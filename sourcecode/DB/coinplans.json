@@ -1,0 +1,32 @@
+[{
+  "_id": {
+    "$oid": "682abbfe45df3ed7107b28ea"
+  },
+  "coins": 100,
+  "price": 9.99,
+  "productId": "com.example.app.coinpack1000",
+  "isPopular": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-05-19T05:05:02.312Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-17T06:38:16.178Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "683431ee8a4f85514a66ecbf"
+  },
+  "coins": 1000,
+  "price": 10,
+  "productId": "com.example.app.coinpack1000",
+  "isPopular": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-05-19T05:05:02.312Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-10T09:32:36.099Z"
+  }
+}]

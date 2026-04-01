@@ -1,0 +1,32 @@
+[{
+  "_id": {
+    "$oid": "683804bb05519f2516cf1c3c"
+  },
+  "name": "Rupee",
+  "symbol": "₹",
+  "countryCode": "IN",
+  "currencyCode": "INR",
+  "isDefault": true,
+  "createdAt": {
+    "$date": "2025-05-29T06:54:51.658Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-17T06:42:59.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "683808111b3eea77990e81a1"
+  },
+  "name": "Doller",
+  "symbol": "$",
+  "countryCode": "US",
+  "currencyCode": "USD",
+  "isDefault": false,
+  "createdAt": {
+    "$date": "2025-05-29T07:09:05.618Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-17T06:42:59.346Z"
+  }
+}]

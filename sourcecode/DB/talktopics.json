@@ -1,0 +1,72 @@
+[{
+  "_id": {
+    "$oid": "6821c64d01b9e00a24797fd3"
+  },
+  "name": "Health Issues",
+  "createdAt": {
+    "$date": "2025-05-12T09:58:37.086Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-12T09:58:37.086Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6821c67c01b9e00a24797fd5"
+  },
+  "name": "Loneliness",
+  "createdAt": {
+    "$date": "2025-05-12T09:59:24.262Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-12T09:59:24.262Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6826c9f2648f1f0ecb166a5e"
+  },
+  "name": "Family issues",
+  "createdAt": {
+    "$date": "2025-05-16T05:15:30.139Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-20T06:18:39.896Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68411c56709097c01ae6027f"
+  },
+  "name": "Mental Health",
+  "createdAt": {
+    "$date": "2025-06-05T04:25:58.109Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-05T04:25:58.109Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68411c60709097c01ae60282"
+  },
+  "name": "Workplace Stress",
+  "createdAt": {
+    "$date": "2025-06-05T04:26:08.828Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-05T04:26:08.828Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68411c6e709097c01ae60285"
+  },
+  "name": "Financial Problems",
+  "createdAt": {
+    "$date": "2025-06-05T04:26:22.684Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-05T04:26:22.684Z"
+  }
+}]

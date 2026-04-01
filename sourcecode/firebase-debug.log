@@ -1,0 +1,35 @@
+[debug] [2026-03-16T21:54:39.073Z] ----------------------------------------------------------------------
+[debug] [2026-03-16T21:54:39.078Z] Command:       /opt/homebrew/Cellar/node/25.8.0/bin/node /opt/homebrew/bin/firebase init
+[debug] [2026-03-16T21:54:39.078Z] CLI Version:   15.9.0
+[debug] [2026-03-16T21:54:39.078Z] Platform:      darwin
+[debug] [2026-03-16T21:54:39.078Z] Node Version:  v25.8.0
+[debug] [2026-03-16T21:54:39.078Z] Time:          Tue Mar 17 2026 02:54:39 GMT+0500 (Pakistan Standard Time)
+[debug] [2026-03-16T21:54:39.078Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-16T21:54:39.079Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/hammadqayyoom/Downloads/Talkin all file/Source Code
+
+[debug] [2026-03-16T21:54:40.361Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-03-16T21:54:40.361Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2026-03-16T21:56:31.625Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (/opt/homebrew/lib/node_modules/firebase-tools/node_modules/@inquirer/core/dist/commonjs/lib/create-prompt.js:101:37)
+    at Interface.emit (node:events:508:20)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1327:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:284:20)
+    at ReadStream.emit (node:events:520:22)
+    at emitKeys (node:internal/readline/utils:371:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+    at ReadStream.emit (node:events:508:20)
+    at addChunk (node:internal/streams/readable:564:12)
+[error] 
+[error] Error: An unexpected error has occurred.

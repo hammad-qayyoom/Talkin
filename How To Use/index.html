@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Talkin- Admin panel -Functionalities</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link id="theme-style" rel="stylesheet" href="assets/css/styles.css">
+	<script></script>
+	<link
+		href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+		rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+	<!-- Facebook Pixel Code -->
+	<script>
+		!function (f, b, e, v, n, t, s) {
+			if (f.fbq) return; n = f.fbq = function () {
+				n.callMethod ?
+					n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+			};
+			if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+			n.queue = []; t = b.createElement(e); t.async = !0;
+			t.src = v; s = b.getElementsByTagName(e)[0];
+			s.parentNode.insertBefore(t, s)
+		}(window, document, 'script',
+			'../../../connect.facebook.net/en_US/fbevents.js');
+		fbq('init', '2223805407931076');
+		fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+			src="https://www.facebook.com/tr?id=2223805407931076&amp;ev=PageView&amp;noscript=1" /></noscript>
+	<!-- End Facebook Pixel Code -->
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-88404643-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'UA-88404643-1');
+	</script>
+
+</head>
+
+<body>
+	<nav>
+		<div class="menu-bar sidenav-menubar">
+			<div class="menubar-icon">
+				<span class="first-line"></span>
+				<span class="middle-line"></span>
+				<span class="last-line"></span>
+			</div>
+		</div>
+		<div class="sidebar-top">
+			<div class="brand-logo">
+				<a href="">
+					<img src="./img/logo.png" class="me-2" style="margin-right: 20px;" alt="">
+					<h2 class="ms-2 logoText text-nowrap" style="color: #8f6dff;">Talkin</h2>
+				</a>
+			</div>
+		</div>
+		<div class="sidenav">
+			<div class="doc-sidebar col-md-2 col-12 order-0 d-none d-md-flex position-fixed" style="left:0;">
+
+				<div id="doc-nav" class="doc-nav">
+
+					<nav id="doc-menu" class=" doc-menu sticky">
+						<span class="sidebar-heading">Main</span>
+
+						<a class="nav-link scrollto " href="#intro">Introduction</a>
+						<a class="nav-link scrollto " href="#users">User Details</a>
+						<a class="nav-link scrollto " href="#listener">Listener Details</a>
+						<a class="nav-link scrollto " href="#listenerReqDetails">Listener Request Details</a>
+						<a class="nav-link scrollto " href="#faqs">FAQs Details</a>
+						<a class="nav-link scrollto " href="#talk-topics">Talks Topics</a>
+						<a class="nav-link scrollto " href="#identity-proof">Identity proofs</a>
+						<a class="nav-link scrollto " href="#coinplan">Plan Details</a>
+						<a class="nav-link scrollto " href="#plan-history">Plan History</a>
+						<a class="nav-link scrollto " href="#payment-option">Payment Option</a>
+						<a class="nav-link scrollto " href="#redeem">Payout Request</a>
+						<a class="nav-link scrollto " href="#setting">Setting</a>
+						<a class="nav-link scrollto " href="#profile">Profile</a>
+					</nav>
+
+				</div>
+			</div>
+		</div>
+	</nav>
+	<header class="header">
+		<section class="page-head">
+			<div class="menu-bar">
+				<div class="menu-bar-icon">
+					<span class="first-line"></span>
+					<span class="middle-line"></span>
+					<span class="last-line"></span>
+				</div>
+			</div>
+			<div class="page-head-inner">
+				<div class="content-tabs ">
+					<div class="brand-logo logo-md">
+						<a href="">
+							<img src="./img/logo.png" class="me-2" style="margin-right: 20px;" alt="">
+							<h2 class="ms-2 logoText text-nowrap" style="color: #8f6dff;">Talkin</h2>
+						</a>
+					</div>
+					<ul class="nav nav-tabs justify-content-end" id="myTab" role="tablist">
+						<li class="nav-item" role="presentation">
+							<a href="./index.html" class="nav-link current">Admin panel</a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<a href="./assets/talkinuser.html" class="nav-link ">User</a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<a href="./assets/talkinlistener.html" class="nav-link ">Listener</a>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+		</section>
+	</header>
+
+	<main class="content-inner">
+		<section id="intro" class="doc-section">
+			<h2 class="section-title">Introduction</h2>
+			<div class="section-block">
+				<p class="lead text-secondary">Hey there, This is documentation for admin to know the functionalities in
+					better way for the admin panel by author.
+				</p>
+			</div>
+		</section>
+		<section id="dashboard" class="doc-section">
+			<h2 class="section-title">Dashboard</h2>
+			<div class="section-block">
+
+				<div class="list-section">
+					<ul class="pl-0">
+						<li class="mb-5">
+							This dashboard shows an overview of user and listener statistics, a graph of user and
+							listener overview, and a table listing recent users with their details.
+						</li>
+						<div class="w-75">
+							<img class="mt-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/1.png" />
+						</div>
+					</ul>
+				</div>
+		</section>
+		<section id="users" class="doc-section">
+			<h2 class="section-title">User Details</h2>
+			<div class="section-block">
+
+				<div class="list-section">
+					<ul class="pl-0">
+						<li class="">
+							Displays a searchable, paginated list of users showing key info like email, country, coin
+							balance, online status, and block/unblock options.
+						</li>
+						<div class="w-75">
+							<img class="mt-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/2.png" />
+						</div>
+					</ul>
+					<ul class="pl-0">
+						<li class="">
+							Admin can view each user's profile along with Coin transaction history, Call activity log,
+							Coin plan purchase history
+						</li>
+						<div class="w-75">
+							<img class="mt-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/3.png" />
+						</div>
+					</ul>
+				</div>
+		</section>
+		<section id="listener" class="doc-section">
+			<h2 class="section-title">Listener Details</h2>
+			<div class="section-block">
+
+				<div class="list-section">
+					<ul class="pl-0">
+						<li class="">
+							Shows a searchable, paginated list of all listener with key details like name, call
+							rate, earnings (coins), age, and call count.
+						</li>
+						<li class="">
+							Admin can add, update, or delete listeners. Additionally, they can toggle each listener
+							between fake and real status.
+						</li>
+						<div class="w-75">
+							<img class="mt-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/4.png" />
+						</div>
+						<li class="">
+							Admin can view each listener's profile along with Coin transaction history, Call activity
+							log.
+						</li>
+						<div class="w-75">
+							<img class="mt-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/5.png" />
+						</div>
+					</ul>
+				</div>
+		</section>
+		<section id="listenerReqDetails" class="doc-section">
+			<h2 class="section-title">Listener Request Details</h2>
+			<div class="section-block">
+				<div class="list-section">
+					<ul>
+						<li class="lead">Admin can view and manage listener requests, including user info, listener
+							details, and current request status.</li>
+						<li class="lead">Requests can be toggled between Pending, Accepted, and Declined statuses.</li>
+						<li class="lead">Admin can also accept or decline requests, with the option to provide a reason.
+						</li>
+						<div class="w-75">
+
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/6.png" />
+						</div>
+
+					</ul>
+				</div>
+			</div>
+		</section>
+		<section id="faqs" class="doc-section">
+			<h2 class="section-title">FAQs Details</h2>
+			<div class="section-block">
+				<div class="list-section">
+					<ul>
+						<li class="lead">Admin can view and manage FAQs for both users and listeners, including the
+							question and corresponding answer details.</li>
+						<div class="w-75">
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/7.png" />
+						</div>
+
+					</ul>
+				</div>
+			</div>
+		</section>
+		<section id="talk-topics" class="doc-section">
+			<h2 class="section-title">Talks Topics</h2>
+			<div class="section-block">
+				<div class="list-section">
+					<ul>
+						<li class="lead">Admin can add new talk topics, view existing ones, and edit or delete them as
+							needed.</li>
+						<li class="lead">These topics are used when users create requests for listeners.</li>
+						<div class="w-75">
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/8.png" />
+						</div>
+					</ul>
+				</div>
+
+			</div>
+
+			</div>
+		</section>
+		<section id="identity-proof" class="doc-section">
+			<h2 class="section-title">Identity proofs</h2>
+			<div class="section-block">
+				<div class="list-section">
+					<ul>
+						<li class="lead">Admin can view and manage identity proof types, which are required when users
+							submit listener requests.</li>
+
+						<div class="w-75">
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/9.png" />
+						</div>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<section id="coinplan" class="doc-section">
+			<h2 class="section-title">Plan Details</h2>
+			<div class="section-block">
+				<div class="list-section">
+					<ul>
+						<li class="lead">Admin can create new plans, view existing ones, and manage their status by
+							activating or deactivating them.</li>
+						<div class="w-75">
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/10.png" />
+						</div>
+					</ul>
+				</div>
+
+			</div>
+		</section>
+		<section id="plan-history" class="doc-section">
+			<h2 class="section-title">Plan History</h2>
+			<div class="section-block">
+				<div class="list-section">
+					<ul>
+						<li class="lead">Admin can view which listener purchased which plan, along with the payment
+							gateway used for the transaction.</li>
+						<div class="w-75">
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/11.png" />
+						</div>
+					</ul>
+				</div>
+
+			</div>
+		</section>
+
+		<section id="payment-option" class="doc-section">
+			<h2 class="section-title">Payment Option</h2>
+			<div class="section-block">
+				<div class="list-section">
+					<ul>
+						<li class="lead">Admin can add new payment options and toggle them on or off. These options are
+							used when listeners request withdrawals.</li>
+						<div class="w-75">
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/12.png" />
+						</div>
+					</ul>
+				</div>
+
+			</div>
+		</section>
+
+		<section id="redeem" class="doc-section">
+			<h2 class="section-title">Payout Request</h2>
+			<div class="section-block">
+				<div class="list-section">
+					<ul>
+						<li class="lead">Admin can view all Pending, Accepted, and Declined redeem requests.</li>
+						<li class="lead">Admin have the authority to approve valid requests or decline inappropriate
+							ones.</li>
+						<li class="lead">Redeem requests are withdrawal requests submitted by listeners.
+						</li>
+						<div class="w-75">
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver"
+								src="./img//admin/13.png" />
+						</div>
+					</ul>
+				</div>
+
+			</div>
+		</section>
+		<section id="setting" class="doc-section">
+			<h2 class="section-title">Setting</h2>
+			<div class="section-block">
+				<div class="list-section">
+					<ul>
+						<!-- Genral -->
+						<li class="lead">This is a crucial section where the admin can configure and manage key
+							application settings.</li>
+						<li class="lead mb-3">Admin can update settings such as fake data toggles, call rates, Firebase configuration, Zego integration, and login bonus parameters.</li>
+						<li class="lead mb-3">Admin manages important links like privacy policies for users and listeners, about pages, and support email addresses.</li>
+						<div class="w-75">
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/14.png" />
+						</div>
+
+						<!-- Payment -->
+						<li class="lead ">Admin can update payment credentials and secret keys for providers like RazorPay, Stripe, and Flutterwave.</li>
+						<li class="lead ">Admin can toggle payment gateways between active and inactive statuses as needed.</li>
+						<div class="w-75">
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/15.png" />
+						</div>
+
+
+						<!-- currency -->
+						<li class="lead ">Admin can manage multiple currencies and set a default currency for the platform.</li>
+						<div class="w-75">
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/16.png" />
+						</div>
+						<li class="lead ">Admin can set the coin ratio and manage the minimum coin payout thresholds for listeners.</li>
+						<div class="w-75">
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/17.png" />
+						</div>
+
+						
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<section id="profile" class="doc-section">
+			<h2 class="section-title">Profile</h2>
+			<div class="section-block">
+				<div class="list-section">
+					<ul>
+						<li class="lead">Admin can update their own profile details, including profile photo, password,
+							and name.</li>
+						<div class="w-75">
+							<img class="my-3 p-5 border" style="box-shadow: 0 0 20px silver" src="./img/admin/18.png" />
+						</div>
+					</ul>
+				</div>
+
+			</div>
+		</section>
+	</main>
+
+	<script type="text/javascript" src="assets/plugins/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+	<script type="text/javascript" src="assets/plugins/stickyfill/dist/stickyfill.min.js"></script>
+	<script type="text/javascript" src="assets/js/main.js"></script>
+</body>
+
+
+</html>
