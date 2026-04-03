@@ -84,10 +84,10 @@ const HorizontalMenu = () => {
             exactMatch={false}
             activeUrl='/apps/listener'
           >
-            Listener
+            Expert
           </MenuItem>
           <MenuItem href='/listener/request' icon={<i className='tabler-user-scan' />}>
-            Listener Request
+            Expert Request
           </MenuItem>
         </SubMenu>
 

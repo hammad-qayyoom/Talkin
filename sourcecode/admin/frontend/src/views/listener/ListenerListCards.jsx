@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 
 import HorizontalWithSubtitle from '@components/card-statistics/HorizontalWithSubtitle'
 
-const ListenerListCards = ({ states, total, userCount, personType = 'listener' }) => {
+const ListenerListCards = ({ states, total, userCount, personType = 'expert' }) => {
   console.log('userCount: ', userCount);
   // Get current user type
   const { type, data: reduxData } = useSelector(state => state.userReducer)

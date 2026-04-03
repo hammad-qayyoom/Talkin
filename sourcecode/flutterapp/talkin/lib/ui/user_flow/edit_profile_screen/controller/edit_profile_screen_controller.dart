@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:talk_in/custom/custom_country_picker/country_picker.dart';
 import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
 import 'package:talk_in/ui/user_flow/edit_profile_screen/api/edit_profile_api.dart';
@@ -19,6 +20,8 @@ import 'package:talk_in/utils/font_style.dart';
 import 'package:talk_in/utils/utils.dart';
 
 class EditProfileController extends GetxController {
+  static const int _minimumAllowedAge = 18;
+
   final formKey = GlobalKey<FormState>();
   TextEditingController dateController = TextEditingController();
   TextEditingController nickNameCnt = TextEditingController();
@@ -62,13 +65,59 @@ class EditProfileController extends GetxController {
     profilePic = Database.loginUserProfilePic;
     dialCode = Database.dialCode;
 
-    if (Database.loginUserGender.toLowerCase() == EnumLocale.txtFemale.name.tr.toLowerCase()) {
+    if (Database.loginUserGender.toLowerCase() ==
+        EnumLocale.txtFemale.name.tr.toLowerCase()) {
       selectedIndex = 1;
     } else {
       selectedIndex = 0;
     }
 
     super.onInit();
+  }
+
+  DateTime? _parseBirthDate(String value) {
+    final rawValue = value.trim();
+    if (rawValue.isEmpty) return null;
+
+    final directParse = DateTime.tryParse(rawValue);
+    if (directParse != null) return directParse;
+
+    final formats = <String>[
+      'dd / MM / yyyy',
+      'dd/MM/yyyy',
+      'MM / dd / yyyy',
+      'MM/dd/yyyy',
+      'yyyy-MM-dd',
+    ];
+
+    for (final format in formats) {
+      try {
+        return DateFormat(format).parseStrict(rawValue);
+      } catch (_) {
+        // Try the next known date format.
+      }
+    }
+
+    return null;
+  }
+
+  int _calculateAge(DateTime birthDate) {
+    final now = DateTime.now();
+    int age = now.year - birthDate.year;
+    final hasBirthdayPassedThisYear = now.month > birthDate.month ||
+        (now.month == birthDate.month && now.day >= birthDate.day);
+
+    if (!hasBirthdayPassedThisYear) {
+      age -= 1;
+    }
+
+    return age;
+  }
+
+  void _closeLoadingIfOpen() {
+    if (Get.isDialogOpen ?? false) {
+      Get.back();
+    }
   }
 
   List<Map<String, dynamic>> gender = [
@@ -99,11 +148,15 @@ class EditProfileController extends GetxController {
 
   /// select date
   Future<void> selectDate(BuildContext context) async {
+    final now = DateTime.now();
+    final DateTime latestAllowedDate =
+        DateTime(now.year - _minimumAllowedAge, now.month, now.day);
+
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: latestAllowedDate,
       firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      lastDate: latestAllowedDate,
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -129,14 +182,16 @@ class EditProfileController extends GetxController {
     );
 
     if (picked != null) {
-      dateController.text = "${picked.day.toString().padLeft(2, '0')} / ${picked.month.toString().padLeft(2, '0')} / ${picked.year}";
+      dateController.text =
+          "${picked.day.toString().padLeft(2, '0')} / ${picked.month.toString().padLeft(2, '0')} / ${picked.year}";
       update(); // For GetBuilder to update
     }
   }
 
   /// Image Picker from gallery
   getImageFromGallery() async {
-    xFiles = await imagePicker.pickImage(source: ImageSource.gallery, imageQuality: 100);
+    xFiles = await imagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 100);
     if (xFiles != null) {
       pickImage = xFiles!.path;
       log("Gallery Image Path ::: $pickImage");
@@ -146,7 +201,8 @@ class EditProfileController extends GetxController {
 
   /// Take Photo
   takePhoto() async {
-    xFiles = await imagePicker.pickImage(source: ImageSource.camera, imageQuality: 100);
+    xFiles = await imagePicker.pickImage(
+        source: ImageSource.camera, imageQuality: 100);
     if (xFiles != null) {
       pickImage = xFiles!.path;
       log("Camera Image Path ::: $pickImage");
@@ -156,20 +212,28 @@ class EditProfileController extends GetxController {
 
   /// save profile button on tap
   Future<void> onSaveProfile() async {
-    Database.onSetFillProfile(true);
-
     Utils.showLog("Click On Save Profile => ${Database.loginUserId}");
 
     if (profilePic == "" && pickImage == null) {
-      Utils.showToast(Get.context!, EnumLocale.txtPleaseSelectProfileImage.name.tr);
+      Utils.showToast(
+          Get.context!, EnumLocale.txtPleaseSelectProfileImage.name.tr);
     } else if (nickNameCnt.text.trim().isEmpty) {
       Utils.showToast(Get.context!, EnumLocale.txtPleaseEnterNickName.name.tr);
     } else if (dateController.text.trim().isEmpty) {
-      Utils.showToast(Get.context!, EnumLocale.txtPleaseSelectBirthDate.name.tr);
+      Utils.showToast(
+          Get.context!, EnumLocale.txtPleaseSelectBirthDate.name.tr);
+    } else if (_parseBirthDate(dateController.text) == null) {
+      Utils.showToast(Get.context!, "Please select a valid birth date.");
+    } else if (_calculateAge(_parseBirthDate(dateController.text)!) <
+        _minimumAllowedAge) {
+      Utils.showToast(Get.context!,
+          "You must be at least $_minimumAllowedAge years old to continue.");
     } else if (mobileNumberCnt.text.trim().isEmpty) {
-      Utils.showToast(Get.context!, EnumLocale.txtPleaseEnterMobileNumber.name.tr);
+      Utils.showToast(
+          Get.context!, EnumLocale.txtPleaseEnterMobileNumber.name.tr);
     } else {
-      Get.dialog(const LoadingWidget(), barrierDismissible: false); // Start Loading...
+      Get.dialog(const LoadingWidget(),
+          barrierDismissible: false); // Start Loading...
 
       await callEditApi();
     }
@@ -178,6 +242,12 @@ class EditProfileController extends GetxController {
   /// edit profile api
   Future<void> callEditApi({String? image}) async {
     final token = await FirebaseAccessToken.onGet();
+    final parsedBirthDate = _parseBirthDate(dateController.text);
+    final normalizedBirthDate = parsedBirthDate == null
+        ? dateController.text.trim()
+        : DateFormat('yyyy-MM-dd').format(parsedBirthDate);
+    final resolvedAge =
+        parsedBirthDate == null ? null : _calculateAge(parsedBirthDate);
 
     log('Database.countryCode  ::::  ${Database.selectedCountryCode}');
     log('countryController.text  ::::  ${countryController.text}');
@@ -188,7 +258,8 @@ class EditProfileController extends GetxController {
     debugPrint("countryFlag: ${flagController.text}");
     debugPrint("countryCode: ${Database.selectedCountryCode}");
     debugPrint("uid: ${Database.loginUserFirebaseId}");
-    debugPrint("birthDate: ${dateController.text}");
+    debugPrint("birthDate: $normalizedBirthDate");
+    debugPrint("age: $resolvedAge");
     debugPrint("image: ${pickImage == "" ? profilePic : pickImage}");
     debugPrint("nickName: ${nickNameCnt.text}");
     debugPrint("gender: ${Database.loginUserGender}");
@@ -200,7 +271,8 @@ class EditProfileController extends GetxController {
       countryFlag: flagController.text,
       countryCode: Database.selectedCountryCode,
       uid: Database.loginUserFirebaseId,
-      birthDate: dateController.text,
+      birthDate: normalizedBirthDate,
+      age: resolvedAge,
       image: pickImage == "" ? profilePic : pickImage,
       nickName: nickNameCnt.text,
       gender: Database.loginUserGender,
@@ -213,7 +285,8 @@ class EditProfileController extends GetxController {
     debugPrint("countryFlag: ${flagController.text}");
     debugPrint("countryCode: ${Database.selectedCountryCode}");
     debugPrint("uid: ${Database.loginUserFirebaseId}");
-    debugPrint("birthDate: ${dateController.text}");
+    debugPrint("birthDate: $normalizedBirthDate");
+    debugPrint("age: $resolvedAge");
     debugPrint("image: ${pickImage == "" ? profilePic : pickImage}");
     debugPrint("nickName: ${nickNameCnt.text}");
     debugPrint("gender: ${Database.loginUserGender}");
@@ -221,29 +294,45 @@ class EditProfileController extends GetxController {
     debugPrint("fullName: ${nameCnt.text}");
 
     if (editProfileModel?.status == true) {
-      Utils.showToast(Get.context!, EnumLocale.txtProfileUpdateSuccessfully.name.tr);
-      fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(loginUserId: Database.loginUserFirebaseId, token: token ?? '');
+      Database.onSetFillProfile(true);
+      Utils.showToast(
+          Get.context!, EnumLocale.txtProfileUpdateSuccessfully.name.tr);
+      fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(
+          loginUserId: Database.loginUserFirebaseId, token: token ?? '');
 
-      Database.onSetLoginUserProfilePic(fetchLoginUserProfileModel?.user?.profilePic ?? "");
+      Database.onSetLoginUserProfilePic(
+          fetchLoginUserProfileModel?.user?.profilePic ?? "");
       Database.onSetLoginUserName(fetchLoginUserProfileModel!.user!.fullName!);
-      Database.onSetLoginUserNickName(fetchLoginUserProfileModel?.user?.nickName ?? "");
+      Database.onSetLoginUserNickName(
+          fetchLoginUserProfileModel?.user?.nickName ?? "");
       Database.onSetLoginUserEmail(fetchLoginUserProfileModel!.user!.email!);
-      Database.onSetLoginUserCountry(fetchLoginUserProfileModel!.user!.country!);
-      Database.onSetLoginUserCountryFlag(fetchLoginUserProfileModel!.user!.countryFlag!);
-      Database.onSetLoginUserBirthDate(fetchLoginUserProfileModel?.user?.birthDate ?? "");
-      Database.onSetLoginUserGender(fetchLoginUserProfileModel?.user?.gender ?? "Male");
-      Database.onSetLoginUserPhoneNumber(fetchLoginUserProfileModel?.user?.phoneNumber ?? "");
+      Database.onSetLoginUserCountry(
+          fetchLoginUserProfileModel!.user!.country!);
+      Database.onSetLoginUserCountryFlag(
+          fetchLoginUserProfileModel!.user!.countryFlag!);
+      Database.onSetLoginUserBirthDate(
+          fetchLoginUserProfileModel?.user?.birthDate ?? "");
+      Database.onSetLoginUserGender(
+          fetchLoginUserProfileModel?.user?.gender ?? "Male");
+      Database.onSetLoginUserPhoneNumber(
+          fetchLoginUserProfileModel?.user?.phoneNumber ?? "");
       Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
 
       update([Constant.idProfile]);
 
       Get.close(2);
-      fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(loginUserId: Database.loginUserFirebaseId, token: token ?? '');
+      fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(
+          loginUserId: Database.loginUserFirebaseId, token: token ?? '');
       Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
 
       update();
     } else {
-      Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+      _closeLoadingIfOpen();
+      Utils.showToast(
+          Get.context!,
+          editProfileModel?.message?.trim().isNotEmpty == true
+              ? editProfileModel!.message!
+              : EnumLocale.txtSomeThingWentWrong.name.tr);
     }
   }
 
@@ -256,7 +345,8 @@ class EditProfileController extends GetxController {
         flagController.text = country.flagEmoji;
         countryController.text = country.name;
         update([Constant.idChangeCountry]);
-        debugPrint("Country selected: ${country.name}, Flag: ${country.flagEmoji}");
+        debugPrint(
+            "Country selected: ${country.name}, Flag: ${country.flagEmoji}");
         log("Selected Country => Flag: ${flagController.text}, Name: ${countryController.text}");
       },
     );

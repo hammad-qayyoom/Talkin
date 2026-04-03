@@ -72,7 +72,7 @@ const ActivityOverview = () => {
   }
 
   // Get data for all three series
-  const listenerData = processChartData('listener')
+  const listenerData = processChartData('expert')
   const userData = processChartData('user')
 
   // const videoReportData = processChartData('report', 'videoReports')
@@ -136,7 +136,7 @@ const ActivityOverview = () => {
   // Generate chart series
   const series = [
     createAlignedSeries(userData, 'Users', theme.palette.warning.main),
-    createAlignedSeries(listenerData, 'Listeners', theme.palette.success.main),
+    createAlignedSeries(listenerData, 'Experts', theme.palette.success.main),
     
     // createAlignedSeries(videoData, 'Videos', theme.palette.primary.main),
     // createAlignedSeries(userReportData, 'User Reports', theme.palette.error.light),
@@ -250,7 +250,7 @@ const ActivityOverview = () => {
         title='Activity Overview'
 
         // titleTypographyProps={{ sx: { fontWeight: 600, fontSize: '1.25rem' } }}
-        subheader='Combined view of users and listeners activity'
+        subheader='Combined view of users and experts activity'
         subheaderTypographyProps={{ sx: { color: 'text.disabled'} }}
       />
       <CardContent sx={{ pt: 0 }}>

@@ -45,7 +45,6 @@ class HostHomeScreen extends GetView<HostHomeScreenController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         HostImageView(),
-                        // RandomCallView().paddingOnly(left: 16, right: 15),
                         PermissionView().paddingSymmetric(horizontal: 16),
                         NoteView().paddingSymmetric(horizontal: 16),
                       ],

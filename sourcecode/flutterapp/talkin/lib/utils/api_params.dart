@@ -11,6 +11,7 @@ class ApiParams {
   static const password = "password";
   static const fullName = "fullName";
   static const nickName = "nickName";
+  static const age = "age";
   static const birthDate = "birthDate";
   static const gender = "gender";
   static const confirmPassword = "confirmPassword";
@@ -24,6 +25,7 @@ class ApiParams {
   static const start = "start";
   static const limit = "limit";
   static const searchString = "searchString";
+  static const expertId = "expertId";
   static const listenerId = "listenerId";
   static const talkTopic = "talkTopic";
   static const language = "language";
@@ -34,8 +36,6 @@ class ApiParams {
   static const talkTopics = "talkTopics";
   static const ratePrivateVideoCall = "ratePrivateVideoCall";
   static const ratePrivateAudioCall = "ratePrivateAudioCall";
-  static const rateRandomVideoCall = "rateRandomVideoCall";
-  static const rateRandomAudioCall = "rateRandomAudioCall";
   static const image = "image";
   static const audio = "audio";
   static const receiverId = "receiverId";

@@ -28,7 +28,7 @@ const TopPerformanceListeners = ({ topPerformanceListeners }) => {
   return (
    <Card>
       <CardHeader
-        title='Top Listeners'
+        title='Top Experts'
         titleTypographyProps={{ sx: { lineHeight: '2rem !important', letterSpacing: '0.15px !important' } }}
       />
       <CardContent>

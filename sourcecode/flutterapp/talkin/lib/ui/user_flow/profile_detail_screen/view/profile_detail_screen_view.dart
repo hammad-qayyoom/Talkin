@@ -96,7 +96,12 @@ class ProfileDetailScreenView extends StatelessWidget {
                       );
                     },
                     onReport: () {
-                      ReportBottomSheetUi.show(context: context);
+                      final profileController = Get.find<ProfileDetailScreenController>();
+                      ReportBottomSheetUi.show(
+                        context: context,
+                        reportType: 'user',
+                        targetId: profileController.listenerId ?? '',
+                      );
                     },
                   );
                 },

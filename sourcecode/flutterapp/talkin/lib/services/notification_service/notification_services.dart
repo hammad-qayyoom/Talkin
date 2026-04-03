@@ -93,7 +93,7 @@ library;
 //               // controller.listenerChatList[index].profilePic,],
 //             );
 //           }
-//         } else if (data['type'] == 'listener_verified') {
+//         } else if (data['type'] == 'expert_verified') {
 //           // Show a dialog when listener is verified
 //           Get.dialog(
 //             barrierColor: AppColors.black.withValues(alpha: 0.8),
@@ -191,7 +191,7 @@ library;
 //           }
 //         }
 //
-//         if (message.data["type"] == "listener_verified") {
+//         if (message.data["type"] == "expert_verified") {
 //           Utils.showLog("User Listener Req acssepted.");
 //           Get.dialog(
 //             barrierColor: AppColors.black.withValues(alpha: 0.8),
@@ -267,7 +267,7 @@ library;
 //               ],
 //             );
 //           }
-//         } else if (data['type'] == 'listener_verified') {
+//         } else if (data['type'] == 'expert_verified') {
 //           // Show a dialog when listener is verified
 //           Get.dialog(
 //             barrierColor: AppColors.black.withValues(alpha: 0.8),
@@ -698,8 +698,8 @@ class NotificationServices {
           }
         }
 
-        if (message.data["type"] == "listener_verified") {
-          Utils.showLog("User Listener Request accepted.");
+        if (message.data["type"] == "expert_verified") {
+          Utils.showLog("User Expert Request accepted.");
           Get.dialog(
             barrierColor: AppColors.black.withValues(alpha: 0.8),
             Dialog(
@@ -1034,7 +1034,7 @@ class NotificationServices {
         if ((Get.currentRoute == AppRoutes.personalChatScreen || Get.currentRoute == AppRoutes.hostPersonalChatScreen) &&
             message.data["type"] == "CHAT") {
           Utils.showLog("User is already on a chat screen. Suppressing notification.");
-        } else if (message.data['type'] == 'listener_verified') {
+        } else if (message.data['type'] == 'expert_verified') {
           Get.dialog(
             barrierColor: AppColors.black.withOpacity(0.8),
             Dialog(
@@ -1308,7 +1308,7 @@ class NotificationServices {
         Utils.showLog("app is in the foreground.");
         if ((Get.currentRoute == AppRoutes.personalChatScreen || Get.currentRoute == AppRoutes.hostPersonalChatScreen) && message.data["type"] == "CHAT") {
           Utils.showLog("User is already on a chat screen. Suppressing notification.");
-        } else if (message.data['type'] == 'listener_verified') {
+        } else if (message.data['type'] == 'expert_verified') {
           Get.dialog(
             barrierDismissible: false,
             barrierColor: AppColors.black.withValues(alpha: 0.8),

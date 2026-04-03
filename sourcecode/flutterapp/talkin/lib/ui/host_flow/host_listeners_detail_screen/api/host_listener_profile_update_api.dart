@@ -13,9 +13,7 @@ class HostListenerProfileUpdateApi {
     required String? selfIntro,
     required String? name,
     required String? nickName,
-    required String? rateRandomAudioCall,
     required String? image,
-    required String? rateRandomVideoCall,
     required String? ratePrivateVideoCall,
     required String? ratePrivateAudioCall,
     required String? language,
@@ -46,8 +44,6 @@ class HostListenerProfileUpdateApi {
         ApiParams.talkTopics: talkTopics ?? '',
         ApiParams.ratePrivateAudioCall: ratePrivateAudioCall ?? '',
         ApiParams.ratePrivateVideoCall: ratePrivateVideoCall ?? '',
-        ApiParams.rateRandomAudioCall: rateRandomAudioCall ?? '',
-        ApiParams.rateRandomVideoCall: rateRandomVideoCall ?? '',
         ApiParams.image: image ?? ''
       });
 

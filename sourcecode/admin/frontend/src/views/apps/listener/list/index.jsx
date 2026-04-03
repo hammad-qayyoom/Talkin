@@ -18,13 +18,13 @@ import ListenerListTable from './ListenerListTable'
 // Actions
 import CustomTabList from '@/@core/components/mui/TabList'
 
-import { fetchListeners, setSearchQuery } from '@/redux-store/slices/listener'
+import { fetchExperts, setSearchQuery } from '@/redux-store/slices/listener'
 import ListenerListCards from '@/views/listener/ListenerListCards'
 
 const ListenerList = () => {
   const dispatch = useDispatch()
 
-  const { userCount, data,total } = useSelector( state => state.listener)
+  const { userCount, data,total } = useSelector( state => state.expert)
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -49,7 +49,7 @@ const ListenerList = () => {
     params => {
       if (fetchInProgress.current) return
       fetchInProgress.current = true
-      dispatch(fetchListeners(params)).finally(() => {
+      dispatch(fetchExperts(params)).finally(() => {
         fetchInProgress.current = false
         tabChangeInProgress.current = false
       })
@@ -142,7 +142,8 @@ const ListenerList = () => {
     urlEndDate,
     urlSearch,
     urlGender,
-    searchParams   // isBlock/isOnline/isBusy change detect ke liye
+    searchParams,  // isBlock/isOnline/isBusy change detect ke liye
+    getListeners
   ])
 
 
@@ -188,9 +189,9 @@ const ListenerList = () => {
   return (
     <>
       <Box className='mb-3'>
-          <Typography variant='h4'>Listener Management</Typography>
+          <Typography variant='h4'>Expert Management</Typography>
           <Typography variant='body2' color='text.secondary'>
-            Overview of platform listeners with insights into engagement and performance.
+            Overview of platform experts with insights into engagement and performance.
           </Typography>
       </Box>
       <ListenerListCards states={userCount} total={total} userCount={data} />
@@ -198,11 +199,11 @@ const ListenerList = () => {
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <CustomTabList onChange={handleChange} variant='scrollable' pill='true'>
-              <Tab icon={<i className='tabler-user-star' />} value='real' label='Real Listener' iconPosition='start' />
+              <Tab icon={<i className='tabler-user-star' />} value='real' label='Real Expert' iconPosition='start' />
               <Tab
                 icon={<i className='tabler-user-cancel' />}
                 value='fake'
-                label='Fake Listener'
+                label='Fake Expert'
                 iconPosition='start'
               />
             </CustomTabList>

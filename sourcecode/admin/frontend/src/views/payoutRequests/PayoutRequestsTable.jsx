@@ -280,7 +280,7 @@ const PayoutRequestsTable = ({ personType, statusType, showActions, onAccept, on
                     size="small"
                     onClick={() => {
                       if (isBlocked) {
-                        toast.error("This listener cannot be approved.");
+                        toast.error("This expert cannot be approved.");
                         return; // ⛔ Prevent API call
                       }
 
@@ -300,7 +300,7 @@ const PayoutRequestsTable = ({ personType, statusType, showActions, onAccept, on
                     size="small"
                     onClick={() => {
                       if (isBlocked) {
-                        toast.error("This listener cannot be rejected.");
+                        toast.error("This expert cannot be rejected.");
                         return; // ⛔ Prevent API call
                       }
 

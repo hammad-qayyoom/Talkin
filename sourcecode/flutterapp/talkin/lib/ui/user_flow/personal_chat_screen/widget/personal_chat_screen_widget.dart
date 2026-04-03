@@ -234,7 +234,11 @@ class ChatScreenAppBar extends StatelessWidget {
                       );
                     },
                     onReport: () {
-                      ReportBottomSheetUi.show(context: context);
+                      ReportBottomSheetUi.show(
+                        context: context,
+                        reportType: 'user',
+                        targetId: controller.receiverId ?? '',
+                      );
                     },
                   );
                 },

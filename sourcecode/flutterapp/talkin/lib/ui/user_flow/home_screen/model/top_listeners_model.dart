@@ -41,8 +41,6 @@ class TopListeners {
   String? image;
   int? ratePrivateVideoCall;
   int? ratePrivateAudioCall;
-  int? rateRandomVideoCall;
-  int? rateRandomAudioCall;
   List<String>? video;
   double? rating;
   int? callCount;
@@ -53,8 +51,6 @@ class TopListeners {
   String? uniqueId;
   bool? isAvailableForPrivateAudioCall;
   bool? isAvailableForPrivateVideoCall;
-  bool? isAvailableForRandomAudioCall;
-  bool? isAvailableForRandomVideoCall;
   bool? isAvailableForChat;
   String? audio;
 
@@ -67,8 +63,6 @@ class TopListeners {
     this.image,
     this.ratePrivateVideoCall,
     this.ratePrivateAudioCall,
-    this.rateRandomVideoCall,
-    this.rateRandomAudioCall,
     this.video,
     this.rating,
     this.callCount,
@@ -79,8 +73,6 @@ class TopListeners {
     this.uniqueId,
     this.isAvailableForPrivateAudioCall,
     this.isAvailableForPrivateVideoCall,
-    this.isAvailableForRandomAudioCall,
-    this.isAvailableForRandomVideoCall,
     this.isAvailableForChat,
     this.audio,
   });
@@ -94,8 +86,6 @@ class TopListeners {
         image: json["image"],
         ratePrivateVideoCall: json["ratePrivateVideoCall"],
         ratePrivateAudioCall: json["ratePrivateAudioCall"],
-        rateRandomVideoCall: json["rateRandomVideoCall"],
-        rateRandomAudioCall: json["rateRandomAudioCall"],
         video: json["video"] == null ? [] : List<String>.from(json["video"]!.map((x) => x)),
         rating: json["rating"]?.toDouble(),
         callCount: json["callCount"],
@@ -106,8 +96,6 @@ class TopListeners {
         uniqueId: json["uniqueId"],
         isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],
         isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],
-        isAvailableForRandomAudioCall: json["isAvailableForRandomAudioCall"],
-        isAvailableForRandomVideoCall: json["isAvailableForRandomVideoCall"],
         isAvailableForChat: json["isAvailableForChat"],
         audio: json["audio"],
       );
@@ -121,8 +109,6 @@ class TopListeners {
         "image": image,
         "ratePrivateVideoCall": ratePrivateVideoCall,
         "ratePrivateAudioCall": ratePrivateAudioCall,
-        "rateRandomVideoCall": rateRandomVideoCall,
-        "rateRandomAudioCall": rateRandomAudioCall,
         "video": video == null ? [] : List<dynamic>.from(video!.map((x) => x)),
         "rating": rating,
         "callCount": callCount,
@@ -133,8 +119,6 @@ class TopListeners {
         "uniqueId": uniqueId,
         "isAvailableForPrivateAudioCall": isAvailableForPrivateAudioCall,
         "isAvailableForPrivateVideoCall": isAvailableForPrivateVideoCall,
-        "isAvailableForRandomAudioCall": isAvailableForRandomAudioCall,
-        "isAvailableForRandomVideoCall": isAvailableForRandomVideoCall,
         "isAvailableForChat": isAvailableForChat,
         "audio": audio,
       };

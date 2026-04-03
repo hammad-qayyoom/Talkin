@@ -6,7 +6,6 @@ import 'package:talk_in/ui/user_flow/chat_screen/controller/chat_screen_controll
 import 'package:talk_in/ui/user_flow/edit_profile_screen/controller/edit_profile_screen_controller.dart';
 import 'package:talk_in/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:talk_in/ui/user_flow/listener_screen/controller/listeners_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/random_call_screen/controller/random_call_controller.dart';
 
 class BottomBarBinding extends Bindings {
   @override
@@ -16,7 +15,6 @@ class BottomBarBinding extends Bindings {
     Get.lazyPut<EditProfileController>(() => EditProfileController(), fenix: true);
     Get.lazyPut<ListenersScreenController>(() => ListenersScreenController(), fenix: true);
     Get.lazyPut<AllListenersController>(() => AllListenersController());
-    Get.lazyPut<RandomCallController>(() => RandomCallController(), fenix: true);
     Get.lazyPut<ChatScreenController>(() => ChatScreenController(), fenix: true);
     Get.lazyPut<CallingScreenController>(() => CallingScreenController(), fenix: true);
   }

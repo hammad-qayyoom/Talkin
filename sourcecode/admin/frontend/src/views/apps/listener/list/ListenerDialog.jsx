@@ -1,6 +1,6 @@
 'use client'
 
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -31,7 +31,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 })
 
 // Actions
-import { createListener, fetchDropdownUser, fetchListeners, updateListener } from '@/redux-store/slices/listener'
+import { createExpert, fetchDropdownUser, updateListener } from '@/redux-store/slices/listener'
 
 // Utilities
 import CustomAutocomplete from '@/@core/components/mui/Autocomplete'
@@ -52,8 +52,9 @@ const urlToFile = async (url, filename, mimeType) => {
 
 const normalizeValue = value => {
   if (value === undefined || value === null) return ''
+
   return String(value).trim()
-} 
+}
 
 // Define validation schema
 
@@ -65,10 +66,13 @@ const appendIfChanged = (formData, key, newValue, oldValue) => {
   if (Array.isArray(newValue)) {
     const n = newValue.join(',')
     const o = Array.isArray(oldValue) ? oldValue.join(',') : ''
+
     if (n !== o) {
       formData.append(key, n)
+
       return true
     }
+
     return false
   }
 
@@ -78,6 +82,7 @@ const appendIfChanged = (formData, key, newValue, oldValue) => {
 
   if (normalizedNew !== normalizedOld) {
     formData.append(key, normalizedNew)
+
     return true
   }
 
@@ -93,14 +98,12 @@ const schema = yup.object().shape({
   talkTopics: yup.array().min(1, 'At least one talk topic is required'),
   ratePrivateVideoCall: yup.number().min(0, 'Must be at least 0').required('Rate is required'),
   ratePrivateAudioCall: yup.number().min(0, 'Must be at least 0').required('Rate is required'),
-  rateRandomVideoCall: yup.number().min(0, 'Must be at least 0').required('Rate is required'),
-  rateRandomAudioCall: yup.number().min(0, 'Must be at least 0').required('Rate is required'),
-  experience: yup.string().when('$listener', {
+  experience: yup.string().when('$expert', {
     is: val => val === null,
     then: schema => schema.required('Experience is required'),
     otherwise: schema => schema.notRequired()
   }),
-  phoneNumber: yup.string().when('$listener', {
+  phoneNumber: yup.string().when('$expert', {
     is: val => val === null,
     then: schema =>
       schema
@@ -111,18 +114,18 @@ const schema = yup.object().shape({
         .notRequired()
         .matches(/^(\+\d{1,4})\d{6,14}$/, 'Enter valid phone number with country code, e.g. +911234567890')
   }),
-  location: yup.string().when('$listener', {
+  location: yup.string().when('$expert', {
     is: val => val === null,
     then: schema => schema.required('Location is required'),
     otherwise: schema => schema.notRequired()
   }),
-  age: yup.string().when('$listener', {
+  age: yup.string().when('$expert', {
     is: val => val === null,
     then: schema => schema.required('Age is required'),
     otherwise: schema => schema.notRequired()
   }),
-  userId: yup.string().when(['$role', '$listener'], {
-    is: (role, listener) => role === 'real' && !listener,
+  userId: yup.string().when(['$role', '$expert'], {
+    is: (role, expert) => role === 'real' && !expert,
     then: schema => schema.required('User ID is required'),
     otherwise: schema => schema.notRequired()
   })
@@ -138,10 +141,10 @@ const getAvatar = params => {
   }
 }
 
-const ListenerDialog = ({ open, onClose, listener = null, role }) => {
+const ListenerDialog = ({ open, onClose, expert = null, role }) => {
   const dispatch = useDispatch()
   const { talkTopics } = useSelector(state => state.talkTopicsReducer)
-  const { dropDownUser } = useSelector(state => state.listener)
+  const { dropDownUser } = useSelector(state => state.expert)
   const [loading, setLoading] = useState(false)
   const [imageFile, setImageFile] = useState(null)
   const [video, setVideo] = useState([])
@@ -155,7 +158,6 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
   const [removeVideoIndexes, setRemoveVideoIndexes] = useState([])
 
   const { profileData } = useSelector(state => state.adminSlice)
-  
 
   const getIndexByName = (name, arr) => {
     return arr.indexOf(name)
@@ -188,7 +190,7 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
     watch
   } = useForm({
     resolver: yupResolver(schema),
-    context: { listener, role },
+    context: { expert, role },
     defaultValues: {
       name: '',
       email: '',
@@ -197,8 +199,6 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
       talkTopics: [],
       ratePrivateVideoCall: 0,
       ratePrivateAudioCall: 0,
-      rateRandomVideoCall: 0,
-      rateRandomAudioCall: 0,
       experience: '',
       phoneNumber: '+',
       location: '',
@@ -208,41 +208,59 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
     }
   })
 
-  // Initialize form with listener data when editing
+  const handleResetForm = useCallback(() => {
+    reset({
+      name: '',
+      email: '',
+      selfIntro: '',
+      language: [],
+      talkTopics: [],
+      ratePrivateVideoCall: 0,
+      ratePrivateAudioCall: 0,
+      experience: '',
+      phoneNumber: '',
+      location: '',
+      age: '',
+      nickName: '',
+      userId: ''
+    })
+    setIsVideoChange(false)
+    setIsAudioChange(false)
+  }, [reset])
+
+  // Initialize form with expert data when editing
   useEffect(() => {
-    if (listener) {
+    if (expert) {
       reset({
-        name: listener.name || '',
-        email: listener.email || '',
-        selfIntro: listener.selfIntro || '',
-        language: listener.language || [],
-        talkTopics: listener.talkTopics || [],
-        ratePrivateVideoCall: listener.ratePrivateVideoCall || 0,
-        ratePrivateAudioCall: listener.ratePrivateAudioCall || 0,
-        rateRandomVideoCall: listener.rateRandomVideoCall || 0,
-        rateRandomAudioCall: listener.rateRandomAudioCall || 0,
-        experience: listener.experience || '',
-        phoneNumber: listener.phoneNumber || '',
-        location: listener.location || '',
-        age: listener.age || '',
-        nickName: listener.nickName || '',
-        userId: listener.userId || ''
+        name: expert.name || '',
+        email: expert.email || '',
+        selfIntro: expert.selfIntro || '',
+        language: expert.language || [],
+        talkTopics: expert.talkTopics || [],
+        ratePrivateVideoCall: expert.ratePrivateVideoCall || 0,
+        ratePrivateAudioCall: expert.ratePrivateAudioCall || 0,
+        experience: expert.experience || '',
+        phoneNumber: expert.phoneNumber || '',
+        location: expert.location || '',
+        age: expert.age || '',
+        nickName: expert.nickName || '',
+        userId: expert.userId || ''
       })
 
       // Set preview image if exists
-      if (listener.image) {
-        setPreviewImage(getFullImageUrl(listener.image))
+      if (expert.image) {
+        setPreviewImage(getFullImageUrl(expert.image))
       }
 
       // Set video files if exists
-      if (role === 'fake' && listener.video && listener.video.length) {
-        setVideo([...listener.video])
-        setTempVideo([...listener.video])
+      if (role === 'fake' && expert.video && expert.video.length) {
+        setVideo([...expert.video])
+        setTempVideo([...expert.video])
       }
 
       // Set audio files if exists
-      if (role === 'fake' && listener.audio && listener.audio.length) {
-        const AudioArray = typeof listener.audio === 'string' ? [listener.audio] : listener.audio
+      if (role === 'fake' && expert.audio && expert.audio.length) {
+        const AudioArray = typeof expert.audio === 'string' ? [expert.audio] : expert.audio
 
         setAudioFiles(AudioArray)
       }
@@ -255,7 +273,7 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
       setAudioFiles([])
       setRemoveVideoIndexes([])
     }
-  }, [listener, reset])
+  }, [expert, reset, role, handleResetForm])
 
   const handleImageChange = e => {
     if (e.target.files && e.target.files[0]) {
@@ -333,97 +351,74 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
     setIsAudioChange(true)
   }
 
-
   const onSubmit = async data => {
-  try {
-    setLoading(true)
+    try {
+      setLoading(true)
 
-    const formData = new FormData()
+      const formData = new FormData()
 
-    if (listener) {
-  let hasChanges = false
+      if (expert) {
+        let hasChanges = false
 
-  if (removeVideoIndexes.length) {
-    formData.append('removeVideoIndexes', JSON.stringify(removeVideoIndexes))
-    hasChanges = true
-  }
-
-  Object.keys(data).forEach(key => {
-    if (appendIfChanged(formData, key, data[key], listener[key])) {
-      hasChanges = true
-    }
-  })
-
-  if (imageFile) {
-    formData.append('image', imageFile)
-    hasChanges = true
-  }
-
-  if (role === 'fake' && isVideoChange) {
-    video.forEach(v => v instanceof File && formData.append('video', v))
-    hasChanges = true
-  }
-
-  if (role === 'fake' && isAudioChange) {
-    audioFiles.forEach(a => a instanceof File && formData.append('audio', a))
-    hasChanges = true
-  }
-
-  if (!hasChanges) {
-    toast.info('No changes detected')
-    return
-  }
-
-  await dispatch(updateListener({ listenerId: listener._id, formData }))
-} else {
-      // ---------- CREATE MODE ----------
-
-      Object.keys(data).forEach(key => {
-        if (Array.isArray(data[key])) {
-          formData.append(key, data[key].join(','))
-        } else {
-          formData.append(key, data[key])
+        if (removeVideoIndexes.length) {
+          formData.append('removeVideoIndexes', JSON.stringify(removeVideoIndexes))
+          hasChanges = true
         }
-      })
 
-      if (imageFile) formData.append('image', imageFile)
+        Object.keys(data).forEach(key => {
+          if (appendIfChanged(formData, key, data[key], expert[key])) {
+            hasChanges = true
+          }
+        })
 
-      if (role === 'fake') {
-        video.forEach(v => v instanceof File && formData.append('video', v))
-        audioFiles.forEach(a => a instanceof File && formData.append('audio', a))
+        if (imageFile) {
+          formData.append('image', imageFile)
+          hasChanges = true
+        }
+
+        if (role === 'fake' && isVideoChange) {
+          video.forEach(v => v instanceof File && formData.append('video', v))
+          hasChanges = true
+        }
+
+        if (role === 'fake' && isAudioChange) {
+          audioFiles.forEach(a => a instanceof File && formData.append('audio', a))
+          hasChanges = true
+        }
+
+        if (!hasChanges) {
+          toast.info('No changes detected')
+
+          return
+        }
+
+        await dispatch(updateListener({ listenerId: expert._id, formData }))
+      } else {
+        // ---------- CREATE MODE ----------
+        Object.keys(data).forEach(key => {
+          if (Array.isArray(data[key])) {
+            formData.append(key, data[key].join(','))
+          } else {
+            formData.append(key, data[key])
+          }
+        })
+
+        if (imageFile) formData.append('image', imageFile)
+
+        if (role === 'fake') {
+          video.forEach(v => v instanceof File && formData.append('video', v))
+          audioFiles.forEach(a => a instanceof File && formData.append('audio', a))
+        }
+
+        await dispatch(createExpert(formData))
       }
 
-      await dispatch(createListener(formData))
+      onClosePopup()
+    } catch (error) {
+      console.error('Error saving expert:', error)
+    } finally {
+      setLoading(false)
     }
-
-    onClosePopup()
-  } catch (error) {
-    console.error('Error saving listener:', error)
-  } finally {
-    setLoading(false)
-  }
-}
-
-  const handleResetForm = () => {
-    reset({
-      name: '',
-      email: '',
-      selfIntro: '',
-      language: [],
-      talkTopics: [],
-      ratePrivateVideoCall: 0,
-      ratePrivateAudioCall: 0,
-      rateRandomVideoCall: 0,
-      rateRandomAudioCall: 0,
-      experience: '',
-      phoneNumber: '',
-      location: '',
-      age: '',
-      nickName: '',
-      userId: ''
-    })
-    setIsVideoChange(false)
-    setIsAudioChange(false)
   }
 
   const onClosePopup = (_, reason) => {
@@ -449,7 +444,7 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
       keepMounted
       disableEscapeKeyDown
       TransitionComponent={Transition}
-      aria-labelledby='listener-dialog-title'
+      aria-labelledby='expert-dialog-title'
       fullWidth
       maxWidth='md'
       PaperProps={{
@@ -460,9 +455,9 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
         }
       }}
     >
-      <DialogTitle id='listener-dialog-title'>
+      <DialogTitle id='expert-dialog-title'>
         <Typography variant='h5' component='span'>
-          {listener ? 'Edit Listener' : 'Create Listener'}
+          {expert ? 'Edit Expert' : 'Create Expert'}
         </Typography>
         <DialogCloseButton onClick={onClosePopup} disabled={loading}>
           <i className='tabler-x' />
@@ -473,7 +468,7 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
         <Grid container spacing={4} className='mt-1'>
           <Grid item xs={12} md={12}>
             <Grid container spacing={3}>
-              {role === 'real' && !listener ? (
+              {role === 'real' && !expert ? (
                 <Grid item size={6}>
                   <Controller
                     name='userId'
@@ -575,7 +570,7 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
               </Grid>
 
               {/* Location field - only for new listeners */}
-              {!listener && (
+              {!expert && (
                 <>
                   <Grid item size={6}>
                     <Controller
@@ -596,7 +591,7 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
               )}
 
               {/* Age field - only for new listeners */}
-              {!listener && (
+              {!expert && (
                 <>
                   <Grid item size={6}>
                     <Controller
@@ -666,7 +661,7 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
               </Grid>
 
               {/* Experience field - only for new listeners */}
-              {!listener && (
+              {!expert && (
                 <Grid item size={6}>
                   <Controller
                     name='experience'
@@ -700,10 +695,13 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
                       helperText={errors.phoneNumber?.message || 'Example: +91XXXXXXXXXX'}
                       onChange={e => {
                         let value = e.target.value // Allow only "+" at start and digits
+
                         value = value.replace(/[^+\d]/g, '') // Remove all except + and digits
+
                         if (!value.startsWith('+')) {
                           value = '+' + value.replace(/\+/g, '')
                         } // Remove all additional '+' except at first position
+
                         value = value[0] + value.slice(1).replace(/\+/g, '')
                         field.onChange(value)
                       }}
@@ -717,7 +715,7 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
               </Grid>
 
               <Grid item size={12}>
-                {/* <Grid item xs={listener ? 12 : 6}> */}
+                {/* <Grid item xs={expert ? 12 : 6}> */}
                 <Controller
                   name='selfIntro'
                   control={control}
@@ -772,40 +770,6 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
                       fullWidth
                       error={!!errors.ratePrivateAudioCall}
                       helperText={errors.ratePrivateAudioCall?.message}
-                      InputProps={{ inputProps: { min: 0 } }}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item size={6}>
-                <Controller
-                  name='rateRandomVideoCall'
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label='Random Video Call Rate'
-                      type='number'
-                      fullWidth
-                      error={!!errors.rateRandomVideoCall}
-                      helperText={errors.rateRandomVideoCall?.message}
-                      InputProps={{ inputProps: { min: 0 } }}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item size={6}>
-                <Controller
-                  name='rateRandomAudioCall'
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label='Random Audio Call Rate'
-                      type='number'
-                      fullWidth
-                      error={!!errors.rateRandomAudioCall}
-                      helperText={errors.rateRandomAudioCall?.message}
                       InputProps={{ inputProps: { min: 0 } }}
                     />
                   )}
@@ -960,7 +924,6 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
         </Button>
         <Button
           onClick={() => {
-
             handleSubmit(onSubmit)()
           }}
           variant='contained'
@@ -968,7 +931,7 @@ const ListenerDialog = ({ open, onClose, listener = null, role }) => {
           disabled={loading}
           startIcon={loading ? <CircularProgress size={20} /> : null}
         >
-          {loading ? 'Saving...' : listener ? 'Update' : 'Create'}
+          {loading ? 'Saving...' : expert ? 'Update' : 'Create'}
         </Button>
       </DialogActions>
     </Dialog>

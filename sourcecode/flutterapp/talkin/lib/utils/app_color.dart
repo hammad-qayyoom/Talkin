@@ -64,11 +64,6 @@ class AppColors {
   static Color notificationTxt = const Color(0xff707070);
   static Color historyCallType = const Color(0xff434343);
   static Color historyDivider = const Color(0xffF4F4F4);
-  static Color randomCallCoin = const Color(0xffE49F14);
-  static Color randomCallBg = const Color(0xffD9D9D9);
-  static Color randomCallGrey = const Color(0xffC2C2C2);
-  static Color randomCallPurple = const Color(0xffEFE9F8);
-  static Color randomCallBorder = const Color(0xffEFE9F8);
   static Color idContainerColor = const Color(0xffF0E4F8);
   static Color idContainerColor2 = const Color(0xffE9D5FB);
   static Color idTxtColor = const Color(0xff9D82B6);

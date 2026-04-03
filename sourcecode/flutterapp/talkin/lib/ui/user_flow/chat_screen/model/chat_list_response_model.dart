@@ -51,8 +51,6 @@ class ChatList {
   String? time;
   bool? isAvailableForPrivateAudioCall;
   bool? isAvailableForPrivateVideoCall;
-  bool? isAvailableForRandomAudioCall;
-  bool? isAvailableForRandomVideoCall;
   bool? isAvailableForChat;
 
   ChatList({
@@ -74,8 +72,6 @@ class ChatList {
     this.time,
     this.isAvailableForPrivateAudioCall,
     this.isAvailableForPrivateVideoCall,
-    this.isAvailableForRandomAudioCall,
-    this.isAvailableForRandomVideoCall,
     this.isAvailableForChat,
   });
 
@@ -98,8 +94,6 @@ class ChatList {
         time: json["time"],
         isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],
         isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],
-        isAvailableForRandomAudioCall: json["isAvailableForRandomAudioCall"],
-        isAvailableForRandomVideoCall: json["isAvailableForRandomVideoCall"],
         isAvailableForChat: json["isAvailableForChat"],
       );
 
@@ -122,8 +116,6 @@ class ChatList {
         "time": time,
         "isAvailableForPrivateAudioCall": isAvailableForPrivateAudioCall,
         "isAvailableForPrivateVideoCall": isAvailableForPrivateVideoCall,
-        "isAvailableForRandomAudioCall": isAvailableForRandomAudioCall,
-        "isAvailableForRandomVideoCall": isAvailableForRandomVideoCall,
         "isAvailableForChat": isAvailableForChat,
       };
 }

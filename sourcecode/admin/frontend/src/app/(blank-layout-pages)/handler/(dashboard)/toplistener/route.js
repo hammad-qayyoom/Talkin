@@ -13,7 +13,7 @@ export async function GET(req) {
   // const endDate = searchParams.get('endDate') || 'All'
 
   // try {
-  //   const response = await axios.get(`${baseURL}/api/admin/dashboard/getTopPerformingListeners`, {
+  //   const response = await axios.get(`${baseURL}/api/admin/dashboard/getTopPerformingExperts`, {
   //     headers: {
   //       Authorization: token,
   //       'x-admin-uid': uid,
@@ -31,7 +31,7 @@ export async function GET(req) {
   // }
 
   const { data, error } = await fetchFromBackend(req, {
-    path: '/api/admin/dashboard/getTopPerformingListeners'
+    path: '/api/admin/dashboard/getTopPerformingExperts'
   })
 
   if (error) {

@@ -45,16 +45,12 @@ class Data {
   String? image;
   num? ratePrivateVideoCall;
   num? ratePrivateAudioCall;
-  num? rateRandomVideoCall;
-  num? rateRandomAudioCall;
   num? rating;
   num? callCount;
   String? experience;
   num? currentCoinBalance;
   bool? isAvailableForPrivateAudioCall;
   bool? isAvailableForPrivateVideoCall;
-  bool? isAvailableForRandomAudioCall;
-  bool? isAvailableForRandomVideoCall;
   bool? isAvailableForChat;
   bool? isNotificationEnabled;
   bool? isFake;
@@ -72,16 +68,12 @@ class Data {
     this.image,
     this.ratePrivateVideoCall,
     this.ratePrivateAudioCall,
-    this.rateRandomVideoCall,
-    this.rateRandomAudioCall,
     this.rating,
     this.callCount,
     this.experience,
     this.currentCoinBalance,
     this.isAvailableForPrivateAudioCall,
     this.isAvailableForPrivateVideoCall,
-    this.isAvailableForRandomAudioCall,
-    this.isAvailableForRandomVideoCall,
     this.isAvailableForChat,
     this.isNotificationEnabled,
     this.video,
@@ -100,16 +92,12 @@ class Data {
         image: json["image"],
         ratePrivateVideoCall: json["ratePrivateVideoCall"],
         ratePrivateAudioCall: json["ratePrivateAudioCall"],
-        rateRandomVideoCall: json["rateRandomVideoCall"],
-        rateRandomAudioCall: json["rateRandomAudioCall"],
         rating: json["rating"],
         callCount: json["callCount"],
         experience: json["experience"],
         currentCoinBalance: json["currentCoinBalance"],
         isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],
         isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],
-        isAvailableForRandomAudioCall: json["isAvailableForRandomAudioCall"],
-        isAvailableForRandomVideoCall: json["isAvailableForRandomVideoCall"],
         isAvailableForChat: json["isAvailableForChat"],
         isNotificationEnabled: json["isNotificationEnabled"],
         video: json["video"] == null ? [] : List<String>.from(json["video"]!.map((x) => x)),
@@ -128,16 +116,12 @@ class Data {
         "image": image,
         "ratePrivateVideoCall": ratePrivateVideoCall,
         "ratePrivateAudioCall": ratePrivateAudioCall,
-        "rateRandomVideoCall": rateRandomVideoCall,
-        "rateRandomAudioCall": rateRandomAudioCall,
         "rating": rating,
         "callCount": callCount,
         "experience": experience,
         "currentCoinBalance": currentCoinBalance,
         "isAvailableForPrivateAudioCall": isAvailableForPrivateAudioCall,
         "isAvailableForPrivateVideoCall": isAvailableForPrivateVideoCall,
-        "isAvailableForRandomAudioCall": isAvailableForRandomAudioCall,
-        "isAvailableForRandomVideoCall": isAvailableForRandomVideoCall,
         "isAvailableForChat": isAvailableForChat,
         "isNotificationEnabled": isNotificationEnabled,
         "video": video == null ? [] : List<dynamic>.from(video!.map((x) => x)),

@@ -77,8 +77,7 @@ class Utils {
 
   /// =================== Console Log =================== ///
   static showLog(String text) {
-    print(text);
-    // log(text);
+    debugPrint(text);
   }
 
   // static void showLoading({String? message}) {

@@ -25,7 +25,7 @@ const DeleteConfirmDialog = ({ open, onClose, onConfirm, loading }) => {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id='delete-dialog-description'>
-          Are you sure you want to delete this listener? This action cannot be undone.
+          Are you sure you want to delete this expert? This action cannot be undone.
         </DialogContentText>
       </DialogContent>
       <DialogActions>

@@ -47,7 +47,7 @@ import tableStyles from '@core/styles/table.module.css'
 // Actions
 import {
   deleteListener,
-  fetchListeners,
+  fetchExperts,
   setDateRange,
   setIsFake,
   setPage,
@@ -142,7 +142,7 @@ const ListenerListTable = () => {
     endDate: reduxEndDate,
     isFake,
     selectedListener
-  } = useSelector(state => state.listener)
+  } = useSelector(state => state.expert)
 
   const { profileData } = useSelector(state => state.adminSlice)
   
@@ -201,7 +201,7 @@ const ListenerListTable = () => {
 
     // Fetch data with current filters
     dispatch(
-      fetchListeners({
+      fetchExperts({
         page,
         limit: pageSize,
         searchQuery,
@@ -232,7 +232,7 @@ const ListenerListTable = () => {
   const columns = useMemo(
     () => [
       columnHelper.accessor('name', {
-        header: () => <div className='text-center'>Listener</div>,
+        header: () => <div className='text-center'>Expert</div>,
         cell: ({ row }) => {
           const { name, image, uniqueId } = row.original
 
@@ -385,9 +385,9 @@ const ListenerListTable = () => {
     setInfiniteScrollPage(1)
   }
 
-  const handleEditListener = listener => {
-    setListenerToEdit(listener)
-    dispatch(setSelectedListener(listener))
+  const handleEditListener = expert => {
+    setListenerToEdit(expert)
+    dispatch(setSelectedListener(expert))
     setOpen(true)
   }
 
@@ -405,7 +405,7 @@ const ListenerListTable = () => {
         setIsDeleteDialogOpen(false)
         setListenerToDelete(null)
       } catch (error) {
-        console.error('Failed to delete listener:', error)
+        console.error('Failed to delete expert:', error)
       } finally {
         setDeleteLoading(false)
       }
@@ -438,7 +438,7 @@ const ListenerListTable = () => {
     const nextPage = page + 1
 
     dispatch(
-      fetchListeners({
+      fetchExperts({
         page: nextPage,
         limit: pageSize,
         searchQuery,
@@ -460,7 +460,7 @@ const ListenerListTable = () => {
         <div className='flex flex-wrap gap-4 p-6 justify-between items-center'>
           <div className='flex items-center gap-4'>
             <DebouncedInput
-              placeholder='Search By Listener/Unique Id'
+              placeholder='Search By Expert/Unique Id'
               value={globalFilterValue}
               onChange={value => handleSearch(value)}
               className='min-w-[240px]'
@@ -474,7 +474,7 @@ const ListenerListTable = () => {
           <div className='flex gap-4'>
             <DateRangePicker startDate={reduxStartDate} endDate={reduxEndDate} onChange={handleDateChange} />
             <Button variant='contained' startIcon={<AddIcon />} onClick={handleCreateListener}>
-              Add Listener
+              Add Expert
             </Button>
           </div>
         </div>
@@ -540,7 +540,7 @@ const ListenerListTable = () => {
                               <CircularProgress size={24} />
                             </div>
                           ) : (
-                            'No listeners found'
+                            'No experts found'
                           )}
                         </td>
                       </tr>
@@ -568,8 +568,8 @@ const ListenerListTable = () => {
         </div>
       </Card>
 
-      {/* Listener Dialog for Create/Edit */}
-      <ListenerDialog open={open} onClose={handleDialogClose} listener={listenerToEdit} />
+      {/* Expert Dialog for Create/Edit */}
+      <ListenerDialog open={open} onClose={handleDialogClose} expert={listenerToEdit} />
 
       {/* Delete Confirmation Dialog */}
       <DeleteConfirmDialog

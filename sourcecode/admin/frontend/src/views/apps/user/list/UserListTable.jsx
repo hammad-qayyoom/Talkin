@@ -458,10 +458,10 @@ const UserListTable = ({ breakpoint = 'lg' }) => {
         }
       }),
       columnHelper.accessor('isListener', {
-        header: () => <div className=''>Is Listener</div>,
+        header: () => <div className=''>Is Expert</div>,
         cell: ({ row }) => {
           if (row.original.isListener) {
-            return <Chip size='small' label='Listener' color='info' variant='tonal' />
+            return <Chip size='small' label='Expert' color='info' variant='tonal' />
           } else {
             return <Chip size='small' label='User' color='primary' variant='tonal' />
           }
@@ -740,7 +740,7 @@ const UserListTable = ({ breakpoint = 'lg' }) => {
         updates.isOnline = 'true'
       } else if (value === 'Offline') {
         updates.isOnline = 'false'
-      } else if (value === 'Listener') {
+      } else if (value === 'Expert') {
         updates.isListener = 'true'
       } else if (value === 'User') {
         updates.isListener = 'false'
@@ -839,7 +839,7 @@ const UserListTable = ({ breakpoint = 'lg' }) => {
                       : searchParams.get('isOnline') === 'false'
                         ? 'Offline'
                         : searchParams.get('isListener') === 'true'
-                          ? 'Listener'
+                          ? 'Expert'
                           : searchParams.get('isListener') === 'false'
                             ? 'User'
                             : 'All'
@@ -854,7 +854,7 @@ const UserListTable = ({ breakpoint = 'lg' }) => {
               <MenuItem value='Unblocked'>Unblocked</MenuItem>
               <MenuItem value='Offline'>Offline</MenuItem>
               <MenuItem value='Online'>Online</MenuItem>
-              <MenuItem value='Listener'>Listener</MenuItem>
+              <MenuItem value='Expert'>Expert</MenuItem>
               <MenuItem value='User'>User</MenuItem>
             </CustomTextField>
             <CustomTextField

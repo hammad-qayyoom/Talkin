@@ -43,7 +43,7 @@ const GeneralSettings = () => {
     minCoinsToCashOut: '',
     minCoinsForPayout: '',
     pkEndTime: '',
-    listenerPrivacyPolicyUrl: '',
+    expertPrivacyPolicyUrl: '',
     aboutUsUrl: '',
     helpdeskEmail: '',
     userPrivacyPolicyUrl: '',
@@ -57,8 +57,6 @@ const GeneralSettings = () => {
     isDummyData: false,
     videoCallRatePrivate: '',
     audioCallRatePrivate: '',
-    videoCallRateRandom: '',
-    audioCallRateRandom: '',
     dailyLoginBonusCoins: '',
     isDemoContentEnabled: '',
     isApplicationLive: '',
@@ -84,7 +82,7 @@ const GeneralSettings = () => {
         minCoinsToCashOut: settings.minCoinsToCashOut?.toString() || '',
         minCoinsForPayout: settings.minCoinsForPayout?.toString() || '',
         userPrivacyPolicyUrl: settings.userPrivacyPolicyUrl || '',
-        listenerPrivacyPolicyUrl: settings.listenerPrivacyPolicyUrl || '',
+        expertPrivacyPolicyUrl: settings.expertPrivacyPolicyUrl || '',
         aboutUsUrl: settings.aboutUsUrl || '',
         helpdeskEmail: settings.helpdeskEmail || '',
         shortsEffectEnabled: settings.shortsEffectEnabled || false,
@@ -97,8 +95,6 @@ const GeneralSettings = () => {
         isDummyData: settings.isDummyData || false,
         videoCallRatePrivate: settings.videoCallRatePrivate || 0,
         audioCallRatePrivate: settings.audioCallRatePrivate || 0,
-        videoCallRateRandom: settings.videoCallRateRandom || 0,
-        audioCallRateRandom: settings.audioCallRateRandom || 0,
         dailyLoginBonusCoins: settings.dailyLoginBonusCoins || 0,
         adminCommissionPercent: settings.adminCommissionPercent || 0,
         allowBecomeHostOption: settings.allowBecomeHostOption || false,
@@ -109,6 +105,7 @@ const GeneralSettings = () => {
         androidAppLink: settings.androidAppLink || 'https://andriodapplink.com',
         iosAppLink: settings.iosAppLink || 'https://iosapplink.com'
       }
+
       setFormData(newData)
       setInitialData(newData)
 
@@ -190,8 +187,6 @@ const GeneralSettings = () => {
     'minCoinsForPayout',
     'videoCallRatePrivate',
     'audioCallRatePrivate',
-    'videoCallRateRandom',
-    'audioCallRateRandom',
     'dailyLoginBonusCoins',
     'adminCommissionPercent'
   ]
@@ -230,6 +225,7 @@ const GeneralSettings = () => {
 
     if (Object.keys(updatedFields).length === 0) {
       toast.info('No changes to update')
+
       return
     }
 
@@ -477,10 +473,10 @@ const GeneralSettings = () => {
                       variant='subtitle1'
                       sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
                     >
-                      {toolTipData['videoCallRateRandom'].title}
+                      {toolTipData['videoCallRatePrivate'].title}
                     </Typography>
                     <Divider sx={{ mb: 0 }} />
-                    <p>{toolTipData['videoCallRateRandom'].tooltip}</p>
+                    <p>{toolTipData['videoCallRatePrivate'].tooltip}</p>
                   </Box>
                 </>
               }
@@ -491,107 +487,55 @@ const GeneralSettings = () => {
 
           <Divider sx={{ mb: 3 }} />
 
-          <div className='flex gap-3'>
-            <Card className='w-full bg-transparent'>
-              <CardContent className=''>
-                <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-                  <i className='tabler-settings mr-2' />
-                  Private Rate
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                <div className='flex gap-3 flex-col'>
-                  <Grid item xs={12} md={12}>
-                    <TextField
-                      fullWidth
-                      type='text'
-                      label='Private Audio Rate'
-                      value={formData.audioCallRatePrivate || ''}
-                      onChange={e => handleFieldChange('audioCallRatePrivate', e.target.value)}
-                      InputProps={{
-                        inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
-                        endAdornment: (
-                          <InputAdornment position='end'>
-                            <Typography variant='caption' color='text.secondary'>
-                              coins/minute
-                            </Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={12}>
-                    <TextField
-                      fullWidth
-                      type='text'
-                      label='Private Video Rate'
-                      value={formData.videoCallRatePrivate || ''}
-                      onChange={e => handleFieldChange('videoCallRatePrivate', e.target.value)}
-                      InputProps={{
-                        inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
-                        endAdornment: (
-                          <InputAdornment position='end'>
-                            <Typography variant='caption' color='text.secondary'>
-                              coins/minute
-                            </Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className='w-full'>
-              <CardContent className=''>
-                <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-                  <i className='tabler-settings mr-2' />
-                  Random Rate
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                <div className='flex gap-3 flex-col'>
-                  <Grid item xs={12} md={12}>
-                    <TextField
-                      fullWidth
-                      type='text'
-                      label='Random Audio Rate'
-                      value={formData.audioCallRateRandom || ''}
-                      onChange={e => handleFieldChange('audioCallRateRandom', e.target.value)}
-                      InputProps={{
-                        inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
-                        endAdornment: (
-                          <InputAdornment position='end'>
-                            <Typography variant='caption' color='text.secondary'>
-                              coins/minute
-                            </Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} md={12}>
-                    <TextField
-                      fullWidth
-                      type='text'
-                      label='Random Video Rate'
-                      value={formData.videoCallRateRandom || ''}
-                      onChange={e => handleFieldChange('videoCallRateRandom', e.target.value)}
-                      InputProps={{
-                        inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
-                        endAdornment: (
-                          <InputAdornment position='end'>
-                            <Typography variant='caption' color='text.secondary'>
-                              coins/minute
-                            </Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <Card className='w-full bg-transparent'>
+            <CardContent className=''>
+              <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
+                <i className='tabler-settings mr-2' />
+                Private Rate
+              </Typography>
+              <Divider sx={{ mb: 3 }} />
+              <div className='flex gap-3 flex-col'>
+                <Grid item xs={12} md={12}>
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='Private Audio Rate'
+                    value={formData.audioCallRatePrivate || ''}
+                    onChange={e => handleFieldChange('audioCallRatePrivate', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography variant='caption' color='text.secondary'>
+                            coins/minute
+                          </Typography>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={12}>
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='Private Video Rate'
+                    value={formData.videoCallRatePrivate || ''}
+                    onChange={e => handleFieldChange('videoCallRatePrivate', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography variant='caption' color='text.secondary'>
+                            coins/minute
+                          </Typography>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+              </div>
+            </CardContent>
+          </Card>
         </CardContent>
       </Card>
 
@@ -682,10 +626,10 @@ const GeneralSettings = () => {
                       variant='subtitle1'
                       sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
                     >
-                      {toolTipData['listenerPrivacyPolicyUrl'].title}
+                      {toolTipData['expertPrivacyPolicyUrl'].title}
                     </Typography>
                     <Divider sx={{ mb: 0 }} />
-                    <p>{toolTipData['listenerPrivacyPolicyUrl'].tooltip}</p>
+                    <p>{toolTipData['expertPrivacyPolicyUrl'].tooltip}</p>
                   </Box>
                   <Box className='mt-2'>
                     <Typography
@@ -718,9 +662,9 @@ const GeneralSettings = () => {
             <Grid item size={6}>
               <TextField
                 fullWidth
-                label='Privacy Policy Link (Listener)'
-                value={formData.listenerPrivacyPolicyUrl || ''}
-                onChange={e => handleFieldChange('listenerPrivacyPolicyUrl', e.target.value)}
+                label='Privacy Policy Link (Expert)'
+                value={formData.expertPrivacyPolicyUrl || ''}
+                onChange={e => handleFieldChange('expertPrivacyPolicyUrl', e.target.value)}
               />
             </Grid>
             <Grid item size={6}>

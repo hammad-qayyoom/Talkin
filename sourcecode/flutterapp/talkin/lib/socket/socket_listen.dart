@@ -50,7 +50,6 @@ class SocketListen {
     socket?.off(SocketEvents.callEnded);
     socket?.off(SocketEvents.callerCallCut);
     socket?.off(SocketEvents.callTerminated);
-    socket?.off(SocketEvents.randomCallRinging);
     socket?.off(SocketEvents.notEnoughCoins);
     socket?.off(SocketEvents.callCoinsDeducted);
     socket?.off(SocketEvents.callCutData);
@@ -67,7 +66,6 @@ class SocketListen {
     socket!.on(SocketEvents.callEnded, handleCallEnded);
     socket!.on(SocketEvents.callerCallCut, handleCallRejected);
     socket!.on(SocketEvents.callTerminated, handleCallTerminated);
-    socket?.on(SocketEvents.randomCallRinging, handleRandomCallRinging);
     socket?.on(SocketEvents.notEnoughCoins, handleNotEnoughCoins);
     socket?.on(SocketEvents.callCoinsDeducted, handleCallCoinsDeducted);
     socket?.on(SocketEvents.callCutData, handleCallCutData);
@@ -461,54 +459,6 @@ class SocketListen {
     Utils.showLog("Socket Listen => callRejected event: $data");
   }
 
-  /// both join call and then cut call this event listen
-  // static Future<void> handleCallTerminated(dynamic data) async {
-  //   UserCoinModel? userCoinModel;
-  //   ListenerCoinModel? listenerCoinModel;
-  //   Utils.showLog("Socket Listen => callTerminated event: $data");
-  //
-  //   final callerRole = data['callerRole'];
-  //   final callMode = data['callMode'];
-  //   if (Database.fetchLoginUserProfileModel?.user?.isListener == false && callMode == "random") {
-  //     // Get.close(2);
-  //     if (Get.currentRoute == AppRoutes.videoCallScreen || Get.currentRoute == AppRoutes.voiceCallScreen) {
-  //       StreamSubscription<bool>? subsProximity;
-  //
-  //       await ProximityScreenLock.setActive(false);
-  //       // Subscribe to proximity states
-  //       subsProximity = ProximityScreenLock.proximityStates.listen((objectDetected) {
-  //         log("call cut screen controller Proximity event (even though disabled): $objectDetected   $subsProximity");
-  //       });
-  //
-  //       Get.back();
-  //     }
-  //
-  //     log("is listener ${Database.fetchLoginUserProfileModel?.user?.isListener}");
-  //     log("call mode  $callMode");
-  //   } else {
-  //     if (Get.currentRoute == AppRoutes.videoCallScreen || Get.currentRoute == AppRoutes.voiceCallScreen) {
-  //       Get.back();
-  //     }
-  //   }
-  //   if (Database.fetchLoginUserProfileModel?.user?.isListener == false && callerRole == "user") {
-  //     Get.toNamed(AppRoutes.callCutScreen, arguments: data);
-  //   }
-  //
-  //   userCoinModel = await UserCoinApi.callApi();
-  //   Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
-  //
-  //   if (Get.isRegistered<HostHomeScreenController>()) {
-  //     final hostHomeScreenController = Get.find<HostHomeScreenController>();
-  //
-  //     hostHomeScreenController.isCoinLoading = true;
-  //     hostHomeScreenController.update([Constant.idCoinUpdate]);
-  //     listenerCoinModel = await HostCoinApi.callApi();
-  //     Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
-  //     hostHomeScreenController.isCoinLoading = false;
-  //     hostHomeScreenController.update([Constant.idCoinUpdate]);
-  //   }
-  // }
-
   static Future<void> handleCallTerminated(dynamic data) async {
     UserCoinModel? userCoinModel;
     ListenerCoinModel? listenerCoinModel;
@@ -523,7 +473,6 @@ class SocketListen {
       }
     }
     final callerRole = data['callerRole'];
-    final callMode = data['callMode'];
 
     // ✅ First, properly cleanup proximity sensor and screen lock
     try {
@@ -537,20 +486,9 @@ class SocketListen {
       log("❌ Error deactivating proximity sensor: $e");
     }
 
-    if (Database.fetchLoginUserProfileModel?.user?.isListener == false &&
-        callMode == "random") {
-      if (Get.currentRoute == AppRoutes.videoCallScreen ||
-          Get.currentRoute == AppRoutes.voiceCallScreen) {
-        Get.back();
-      }
-
-      log("is listener ${Database.fetchLoginUserProfileModel?.user?.isListener}");
-      log("call mode  $callMode");
-    } else {
-      if (Get.currentRoute == AppRoutes.videoCallScreen ||
-          Get.currentRoute == AppRoutes.voiceCallScreen) {
-        Get.back();
-      }
+    if (Get.currentRoute == AppRoutes.videoCallScreen ||
+        Get.currentRoute == AppRoutes.voiceCallScreen) {
+      Get.back();
     }
 
     if (Database.fetchLoginUserProfileModel?.user?.isListener == false &&
@@ -577,13 +515,6 @@ class SocketListen {
     if (Get.isRegistered<HomeScreenController>()) {
       Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
     }
-  }
-
-  /// random call If any error like busy, caller or receiver not found then listen always in incomingRingingStarted event
-  static void handleRandomCallRinging(dynamic data) {
-    Utils.showLog(
-        "Socket Listen => random call incomingRingingStarted (error or status): $data");
-    Utils.showToast(Get.context!, data['message']);
   }
 
   static void handleNotEnoughCoins(dynamic data) {

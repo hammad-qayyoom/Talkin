@@ -475,59 +475,6 @@ class HostListenersDetailView extends StatelessWidget {
                         ).paddingOnly(bottom: 18),
                       ),
                     ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomTitle(
-                          title: EnumLocale.txtRandomVideoCallRate.name.tr,
-                          textStyle: AppFontStyle.fontStyleW500(
-                            fontSize: 12,
-                            fontColor: AppColors.listenersDetail,
-                          ),
-                          method: CustomTextField(
-                            filled: true,
-                            borderColor: AppColors.appTextColor.withValues(alpha: 0.18),
-                            controller: controller.rateRandomVideoCallCnt,
-                            fillColor: AppColors.white,
-                            cursorColor: AppColors.black,
-                            fontColor: AppColors.black,
-                            fontSize: 15,
-                            textInputAction: TextInputAction.next,
-                            maxLines: 1,
-                            textInputType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly,
-                            ],
-                          ),
-                        ).paddingOnly(bottom: 18),
-                      ),
-                      8.width,
-                      Expanded(
-                        child: CustomTitle(
-                          title: EnumLocale.txtRandomAudioCallRate.name.tr,
-                          textStyle: AppFontStyle.fontStyleW500(
-                            fontSize: 12,
-                            fontColor: AppColors.listenersDetail,
-                          ),
-                          method: CustomTextField(
-                            filled: true,
-                            borderColor: AppColors.appTextColor.withValues(alpha: 0.18),
-                            controller: controller.rateRandomAudioCallCnt,
-                            fillColor: AppColors.white,
-                            cursorColor: AppColors.black,
-                            fontColor: AppColors.black,
-                            fontSize: 15,
-                            textInputAction: TextInputAction.next,
-                            maxLines: 1,
-                            textInputType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly,
-                            ],
-                          ),
-                        ).paddingOnly(bottom: 18),
-                      ),
-                    ],
                   )
                 ],
               ).paddingSymmetric(horizontal: 16),

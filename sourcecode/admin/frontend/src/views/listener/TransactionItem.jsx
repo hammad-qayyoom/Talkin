@@ -213,7 +213,7 @@ const TransactionItem = ({ transaction, transactionType }) => {
               <Chip variant='tonal' label={`User : ${transaction?.userCoin || '0'} Coins`} size='small' color='info' />
               <Chip
                 variant='tonal'
-                label={`Listener : ${transaction?.listenerCoin || '0'} Coins`}
+                label={`Expert : ${transaction?.listenerCoin || '0'} Coins`}
                 size='small'
                 color='success'
               />
@@ -315,7 +315,7 @@ const TransactionItem = ({ transaction, transactionType }) => {
               <Chip variant='tonal' label={`User : ${transaction?.userCoin || '0'} Coins`} size='small' color='info' />
               <Chip
                 variant='tonal'
-                label={`Listener : ${transaction?.listenerCoin || '0'} Coins`}
+                label={`Expert : ${transaction?.listenerCoin || '0'} Coins`}
                 size='small'
                 color='success'
               />
@@ -417,7 +417,7 @@ const TransactionItem = ({ transaction, transactionType }) => {
               <Chip variant='tonal' label={`User : ${transaction?.userCoin || '0'} Coins`} size='small' color='info' />
               <Chip
                 variant='tonal'
-                label={`Listener : ${transaction?.listenerCoin || '0'} Coins`}
+                label={`Expert : ${transaction?.listenerCoin || '0'} Coins`}
                 size='small'
                 color='success'
               />
@@ -519,7 +519,7 @@ const TransactionItem = ({ transaction, transactionType }) => {
               <Chip variant='tonal' label={`User : ${transaction?.userCoin || '0'} Coins`} size='small' color='info' />
               <Chip
                 variant='tonal'
-                label={`Listener : ${transaction?.listenerCoin || '0'} Coins`}
+                label={`Expert : ${transaction?.listenerCoin || '0'} Coins`}
                 size='small'
                 color='success'
               />

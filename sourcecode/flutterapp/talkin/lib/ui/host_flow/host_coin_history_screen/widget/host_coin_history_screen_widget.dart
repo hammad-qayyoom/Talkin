@@ -313,9 +313,9 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                                                     : item.type == 4
                                                                         ? "private video call"
                                                                         : item.type == 5
-                                                                            ? "Random audio call"
+                                                                    ? "Audio call"
                                                                             : item.type == 6
-                                                                                ? "Random video call"
+                                                                      ? "Video call"
                                                                                 : "Log In Bonus",
                                                             style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.historyCallType),
                                                           ).paddingOnly(right: 6),

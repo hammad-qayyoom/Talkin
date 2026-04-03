@@ -80,7 +80,7 @@ const AboutOverview = ({ data }) => {
                 <i className='tabler-crown' />
                 <div className='flex items-center flex-wrap gap-2'>
                   <Typography className='font-medium'>Role :</Typography>
-                  <Typography> {userDetails?.isListener ? 'Listener' : 'User'}</Typography>
+                  <Typography> {userDetails?.isListener ? 'Expert' : 'User'}</Typography>
                 </div>
               </div>
               <div className='flex items-center gap-2'>

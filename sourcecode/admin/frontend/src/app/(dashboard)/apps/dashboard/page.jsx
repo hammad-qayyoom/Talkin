@@ -75,7 +75,7 @@ const Dashboard = () => {
     dispatch(getTopPerformanceListeners({ startDate, endDate }))
 
     // Fetch graph stats for all types
-    dispatch(getGraphStats({ startDate, endDate, type: 'listener' }))
+    dispatch(getGraphStats({ startDate, endDate, type: 'expert' }))
     dispatch(getGraphStats({ startDate, endDate, type: 'user' }))
   }
 
@@ -156,13 +156,13 @@ const Dashboard = () => {
               <StatisticsCard />
             )}
 
-            {loading.graphStats.listener.length || loading.graphStats.user.length ? (
+            {loading.graphStats.expert.length || loading.graphStats.user.length ? (
               <ActivityOverviewSkeleton />
             ) : hasGraphError ? (
               <ErrorCard message='Failed to load activity data' onRetry={handleRetry} />
             ) : (
 
-              graphStats.listener.length || graphStats.listener.length ? <ActivityOverview /> : ""
+              graphStats.expert.length || graphStats.expert.length ? <ActivityOverview /> : ""
             )}
             {loading.recentUsers ? (
               <UserListSkeleton />

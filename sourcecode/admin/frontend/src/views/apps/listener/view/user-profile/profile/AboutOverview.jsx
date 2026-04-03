@@ -213,20 +213,6 @@ const AboutOverview = ({ data }) => {
                     <Typography> {userDetails?.ratePrivateAudioCall || 0}</Typography>
                   </div>
                 </div>
-                <div className='flex items-center gap-2'>
-                  <i className='tabler-coin' />
-                  <div className='flex items-center flex-wrap gap-2'>
-                    <Typography className='font-medium'>Random Video Call:</Typography>
-                    <Typography> {userDetails?.rateRandomVideoCall || 0}</Typography>
-                  </div>
-                </div>
-                <div className='flex items-center gap-2'>
-                  <i className='tabler-coin' />
-                  <div className='flex items-center flex-wrap gap-2'>
-                    <Typography className='font-medium'>Random Audio Call:</Typography>
-                    <Typography> {userDetails?.rateRandomAudioCall || 0}</Typography>
-                  </div>
-                </div>
               </div>
             </CardContent>
           </Card>
@@ -509,28 +495,6 @@ const AboutOverview = ({ data }) => {
                     />
                   </div>
                 </div>
-                <div className='flex items-center gap-2'>
-                  <div className='flex items-center flex-wrap gap-2'>
-                    <Typography className='font-medium'>Available For Random Audio Call:</Typography>
-                    <Chip
-                      label={userDetails?.isAvailableForRandomAudioCall ? 'Available' : 'Not Abailable'}
-                      color={userDetails?.isAvailableForRandomAudioCall ? 'success' : 'error'}
-                      variant='tonal'
-                      size='small'
-                    />
-                  </div>
-                </div>
-                <div className='flex items-center gap-2'>
-                  <div className='flex items-center flex-wrap gap-2'>
-                    <Typography className='font-medium'>Available For Random Video Call:</Typography>
-                    <Chip
-                      label={userDetails?.isAvailableForRandomVideoCall ? 'Available' : 'Not Abailable'}
-                      color={userDetails?.isAvailableForRandomVideoCall ? 'success' : 'error'}
-                      variant='tonal'
-                      size='small'
-                    />
-                  </div>
-                </div>
               </div>
             </CardContent>
           </Card>
@@ -554,20 +518,6 @@ const AboutOverview = ({ data }) => {
                   <div className='flex items-center flex-wrap gap-2'>
                     <Typography className='font-medium'>Private Audio Call:</Typography>
                     <Typography> {userDetails?.ratePrivateAudioCall || 0}</Typography>
-                  </div>
-                </div>
-                <div className='flex items-center gap-2'>
-                  <i className='tabler-coin' />
-                  <div className='flex items-center flex-wrap gap-2'>
-                    <Typography className='font-medium'>Random Video Call:</Typography>
-                    <Typography> {userDetails?.rateRandomVideoCall || 0}</Typography>
-                  </div>
-                </div>
-                <div className='flex items-center gap-2'>
-                  <i className='tabler-coin' />
-                  <div className='flex items-center flex-wrap gap-2'>
-                    <Typography className='font-medium'>Random Audio Call: </Typography>
-                    <Typography> {userDetails?.rateRandomAudioCall || 0}</Typography>
                   </div>
                 </div>
               </div>

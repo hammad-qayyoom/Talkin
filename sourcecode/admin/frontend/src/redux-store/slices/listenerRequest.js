@@ -31,9 +31,9 @@ const getAuthHeaders = () => {
 }
 
 // Fetch host applications based on status
-export const fetchlistenerRequest = createAsyncThunk('listener/getListenerRequests', async (params = {}, thunkAPI) => {
+export const fetchlistenerRequest = createAsyncThunk('expert/getExpertRequests', async (params = {}, thunkAPI) => {
   try {
-    const result = await axios.get(`${baseURL}/api/admin/listener/getListenerRequests`, {
+    const result = await axios.get(`${baseURL}/api/admin/expert/getExpertRequests`, {
       headers: getAuthHeaders(),
       params: {
         start: params.page,
@@ -51,12 +51,12 @@ export const fetchlistenerRequest = createAsyncThunk('listener/getListenerReques
   }
 })
 
-export const handleListenerRequest = createAsyncThunk(
-  'listener/handleListenerRequest',
+export const handleExpertRequest = createAsyncThunk(
+  'expert/handleExpertRequest',
   async (params = {}, thunkAPI) => {
     try {
       const result = await axios.patch(
-        `${baseURL}/api/admin/listener/handleListenerRequest`,
+        `${baseURL}/api/admin/expert/handleExpertRequest`,
         {},
         {
           headers: getAuthHeaders(),
@@ -147,10 +147,10 @@ const hostApplicationSlice = createSlice({
       })
 
       // Handle Req
-      .addCase(handleListenerRequest.pending, state => {
+      .addCase(handleExpertRequest.pending, state => {
         state.loading = true
       })
-      .addCase(handleListenerRequest.fulfilled, (state, action) => {
+      .addCase(handleExpertRequest.fulfilled, (state, action) => {
         if (action.payload.status) {
           state.loading = false
           state.initialLoad = false
@@ -171,7 +171,7 @@ const hostApplicationSlice = createSlice({
           toast.error(action.payload.message || 'Failed to accept applications')
         }
       })
-      .addCase(handleListenerRequest.rejected, (state, action) => {
+      .addCase(handleExpertRequest.rejected, (state, action) => {
         state.loading = false
         state.initialLoad = false
         state.error = action.payload

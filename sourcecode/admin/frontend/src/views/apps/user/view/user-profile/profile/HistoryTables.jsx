@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 // Next Imports
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -54,10 +54,9 @@ const HistoryTables = () => {
   const DateRangeRef = useRef(false)
 
   const { history, startDate, endDate, page, pageSize } = useSelector(state => state.userReducer)
-  console.log("history" , history);
-  
 
   const userDetails = localStorage.getItem('selectedUser') ? JSON.parse(localStorage.getItem('selectedUser')) : {}
+  const userId = userDetails?._id
   const typeWiseStats = history.typeWiseStats || []
 
   const getTransactionTypeDistribution = () => {
@@ -66,9 +65,9 @@ const HistoryTables = () => {
         case TRANSACTION_TYPES.PRIVATE_AUDIO_CALL:
           return 'Private Audio Call'
         case TRANSACTION_TYPES.RANDOM_AUDIO_CALL:
-          return 'Random Audio Call'
+          return 'Audio Call'
         case TRANSACTION_TYPES.RANDOM_VIDEO_CALL:
-          return 'Random Video Call'
+          return 'Video Call'
         case TRANSACTION_TYPES.PRIVATE_VIDEO_CALL:
           return 'Private Video Call'
         case TRANSACTION_TYPES.COIN_PLAN_PURCHASE:
@@ -310,39 +309,18 @@ const HistoryTables = () => {
   const urlPage = searchParams.get('page') || 1
   const urlPageSize = searchParams.get('pageSize') || 10
 
-  // Effect to load data when tab changes or user changes
-  useEffect(() => {
-    if (userDetails?._id) {
-      loadHistoryData()
-    }
-  }, [activeTab, userDetails?._id, urlPage, urlPageSize, urlStartDate, urlEndDate])
-
-  // Effect to sync URL with state when tab changes externally
-  useEffect(() => {
-    if (historyTabParam !== activeTab) {
-      setActiveTab(historyTabParam)
-    }
-  }, [historyTabParam])
-
-  useEffect(() => {
-    if (!defaultCurrency) {
-      dispatch(fetchDefaultCurrencies())
-    }
-  }, [])
-
   // Function to load data based on current tab
-  const loadHistoryData = () => {
-    if (!userDetails?._id) return
+  const loadHistoryData = useCallback(() => {
+    if (!userId) return
 
     const params = {
-      userId: userDetails._id,
-      start: +(searchParams.get('page') || 1), // API uses 1-based indexing
+      userId,
+      start: +(searchParams.get('page') || 1),
       limit: +(searchParams.get('pageSize') || 10),
       startDate: searchParams.get('startDate') || 'All',
       endDate: searchParams.get('endDate') || 'All'
     }
 
-    // Dispatch appropriate action based on active tab
     if (activeTab === 'coin') {
       dispatch(fetchWalletHistory(params))
     } else if (activeTab === 'call') {
@@ -350,7 +328,27 @@ const HistoryTables = () => {
     } else if (activeTab === 'plan') {
       dispatch(fetchPurchaseHistory(params))
     }
-  }
+  }, [activeTab, dispatch, searchParams, userId])
+
+  // Effect to load data when tab changes or user changes
+  useEffect(() => {
+    if (userId) {
+      loadHistoryData()
+    }
+  }, [loadHistoryData, userId, urlPage, urlPageSize, urlStartDate, urlEndDate])
+
+  // Effect to sync URL with state when tab changes externally
+  useEffect(() => {
+    if (historyTabParam !== activeTab) {
+      setActiveTab(historyTabParam)
+    }
+  }, [activeTab, historyTabParam])
+
+  useEffect(() => {
+    if (!defaultCurrency) {
+      dispatch(fetchDefaultCurrencies())
+    }
+  }, [defaultCurrency, dispatch])
 
   // Render history table based on current tab
   const renderHistoryTable = () => {
@@ -532,7 +530,6 @@ const HistoryTables = () => {
               }
               buttonStartIcon={<i className='tabler-calendar' />}
               setAction={null}
-              // setAction={setDateRange}
               initialStartDate={searchParams.get('startDate') ? new Date(startDate) : null}
               initialEndDate={searchParams.get('endDate') ? new Date(endDate) : null}
               showClearButton={searchParams.get('startDate') && searchParams.get('endDate')}

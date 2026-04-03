@@ -44,8 +44,6 @@ class CallHistory {
   int? ratePrivateAudioCall;
   bool? isAvailableForPrivateAudioCall;
   bool? isAvailableForPrivateVideoCall;
-  bool? isAvailableForRandomAudioCall;
-  bool? isAvailableForRandomVideoCall;
   bool? isAvailableForChat;
   String? audio;
   bool? isOnline;
@@ -66,8 +64,6 @@ class CallHistory {
     this.ratePrivateAudioCall,
     this.isAvailableForPrivateAudioCall,
     this.isAvailableForPrivateVideoCall,
-    this.isAvailableForRandomAudioCall,
-    this.isAvailableForRandomVideoCall,
     this.isAvailableForChat,
     this.audio,
     this.isOnline,
@@ -90,8 +86,6 @@ class CallHistory {
         ratePrivateAudioCall: json["ratePrivateAudioCall"],
         isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],
         isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],
-        isAvailableForRandomAudioCall: json["isAvailableForRandomAudioCall"],
-        isAvailableForRandomVideoCall: json["isAvailableForRandomVideoCall"],
         isAvailableForChat: json["isAvailableForChat"],
         audio: json["audio"],
         isOnline: json["isOnline"],
@@ -113,8 +107,6 @@ class CallHistory {
         "ratePrivateAudioCall": ratePrivateAudioCall,
         "isAvailableForPrivateAudioCall": isAvailableForPrivateAudioCall,
         "isAvailableForPrivateVideoCall": isAvailableForPrivateVideoCall,
-        "isAvailableForRandomAudioCall": isAvailableForRandomAudioCall,
-        "isAvailableForRandomVideoCall": isAvailableForRandomVideoCall,
         "isAvailableForChat": isAvailableForChat,
         "audio": audio,
         "isOnline": isOnline,

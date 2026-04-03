@@ -34,7 +34,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { createListener, fetchListeners, updateListener } from '@/redux-store/slices/listener'
+import { createExpert, fetchExperts, updateListener } from '@/redux-store/slices/listener'
 
 import { getFullImageUrl } from '@/utils/commonfunctions'
 import DialogCloseButton from '@/components/dialogs/DialogCloseButton'
@@ -67,12 +67,10 @@ const schema = yup.object().shape({
   talkTopics: yup.array().min(1, 'At least one talk topic is required'),
   ratePrivateVideoCall: yup.number().min(0, 'Must be at least 0').required('Rate is required'),
   ratePrivateAudioCall: yup.number().min(0, 'Must be at least 0').required('Rate is required'),
-  rateRandomVideoCall: yup.number().min(0, 'Must be at least 0').required('Rate is required'),
-  rateRandomAudioCall: yup.number().min(0, 'Must be at least 0').required('Rate is required'),
   experience: yup.string()
 })
 
-const ListenerDialog = ({ open, onClose, listener = null }) => {
+const ListenerDialog = ({ open, onClose, expert = null }) => {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
   const [imageFile, setImageFile] = useState(null)
@@ -111,31 +109,27 @@ const ListenerDialog = ({ open, onClose, listener = null }) => {
       talkTopics: [],
       ratePrivateVideoCall: 0,
       ratePrivateAudioCall: 0,
-      rateRandomVideoCall: 0,
-      rateRandomAudioCall: 0,
       experience: ''
     }
   })
 
-  // Initialize form with listener data when editing
+  // Initialize form with expert data when editing
   useEffect(() => {
-    if (listener) {
+    if (expert) {
       reset({
-        name: listener.name || '',
-        email: listener.email || '',
-        selfIntro: listener.selfIntro || '',
-        language: listener.language || [],
-        talkTopics: listener.talkTopics || [],
-        ratePrivateVideoCall: listener.ratePrivateVideoCall || 0,
-        ratePrivateAudioCall: listener.ratePrivateAudioCall || 0,
-        rateRandomVideoCall: listener.rateRandomVideoCall || 0,
-        rateRandomAudioCall: listener.rateRandomAudioCall || 0,
-        experience: listener.experience || ''
+        name: expert.name || '',
+        email: expert.email || '',
+        selfIntro: expert.selfIntro || '',
+        language: expert.language || [],
+        talkTopics: expert.talkTopics || [],
+        ratePrivateVideoCall: expert.ratePrivateVideoCall || 0,
+        ratePrivateAudioCall: expert.ratePrivateAudioCall || 0,
+        experience: expert.experience || ''
       })
 
       // Set preview image if exists
-      if (listener.image) {
-        setPreviewImage(getFullImageUrl(listener.image))
+      if (expert.image) {
+        setPreviewImage(getFullImageUrl(expert.image))
       }
     } else {
       reset({
@@ -146,14 +140,12 @@ const ListenerDialog = ({ open, onClose, listener = null }) => {
         talkTopics: [],
         ratePrivateVideoCall: 0,
         ratePrivateAudioCall: 0,
-        rateRandomVideoCall: 0,
-        rateRandomAudioCall: 0,
         experience: ''
       })
       setPreviewImage('')
       setImageFile(null)
     }
-  }, [listener, reset])
+  }, [expert, reset])
 
   const handleImageChange = e => {
     if (e.target.files[0]) {
@@ -185,19 +177,19 @@ const ListenerDialog = ({ open, onClose, listener = null }) => {
         formData.append('image', imageFile)
       }
 
-      if (listener) {
-        // Update existing listener
-        await dispatch(updateListener({ listenerId: listener._id, formData }))
+      if (expert) {
+        // Update existing expert
+        await dispatch(updateListener({ listenerId: expert._id, formData }))
       } else {
-        // Create new listener
-        await dispatch(createListener(formData))
+        // Create new expert
+        await dispatch(createExpert(formData))
       }
 
       // Refresh the listeners list
-      dispatch(fetchListeners())
+      dispatch(fetchExperts())
       onClose()
     } catch (error) {
-      console.error('Error saving listener:', error)
+      console.error('Error saving expert:', error)
     } finally {
       setLoading(false)
     }
@@ -243,7 +235,7 @@ const ListenerDialog = ({ open, onClose, listener = null }) => {
                 onChange={e => handleChange('category', e.target.value)}
               >
                 <MenuItem value='User'>User</MenuItem>
-                <MenuItem value='Listener'>Listener</MenuItem>
+                <MenuItem value='Expert'>Expert</MenuItem>
               </Select>
             </FormControl> */}
     

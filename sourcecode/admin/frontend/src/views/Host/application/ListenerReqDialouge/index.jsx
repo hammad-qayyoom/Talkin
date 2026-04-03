@@ -20,7 +20,7 @@ import { toast } from 'react-toastify'
 
 import DialogCloseButton from '@/components/dialogs/DialogCloseButton'
 
-import { handleListenerRequest } from '@/redux-store/slices/listenerRequest'
+import { handleExpertRequest } from '@/redux-store/slices/listenerRequest'
 
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -58,7 +58,7 @@ const ReqReasonDialog = ({ open, onClose, data }) => {
     
     try {
       await dispatch(
-        handleListenerRequest({
+        handleExpertRequest({
           requestId: data._id,
           userId: data.userId._id,
           type: 3,

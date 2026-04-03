@@ -37,8 +37,6 @@ class ListenerData {
   final String? image;
   final int? ratePrivateVideoCall;
   final int? ratePrivateAudioCall;
-  final int? rateRandomVideoCall;
-  final int? rateRandomAudioCall;
   final double? rating;
   final int? callCount;
   final String? experience;
@@ -50,8 +48,6 @@ class ListenerData {
   String? uniqueId;
   bool? isAvailableForPrivateAudioCall;
   bool? isAvailableForPrivateVideoCall;
-  bool? isAvailableForRandomAudioCall;
-  bool? isAvailableForRandomVideoCall;
   bool? isAvailableForChat;
   String? audio;
 
@@ -64,8 +60,6 @@ class ListenerData {
     this.image,
     this.ratePrivateVideoCall,
     this.ratePrivateAudioCall,
-    this.rateRandomVideoCall,
-    this.rateRandomAudioCall,
     this.rating,
     this.callCount,
     this.experience,
@@ -77,8 +71,6 @@ class ListenerData {
     this.uniqueId,
     this.isAvailableForPrivateAudioCall,
     this.isAvailableForPrivateVideoCall,
-    this.isAvailableForRandomAudioCall,
-    this.isAvailableForRandomVideoCall,
     this.isAvailableForChat,
     this.audio,
   });
@@ -92,8 +84,6 @@ class ListenerData {
         image: json["image"],
         ratePrivateVideoCall: json["ratePrivateVideoCall"],
         ratePrivateAudioCall: json["ratePrivateAudioCall"],
-        rateRandomVideoCall: json["rateRandomVideoCall"],
-        rateRandomAudioCall: json["rateRandomAudioCall"],
         rating: json["rating"].toDouble(),
         callCount: json["callCount"],
         experience: json["experience"],
@@ -105,8 +95,6 @@ class ListenerData {
         uniqueId: json["uniqueId"],
         isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],
         isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],
-        isAvailableForRandomAudioCall: json["isAvailableForRandomAudioCall"],
-        isAvailableForRandomVideoCall: json["isAvailableForRandomVideoCall"],
         isAvailableForChat: json["isAvailableForChat"],
         audio: json["audio"],
       );
@@ -120,8 +108,6 @@ class ListenerData {
         "image": image,
         "ratePrivateVideoCall": ratePrivateVideoCall,
         "ratePrivateAudioCall": ratePrivateAudioCall,
-        "rateRandomVideoCall": rateRandomVideoCall,
-        "rateRandomAudioCall": rateRandomAudioCall,
         "rating": rating,
         "callCount": callCount,
         "experience": experience,
@@ -133,8 +119,6 @@ class ListenerData {
         "uniqueId": uniqueId,
         "isAvailableForPrivateAudioCall": isAvailableForPrivateAudioCall,
         "isAvailableForPrivateVideoCall": isAvailableForPrivateVideoCall,
-        "isAvailableForRandomAudioCall": isAvailableForRandomAudioCall,
-        "isAvailableForRandomVideoCall": isAvailableForRandomVideoCall,
         "isAvailableForChat": isAvailableForChat,
         "audio": audio,
       };

@@ -31,8 +31,6 @@
   "minimumCoinsForPayout": 10,
   "videoCallRatePrivate": 2,
   "audioCallRatePrivate": 1,
-  "videoCallRateRandom": 40,
-  "audioCallRateRandom": 20,
   "privateKey": {
     "type": "service_account",
     "project_id": "demo-98cd8963",
@@ -55,7 +53,7 @@
   "zegoAppId": "zegoAppId",
   "zegoAppSignIn": "zegoAppSignIn",
   "aboutUsUrl": "https://married-copper-vebibx6pkp.edgeone.dev/",
-  "listenerPrivacyPolicyUrl": "https://www.termsfeed.com/live/cd67f429-2d47-426a-a018-59c32a82e0fd",
+  "expertPrivacyPolicyUrl": "https://www.termsfeed.com/live/cd67f429-2d47-426a-a018-59c32a82e0fd",
   "userPrivacyPolicyUrl": "https://www.termsfeed.com/live/cd67f429-2d47-426a-a018-59c32a82e0fd",
   "helpdeskEmail": "dev.flutter2001@gmail.com",
   "cashfreeClientId": "TEST430329ae80e0f32e41a393d78b923034",

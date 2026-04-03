@@ -11,7 +11,6 @@ class AppAsset {
   static const backArrowIcon = "${getIconsPath}back_arrow_icon.png";
   static const homeFilled = "${getIconsPath}home_filled.png";
   static const listener = "${getIconsPath}listener.png";
-  static const randomCall = "${getIconsPath}random_call.png";
   static const chat = "${getIconsPath}chat.png";
   static const calling = "${getIconsPath}calling.png";
   static const callIcon = "${getIconsPath}call_icon.png";
@@ -133,9 +132,6 @@ class AppAsset {
   static const noChatFound = "${getImagesPath}no_chat_list.png";
   static const noNotificationFound = "${getImagesPath}no_notification_found.png";
   static const listenerPlaceHolder = "${getImagesPath}listener_place_holder.png";
-  static const randomDotBg = "${getImagesPath}random_dot_bg.png";
-  static const randomBottomBg = "${getImagesPath}random_bottom_bg.png";
-  static const randomMatchBg = "${getImagesPath}random_match_bg.png";
   static const paymentMode = "${getImagesPath}payment_mode_icon.png";
   static const underMaintenanceImage = "${getImagesPath}under_maintenance_image.png";
   static const demoListener = "${getImagesPath}demo_listener.png";
@@ -153,7 +149,6 @@ class AppAsset {
   static const splashBg = "${getImagesPath}splash_bg.png";
   static const splashLogo = "${getImagesPath}splash_logo.png";
   static const imagePlaceHolder = "${getImagesPath}image_place_holder.png";
-  static const randomBg = "${getImagesPath}random_bg.png";
   static const appLogo = "${getImagesPath}app_logo.png";
   static const appStoreImage = "${getImagesPath}apple_icon.png";
   static const payPalImage = "${getImagesPath}pay_pal_icon.webp";
@@ -166,7 +161,6 @@ class AppAsset {
   static const ringTone = "audio/ringtone.mp3";
 
   ////////////////////// lottie //////////////////////
-  static const randomMatchLottie = "assets/lottie/random_match_lottie.json";
   static const callDotLoading = "assets/lottie/bouncing_ball_loader_black.json";
   static const callDotLoadingWhite = "assets/lottie/bouncing_ball_loader.json";
 }

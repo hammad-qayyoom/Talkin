@@ -2,8 +2,9 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
 import 'package:talk_in/routes/app_routes.dart';
@@ -25,8 +26,10 @@ class RegistrationController extends GetxController {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController birthDateController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
+  DateTime? selectedBirthDate;
   LoginModel? loginModel;
   FetchLoginUserProfileModel? fetchLoginUserProfileModel;
   // MainScreenController mainScreenController = Get.put(MainScreenController());
@@ -55,6 +58,38 @@ class RegistrationController extends GetxController {
     update([Constant.idAcceptTerms]);
   }
 
+  Future<void> onTapBirthDate(BuildContext context) async {
+    final DateTime now = DateTime.now();
+    final DateTime initialDate = selectedBirthDate ?? DateTime(now.year - 18, now.month, now.day);
+
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(1900),
+      lastDate: now,
+    );
+
+    if (pickedDate == null) return;
+
+    selectedBirthDate = pickedDate;
+    birthDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+    update();
+  }
+
+  int _calculateAge(DateTime birthDate) {
+    final DateTime now = DateTime.now();
+    int age = now.year - birthDate.year;
+
+    final bool hasNotHadBirthdayThisYear =
+        now.month < birthDate.month || (now.month == birthDate.month && now.day < birthDate.day);
+
+    if (hasNotHadBirthdayThisYear) {
+      age -= 1;
+    }
+
+    return age;
+  }
+
   bool validateRegistration() {
     final isValid = formKey.currentState?.validate() ?? false;
 
@@ -62,7 +97,6 @@ class RegistrationController extends GetxController {
       return false;
     }
 
-    Get.dialog(LoadingWidget(), barrierDismissible: false);
     final name = nameController.text.trim();
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
@@ -102,7 +136,18 @@ class RegistrationController extends GetxController {
       Utils.showToast(Get.context!, "Passwords do not match");
       return false;
     }
-    Get.back();
+
+    if (selectedBirthDate == null) {
+      Utils.showToast(Get.context!, "Please select your date of birth");
+      return false;
+    }
+
+    final int age = _calculateAge(selectedBirthDate!);
+    if (age < 18) {
+      Utils.showToast(Get.context!, "You must be at least 18 years old to continue");
+      return false;
+    }
+
     return true;
   }
 
@@ -194,85 +239,135 @@ class RegistrationController extends GetxController {
 
   var isBusy = false;
 
+  Future<void> _prepareDeviceContext() async {
+    final identity = await MobileDeviceIdentifier().getDeviceId();
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+
+    Database.onSetIdentity(identity ?? "");
+    Database.onSetFcmToken(fcmToken ?? "");
+  }
+
+  Future<void> _cleanupCreatedFirebaseUser(UserCredential? userCredential) async {
+    try {
+      await userCredential?.user?.delete();
+    } catch (error) {
+      Utils.showLog("Firebase cleanup skipped => $error");
+    }
+
+    try {
+      await _auth.signOut();
+    } catch (_) {}
+  }
+
+  Future<void> _handleEmailAuthSuccess(UserCredential userCredential) async {
+    Database.onSetIsLogin(true);
+    Database.onSetSeenOnboarding(true);
+    Database.onSetFillProfile(true);
+
+    Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
+
+    await onGetProfile(
+      loginUserId: userCredential.user!.uid,
+      loginType: 4,
+    );
+
+    if (loginModel?.signUp == true) {
+      Database.onSetFillProfile(false);
+      Get.offAllNamed(AppRoutes.fillProfileScreen, arguments: [
+        Database.loginUserName,
+        Database.loginUserProfilePic,
+        Database.loginUserEmail,
+      ]);
+    } else {
+      Database.onSetFillProfile(true);
+      await onGetProfile(
+        loginUserId: userCredential.user!.uid,
+        loginType: 4,
+      );
+
+      if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
+        Get.toNamed(AppRoutes.hostBottomBar);
+      } else {
+        Get.toNamed(AppRoutes.bottomBar);
+      }
+    }
+  }
+
+  Future<bool> _syncEmailUserWithBackend(UserCredential userCredential) async {
+    Database.onSetUserExist(false);
+
+    loginModel = await LoginApi.callApi(
+      countryCode: Database.selectedCountryCode,
+      loginType: 4,
+      email: userCredential.user?.email ?? "",
+      identity: Database.identity,
+      fcmToken: Database.fcmToken,
+      userName: nameController.text.trim(),
+      confirmPassword: confirmPassController.text.trim(),
+      birthDate: birthDateController.text.trim(),
+      age: selectedBirthDate == null ? null : _calculateAge(selectedBirthDate!),
+      acceptTerms: true,
+      acceptanceSource: "signup_email",
+    );
+
+    if (loginModel?.status != true) {
+      return false;
+    }
+
+    await _handleEmailAuthSuccess(userCredential);
+    return true;
+  }
+
   Future<void> signUpWithEmailPassword() async {
     if (isBusy) return;
     isBusy = true;
 
-    // keyboard બંધ કરો (optional)
     FocusManager.instance.primaryFocus?.unfocus();
 
-    // Loader – એક જ જગ્યા
     Get.dialog(LoadingWidget(), barrierDismissible: false);
 
+    UserCredential? createdUserCredential;
+
     try {
-      final userCredential = await _auth.createUserWithEmailAndPassword(
+      await _prepareDeviceContext();
+
+      createdUserCredential = await _auth.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
 
-      final identity = (await MobileDeviceIdentifier().getDeviceId())!;
-      final fcmToken = await FirebaseMessaging.instance.getToken();
-      Database.onSetIdentity(identity);
-      Database.onSetFcmToken(fcmToken ?? "");
+      final bool synced = await _syncEmailUserWithBackend(createdUserCredential);
 
-      Database.onSetUserExist(false);
-      loginModel = await LoginApi.callApi(
-        countryCode: Database.selectedCountryCode,
-        loginType: 4,
-        email: userCredential.user?.email ?? "",
-        identity: Database.identity,
-        fcmToken: Database.fcmToken,
-        userName: nameController.text,
-        confirmPassword: confirmPassController.text,
-      );
-
-      if (loginModel?.status == true) {
-        Database.onSetIsLogin(true);
-        Database.onSetSeenOnboarding(true);
-        Database.onSetFillProfile(true);
-
-        Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
-
-        await onGetProfile(
-          loginUserId: userCredential.user!.uid,
-          loginType: 4,
-        );
-
-        if (loginModel?.signUp == true) {
-          Database.onSetFillProfile(false);
-          Get.offAllNamed(AppRoutes.fillProfileScreen, arguments: [
-            Database.loginUserName,
-            Database.loginUserProfilePic,
-            Database.loginUserEmail,
-          ]);
-        } else {
-          Database.onSetFillProfile(true);
-          await onGetProfile(
-            loginUserId: userCredential.user!.uid,
-            loginType: 4,
-          );
-          // Get.toNamed(AppRoutes.bottomBar);
-          if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
-            Get.toNamed(AppRoutes.hostBottomBar);
-          } else {
-            Get.toNamed(AppRoutes.bottomBar);
-          }
-        }
-      } else {
-        Utils.showToast(Get.context!, "Something went wrong");
-        Utils.showLog("Login Api Calling Failed !!");
+      if (!synced) {
+        await _cleanupCreatedFirebaseUser(createdUserCredential);
+        Utils.showToast(Get.context!, loginModel?.message ?? "Registration failed. Please try again.");
       }
     } on FirebaseAuthException catch (e) {
       Utils.showLog('>>>>>>>>>>>>>>>>>>>>>$e');
 
-      // Loader બંધ
-      if (Get.isDialogOpen ?? false) Get.back();
-
-      // ✅ Client SDKમાં code: 'email-already-in-use'
       if (e.code == 'email-already-in-use') {
-        Utils.showLog('......................................');
+        try {
+          await _prepareDeviceContext();
 
-        Utils.showToast(Get.context!, "This email is already in use.");
+          final UserCredential existingUserCredential = await _auth.signInWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
+
+          final bool synced = await _syncEmailUserWithBackend(existingUserCredential);
+          if (!synced) {
+            Utils.showToast(Get.context!, loginModel?.message ?? "Registration sync failed. Please try again.");
+          }
+        } on FirebaseAuthException catch (signInError) {
+          if (signInError.code == 'wrong-password' || signInError.code == 'invalid-credential') {
+            Utils.showToast(Get.context!, "This email is already registered. Please login with the correct password.");
+          } else {
+            Utils.showToast(Get.context!, "Registration failed: ${signInError.message}");
+          }
+        } catch (error) {
+          Utils.showLog("Email in use recovery failed => $error");
+          Utils.showToast(Get.context!, "Registration failed. Please login or reset password.");
+        }
       } else if (e.code == 'weak-password') {
         Utils.showToast(Get.context!, "Password is too weak.");
       } else {

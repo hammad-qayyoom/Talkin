@@ -70,7 +70,7 @@ const ReqViewDialog = ({ open, onClose, data }) => {
           {/* Contact Information Section */}
           <Box sx={{ p: 4, pb: 3 }}>
             <Typography variant='h6' sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
-              Listener Information
+              Expert Information
             </Typography>
 
             <Grid container spacing={2}>

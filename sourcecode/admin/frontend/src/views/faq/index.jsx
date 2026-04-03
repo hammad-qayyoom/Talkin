@@ -192,9 +192,9 @@ const Faqs = () => {
     <Box className='container'>
       <Box className='flex justify-between items-center flex-wrap gap-4 mb-3'>
         <Box>
-          <Typography variant='h4'>{selectedCategory === 'User' ? 'User FAQs' : 'Listener FAQs'}</Typography>
+          <Typography variant='h4'>{selectedCategory === 'User' ? 'User FAQs' : 'Expert FAQs'}</Typography>
           <Typography variant='body2' color='text.secondary'>
-            Create, organize, and manage FAQs to help users and listeners find quick answers.
+            Create, organize, and manage FAQs to help users and experts find quick answers.
           </Typography>
         </Box>
         <Box className='flex gap-2'>
@@ -204,7 +204,7 @@ const Faqs = () => {
             onClick={handleCreateFaq}
             className='shadow-sm hover:shadow-md transition-all'
           >
-            Create {selectedCategory === "User" ? "User" : "Listener "} FAQ
+            Create {selectedCategory === "User" ? "User" : "Expert "} FAQ
           </Button>
         </Box>
       </Box>
@@ -222,8 +222,8 @@ const Faqs = () => {
           <ToggleButton value='User' className='px-6'>
             User FAQs
           </ToggleButton>
-          <ToggleButton value='Listener' className='px-6'>
-            Listener FAQs
+          <ToggleButton value='Expert' className='px-6'>
+            Expert FAQs
           </ToggleButton>
         </ToggleButtonGroup>
       </Box>

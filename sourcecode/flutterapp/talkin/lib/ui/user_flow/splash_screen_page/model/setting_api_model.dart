@@ -57,15 +57,13 @@ class Data {
   final int? minimumCoinsForPayout;
   final int? videoCallRatePrivate;
   final int? audioCallRatePrivate;
-  final int? videoCallRateRandom;
-  final int? audioCallRateRandom;
   final PrivateKey? privateKey;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String? zegoAppId;
   final String? zegoAppSignIn;
   final String? aboutUsUrl;
-  final String? listenerPrivacyPolicyUrl;
+  final String? expertPrivacyPolicyUrl;
   final String? userPrivacyPolicyUrl;
   final String? helpdeskEmail;
   final String? cashfreeClientId;
@@ -114,15 +112,13 @@ class Data {
     this.minimumCoinsForPayout,
     this.videoCallRatePrivate,
     this.audioCallRatePrivate,
-    this.videoCallRateRandom,
-    this.audioCallRateRandom,
     this.privateKey,
     this.createdAt,
     this.updatedAt,
     this.zegoAppId,
     this.zegoAppSignIn,
     this.aboutUsUrl,
-    this.listenerPrivacyPolicyUrl,
+    this.expertPrivacyPolicyUrl,
     this.userPrivacyPolicyUrl,
     this.helpdeskEmail,
     this.cashfreeClientId,
@@ -172,15 +168,13 @@ class Data {
     minimumCoinsForPayout: json["minimumCoinsForPayout"],
     videoCallRatePrivate: json["videoCallRatePrivate"],
     audioCallRatePrivate: json["audioCallRatePrivate"],
-    videoCallRateRandom: json["videoCallRateRandom"],
-    audioCallRateRandom: json["audioCallRateRandom"],
     privateKey: json["privateKey"] == null ? null : PrivateKey.fromJson(json["privateKey"]),
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     zegoAppId: json["zegoAppId"],
     zegoAppSignIn: json["zegoAppSignIn"],
     aboutUsUrl: json["aboutUsUrl"],
-    listenerPrivacyPolicyUrl: json["listenerPrivacyPolicyUrl"],
+    expertPrivacyPolicyUrl: json["expertPrivacyPolicyUrl"],
     userPrivacyPolicyUrl: json["userPrivacyPolicyUrl"],
     helpdeskEmail: json["helpdeskEmail"],
     cashfreeClientId: json["cashfreeClientId"],
@@ -230,15 +224,13 @@ class Data {
     "minimumCoinsForPayout": minimumCoinsForPayout,
     "videoCallRatePrivate": videoCallRatePrivate,
     "audioCallRatePrivate": audioCallRatePrivate,
-    "videoCallRateRandom": videoCallRateRandom,
-    "audioCallRateRandom": audioCallRateRandom,
     "privateKey": privateKey?.toJson(),
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
     "zegoAppId": zegoAppId,
     "zegoAppSignIn": zegoAppSignIn,
     "aboutUsUrl": aboutUsUrl,
-    "listenerPrivacyPolicyUrl": listenerPrivacyPolicyUrl,
+    "expertPrivacyPolicyUrl": expertPrivacyPolicyUrl,
     "userPrivacyPolicyUrl": userPrivacyPolicyUrl,
     "helpdeskEmail": helpdeskEmail,
     "cashfreeClientId": cashfreeClientId,

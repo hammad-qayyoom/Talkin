@@ -237,83 +237,6 @@ class HostImageView extends StatelessWidget {
   }
 }
 
-class RandomCallView extends StatelessWidget {
-  const RandomCallView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          EnumLocale.txtAllowRandomCall.name.tr,
-          style: AppFontStyle.fontStyleW800(
-            fontSize: 18,
-            fontColor: AppColors.appDarkColor,
-          ),
-        ).paddingOnly(top: 16),
-        Row(
-          children: [
-            Image.asset(
-              AppAsset.hostHomeImage,
-              height: 195,
-              width: 154,
-            ).paddingOnly(right: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    EnumLocale.txtEarnMoney.name.tr,
-                    style: AppFontStyle.fontStyleW800(
-                      fontSize: 20,
-                      fontColor: AppColors.orange,
-                    ),
-                  ).paddingOnly(bottom: 1),
-                  Text(
-                    EnumLocale.txtHostHomeDescription.name.tr,
-                    style: AppFontStyle.fontStyleW500(
-                      fontSize: 11,
-                      height: 1.95,
-                      fontColor: AppColors.otpScreenGrey,
-                    ),
-                  ).paddingOnly(bottom: 6),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: AppColors.yellow200,
-                    ),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          AppAsset.starCoin,
-                          height: 24,
-                          width: 24,
-                        ).paddingAll(5),
-                        Expanded(
-                          child: Text(
-                            "Get ${Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall.toString() ?? 0.toString()} Coin/Min",
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: AppFontStyle.fontStyleW600(
-                              fontSize: 14,
-                              fontColor: AppColors.getCoinText,
-                            ),
-                          ).paddingOnly(right: 4),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ).paddingOnly(top: 14, bottom: 4)
-      ],
-    );
-  }
-}
-
 class PermissionView extends StatelessWidget {
   const PermissionView({super.key});
 
@@ -357,28 +280,6 @@ class PermissionView extends StatelessWidget {
               //     },
               //   );
               // }),
-              GetBuilder<HostHomeScreenController>(builder: (controller) {
-                return CustomSwitchView(
-                  callCoin: Database.fetchListenerProfileModel?.data?.rateRandomAudioCall.toString() ?? '0',
-                  coinShow: true,
-                  text: EnumLocale.txtRanAudioCallConnect.name.tr,
-                  value: controller.isAvailableForRandomAudioCall,
-                  onChanged: (val) {
-                    controller.permissionSwitch(val, "isAvailableForRandomAudioCall");
-                  },
-                );
-              }),
-              GetBuilder<HostHomeScreenController>(builder: (controller) {
-                return CustomSwitchView(
-                  callCoin: Database.fetchListenerProfileModel?.data?.rateRandomVideoCall.toString() ?? '0',
-                  coinShow: true,
-                  text: EnumLocale.txtRandomVideoCallConnect.name.tr,
-                  value: controller.isAvailableForRandomVideoCall,
-                  onChanged: (val) {
-                    controller.permissionSwitch(val, "isAvailableForRandomVideoCall");
-                  },
-                );
-              }),
               GetBuilder<HostHomeScreenController>(builder: (controller) {
                 return CustomSwitchView(
                   callCoin: Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall.toString() ?? '0',

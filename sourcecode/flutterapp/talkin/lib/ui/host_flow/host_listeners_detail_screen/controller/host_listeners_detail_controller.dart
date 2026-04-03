@@ -23,8 +23,6 @@ class HostListenersDetailController extends GetxController {
   TextEditingController introCnt = TextEditingController();
   TextEditingController ratePrivateVideoCallCnt = TextEditingController();
   TextEditingController ratePrivateAudioCallCnt = TextEditingController();
-  TextEditingController rateRandomVideoCallCnt = TextEditingController();
-  TextEditingController rateRandomAudioCallCnt = TextEditingController();
   int selectedTopic = 0;
   List<String> allLanguages = [];
   List<String> selectedLanguages = [];
@@ -48,8 +46,6 @@ class HostListenersDetailController extends GetxController {
     nameCnt.text = Database.fetchListenerProfileModel?.data?.name ?? '';
     nickNameCnt.text = Database.fetchListenerProfileModel?.data?.nickName ?? '';
     introCnt.text = Database.fetchListenerProfileModel?.data?.selfIntro ?? '';
-    rateRandomVideoCallCnt.text = Database.fetchListenerProfileModel?.data?.rateRandomVideoCall.toString() ?? '';
-    rateRandomAudioCallCnt.text = Database.fetchListenerProfileModel?.data?.rateRandomAudioCall.toString() ?? '';
     ratePrivateAudioCallCnt.text = Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall.toString() ?? '';
     ratePrivateVideoCallCnt.text = Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall.toString() ?? '';
     profilePic = Database.fetchListenerProfileModel?.data?.image;
@@ -199,8 +195,6 @@ class HostListenersDetailController extends GetxController {
       selfIntro: introCnt.text,
       ratePrivateAudioCall: ratePrivateAudioCallCnt.text,
       ratePrivateVideoCall: ratePrivateVideoCallCnt.text,
-      rateRandomAudioCall: rateRandomAudioCallCnt.text,
-      rateRandomVideoCall: rateRandomVideoCallCnt.text,
       talkTopics: talkTopics,
     );
 

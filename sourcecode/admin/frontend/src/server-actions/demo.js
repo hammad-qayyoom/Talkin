@@ -54,7 +54,7 @@ export const getTopContributors = async (headers, params = {}, data) => {
 
 export const getTopPerformanceListeners = async (headers, params = {}, data) => {
   try {
-    const response = await axios.get(`${baseURL}/api/admin/dashboard/getTopPerformingListeners`, {
+    const response = await axios.get(`${baseURL}/api/admin/dashboard/getTopPerformingExperts`, {
       headers: { ...headers, key: secretKey },
       params: {
         startDate: params.startDate,

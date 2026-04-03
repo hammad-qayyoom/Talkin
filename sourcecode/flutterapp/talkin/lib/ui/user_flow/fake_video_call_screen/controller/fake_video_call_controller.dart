@@ -39,7 +39,7 @@ class FakeVideoCallController extends GetxController {
   bool isMute = false;
   bool isVideoOn = true;
   bool isRotedCamera = false;
-  var randomNumber = 90.obs;
+  var meterValue = 90.obs;
 
   ChewieController? chewieController;
   VideoPlayerController? videoPlayerController;
@@ -55,7 +55,7 @@ class FakeVideoCallController extends GetxController {
       Utils.showLog(" fake video call video url  $videoUrl");
     }
     onRequestPermissions();
-    generateRandomNumber();
+    generateMeterValue();
     1.seconds.delay();
     initializeVideoPlayer();
 
@@ -74,9 +74,9 @@ class FakeVideoCallController extends GetxController {
     super.dispose();
   }
 
-  void generateRandomNumber() {
+  void generateMeterValue() {
     final random = Random();
-    randomNumber.value = random.nextInt(191) + 10; // Random between 10 and 200
+    meterValue.value = random.nextInt(191) + 10;
   }
 
   Future<void> onRequestPermissions() async {

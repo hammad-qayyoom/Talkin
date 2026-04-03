@@ -78,7 +78,7 @@ class CallCutView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Listener",
+                          "Expert",
                           style: AppFontStyle.fontStyleW500(fontSize: 15, fontColor: AppColors.darkGrey.withValues(alpha: 0.8)),
                         ).paddingOnly(bottom: 4),
                         Text(
@@ -184,7 +184,7 @@ class CallCutView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Add ${controller.receiverName} to your Favourite Listeners?",
+                  "Add ${controller.receiverName} to your Favourite Experts?",
                   style: AppFontStyle.fontStyleW500(fontSize: 15, fontColor: AppColors.black),
                 ).paddingOnly(bottom: 18),
                 GetBuilder<CallCutController>(

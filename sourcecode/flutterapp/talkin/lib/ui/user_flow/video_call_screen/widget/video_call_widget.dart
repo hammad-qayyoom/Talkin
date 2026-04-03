@@ -184,7 +184,11 @@
                                   );
                                 },
                                 onReport: () {
-                                  ReportBottomSheetUi.show(context: context);
+                                  ReportBottomSheetUi.show(
+                                    context: context,
+                                    reportType: 'user',
+                                    targetId: logic.receiverId ?? '',
+                                  );
                                 },
                               );
                             },

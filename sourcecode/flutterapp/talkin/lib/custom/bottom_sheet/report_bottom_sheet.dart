@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
+import 'package:talk_in/custom/bottom_sheet/api/moderation_report_api.dart';
 import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/enums.dart';
@@ -11,6 +12,23 @@ class ReportBottomSheetUi {
   static RxInt selectedReportType = 0.obs;
 
   static RxBool isLoading = false.obs;
+
+  static const List<String> reportReasonCodes = [
+    'spam',
+    'nudity_or_sexual_activity',
+    'hate_speech_or_symbols',
+    'violence_or_dangerous_organization',
+    'false_information',
+    'bullying_or_harassment',
+    'scam_or_fraud',
+    'intellectual_property_violation',
+    'suicide_or_self_injury',
+    'drugs',
+    'eating_disorders',
+    'something_else',
+    'child_abuse',
+    'others',
+  ];
 
   // static List<Data> reportTypes = [];
   static List reportTypes = [
@@ -30,27 +48,45 @@ class ReportBottomSheetUi {
     EnumLocale.txtOthers.name.tr,
   ];
 
-  static Future<void> onSendReport() async {
-    // Utils.showToast(EnumLocale.txtReportSending.name.tr);
+  static Future<void> onSendReport({
+    required String reportType,
+    required String targetId,
+  }) async {
+    if (targetId.trim().isEmpty) {
+      Get.back();
+      Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+      return;
+    }
+
+    isLoading.value = true;
+
+    final selectedIndex = selectedReportType.value.clamp(0, reportTypes.length - 1);
+    final reasonCode = reportReasonCodes[selectedIndex];
+    final reasonText = reportTypes[selectedIndex].toString();
+
+    final response = await ModerationReportApi.submitReport(
+      reportType: reportType,
+      targetId: targetId,
+      reasonCode: reasonCode,
+      reasonText: reasonText,
+    );
+
+    isLoading.value = false;
     Get.back();
-    //
-    // final response = await CreateReportApi.callApi(
-    //   loginUserId: Database.loginUserId,
-    //   reportReason: reportTypes[selectedReportType.value].title ?? "",
-    //   eventType: eventType,
-    //   eventId: eventId,
-    // );
-    //
-    // if (response != null && response) {
-    //   Utils.showToast(EnumLocale.txtReportSendSuccess.name.tr);
-    // } else {
-    //   Utils.showToast(EnumLocale.txtSomeThingWentWrong.name.tr);
-    // }
-    Utils.showToast(Get.context!, EnumLocale.txtReportSendSuccess.name.tr);
+
+    if ((response?['status'] ?? false) == true) {
+      Utils.showToast(Get.context!, EnumLocale.txtReportSendSuccess.name.tr);
+      return;
+    }
+
+    final message = response?['message']?.toString() ?? EnumLocale.txtSomeThingWentWrong.name.tr;
+    Utils.showToast(Get.context!, message);
   }
 
   static void show({
     required BuildContext context,
+    String reportType = 'user',
+    String targetId = '',
     Callback? onComplete,
   }) async {
     ReportBottomSheetUi.selectedReportType.value = 0;
@@ -178,7 +214,10 @@ class ReportBottomSheetUi {
                       15.width,
                       GestureDetector(
                         onTap: () async {
-                          await onSendReport();
+                          await onSendReport(
+                            reportType: reportType,
+                            targetId: targetId,
+                          );
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 12),

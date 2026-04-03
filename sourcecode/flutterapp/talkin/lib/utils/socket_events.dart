@@ -32,9 +32,6 @@ class SocketEvents {
   /// call cut
   static const callTerminated = "callTerminated";
 
-  /// random call ringing
-  static const randomCallRinging = "incomingRingingStarted";
-
   /// call cut summary data
   static const callCutData = "callSummary";
 

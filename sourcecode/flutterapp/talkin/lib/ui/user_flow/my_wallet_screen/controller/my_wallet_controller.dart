@@ -14,7 +14,6 @@ import 'package:talk_in/ui/user_flow/home_screen/model/user_coin_model.dart';
 import 'package:talk_in/ui/user_flow/my_wallet_screen/api/fetch_coin_plan_api.dart';
 import 'package:talk_in/ui/user_flow/my_wallet_screen/model/fetch_coin_plan.dart';
 import 'package:talk_in/ui/user_flow/my_wallet_screen/model/purchase_coin_plan.dart';
-import 'package:talk_in/ui/user_flow/random_call_screen/controller/random_call_controller.dart';
 import 'package:talk_in/utils/common_payment.dart';
 import 'package:talk_in/utils/constant.dart';
 import 'package:talk_in/utils/database.dart';
@@ -129,7 +128,6 @@ class MyWalletController extends GetxController implements IAPCallback {
             userCoinModel = await UserCoinApi.callApi();
             Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
             Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
-            Get.find<RandomCallController>().update([Constant.idCoinUpdate]);
             log("Database.userCoin  ${Database.userCoin}");
 
             Utils.showToast(
@@ -334,7 +332,6 @@ class MyWalletController extends GetxController implements IAPCallback {
             userCoinModel = await UserCoinApi.callApi();
             Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
             Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
-            Get.find<RandomCallController>().update([Constant.idCoinUpdate]);
             log("Database.userCoin  ${Database.userCoin}");
 
             Utils.showToast(
@@ -385,7 +382,6 @@ class MyWalletController extends GetxController implements IAPCallback {
             userCoinModel = await UserCoinApi.callApi();
             Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
             Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
-            Get.find<RandomCallController>().update([Constant.idCoinUpdate]);
             log("Database.userCoin  ${Database.userCoin}");
 
             Utils.showToast(
@@ -436,7 +432,6 @@ class MyWalletController extends GetxController implements IAPCallback {
             userCoinModel = await UserCoinApi.callApi();
             Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
             Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
-            Get.find<RandomCallController>().update([Constant.idCoinUpdate]);
             log("Database.userCoin  ${Database.userCoin}");
 
             Utils.showToast(

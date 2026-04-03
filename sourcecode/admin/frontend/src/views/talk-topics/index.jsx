@@ -168,7 +168,7 @@ const TalkTopics = () => {
           Talk Topic
         </Typography>
         <Typography variant='body2' color='text.secondary'>
-          Create and manage conversation topics to organize user–listener interactions.
+          Create and manage conversation topics to organize user-expert interactions.
         </Typography>
       </Box>
 

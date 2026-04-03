@@ -190,7 +190,7 @@ const ListenerListTable = () => {
 
   // Redux state
   const { listeners, total, loading, initialLoad, page, pageSize, startDate, endDate } = useSelector(
-    state => state.listener
+    state => state.expert
   )
 
   const { profileData } = useSelector(state => state.adminSlice)
@@ -323,7 +323,7 @@ const ListenerListTable = () => {
   const columns = useMemo(
     () => [
       columnHelper.accessor('name', {
-        header: () => <div className=''>Listener</div>,
+        header: () => <div className=''>Expert</div>,
         cell: ({ row }) => {
           const { name, image, uniqueId, nickName,gender } = row.original
 
@@ -437,7 +437,7 @@ const ListenerListTable = () => {
               size="small"
               onClick={() => {
                 if (row.original._id === "691822c8ea0bbcd6eaa74bdc") {
-                  toast.error("This listener cannot be deleted.");
+                  toast.error("This expert cannot be deleted.");
                   return;
                 }
 
@@ -507,9 +507,9 @@ const ListenerListTable = () => {
     updateUrlPagination(1, newPageSize)
   }
 
-  const handleEditListener = listener => {
-    setListenerToEdit(listener)
-    dispatch(setSelectedListener(listener))
+  const handleEditListener = expert => {
+    setListenerToEdit(expert)
+    dispatch(setSelectedListener(expert))
     setOpen(true)
   }
 
@@ -529,7 +529,7 @@ const ListenerListTable = () => {
         setIsDeleteDialogOpen(false)
         setListenerToDelete(null)
       } catch (error) {
-        console.log('Failed to delete listener:', error)
+        console.log('Failed to delete expert:', error)
       } finally {
         setDeleteLoading(false)
       }
@@ -618,7 +618,7 @@ const ListenerListTable = () => {
             <DebouncedInput
               value={globalFilterValue}
               onChange={setGlobalFilterValue}
-              placeholder='Search By Listener, Or Unique Id'
+              placeholder='Search By Expert, Or Unique Id'
               className='max-sm:is-full min-w-[260px]'
             />
 
@@ -659,7 +659,7 @@ const ListenerListTable = () => {
               }}
             />
             <Button variant='contained' startIcon={<AddIcon />} onClick={handleCreateListener}>
-              Add Listener
+              Add Expert
             </Button>
             <Tooltip title={isFilterActive ? 'Reset Filters' : 'No filters applied'}>
               <span>
@@ -713,7 +713,7 @@ const ListenerListTable = () => {
                       </tr>
                     ))
                     : ''}
-                  <EmprtyTableRow limit={9} data={listeners} columns={{ columns }} noDataLebel={'No listeners found'} />
+                  <EmprtyTableRow limit={9} data={listeners} columns={{ columns }} noDataLebel={'No experts found'} />
                 </tbody>
               </table>
             )}
@@ -729,14 +729,14 @@ const ListenerListTable = () => {
           />
       </Card>
 
-      {/* Listener Dialog for Create/Edit */}
-      <ListenerDialog open={open} onClose={handleDialogClose} listener={listenerToEdit} role={activeTab} />
+      {/* Expert Dialog for Create/Edit */}
+      <ListenerDialog open={open} onClose={handleDialogClose} expert={listenerToEdit} role={activeTab} />
 
       <ConfirmationDialog
         open={isDeleteDialogOpen}
         setOpen={setIsDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
-        type='delete-listener'
+        type='delete-expert'
         onConfirm={confirmDeleteListener}
         loading={deleteLoading}
       />

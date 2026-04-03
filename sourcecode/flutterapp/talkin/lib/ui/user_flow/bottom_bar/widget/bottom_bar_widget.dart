@@ -60,17 +60,11 @@ class BottomBarView extends StatelessWidget {
                 bottomBarItemView(
                   index: 2,
                   selectIndex: logic.selectIndex,
-                  image: AppAsset.randomCall,
-                  label: EnumLocale.txtRandomCall.name.tr,
-                ),
-                bottomBarItemView(
-                  index: 3,
-                  selectIndex: logic.selectIndex,
                   image: AppAsset.chat,
                   label: EnumLocale.txtChat.name.tr,
                 ),
                 bottomBarItemView(
-                  index: 4,
+                  index: 3,
                   selectIndex: logic.selectIndex,
                   image: AppAsset.calling,
                   label: EnumLocale.txtCalling.name.tr,

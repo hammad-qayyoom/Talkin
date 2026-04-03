@@ -78,6 +78,28 @@ class RegistrationAddInfoView extends StatelessWidget {
                 ),
               ).paddingOnly(bottom: 30),
               CustomTitle(
+                title: 'Date of Birth',
+                method: CustomTextField(
+                  filled: true,
+                  readOnly: true,
+                  controller: logic.birthDateController,
+                  fillColor: AppColors.white,
+                  cursorColor: AppColors.black,
+                  fontColor: AppColors.black,
+                  fontSize: 15,
+                  textInputAction: TextInputAction.next,
+                  hintText: 'YYYY-MM-DD',
+                  onTap: () => logic.onTapBirthDate(context),
+                  suffixIcon: const Icon(Icons.calendar_month, size: 20),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select your date of birth';
+                    }
+                    return null;
+                  },
+                ),
+              ).paddingOnly(bottom: 30),
+              CustomTitle(
                 title: EnumLocale.txtPassword.name.tr,
                 method: CustomTextField(
                     filled: true,

@@ -441,7 +441,7 @@ const LiveStreamTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
 
                     <Chip
                       variant='tonal'
-                      label={`Listener : ${stream?.listenerCoin || '0'} Coins`}
+                      label={`Expert : ${stream?.listenerCoin || '0'} Coins`}
                       size='small'
                       color='success'
                     />

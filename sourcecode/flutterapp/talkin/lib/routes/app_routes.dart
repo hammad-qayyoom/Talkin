@@ -36,7 +36,6 @@ class AppRoutes {
   static const String hostRequestSentSuccessfullyScreen = '/hostRequestSentSuccessfullyScreen';
   static const String forgotPasswordScreen = '/forgotPasswordScreen';
   static const String createNewPassScreen = '/createNewPassScreen';
-  static const String randomMatchView = '/randomMatchView';
   static const String chatListSearchView = '/chatListSearchView';
   static const String userNotificationView = '/userNotificationView';
   static const String fakeOutgoingCall = '/fakeOutgoingCall';

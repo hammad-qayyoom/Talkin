@@ -42,7 +42,7 @@ import {
   setStatus,
   setSearchQuery,
   APPLICATION_STATUS,
-  handleListenerRequest
+  handleExpertRequest
 } from '@/redux-store/slices/listenerRequest'
 
 
@@ -120,7 +120,7 @@ const isFirstRender = React.useRef(true)
 
     if (confirmDelete.data) {
       dispatch(
-        handleListenerRequest({
+        handleExpertRequest({
           requestId: confirmDelete?.data._id,
           userId: confirmDelete?.data.userId._id,
           type: confirmDelete.type
@@ -165,7 +165,7 @@ const isFirstRender = React.useRef(true)
         }
       },
       {
-        header: 'Listener',
+        header: 'Expert',
         accessorKey: 'userId.email',
         cell: ({ row }) => {
           const user = row.original
@@ -496,7 +496,7 @@ const isFirstRender = React.useRef(true)
 
                 router.replace(`${pathname}?${params.toString()}`, { scroll: false })
               }}
-              placeholder='Search By Listener, Or Unique Id'
+              placeholder='Search By Expert, Or Unique Id'
               className='max-sm:is-full min-w-[260px]'
             />
 

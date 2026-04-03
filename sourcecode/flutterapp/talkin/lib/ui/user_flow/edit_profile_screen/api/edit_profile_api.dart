@@ -16,6 +16,7 @@ class EditProfileApi {
     required String gender,
     required String phoneNumber,
     required String birthDate,
+    int? age,
     required String? country,
     required String? countryFlag,
     String? countryCode,
@@ -49,13 +50,15 @@ class EditProfileApi {
         ApiParams.gender: gender,
         ApiParams.phoneNumber: phoneNumber,
         ApiParams.profilePic: image ?? '',
+        ApiParams.age: age?.toString() ?? '',
         ApiParams.countryCode: countryCode ?? '',
         ApiParams.country: country ?? '',
         ApiParams.countryFlag: countryFlag ?? '',
       });
 
       if (image != null) {
-        request.files.add(await http.MultipartFile.fromPath('profilePic', image));
+        request.files
+            .add(await http.MultipartFile.fromPath('profilePic', image));
       }
 
       request.headers.addAll(headers);

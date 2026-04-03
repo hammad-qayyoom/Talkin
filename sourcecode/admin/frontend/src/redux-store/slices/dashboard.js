@@ -78,11 +78,11 @@ export const getTopContributors = createAsyncThunk(
 )
 
 export const getTopPerformanceListeners = createAsyncThunk(
-  'dashboard/getTopPerformingListeners',
+  'dashboard/getTopPerformingExperts',
   async ({ startDate = 'All', endDate = 'All' }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/admin/dashboard/getTopPerformingListeners?startDate=${startDate}&endDate=${endDate}`,
+        `${BASE_URL}/api/admin/dashboard/getTopPerformingExperts?startDate=${startDate}&endDate=${endDate}`,
         {
           headers: getAuthHeaders()
         }
@@ -111,8 +111,8 @@ export const getGraphStats = createAsyncThunk(
       // Handle based on type
       if (type === 'user') {
         data = response.data.chartUser
-      } else if (type === 'listener') {
-        data = response.data.chartListener
+      } else if (type === 'expert') {
+        data = response.data.chartExpert
       }
 
       return { type, data }
@@ -202,7 +202,7 @@ const initialState = {
   topHosts: [],
   topAgencies: [],
   graphStats: {
-    listener: [],
+    expert: [],
     user: []
   },
   loading: {
@@ -215,7 +215,7 @@ const initialState = {
     topHosts: true,
     topAgencies: true,
     graphStats: {
-      listener: [],
+      expert: [],
       user: []
     }
   },
@@ -229,7 +229,7 @@ const initialState = {
     topHosts: null,
     topAgencies: null,
     graphStats: {
-      listener: [],
+      expert: [],
       user: []
     }
   }

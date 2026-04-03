@@ -88,8 +88,6 @@ import 'package:talk_in/ui/user_flow/personal_chat_screen/binding/personal_chat_
 import 'package:talk_in/ui/user_flow/personal_chat_screen/view/personal_chat_screen.dart';
 import 'package:talk_in/ui/user_flow/profile_detail_screen/binding/profile_detail_screen_binding.dart';
 import 'package:talk_in/ui/user_flow/profile_detail_screen/view/profile_detail_screen_view.dart';
-import 'package:talk_in/ui/user_flow/random_call_screen/binding/random_call_binding.dart';
-import 'package:talk_in/ui/user_flow/random_call_screen/widget/random_match_view.dart';
 import 'package:talk_in/ui/user_flow/registration_screen/binding/registration_binding.dart';
 import 'package:talk_in/ui/user_flow/registration_screen/view/registration_screen.dart';
 import 'package:talk_in/ui/user_flow/search_screen/binding/search_screen_binding.dart';
@@ -281,11 +279,6 @@ class AppPages {
       name: AppRoutes.createNewPassScreen,
       page: () => CreateNewPasswordScreen(),
       binding: CreateNewPasswordBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.randomMatchView,
-      page: () => RandomMatchView(),
-      binding: RandomCallBinding(),
     ),
     GetPage(
       name: AppRoutes.chatListSearchView,

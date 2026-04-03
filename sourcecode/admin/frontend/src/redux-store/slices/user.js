@@ -150,7 +150,7 @@ export const fetchPurchaseHistory = createAsyncThunk(
   }
 )
 
-// Listener Coin History
+// Expert Coin History
 export const fetchCoinHistoryListener = createAsyncThunk(
   'user/fetchCoinTransactions',
   async ({ userId, start = 1, limit = 20, startDate = 'All', endDate = 'All' }, thunkAPI) => {
@@ -170,7 +170,7 @@ export const fetchCoinHistoryListener = createAsyncThunk(
   }
 )
 
-// Listener Call History
+// Expert Call History
 export const fetchCallHistoryListener = createAsyncThunk(
   'user/fetchCallHistoryListener',
   async ({ userId, start = 1, limit = 20, startDate = 'All', endDate = 'All' }, thunkAPI) => {
@@ -1119,7 +1119,7 @@ const userSlice = createSlice({
         state.history.error = action.payload
       })
 
-    // Coin History Listener
+    // Coin History Expert
     // builder
     //   .addCase(fetchCoinHistoryListener.pending, state => {
     //     state.history.loading = true

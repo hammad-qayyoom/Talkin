@@ -277,7 +277,7 @@ const WithdrawalSettings = () => {
               <TextField
                 fullWidth
                 type='text'
-                label='Minimum Coins Payout For Listener'
+                label='Minimum Coins Payout For Expert'
                 value={formData.minimumCoinsForPayout || ''}
                 onChange={e => handleFieldChange('minimumCoinsForPayout', e.target.value)}
                 InputProps={{

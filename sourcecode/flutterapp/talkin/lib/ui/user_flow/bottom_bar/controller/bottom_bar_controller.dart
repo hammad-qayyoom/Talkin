@@ -8,7 +8,6 @@ import 'package:talk_in/ui/user_flow/calling_screen/view/calling_screen.dart';
 import 'package:talk_in/ui/user_flow/chat_screen/view/chat_screen.dart';
 import 'package:talk_in/ui/user_flow/home_screen/view/home_screen.dart';
 import 'package:talk_in/ui/user_flow/listener_screen/view/listeners_screen.dart';
-import 'package:talk_in/ui/user_flow/random_call_screen/view/random_call_view.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/api/setting_api.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/model/setting_api_model.dart';
 import 'package:talk_in/utils/constant.dart';
@@ -71,7 +70,6 @@ class BottomBarController extends GetxController {
   final pages = [
     HomeScreen(),
     ListenersScreen(),
-    RandomCallScreen(),
     ChatScreen(),
     CallingScreen(),
   ];

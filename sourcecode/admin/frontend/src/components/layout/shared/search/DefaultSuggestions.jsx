@@ -17,12 +17,12 @@ const defaultSuggestions = [
         icon: 'tabler-user'
       },
       {
-        label: 'Listener',
+        label: 'Expert',
         href: '/apps/listener',
         icon: 'tabler-user-star'
       },
       {
-        label: 'Listener Request',
+        label: 'Expert Request',
         href: '/listener/request',
         icon: 'tabler-user-scan'
       },

@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 // Next Imports
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -52,7 +52,7 @@ const HistoryTables = () => {
   const { defaultCurrency } = useSelector(state => state.currency)
 
   // Get the current state from Redux
-  const { userDetails, startDate, endDate, history, pageSize, page } = useSelector(state => state.listener)
+  const { userDetails, startDate, endDate, history, pageSize, page } = useSelector(state => state.expert)
 
   // const {history } = useSelector(state => state.userReducer)
   const userId = searchParams.get('userId')
@@ -79,46 +79,38 @@ const HistoryTables = () => {
   const urlPage = searchParams.get('page') || 1
   const urlPageSize = searchParams.get('pageSize') || 10
 
-  // Effect to load data when tab changes or user changes
-  useEffect(() => {
-    if (userId) {
-      loadHistoryData()
-    }
-  }, [activeTab, urlPage, urlPageSize, urlStartDate, urlEndDate])
-
-  // Effect to sync URL with state when tab changes externally
-  useEffect(() => {
-    if (historyTabParam !== activeTab) {
-      setActiveTab(historyTabParam)
-    }
-  }, [historyTabParam])
-
   // Function to load data based on current tab
-  const loadHistoryData = () => {
+  const loadHistoryData = useCallback(() => {
     if (!userId) return
 
     const params = {
-      userId: userId,
-      start: +(searchParams.get('page') || 1), // API uses 1-based indexing
+      userId,
+      start: +(searchParams.get('page') || 1),
       limit: +(searchParams.get('pageSize') || 10),
       startDate: searchParams.get('startDate') || 'All',
       endDate: searchParams.get('endDate') || 'All'
     }
-
-    console.log('params-->', params)
-
-    // Dispatch appropriate action based on active tab
 
     if (activeTab === 'coin') {
       dispatch(fetchCoinHistoryListener(params))
     } else if (activeTab === 'call') {
       dispatch(fetchCallHistoryListener(params))
     }
+  }, [activeTab, dispatch, searchParams, userId])
 
-    // else if (activeTab === 'plan') {
-    //   dispatch(fetchPurchaseHistory(params))
-    // }
-  }
+  // Effect to load data when tab changes or user changes
+  useEffect(() => {
+    if (userId) {
+      loadHistoryData()
+    }
+  }, [loadHistoryData, userId, urlPage, urlPageSize, urlStartDate, urlEndDate])
+
+  // Effect to sync URL with state when tab changes externally
+  useEffect(() => {
+    if (historyTabParam !== activeTab) {
+      setActiveTab(historyTabParam)
+    }
+  }, [activeTab, historyTabParam])
 
   const typeWiseStats = history.typeWiseStats || []
 
@@ -128,9 +120,9 @@ const HistoryTables = () => {
         case TRANSACTION_TYPES.PRIVATE_AUDIO_CALL:
           return 'Private Audio Call'
         case TRANSACTION_TYPES.RANDOM_AUDIO_CALL:
-          return 'Random Audio Call'
+          return 'Audio Call'
         case TRANSACTION_TYPES.RANDOM_VIDEO_CALL:
-          return 'Random Video Call'
+          return 'Video Call'
         case TRANSACTION_TYPES.PRIVATE_VIDEO_CALL:
           return 'Private Video Call'
         case TRANSACTION_TYPES.COIN_PLAN_PURCHASE:
@@ -408,7 +400,7 @@ const HistoryTables = () => {
     if (!defaultCurrency) {
       dispatch(fetchDefaultCurrencies())
     }
-  }, [])
+  }, [defaultCurrency, dispatch])
 
   const handleRowsPerPageChange = e => {
     const newPageSize = parseInt(e.target.value, 10)
@@ -419,7 +411,7 @@ const HistoryTables = () => {
   return (
     <Card>
       <CardHeader
-        title='Listener History'
+        title='Expert History'
         action={
           <Box className='flex items-center gap-2'>
             <CustomTextField

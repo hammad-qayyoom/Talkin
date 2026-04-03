@@ -511,11 +511,11 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
                                                                     : item.type == 4
                                                                         ? "Private Video Call"
                                                                         : item.type == 5
-                                                                            ? "Random Audio Call"
+                                                                      ? "Audio Call"
                                                                             : item.type == 6
-                                                                                ? "Random Video Call"
+                                                                        ? "Video Call"
                                                                                 : item.type == 7
-                                                                                    ? "Withdrawal by Listener" // 🔹 NEW
+                                                                          ? "Withdrawal by Expert" // 🔹 NEW
                                                                                     : item.type == 8
                                                                                         ? "Admin Added Coin" // 🔹 NEW
                                                                                         : item.type == 9

@@ -26,26 +26,26 @@ const getAuthHeaders = () => {
 }
 
 // Fetch listeners with pagination, search, and date range
-export const fetchListeners = createAsyncThunk(
-  'listener/fetchListeners',
+export const fetchExperts = createAsyncThunk(
+  'expert/fetchExperts',
   async (params = {}, { rejectWithValue, getState }) => {
     try {
       const state = getState()
 
       // Get parameters from params or state
-      const page = params.page || state.listener.page || 1
-      const limit = params.limit || state.listener.pageSize || 10
-      const searchQuery = params.searchQuery || state.listener.searchQuery || ''
-      const startDate = params.startDate || state.listener.startDate || 'All'
-      const endDate = params.endDate || state.listener.endDate || 'All'
-      const gender = params.gender || state.listener.gender || 'All'
-      const isFake = params.isFake !== undefined ? params.isFake : state.listener.isFake
+      const page = params.page || state.expert.page || 1
+      const limit = params.limit || state.expert.pageSize || 10
+      const searchQuery = params.searchQuery || state.expert.searchQuery || ''
+      const startDate = params.startDate || state.expert.startDate || 'All'
+      const endDate = params.endDate || state.expert.endDate || 'All'
+      const gender = params.gender || state.expert.gender || 'All'
+      const isFake = params.isFake !== undefined ? params.isFake : state.expert.isFake
 
-      const isBlock = params.isBlock !== undefined ? params.isBlock : state.listener.isBlock
-      const isOnline = params.isOnline !== undefined ? params.isOnline : state.listener.isOnline
-      const isBusy = params.isBusy !== undefined ? params.isBusy : state.listener.isBusy
+      const isBlock = params.isBlock !== undefined ? params.isBlock : state.expert.isBlock
+      const isOnline = params.isOnline !== undefined ? params.isOnline : state.expert.isOnline
+      const isBusy = params.isBusy !== undefined ? params.isBusy : state.expert.isBusy
 
-      const response = await axios.get(`${BASE_URL}/api/admin/listener/fetchListeners`, {
+      const response = await axios.get(`${BASE_URL}/api/admin/expert/fetchExperts`, {
         headers: getAuthHeaders(),
         params: {
           start: page,
@@ -70,7 +70,7 @@ export const fetchListeners = createAsyncThunk(
 
 // Fetch listeners with pagination, search, and date range
 export const fetchDropdownUser = createAsyncThunk(
-  'listener/retrieveUserList',
+  'expert/retrieveUserList',
   async (params = {}, { rejectWithValue, getState }) => {
     try {
       const response = await axios.get(`${BASE_URL}/api/admin/user/retrieveUserList`, {
@@ -87,10 +87,10 @@ export const fetchDropdownUser = createAsyncThunk(
   }
 )
 
-// Create a new listener
-export const createListener = createAsyncThunk('listener/createListener', async (formData, { rejectWithValue }) => {
+// Create a new expert
+export const createExpert = createAsyncThunk('expert/createExpert', async (formData, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${BASE_URL}/api/admin/listener/createListener`, formData, {
+    const response = await axios.post(`${BASE_URL}/api/admin/expert/createExpert`, formData, {
       headers: {
         ...getAuthHeaders(),
         'Content-Type': 'multipart/form-data'
@@ -98,7 +98,7 @@ export const createListener = createAsyncThunk('listener/createListener', async 
     })
 
     if (response.data.status) {
-      toast.success(response.data.message || 'Listener created successfully')
+      toast.success(response.data.message || 'Expert created successfully')
 
       return response.data.newListener
     } else {
@@ -111,12 +111,12 @@ export const createListener = createAsyncThunk('listener/createListener', async 
   }
 })
 
-// Update a listener
+// Update a expert
 export const updateListener = createAsyncThunk(
-  'listener/updateListener',
+  'expert/updateListener',
   async ({ listenerId, formData }, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(`${BASE_URL}/api/admin/listener/updateListenerProfile`, formData, {
+      const response = await axios.patch(`${BASE_URL}/api/admin/expert/updateExpertProfile`, formData, {
         headers: {
           ...getAuthHeaders(),
           'Content-Type': 'multipart/form-data'
@@ -125,7 +125,7 @@ export const updateListener = createAsyncThunk(
       })
 
       if (response.data.status) {
-        toast.success(response.data.message || 'Listener updated successfully')
+        toast.success(response.data.message || 'Expert updated successfully')
 
         return response.data.data
       } else {
@@ -139,16 +139,16 @@ export const updateListener = createAsyncThunk(
   }
 )
 
-// Delete a listener
-export const deleteListener = createAsyncThunk('listener/deleteListener', async (listenerId, { rejectWithValue }) => {
+// Delete a expert
+export const deleteListener = createAsyncThunk('expert/deleteListener', async (listenerId, { rejectWithValue }) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/api/admin/listener/deleteListenerProfile`, {
+    const response = await axios.delete(`${BASE_URL}/api/admin/expert/deleteExpertProfile`, {
       headers: getAuthHeaders(),
       params: { listenerId }
     })
 
     if (response.data.status) {
-      toast.success(response.data.message || 'Listener deleted successfully')
+      toast.success(response.data.message || 'Expert deleted successfully')
 
       return listenerId
     } else {
@@ -161,7 +161,7 @@ export const deleteListener = createAsyncThunk('listener/deleteListener', async 
   }
 })
 
-// Listener Coin History
+// Expert Coin History
 export const fetchCoinHistoryListener = createAsyncThunk(
   'user/fetchCoinTransactions',
   async ({ userId, start = 1, limit = 20, startDate = 'All', endDate = 'All' }, thunkAPI) => {
@@ -181,7 +181,7 @@ export const fetchCoinHistoryListener = createAsyncThunk(
   }
 )
 
-// Listener Call History
+// Expert Call History
 export const fetchCallHistoryListener = createAsyncThunk(
   'user/fetchCallHistoryListener',
   async ({ userId, start = 1, limit = 20, startDate = 'All', endDate = 'All' }, thunkAPI) => {
@@ -201,11 +201,11 @@ export const fetchCallHistoryListener = createAsyncThunk(
   }
 )
 
-// Block listener
-export const blockListener = createAsyncThunk('listener/blockListener', async (listenerId, { rejectWithValue }) => {
+// Block expert
+export const blockListener = createAsyncThunk('expert/blockListener', async (listenerId, { rejectWithValue }) => {
   try {
     const response = await axios.patch(
-      `${BASE_URL}/api/admin/listener/updateBlockStatus?listenerId=${listenerId}`,
+      `${BASE_URL}/api/admin/expert/updateBlockStatus?listenerId=${listenerId}`,
       {},
       {
         headers: getAuthHeaders()
@@ -250,7 +250,7 @@ const initialState = {
 }
 
 const listenerSlice = createSlice({
-  name: 'listener',
+  name: 'expert',
   initialState,
   reducers: {
     setPage: (state, action) => {
@@ -301,12 +301,12 @@ const listenerSlice = createSlice({
   extraReducers: builder => {
     builder
 
-      // Handle fetchListeners states
-      .addCase(fetchListeners.pending, state => {
+      // Handle fetchExperts states
+      .addCase(fetchExperts.pending, state => {
         state.loading = true
         state.error = null
       })
-      .addCase(fetchListeners.fulfilled, (state, action) => {
+      .addCase(fetchExperts.fulfilled, (state, action) => {
         state.loading = false
         state.initialLoad = false
         state.listeners = action.payload.data || []
@@ -318,11 +318,11 @@ const listenerSlice = createSlice({
         state.total = action.payload.total || 0
         state.error = null
       })
-      .addCase(fetchListeners.rejected, (state, action) => {
+      .addCase(fetchExperts.rejected, (state, action) => {
         state.loading = false
         state.initialLoad = false
-        state.error = action.payload || 'Failed to fetch listeners'
-        toast.error(action.payload || 'Failed to fetch listeners')
+        state.error = action.payload || 'Failed to fetch experts'
+        toast.error(action.payload || 'Failed to fetch experts')
       })
       .addCase(fetchDropdownUser.pending, state => {})
       .addCase(fetchDropdownUser.fulfilled, (state, action) => {
@@ -330,18 +330,18 @@ const listenerSlice = createSlice({
       })
       .addCase(fetchDropdownUser.rejected, (state, action) => {})
 
-      // Handle createListener states
-      .addCase(createListener.pending, state => {
+      // Handle createExpert states
+      .addCase(createExpert.pending, state => {
         // No state changes needed for pending creation
       })
-      .addCase(createListener.fulfilled, (state, action) => {
-        // Optionally add the new listener to the state if needed immediately
+      .addCase(createExpert.fulfilled, (state, action) => {
+        // Optionally add the new expert to the state if needed immediately
         state.listeners = [action.payload, ...state.listeners]
         state.total += 1
       })
-      .addCase(createListener.rejected, (state, action) => {
-        state.error = action.payload || 'Failed to create listener'
-        toast.error(action.payload || 'Failed to create listener')
+      .addCase(createExpert.rejected, (state, action) => {
+        state.error = action.payload || 'Failed to create expert'
+        toast.error(action.payload || 'Failed to create expert')
       })
 
       // Handle updateListener states
@@ -349,15 +349,15 @@ const listenerSlice = createSlice({
         // No state changes needed for pending update
       })
       .addCase(updateListener.fulfilled, (state, action) => {
-        // Update the listener in the state if it exists
+        // Update the expert in the state if it exists
         // const updatedListener = action.payload
-        // state.listeners = state.listeners.map(listener =>
-        //   listener._id === updatedListener._id ? updatedListener : listener
+        // state.listeners = state.listeners.map(expert =>
+        //   expert._id === updatedListener._id ? updatedListener : expert
         // )
       })
       .addCase(updateListener.rejected, (state, action) => {
-        state.error = action.payload || 'Failed to update listener'
-        toast.error(action.payload || 'Failed to update listener')
+        state.error = action.payload || 'Failed to update expert'
+        toast.error(action.payload || 'Failed to update expert')
       })
 
       // Handle deleteListener states
@@ -365,13 +365,13 @@ const listenerSlice = createSlice({
         // No state changes needed for pending deletion
       })
       .addCase(deleteListener.fulfilled, (state, action) => {
-        // Remove the deleted listener from the state
-        state.listeners = state.listeners.filter(listener => listener._id !== action.payload)
+        // Remove the deleted expert from the state
+        state.listeners = state.listeners.filter(expert => expert._id !== action.payload)
         state.total -= 1
       })
       .addCase(deleteListener.rejected, (state, action) => {
-        state.error = action.payload || 'Failed to delete listener'
-        toast.error(action.payload || 'Failed to delete listener')
+        state.error = action.payload || 'Failed to delete expert'
+        toast.error(action.payload || 'Failed to delete expert')
       })
 
     builder
@@ -418,8 +418,8 @@ const listenerSlice = createSlice({
       .addCase(blockListener.fulfilled, (state, action) => {
         // change isblock status
         if (action.payload.status) {
-          state.listeners = state.listeners.map(listener =>
-            listener._id === action.meta.arg ? { ...listener, isBlock: !listener.isBlock } : listener
+          state.listeners = state.listeners.map(expert =>
+            expert._id === action.meta.arg ? { ...expert, isBlock: !expert.isBlock } : expert
           )
           toast.success(action.payload.message)
         } else {
@@ -427,8 +427,8 @@ const listenerSlice = createSlice({
         }
       })
       .addCase(blockListener.rejected, (state, action) => {
-        state.error = action.payload || 'Failed to block listener'
-        toast.error(action.payload || 'Failed to block listener')
+        state.error = action.payload || 'Failed to block expert'
+        toast.error(action.payload || 'Failed to block expert')
       })
   }
 })

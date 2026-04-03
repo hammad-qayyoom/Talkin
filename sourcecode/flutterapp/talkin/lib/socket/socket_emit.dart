@@ -166,11 +166,11 @@ class SocketEmit {
       listenerCoinModel = await HostCoinApi.callApi();
       Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
 
-      print("user coin emit ::::::::::::::::::::::::${Database.userCoin}");
-      print("user coin emit ::::::::::::::::::::::::${userCoinModel?.coin.toString()}");
+      Utils.showLog("user coin emit ::::::::::::::::::::::::${Database.userCoin}");
+      Utils.showLog("user coin emit ::::::::::::::::::::::::${userCoinModel?.coin.toString()}");
 
-      print("listenerCoinModel emit ::::::::::::::::::::::::${Database.listenerCoin}");
-      print("listenerCoinModel emit ::::::::::::::::::::::::${listenerCoinModel.coin.toString()}");
+      Utils.showLog("listenerCoinModel emit ::::::::::::::::::::::::${Database.listenerCoin}");
+      Utils.showLog("listenerCoinModel emit ::::::::::::::::::::::::${listenerCoinModel.coin.toString()}");
 
       if (Get.isRegistered<HomeScreenController>()) {
         Get.find<HomeScreenController>()
@@ -184,37 +184,6 @@ class SocketEmit {
 
 
       Utils.showLog("Socket Emit => callTerminated: $data");
-    } else {
-      Utils.showLog("Socket Not Connected!!");
-    }
-  }
-
-  /// random call ringing
-  static void randomCallRinging({
-    required String callerId,
-    required String receiverId,
-    required String callType,
-    required String callerRole,
-    required String receiverRole,
-    required String receiverName,
-    required String receiverImage,
-    required String callerName,
-    required String callerImage,
-  }) {
-    if (socket != null && socket?.connected == true) {
-      final data = {
-        SocketParams.callerId: callerId,
-        SocketParams.receiverId: receiverId,
-        SocketParams.callType: callType,
-        SocketParams.callerRole: callerRole,
-        SocketParams.receiverRole: receiverRole,
-        SocketParams.receiverName: receiverName,
-        SocketParams.receiverImage: receiverImage,
-        SocketParams.callerName: callerName,
-        SocketParams.callerImage: callerImage,
-      };
-      socket?.emit(SocketEvents.randomCallRinging, data);
-      Utils.showLog("Socket Emit => random call incomingRingingStarted: $data");
     } else {
       Utils.showLog("Socket Not Connected!!");
     }

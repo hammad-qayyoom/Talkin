@@ -29,13 +29,13 @@ const StatisticsCard = () => {
     },
     {
       stats: metrics.totalPendingListeners || 0,
-      title: 'Pending Listeners',
+      title: 'Pending Experts',
       color: 'warning',
       icon: 'tabler-alert-triangle'
     },
     {
       stats: metrics.totalListeners || 0,
-      title: 'Total Listeners',
+      title: 'Total Experts',
       color: 'secondary',
       icon: 'tabler-user-star'
     },

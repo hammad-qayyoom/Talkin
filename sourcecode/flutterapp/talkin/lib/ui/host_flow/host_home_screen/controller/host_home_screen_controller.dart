@@ -4,9 +4,9 @@ import 'package:carousel_slider/carousel_options.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/ui/host_flow/host_home_screen/api/host_coin_api.dart';
-import 'package:talk_in/ui/host_flow/host_home_screen/api/update_random_call_status_api.dart';
+import 'package:talk_in/ui/host_flow/host_home_screen/api/update_expert_call_status_api.dart';
 import 'package:talk_in/ui/host_flow/host_home_screen/model/listener_coin_model.dart';
-import 'package:talk_in/ui/host_flow/host_home_screen/model/update_random_call_status_model.dart';
+import 'package:talk_in/ui/host_flow/host_home_screen/model/update_expert_call_status_model.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/model/fetch_listener_profile_model.dart';
 import 'package:talk_in/utils/app_asset.dart';
@@ -19,10 +19,8 @@ class HostHomeScreenController extends GetxController {
   // bool isChatPermission = Database.fetchListenerProfileModel?.data?.isAvailableForChat ?? false;
   bool isAvailableForPrivateAudioCall = Database.fetchListenerProfileModel?.data?.isAvailableForPrivateAudioCall ?? false;
   bool isAvailableForPrivateVideoCall = Database.fetchListenerProfileModel?.data?.isAvailableForPrivateVideoCall ?? false;
-  bool isAvailableForRandomAudioCall = Database.fetchListenerProfileModel?.data?.isAvailableForRandomAudioCall ?? false;
-  bool isAvailableForRandomVideoCall = Database.fetchListenerProfileModel?.data?.isAvailableForRandomVideoCall ?? false;
   bool isToastVisible = false;
-  UpdateRandomCallStatusModel? updateRandomCallStatusModel;
+  UpdateExpertCallStatusModel? updateExpertCallStatusModel;
   final List<String> imageList = [
     AppAsset.homeCallPerson,
     AppAsset.homeCallPerson,
@@ -54,9 +52,6 @@ class HostHomeScreenController extends GetxController {
     fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(loginListenerId: Database.fetchLoginUserProfileModel?.user?.listenerId ?? '');
     Database.fetchListenerProfileModel = fetchListenerProfileModel;
 
-    // if (fetchListenerProfileModel != null) {
-    //   isAvailableForRandomVideoCall = fetchListenerProfileModel?.data?.isAvailableForRandomVideoCall ?? false;
-    // }
     isCoinLoading = true;
     update([Constant.idCoinUpdate]);
     listenerCoinModel = await HostCoinApi.callApi();
@@ -76,7 +71,7 @@ class HostHomeScreenController extends GetxController {
     update([Constant.idGetCoinPlan]);
   }
 
-  /// random call switch permission
+  /// availability switch permission
   void permissionSwitch(bool currentValue, String status) async {
     log("status=============================$status");
 
@@ -85,20 +80,17 @@ class HostHomeScreenController extends GetxController {
       isAvailableForPrivateVideoCall = currentValue;
     } else if (status == "isAvailableForPrivateAudioCall") {
       isAvailableForPrivateAudioCall = currentValue;
-    } else if (status == "isAvailableForRandomVideoCall") {
-      isAvailableForRandomVideoCall = currentValue;
     }
 
     log("isPermission = currentValue=============================$isAvailableForPrivateAudioCall");
     update();
 
     /// API call to update permission
-    final response = await UpdateRandomCallStatusApi.callApi(
+    final response = await UpdateExpertCallStatusApi.callApi(
       status: status.toString(),
-      listenerId: Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
+      expertId: Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
     );
-    updateRandomCallStatusModel = response;
-    // Utils.showToast(Get.context!, updateRandomCallStatusModel?.message ?? "");
+    updateExpertCallStatusModel = response;
 
     if (response != null && response.status == true) {
       // Success, keep toggled value
@@ -117,22 +109,6 @@ class HostHomeScreenController extends GetxController {
         } else {
           Utils.showToast(Get.context!, EnumLocale.txtListenerDisableForPrivateAudioCall.name.tr, toastLength: Toast.LENGTH_SHORT);
         }
-      } else if (status == "isAvailableForRandomVideoCall") {
-        isAvailableForRandomVideoCall = currentValue;
-
-        if (currentValue == true) {
-          Utils.showToast(Get.context!, EnumLocale.txtListenerAvailableForRandomVideoCall.name.tr, toastLength: Toast.LENGTH_SHORT);
-        } else {
-          Utils.showToast(Get.context!, EnumLocale.txtListenerDisableForRandomVideoCall.name.tr, toastLength: Toast.LENGTH_SHORT);
-        }
-      } else if (status == "isAvailableForRandomAudioCall") {
-        isAvailableForRandomAudioCall = currentValue;
-
-        if (currentValue == true) {
-          Utils.showToast(Get.context!, EnumLocale.txtListenerAvailableForRandomAudioCall.name.tr, toastLength: Toast.LENGTH_SHORT);
-        } else {
-          Utils.showToast(Get.context!, EnumLocale.txtListenerDisableForRandomAudioCall.name.tr, toastLength: Toast.LENGTH_SHORT);
-        }
       }
     } else {
       // Failure, revert to previous value
@@ -141,10 +117,6 @@ class HostHomeScreenController extends GetxController {
         isAvailableForPrivateVideoCall = !currentValue;
       } else if (status == "isAvailableForPrivateAudioCall") {
         isAvailableForPrivateAudioCall = !currentValue;
-      } else if (status == "isAvailableForRandomVideoCall") {
-        isAvailableForRandomVideoCall = !currentValue;
-      } else if (status == "isAvailableForRandomAudioCall") {
-        isAvailableForRandomAudioCall = !currentValue;
       }
     }
     fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(loginListenerId: Database.fetchLoginUserProfileModel?.user?.listenerId ?? '');
@@ -152,8 +124,6 @@ class HostHomeScreenController extends GetxController {
     if (fetchListenerProfileModel?.status == false) {
       Utils.showLog(fetchListenerProfileModel?.message ?? "");
     }
-    fetchListenerProfileModel?.data?.isAvailableForRandomVideoCall = isAvailableForRandomVideoCall;
-    fetchListenerProfileModel?.data?.isAvailableForRandomAudioCall = isAvailableForRandomAudioCall;
     fetchListenerProfileModel?.data?.isAvailableForPrivateVideoCall = isAvailableForPrivateVideoCall;
     fetchListenerProfileModel?.data?.isAvailableForPrivateAudioCall = isAvailableForPrivateAudioCall;
 

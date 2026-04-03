@@ -198,7 +198,7 @@ class FakeVideoCallView extends StatelessWidget {
                       GetBuilder<FakeVideoCallController>(
                         builder: (controller) {
                           return Text(
-                            "${controller.randomNumber.value}",
+                            "${controller.meterValue.value}",
                             style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: Colors.yellow),
                           );
                         },

@@ -25,9 +25,9 @@ export const toolTipData = {
     title: 'User Privacy Policy URL',
     tooltip: 'Link to privacy policy for app users.'
   },
-  listenerPrivacyPolicyUrl: {
-    title: 'Listener Privacy Policy URL',
-    tooltip: 'Link to privacy policy for listeners.'
+  expertPrivacyPolicyUrl: {
+    title: 'Expert Privacy Policy URL',
+    tooltip: 'Link to privacy policy for experts.'
   },
   aboutUsUrl: {
     title: 'About Us URL',
@@ -84,14 +84,6 @@ export const toolTipData = {
   audioCallRatePrivate: {
     title: 'Audio Call Rate',
     tooltip: 'Per-minute coin cost for audio calls.'
-  },
-  videoCallRateRandom: {
-    title: 'Video Call Rate',
-    tooltip: 'Per-minute coin cost for video calls.'
-  },
-  audioCallRateRandom: {
-    title: 'Random Audio Call Rate',
-    tooltip: 'Per-minute coin cost for random audio calls.'
   },
   dailyLoginBonusCoins: {
     title: 'Login Bonus Coins',
@@ -283,7 +275,7 @@ export const toolTipData = {
   },
   minimumCoinsForPayout: {
     title: 'Minimum Coins for Payout',
-    tooltip: 'Minimum coin threshold required for listener to request a payout.'
+    tooltip: 'Minimum coin threshold required for expert to request a payout.'
   },
   agencyMinPayout: {
     title: 'Agency Minimum Payout',

@@ -2,9 +2,9 @@
   "_id": {
     "$oid": "6822d2bbb507da14c1d39da4"
   },
-  "category": "Listener",
-  "question": "What is Listener?",
-  "answer": "A Listener is someone who is available to talk and provide emotional support.",
+  "category": "Expert",
+  "question": "What is an Expert?",
+  "answer": "An Expert is someone who is available to talk and provide emotional support.",
   "createdAt": {
     "$date": "2025-05-13T05:03:55.565Z"
   },
@@ -16,9 +16,9 @@
   "_id": {
     "$oid": "6822d2cbb507da14c1d39da6"
   },
-  "category": "Listener",
-  "question": "Who are Listeners?",
-  "answer": "Listeners are trained individuals who volunteer or get verified to support others.",
+  "category": "Expert",
+  "question": "Who are Experts?",
+  "answer": "Experts are trained individuals who volunteer or get verified to support others.",
   "createdAt": {
     "$date": "2025-05-13T05:04:11.166Z"
   },
@@ -30,9 +30,9 @@
   "_id": {
     "$oid": "6822d2d9b507da14c1d39da8"
   },
-  "category": "Listener",
-  "question": "How can I call a Listener?",
-  "answer": "You can call a listener by tapping on their profile and selecting the call option.",
+  "category": "Expert",
+  "question": "How can I call an Expert?",
+  "answer": "You can call an expert by tapping on their profile and selecting the call option.",
   "createdAt": {
     "$date": "2025-05-13T05:04:25.170Z"
   },
@@ -44,9 +44,9 @@
   "_id": {
     "$oid": "6822d2e3b507da14c1d39daa"
   },
-  "category": "Listener",
-  "question": "When can I talk to a Listener?",
-  "answer": "You can talk to a listener anytime they are shown as online or available.",
+  "category": "Expert",
+  "question": "When can I talk to an Expert?",
+  "answer": "You can talk to an expert anytime they are shown as online or available.",
   "createdAt": {
     "$date": "2025-05-13T05:04:35.224Z"
   },
@@ -60,7 +60,7 @@
   },
   "category": "User",
   "question": "What is a User?",
-  "answer": "A User is someone who can interact with listeners, join sessions, and access the platform features.",
+  "answer": "A User is someone who can interact with experts, join sessions, and access the platform features.",
   "createdAt": {
     "$date": "2025-05-13T05:49:09.811Z"
   },
@@ -88,7 +88,7 @@
   },
   "category": "User",
   "question": "What are the benefits of being a User?",
-  "answer": "Users can connect with verified listeners, access mental wellness tools, and track their progress.",
+  "answer": "Users can connect with verified experts, access mental wellness tools, and track their progress.",
   "createdAt": {
     "$date": "2025-05-13T05:49:41.059Z"
   },
@@ -101,8 +101,8 @@
     "$oid": "6822dd8614f8bd116f68462f"
   },
   "category": "User",
-  "question": "Can I switch to a Listener later?",
-  "answer": "Yes, you can apply to become a listener once your profile meets the criteria",
+  "question": "Can I switch to an Expert later?",
+  "answer": "Yes, you can apply to become an expert once your profile meets the criteria",
   "createdAt": {
     "$date": "2025-05-13T05:49:58.963Z"
   },

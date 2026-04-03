@@ -57,9 +57,9 @@ const ListenerRequest = () => {
     <>
 
       <Box className='mb-3'>
-        <Typography variant='h4'>Listener Request</Typography>
+        <Typography variant='h4'>Expert Request</Typography>
         <Typography variant='body2' color='text.secondary'>
-          Review and manage listener onboarding requests, approvals, and rejections.
+          Review and manage expert onboarding requests, approvals, and rejections.
         </Typography>
       </Box>
       <TabContext value={activeTab}>

@@ -166,7 +166,7 @@ const IdentityProofs = () => {
           Identity Proof
         </Typography>
         <Typography variant='body2' color='text.secondary'>
-          Manage identity verification document types for user and listener authentication.
+          Manage identity verification document types for user and expert authentication.
         </Typography>
       </Box>
 

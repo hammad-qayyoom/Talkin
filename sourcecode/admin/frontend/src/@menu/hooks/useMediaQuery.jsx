@@ -15,11 +15,11 @@ const useMediaQuery = breakpoint => {
         setMatches(media.matches)
       }
 
-      const listener = () => setMatches(media.matches)
+      const expert = () => setMatches(media.matches)
 
-      window.addEventListener('resize', listener)
+      window.addEventListener('resize', expert)
 
-      return () => window.removeEventListener('resize', listener)
+      return () => window.removeEventListener('resize', expert)
     }
   }, [matches, breakpoint])
 
