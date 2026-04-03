@@ -32,7 +32,7 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
   const { loading } = useSelector(state => state.coinPlansReducer)
 
   const [formData, setFormData] = useState({
-    coins: '',
+    sessionCredits: '',
     price: '',
     productId: '',
     isPopular: false,
@@ -45,7 +45,7 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
   useEffect(() => {
     if (mode === 'edit' && coinPlan) {
       setFormData({
-        coins: coinPlan.coins || '',
+        sessionCredits: coinPlan.sessionCredits || coinPlan.coins || '',
         price: coinPlan.price || '',
         productId: coinPlan.productId || '',
         isPopular: coinPlan.isPopular || false,
@@ -53,7 +53,7 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
       })
     } else {
       setFormData({
-        coins: '',
+        sessionCredits: '',
         price: '',
         productId: '',
         isPopular: false,
@@ -69,8 +69,8 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
     setErrors(prev => {
       const updatedErrors = { ...prev }
 
-      if (field === 'coins' && value > 0) {
-        delete updatedErrors.coins
+      if (field === 'sessionCredits' && value > 0) {
+        delete updatedErrors.sessionCredits
       } else if (field === 'price' && value > 0) {
         delete updatedErrors.price
       } else if (field === 'productId' && value.trim() !== '') {
@@ -84,8 +84,8 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
   const handleValidation = () => {
     const newErrors = {}
 
-    if (!formData.coins || formData.coins <= 0) {
-      newErrors.coins = 'Coins must be a positive number'
+    if (!formData.sessionCredits || formData.sessionCredits <= 0) {
+      newErrors.sessionCredits = 'Session credits must be a positive number'
     }
 
     if (!formData.price || formData.price <= 0) {
@@ -114,7 +114,12 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
 
       if (mode === 'edit') {
         const updatedPayload = {}
-        if (formData.coins !== coinPlan.coins) updatedPayload.coins = formData.coins
+
+        if (formData.sessionCredits !== (coinPlan.sessionCredits || coinPlan.coins)) {
+          updatedPayload.sessionCredits = formData.sessionCredits
+          updatedPayload.coins = formData.sessionCredits
+        }
+
         if (formData.price !== coinPlan.price) updatedPayload.price = formData.price
         if (formData.productId !== coinPlan.productId) updatedPayload.productId = formData.productId
         if (formData.isPopular !== coinPlan.isPopular) updatedPayload.isPopular = formData.isPopular
@@ -128,7 +133,7 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
           ).unwrap()
         }
       } else {
-        await dispatch(createCoinPlan(formData)).unwrap()
+        await dispatch(createCoinPlan({ ...formData, coins: formData.sessionCredits })).unwrap()
       }
 
       resetForm()
@@ -143,7 +148,7 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
 
   const resetForm = () => {
     setFormData({
-      coins: '',
+      sessionCredits: '',
       price: '',
       productId: '',
       isPopular: false,
@@ -176,7 +181,7 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
     >
       <DialogTitle id='coinplan-dialog-title'>
         <Typography variant='h5' component='span'>
-          {mode === 'edit' ? 'Edit Coin Plan' : 'Create Coin Plan'}
+          {mode === 'edit' ? 'Edit Subscription Plan' : 'Create Subscription Plan'}
         </Typography>
         <DialogCloseButton onClick={handleClose}>
           <i className='tabler-x' />
@@ -185,14 +190,14 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
 
       <DialogContent className='flex flex-col gap-4 py-4'>
         <TextField
-          label='Coins'
+          label='Session Credits'
           type='number'
           fullWidth
-          value={formData.coins}
-          error={!!errors.coins}
-          helperText={errors.coins || ''}
-          onChange={e => handleChange('coins', parseInt(e.target.value, 10) || '')}
-          placeholder='1000'
+          value={formData.sessionCredits}
+          error={!!errors.sessionCredits}
+          helperText={errors.sessionCredits || ''}
+          onChange={e => handleChange('sessionCredits', parseInt(e.target.value, 10) || '')}
+          placeholder='10'
           inputProps={{ min: 1 }}
         />
 
@@ -209,13 +214,13 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
         />
 
         <TextField
-          label='Product ID'
+          label='Plan Slug / Product ID'
           fullWidth
           value={formData.productId}
           error={!!errors.productId}
           helperText={errors.productId || ''}
           onChange={e => handleChange('productId', e.target.value)}
-          placeholder='com.example.app.coinpack1000'
+          placeholder='starter-monthly'
         />
 
         {/* <div className='flex flex-col gap-2'>

@@ -79,7 +79,7 @@ const UserDetails = ({ userDetails }) => {
                       : userDetails?.role === 3
                         ? 'Agency'
                         : userDetails?.role === 4
-                          ? 'Coin Trader'
+                          ? 'Session Credit Trader'
                           : 'Unknown'
                 }
                 color='secondary'
@@ -96,7 +96,7 @@ const UserDetails = ({ userDetails }) => {
                     </CustomAvatar>
                     <div>
                       <Typography variant='h5'>{userDetails?.receivedCoins || '0'}</Typography>
-                      <Typography>Received Coins</Typography>
+                      <Typography>Received Session Credits</Typography>
                     </div>
                   </div>
                   <div className='flex items-center gap-4'>
@@ -105,7 +105,7 @@ const UserDetails = ({ userDetails }) => {
                     </CustomAvatar>
                     <div>
                       <Typography variant='h5'>{userDetails?.spentCoins || '0'}</Typography>
-                      <Typography>Spent Coins</Typography>
+                      <Typography>Spent Session Credits</Typography>
                     </div>
                   </div>
                 </>
@@ -145,7 +145,7 @@ const UserDetails = ({ userDetails }) => {
               {!userDetails?.isFake && (
                 <div className='flex items-center flex-wrap gap-x-1.5'>
                   <Typography className='font-medium' color='text.primary'>
-                    Coins:
+                    Session Credits:
                   </Typography>
                   <Typography>{userDetails?.coin || '0'}</Typography>
                 </div>

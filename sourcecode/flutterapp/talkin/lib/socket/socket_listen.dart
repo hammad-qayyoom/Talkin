@@ -499,8 +499,10 @@ class SocketListen {
     userCoinModel = await UserCoinApi.callApi();
     Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
 
-    Utils.showLog("user coin listen ::::::::::::::::::${userCoinModel?.coin}");
-    Utils.showLog("user coin listen ::::::::::::::::::${Database.userCoin}");
+    Utils.showLog(
+        "user session credit listen ::::::::::::::::::${userCoinModel?.coin}");
+    Utils.showLog(
+        "user session credit listen ::::::::::::::::::${Database.userCoin}");
 
     if (Get.isRegistered<HostHomeScreenController>()) {
       final hostHomeScreenController = Get.find<HostHomeScreenController>();
@@ -518,7 +520,7 @@ class SocketListen {
   }
 
   static void handleNotEnoughCoins(dynamic data) {
-    Utils.showLog("Socket Listen => handleNotEnoughCoins: $data");
+    Utils.showLog("Socket Listen => handleNotEnoughSessionCredits: $data");
     if (Get.isRegistered<VideoCallController>()) {
       final videoCallController = Get.find<VideoCallController>();
 
@@ -554,7 +556,7 @@ class SocketListen {
 
   /// if Invalid callerRole or receiverRole  or Caller, Receiver, or CallHistory not found then listen also in coinDeductionError
   static void handleCallCoinsDeducted(dynamic data) {
-    Utils.showLog("Socket Listen => callCoinsDeducted: $data");
+    Utils.showLog("Socket Listen => callSessionCreditsDeducted: $data");
     Utils.showToast(Get.context!, data['message']);
     if (Get.isRegistered<VideoCallController>()) {
       final videoCallController = Get.find<VideoCallController>();

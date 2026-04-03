@@ -54,7 +54,7 @@ const RecentUsers = ({ recentUsers }) => {
                 <TableCell>User</TableCell>
                 <TableCell>Nickname</TableCell>
                 <TableCell>Gender</TableCell>
-                <TableCell>Coin</TableCell>
+                <TableCell>Session Credit</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Login Type</TableCell>
                 <TableCell>Date</TableCell>

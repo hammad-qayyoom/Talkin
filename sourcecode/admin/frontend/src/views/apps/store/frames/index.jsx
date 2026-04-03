@@ -157,7 +157,7 @@ const Frames = () => {
                   <div className='border-t pt-3 mt-3 flex justify-between text-sm text-gray-700'>
                     <div>
                       <Typography className='block'>Price</Typography>
-                      <Typography className='block'>{frame.coin.toLocaleString()} Coins</Typography>
+                      <Typography className='block'>{frame.coin.toLocaleString()} Session Credits</Typography>
                     </div>
                     <div>
                       <Typography className='block'>Validity</Typography>

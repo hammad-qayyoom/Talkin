@@ -29,7 +29,7 @@ class CoinPurchaseTopView extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              "Congratulations on taking a step towards combating loneliness",
+              "Subscription payment completed successfully",
               style: AppFontStyle.fontStyleW700(
                 fontSize: 18,
                 fontColor: Colors.white,
@@ -65,7 +65,7 @@ class CoinPurchaseView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      EnumLocale.txtAmountCredited.name.tr,
+                      "Subscription Amount",
                       style: AppFontStyle.fontStyleW500(fontSize: 16, fontColor: Colors.black),
                     ),
                     Text(

@@ -12,11 +12,11 @@ class UserCoinApi {
   static Future<UserCoinModel?> callApi() async {
     final token = await FirebaseAccessToken.onGet() ?? "";
 
-    Utils.showLog("User Coin Api Calling...");
+    Utils.showLog("User Session Credit Api Calling...");
 
     final uri = Uri.parse(Api.userCoin);
 
-    Utils.showLog("User Coin Api url => $uri");
+    Utils.showLog("User Session Credit Api url => $uri");
 
     final headers = {
       ApiParams.key: Api.secretKey,
@@ -27,16 +27,16 @@ class UserCoinApi {
     try {
       final response = await http.get(uri, headers: headers);
 
-      Utils.showLog("User Coin Api Response => ${response.body}");
+      Utils.showLog("User Session Credit Api Response => ${response.body}");
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
         return UserCoinModel.fromJson(jsonResponse);
       } else {
-        Utils.showLog("User Coin Api StateCode Error");
+        Utils.showLog("User Session Credit Api StateCode Error");
       }
     } catch (e) {
-      Utils.showLog("User Coin Api Response => ${e.toString()}");
+      Utils.showLog("User Session Credit Api Response => ${e.toString()}");
     }
     return null;
   }

@@ -137,11 +137,11 @@ const CoinUserDialog = ({ open, onClose, editData, coinAdjustmentMode = false })
   // Render the appropriate title based on mode
   const getDialogTitle = () => {
     if (isCoinAdjustmentMode) {
-      return `Adjust Coins for ${editData?.fullName || 'User'}`
+      return `Adjust Session Credits for ${editData?.fullName || 'User'}`
     } else if (isEditMode) {
       return `Edit ${editData?.fullName || 'User'}`
     } else {
-      return 'Create Coin User'
+      return 'Create Session Credit User'
     }
   }
 
@@ -172,13 +172,13 @@ const CoinUserDialog = ({ open, onClose, editData, coinAdjustmentMode = false })
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3} sx={{ mt: 1, display: 'flex', flexDirection: 'column' }}>
-            {/* Coin adjustment fields - only show in coin adjustment mode */}
+            {/* Session Credit adjustment fields - only show in coin adjustment mode */}
             {isCoinAdjustmentMode && (
               <>
                 <Grid item xs={12}>
                   <Box sx={{ mb: 2 }}>
                     <Typography variant='body1' sx={{ fontWeight: 500  }}>
-                      Current Coin Balance : <span style={{ color: 'primary.main' }}>{editData?.coins || 0}</span> 
+                      Current Session Credit Balance : <span style={{ color: 'primary.main' }}>{editData?.coins || 0}</span> 
                     </Typography>
                   </Box>
                 </Grid>
@@ -195,14 +195,14 @@ const CoinUserDialog = ({ open, onClose, editData, coinAdjustmentMode = false })
                           onClick={() => field.onChange('add')}
                           sx={{ mr: 2 }}
                         >
-                          Add Coins
+                          Add Session Credits
                         </Button>
                         <Button
                           variant={field.value === 'deduct' ? 'contained' : 'outlined'}
                           color='error'
                           onClick={() => field.onChange('deduct')}
                         >
-                          Remove Coins
+                          Remove Session Credits
                         </Button>
                       </Box>
                     )}
@@ -214,14 +214,14 @@ const CoinUserDialog = ({ open, onClose, editData, coinAdjustmentMode = false })
                     name='coinAmount'
                     control={control}
                     rules={{
-                      required: 'Coin amount is required',
+                      required: 'Session Credit amount is required',
                       min: {
                         value: 1,
-                        message: 'Coin amount must be at least 1'
+                        message: 'Session Credit amount must be at least 1'
                       },
                       validate: value => {
                         if (coinAction === 'deduct' && parseInt(value) > (editData?.coins || 0)) {
-                          return 'Not enough coins to deduct the requested coins'
+                          return 'Not enough session credits to deduct the requested amount'
                         }
 
                         return true
@@ -231,7 +231,7 @@ const CoinUserDialog = ({ open, onClose, editData, coinAdjustmentMode = false })
                       <TextField
                         {...field}
                         type='number'
-                        label={coinAction === 'add' ? 'Coins to Add' : 'Coins to Remove'}
+                        label={coinAction === 'add' ? 'Session Credits to Add' : 'Session Credits to Remove'}
                         fullWidth
                         error={Boolean(errors.coinAmount)}
                         helperText={errors.coinAmount?.message}
@@ -261,7 +261,7 @@ const CoinUserDialog = ({ open, onClose, editData, coinAdjustmentMode = false })
                     {isCoinAdjustmentMode ? 'Updating...' : isEditMode ? 'Updating...' : 'Creating...'}
                   </>
                 ) : isCoinAdjustmentMode ? (
-                  'Update Coins'
+                  'Update Session Credits'
                 ) : isEditMode ? (
                   'Update'
                 ) : (

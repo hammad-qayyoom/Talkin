@@ -128,11 +128,11 @@ const HostListTable = ({ tableData, isAgency = false }) => {
         accessorKey: 'age'
       },
       {
-        header: 'Coin',
+        header: 'Session Credit',
         accessorKey: 'coin'
       },
       {
-        header: 'Earned Coin',
+        header: 'Earned Session Credit',
         accessorKey: 'earnedHostCoins'
       },
       {

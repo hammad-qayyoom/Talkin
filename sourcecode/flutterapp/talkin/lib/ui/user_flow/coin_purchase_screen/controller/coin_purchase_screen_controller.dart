@@ -13,7 +13,7 @@ class CoinPurchaseScreenController extends GetxController {
   void onInit() {
     Map<String, dynamic> data = Get.arguments ?? {};
 
-    log("purchase coin plan arguments :: $data");
+    log("purchase subscription arguments :: $data");
 
     // date = data['date']?.toString();
     date = formatToCustomDate("${data['date']?.toString()}");
@@ -26,7 +26,8 @@ class CoinPurchaseScreenController extends GetxController {
 
   String formatToCustomDate(String input) {
     try {
-      final inputFormat = DateFormat("M/d/y, h:mm:ss a"); // your original format
+      final inputFormat =
+          DateFormat("M/d/y, h:mm:ss a"); // your original format
       final dateTime = inputFormat.parse(input);
 
       final outputFormat = DateFormat("d MMM y"); // your desired format

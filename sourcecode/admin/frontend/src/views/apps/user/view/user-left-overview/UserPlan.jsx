@@ -102,7 +102,7 @@ const UserPlan = ({ userDetails }) => {
           <div className='flex flex-col gap-2'>
             <div className='flex items-center gap-2'>
               <i className='tabler-coin text-secondary' />
-              <Typography component='span'>Current Coins: {userDetails?.coin || 0}</Typography>
+              <Typography component='span'>Current Session Credits: {userDetails?.coin || 0}</Typography>
             </div>
             {wealthLevel?.permissions &&
               Object.entries(wealthLevel.permissions).map(([key, value]) => (

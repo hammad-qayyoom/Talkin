@@ -44,7 +44,7 @@ class HostHomeScreenController extends GetxController {
     Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
     isCoinLoading = false;
     update([Constant.idCoinUpdate]);
-    log("Listener Coin => ${listenerCoinModel?.coin}");
+    log("Listener Session Credit => ${listenerCoinModel?.coin}");
   }
 
   /// refresh
@@ -58,7 +58,7 @@ class HostHomeScreenController extends GetxController {
     Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
     isCoinLoading = false;
     update([Constant.idCoinUpdate]);
-    log("Listener Coin => ${listenerCoinModel?.coin}");
+    log("Listener Session Credit => ${listenerCoinModel?.coin}");
 
     update();
   }

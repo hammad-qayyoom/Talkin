@@ -15,7 +15,8 @@ class MyWalletScreenTopView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage(AppAsset.walletBg), fit: BoxFit.cover),
+        image: DecorationImage(
+            image: AssetImage(AppAsset.walletBg), fit: BoxFit.cover),
       ),
       child: Column(
         children: [
@@ -37,7 +38,8 @@ class MyWalletScreenTopView extends StatelessWidget {
               Spacer(),
               Text(
                 EnumLocale.txtMyWallet.name.tr,
-                style: AppFontStyle.fontStyleW600(fontSize: 20, fontColor: AppColors.white),
+                style: AppFontStyle.fontStyleW600(
+                    fontSize: 20, fontColor: AppColors.white),
               ).paddingOnly(right: Get.width * 0.16),
               Spacer(),
             ],
@@ -66,7 +68,7 @@ class MyWalletScreenTopView extends StatelessWidget {
                             width: Get.width * 0.40,
                             child: FittedBox(
                               child: Text(
-                                EnumLocale.txtCurrentCoinBalance.name.tr,
+                                "Current Session Credits",
                                 // overflow: TextOverflow.ellipsis,
                                 style: AppFontStyle.fontStyleW600(
                                   fontSize: 14,
@@ -79,14 +81,17 @@ class MyWalletScreenTopView extends StatelessWidget {
                           ),
                           Text(
                             "${controller.fetchCoinPlan?.userCoin ?? 0}",
-                            style: AppFontStyle.fontStyleW900(fontSize: 44, fontColor: AppColors.yellowDark800),
+                            style: AppFontStyle.fontStyleW900(
+                                fontSize: 44,
+                                fontColor: AppColors.yellowDark800),
                           ),
                           GestureDetector(
                             onTap: () {
                               Get.toNamed(AppRoutes.coinHistoryScreen);
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 2, vertical: 7),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 2, vertical: 7),
                               decoration: BoxDecoration(
                                 color: AppColors.white,
                                 borderRadius: BorderRadius.circular(8),
@@ -94,8 +99,10 @@ class MyWalletScreenTopView extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Text(
-                                    EnumLocale.txtViewCoinHistory.name.tr,
-                                    style: AppFontStyle.fontStyleW600(fontSize: 12, fontColor: AppColors.yellowDark800),
+                                    "View Payment History",
+                                    style: AppFontStyle.fontStyleW600(
+                                        fontSize: 12,
+                                        fontColor: AppColors.yellowDark800),
                                   ).paddingOnly(left: 6, right: 6),
                                   RotatedBox(
                                     quarterTurns: 2,
@@ -131,13 +138,14 @@ class WalletGuideView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          EnumLocale.txtWalletGuide.name.tr,
-          style: AppFontStyle.fontStyleW800(fontSize: 17, fontColor: AppColors.black),
+          "Subscription Guide",
+          style: AppFontStyle.fontStyleW800(
+              fontSize: 17, fontColor: AppColors.black),
         ),
         Text(
-          EnumLocale.txtUserGuide.name.tr,
-          // "1. Your wallet balance represents the number of coins available in your account. These coins can be used to access premium features, connect with listeners, or make in-app purchases.\n\n2. You can top up your coin balance by selecting a plan from the options below. Each plan offers a different coin-to-dollar rate, so choose the one that best fits your needs.\n\n3. The more coins you buy, the better the value. Higher plans often come with bonus coins or special offers. Make sure to check for the 'Most Popular Plan' tag for recommended choices.",
-          style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.profileText, height: 1.7),
+          "Pick a subscription plan to unlock session credits. Paid sessions are booked only after successful payment, and each booking is recorded in your payment history.",
+          style: AppFontStyle.fontStyleW500(
+              fontSize: 11, fontColor: AppColors.profileText, height: 1.7),
         ).paddingOnly(top: 8),
       ],
     ).paddingSymmetric(horizontal: 14);

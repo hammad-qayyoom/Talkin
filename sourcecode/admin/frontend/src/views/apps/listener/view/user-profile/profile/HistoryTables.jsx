@@ -126,7 +126,7 @@ const HistoryTables = () => {
         case TRANSACTION_TYPES.PRIVATE_VIDEO_CALL:
           return 'Private Video Call'
         case TRANSACTION_TYPES.COIN_PLAN_PURCHASE:
-          return 'Coin Plan Purchase'
+          return 'Subscription Purchase'
         case TRANSACTION_TYPES.LOGIN_BONUS:
           return 'Login Bonus'
 
@@ -469,7 +469,7 @@ const HistoryTables = () => {
             <CustomTabList onChange={handleTabChange} variant='scrollable' pill='true'>
               <Tab
                 value='coin'
-                label='Coin History'
+                label='Session Credit History'
                 icon={<i className='tabler-coin' />}
                 iconPosition='start'
                 className='ms-4'

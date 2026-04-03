@@ -157,7 +157,7 @@ const talkTopicsSlice = createSlice({
       if (action.payload.status) {
         state.talkTopics = [...state.talkTopics, action.payload.data]
         state.total += 1
-        toast.success(action.payload.message || 'Talk Topic created successfully')
+        toast.success(action.payload.message || 'Category created successfully')
       } else {
         state.error = action.payload.message
         toast.error(action.payload.message)
@@ -183,7 +183,7 @@ const talkTopicsSlice = createSlice({
           state.talkTopics[index] = action.payload.data
         }
 
-        toast.success(action.payload.message || 'Talk Topic updated successfully')
+        toast.success(action.payload.message || 'Category updated successfully')
       } else {
         state.error = action.payload.message
         toast.error(action.payload.message)
@@ -205,7 +205,7 @@ const talkTopicsSlice = createSlice({
       if (action.payload.status) {
         state.talkTopics = state.talkTopics.filter(talkTopic => talkTopic._id !== action.payload.talkTopicId)
         state.total -= 1
-        toast.success(action.payload.message || 'Talk Topic deleted successfully')
+        toast.success(action.payload.message || 'Category deleted successfully')
       } else {
         state.error = action.payload.message
         toast.error(action.payload.message)

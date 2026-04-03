@@ -149,11 +149,11 @@ class HostVerificationController extends GetxController {
     }
 
     if (talkTopic.isEmpty || selectedTopic < 0 || selectedTopic >= talkTopic.length) {
-      Utils.showToast(Get.context!, "Please select a Talk Topic");
+      Utils.showToast(Get.context!, "Please select a Category");
       return;
     }
     if (talkTopic.isEmpty || selectedTopics.isEmpty) {
-      Utils.showToast(Get.context!, "Please select at least one Talk Topic");
+      Utils.showToast(Get.context!, "Please select at least one Category");
       return;
     }
     logControllerState(); // Log all values
@@ -287,9 +287,9 @@ class HostVerificationController extends GetxController {
     log("Selected Languages (${selectedLanguages.length}): ${selectedLanguages.join(', ')}");
 
     if (talkTopic.isNotEmpty && selectedTopic >= 0 && selectedTopic < talkTopic.length) {
-      log("Selected Talk Topic: ${talkTopic[selectedTopic].name}");
+      log("Selected Category: ${talkTopic[selectedTopic].name}");
     } else {
-      log("Selected Talk Topic: None");
+      log("Selected Category: None");
     }
 
     log("===========================================");
@@ -326,7 +326,7 @@ class HostVerificationController extends GetxController {
       .where((id) => id.isNotEmpty)
       .toList();
 
-    log("Talk Topics: ${selectedTopicNames.join(', ')}");
+    log("Categories: ${selectedTopicNames.join(', ')}");
     log("Category IDs: ${selectedCategoryIds.join(', ')}");
     log("User ID: ${Database.loginUserFirebaseId}");
     log("Age: ${ageController.text}");

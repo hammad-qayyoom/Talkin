@@ -236,7 +236,7 @@
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                Database.fetchLoginUserProfileModel?.user?.isListener == true ? (logic.listenerCoinModel?.coin ?? 0).toString() : (logic.userCoinModel?.coin ?? 0).toString(),
+                                Database.fetchLoginUserProfileModel?.user?.isListener == true ? Database.listenerCoin.toString() : Database.userCoin.toString(),
                                 style: AppFontStyle.fontStyleW700(fontSize: 17, fontColor: AppColors.yellow),
                               ),
                             ],

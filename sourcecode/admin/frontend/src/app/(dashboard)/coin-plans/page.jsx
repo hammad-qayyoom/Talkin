@@ -1,7 +1,7 @@
 import ClientWrapper from '@/views/coin-plans/ClientWrapper'
 
 export const metadata = {
-  title: 'Coin Plans'
+  title: 'Subscription Plans'
 }
 
 export default function CoinPlansPage() {

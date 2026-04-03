@@ -39,7 +39,7 @@ export const getRoleDetails = role => {
     case 3:
       return { label: 'Agency', icon: 'tabler-users-group', color: 'warning' }
     case 4:
-      return { label: 'CoinTrader', icon: 'tabler-coins', color: 'info' }
+      return { label: 'Session Credit Trader', icon: 'tabler-coins', color: 'info' }
     default:
       return { label: 'Unknown', icon: 'tabler-alert-circle', color: 'error' }
   }

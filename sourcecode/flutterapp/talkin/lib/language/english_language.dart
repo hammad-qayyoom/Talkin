@@ -5,12 +5,15 @@ final Map<String, String> enUS = {
   EnumLocale.txtRegisterTitle1.name: "FIND",
   EnumLocale.txtRegisterTitle2.name: "CHAT",
   EnumLocale.txtRegisterTitle3.name: "VIDEO CALL",
-  EnumLocale.txtRegisterSubTitle1.name: "You can connect with the people around\nthe world for doing chat, messages and\nmake connections with them.",
-  EnumLocale.txtRegisterSubTitle2.name: 'Chat with the strangers to know each\nother better and have a nice\ncompatibility.',
-  EnumLocale.txtRegisterSubTitle3.name: "You can share your videos and photos\nwith your friend and connections.",
+  EnumLocale.txtRegisterSubTitle1.name:
+      "You can connect with the people around\nthe world for doing chat, messages and\nmake connections with them.",
+  EnumLocale.txtRegisterSubTitle2.name:
+      'Chat with the strangers to know each\nother better and have a nice\ncompatibility.',
+  EnumLocale.txtRegisterSubTitle3.name:
+      "You can share your videos and photos\nwith your friend and connections.",
   EnumLocale.txtEnterYourMail.name: "Enter Your Email Id",
   EnumLocale.txtEnterPassword.name: "Enter Your Password",
-  EnumLocale.txtCoinRechargeSuccess.name: "Coin recharge success",
+  EnumLocale.txtCoinRechargeSuccess.name: "Session Credit recharge success",
   EnumLocale.txtPassword.name: "Password",
   EnumLocale.txtTypeSomething.name: "Type Something..",
   EnumLocale.txtSelectCountry.name: "Select Country",
@@ -30,10 +33,12 @@ final Map<String, String> enUS = {
   EnumLocale.txtPay.name: "Pay",
   EnumLocale.txtRegister.name: "Register",
   EnumLocale.desEnterEmail.name: "Please enter email",
-  EnumLocale.desEnterValidEmailAddress.name: "Please enter a valid email address",
+  EnumLocale.desEnterValidEmailAddress.name:
+      "Please enter a valid email address",
   EnumLocale.desEnterPassword.name: "Please enter password",
   EnumLocale.desReEnterPassword.name: "Please enter re-password",
-  EnumLocale.desPasswordCharacters.name: "Password must be at least 6 characters long",
+  EnumLocale.desPasswordCharacters.name:
+      "Password must be at least 6 characters long",
   EnumLocale.desPasswordNotMatch.name: "Password does not match",
   EnumLocale.txtEnterName.name: "Enter your name",
   EnumLocale.desEnterFullName.name: "Please enter full name",
@@ -44,7 +49,8 @@ final Map<String, String> enUS = {
   EnumLocale.desEnterMobile.name: "Please enter mobile number",
   EnumLocale.txtGetOtp.name: "Get OTP",
   EnumLocale.txtEnterOtp.name: "Enter OTP",
-  EnumLocale.txtEnterOtpWithRegisterNumber.name: "Enter OTP\nWith Register Number...",
+  EnumLocale.txtEnterOtpWithRegisterNumber.name:
+      "Enter OTP\nWith Register Number...",
   EnumLocale.txtYouHaveNotGetOtp.name: "If you have not get OTP?",
   EnumLocale.txtResendOtp.name: "Resend OTP",
   EnumLocale.txtExitApp.name: 'Exit App',
@@ -57,7 +63,8 @@ final Map<String, String> enUS = {
   EnumLocale.txtFreeTalk.name: 'FREE TALK',
   EnumLocale.txtCalling.name: 'Calling',
   EnumLocale.txtHomeFastLalk.name: 'Now Fast Talk, Feel Better',
-  EnumLocale.txtHomeDescription.name: 'Talk to your Favorite Expert and feel lighter and brighter!',
+  EnumLocale.txtHomeDescription.name:
+      'Talk to your Favorite Expert and feel lighter and brighter!',
   EnumLocale.txtFindMoreListener.name: 'Find More Expert',
   EnumLocale.txtTopListener.name: 'Top Experts',
   EnumLocale.txtViewAll.name: 'View All',
@@ -67,12 +74,14 @@ final Map<String, String> enUS = {
   EnumLocale.txtTalkNow.name: 'Talk Now',
   EnumLocale.txtChatNow.name: 'Chat Now',
   EnumLocale.txtAllListeners.name: 'All Experts',
-  EnumLocale.txtMobileLoginDescription.name: 'Start your journey with just your mobile number. We’ll send you a one-time password (OTP) to verify your identity and get you started.',
-  EnumLocale.txtVerifyOtpDescription.name: "To keep your account secure, we’ve sent you a unique 5-digit code via SMS. Enter it below to verify your identity and continue with the login process.",
+  EnumLocale.txtMobileLoginDescription.name:
+      'Start your journey with just your mobile number. We’ll send you a one-time password (OTP) to verify your identity and get you started.',
+  EnumLocale.txtVerifyOtpDescription.name:
+      "To keep your account secure, we’ve sent you a unique 5-digit code via SMS. Enter it below to verify your identity and continue with the login process.",
   EnumLocale.txtVideoCall.name: "Video Call",
   EnumLocale.txtSelectCallType.name: "SELECT CALL TYPE",
   EnumLocale.txtAudioCall.name: "Audio Call",
-  EnumLocale.txtFreeCoin.name: "Free Coin",
+  EnumLocale.txtFreeCoin.name: "Free Session Credit",
   EnumLocale.txtNote.name: "Note :",
   EnumLocale.txtSearchPeople.name: "Search People...",
   EnumLocale.txtRecentPeople.name: "Recent Search",
@@ -80,10 +89,13 @@ final Map<String, String> enUS = {
   EnumLocale.txtTalkAbout.name: "Talk About",
   EnumLocale.txtSelectPaymentMethod.name: "Select Payment Method",
   EnumLocale.txtAPPLanguage.name: "APP Language",
-  EnumLocale.txtSelectLanguageForApp.name: "Select a language to see matching experts.",
-  EnumLocale.txtSelectTalkAboutForApp.name: "Select talk about for the content In app",
+  EnumLocale.txtSelectLanguageForApp.name:
+      "Select a language to see matching experts.",
+  EnumLocale.txtSelectTalkAboutForApp.name:
+      "Select talk about for the content In app",
   EnumLocale.txtRecommendedProfile.name: "Recommended Profile",
-  EnumLocale.txtSelectCallTypeNote.name: "Please do not trust fraudulent information such as money transfer,lottery etc from strangers. Please do not share any personal information such as passwords,mobile numbers, otp etc. Please do not engage in nudity, pornography or any obscene acts.",
+  EnumLocale.txtSelectCallTypeNote.name:
+      "Please do not trust fraudulent information such as money transfer,lottery etc from strangers. Please do not share any personal information such as passwords,mobile numbers, otp etc. Please do not engage in nudity, pornography or any obscene acts.",
   EnumLocale.txtTotalCall.name: "Total Calls",
   EnumLocale.txtRating.name: "Rating",
   EnumLocale.txtExperience.name: "Experience",
@@ -100,13 +112,16 @@ final Map<String, String> enUS = {
   EnumLocale.txtMyBalance.name: "My balance",
   EnumLocale.txtMyProfile.name: "My Profile",
   EnumLocale.txtShareListenersApp.name: "Share Expert App",
-  EnumLocale.txtRatingDescription.name: "Your Feedback will help other members choose their Expert better help us improve our service!",
-  EnumLocale.txtShareListenersAppDescription.name: "Share App With Friends & Family and Spread Joy...!",
+  EnumLocale.txtRatingDescription.name:
+      "Your Feedback will help other members choose their Expert better help us improve our service!",
+  EnumLocale.txtShareListenersAppDescription.name:
+      "Share App With Friends & Family and Spread Joy...!",
   EnumLocale.txtShareAppNow.name: "Share App Now",
   EnumLocale.txtCompleteTrailCall.name: "Thanks for Your Call with",
   EnumLocale.txtCompleteTrailCall1.name: "– Tell Us What You Think!",
   EnumLocale.txtDidYouLikeService.name: "Did you like Expert service?",
-  EnumLocale.txtAddFilderToYourFavListeners.name: "Add Andrew Filder to your Favourite Experts?",
+  EnumLocale.txtAddFilderToYourFavListeners.name:
+      "Add Andrew Filder to your Favourite Experts?",
   EnumLocale.txtEditProfile.name: "Edit Profile",
   EnumLocale.txtMyWallet.name: "My Wallet",
   EnumLocale.txtHelpCenter.name: "Help Center",
@@ -127,18 +142,20 @@ final Map<String, String> enUS = {
   EnumLocale.txtSaveGender.name: "SAVE GENDER",
   EnumLocale.txtChooseYourGender.name: "Choose your Gender",
   EnumLocale.txtSelectYourGender.name: "Select Your Gender",
-  EnumLocale.txtIfSelectWrongGenderLifeBan.name: "If You Select Wrong Gender =\nLife Ban️🚫",
+  EnumLocale.txtIfSelectWrongGenderLifeBan.name:
+      "If You Select Wrong Gender =\nLife Ban️🚫",
   EnumLocale.txtMale.name: "Male",
   EnumLocale.txtFemale.name: "Female",
   EnumLocale.txtBecomeListener.name: "Become Expert",
-  EnumLocale.txtViewCoinHistory.name: "View Coin History",
-  EnumLocale.txtCurrentCoinBalance.name: "Current Coin Balance",
+  EnumLocale.txtViewCoinHistory.name: "View Session Credit History",
+  EnumLocale.txtCurrentCoinBalance.name: "Current Session Credit Balance",
   EnumLocale.txtWalletGuide.name: "Wallet Guide :-",
-  EnumLocale.txtAddCoinBalanceSelectPlan.name: "Add Coin Balance, Select Plan :-",
-  EnumLocale.txtMostPopularPlan.name: "Most Popular Plan",
+  EnumLocale.txtAddCoinBalanceSelectPlan.name:
+      "Add Session Credit Balance, Select Subscription :-",
+  EnumLocale.txtMostPopularPlan.name: "Most Popular Subscription",
   EnumLocale.txtHistory.name: "History",
   EnumLocale.txtPayment.name: "Payment",
-  EnumLocale.txtCoinHistory.name: "Coin History",
+  EnumLocale.txtCoinHistory.name: "Session Credit History",
   EnumLocale.txtDetails.name: "Details",
   EnumLocale.txtAmount.name: "Amount",
   EnumLocale.txtStatus.name: "Status",
@@ -146,22 +163,26 @@ final Map<String, String> enUS = {
   EnumLocale.txtFailed.name: "Failed",
   EnumLocale.txtSuccess.name: "Success",
   EnumLocale.txtCallDuration.name: "Call Duration",
-  EnumLocale.txtManageYourAccountSettings.name: "Manage Your Account\nSettings...",
+  EnumLocale.txtManageYourAccountSettings.name:
+      "Manage Your Account\nSettings...",
   EnumLocale.txtLogoutApp.name: "Logout App",
   EnumLocale.txtLogout.name: "Logout",
   EnumLocale.txtCancel.name: "Cancel",
-  EnumLocale.txtDesLogout.name: "Are you sure you want to log out your account?",
+  EnumLocale.txtDesLogout.name:
+      "Are you sure you want to log out your account?",
   EnumLocale.txtDeleteAccount.name: "Delete Account",
   EnumLocale.txtNeedAnyHelpFAQ.name: "Need Any Help &\nFAQ...",
   EnumLocale.txtHaveAnIssue.name: "Have an Issue?",
   EnumLocale.txtFrequentlyAskedQuestions.name: "Frequently Asked Questions",
-  EnumLocale.txtLetEngageMoreUserThrowShareApp.name: "Let’s Engage More User throw Share App...",
+  EnumLocale.txtLetEngageMoreUserThrowShareApp.name:
+      "Let’s Engage More User throw Share App...",
   EnumLocale.txtRateUs.name: "Rate Us",
   EnumLocale.txtRateYourExperienceWithUs.name: "Rate Your Experience With Us!",
   EnumLocale.txtYouWantToBecomeListener.name: "You Want to Become\nExpert...",
   EnumLocale.txtListenerVerification.name: "Expert Verification",
   EnumLocale.txtExploreListener.name: "Explore Expert",
-  EnumLocale.txtTakeControlOfYourPrivacyData.name: "Take Control Of You\nPrivacy Data...",
+  EnumLocale.txtTakeControlOfYourPrivacyData.name:
+      "Take Control Of You\nPrivacy Data...",
   EnumLocale.txtLocation.name: "Location",
   EnumLocale.txtBluetooth.name: "Bluetooth",
   EnumLocale.txtMicrophone.name: "Microphone",
@@ -183,7 +204,8 @@ final Map<String, String> enUS = {
   EnumLocale.txtEnterYourAge.name: "Enter Your Age",
   EnumLocale.txtEnterYourExperience.name: "Enter Your Experience(in year)",
   EnumLocale.txtSUBMIT.name: "SUBMIT",
-  EnumLocale.desWantDeleteAccount.name: "Are you sure you want to delete your account?",
+  EnumLocale.desWantDeleteAccount.name:
+      "Are you sure you want to delete your account?",
   EnumLocale.changeYourImage.name: "Change your picture",
   EnumLocale.txtTakeAphoto.name: "Take a photo",
   EnumLocale.txtChooseFromYourFile.name: "Choose from your file",
@@ -199,39 +221,50 @@ final Map<String, String> enUS = {
   EnumLocale.txtEnterMailMobileNumber.name: "Enter mail/mobile number",
   EnumLocale.txtVerify.name: "Verify",
   EnumLocale.txtCreatePassword.name: "Create Password",
-  EnumLocale.txtForgotPassDescription.name: "Enter your email address or mobile number below to reset your password. We’ll send you a verification code to help you recover your account.",
-  EnumLocale.txtLongPressToEnableAudioRecording.name: "Long press to enable audio recording",
+  EnumLocale.txtForgotPassDescription.name:
+      "Enter your email address or mobile number below to reset your password. We’ll send you a verification code to help you recover your account.",
+  EnumLocale.txtLongPressToEnableAudioRecording.name:
+      "Long press to enable audio recording",
   EnumLocale.txtAudioRecording.name: "Audio Recording...",
   EnumLocale.txtPleaseAllowPermission.name: "Please allow permission !!",
-  EnumLocale.txtHostCenterDescription.name: "Now you can become a host and organize your own events. Create new events and share your services with others.",
-  EnumLocale.txtDataPrivacy.name: "We value your data privacy. Learn how your personal information is collected, used, and protected.",
-  EnumLocale.txtShareAppDes.name: "Share this app with your friends and family so they can also enjoy its unique features.",
-  EnumLocale.txtAboutUsDes.name: "We are committed to providing you with the best service. Learn more about our team and our mission.",
+  EnumLocale.txtHostCenterDescription.name:
+      "Now you can become a host and organize your own events. Create new events and share your services with others.",
+  EnumLocale.txtDataPrivacy.name:
+      "We value your data privacy. Learn how your personal information is collected, used, and protected.",
+  EnumLocale.txtShareAppDes.name:
+      "Share this app with your friends and family so they can also enjoy its unique features.",
+  EnumLocale.txtAboutUsDes.name:
+      "We are committed to providing you with the best service. Learn more about our team and our mission.",
   EnumLocale.txtPaymentMethod.name: "Payment Method",
-  EnumLocale.txtListenerWithdrawDescription.name: "1. You can withdraw your earned coins as real money once you meet the minimum withdrawal threshold set by the platform. Make sure your profile and payment details are fully verified to avoid delays in processing your withdrawal request.",
-  EnumLocale.txtListenerGuide.name: "1. Your wallet balance shows the total coins you’ve earned from users who call you as a expert. These coins are rewarded to you for your time and engagement during the call.\n\n2. Users purchase coins and spend them by calling experts like you. The more users call you, the more coins you earn in your wallet.\n\n3. Coins earned can be accumulated and later withdrawn as money, depending on the platform’s withdrawal rules. Keep engaging actively to grow your wallet balance.",
-  EnumLocale.txtUserGuide.name: "1. Your wallet balance represents the number of coins available in your account. These coins can be used to access premium features, connect with experts, or make in-app purchases.\n\n2. You can top up your coin balance by selecting a plan from the options below. Each plan offers a different coin-to-dollar rate, so choose the one that best fits your needs.\n\n3. The more coins you buy, the better the value. Higher plans often come with bonus coins or special offers. Make sure to check for the 'Most Popular Plan' tag for recommended choices.",
+  EnumLocale.txtListenerWithdrawDescription.name:
+      "1. You can withdraw your earned Session Credits as real money once you meet the minimum withdrawal threshold set by the platform. Make sure your profile and payment details are fully verified to avoid delays in processing your withdrawal request.",
+  EnumLocale.txtListenerGuide.name:
+      "1. Your wallet balance shows the total Session Credits you've earned from users who call you as an expert. These Session Credits are rewarded for your time and engagement during each call.\n\n2. Users purchase Session Credits and spend them by calling experts like you. The more users call you, the more Session Credits you earn in your wallet.\n\n3. Earned Session Credits can be accumulated and later withdrawn as money, depending on the platform's withdrawal rules. Keep engaging actively to grow your wallet balance.",
+  EnumLocale.txtUserGuide.name:
+      "1. Your wallet balance represents the number of Session Credits available in your account. These Session Credits can be used to access premium features, connect with experts, or make in-app purchases.\n\n2. You can top up your Session Credit balance by selecting a subscription from the options below. Each subscription offers a different Session Credit-to-dollar rate, so choose the one that best fits your needs.\n\n3. The more Session Credits you buy, the better the value. Higher subscriptions often include bonus Session Credits or special offers. Make sure to check for the 'Most Popular Subscription' tag for recommended choices.",
   EnumLocale.txtWallet.name: "Wallet",
   EnumLocale.txtProfile.name: "Profile",
   EnumLocale.txtRecentCalling.name: "Recent Calling",
   EnumLocale.txtEarnMoney.name: "Earn Money",
   EnumLocale.txtPermissionAllow.name: "Permission Allow",
-  EnumLocale.txtHostHomeNote.name: "Please do not trust fraudulent information such as money transfer,lottery etc from strangers. Please do not share any personal information such as passwords,mobile numbers, otp etc. Please do not engage in nudity, pornography or any obscene acts.",
-  EnumLocale.txtWithdrawCoin.name: "Withdraw Coin",
+  EnumLocale.txtHostHomeNote.name:
+      "Please do not trust fraudulent information such as money transfer,lottery etc from strangers. Please do not share any personal information such as passwords,mobile numbers, otp etc. Please do not engage in nudity, pornography or any obscene acts.",
+  EnumLocale.txtWithdrawCoin.name: "Withdraw Session Credit",
   EnumLocale.txtSecurePayment.name: "Secure Payment",
   EnumLocale.txtGuarantedChat.name: "Guaranted Chat",
   EnumLocale.txt1CrPayments.name: "1 Cr+ Payments",
   EnumLocale.txtTrustedUser.name: "Trusted User",
-  EnumLocale.txtReceiveCoin.name: "Receive Coin",
+  EnumLocale.txtReceiveCoin.name: "Receive Session Credit",
   EnumLocale.txtWithdrawAmount.name: "Withdraw Amount",
   EnumLocale.txtWithdraw.name: "Withdraw",
-  EnumLocale.txtCoin.name: "Coin",
-  EnumLocale.txtAvailableCoinBalance.name: "Available Coin Balance",
+  EnumLocale.txtCoin.name: "Session Credit",
+  EnumLocale.txtAvailableCoinBalance.name: "Available Session Credit Balance",
   EnumLocale.txtWithdrawalDetails.name: "Withdrawal Details :-",
-  EnumLocale.txtEnterCoinAmount.name: "Enter Coin Amount",
-  EnumLocale.txtMinimumWithdrawCoin.name: "*Minimum Withdraw Coin : ",
+  EnumLocale.txtEnterCoinAmount.name: "Enter Session Credit Amount",
+  EnumLocale.txtMinimumWithdrawCoin.name: "*Minimum Withdraw Session Credit : ",
   EnumLocale.txtMyAmountBalance.name: "My Amount Balance : ",
-  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name: "Get Your Withdrawable Coin Amount Here...",
+  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
+      "Get Your Withdrawable Session Credit Amount Here...",
   EnumLocale.txtListenerDetails.name: "Expert Details :-",
   EnumLocale.txtEnterIntroduction.name: "Enter Introduction",
   EnumLocale.txtTalkLanguages.name: "Talk Languages :-",
@@ -251,11 +284,14 @@ final Map<String, String> enUS = {
   EnumLocale.txtAddress.name: "Address :",
   EnumLocale.txtNOte.name: "Note :",
   EnumLocale.txtPleaseFillProfile.name: "Please fill profile",
-  EnumLocale.txtPleaseEnterWithdrawCoin.name: "Please Enter WithdrawCoin",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name: "Please Select Withdraw Method",
-  EnumLocale.txtPleaseEnterAllPaymentDetails.name: "Please Enter All Payment Details",
+  EnumLocale.txtPleaseEnterWithdrawCoin.name:
+      "Please Enter Session Credit Amount",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name:
+      "Please Select Withdraw Method",
+  EnumLocale.txtPleaseEnterAllPaymentDetails.name:
+      "Please Enter All Payment Details",
   EnumLocale.txtSelectPaymentGateway.name: "Select Payment Gateway",
-  EnumLocale.txtNumberOfCoin.name: "Number Of Coin :",
+  EnumLocale.txtNumberOfCoin.name: "Number Of Session Credit :",
   EnumLocale.txtWithdrawalID.name: "Withdrawal ID :",
   EnumLocale.txtTransactionID.name: "Transaction ID :",
   EnumLocale.txtViewMore.name: "View More",
@@ -268,28 +304,43 @@ final Map<String, String> enUS = {
   EnumLocale.txtPrivateAudioCallRate.name: "Private Audio Call Rate",
   EnumLocale.txtPaymentDetails.name: "Payment Details :",
   EnumLocale.txtAppRestart.name: "Your Expert Request Are Accepted",
-  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name: "The User Does Not Have Sufficient Funds To Make The Withdrawal",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name: "Withdrawal Requested Coin Must Be Greater Than Specified By The Admin",
+  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
+      "The User Does Not Have Sufficient Funds To Make The Withdrawal",
+  EnumLocale
+          .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
+      "Withdrawal Requested Session Credit Must Be Greater Than Specified By The Admin",
   EnumLocale.txtSkip.name: "Skip",
-  EnumLocale.txtHostHomeDescription.name: "Get rewarded while guiding users through professional consultations. Enable your private session availability and earn coins per minute.",
-  EnumLocale.txtManageYourAccountSettingsSubText.name: "Customize your app experience by changing the language, logging out, or permanently deleting your account. Make sure to review each option carefully before making changes.",
+  EnumLocale.txtHostHomeDescription.name:
+      "Get rewarded while guiding users through professional consultations. Enable private session availability and earn from booked sessions.",
+  EnumLocale.txtManageYourAccountSettingsSubText.name:
+      "Customize your app experience by changing the language, logging out, or permanently deleting your account. Make sure to review each option carefully before making changes.",
   EnumLocale.txtSelectLanguage.name: "Select Language",
-  EnumLocale.txtSelectLanguages.name: "Choose the languages you are comfortable speaking with experts. This helps us connect you with the right people who need support in those languages.",
-  EnumLocale.txtSelectTopic.name: "Select the topics you feel confident talking about. These will help match you with users seeking support in those specific areas.",
-  EnumLocale.txtSureClearNotification.name: "Are you sure you want to clear all notifications?",
+  EnumLocale.txtSelectLanguages.name:
+      "Choose the languages you are comfortable speaking with experts. This helps us connect you with the right people who need support in those languages.",
+  EnumLocale.txtSelectTopic.name:
+      "Select the topics you feel confident talking about. These will help match you with users seeking support in those specific areas.",
+  EnumLocale.txtSureClearNotification.name:
+      "Are you sure you want to clear all notifications?",
   EnumLocale.txtSure.name: "Sure",
   EnumLocale.txtIntroduction.name: "Introduction",
   EnumLocale.txtTryAgain.name: "Try Again",
   EnumLocale.txtSelectDate.name: "Select Date :",
   EnumLocale.txtAll.name: "All",
-  EnumLocale.txtHelpCenterDescription.name: "If you have any questions or face any issues, we’re here to help! Check out the most frequently asked questions below or reach out to our support team for personalized assistance.",
-  EnumLocale.txtBecomeHostDescription.name: "Experts play a vital role by offering support, guidance, or simply a listening ear to users who need someone to talk to. If you’re empathetic, patient, and ready to help others, becoming a expert is the perfect way to make a positive impact.",
-  EnumLocale.txtListenerReqSentSuccessfully.name: "Expert Request Sent Successfully....",
+  EnumLocale.txtHelpCenterDescription.name:
+      "If you have any questions or face any issues, we’re here to help! Check out the most frequently asked questions below or reach out to our support team for personalized assistance.",
+  EnumLocale.txtBecomeHostDescription.name:
+      "Experts play a vital role by offering support, guidance, or simply a listening ear to users who need someone to talk to. If you’re empathetic, patient, and ready to help others, becoming a expert is the perfect way to make a positive impact.",
+  EnumLocale.txtListenerReqSentSuccessfully.name:
+      "Expert Request Sent Successfully....",
   EnumLocale.txtSearchLanguage.name: "Search language...",
-  EnumLocale.txtHostVerificationUploadImageTxt.name: "To verify your identity, please upload a recent personal photo and a clear photo of your government-issued ID. Make sure the images are visible and not blurry. Your details will remain confidential and are used only for verification purposes.",
-  EnumLocale.txtSelectTalkaboutTxt.name: "Select talk about for the content In app.",
-  EnumLocale.txtSelectAppLanguageTxt.name: "Choose your preferred app language.",
-  EnumLocale.txtHostVerificationFillForm.name: "Please complete the form with accurate details. Enter your valid email ID to receive important updates and verification results. Ensure all fields are filled correctly before proceeding.",
+  EnumLocale.txtHostVerificationUploadImageTxt.name:
+      "To verify your identity, please upload a recent personal photo and a clear photo of your government-issued ID. Make sure the images are visible and not blurry. Your details will remain confidential and are used only for verification purposes.",
+  EnumLocale.txtSelectTalkaboutTxt.name:
+      "Select talk about for the content In app.",
+  EnumLocale.txtSelectAppLanguageTxt.name:
+      "Choose your preferred app language.",
+  EnumLocale.txtHostVerificationFillForm.name:
+      "Please complete the form with accurate details. Enter your valid email ID to receive important updates and verification results. Ensure all fields are filled correctly before proceeding.",
   EnumLocale.txtUserName.name: "User Name : ",
   EnumLocale.txtUserDetails.name: "User Details : ",
   EnumLocale.txtUserNickName.name: "User Nickname : ",
@@ -329,32 +380,43 @@ final Map<String, String> enUS = {
   EnumLocale.txtItsAMatch.name: 'It’s a match!',
   EnumLocale.txtAgreePrivacyPolicy.name: 'I agree to the ',
   EnumLocale.txtPrivacyPolicy.name: 'Privacy Policy.',
-  EnumLocale.txtListenerAvailableForPrivateVideoCall.name: 'Expert available for private video call.',
-  EnumLocale.txtListenerAvailableForPrivateAudioCall.name: 'Expert available for private audio call.',
-  EnumLocale.txtListenerDisableForPrivateVideoCall.name: 'Expert disabled private video calls.',
-  EnumLocale.txtListenerDisableForPrivateAudioCall.name: 'Expert disabled private audio calls.',
+  EnumLocale.txtListenerAvailableForPrivateVideoCall.name:
+      'Expert available for private video call.',
+  EnumLocale.txtListenerAvailableForPrivateAudioCall.name:
+      'Expert available for private audio call.',
+  EnumLocale.txtListenerDisableForPrivateVideoCall.name:
+      'Expert disabled private video calls.',
+  EnumLocale.txtListenerDisableForPrivateAudioCall.name:
+      'Expert disabled private audio calls.',
   EnumLocale.txtEarpiece.name: 'Earpiece',
   EnumLocale.txtEnterProperValue.name: 'Enter Proper Value',
-  EnumLocale.txtYourHostRequestSentSuccessfully.name: 'Your Host Request Sent Successfully',
-  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name: 'Your request has been submitted. Please wait while we review and approve it.',
+  EnumLocale.txtYourHostRequestSentSuccessfully.name:
+      'Your Host Request Sent Successfully',
+  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
+      'Your request has been submitted. Please wait while we review and approve it.',
   EnumLocale.txtViewRequest.name: 'View Request',
-  EnumLocale.txtDEmoListenerText.name: "Oops! you don't have permission.This is demo login",
+  EnumLocale.txtDEmoListenerText.name:
+      "Oops! you don't have permission.This is demo login",
   EnumLocale.txtMessages.name: "Messages",
   EnumLocale.txtVideoCalling.name: "Video Calling",
   EnumLocale.txtAudioCalling.name: "Audio Calling",
   EnumLocale.txtIncomingVoiceCalling.name: 'Incoming Video Calling',
   EnumLocale.txtIncomingAudioCalling.name: 'Incoming Audio Calling',
-  EnumLocale.txtNoAccountFoundForThisEmail.name: "No account found for this email",
+  EnumLocale.txtNoAccountFoundForThisEmail.name:
+      "No account found for this email",
   EnumLocale.txtResetLinkSentToYourEmail.name: "Reset link sent to your email",
-  EnumLocale.txtForgetPasswordDescription.name: "You must have received the forget password link on your Gmail account, check it. If not, then check the spam section.",
+  EnumLocale.txtForgetPasswordDescription.name:
+      "You must have received the forget password link on your Gmail account, check it. If not, then check the spam section.",
   EnumLocale.txtItIsSpam.name: "It is spam",
   EnumLocale.txtNudityOrSexualActivity.name: "Nudity or sexual activity",
   EnumLocale.txtHateSpeechOrSymbols.name: "Hate speech or symbols",
-  EnumLocale.txtViolenceOrDangerousOrganization.name: "Violence or dangerous organization",
+  EnumLocale.txtViolenceOrDangerousOrganization.name:
+      "Violence or dangerous organization",
   EnumLocale.txtFalseInformation.name: "False information",
   EnumLocale.txtBullyingOrHarassment.name: "Bullying or harassment",
   EnumLocale.txtScamOrFraud.name: "Scam or fraud",
-  EnumLocale.txtIntellectualPropertyViolation.name: "Intellectual property violation",
+  EnumLocale.txtIntellectualPropertyViolation.name:
+      "Intellectual property violation",
   EnumLocale.txtSuicideOrSelfInjury.name: "Suicide or self injury",
   EnumLocale.txtDrugs.name: "Drugs",
   EnumLocale.txtEatingDisorders.name: "Eating disorders",
@@ -367,10 +429,13 @@ final Map<String, String> enUS = {
   EnumLocale.txtMore.name: "More",
   EnumLocale.txtBlockListener.name: "Block Expert",
   EnumLocale.txtBlockUser.name: "Block User",
-  EnumLocale.txtBlockDetailsListener.name: "Are you sure you want to block this Expert ?",
-  EnumLocale.txtBlockDetailsUser.name: "Are you sure you want to block this user ?",
+  EnumLocale.txtBlockDetailsListener.name:
+      "Are you sure you want to block this Expert ?",
+  EnumLocale.txtBlockDetailsUser.name:
+      "Are you sure you want to block this user ?",
   EnumLocale.txtListenerRequestRejected.name: "Expert Request Rejected ....",
   EnumLocale.txtReMatch.name: "Re-Match",
-  EnumLocale.txtPaymentFailedPleaseTryAgain.name: "Payment Failed Please Try Again",
+  EnumLocale.txtPaymentFailedPleaseTryAgain.name:
+      "Payment Failed Please Try Again",
   EnumLocale.txtSelfIntro.name: "Self Intro",
 };

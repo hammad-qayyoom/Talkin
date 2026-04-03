@@ -150,7 +150,7 @@ export const fetchPurchaseHistory = createAsyncThunk(
   }
 )
 
-// Expert Coin History
+// Expert Session Credit History
 export const fetchCoinHistoryListener = createAsyncThunk(
   'user/fetchCoinTransactions',
   async ({ userId, start = 1, limit = 20, startDate = 'All', endDate = 'All' }, thunkAPI) => {
@@ -560,7 +560,7 @@ export const fetchVisitedProfiles = createAsyncThunk(
 )
 
 // --------------------------------------------------
-// ✅ Coin User ADD and DEDUCT
+// ✅ Session Credit User ADD and DEDUCT
 // --------------------------------------------------
 
 export const updateCoinForUser = createAsyncThunk('api/admin/user/adjustUserCoins', async (coinData, thunkAPI) => {
@@ -575,10 +575,10 @@ export const updateCoinForUser = createAsyncThunk('api/admin/user/adjustUserCoin
     )
 
     if (!result.data.status) {
-      throw new Error(result.data.message || 'Failed to update coins')
+      throw new Error(result.data.message || 'Failed to update session credits')
     }
 
-    toast.success(result.data.message || 'Coins updated successfully')
+    toast.success(result.data.message || 'Session Credits updated successfully')
 
     return result.data
   } catch (err) {
@@ -1119,7 +1119,7 @@ const userSlice = createSlice({
         state.history.error = action.payload
       })
 
-    // Coin History Expert
+    // Session Credit History Expert
     // builder
     //   .addCase(fetchCoinHistoryListener.pending, state => {
     //     state.history.loading = true

@@ -7,8 +7,10 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtRegisterTitle3.name: "PANGGILAN VIDEO",
   EnumLocale.txtRegisterSubTitle1.name:
       "Anda dapat terhubung dengan orang-orang di seluruh dunia untuk mengobrol, mengirim pesan, dan menjalin koneksi dengan mereka.",
-  EnumLocale.txtRegisterSubTitle2.name: 'Ngobrol dengan orang asing untuk saling mengenal lebih baik dan mendapatkan kecocokan yang baik.',
-  EnumLocale.txtRegisterSubTitle3.name: "Anda dapat berbagi video dan foto dengan teman dan koneksi Anda.",
+  EnumLocale.txtRegisterSubTitle2.name:
+      'Ngobrol dengan orang asing untuk saling mengenal lebih baik dan mendapatkan kecocokan yang baik.',
+  EnumLocale.txtRegisterSubTitle3.name:
+      "Anda dapat berbagi video dan foto dengan teman dan koneksi Anda.",
   EnumLocale.txtEnterYourMail.name: "Masukkan ID Email Anda",
   EnumLocale.txtEnterPassword.name: "Masukkan Kata Sandi Anda",
   EnumLocale.txtCoinRechargeSuccess.name: "Isi ulang koin berhasil",
@@ -31,7 +33,8 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtPay.name: "Membayar",
   EnumLocale.txtRegister.name: "Daftar",
   EnumLocale.desEnterEmail.name: "Silakan masukkan email",
-  EnumLocale.desEnterValidEmailAddress.name: "Harap masukkan alamat email yang valid",
+  EnumLocale.desEnterValidEmailAddress.name:
+      "Harap masukkan alamat email yang valid",
   EnumLocale.desEnterPassword.name: "Silakan masukkan kata sandi",
   EnumLocale.desReEnterPassword.name: "Silakan masukkan kembali kata sandi",
   EnumLocale.desPasswordCharacters.name: "Kata sandi harus minimal 6 karakter",
@@ -45,7 +48,8 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.desEnterMobile.name: "Silakan masukkan nomor ponsel",
   EnumLocale.txtGetOtp.name: "Dapatkan OTP",
   EnumLocale.txtEnterOtp.name: "Masukkan OTP",
-  EnumLocale.txtEnterOtpWithRegisterNumber.name: "Masukkan OTP\nDengan Nomor Registrasi...",
+  EnumLocale.txtEnterOtpWithRegisterNumber.name:
+      "Masukkan OTP\nDengan Nomor Registrasi...",
   EnumLocale.txtYouHaveNotGetOtp.name: "Jika Anda belum mendapatkan OTP?",
   EnumLocale.txtResendOtp.name: "Kirim ulang OTP",
   EnumLocale.txtExitApp.name: 'Keluar dari Aplikasi',
@@ -58,7 +62,8 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtFreeTalk.name: 'BICARA BEBAS',
   EnumLocale.txtCalling.name: 'Panggilan',
   EnumLocale.txtHomeFastLalk.name: 'Sekarang Cepat Lalk, Merasa Lebih Baik',
-  EnumLocale.txtHomeDescription.name: 'Bicaralah dengan Pendengar Favorit Anda dan rasakan perasaan lebih ringan dan cerah!',
+  EnumLocale.txtHomeDescription.name:
+      'Bicaralah dengan Pendengar Favorit Anda dan rasakan perasaan lebih ringan dan cerah!',
   EnumLocale.txtFindMoreListener.name: 'Temukan Lebih Banyak Pendengar',
   EnumLocale.txtTopListener.name: 'Pendengar Teratas',
   EnumLocale.txtViewAll.name: 'Lihat Semua',
@@ -83,8 +88,10 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtTalkAbout.name: "Berbicara tentang",
   EnumLocale.txtSelectPaymentMethod.name: "Pilih Metode Pembayaran",
   EnumLocale.txtAPPLanguage.name: "Bahasa APP",
-  EnumLocale.txtSelectLanguageForApp.name: "Pilih bahasa untuk melihat pendengar yang cocok.",
-  EnumLocale.txtSelectTalkAboutForApp.name: "Pilih bicarakan tentang konten Dalam aplikasi",
+  EnumLocale.txtSelectLanguageForApp.name:
+      "Pilih bahasa untuk melihat pendengar yang cocok.",
+  EnumLocale.txtSelectTalkAboutForApp.name:
+      "Pilih bicarakan tentang konten Dalam aplikasi",
   EnumLocale.txtRecommendedProfile.name: "Profil yang Direkomendasikan",
   EnumLocale.txtSelectCallTypeNote.name:
       "Jangan percaya informasi palsu seperti transfer uang, lotere, dll. dari orang asing. Jangan bagikan informasi pribadi seperti kata sandi, nomor ponsel, OTP, dll. Jangan terlibat dalam ketelanjangan, pornografi, atau tindakan cabul apa pun.",
@@ -106,12 +113,16 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtShareListenersApp.name: "Bagikan Aplikasi Pendengar",
   EnumLocale.txtRatingDescription.name:
       "Masukan Anda akan membantu anggota lain memilih Pendengar mereka dengan lebih baik dan membantu kami meningkatkan layanan kami!",
-  EnumLocale.txtShareListenersAppDescription.name: "Bagikan Aplikasi dengan Teman & Keluarga dan Sebarkan Kebahagiaan...!",
+  EnumLocale.txtShareListenersAppDescription.name:
+      "Bagikan Aplikasi dengan Teman & Keluarga dan Sebarkan Kebahagiaan...!",
   EnumLocale.txtShareAppNow.name: "Bagikan Aplikasi Sekarang",
-  EnumLocale.txtCompleteTrailCall.name: "Terima kasih atas panggilan Anda dengan",
+  EnumLocale.txtCompleteTrailCall.name:
+      "Terima kasih atas panggilan Anda dengan",
   EnumLocale.txtCompleteTrailCall1.name: "– Beritahu Kami Apa Pendapat Anda!",
-  EnumLocale.txtDidYouLikeService.name: "Apakah Anda menyukai layanan Pendengar?",
-  EnumLocale.txtAddFilderToYourFavListeners.name: "Tambahkan Andrew Filder ke Pendengar Favorit Anda?",
+  EnumLocale.txtDidYouLikeService.name:
+      "Apakah Anda menyukai layanan Pendengar?",
+  EnumLocale.txtAddFilderToYourFavListeners.name:
+      "Tambahkan Andrew Filder ke Pendengar Favorit Anda?",
   EnumLocale.txtEditProfile.name: "Edit Profil",
   EnumLocale.txtMyWallet.name: "Dompetku",
   EnumLocale.txtHelpCenter.name: "Pusat Bantuan",
@@ -132,14 +143,16 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtSaveGender.name: "SIMPAN GENDER",
   EnumLocale.txtChooseYourGender.name: "Pilih Jenis Kelamin Anda",
   EnumLocale.txtSelectYourGender.name: "Pilih Jenis Kelamin Anda",
-  EnumLocale.txtIfSelectWrongGenderLifeBan.name: "Jika Anda Salah Memilih Jenis Kelamin =\nLarangan Seumur Hidup️🚫",
+  EnumLocale.txtIfSelectWrongGenderLifeBan.name:
+      "Jika Anda Salah Memilih Jenis Kelamin =\nLarangan Seumur Hidup️🚫",
   EnumLocale.txtMale.name: "Pria",
   EnumLocale.txtFemale.name: "Perempuan",
   EnumLocale.txtBecomeListener.name: "Menjadi Pendengar",
   EnumLocale.txtViewCoinHistory.name: "Lihat Riwayat Koin",
   EnumLocale.txtCurrentCoinBalance.name: "Saldo Koin Saat Ini",
   EnumLocale.txtWalletGuide.name: "Panduan Dompet :-",
-  EnumLocale.txtAddCoinBalanceSelectPlan.name: "Tambahkan Saldo Koin, Pilih Paket :-",
+  EnumLocale.txtAddCoinBalanceSelectPlan.name:
+      "Tambahkan Saldo Koin, Pilih Paket :-",
   EnumLocale.txtMostPopularPlan.name: "Paket Paling Populer",
   EnumLocale.txtHistory.name: "Sejarah",
   EnumLocale.txtPayment.name: "Pembayaran",
@@ -151,22 +164,28 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtFailed.name: "Gagal",
   EnumLocale.txtSuccess.name: "Kesuksesan",
   EnumLocale.txtCallDuration.name: "Durasi Panggilan",
-  EnumLocale.txtManageYourAccountSettings.name: "Kelola Akun Anda\nPengaturan...",
+  EnumLocale.txtManageYourAccountSettings.name:
+      "Kelola Akun Anda\nPengaturan...",
   EnumLocale.txtLogoutApp.name: "Keluar dari Aplikasi",
   EnumLocale.txtLogout.name: "Keluar",
   EnumLocale.txtCancel.name: "Membatalkan",
-  EnumLocale.txtDesLogout.name: "Apakah Anda yakin ingin keluar dari akun Anda?",
+  EnumLocale.txtDesLogout.name:
+      "Apakah Anda yakin ingin keluar dari akun Anda?",
   EnumLocale.txtDeleteAccount.name: "Hapus Akun",
   EnumLocale.txtNeedAnyHelpFAQ.name: "Butuh Bantuan &\nFAQ...",
   EnumLocale.txtHaveAnIssue.name: "Punya Masalah?",
-  EnumLocale.txtFrequentlyAskedQuestions.name: "Pertanyaan yang Sering Diajukan",
-  EnumLocale.txtLetEngageMoreUserThrowShareApp.name: "Mari Libatkan Lebih Banyak Pengguna melalui Aplikasi Berbagi...",
+  EnumLocale.txtFrequentlyAskedQuestions.name:
+      "Pertanyaan yang Sering Diajukan",
+  EnumLocale.txtLetEngageMoreUserThrowShareApp.name:
+      "Mari Libatkan Lebih Banyak Pengguna melalui Aplikasi Berbagi...",
   EnumLocale.txtRateUs.name: "Nilai Kami",
-  EnumLocale.txtRateYourExperienceWithUs.name: "Nilai Pengalaman Anda Bersama Kami!",
+  EnumLocale.txtRateYourExperienceWithUs.name:
+      "Nilai Pengalaman Anda Bersama Kami!",
   EnumLocale.txtYouWantToBecomeListener.name: "Anda Ingin Menjadi Pendengar...",
   EnumLocale.txtListenerVerification.name: "Verifikasi Pendengar",
   EnumLocale.txtExploreListener.name: "Jelajahi Pendengar",
-  EnumLocale.txtTakeControlOfYourPrivacyData.name: "Ambil Kendali Atas Data Privasi Anda...",
+  EnumLocale.txtTakeControlOfYourPrivacyData.name:
+      "Ambil Kendali Atas Data Privasi Anda...",
   EnumLocale.txtLocation.name: "Lokasi",
   EnumLocale.txtBluetooth.name: "Bahasa Indonesia: Bluetooth",
   EnumLocale.txtMicrophone.name: "Mikropon",
@@ -186,9 +205,11 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtRequestID.name: "ID Permintaan",
   EnumLocale.txtEnterYourAddress.name: "Masukkan Alamat Anda",
   EnumLocale.txtEnterYourAge.name: "Masukkan Usia Anda",
-  EnumLocale.txtEnterYourExperience.name: "Masukkan Pengalaman Anda (dalam tahun)",
+  EnumLocale.txtEnterYourExperience.name:
+      "Masukkan Pengalaman Anda (dalam tahun)",
   EnumLocale.txtSUBMIT.name: "KIRIM",
-  EnumLocale.desWantDeleteAccount.name: "Apakah Anda yakin ingin menghapus akun Anda?",
+  EnumLocale.desWantDeleteAccount.name:
+      "Apakah Anda yakin ingin menghapus akun Anda?",
   EnumLocale.changeYourImage.name: "Ubah gambar Anda",
   EnumLocale.txtTakeAphoto.name: "Ambil foto",
   EnumLocale.txtChooseFromYourFile.name: "Pilih dari file Anda",
@@ -206,7 +227,8 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtCreatePassword.name: "Buat Kata Sandi",
   EnumLocale.txtForgotPassDescription.name:
       "Masukkan alamat email atau nomor ponsel Anda di bawah ini untuk mengatur ulang kata sandi Anda. Kami akan mengirimkan kode verifikasi untuk membantu Anda memulihkan akun.",
-  EnumLocale.txtLongPressToEnableAudioRecording.name: "Tekan lama untuk mengaktifkan rekaman audio",
+  EnumLocale.txtLongPressToEnableAudioRecording.name:
+      "Tekan lama untuk mengaktifkan rekaman audio",
   EnumLocale.txtAudioRecording.name: "Rekaman Audio...",
   EnumLocale.txtPleaseAllowPermission.name: "Mohon izin!!",
   EnumLocale.txtHostCenterDescription.name:
@@ -215,7 +237,8 @@ final Map<String, String> idID = <String, String>{
       "Kami menghargai privasi data Anda. Pelajari bagaimana informasi pribadi Anda dikumpulkan, digunakan, dan dilindungi.",
   EnumLocale.txtShareAppDes.name:
       "Bagikan aplikasi ini kepada teman-teman dan keluarga Anda agar mereka juga dapat menikmati fitur-fiturnya yang unik.",
-  EnumLocale.txtAboutUsDes.name: "Kami berkomitmen untuk memberikan layanan terbaik kepada Anda. Pelajari lebih lanjut tentang tim dan misi kami.",
+  EnumLocale.txtAboutUsDes.name:
+      "Kami berkomitmen untuk memberikan layanan terbaik kepada Anda. Pelajari lebih lanjut tentang tim dan misi kami.",
   EnumLocale.txtPaymentMethod.name: "Metode Pembayaran",
   EnumLocale.txtListenerWithdrawDescription.name:
       "1. Anda dapat menarik koin yang Anda peroleh sebagai uang sungguhan setelah Anda memenuhi ambang batas penarikan minimum yang ditetapkan oleh platform. Pastikan profil dan detail pembayaran Anda diverifikasi sepenuhnya untuk menghindari keterlambatan dalam memproses permintaan penarikan Anda.",
@@ -244,7 +267,8 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtEnterCoinAmount.name: "Masukkan Jumlah Koin",
   EnumLocale.txtMinimumWithdrawCoin.name: "*Minimal Penarikan Koin :",
   EnumLocale.txtMyAmountBalance.name: "Jumlah Saldo Saya:",
-  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name: "Dapatkan Jumlah Koin yang Dapat Ditarik di Sini...",
+  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
+      "Dapatkan Jumlah Koin yang Dapat Ditarik di Sini...",
   EnumLocale.txtListenerDetails.name: "Detail Pendengar :-",
   EnumLocale.txtEnterIntroduction.name: "Masukkan Pendahuluan",
   EnumLocale.txtTalkLanguages.name: "Bicara Bahasa :-",
@@ -264,9 +288,12 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtAddress.name: "Alamat :",
   EnumLocale.txtNOte.name: "Catatan :",
   EnumLocale.txtPleaseFillProfile.name: "Silakan isi profil",
-  EnumLocale.txtPleaseEnterWithdrawCoin.name: "Silakan Masukkan WithdrawCoin",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name: "Silakan Pilih Metode Penarikan",
-  EnumLocale.txtPleaseEnterAllPaymentDetails.name: "Harap Masukkan Semua Rincian Pembayaran",
+  EnumLocale.txtPleaseEnterWithdrawCoin.name:
+      "Silakan masukkan jumlah Session Credit",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name:
+      "Silakan Pilih Metode Penarikan",
+  EnumLocale.txtPleaseEnterAllPaymentDetails.name:
+      "Harap Masukkan Semua Rincian Pembayaran",
   EnumLocale.txtSelectPaymentGateway.name: "Pilih Gateway Pembayaran",
   EnumLocale.txtNumberOfCoin.name: "Jumlah Koin :",
   EnumLocale.txtWithdrawalID.name: "ID Penarikan:",
@@ -281,8 +308,10 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtPrivateAudioCallRate.name: "Tarif Panggilan Audio Pribadi",
   EnumLocale.txtPaymentDetails.name: "Rincian Pembayaran :",
   EnumLocale.txtAppRestart.name: "Permintaan Pendengar Anda Diterima",
-  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name: "Pengguna Tidak Memiliki Dana Yang Cukup Untuk Melakukan Penarikan",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
+  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
+      "Pengguna Tidak Memiliki Dana Yang Cukup Untuk Melakukan Penarikan",
+  EnumLocale
+          .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
       "Penarikan Koin yang Diminta Harus Lebih Besar Dari Yang Ditentukan Oleh Admin",
   EnumLocale.txtSkip.name: "Melewati",
   EnumLocale.txtHostHomeDescription.name:
@@ -294,7 +323,8 @@ final Map<String, String> idID = <String, String>{
       "Pilih bahasa yang nyaman Anda gunakan untuk berbicara dengan pendengar. Ini membantu kami menghubungkan Anda dengan orang yang tepat yang membutuhkan dukungan dalam bahasa tersebut.",
   EnumLocale.txtSelectTopic.name:
       "Pilih topik yang Anda yakini akan dibahas. Ini akan membantu Anda menemukan pengguna yang mencari dukungan di area tertentu.",
-  EnumLocale.txtSureClearNotification.name: "Apakah Anda yakin ingin menghapus semua notifikasi?",
+  EnumLocale.txtSureClearNotification.name:
+      "Apakah Anda yakin ingin menghapus semua notifikasi?",
   EnumLocale.txtSure.name: "Tentu",
   EnumLocale.txtIntroduction.name: "Perkenalan",
   EnumLocale.txtTryAgain.name: "Coba Lagi",
@@ -304,10 +334,13 @@ final Map<String, String> idID = <String, String>{
       "Jika Anda memiliki pertanyaan atau menghadapi masalah, kami siap membantu! Lihat pertanyaan yang paling sering diajukan di bawah ini atau hubungi tim dukungan kami untuk bantuan yang dipersonalisasi.",
   EnumLocale.txtBecomeHostDescription.name:
       "Pendengar memainkan peran penting dengan menawarkan dukungan, bimbingan, atau sekadar menjadi pendengar bagi pengguna yang membutuhkan teman bicara. Jika Anda berempati, sabar, dan siap membantu orang lain, menjadi pendengar adalah cara yang tepat untuk memberikan dampak positif.",
-  EnumLocale.txtListenerReqSentSuccessfully.name: "Permintaan Pendengar Berhasil Dikirim....",
+  EnumLocale.txtListenerReqSentSuccessfully.name:
+      "Permintaan Pendengar Berhasil Dikirim....",
   EnumLocale.txtSearchLanguage.name: "Cari bahasa...",
-  EnumLocale.txtSelectTalkaboutTxt.name: "Pilih bicarakan untuk konten dalam aplikasi.",
-  EnumLocale.txtSelectAppLanguageTxt.name: "Pilih bahasa aplikasi yang Anda inginkan.",
+  EnumLocale.txtSelectTalkaboutTxt.name:
+      "Pilih bicarakan untuk konten dalam aplikasi.",
+  EnumLocale.txtSelectAppLanguageTxt.name:
+      "Pilih bahasa aplikasi yang Anda inginkan.",
   EnumLocale.txtHostVerificationFillForm.name:
       "Mohon lengkapi formulir dengan detail yang akurat. Masukkan ID email Anda yang valid untuk menerima informasi penting dan hasil verifikasi. Pastikan semua kolom diisi dengan benar sebelum melanjutkan.",
   EnumLocale.txtUserName.name: "Pilih bicarakan untuk konten dalam aplikasi.",
@@ -352,21 +385,27 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtPrivacyPolicy.name: 'Masukan',
   EnumLocale.txtListenerAvailableForPrivateVideoCall.name: 'Itu cocok!',
   EnumLocale.txtListenerAvailableForPrivateAudioCall.name: 'Saya setuju dengan',
-  EnumLocale.txtListenerDisableForPrivateVideoCall.name: 'Pendengar Tersedia Untuk Panggilan Audio Pribadi.',
-  EnumLocale.txtListenerDisableForPrivateAudioCall.name: 'Pendengar Tersedia Untuk Panggilan Video Acak.',
+  EnumLocale.txtListenerDisableForPrivateVideoCall.name:
+      'Pendengar Tersedia Untuk Panggilan Audio Pribadi.',
+  EnumLocale.txtListenerDisableForPrivateAudioCall.name:
+      'Pendengar Tersedia Untuk Panggilan Video Acak.',
   EnumLocale.txtEarpiece.name: 'Lubang suara',
   EnumLocale.txtEnterProperValue.name: 'Masukkan Nilai yang Tepat',
-  EnumLocale.txtYourHostRequestSentSuccessfully.name: 'Permintaan Host Anda Berhasil Dikirim',
+  EnumLocale.txtYourHostRequestSentSuccessfully.name:
+      'Permintaan Host Anda Berhasil Dikirim',
   EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
       'Permintaan Anda telah terkirim. Mohon tunggu sementara kami meninjau dan menyetujuinya.',
   EnumLocale.txtViewRequest.name: 'Lihat Permintaan',
-  EnumLocale.txtDEmoListenerText.name: "Ups! Anda tidak memiliki izin. Ini adalah login demo",
+  EnumLocale.txtDEmoListenerText.name:
+      "Ups! Anda tidak memiliki izin. Ini adalah login demo",
   EnumLocale.txtVideoCalling.name: "Panggilan Video",
   EnumLocale.txtAudioCalling.name: "Panggilan Audio",
   EnumLocale.txtIncomingVoiceCalling.name: 'Panggilan Video Masuk',
   EnumLocale.txtIncomingAudioCalling.name: 'Panggilan Audio Masuk',
-  EnumLocale.txtNoAccountFoundForThisEmail.name: "Tidak ada akun yang ditemukan untuk email ini",
-  EnumLocale.txtResetLinkSentToYourEmail.name: "Tautan reset dikirim ke email Anda",
+  EnumLocale.txtNoAccountFoundForThisEmail.name:
+      "Tidak ada akun yang ditemukan untuk email ini",
+  EnumLocale.txtResetLinkSentToYourEmail.name:
+      "Tautan reset dikirim ke email Anda",
   EnumLocale.txtForgetPasswordDescription.name:
       "Anda mungkin menerima tautan lupa kata sandi di akun Gmail Anda. Silakan periksa. Jika tidak, periksa bagian spam.",
 };

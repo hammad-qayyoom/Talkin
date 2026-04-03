@@ -143,7 +143,7 @@ const ReqViewDialog = ({ open, onClose, data }) => {
                 {/* <i className='tabler-mail' style={{ color: 'text.secondary' }} /> */}
                 <Box sx={{ mb: 3 }}>
                   <Typography variant='body2' fontWeight={'medium'} color='text.secondary'>
-                    Talk Topics
+                    Categories
                   </Typography>
                   <Box sx={{ mt: 1 }}>
                     {data?.talkTopics && data?.talkTopics.length > 0 ? (

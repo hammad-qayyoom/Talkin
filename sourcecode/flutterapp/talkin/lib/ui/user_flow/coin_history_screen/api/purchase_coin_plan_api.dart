@@ -19,7 +19,7 @@ class PurchaseCoinGetPlanApi {
   }) async {
     final token = await FirebaseAccessToken.onGet();
 
-    Utils.showLog("purchase Coin history Api Calling...");
+    Utils.showLog("purchase Session Credit history Api Calling...");
     startPagination += 1;
 
     final Map<String, dynamic> queryParameters = {
@@ -29,7 +29,7 @@ class PurchaseCoinGetPlanApi {
       ApiParams.limit: limitPagination.toString(),
     };
 
-    log("purchase Coin history queryParameters ::$queryParameters");
+    log("purchase Session Credit history queryParameters ::$queryParameters");
 
     String query = Uri(queryParameters: queryParameters).query;
 
@@ -41,13 +41,13 @@ class PurchaseCoinGetPlanApi {
       ApiParams.authUid: Database.loginUserFirebaseId,
       ApiParams.contentType: "application/json",
     };
-    Utils.showLog("purchase Coin history Api uri :: $uri");
-    Utils.showLog("purchase Coin history Api headers :: $headers");
+    Utils.showLog("purchase Session Credit history Api uri :: $uri");
+    Utils.showLog("purchase Session Credit history Api headers :: $headers");
 
     try {
       final response = await http.get(uri, headers: headers);
 
-      log('purchase Coin history API STATUS CODE :: ${response.statusCode} \n purchase Coin history API RESPONSE :: ${response.body}');
+      log('purchase Session Credit history API STATUS CODE :: ${response.statusCode} \n purchase Session Credit history API RESPONSE :: ${response.body}');
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
@@ -56,7 +56,7 @@ class PurchaseCoinGetPlanApi {
         throw Exception('Status code is not 200');
       }
     } catch (e) {
-      log("purchase Coin history :: $e");
+      log("purchase Session Credit history :: $e");
     }
     return null;
   }

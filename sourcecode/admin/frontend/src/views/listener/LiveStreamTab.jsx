@@ -200,7 +200,7 @@ const LiveStreamTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
 
             <Grid item xs={6} md={3}>
               <Typography variant='body2' color='text.secondary'>
-                Total Coins Earned
+                Total Session Credits Earned
               </Typography>
               <Typography variant='h6' align='center' color='success.main'>
                 {totalCoins}
@@ -327,7 +327,7 @@ const LiveStreamTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
                     <Chip variant='tonal' label={stream?.callerRole} size='small' color='warning' sx={{ ml: 'auto' }} /> */}
                       {/* <Chip label={formattedDuration} size='small' color='info' sx={{ ml: 'auto' }} /> */}
                       <Typography variant='body2' sx={{ fontWeight: 600 }} color={'success.main'}>
-                        + {stream.listenerCoin} Coins
+                        + {stream.listenerCoin} Session Credits
                       </Typography>
                     </Box>
                   </Box>
@@ -437,17 +437,17 @@ const LiveStreamTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
 
                     // sx={{ borderBottom: '1px solid', borderColor: 'divider', pb: 2, mb: 2 }}
                   >
-                    <Chip variant='tonal' label={`User : ${stream?.userCoin || '0'} Coins`} size='small' color='info' />
+                    <Chip variant='tonal' label={`User : ${stream?.userCoin || '0'} Session Credits`} size='small' color='info' />
 
                     <Chip
                       variant='tonal'
-                      label={`Expert : ${stream?.listenerCoin || '0'} Coins`}
+                      label={`Expert : ${stream?.listenerCoin || '0'} Session Credits`}
                       size='small'
                       color='success'
                     />
                     <Chip
                       variant='tonal'
-                      label={`Admin : ${stream?.adminCoin || '0'} Coins`}
+                      label={`Admin : ${stream?.adminCoin || '0'} Session Credits`}
                       size='small'
                       color='warning'
                     />

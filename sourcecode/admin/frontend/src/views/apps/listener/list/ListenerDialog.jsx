@@ -95,7 +95,7 @@ const schema = yup.object().shape({
   nickName: yup.string().required('Nickname is required'),
   selfIntro: yup.string().required('Self introduction is required'),
   language: yup.array().min(1, 'At least one language is required'),
-  talkTopics: yup.array().min(1, 'At least one talk topic is required'),
+  talkTopics: yup.array().min(1, 'At least one category is required'),
   ratePrivateVideoCall: yup.number().min(0, 'Must be at least 0').required('Rate is required'),
   ratePrivateAudioCall: yup.number().min(0, 'Must be at least 0').required('Rate is required'),
   experience: yup.string().when('$expert', {
@@ -646,7 +646,7 @@ const ListenerDialog = ({ open, onClose, expert = null, role }) => {
                   renderInput={params => (
                     <TextField
                       {...params}
-                      label='Talk Topics'
+                      label='Categories'
                       variant='outlined'
                       error={!!errors.talkTopics}
                       helperText={errors.talkTopics?.message}

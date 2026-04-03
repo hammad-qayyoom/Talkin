@@ -4,7 +4,9 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-import { IconButton } from '@mui/material'
+import Link from 'next/link'
+
+import { IconButton , Fab, Tooltip } from '@mui/material'
 
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // MUI Imports
 import FilterListIcon from '@mui/icons-material/FilterList'
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff'
-import { Fab, Tooltip } from '@mui/material'
+
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -40,8 +42,6 @@ import DateRangePicker from '@/components/common/DateRangePicker'
 import EmprtyTableRow from '@/components/common/EmprtyTableRow'
 
 import { fetchDefaultCurrencies } from '@/redux-store/slices/currency'
-import Link from 'next/link'
-import { Visibility } from '@mui/icons-material'
 
 
 
@@ -137,7 +137,7 @@ const CoinPlanHistory = () => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const { history, loading, page, pageSize, total, dateRange, adminEarnings } = useSelector(
+  const { history, loading, page, pageSize, total, dateRange, adminEarnings, grossRevenue, platformCommission, expertPayouts } = useSelector(
     state => state.coinPlanHistory
   )
 
@@ -301,6 +301,10 @@ const CoinPlanHistory = () => {
         header: 'Plans Bought',
         cell: ({ getValue }) => <Typography>{getValue() || '0'}</Typography>
       }),
+      columnHelper.accessor('sessionBookings', {
+        header: 'Sessions Booked',
+        cell: ({ getValue }) => <Typography>{getValue() || '0'}</Typography>
+      }),
 
       // columnHelper.accessor('records', {
       //   header: 'Records',
@@ -335,6 +339,7 @@ const CoinPlanHistory = () => {
               <IconButton>
                 <Link
                   href={`/coin-plan-history/viewrecords/${row.original._id}`}
+
                   // href={`/coin-plan-history/viewrecords?userData=${encodedUser}`}
                   className='flex'
                 >
@@ -382,6 +387,7 @@ const CoinPlanHistory = () => {
     dispatch(setPageSize(newPageSize))
 
     const params = new URLSearchParams()
+
     params.set('page', '1')
     params.set('pageSize', newPageSize.toString())
 
@@ -398,22 +404,31 @@ const CoinPlanHistory = () => {
       <Box display='flex' justifyContent='space-between' alignItems='center'>
         <Box className='mb-3'>
           <Typography variant='h4' >
-            Coin Plan Purchase History
+            Revenue Dashboard
           </Typography>
           <Typography variant='body2' color='text.secondary'>
-            Track user coin purchases, spending history, and platform earnings.
+            Track subscription purchases, paid session bookings, and platform revenue split.
           </Typography>
         </Box>
 
-        <div className='flex items-center gap-4'>
-          <CustomAvatar variant='rounded' color='success' skin='light'>
-            <i className='tabler-coin' />
-          </CustomAvatar>
+        <div className='flex items-center gap-6'>
           <div>
-            <Typography variant='h5'>
-              {defaultCurrency?.symbol || '₹'} {adminEarnings.toFixed(2) || '0'}
+            <Typography variant='caption' color='text.secondary'>Gross Revenue</Typography>
+            <Typography variant='h6'>
+              {defaultCurrency?.symbol || '₹'} {Number(grossRevenue || 0).toFixed(2)}
             </Typography>
-            <Typography>Total Earnings</Typography>
+          </div>
+          <div>
+            <Typography variant='caption' color='text.secondary'>Platform Commission</Typography>
+            <Typography variant='h6'>
+              {defaultCurrency?.symbol || '₹'} {Number(platformCommission || adminEarnings || 0).toFixed(2)}
+            </Typography>
+          </div>
+          <div>
+            <Typography variant='caption' color='text.secondary'>Expert Payouts</Typography>
+            <Typography variant='h6'>
+              {defaultCurrency?.symbol || '₹'} {Number(expertPayouts || 0).toFixed(2)}
+            </Typography>
           </div>
         </div>
       </Box>
@@ -553,7 +568,7 @@ const CoinPlanHistory = () => {
                     )}
                   </React.Fragment>
                 ))}
-                <EmprtyTableRow limit={9} data={history} columns={columns} noDataLebel={"No coin plan purchase history found"} />
+                <EmprtyTableRow limit={9} data={history} columns={columns} noDataLebel={"No revenue records found"} />
               </tbody>
             </table>
           )}

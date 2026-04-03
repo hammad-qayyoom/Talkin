@@ -365,7 +365,7 @@ const ListenerListTable = () => {
         cell: ({ row }) => <Typography color='text.primary'>{row.original.age || '-'}</Typography>
       }),
       columnHelper.accessor('coin', {
-        header: () => <div className=''>Coin</div>,
+        header: () => <div className=''>Session Credit</div>,
         cell: ({ row }) => (
           <Typography textTransform={'capitalize'} color='text.primary'>
             {row.original.totalCoins || 0}

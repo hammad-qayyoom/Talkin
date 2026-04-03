@@ -250,7 +250,7 @@ class UserProfileInfoView extends StatelessWidget {
                           width: 18,
                         ),
                         Text(
-                          "${controller.listenerProfileModel?.data?.totalCoins.toString() ?? ''} Coin",
+                          "${controller.listenerProfileModel?.data?.totalCoins.toString() ?? ''} Session Credit",
                           style: AppFontStyle.fontStyleW700(fontSize: 12, fontColor: AppColors.orange),
                         ).paddingOnly(left: 6, right: 6)
                       ],

@@ -154,7 +154,7 @@ const coinPlansSlice = createSlice({
       if (action.payload.status) {
         state.coinPlans = [...state.coinPlans, action.payload.data]
         state.total += 1
-        toast.success(action.payload.message || 'Coin Plan created successfully')
+        toast.success(action.payload.message || 'Subscription plan created successfully')
       } else {
         state.error = action.payload.message
         toast.error(action.payload.message)
@@ -180,7 +180,7 @@ const coinPlansSlice = createSlice({
           state.coinPlans[index] = action.payload.data
         }
 
-        toast.success(action.payload.message || 'Coin Plan updated successfully')
+        toast.success(action.payload.message || 'Subscription plan updated successfully')
       } else {
         state.error = action.payload.message
         toast.error(action.payload.message)
@@ -202,7 +202,7 @@ const coinPlansSlice = createSlice({
       if (action.payload.status) {
         state.coinPlans = state.coinPlans.filter(coinPlan => coinPlan._id !== action.payload.coinPlanId)
         state.total -= 1
-        toast.success(action.payload.message || 'Coin Plan deleted successfully')
+        toast.success(action.payload.message || 'Subscription plan deleted successfully')
       } else {
         state.error = action.payload.message
         toast.error(action.payload.message)

@@ -384,7 +384,7 @@ class CustomSwitchView extends StatelessWidget {
                       width: 18,
                     ),
                     Text(
-                      "${callCoin ?? ''}/Min",
+                      "${callCoin ?? ''}/Session",
                       style: AppFontStyle.fontStyleW700(fontSize: 12, fontColor: AppColors.orange),
                     ).paddingOnly(left: 6, right: 6)
                   ],

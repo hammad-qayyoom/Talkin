@@ -161,7 +161,7 @@ export const deleteListener = createAsyncThunk('expert/deleteListener', async (l
   }
 })
 
-// Expert Coin History
+// Expert Session Credit History
 export const fetchCoinHistoryListener = createAsyncThunk(
   'user/fetchCoinTransactions',
   async ({ userId, start = 1, limit = 20, startDate = 'All', endDate = 'All' }, thunkAPI) => {

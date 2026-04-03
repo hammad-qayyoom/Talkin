@@ -5,9 +5,12 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtRegisterTitle1.name: "تلاش کریں۔",
   EnumLocale.txtRegisterTitle2.name: "چیٹ",
   EnumLocale.txtRegisterTitle3.name: "ویڈیو کال",
-  EnumLocale.txtRegisterSubTitle1.name: "آپ چیٹ کرنے، پیغامات بھیجنے اور ان کے ساتھ روابط بنانے کے لیے\nدنیا بھر کے لوگوں سے رابطہ قائم کر سکتے ہیں۔",
-  EnumLocale.txtRegisterSubTitle2.name: 'اجنبیوں کے ساتھ بات چیت کریں تاکہ ایک دوسرے کو بہتر طور پر جان سکیں اور اچھی\nمطابقت حاصل کریں۔',
-  EnumLocale.txtRegisterSubTitle3.name: "آپ اپنی ویڈیوز اور تصاویر\nاپنے دوست اور کنکشنز کے ساتھ شیئر کر سکتے ہیں۔",
+  EnumLocale.txtRegisterSubTitle1.name:
+      "آپ چیٹ کرنے، پیغامات بھیجنے اور ان کے ساتھ روابط بنانے کے لیے\nدنیا بھر کے لوگوں سے رابطہ قائم کر سکتے ہیں۔",
+  EnumLocale.txtRegisterSubTitle2.name:
+      'اجنبیوں کے ساتھ بات چیت کریں تاکہ ایک دوسرے کو بہتر طور پر جان سکیں اور اچھی\nمطابقت حاصل کریں۔',
+  EnumLocale.txtRegisterSubTitle3.name:
+      "آپ اپنی ویڈیوز اور تصاویر\nاپنے دوست اور کنکشنز کے ساتھ شیئر کر سکتے ہیں۔",
   EnumLocale.txtEnterYourMail.name: "اپنا ای میل آئی ڈی درج کریں۔",
   EnumLocale.txtEnterPassword.name: "اپنا پاس ورڈ درج کریں۔",
   EnumLocale.txtCoinRechargeSuccess.name: "سکے کے ریچارج میں کامیابی",
@@ -30,10 +33,12 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtPay.name: "ادا کریں۔",
   EnumLocale.txtRegister.name: "رجسٹر کریں۔",
   EnumLocale.desEnterEmail.name: "براہ کرم ای میل درج کریں۔",
-  EnumLocale.desEnterValidEmailAddress.name: "براہ کرم ایک درست ای میل ایڈریس درج کریں۔",
+  EnumLocale.desEnterValidEmailAddress.name:
+      "براہ کرم ایک درست ای میل ایڈریس درج کریں۔",
   EnumLocale.desEnterPassword.name: "براہ کرم پاس ورڈ درج کریں۔",
   EnumLocale.desReEnterPassword.name: "براہ کرم دوبارہ پاس ورڈ درج کریں۔",
-  EnumLocale.desPasswordCharacters.name: "پاس ورڈ کم از کم 6 حروف کا ہونا چاہیے۔",
+  EnumLocale.desPasswordCharacters.name:
+      "پاس ورڈ کم از کم 6 حروف کا ہونا چاہیے۔",
   EnumLocale.desPasswordNotMatch.name: "پاس ورڈ مماثل نہیں ہے۔",
   EnumLocale.txtEnterName.name: "اپنا نام درج کریں۔",
   EnumLocale.desEnterFullName.name: "براہ کرم پورا نام درج کریں۔",
@@ -44,7 +49,8 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.desEnterMobile.name: "براہ کرم موبائل نمبر درج کریں۔",
   EnumLocale.txtGetOtp.name: "OTP حاصل کریں۔",
   EnumLocale.txtEnterOtp.name: "OTP درج کریں۔",
-  EnumLocale.txtEnterOtpWithRegisterNumber.name: "OTP داخل کریں\nرجسٹر نمبر کے ساتھ...",
+  EnumLocale.txtEnterOtpWithRegisterNumber.name:
+      "OTP داخل کریں\nرجسٹر نمبر کے ساتھ...",
   EnumLocale.txtYouHaveNotGetOtp.name: "اگر آپ کو OTP نہیں ملا ہے؟",
   EnumLocale.txtResendOtp.name: "OTP دوبارہ بھیجیں۔",
   EnumLocale.txtExitApp.name: 'ایپ سے باہر نکلیں۔',
@@ -57,7 +63,8 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtFreeTalk.name: 'مفت گفتگو',
   EnumLocale.txtCalling.name: 'کال کرنا',
   EnumLocale.txtHomeFastLalk.name: 'اب فاسٹ لالک، فیل بیٹر',
-  EnumLocale.txtHomeDescription.name: 'اپنے پسندیدہ سننے والے سے بات کریں اور ہلکا اور روشن محسوس کریں!',
+  EnumLocale.txtHomeDescription.name:
+      'اپنے پسندیدہ سننے والے سے بات کریں اور ہلکا اور روشن محسوس کریں!',
   EnumLocale.txtFindMoreListener.name: 'مزید سننے والے کو تلاش کریں۔',
   EnumLocale.txtTopListener.name: 'سرفہرست سننے والے',
   EnumLocale.txtViewAll.name: 'سبھی دیکھیں',
@@ -82,8 +89,10 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtTalkAbout.name: "کے بارے میں بات کریں۔",
   EnumLocale.txtSelectPaymentMethod.name: "ادائیگی کا طریقہ منتخب کریں۔",
   EnumLocale.txtAPPLanguage.name: "اے پی پی کی زبان",
-  EnumLocale.txtSelectLanguageForApp.name: "مماثل سامعین کو دیکھنے کے لیے ایک زبان منتخب کریں۔",
-  EnumLocale.txtSelectTalkAboutForApp.name: "ایپ میں موجود مواد کے لیے بات چیت کا انتخاب کریں۔",
+  EnumLocale.txtSelectLanguageForApp.name:
+      "مماثل سامعین کو دیکھنے کے لیے ایک زبان منتخب کریں۔",
+  EnumLocale.txtSelectTalkAboutForApp.name:
+      "ایپ میں موجود مواد کے لیے بات چیت کا انتخاب کریں۔",
   EnumLocale.txtRecommendedProfile.name: "تجویز کردہ پروفائل",
   EnumLocale.txtSelectCallTypeNote.name:
       "براہ کرم جعلی معلومات جیسے کہ اجنبیوں سے رقم کی منتقلی، لاٹری وغیرہ پر بھروسہ نہ کریں۔ براہ کرم کوئی بھی ذاتی معلومات جیسے کہ پاس ورڈ، موبائل نمبر، او ٹی پی وغیرہ کا اشتراک نہ کریں۔ براہ کرم عریانیت، فحش نگاری یا کسی بھی فحش حرکت میں ملوث نہ ہوں۔",
@@ -105,12 +114,14 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtShareListenersApp.name: "سننے والے ایپ کا اشتراک کریں۔",
   EnumLocale.txtRatingDescription.name:
       "آپ کے تاثرات سے دوسرے ممبران کو اپنے سننے والے کو بہتر طریقے سے منتخب کرنے میں مدد ملے گی جو ہماری سروس کو بہتر بنانے میں ہماری مدد کرے گی۔",
-  EnumLocale.txtShareListenersAppDescription.name: "دوستوں اور کنبہ کے ساتھ ایپ کا اشتراک کریں اور خوشی پھیلائیں...!",
+  EnumLocale.txtShareListenersAppDescription.name:
+      "دوستوں اور کنبہ کے ساتھ ایپ کا اشتراک کریں اور خوشی پھیلائیں...!",
   EnumLocale.txtShareAppNow.name: "ابھی ایپ شیئر کریں۔",
   EnumLocale.txtCompleteTrailCall.name: "کے ساتھ آپ کی کال کا شکریہ",
   EnumLocale.txtCompleteTrailCall1.name: "- ہمیں بتائیں کہ آپ کیا سوچتے ہیں!",
   EnumLocale.txtDidYouLikeService.name: "کیا آپ کو سننے والے کی خدمت پسند آئی؟",
-  EnumLocale.txtAddFilderToYourFavListeners.name: "اینڈریو فلڈر کو اپنے پسندیدہ سننے والوں میں شامل کریں؟",
+  EnumLocale.txtAddFilderToYourFavListeners.name:
+      "اینڈریو فلڈر کو اپنے پسندیدہ سننے والوں میں شامل کریں؟",
   EnumLocale.txtEditProfile.name: "پروفائل میں ترمیم کریں۔",
   EnumLocale.txtMyWallet.name: "میرا پرس",
   EnumLocale.txtHelpCenter.name: "امدادی مرکز",
@@ -131,14 +142,16 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtSaveGender.name: "GENDER محفوظ کریں۔",
   EnumLocale.txtChooseYourGender.name: "اپنی جنس کا انتخاب کریں۔",
   EnumLocale.txtSelectYourGender.name: "اپنی جنس منتخب کریں۔",
-  EnumLocale.txtIfSelectWrongGenderLifeBan.name: "اگر آپ غلط صنف کا انتخاب کرتے ہیں =\nلائف بان️🚫",
+  EnumLocale.txtIfSelectWrongGenderLifeBan.name:
+      "اگر آپ غلط صنف کا انتخاب کرتے ہیں =\nلائف بان️🚫",
   EnumLocale.txtMale.name: "مرد",
   EnumLocale.txtFemale.name: "خاتون",
   EnumLocale.txtBecomeListener.name: "سننے والے بنیں۔",
   EnumLocale.txtViewCoinHistory.name: "سکے کی تاریخ دیکھیں",
   EnumLocale.txtCurrentCoinBalance.name: "کرنٹ کوائن بیلنس",
   EnumLocale.txtWalletGuide.name: "والیٹ گائیڈ:-",
-  EnumLocale.txtAddCoinBalanceSelectPlan.name: "سکے بیلنس شامل کریں، منصوبہ منتخب کریں:-",
+  EnumLocale.txtAddCoinBalanceSelectPlan.name:
+      "سکے بیلنس شامل کریں، منصوبہ منتخب کریں:-",
   EnumLocale.txtMostPopularPlan.name: "سب سے زیادہ مقبول منصوبہ",
   EnumLocale.txtHistory.name: "تاریخ",
   EnumLocale.txtPayment.name: "ادائیگی",
@@ -150,22 +163,27 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtFailed.name: "ناکام",
   EnumLocale.txtSuccess.name: "کامیابی",
   EnumLocale.txtCallDuration.name: "کال کا دورانیہ",
-  EnumLocale.txtManageYourAccountSettings.name: "اپنے اکاؤنٹ کا نظم کریں\nترتیبات...",
+  EnumLocale.txtManageYourAccountSettings.name:
+      "اپنے اکاؤنٹ کا نظم کریں\nترتیبات...",
   EnumLocale.txtLogoutApp.name: "لاگ آؤٹ ایپ",
   EnumLocale.txtLogout.name: "لاگ آؤٹ",
   EnumLocale.txtCancel.name: "منسوخ کریں۔",
-  EnumLocale.txtDesLogout.name: "کیا آپ واقعی اپنے اکاؤنٹ سے لاگ آؤٹ کرنا چاہتے ہیں؟",
+  EnumLocale.txtDesLogout.name:
+      "کیا آپ واقعی اپنے اکاؤنٹ سے لاگ آؤٹ کرنا چاہتے ہیں؟",
   EnumLocale.txtDeleteAccount.name: "اکاؤنٹ حذف کریں۔",
   EnumLocale.txtNeedAnyHelpFAQ.name: "کوئی مدد درکار ہے اور\nاکثر سوالات...",
   EnumLocale.txtHaveAnIssue.name: "کوئی مسئلہ ہے؟",
   EnumLocale.txtFrequentlyAskedQuestions.name: "اکثر پوچھے گئے سوالات",
-  EnumLocale.txtLetEngageMoreUserThrowShareApp.name: "آئیے مزید یوزر تھرو شیئر ایپ کو شامل کریں...",
+  EnumLocale.txtLetEngageMoreUserThrowShareApp.name:
+      "آئیے مزید یوزر تھرو شیئر ایپ کو شامل کریں...",
   EnumLocale.txtRateUs.name: "ہمیں درجہ دیں۔",
-  EnumLocale.txtRateYourExperienceWithUs.name: "ہمارے ساتھ اپنے تجربے کی درجہ بندی کریں!",
+  EnumLocale.txtRateYourExperienceWithUs.name:
+      "ہمارے ساتھ اپنے تجربے کی درجہ بندی کریں!",
   EnumLocale.txtYouWantToBecomeListener.name: "آپ بننا چاہتے ہیں\nسامعین...",
   EnumLocale.txtListenerVerification.name: "سننے والوں کی تصدیق",
   EnumLocale.txtExploreListener.name: "سننے والے کو دریافت کریں۔",
-  EnumLocale.txtTakeControlOfYourPrivacyData.name: "اپنا کنٹرول رکھیں\nپرائیویسی ڈیٹا...",
+  EnumLocale.txtTakeControlOfYourPrivacyData.name:
+      "اپنا کنٹرول رکھیں\nپرائیویسی ڈیٹا...",
   EnumLocale.txtLocation.name: "مقام",
   EnumLocale.txtBluetooth.name: "بلوٹوتھ",
   EnumLocale.txtMicrophone.name: "مائیکروفون",
@@ -187,17 +205,22 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtEnterYourAge.name: "اپنی عمر درج کریں۔",
   EnumLocale.txtEnterYourExperience.name: "اپنا تجربہ درج کریں (سال میں)",
   EnumLocale.txtSUBMIT.name: "جمع کروائیں۔",
-  EnumLocale.desWantDeleteAccount.name: "کیا آپ واقعی اپنا اکاؤنٹ حذف کرنا چاہتے ہیں؟",
+  EnumLocale.desWantDeleteAccount.name:
+      "کیا آپ واقعی اپنا اکاؤنٹ حذف کرنا چاہتے ہیں؟",
   EnumLocale.changeYourImage.name: "اپنی تصویر تبدیل کریں۔",
   EnumLocale.txtTakeAphoto.name: "تصویر لے لو",
   EnumLocale.txtChooseFromYourFile.name: "اپنی فائل میں سے انتخاب کریں۔",
   EnumLocale.txtNext.name: "اگلا",
-  EnumLocale.txtPleaseSelectProfileImage.name: "براہ کرم پروفائل تصویر منتخب کریں !!",
+  EnumLocale.txtPleaseSelectProfileImage.name:
+      "براہ کرم پروفائل تصویر منتخب کریں !!",
   EnumLocale.txtPleaseEnterNickName.name: "براہ کرم نک نام درج کریں !!",
   EnumLocale.txtEnterNickName.name: "نک نام درج کریں۔",
-  EnumLocale.txtPleaseEnterMobileNumber.name: "براہ کرم موبائل نمبر درج کریں !!",
-  EnumLocale.txtPleaseSelectBirthDate.name: "براہ کرم تاریخ پیدائش کا انتخاب کریں !!",
-  EnumLocale.txtProfileUpdateSuccessfully.name: "پروفائل کو کامیابی کے ساتھ اپ ڈیٹ کر دیا گیا۔",
+  EnumLocale.txtPleaseEnterMobileNumber.name:
+      "براہ کرم موبائل نمبر درج کریں !!",
+  EnumLocale.txtPleaseSelectBirthDate.name:
+      "براہ کرم تاریخ پیدائش کا انتخاب کریں !!",
+  EnumLocale.txtProfileUpdateSuccessfully.name:
+      "پروفائل کو کامیابی کے ساتھ اپ ڈیٹ کر دیا گیا۔",
   EnumLocale.txtForgotPassword.name: "پاس ورڈ بھول گئے۔",
   EnumLocale.txtForgotYourPassword.name: "بھول گئے\nاپنا پاس ورڈ...",
   EnumLocale.txtEnterMailMobileNumber.name: "میل/موبائل نمبر درج کریں۔",
@@ -205,15 +228,18 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtCreatePassword.name: "پاس ورڈ بنائیں",
   EnumLocale.txtForgotPassDescription.name:
       "اپنا پاس ورڈ دوبارہ ترتیب دینے کے لیے نیچے اپنا ای میل پتہ یا موبائل نمبر درج کریں۔ ہم آپ کو ایک توثیقی کوڈ بھیجیں گے تاکہ آپ کو اپنا اکاؤنٹ بحال کرنے میں مدد ملے۔",
-  EnumLocale.txtLongPressToEnableAudioRecording.name: "آڈیو ریکارڈنگ کو فعال کرنے کے لیے دیر تک دبائیں۔",
+  EnumLocale.txtLongPressToEnableAudioRecording.name:
+      "آڈیو ریکارڈنگ کو فعال کرنے کے لیے دیر تک دبائیں۔",
   EnumLocale.txtAudioRecording.name: "آڈیو ریکارڈنگ...",
   EnumLocale.txtPleaseAllowPermission.name: "مہربانی فرما کر اجازت دیں!!",
   EnumLocale.txtHostCenterDescription.name:
       "اب آپ میزبان بن سکتے ہیں اور اپنے پروگرام خود ترتیب دے سکتے ہیں۔ نئے ایونٹس بنائیں اور دوسروں کے ساتھ اپنی خدمات کا اشتراک کریں۔",
   EnumLocale.txtDataPrivacy.name:
       "ہم آپ کے ڈیٹا کی رازداری کی قدر کرتے ہیں۔ جانیں کہ آپ کی ذاتی معلومات کو کیسے جمع کیا جاتا ہے، استعمال کیا جاتا ہے اور محفوظ کیا جاتا ہے۔",
-  EnumLocale.txtShareAppDes.name: "اس ایپ کو اپنے دوستوں اور اہل خانہ کے ساتھ شیئر کریں تاکہ وہ بھی اس کی منفرد خصوصیات سے لطف اندوز ہو سکیں۔",
-  EnumLocale.txtAboutUsDes.name: "ہم آپ کو بہترین سروس فراہم کرنے کے لیے پرعزم ہیں۔ ہماری ٹیم اور ہمارے مشن کے بارے میں مزید جانیں۔",
+  EnumLocale.txtShareAppDes.name:
+      "اس ایپ کو اپنے دوستوں اور اہل خانہ کے ساتھ شیئر کریں تاکہ وہ بھی اس کی منفرد خصوصیات سے لطف اندوز ہو سکیں۔",
+  EnumLocale.txtAboutUsDes.name:
+      "ہم آپ کو بہترین سروس فراہم کرنے کے لیے پرعزم ہیں۔ ہماری ٹیم اور ہمارے مشن کے بارے میں مزید جانیں۔",
   EnumLocale.txtPaymentMethod.name: "ادائیگی کا طریقہ",
   EnumLocale.txtListenerWithdrawDescription.name:
       "1. جب آپ پلیٹ فارم کی طرف سے مقرر کردہ کم از کم رقم نکلوانے کی حد کو پورا کر لیتے ہیں تو آپ اپنے کمائے گئے سکے حقیقی رقم کے طور پر واپس لے سکتے ہیں۔ یقینی بنائیں کہ آپ کی واپسی کی درخواست پر کارروائی میں تاخیر سے بچنے کے لیے آپ کے پروفائل اور ادائیگی کی تفصیلات کی مکمل تصدیق کی گئی ہے۔",
@@ -242,7 +268,8 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtEnterCoinAmount.name: "سکے کی رقم درج کریں۔",
   EnumLocale.txtMinimumWithdrawCoin.name: "* کم از کم واپسی کا سکہ:",
   EnumLocale.txtMyAmountBalance.name: "میری رقم کا بیلنس:",
-  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name: "اپنی واپسی کے قابل سکے کی رقم یہاں حاصل کریں...",
+  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
+      "اپنی واپسی کے قابل سکے کی رقم یہاں حاصل کریں...",
   EnumLocale.txtListenerDetails.name: "سننے والوں کی تفصیلات:-",
   EnumLocale.txtEnterIntroduction.name: "تعارف درج کریں۔",
   EnumLocale.txtTalkLanguages.name: "گفتگو کی زبانیں:-",
@@ -262,9 +289,12 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtAddress.name: "پتہ:",
   EnumLocale.txtNOte.name: "نوٹ:",
   EnumLocale.txtPleaseFillProfile.name: "براہ کرم پروفائل پُر کریں۔",
-  EnumLocale.txtPleaseEnterWithdrawCoin.name: "براہ کرم WithdrawCoin درج کریں۔",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name: "براہ کرم واپسی کا طریقہ منتخب کریں۔",
-  EnumLocale.txtPleaseEnterAllPaymentDetails.name: "براہ کرم تمام ادائیگی کی تفصیلات درج کریں۔",
+  EnumLocale.txtPleaseEnterWithdrawCoin.name:
+      "براہ کرم Session Credit درج کریں۔",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name:
+      "براہ کرم واپسی کا طریقہ منتخب کریں۔",
+  EnumLocale.txtPleaseEnterAllPaymentDetails.name:
+      "براہ کرم تمام ادائیگی کی تفصیلات درج کریں۔",
   EnumLocale.txtSelectPaymentGateway.name: "ادائیگی کے گیٹ وے کو منتخب کریں۔",
   EnumLocale.txtNumberOfCoin.name: "سکے کی تعداد:",
   EnumLocale.txtWithdrawalID.name: "واپسی کی شناخت:",
@@ -279,8 +309,10 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtPrivateAudioCallRate.name: "نجی آڈیو کال کی شرح",
   EnumLocale.txtPaymentDetails.name: "ادائیگی کی تفصیلات:",
   EnumLocale.txtAppRestart.name: "آپ کی سامعین کی درخواست قبول کر لی گئی ہے۔",
-  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name: "صارف کے پاس واپسی کے لیے کافی فنڈز نہیں ہیں۔",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
+  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
+      "صارف کے پاس واپسی کے لیے کافی فنڈز نہیں ہیں۔",
+  EnumLocale
+          .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
       "واپس لینے کی درخواست کردہ سکہ ایڈمن کی طرف سے بتائی گئی رقم سے زیادہ ہونا چاہیے۔",
   EnumLocale.txtSkip.name: "چھوڑیں۔",
   EnumLocale.txtHostHomeDescription.name:
@@ -292,7 +324,8 @@ final Map<String, String> urPK = <String, String>{
       "وہ زبانیں منتخب کریں جو آپ سننے والوں کے ساتھ بولنے میں آرام سے ہوں۔ اس سے ہمیں آپ کو صحیح لوگوں سے جوڑنے میں مدد ملتی ہے جنہیں ان زبانوں میں مدد کی ضرورت ہے۔",
   EnumLocale.txtSelectTopic.name:
       "وہ عنوانات منتخب کریں جن کے بارے میں آپ کو اعتماد محسوس ہوتا ہے۔ یہ آپ کو ان مخصوص شعبوں میں تعاون حاصل کرنے والے صارفین سے ملنے میں مدد کریں گے۔",
-  EnumLocale.txtSureClearNotification.name: "کیا آپ واقعی تمام اطلاعات کو صاف کرنا چاہتے ہیں؟",
+  EnumLocale.txtSureClearNotification.name:
+      "کیا آپ واقعی تمام اطلاعات کو صاف کرنا چاہتے ہیں؟",
   EnumLocale.txtSure.name: "ضرور",
   EnumLocale.txtIntroduction.name: "تعارف",
   EnumLocale.txtTryAgain.name: "دوبارہ کوشش کریں۔",
@@ -302,13 +335,17 @@ final Map<String, String> urPK = <String, String>{
       "اگر آپ کے کوئی سوالات ہیں یا آپ کو کوئی مسئلہ درپیش ہے تو ہم مدد کے لیے حاضر ہیں! ذیل میں اکثر پوچھے گئے سوالات کو چیک کریں یا ذاتی نوعیت کی مدد کے لیے ہماری سپورٹ ٹیم سے رابطہ کریں۔",
   EnumLocale.txtBecomeHostDescription.name:
       "سامعین ان صارفین کو مدد، رہنمائی، یا صرف سننے والے کان کی پیشکش کرکے ایک اہم کردار ادا کرتے ہیں جن سے بات کرنے کے لیے کسی کی ضرورت ہوتی ہے۔ اگر آپ ہمدرد، صبر کرنے والے، اور دوسروں کی مدد کے لیے تیار ہیں، تو سننے والا بننا مثبت اثر ڈالنے کا بہترین طریقہ ہے۔",
-  EnumLocale.txtListenerReqSentSuccessfully.name: "سامعین کی درخواست کامیابی کے ساتھ بھیج دی گئی....",
+  EnumLocale.txtListenerReqSentSuccessfully.name:
+      "سامعین کی درخواست کامیابی کے ساتھ بھیج دی گئی....",
   EnumLocale.txtSearchLanguage.name: "زبان تلاش کریں...",
-  EnumLocale.txtSelectTalkaboutTxt.name: "ایپ میں موجود مواد کے لیے بات چیت کا انتخاب کریں۔",
-  EnumLocale.txtSelectAppLanguageTxt.name: "اپنی پسندیدہ ایپ کی زبان منتخب کریں۔",
+  EnumLocale.txtSelectTalkaboutTxt.name:
+      "ایپ میں موجود مواد کے لیے بات چیت کا انتخاب کریں۔",
+  EnumLocale.txtSelectAppLanguageTxt.name:
+      "اپنی پسندیدہ ایپ کی زبان منتخب کریں۔",
   EnumLocale.txtHostVerificationFillForm.name:
       "براہ کرم درست تفصیلات کے ساتھ فارم کو مکمل کریں۔ اہم اپ ڈیٹس اور تصدیقی نتائج حاصل کرنے کے لیے اپنی درست ای میل ID درج کریں۔ آگے بڑھنے سے پہلے یقینی بنائیں کہ تمام فیلڈز صحیح طریقے سے بھرے گئے ہیں۔",
-  EnumLocale.txtUserName.name: "ایپ میں موجود مواد کے لیے بات چیت کا انتخاب کریں۔",
+  EnumLocale.txtUserName.name:
+      "ایپ میں موجود مواد کے لیے بات چیت کا انتخاب کریں۔",
   EnumLocale.txtUserDetails.name: "اپنی پسندیدہ ایپ کی زبان منتخب کریں۔",
   EnumLocale.txtUserNickName.name:
       "براہ کرم درست تفصیلات کے ساتھ فارم کو مکمل کریں۔ اہم اپ ڈیٹس اور تصدیقی نتائج حاصل کرنے کے لیے اپنی درست ای میل ID درج کریں۔ آگے بڑھنے سے پہلے یقینی بنائیں کہ تمام فیلڈز صحیح طریقے سے بھرے گئے ہیں۔",
@@ -349,22 +386,29 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtAgreePrivacyPolicy.name: 'آنے والی آڈیو کال....',
   EnumLocale.txtPrivacyPolicy.name: 'فیڈ بیک',
   EnumLocale.txtListenerAvailableForPrivateVideoCall.name: 'یہ ایک میچ ہے!',
-  EnumLocale.txtListenerAvailableForPrivateAudioCall.name: 'میں اس سے اتفاق کرتا ہوں۔',
-  EnumLocale.txtListenerDisableForPrivateVideoCall.name: 'سننے والا نجی آڈیو کال کے لیے دستیاب ہے۔',
-  EnumLocale.txtListenerDisableForPrivateAudioCall.name: 'رینڈم ویڈیو کال کے لیے سننے والا دستیاب ہے۔',
+  EnumLocale.txtListenerAvailableForPrivateAudioCall.name:
+      'میں اس سے اتفاق کرتا ہوں۔',
+  EnumLocale.txtListenerDisableForPrivateVideoCall.name:
+      'سننے والا نجی آڈیو کال کے لیے دستیاب ہے۔',
+  EnumLocale.txtListenerDisableForPrivateAudioCall.name:
+      'رینڈم ویڈیو کال کے لیے سننے والا دستیاب ہے۔',
   EnumLocale.txtEarpiece.name: 'ائیر پیس',
   EnumLocale.txtEnterProperValue.name: 'مناسب قدر درج کریں۔',
-  EnumLocale.txtYourHostRequestSentSuccessfully.name: 'آپ کی میزبان کی درخواست کامیابی کے ساتھ بھیج دی گئی۔',
+  EnumLocale.txtYourHostRequestSentSuccessfully.name:
+      'آپ کی میزبان کی درخواست کامیابی کے ساتھ بھیج دی گئی۔',
   EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
       'آپ کی درخواست جمع کر دی گئی ہے۔ براہ کرم انتظار کریں جب تک ہم اس کا جائزہ لیں اور اسے منظور کریں۔',
   EnumLocale.txtViewRequest.name: 'درخواست دیکھیں',
-  EnumLocale.txtDEmoListenerText.name: "افوہ! آپ کو اجازت نہیں ہے۔ یہ ڈیمو لاگ ان ہے۔",
+  EnumLocale.txtDEmoListenerText.name:
+      "افوہ! آپ کو اجازت نہیں ہے۔ یہ ڈیمو لاگ ان ہے۔",
   EnumLocale.txtVideoCalling.name: "ویڈیو کالنگ",
   EnumLocale.txtAudioCalling.name: "آڈیو کالنگ",
   EnumLocale.txtIncomingVoiceCalling.name: 'آنے والی ویڈیو کالنگ',
   EnumLocale.txtIncomingAudioCalling.name: 'آنے والی آڈیو کالنگ',
-  EnumLocale.txtNoAccountFoundForThisEmail.name: "اس ای میل کے لیے کوئی اکاؤنٹ نہیں ملا",
-  EnumLocale.txtResetLinkSentToYourEmail.name: "آپ کے ای میل پر بھیجے گئے لنک کو دوبارہ ترتیب دیں۔",
+  EnumLocale.txtNoAccountFoundForThisEmail.name:
+      "اس ای میل کے لیے کوئی اکاؤنٹ نہیں ملا",
+  EnumLocale.txtResetLinkSentToYourEmail.name:
+      "آپ کے ای میل پر بھیجے گئے لنک کو دوبارہ ترتیب دیں۔",
   EnumLocale.txtForgetPasswordDescription.name:
       "آپ کو اپنے جی میل اکاؤنٹ پر پاس ورڈ بھول جانے کا لنک مل گیا ہوگا، اسے چیک کریں۔ اگر نہیں، تو اسپام سیکشن کو چیک کریں۔",
 };

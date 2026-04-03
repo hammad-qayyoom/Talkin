@@ -41,7 +41,7 @@ const StatisticsCard = () => {
     },
     {
       stats: metrics.totalTalkTopics || 0,
-      title: 'Total Talk Topics',
+      title: 'Total Categories',
       color: 'primary',
       icon: 'tabler-chalkboard'
     },

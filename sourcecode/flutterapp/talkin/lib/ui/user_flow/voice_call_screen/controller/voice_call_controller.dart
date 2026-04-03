@@ -196,7 +196,6 @@ class VoiceCallController extends GetxController {
   void startTimer() {
     startTime = DateTime.now();
     int elapsedSeconds = 0;
-    coinCutEveryOneMinute();
 
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       elapsedSeconds++;
@@ -207,11 +206,6 @@ class VoiceCallController extends GetxController {
       formattedTime =
           '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
       log('Start timer :: $formattedTime');
-
-      /// Every 60 seconds emit the coin deduction event
-      if (elapsedSeconds % 60 == 0) {
-        coinCutEveryOneMinute();
-      }
 
       update([Constant.idVideoCall]);
     });
@@ -230,22 +224,6 @@ class VoiceCallController extends GetxController {
 
     log('Call Duration :: $duration');
     log('Final Duration :: $finalDuration');
-  }
-
-  void coinCutEveryOneMinute() {
-    if (callerId == Database.loginUserId) {
-      SocketEmit.callCoinsDeducted(
-        callerId: callerId.toString(),
-        receiverId: receiverId.toString(),
-        callId: callId.toString(),
-        callType: callType.toString(),
-        callMode: callMode.toString(),
-        callerRole: callerRole.toString(),
-        receiverRole: receiverRole.toString(),
-      );
-
-      return;
-    }
   }
 
   onMicMute() {

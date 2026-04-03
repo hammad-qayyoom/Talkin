@@ -211,7 +211,7 @@ const ViewRecords = ({ userId }) => {
                 cell: ({ getValue }) => <Typography>{getValue() || '-'}</Typography>
             }),
             columnHelper.accessor('userCoin', {
-                header: 'User Coin',
+                header: 'User Session Credit',
                 cell: ({ getValue }) => <Typography>{`${getValue()?.toFixed(2)}`}</Typography>
             }),
             columnHelper.accessor('price', {
@@ -281,7 +281,7 @@ const ViewRecords = ({ userId }) => {
                         key={resetKey}
                         resetSignal={resetKey}
                         value={searchParams.get('search') || ''}
-                        placeholder='Search By Unique Id, Payment Gateway, Or Coins'
+                        placeholder='Search By Unique Id, Payment Gateway, Or Session Credits'
                         className='max-sm:is-full min-w-[370px]'
                     />
 

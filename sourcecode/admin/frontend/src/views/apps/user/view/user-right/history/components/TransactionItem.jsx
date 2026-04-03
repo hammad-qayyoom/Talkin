@@ -235,16 +235,16 @@ const TransactionItem = ({ transaction, transactionType }) => {
             </Stack>
             <Divider className='my-2' />
             <Box className='flex items-center gap-2 justify-start flex-wrap'>
-              <Chip variant='tonal' label={`User : ${transaction?.userCoin || '0'} Coins`} size='small' color='info' />
+              <Chip variant='tonal' label={`User : ${transaction?.userCoin || '0'} Session Credits`} size='small' color='info' />
               <Chip
                 variant='tonal'
-                label={`Expert : ${transaction?.listenerCoin || '0'} Coins`}
+                label={`Expert : ${transaction?.listenerCoin || '0'} Session Credits`}
                 size='small'
                 color='success'
               />
               <Chip
                 variant='tonal'
-                label={`Admin : ${transaction?.adminCoin || '0'} Coins`}
+                label={`Admin : ${transaction?.adminCoin || '0'} Session Credits`}
                 size='small'
                 color='warning'
               />
@@ -337,16 +337,16 @@ const TransactionItem = ({ transaction, transactionType }) => {
             </Stack>
             <Divider className='my-2' />
             <Box className='flex items-center gap-2 justify-start flex-wrap'>
-              <Chip variant='tonal' label={`User : ${transaction?.userCoin || '0'} Coins`} size='small' color='info' />
+              <Chip variant='tonal' label={`User : ${transaction?.userCoin || '0'} Session Credits`} size='small' color='info' />
               <Chip
                 variant='tonal'
-                label={`Expert : ${transaction?.listenerCoin || '0'} Coins`}
+                label={`Expert : ${transaction?.listenerCoin || '0'} Session Credits`}
                 size='small'
                 color='success'
               />
               <Chip
                 variant='tonal'
-                label={`Admin : ${transaction?.adminCoin || '0'} Coins`}
+                label={`Admin : ${transaction?.adminCoin || '0'} Session Credits`}
                 size='small'
                 color='warning'
               />
@@ -439,16 +439,16 @@ const TransactionItem = ({ transaction, transactionType }) => {
             </Stack>
             <Divider className='my-2' />
             <Box className='flex items-center gap-2 justify-start flex-wrap'>
-              <Chip variant='tonal' label={`User : ${transaction?.userCoin || '0'} Coins`} size='small' color='info' />
+              <Chip variant='tonal' label={`User : ${transaction?.userCoin || '0'} Session Credits`} size='small' color='info' />
               <Chip
                 variant='tonal'
-                label={`Expert : ${transaction?.listenerCoin || '0'} Coins`}
+                label={`Expert : ${transaction?.listenerCoin || '0'} Session Credits`}
                 size='small'
                 color='success'
               />
               <Chip
                 variant='tonal'
-                label={`Admin : ${transaction?.adminCoin || '0'} Coins`}
+                label={`Admin : ${transaction?.adminCoin || '0'} Session Credits`}
                 size='small'
                 color='warning'
               />
@@ -541,16 +541,16 @@ const TransactionItem = ({ transaction, transactionType }) => {
             </Stack>
             <Divider className='my-2' />
             <Box className='flex items-center gap-2 justify-start flex-wrap'>
-              <Chip variant='tonal' label={`User : ${transaction?.userCoin || '0'} Coins`} size='small' color='info' />
+              <Chip variant='tonal' label={`User : ${transaction?.userCoin || '0'} Session Credits`} size='small' color='info' />
               <Chip
                 variant='tonal'
-                label={`Expert : ${transaction?.listenerCoin || '0'} Coins`}
+                label={`Expert : ${transaction?.listenerCoin || '0'} Session Credits`}
                 size='small'
                 color='success'
               />
               <Chip
                 variant='tonal'
-                label={`Admin : ${transaction?.adminCoin || '0'} Coins`}
+                label={`Admin : ${transaction?.adminCoin || '0'} Session Credits`}
                 size='small'
                 color='warning'
               />
@@ -741,7 +741,7 @@ const TransactionItem = ({ transaction, transactionType }) => {
               color={transaction.isIncome ? 'success.main' : 'error.main'}
             >
               {transaction.isIncome ? '+' : '-'}
-              {transaction.userCoin} Coins
+              {transaction.userCoin} Session Credits
             </Typography>
 
             {/* <Chip variant='tonal' label={transaction?.duration} size='small' color='warning' sx={{ ml: 'auto' }} /> */}
@@ -796,7 +796,7 @@ const TransactionItem = ({ transaction, transactionType }) => {
                 color={transaction.isIncome ? 'success.main' : 'error.main'}
               >
                 {transaction.isIncome ? '+' : '-'}
-                {transaction.userCoin} Coins
+                {transaction.userCoin} Session Credits
               </Typography>
             </Box>
           </Box>

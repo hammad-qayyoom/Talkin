@@ -3,7 +3,7 @@ import { Divider } from '@mui/material'
 export const toolTipData = {
   loginBonus: {
     title: 'Login Bonus',
-    tooltip: 'Coins rewarded to users upon daily login.'
+    tooltip: 'Session Credits rewarded to users upon daily login.'
   },
   durationOfShorts: {
     title: 'Shorts Duration',
@@ -14,12 +14,12 @@ export const toolTipData = {
     tooltip: 'Time limit (in minutes) for PK battles.'
   },
   minCoinsToCashOut: {
-    title: 'Minimum Coins to Cash Out',
-    tooltip: 'Minimum coins a user needs to withdraw as cash.'
+    title: 'Minimum Session Credits to Cash Out',
+    tooltip: 'Minimum session credits a user needs to withdraw as cash.'
   },
   minCoinsForPayout: {
-    title: 'Minimum Coins for Payout',
-    tooltip: 'Minimum coins required for a payout request.'
+    title: 'Minimum Session Credits for Payout',
+    tooltip: 'Minimum session credits required for a payout request.'
   },
   userPrivacyPolicyUrl: {
     title: 'User Privacy Policy URL',
@@ -86,8 +86,8 @@ export const toolTipData = {
     tooltip: 'Per-minute coin cost for audio calls.'
   },
   dailyLoginBonusCoins: {
-    title: 'Login Bonus Coins',
-    tooltip: 'Fixed bonus coins for each login.'
+    title: 'Login Bonus Session Credits',
+    tooltip: 'Fixed bonus session credits for each login.'
   },
   adminCommissionPercent: {
     title: 'Admin Commission (%)',
@@ -270,12 +270,12 @@ export const toolTipData = {
   },
 
   minimumCoinsForConversion: {
-    title: 'Cash and Coin Ratio',
-    tooltip: 'This is ratio for converting coins to cash. For example, if set to 100, 100 coins equal 1 cash unit.'
+    title: 'Cash and Session Credit Ratio',
+    tooltip: 'This is ratio for converting session credits to cash. For example, if set to 100, 100 session credits equal 1 cash unit.'
   },
   minimumCoinsForPayout: {
-    title: 'Minimum Coins for Payout',
-    tooltip: 'Minimum coin threshold required for expert to request a payout.'
+    title: 'Minimum Session Credits for Payout',
+    tooltip: 'Minimum session credit threshold required for expert to request a payout.'
   },
   agencyMinPayout: {
     title: 'Agency Minimum Payout',

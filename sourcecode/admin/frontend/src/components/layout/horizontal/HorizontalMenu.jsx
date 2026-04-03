@@ -98,17 +98,17 @@ const HorizontalMenu = () => {
           </MenuItem>
 
           <MenuItem href='/talk-topics' icon={<i className='tabler-message-circle' />}>
-            Talk Topic
+            Category
           </MenuItem>
           <MenuItem href='/identity-proofs' icon={<i className='tabler-id' />}>
             Identity Proof
           </MenuItem>
         </SubMenu>
 
-        {/* PACKAGE*/}
-        <SubMenu label='Package'>
+        {/* SUBSCRIPTION */}
+        <SubMenu label='Subscription'>
           <MenuItem href='/coin-plans' icon={<i className='tabler-coins' />}>
-            Coin Plan
+            Subscription Plan
           </MenuItem>
           <MenuItem
             href='/coin-plan-history'
@@ -116,7 +116,7 @@ const HorizontalMenu = () => {
             activeUrl='/coin-plan-history'
             icon={<i className='tabler-history' />}
           >
-            Coin Plan History
+            Subscription History
           </MenuItem>
         </SubMenu>
 

@@ -69,7 +69,7 @@ export const resetGameAdminCoins = createAsyncThunk('gameHistory/resetGameAdminC
       }
     )
 
-    toast.success(response.data.message || 'Admin coins reset successfully')
+    toast.success(response.data.message || 'Admin session credits reset successfully')
 
     return response.data
   } catch (error) {

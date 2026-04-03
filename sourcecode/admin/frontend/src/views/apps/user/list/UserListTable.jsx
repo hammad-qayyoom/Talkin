@@ -440,7 +440,7 @@ const UserListTable = ({ breakpoint = 'lg' }) => {
         )
       }),
       columnHelper.accessor('coin', {
-        header: () => <div className=''>Coin</div>,
+        header: () => <div className=''>Session Credit</div>,
         cell: ({ row }) => (
           <Typography textTransform={'capitalize'} color='text.primary'>
             {row.original.coins || 0}
@@ -1056,7 +1056,7 @@ const UserListTable = ({ breakpoint = 'lg' }) => {
         error={deleteError}
       />
 
-      {/* Coin Adjustment Dialog */}
+      {/* Session Credit Adjustment Dialog */}
       <CoinUserDialog
         open={coinAdjustDialogOpen}
         onClose={() => {

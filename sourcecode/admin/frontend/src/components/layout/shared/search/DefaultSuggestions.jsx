@@ -37,7 +37,7 @@ const defaultSuggestions = [
         icon: 'tabler-device-ipad-question'
       },
       {
-        label: 'Talk Topic',
+        label: 'Category',
         href: '/talk-topics',
         icon: 'tabler-message-circle'
       },
@@ -49,15 +49,15 @@ const defaultSuggestions = [
     ]
   },
   {
-    sectionLabel: 'Package',
+    sectionLabel: 'Subscription',
     items: [
       {
-        label: 'Coin Plan',
+        label: 'Subscription Plan',
         href: '/coin-plans',
         icon: 'tabler-coins'
       },
       {
-        label: 'Coin Plan History',
+        label: 'Subscription History',
         href: '/coin-plan-history',
         icon: 'tabler-history'
       },

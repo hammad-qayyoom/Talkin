@@ -71,13 +71,13 @@ const HistoryTables = () => {
         case TRANSACTION_TYPES.PRIVATE_VIDEO_CALL:
           return 'Private Video Call'
         case TRANSACTION_TYPES.COIN_PLAN_PURCHASE:
-          return 'Coin Plan Purchase'
+          return 'Subscription Purchase'
         case TRANSACTION_TYPES.LOGIN_BONUS:
           return 'Login Bonus'
         case TRANSACTION_TYPES.ADMIN_ADD_COIN:
-          return 'Coin Add'
+          return 'Credits Added'
         case TRANSACTION_TYPES.ADMIN_DEDUCT_COIN:
-          return 'Coin Deduct'
+          return 'Credits Deducted'
 
         default:
           return 'Other'
@@ -380,7 +380,7 @@ const HistoryTables = () => {
                           color={transaction.isIncome ? 'success.main' : 'error.main'}
                         >
                           {transaction.isIncome ? '+' : '-'}
-                          {transaction.userCoin} Coins
+                          {transaction.userCoin} Session Credits
                         </Typography>
                       </Box>
                     </Box>
@@ -388,7 +388,7 @@ const HistoryTables = () => {
                     <Box sx={{ flexGrow: 1 }}>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                         <Box>
-                          <Typography variant='subtitle2'>Coin Plan Purchase</Typography>
+                          <Typography variant='subtitle2'>Subscription Purchase</Typography>
 
                           <Box display='flex' gap={2} alignItems='center'>
                             <Typography variant='caption' color='text.secondary'>
@@ -402,7 +402,7 @@ const HistoryTables = () => {
                             {/* <Chip  label={formatDuration(transaction.duration)} size='small' color='info' sx={{ ml: 'auto' }} /> */}
                           </Box>
                           <Typography variant='body2' sx={{ fontWeight: 600 }} color={'success.main'}>
-                            + {transaction.userCoin} Coins
+                            + {transaction.userCoin} Session Credits
                           </Typography>
                         </Box>
                       </Box>
@@ -566,7 +566,7 @@ const HistoryTables = () => {
             <CustomTabList onChange={handleTabChange} variant='scrollable' pill='true'>
               <Tab
                 value='coin'
-                label='Coin History'
+                label='Session Credit History'
                 icon={<i className='tabler-coin' />}
                 iconPosition='start'
                 className='ms-4'
@@ -574,7 +574,7 @@ const HistoryTables = () => {
               <Tab value='call' label='Call History' icon={<i className='tabler-phone' />} iconPosition='start' />
               <Tab
                 value='plan'
-                label='Coin Plan History'
+                label='Subscription History'
                 icon={<i className='tabler-shopping-cart' />}
                 iconPosition='start'
               />

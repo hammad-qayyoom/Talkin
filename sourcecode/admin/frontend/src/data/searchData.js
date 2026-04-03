@@ -119,27 +119,27 @@ const data = [
     section: 'Engagement'
   },
 
-  // === PACKAGE ===
+  // === SUBSCRIPTION ===
   {
     id: '17',
-    name: 'Coin Plans',
+    name: 'Subscription Plans',
     url: '/coin-plan',
     icon: 'tabler-coins',
-    section: 'Package'
+    section: 'Subscription'
   },
   {
     id: '18',
     name: 'VIP Plans',
     url: '/vip-plan',
     icon: 'tabler-vip',
-    section: 'Package'
+    section: 'Subscription'
   },
   {
     id: '19',
-    name: 'Coin Trader',
+    name: 'Session Credit Trader',
     url: '/coin-trader',
     icon: 'tabler-database-share',
-    section: 'Package'
+    section: 'Subscription'
   },
 
   // === WEALTH ===

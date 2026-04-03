@@ -15,6 +15,7 @@ import Divider from '@mui/material/Divider'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Grid from '@mui/material/Grid'
 import InputAdornment from '@mui/material/InputAdornment'
+import MenuItem from '@mui/material/MenuItem'
 import Switch from '@mui/material/Switch'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
@@ -64,7 +65,11 @@ const GeneralSettings = () => {
     androidAppVersion: '',
     iosAppVersion: '',
     androidAppLink: '',
-    iosAppLink: ''
+    iosAppLink: '',
+    sessionCommissionPercent: '',
+    monetizationMode: 'subscription_session_commission',
+    requireActiveSubscriptionForSessionBooking: false,
+    allowDirectPaidSessionBooking: true
   })
 
   const [privateKeyJson, setPrivateKeyJson] = useState('')
@@ -97,6 +102,10 @@ const GeneralSettings = () => {
         audioCallRatePrivate: settings.audioCallRatePrivate || 0,
         dailyLoginBonusCoins: settings.dailyLoginBonusCoins || 0,
         adminCommissionPercent: settings.adminCommissionPercent || 0,
+        sessionCommissionPercent: settings.sessionCommissionPercent || 0,
+        monetizationMode: settings.monetizationMode || 'subscription_session_commission',
+        requireActiveSubscriptionForSessionBooking: settings.requireActiveSubscriptionForSessionBooking || false,
+        allowDirectPaidSessionBooking: settings.allowDirectPaidSessionBooking !== false,
         allowBecomeHostOption: settings.allowBecomeHostOption || false,
         isApplicationLive: settings.isApplicationLive || false,
         isDemoContentEnabled: settings.isDemoContentEnabled || false,
@@ -130,7 +139,10 @@ const GeneralSettings = () => {
         'durationOfShorts',
         'pkEndTime',
         'minCoinsToCashOut',
-        'minCoinsForPayout'
+        'minCoinsForPayout',
+        'dailyLoginBonusCoins',
+        'adminCommissionPercent',
+        'sessionCommissionPercent'
       ].includes(field)
     ) {
       // Allow empty string or valid numbers
@@ -188,7 +200,8 @@ const GeneralSettings = () => {
     'videoCallRatePrivate',
     'audioCallRatePrivate',
     'dailyLoginBonusCoins',
-    'adminCommissionPercent'
+    'adminCommissionPercent',
+    'sessionCommissionPercent'
   ]
 
   const getUpdatedFields = () => {
@@ -400,6 +413,52 @@ const GeneralSettings = () => {
                   inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
                 }}
               />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='Session Commission Percent'
+                value={formData.sessionCommissionPercent || ''}
+                onChange={e => handleFieldChange('sessionCommissionPercent', e.target.value)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+                }}
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                select
+                label='Monetization Mode'
+                value={formData.monetizationMode || 'subscription_session_commission'}
+                onChange={e => handleFieldChange('monetizationMode', e.target.value)}
+              >
+                <MenuItem value='subscription_session_commission'>Subscription + Session Commission</MenuItem>
+                <MenuItem value='coin_per_minute'>Legacy Session Credit Per Minute (deprecated)</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item size={12}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', columnGap: 4 }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={Boolean(formData.requireActiveSubscriptionForSessionBooking)}
+                      onChange={e => handleFieldChange('requireActiveSubscriptionForSessionBooking', e.target.checked)}
+                    />
+                  }
+                  label='Require Active Subscription For Session Booking'
+                />
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={Boolean(formData.allowDirectPaidSessionBooking)}
+                      onChange={e => handleFieldChange('allowDirectPaidSessionBooking', e.target.checked)}
+                    />
+                  }
+                  label='Allow Direct Paid Session Booking'
+                />
+              </Box>
             </Grid>
             <Grid item size={6}>
               <TextField

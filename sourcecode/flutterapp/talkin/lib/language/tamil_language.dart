@@ -7,8 +7,10 @@ final Map<String, String> taIN = {
   EnumLocale.txtRegisterTitle3.name: "வீடியோ அழைப்பு",
   EnumLocale.txtRegisterSubTitle1.name:
       "அரட்டை, செய்திகள் மற்றும்\nஅவர்களுடன் இணைப்புகளை உருவாக்குவதற்கு\nஉலகம் முழுவதும் உள்ளவர்களுடன் நீங்கள் இணையலாம்.",
-  EnumLocale.txtRegisterSubTitle2.name: 'அந்நியர்களுடன் அரட்டையடித்து, ஒருவரையொருவர் நன்கு அறிந்துகொள்ளவும், நல்ல இணக்கத்தன்மையைப் பெறவும்.',
-  EnumLocale.txtRegisterSubTitle3.name: "உங்கள் வீடியோக்களையும் புகைப்படங்களையும்\nஉங்கள் நண்பர் மற்றும் இணைப்புகளுடன் பகிரலாம்.",
+  EnumLocale.txtRegisterSubTitle2.name:
+      'அந்நியர்களுடன் அரட்டையடித்து, ஒருவரையொருவர் நன்கு அறிந்துகொள்ளவும், நல்ல இணக்கத்தன்மையைப் பெறவும்.',
+  EnumLocale.txtRegisterSubTitle3.name:
+      "உங்கள் வீடியோக்களையும் புகைப்படங்களையும்\nஉங்கள் நண்பர் மற்றும் இணைப்புகளுடன் பகிரலாம்.",
   EnumLocale.txtEnterYourMail.name: "உங்கள் மின்னஞ்சல் ஐடியை உள்ளிடவும்",
   EnumLocale.txtEnterPassword.name: "உங்கள் கடவுச்சொல்லை உள்ளிடவும்",
   EnumLocale.txtCoinRechargeSuccess.name: "நாணயம் ரீசார்ஜ் வெற்றி",
@@ -31,10 +33,12 @@ final Map<String, String> taIN = {
   EnumLocale.txtPay.name: "செலுத்து",
   EnumLocale.txtRegister.name: "பதிவு செய்யுங்கள்",
   EnumLocale.desEnterEmail.name: "மின்னஞ்சலை உள்ளிடவும்",
-  EnumLocale.desEnterValidEmailAddress.name: "சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்",
+  EnumLocale.desEnterValidEmailAddress.name:
+      "சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்",
   EnumLocale.desEnterPassword.name: "கடவுச்சொல்லை உள்ளிடவும்",
   EnumLocale.desReEnterPassword.name: "மறு கடவுச்சொல்லை உள்ளிடவும்",
-  EnumLocale.desPasswordCharacters.name: "கடவுச்சொல் குறைந்தது 6 எழுத்துக்கள் நீளமாக இருக்க வேண்டும்",
+  EnumLocale.desPasswordCharacters.name:
+      "கடவுச்சொல் குறைந்தது 6 எழுத்துக்கள் நீளமாக இருக்க வேண்டும்",
   EnumLocale.desPasswordNotMatch.name: "கடவுச்சொல் பொருந்தவில்லை",
   EnumLocale.txtEnterName.name: "உங்கள் பெயரை உள்ளிடவும்",
   EnumLocale.desEnterFullName.name: "தயவுசெய்து முழுப் பெயரை உள்ளிடவும்",
@@ -45,11 +49,13 @@ final Map<String, String> taIN = {
   EnumLocale.desEnterMobile.name: "மொபைல் எண்ணை உள்ளிடவும்",
   EnumLocale.txtGetOtp.name: "OTP பெறவும்",
   EnumLocale.txtEnterOtp.name: "OTP ஐ உள்ளிடவும்",
-  EnumLocale.txtEnterOtpWithRegisterNumber.name: "OTPயை உள்ளிடவும்\nபதிவு எண்ணுடன்...",
+  EnumLocale.txtEnterOtpWithRegisterNumber.name:
+      "OTPயை உள்ளிடவும்\nபதிவு எண்ணுடன்...",
   EnumLocale.txtYouHaveNotGetOtp.name: "நீங்கள் OTP பெறவில்லை என்றால்?",
   EnumLocale.txtResendOtp.name: "OTP ஐ மீண்டும் அனுப்பவும்",
   EnumLocale.txtExitApp.name: 'பயன்பாட்டிலிருந்து வெளியேறு',
-  EnumLocale.desWantExitApp.name: 'இந்தப் பயன்பாட்டிலிருந்து வெளியேற விரும்புகிறீர்களா?',
+  EnumLocale.desWantExitApp.name:
+      'இந்தப் பயன்பாட்டிலிருந்து வெளியேற விரும்புகிறீர்களா?',
   EnumLocale.txtClose.name: 'மூடு',
   EnumLocale.txtHome.name: 'வீடு',
   EnumLocale.txtListener.name: 'கேட்பவர்',
@@ -58,7 +64,8 @@ final Map<String, String> taIN = {
   EnumLocale.txtFreeTalk.name: 'இலவச பேச்சு',
   EnumLocale.txtCalling.name: 'அழைப்பு',
   EnumLocale.txtHomeFastLalk.name: 'இப்போது ஃபாஸ்ட் லால்க், ஃபீல் பெட்டர்',
-  EnumLocale.txtHomeDescription.name: 'உங்களுக்குப் பிடித்தமான கேட்பவருடன் பேசுங்கள் மற்றும் இலகுவாகவும் பிரகாசமாகவும் உணருங்கள்!',
+  EnumLocale.txtHomeDescription.name:
+      'உங்களுக்குப் பிடித்தமான கேட்பவருடன் பேசுங்கள் மற்றும் இலகுவாகவும் பிரகாசமாகவும் உணருங்கள்!',
   EnumLocale.txtFindMoreListener.name: 'மேலும் கேட்பவரைக் கண்டறியவும்',
   EnumLocale.txtTopListener.name: 'சிறந்த கேட்போர்',
   EnumLocale.txtViewAll.name: 'அனைத்தையும் பார்க்கவும்',
@@ -83,8 +90,10 @@ final Map<String, String> taIN = {
   EnumLocale.txtTalkAbout.name: "பற்றி பேசுங்கள்",
   EnumLocale.txtSelectPaymentMethod.name: "கட்டண முறையைத் தேர்ந்தெடுக்கவும்",
   EnumLocale.txtAPPLanguage.name: "APP மொழி",
-  EnumLocale.txtSelectLanguageForApp.name: "பொருத்தமான கேட்பவர்களைக் காண ஒரு மொழியைத் தேர்ந்தெடுக்கவும்.",
-  EnumLocale.txtSelectTalkAboutForApp.name: "பயன்பாட்டில் உள்ள உள்ளடக்கத்திற்கான பேச்சு என்பதைத் தேர்ந்தெடுக்கவும்",
+  EnumLocale.txtSelectLanguageForApp.name:
+      "பொருத்தமான கேட்பவர்களைக் காண ஒரு மொழியைத் தேர்ந்தெடுக்கவும்.",
+  EnumLocale.txtSelectTalkAboutForApp.name:
+      "பயன்பாட்டில் உள்ள உள்ளடக்கத்திற்கான பேச்சு என்பதைத் தேர்ந்தெடுக்கவும்",
   EnumLocale.txtRecommendedProfile.name: "பரிந்துரைக்கப்பட்ட சுயவிவரம்",
   EnumLocale.txtSelectCallTypeNote.name:
       "அந்நியர்களிடமிருந்து பணப் பரிமாற்றம், லாட்டரி போன்ற மோசடியான தகவல்களை நம்ப வேண்டாம். கடவுச்சொற்கள், மொபைல் எண்கள், OTP போன்ற தனிப்பட்ட தகவல்களைப் பகிர வேண்டாம். தயவு செய்து நிர்வாணம், ஆபாசம் அல்லது ஆபாசமான செயல்களில் ஈடுபட வேண்டாம்.",
@@ -106,12 +115,16 @@ final Map<String, String> taIN = {
   EnumLocale.txtShareListenersApp.name: "கேட்பவர் பயன்பாட்டைப் பகிரவும்",
   EnumLocale.txtRatingDescription.name:
       "உங்கள் கருத்து மற்ற உறுப்பினர்களுக்கு அவர்களின் கேட்பவரைத் தேர்வுசெய்ய உதவும், எங்கள் சேவையை மேம்படுத்த எங்களுக்கு உதவும்!",
-  EnumLocale.txtShareListenersAppDescription.name: "நண்பர்கள் மற்றும் குடும்பத்தினருடன் பயன்பாட்டைப் பகிர்ந்து, மகிழ்ச்சியைப் பரப்புங்கள்...!",
+  EnumLocale.txtShareListenersAppDescription.name:
+      "நண்பர்கள் மற்றும் குடும்பத்தினருடன் பயன்பாட்டைப் பகிர்ந்து, மகிழ்ச்சியைப் பரப்புங்கள்...!",
   EnumLocale.txtShareAppNow.name: "இப்போது பயன்பாட்டைப் பகிரவும்",
   EnumLocale.txtCompleteTrailCall.name: "உங்கள் அழைப்புக்கு நன்றி",
-  EnumLocale.txtCompleteTrailCall1.name: "- நீங்கள் என்ன நினைக்கிறீர்கள் என்று எங்களிடம் கூறுங்கள்!",
-  EnumLocale.txtDidYouLikeService.name: "நீங்கள் கேட்பவர் சேவையை விரும்புகிறீர்களா?",
-  EnumLocale.txtAddFilderToYourFavListeners.name: "உங்களுக்குப் பிடித்தமான கேட்பவர்களுடன் ஆண்ட்ரூ ஃபில்டரைச் சேர்க்கவா?",
+  EnumLocale.txtCompleteTrailCall1.name:
+      "- நீங்கள் என்ன நினைக்கிறீர்கள் என்று எங்களிடம் கூறுங்கள்!",
+  EnumLocale.txtDidYouLikeService.name:
+      "நீங்கள் கேட்பவர் சேவையை விரும்புகிறீர்களா?",
+  EnumLocale.txtAddFilderToYourFavListeners.name:
+      "உங்களுக்குப் பிடித்தமான கேட்பவர்களுடன் ஆண்ட்ரூ ஃபில்டரைச் சேர்க்கவா?",
   EnumLocale.txtEditProfile.name: "சுயவிவரத்தைத் திருத்து",
   EnumLocale.txtMyWallet.name: "எனது பணப்பை",
   EnumLocale.txtHelpCenter.name: "உதவி மையம்",
@@ -132,14 +145,16 @@ final Map<String, String> taIN = {
   EnumLocale.txtSaveGender.name: "லிங்கத்தை சேமிக்கவும்",
   EnumLocale.txtChooseYourGender.name: "உங்கள் பாலினத்தைத் தேர்ந்தெடுக்கவும்",
   EnumLocale.txtSelectYourGender.name: "உங்கள் பாலினத்தைத் தேர்ந்தெடுக்கவும்",
-  EnumLocale.txtIfSelectWrongGenderLifeBan.name: "நீங்கள் தவறான பாலினத்தை தேர்ந்தெடுத்தால் =\nவாழ்க்கை தடை️🚫",
+  EnumLocale.txtIfSelectWrongGenderLifeBan.name:
+      "நீங்கள் தவறான பாலினத்தை தேர்ந்தெடுத்தால் =\nவாழ்க்கை தடை️🚫",
   EnumLocale.txtMale.name: "ஆண்",
   EnumLocale.txtFemale.name: "பெண்",
   EnumLocale.txtBecomeListener.name: "கேட்பவர் ஆகுங்கள்",
   EnumLocale.txtViewCoinHistory.name: "நாணய வரலாற்றைக் காண்க",
   EnumLocale.txtCurrentCoinBalance.name: "தற்போதைய நாணய இருப்பு",
   EnumLocale.txtWalletGuide.name: "பணப்பை வழிகாட்டி:-",
-  EnumLocale.txtAddCoinBalanceSelectPlan.name: "நாணய இருப்பைச் சேர்க்கவும், திட்டத்தைத் தேர்ந்தெடுக்கவும்:-",
+  EnumLocale.txtAddCoinBalanceSelectPlan.name:
+      "நாணய இருப்பைச் சேர்க்கவும், திட்டத்தைத் தேர்ந்தெடுக்கவும்:-",
   EnumLocale.txtMostPopularPlan.name: "மிகவும் பிரபலமான திட்டம்",
   EnumLocale.txtHistory.name: "வரலாறு",
   EnumLocale.txtPayment.name: "பணம் செலுத்துதல்",
@@ -151,22 +166,29 @@ final Map<String, String> taIN = {
   EnumLocale.txtFailed.name: "தோல்வியடைந்தது",
   EnumLocale.txtSuccess.name: "வெற்றி",
   EnumLocale.txtCallDuration.name: "அழைப்பு காலம்",
-  EnumLocale.txtManageYourAccountSettings.name: "உங்கள் கணக்கை நிர்வகிக்கவும்\nஅமைப்புகள்...",
+  EnumLocale.txtManageYourAccountSettings.name:
+      "உங்கள் கணக்கை நிர்வகிக்கவும்\nஅமைப்புகள்...",
   EnumLocale.txtLogoutApp.name: "வெளியேறு பயன்பாடு",
   EnumLocale.txtLogout.name: "வெளியேறு",
   EnumLocale.txtCancel.name: "ரத்து செய்",
-  EnumLocale.txtDesLogout.name: "உங்கள் கணக்கிலிருந்து நிச்சயமாக வெளியேற விரும்புகிறீர்களா?",
+  EnumLocale.txtDesLogout.name:
+      "உங்கள் கணக்கிலிருந்து நிச்சயமாக வெளியேற விரும்புகிறீர்களா?",
   EnumLocale.txtDeleteAccount.name: "கணக்கை நீக்கு",
   EnumLocale.txtNeedAnyHelpFAQ.name: "ஏதேனும் உதவி தேவை &\nகேள்விகள்...",
   EnumLocale.txtHaveAnIssue.name: "ஏதேனும் சிக்கல் உள்ளதா?",
-  EnumLocale.txtFrequentlyAskedQuestions.name: "அடிக்கடி கேட்கப்படும் கேள்விகள்",
-  EnumLocale.txtLetEngageMoreUserThrowShareApp.name: "மேலும் பயனர் வீசுதல் பகிர் பயன்பாட்டில் ஈடுபடுவோம்...",
+  EnumLocale.txtFrequentlyAskedQuestions.name:
+      "அடிக்கடி கேட்கப்படும் கேள்விகள்",
+  EnumLocale.txtLetEngageMoreUserThrowShareApp.name:
+      "மேலும் பயனர் வீசுதல் பகிர் பயன்பாட்டில் ஈடுபடுவோம்...",
   EnumLocale.txtRateUs.name: "எங்களை மதிப்பிடு",
-  EnumLocale.txtRateYourExperienceWithUs.name: "எங்களுடன் உங்கள் அனுபவத்தை மதிப்பிடுங்கள்!",
-  EnumLocale.txtYouWantToBecomeListener.name: "நீங்கள் கேட்பவராக ஆக விரும்புகிறீர்கள்...",
+  EnumLocale.txtRateYourExperienceWithUs.name:
+      "எங்களுடன் உங்கள் அனுபவத்தை மதிப்பிடுங்கள்!",
+  EnumLocale.txtYouWantToBecomeListener.name:
+      "நீங்கள் கேட்பவராக ஆக விரும்புகிறீர்கள்...",
   EnumLocale.txtListenerVerification.name: "கேட்போர் சரிபார்ப்பு",
   EnumLocale.txtExploreListener.name: "கேட்பவரை ஆராயுங்கள்",
-  EnumLocale.txtTakeControlOfYourPrivacyData.name: "உங்களைக் கட்டுப்படுத்துங்கள்\nதனியுரிமைத் தரவு...",
+  EnumLocale.txtTakeControlOfYourPrivacyData.name:
+      "உங்களைக் கட்டுப்படுத்துங்கள்\nதனியுரிமைத் தரவு...",
   EnumLocale.txtLocation.name: "இடம்",
   EnumLocale.txtBluetooth.name: "புளூடூத்",
   EnumLocale.txtMicrophone.name: "ஒலிவாங்கி",
@@ -186,27 +208,36 @@ final Map<String, String> taIN = {
   EnumLocale.txtRequestID.name: "கோரிக்கை ஐடி",
   EnumLocale.txtEnterYourAddress.name: "உங்கள் முகவரியை உள்ளிடவும்",
   EnumLocale.txtEnterYourAge.name: "உங்கள் வயதை உள்ளிடவும்",
-  EnumLocale.txtEnterYourExperience.name: "உங்கள் அனுபவத்தை உள்ளிடவும் (ஆண்டில்)",
+  EnumLocale.txtEnterYourExperience.name:
+      "உங்கள் அனுபவத்தை உள்ளிடவும் (ஆண்டில்)",
   EnumLocale.txtSUBMIT.name: "சமர்ப்பிக்கவும்",
-  EnumLocale.desWantDeleteAccount.name: "உங்கள் கணக்கை நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
+  EnumLocale.desWantDeleteAccount.name:
+      "உங்கள் கணக்கை நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
   EnumLocale.changeYourImage.name: "உங்கள் படத்தை மாற்றவும்",
   EnumLocale.txtTakeAphoto.name: "புகைப்படம் எடுங்கள்",
-  EnumLocale.txtChooseFromYourFile.name: "உங்கள் கோப்பிலிருந்து தேர்வு செய்யவும்",
+  EnumLocale.txtChooseFromYourFile.name:
+      "உங்கள் கோப்பிலிருந்து தேர்வு செய்யவும்",
   EnumLocale.txtNext.name: "அடுத்தது",
-  EnumLocale.txtPleaseSelectProfileImage.name: "சுயவிவரப் படத்தைத் தேர்ந்தெடுக்கவும் !!",
-  EnumLocale.txtPleaseEnterNickName.name: "தயவுசெய்து புனைப் பெயரை உள்ளிடவும் !!",
+  EnumLocale.txtPleaseSelectProfileImage.name:
+      "சுயவிவரப் படத்தைத் தேர்ந்தெடுக்கவும் !!",
+  EnumLocale.txtPleaseEnterNickName.name:
+      "தயவுசெய்து புனைப் பெயரை உள்ளிடவும் !!",
   EnumLocale.txtEnterNickName.name: "நிக் பெயரை உள்ளிடவும்",
   EnumLocale.txtPleaseEnterMobileNumber.name: "மொபைல் எண்ணை உள்ளிடவும் !!",
-  EnumLocale.txtPleaseSelectBirthDate.name: "பிறந்த தேதியைத் தேர்ந்தெடுக்கவும் !!",
-  EnumLocale.txtProfileUpdateSuccessfully.name: "சுயவிவரப் புதுப்பிப்பு வெற்றிகரமாக",
+  EnumLocale.txtPleaseSelectBirthDate.name:
+      "பிறந்த தேதியைத் தேர்ந்தெடுக்கவும் !!",
+  EnumLocale.txtProfileUpdateSuccessfully.name:
+      "சுயவிவரப் புதுப்பிப்பு வெற்றிகரமாக",
   EnumLocale.txtForgotPassword.name: "கடவுச்சொல் மறந்துவிட்டது",
-  EnumLocale.txtForgotYourPassword.name: "உங்கள் கடவுச்சொல்லை மறந்துவிட்டீர்கள்...",
+  EnumLocale.txtForgotYourPassword.name:
+      "உங்கள் கடவுச்சொல்லை மறந்துவிட்டீர்கள்...",
   EnumLocale.txtEnterMailMobileNumber.name: "அஞ்சல்/மொபைல் எண்ணை உள்ளிடவும்",
   EnumLocale.txtVerify.name: "சரிபார்க்கவும்",
   EnumLocale.txtCreatePassword.name: "கடவுச்சொல்லை உருவாக்கவும்",
   EnumLocale.txtForgotPassDescription.name:
       "உங்கள் கடவுச்சொல்லை மீட்டமைக்க கீழே உங்கள் மின்னஞ்சல் முகவரி அல்லது மொபைல் எண்ணை உள்ளிடவும். உங்கள் கணக்கை மீட்டெடுப்பதற்கு உதவ, சரிபார்ப்புக் குறியீட்டை உங்களுக்கு அனுப்புவோம்.",
-  EnumLocale.txtLongPressToEnableAudioRecording.name: "ஆடியோ பதிவை இயக்க நீண்ட நேரம் அழுத்தவும்",
+  EnumLocale.txtLongPressToEnableAudioRecording.name:
+      "ஆடியோ பதிவை இயக்க நீண்ட நேரம் அழுத்தவும்",
   EnumLocale.txtAudioRecording.name: "ஆடியோ பதிவு...",
   EnumLocale.txtPleaseAllowPermission.name: "அனுமதி வழங்கவும்!!",
   EnumLocale.txtHostCenterDescription.name:
@@ -215,7 +246,8 @@ final Map<String, String> taIN = {
       "உங்கள் தரவு தனியுரிமையை நாங்கள் மதிக்கிறோம். உங்கள் தனிப்பட்ட தகவல்கள் எவ்வாறு சேகரிக்கப்படுகின்றன, பயன்படுத்தப்படுகின்றன மற்றும் பாதுகாக்கப்படுகின்றன என்பதை அறிக.",
   EnumLocale.txtShareAppDes.name:
       "உங்கள் நண்பர்கள் மற்றும் குடும்பத்தினருடன் இந்தப் பயன்பாட்டைப் பகிரவும், இதன் மூலம் அவர்களும் இதன் தனித்துவமான அம்சங்களை அனுபவிக்க முடியும்.",
-  EnumLocale.txtAboutUsDes.name: "உங்களுக்கு சிறந்த சேவையை வழங்க நாங்கள் கடமைப்பட்டுள்ளோம். எங்கள் குழு மற்றும் எங்கள் பணி பற்றி மேலும் அறிக.",
+  EnumLocale.txtAboutUsDes.name:
+      "உங்களுக்கு சிறந்த சேவையை வழங்க நாங்கள் கடமைப்பட்டுள்ளோம். எங்கள் குழு மற்றும் எங்கள் பணி பற்றி மேலும் அறிக.",
   EnumLocale.txtPaymentMethod.name: "பணம் செலுத்தும் முறை",
   EnumLocale.txtListenerWithdrawDescription.name:
       "1. பிளாட்ஃபார்ம் நிர்ணயித்த குறைந்தபட்ச திரும்பப் பெறும் வரம்பை நீங்கள் அடைந்தவுடன், நீங்கள் சம்பாதித்த நாணயங்களை உண்மையான பணமாக திரும்பப் பெறலாம். உங்கள் திரும்பப் பெறும் கோரிக்கையைச் செயல்படுத்துவதில் தாமதத்தைத் தவிர்க்க, உங்கள் சுயவிவரம் மற்றும் கட்டண விவரங்கள் முழுமையாகச் சரிபார்க்கப்பட்டிருப்பதை உறுதிசெய்யவும்.",
@@ -242,9 +274,11 @@ final Map<String, String> taIN = {
   EnumLocale.txtAvailableCoinBalance.name: "கிடைக்கும் நாணய இருப்பு",
   EnumLocale.txtWithdrawalDetails.name: "திரும்பப் பெறுதல் விவரங்கள்:-",
   EnumLocale.txtEnterCoinAmount.name: "நாணயத்தின் அளவை உள்ளிடவும்",
-  EnumLocale.txtMinimumWithdrawCoin.name: "*குறைந்தபட்சம் திரும்பப் பெறும் நாணயம்:",
+  EnumLocale.txtMinimumWithdrawCoin.name:
+      "*குறைந்தபட்சம் திரும்பப் பெறும் நாணயம்:",
   EnumLocale.txtMyAmountBalance.name: "எனது இருப்புத் தொகை:",
-  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name: "உங்கள் திரும்பப் பெறக்கூடிய நாணயத் தொகையை இங்கே பெறுங்கள்...",
+  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
+      "உங்கள் திரும்பப் பெறக்கூடிய நாணயத் தொகையை இங்கே பெறுங்கள்...",
   EnumLocale.txtListenerDetails.name: "கேட்போர் விவரம்:-",
   EnumLocale.txtEnterIntroduction.name: "அறிமுகத்தை உள்ளிடவும்",
   EnumLocale.txtTalkLanguages.name: "பேச்சு மொழிகள்:-",
@@ -254,7 +288,8 @@ final Map<String, String> taIN = {
   EnumLocale.txtAvailableBalance.name: "இருப்பு உள்ளது",
   EnumLocale.txtSomeThingWentWrong.name: "ஏதோ தவறாகிவிட்டது !!",
   EnumLocale.txtYoumusthavesignup.name: "நீங்கள் பதிவு செய்திருக்க வேண்டும் !!",
-  EnumLocale.txtSelectIdentityProof.name: "அடையாளச் சான்றினைத் தேர்ந்தெடுக்கவும்",
+  EnumLocale.txtSelectIdentityProof.name:
+      "அடையாளச் சான்றினைத் தேர்ந்தெடுக்கவும்",
   EnumLocale.txtBackToHome.name: "வீட்டிற்குத் திரும்பு",
   EnumLocale.txtListenersName.name: "கேட்போர் பெயர்:",
   EnumLocale.txtRequestDate.name: "கோரிக்கை தேதி:",
@@ -264,10 +299,14 @@ final Map<String, String> taIN = {
   EnumLocale.txtAddress.name: "முகவரி:",
   EnumLocale.txtNOte.name: "குறிப்பு:",
   EnumLocale.txtPleaseFillProfile.name: "சுயவிவரத்தை நிரப்பவும்",
-  EnumLocale.txtPleaseEnterWithdrawCoin.name: "தயவுசெய்து WithdrawCoin ஐ உள்ளிடவும்",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name: "திரும்பப் பெறும் முறையைத் தேர்ந்தெடுக்கவும்",
-  EnumLocale.txtPleaseEnterAllPaymentDetails.name: "அனைத்து கட்டண விவரங்களையும் உள்ளிடவும்",
-  EnumLocale.txtSelectPaymentGateway.name: "கட்டண நுழைவாயிலைத் தேர்ந்தெடுக்கவும்",
+  EnumLocale.txtPleaseEnterWithdrawCoin.name:
+      "தயவுசெய்து Session Credit தொகையை உள்ளிடவும்",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name:
+      "திரும்பப் பெறும் முறையைத் தேர்ந்தெடுக்கவும்",
+  EnumLocale.txtPleaseEnterAllPaymentDetails.name:
+      "அனைத்து கட்டண விவரங்களையும் உள்ளிடவும்",
+  EnumLocale.txtSelectPaymentGateway.name:
+      "கட்டண நுழைவாயிலைத் தேர்ந்தெடுக்கவும்",
   EnumLocale.txtNumberOfCoin.name: "நாணயத்தின் எண்ணிக்கை:",
   EnumLocale.txtWithdrawalID.name: "திரும்பப் பெறுதல் ஐடி:",
   EnumLocale.txtTransactionID.name: "பரிவர்த்தனை ஐடி:",
@@ -281,8 +320,10 @@ final Map<String, String> taIN = {
   EnumLocale.txtPrivateAudioCallRate.name: "தனிப்பட்ட ஆடியோ அழைப்பு விகிதம்",
   EnumLocale.txtPaymentDetails.name: "கட்டண விவரங்கள்:",
   EnumLocale.txtAppRestart.name: "உங்கள் கேட்போர் கோரிக்கை ஏற்கப்படுகிறது",
-  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name: "திரும்பப் பெறுவதற்கு பயனரிடம் போதிய நிதி இல்லை",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
+  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
+      "திரும்பப் பெறுவதற்கு பயனரிடம் போதிய நிதி இல்லை",
+  EnumLocale
+          .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
       "திரும்பப் பெற கோரப்பட்ட நாணயம் நிர்வாகியால் குறிப்பிடப்பட்டதை விட அதிகமாக இருக்க வேண்டும்",
   EnumLocale.txtSkip.name: "தவிர்க்கவும்",
   EnumLocale.txtHostHomeDescription.name:
@@ -294,7 +335,8 @@ final Map<String, String> taIN = {
       "கேட்பவர்களுடன் நீங்கள் பேச வசதியாக இருக்கும் மொழிகளைத் தேர்வு செய்யவும். அந்த மொழிகளில் ஆதரவு தேவைப்படும் சரியான நபர்களுடன் உங்களை இணைக்க இது எங்களுக்கு உதவுகிறது.",
   EnumLocale.txtSelectTopic.name:
       "நீங்கள் நம்பிக்கையுடன் பேசும் தலைப்புகளைத் தேர்ந்தெடுக்கவும். குறிப்பிட்ட பகுதிகளில் ஆதரவைத் தேடும் பயனர்களுடன் உங்களைப் பொருத்த இவை உதவும்.",
-  EnumLocale.txtSureClearNotification.name: "எல்லா அறிவிப்புகளையும் அழிக்க விரும்புகிறீர்களா?",
+  EnumLocale.txtSureClearNotification.name:
+      "எல்லா அறிவிப்புகளையும் அழிக்க விரும்புகிறீர்களா?",
   EnumLocale.txtSure.name: "நிச்சயமாக",
   EnumLocale.txtIntroduction.name: "அறிமுகம்",
   EnumLocale.txtTryAgain.name: "மீண்டும் முயற்சிக்கவும்",
@@ -304,14 +346,19 @@ final Map<String, String> taIN = {
       "உங்களிடம் ஏதேனும் கேள்விகள் இருந்தால் அல்லது ஏதேனும் சிக்கல்களை எதிர்கொண்டால், நாங்கள் உதவ இங்கே இருக்கிறோம்! கீழே அடிக்கடி கேட்கப்படும் கேள்விகளைப் பார்க்கவும் அல்லது தனிப்பயனாக்கப்பட்ட உதவிக்கு எங்கள் ஆதரவுக் குழுவைத் தொடர்பு கொள்ளவும்.",
   EnumLocale.txtBecomeHostDescription.name:
       "யாராவது பேச வேண்டிய பயனர்களுக்கு ஆதரவு, வழிகாட்டுதல் அல்லது வெறுமனே கேட்கும் காதுகளை வழங்குவதன் மூலம் கேட்போர் முக்கிய பங்கு வகிக்கின்றனர். நீங்கள் அனுதாபமாகவும், பொறுமையாகவும், மற்றவர்களுக்கு உதவத் தயாராகவும் இருந்தால், கேட்பவராக மாறுவது நேர்மறையான தாக்கத்தை ஏற்படுத்துவதற்கான சரியான வழியாகும்.",
-  EnumLocale.txtListenerReqSentSuccessfully.name: "கேட்போர் கோரிக்கை வெற்றிகரமாக அனுப்பப்பட்டது....",
+  EnumLocale.txtListenerReqSentSuccessfully.name:
+      "கேட்போர் கோரிக்கை வெற்றிகரமாக அனுப்பப்பட்டது....",
   EnumLocale.txtSearchLanguage.name: "தேடல் மொழி...",
-  EnumLocale.txtSelectTalkaboutTxt.name: "பயன்பாட்டில் உள்ள உள்ளடக்கத்திற்கான பேச்சு என்பதைத் தேர்ந்தெடுக்கவும்.",
-  EnumLocale.txtSelectAppLanguageTxt.name: "உங்களுக்கு விருப்பமான பயன்பாட்டு மொழியைத் தேர்ந்தெடுக்கவும்.",
+  EnumLocale.txtSelectTalkaboutTxt.name:
+      "பயன்பாட்டில் உள்ள உள்ளடக்கத்திற்கான பேச்சு என்பதைத் தேர்ந்தெடுக்கவும்.",
+  EnumLocale.txtSelectAppLanguageTxt.name:
+      "உங்களுக்கு விருப்பமான பயன்பாட்டு மொழியைத் தேர்ந்தெடுக்கவும்.",
   EnumLocale.txtHostVerificationFillForm.name:
       "சரியான விவரங்களுடன் படிவத்தைப் பூர்த்தி செய்யவும். முக்கியமான புதுப்பிப்புகள் மற்றும் சரிபார்ப்பு முடிவுகளைப் பெற உங்கள் சரியான மின்னஞ்சல் ஐடியை உள்ளிடவும். தொடர்வதற்கு முன் அனைத்து புலங்களும் சரியாக நிரப்பப்பட்டிருப்பதை உறுதி செய்யவும்.",
-  EnumLocale.txtUserName.name: "பயன்பாட்டில் உள்ள உள்ளடக்கத்திற்கான பேச்சு என்பதைத் தேர்ந்தெடுக்கவும்.",
-  EnumLocale.txtUserDetails.name: "உங்களுக்கு விருப்பமான பயன்பாட்டு மொழியைத் தேர்ந்தெடுக்கவும்.",
+  EnumLocale.txtUserName.name:
+      "பயன்பாட்டில் உள்ள உள்ளடக்கத்திற்கான பேச்சு என்பதைத் தேர்ந்தெடுக்கவும்.",
+  EnumLocale.txtUserDetails.name:
+      "உங்களுக்கு விருப்பமான பயன்பாட்டு மொழியைத் தேர்ந்தெடுக்கவும்.",
   EnumLocale.txtUserNickName.name:
       "சரியான விவரங்களுடன் படிவத்தைப் பூர்த்தி செய்யவும். முக்கியமான புதுப்பிப்புகள் மற்றும் சரிபார்ப்பு முடிவுகளைப் பெற உங்கள் சரியான மின்னஞ்சல் ஐடியை உள்ளிடவும். தொடர்வதற்கு முன் அனைத்து புலங்களும் சரியாக நிரப்பப்பட்டிருப்பதை உறுதி செய்யவும்.",
   EnumLocale.txtGender.name: "பயனர் பெயர்",
@@ -351,22 +398,29 @@ final Map<String, String> taIN = {
   EnumLocale.txtAgreePrivacyPolicy.name: 'உள்வரும் ஆடியோ அழைப்பு....',
   EnumLocale.txtPrivacyPolicy.name: 'பின்னூட்டம்',
   EnumLocale.txtListenerAvailableForPrivateVideoCall.name: 'இது ஒரு போட்டி!',
-  EnumLocale.txtListenerAvailableForPrivateAudioCall.name: 'நான் ஒப்புக்கொள்கிறேன்',
-  EnumLocale.txtListenerDisableForPrivateVideoCall.name: 'தனிப்பட்ட ஆடியோ அழைப்பிற்கு கேட்பவர் கிடைக்கும்.',
-  EnumLocale.txtListenerDisableForPrivateAudioCall.name: 'ரேண்டம் வீடியோ அழைப்பிற்கு கேட்பவர் கிடைக்கும்.',
+  EnumLocale.txtListenerAvailableForPrivateAudioCall.name:
+      'நான் ஒப்புக்கொள்கிறேன்',
+  EnumLocale.txtListenerDisableForPrivateVideoCall.name:
+      'தனிப்பட்ட ஆடியோ அழைப்பிற்கு கேட்பவர் கிடைக்கும்.',
+  EnumLocale.txtListenerDisableForPrivateAudioCall.name:
+      'ரேண்டம் வீடியோ அழைப்பிற்கு கேட்பவர் கிடைக்கும்.',
   EnumLocale.txtEarpiece.name: 'காதணி',
   EnumLocale.txtEnterProperValue.name: 'சரியான மதிப்பை உள்ளிடவும்',
-  EnumLocale.txtYourHostRequestSentSuccessfully.name: 'உங்கள் ஹோஸ்ட் கோரிக்கை வெற்றிகரமாக அனுப்பப்பட்டது',
+  EnumLocale.txtYourHostRequestSentSuccessfully.name:
+      'உங்கள் ஹோஸ்ட் கோரிக்கை வெற்றிகரமாக அனுப்பப்பட்டது',
   EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
       'உங்கள் கோரிக்கை சமர்ப்பிக்கப்பட்டது. நாங்கள் அதை மதிப்பாய்வு செய்து அங்கீகரிக்கும் வரை காத்திருக்கவும்.',
   EnumLocale.txtViewRequest.name: 'கோரிக்கையைப் பார்க்கவும்',
-  EnumLocale.txtDEmoListenerText.name: "அச்சச்சோ! உங்களுக்கு அனுமதி இல்லை.இது டெமோ உள்நுழைவு",
+  EnumLocale.txtDEmoListenerText.name:
+      "அச்சச்சோ! உங்களுக்கு அனுமதி இல்லை.இது டெமோ உள்நுழைவு",
   EnumLocale.txtVideoCalling.name: "வீடியோ அழைப்பு",
   EnumLocale.txtAudioCalling.name: "ஆடியோ அழைப்பு",
   EnumLocale.txtIncomingVoiceCalling.name: 'உள்வரும் வீடியோ அழைப்பு',
   EnumLocale.txtIncomingAudioCalling.name: 'உள்வரும் ஆடியோ அழைப்பு',
-  EnumLocale.txtNoAccountFoundForThisEmail.name: "இந்த மின்னஞ்சலுக்கான கணக்கு எதுவும் இல்லை",
-  EnumLocale.txtResetLinkSentToYourEmail.name: "உங்கள் மின்னஞ்சலுக்கு அனுப்பப்பட்ட இணைப்பை மீட்டமைக்கவும்",
+  EnumLocale.txtNoAccountFoundForThisEmail.name:
+      "இந்த மின்னஞ்சலுக்கான கணக்கு எதுவும் இல்லை",
+  EnumLocale.txtResetLinkSentToYourEmail.name:
+      "உங்கள் மின்னஞ்சலுக்கு அனுப்பப்பட்ட இணைப்பை மீட்டமைக்கவும்",
   EnumLocale.txtForgetPasswordDescription.name:
       "உங்கள் ஜிமெயில் கணக்கில் கடவுச்சொல் மறந்த இணைப்பைப் பெற்றிருக்க வேண்டும், அதைச் சரிபார்க்கவும். இல்லையெனில், ஸ்பேம் பகுதியைச் சரிபார்க்கவும்.",
 };

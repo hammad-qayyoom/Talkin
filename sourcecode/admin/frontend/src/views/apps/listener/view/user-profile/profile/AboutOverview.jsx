@@ -68,7 +68,7 @@ const AboutOverview = ({ data }) => {
                 <div className='flex items-center gap-2'>
                   <i className='tabler-coin' />
                   <div className='flex items-center flex-wrap gap-2'>
-                    <Typography className='font-medium'>Coin :</Typography>
+                    <Typography className='font-medium'>Session Credits :</Typography>
                     <Typography> {userDetails?.currentCoinBalance || '0'}</Typography>
                   </div>
                 </div>
@@ -91,7 +91,7 @@ const AboutOverview = ({ data }) => {
                   <div className='flex items-center gap-2'>
                     <i className='tabler-brand-kako-talk' />
                     <div className=''>
-                      <Typography className='font-medium'>Talk Topics :</Typography>
+                      <Typography className='font-medium'>Categories :</Typography>
                     </div>
                   </div>
                   <div className='flex items-center flex-wrap gap-2 mt-3'>
@@ -196,7 +196,7 @@ const AboutOverview = ({ data }) => {
             <CardContent className='flex flex-col gap-6'>
               <div className='flex flex-col gap-4'>
                 <Typography className='uppercase' variant='body2' color='text.disabled'>
-                  Call Rates (in Coins)
+                  Call Rates (Per Session)
                 </Typography>
 
                 <div className='flex items-center gap-2'>
@@ -345,7 +345,7 @@ const AboutOverview = ({ data }) => {
                 <div className='flex items-center gap-2'>
                   <i className='tabler-coin' />
                   <div className='flex items-center flex-wrap gap-2'>
-                    <Typography className='font-medium'>Coin :</Typography>
+                    <Typography className='font-medium'>Session Credits :</Typography>
                     <Typography> {userDetails?.currentCoinBalance || '0'}</Typography>
                   </div>
                 </div>
@@ -366,7 +366,7 @@ const AboutOverview = ({ data }) => {
                 <div className='flex items-center gap-2'>
                   <i className='tabler-stars' />
                   <div className='flex items-center flex-wrap gap-2'>
-                    <Typography className='font-medium'>Current Coin :</Typography>
+                    <Typography className='font-medium'>Current Session Credits :</Typography>
                     <Typography> {userDetails?.currentCoinBalance || 0}</Typography>
                   </div>
                 </div>
@@ -425,7 +425,7 @@ const AboutOverview = ({ data }) => {
                   <div className='flex items-center gap-2'>
                     <i className='tabler-brand-kako-talk' />
                     <div className=''>
-                      <Typography className='font-medium'>Talk Topics :</Typography>
+                      <Typography className='font-medium'>Categories :</Typography>
                     </div>
                   </div>
                   <div className='flex items-center flex-wrap gap-2 mt-3'>
@@ -503,7 +503,7 @@ const AboutOverview = ({ data }) => {
             <CardContent className='flex flex-col gap-6'>
               <div className='flex flex-col gap-4'>
                 <Typography className='uppercase' variant='body2' color='text.disabled'>
-                  Call Rates (in Coins)
+                  Call Rates (Per Session)
                 </Typography>
 
                 <div className='flex items-center gap-2'>

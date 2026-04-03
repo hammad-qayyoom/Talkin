@@ -6,10 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/services/permission_handler/permission_handler.dart';
 import 'package:talk_in/socket/socket_emit.dart';
-import 'package:talk_in/ui/host_flow/host_home_screen/api/host_coin_api.dart';
-import 'package:talk_in/ui/host_flow/host_home_screen/model/listener_coin_model.dart';
-import 'package:talk_in/ui/user_flow/home_screen/api/user_coin_api.dart';
-import 'package:talk_in/ui/user_flow/home_screen/model/user_coin_model.dart';
 import 'package:talk_in/ui/user_flow/my_wallet_screen/model/fetch_coin_plan.dart';
 import 'package:talk_in/utils/constant.dart';
 import 'package:talk_in/utils/database.dart';
@@ -58,8 +54,6 @@ class VideoCallController extends GetxController {
   Widget? remoteView;
   int? remoteViewID;
   int? localViewID;
-  UserCoinModel? userCoinModel;
-  ListenerCoinModel? listenerCoinModel;
   String? publishedStreamId;
   String? playingStreamId;
 
@@ -90,17 +84,6 @@ class VideoCallController extends GetxController {
     } else {
       Utils.showLog("Video call login failed: ${loginRoomResult.errorCode}");
     }
-
-    userCoinModel = await UserCoinApi.callApi();
-    Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
-    update([Constant.idCoinUpdate]);
-
-    Utils.showLog("user coin ::::::::::::::::::::::::${Database.userCoin}");
-    Utils.showLog(
-        "user coin ::::::::::::::::::::::::${userCoinModel?.coin.toString()}");
-
-    listenerCoinModel = await HostCoinApi.callApi();
-    Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
   }
 
   Future<bool> permissionManager() async {
@@ -224,20 +207,6 @@ class VideoCallController extends GetxController {
     startTime = DateTime.now();
     int elapsedSeconds = 0;
 
-    coinCutEveryOneMinute();
-    if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
-      listenerCoinModel = await HostCoinApi.callApi();
-      Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
-    } else {
-      userCoinModel = await UserCoinApi.callApi();
-      Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
-      update([Constant.idCoinUpdate]);
-
-      Utils.showLog("user init ::::::::::::::::::::::::${Database.userCoin}");
-      Utils.showLog(
-          "user init ::::::::::::::::::::::::${userCoinModel?.coin.toString()}");
-    }
-
     update();
 
     timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
@@ -249,23 +218,6 @@ class VideoCallController extends GetxController {
       formattedTime =
           '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
       log('Start timer :: $formattedTime');
-
-      /// Every 60 seconds emit the coin deduction event
-      if (elapsedSeconds % 60 == 0) {
-        coinCutEveryOneMinute();
-
-        if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
-          listenerCoinModel = await HostCoinApi.callApi();
-          Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
-        } else {
-          userCoinModel = await UserCoinApi.callApi();
-          Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
-        }
-
-        log("user coin saved database  ${Database.userCoin}");
-        log("listener coin saved database  ${Database.listenerCoin}");
-        update();
-      }
 
       update([Constant.idVideoCall]);
     });
@@ -548,27 +500,6 @@ class VideoCallController extends GetxController {
 
   Future<void> stopPublish() async {
     return ZegoExpressEngine.instance.stopPublishingStream();
-  }
-
-  void coinCutEveryOneMinute() async {
-    Utils.showLog('coinCutEveryOneMinute callerId >>>>> $callerId');
-    Utils.showLog(
-        'coinCutEveryOneMinute Database.loginUserId >>>>> ${Database.fetchLoginUserProfileModel?.user?.id}');
-
-    if (callerId == Database.loginUserId) {
-      SocketEmit.callCoinsDeducted(
-        callerId: callerId.toString(),
-        receiverId: receiverId.toString(),
-        callId: callId.toString(),
-        callType: callType.toString(),
-        callMode: callMode.toString(),
-        callerRole: callerRole.toString(),
-        receiverRole: receiverRole.toString(),
-      );
-
-      update();
-      return;
-    }
   }
 
   void endCallDueToBackground() {

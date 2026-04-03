@@ -5,9 +5,12 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtRegisterTitle1.name: "TAFUTA",
   EnumLocale.txtRegisterTitle2.name: "CHAT",
   EnumLocale.txtRegisterTitle3.name: "WITO WA VIDEO",
-  EnumLocale.txtRegisterSubTitle1.name: "Unaweza kuungana na watu kote\nlimwenguni kote kwa kufanya gumzo, ujumbe na\nkuunganisha nao.",
-  EnumLocale.txtRegisterSubTitle2.name: 'Piga gumzo na watu usiowajua ili kujuana\note zaidi na kuwa na\nutangamano mzuri.',
-  EnumLocale.txtRegisterSubTitle3.name: "Unaweza kushiriki video na picha zako\nna rafiki na watu unaowasiliana nao.",
+  EnumLocale.txtRegisterSubTitle1.name:
+      "Unaweza kuungana na watu kote\nlimwenguni kote kwa kufanya gumzo, ujumbe na\nkuunganisha nao.",
+  EnumLocale.txtRegisterSubTitle2.name:
+      'Piga gumzo na watu usiowajua ili kujuana\note zaidi na kuwa na\nutangamano mzuri.',
+  EnumLocale.txtRegisterSubTitle3.name:
+      "Unaweza kushiriki video na picha zako\nna rafiki na watu unaowasiliana nao.",
   EnumLocale.txtEnterYourMail.name: "Weka Kitambulisho chako cha Barua Pepe",
   EnumLocale.txtEnterPassword.name: "Weka Nenosiri Lako",
   EnumLocale.txtCoinRechargeSuccess.name: "Mafanikio ya kuchaji sarafu",
@@ -33,7 +36,8 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.desEnterValidEmailAddress.name: "Tafadhali weka barua pepe halali",
   EnumLocale.desEnterPassword.name: "Tafadhali weka nenosiri",
   EnumLocale.desReEnterPassword.name: "Tafadhali weka nenosiri upya",
-  EnumLocale.desPasswordCharacters.name: "Nenosiri lazima liwe na urefu wa angalau vibambo 6",
+  EnumLocale.desPasswordCharacters.name:
+      "Nenosiri lazima liwe na urefu wa angalau vibambo 6",
   EnumLocale.desPasswordNotMatch.name: "Nenosiri halilingani",
   EnumLocale.txtEnterName.name: "Ingiza jina lako",
   EnumLocale.desEnterFullName.name: "Tafadhali weka jina kamili",
@@ -44,7 +48,8 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.desEnterMobile.name: "Tafadhali weka nambari ya simu",
   EnumLocale.txtGetOtp.name: "Pata OTP",
   EnumLocale.txtEnterOtp.name: "Ingiza OTP",
-  EnumLocale.txtEnterOtpWithRegisterNumber.name: "Weka OTP\nKwa Nambari ya Usajili...",
+  EnumLocale.txtEnterOtpWithRegisterNumber.name:
+      "Weka OTP\nKwa Nambari ya Usajili...",
   EnumLocale.txtYouHaveNotGetOtp.name: "Ikiwa hujapata OTP?",
   EnumLocale.txtResendOtp.name: "Tuma tena OTP",
   EnumLocale.txtExitApp.name: 'Ondoka kwenye Programu',
@@ -57,7 +62,8 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtFreeTalk.name: 'MAZUNGUMZO BURE',
   EnumLocale.txtCalling.name: 'Kupiga simu',
   EnumLocale.txtHomeFastLalk.name: 'Sasa Maziwa Haraka, Jisikie Bora',
-  EnumLocale.txtHomeDescription.name: 'Zungumza na Msikilizaji Umpendaye na ujisikie mwepesi na angavu zaidi!',
+  EnumLocale.txtHomeDescription.name:
+      'Zungumza na Msikilizaji Umpendaye na ujisikie mwepesi na angavu zaidi!',
   EnumLocale.txtFindMoreListener.name: 'Tafuta Msikilizaji Zaidi',
   EnumLocale.txtTopListener.name: 'Wasikilizaji Maarufu',
   EnumLocale.txtViewAll.name: 'Tazama Zote',
@@ -82,8 +88,10 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtTalkAbout.name: "Zungumza Kuhusu",
   EnumLocale.txtSelectPaymentMethod.name: "Chagua Njia ya Kulipa",
   EnumLocale.txtAPPLanguage.name: "Lugha ya APP",
-  EnumLocale.txtSelectLanguageForApp.name: "Chagua lugha ili kuona wasikilizaji wanaolingana.",
-  EnumLocale.txtSelectTalkAboutForApp.name: "Chagua mazungumzo kuhusu maudhui Katika programu",
+  EnumLocale.txtSelectLanguageForApp.name:
+      "Chagua lugha ili kuona wasikilizaji wanaolingana.",
+  EnumLocale.txtSelectTalkAboutForApp.name:
+      "Chagua mazungumzo kuhusu maudhui Katika programu",
   EnumLocale.txtRecommendedProfile.name: "Wasifu Unaopendekezwa",
   EnumLocale.txtSelectCallTypeNote.name:
       "Tafadhali usiamini taarifa za ulaghai kama vile uhamisho wa pesa, bahati nasibu n.k kutoka kwa wageni. Tafadhali usishiriki taarifa zozote za kibinafsi kama vile nenosiri, nambari za simu, otp n.k. Tafadhali usijihusishe na uchi, ponografia au vitendo vyovyote vichafu.",
@@ -105,12 +113,14 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtShareListenersApp.name: "Shiriki Programu ya Msikilizaji",
   EnumLocale.txtRatingDescription.name:
       "Maoni Yako yatawasaidia washiriki wengine kuchagua Msikilizaji wao vyema zaidi kutusaidia kuboresha huduma zetu!",
-  EnumLocale.txtShareListenersAppDescription.name: "Shiriki Programu na Marafiki na Familia na Ueneze Furaha...!",
+  EnumLocale.txtShareListenersAppDescription.name:
+      "Shiriki Programu na Marafiki na Familia na Ueneze Furaha...!",
   EnumLocale.txtShareAppNow.name: "Shiriki Programu Sasa",
   EnumLocale.txtCompleteTrailCall.name: "Asante kwa Simu yako na",
   EnumLocale.txtCompleteTrailCall1.name: "- Tuambie Unachofikiria!",
   EnumLocale.txtDidYouLikeService.name: "Je, ulipenda huduma ya Msikilizaji?",
-  EnumLocale.txtAddFilderToYourFavListeners.name: "Ungependa kuongeza Andrew Filder kwa Wasikilizaji Unayopenda?",
+  EnumLocale.txtAddFilderToYourFavListeners.name:
+      "Ungependa kuongeza Andrew Filder kwa Wasikilizaji Unayopenda?",
   EnumLocale.txtEditProfile.name: "Hariri Wasifu",
   EnumLocale.txtMyWallet.name: "Mkoba Wangu",
   EnumLocale.txtHelpCenter.name: "Kituo cha Usaidizi",
@@ -131,14 +141,16 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtSaveGender.name: "HIFADHI JINSIA",
   EnumLocale.txtChooseYourGender.name: "Chagua Jinsia yako",
   EnumLocale.txtSelectYourGender.name: "Chagua Jinsia yako",
-  EnumLocale.txtIfSelectWrongGenderLifeBan.name: "Ukichagua Jinsia Isiyo sahihi =\nMarufuku ya Maisha🚫",
+  EnumLocale.txtIfSelectWrongGenderLifeBan.name:
+      "Ukichagua Jinsia Isiyo sahihi =\nMarufuku ya Maisha🚫",
   EnumLocale.txtMale.name: "Mwanaume",
   EnumLocale.txtFemale.name: "Kike",
   EnumLocale.txtBecomeListener.name: "Kuwa Msikilizaji",
   EnumLocale.txtViewCoinHistory.name: "Tazama Historia ya Sarafu",
   EnumLocale.txtCurrentCoinBalance.name: "Salio la Sarafu la Sasa",
   EnumLocale.txtWalletGuide.name: "Mwongozo wa Wallet :-",
-  EnumLocale.txtAddCoinBalanceSelectPlan.name: "Ongeza Salio la Sarafu, Chagua Mpango :-",
+  EnumLocale.txtAddCoinBalanceSelectPlan.name:
+      "Ongeza Salio la Sarafu, Chagua Mpango :-",
   EnumLocale.txtMostPopularPlan.name: "Mpango maarufu zaidi",
   EnumLocale.txtHistory.name: "Historia",
   EnumLocale.txtPayment.name: "Malipo",
@@ -150,22 +162,28 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtFailed.name: "Imeshindwa",
   EnumLocale.txtSuccess.name: "Mafanikio",
   EnumLocale.txtCallDuration.name: "Muda wa Simu",
-  EnumLocale.txtManageYourAccountSettings.name: "Dhibiti Akaunti Yako\nMipangilio...",
+  EnumLocale.txtManageYourAccountSettings.name:
+      "Dhibiti Akaunti Yako\nMipangilio...",
   EnumLocale.txtLogoutApp.name: "Ondoka kwa Programu",
   EnumLocale.txtLogout.name: "Ondoka",
   EnumLocale.txtCancel.name: "Ghairi",
-  EnumLocale.txtDesLogout.name: "Je, una uhakika unataka kuondoka kwenye akaunti yako?",
+  EnumLocale.txtDesLogout.name:
+      "Je, una uhakika unataka kuondoka kwenye akaunti yako?",
   EnumLocale.txtDeleteAccount.name: "Futa Akaunti",
-  EnumLocale.txtNeedAnyHelpFAQ.name: "Unahitaji Usaidizi Wowote &\nMaswali Yanayoulizwa Mara kwa Mara...",
+  EnumLocale.txtNeedAnyHelpFAQ.name:
+      "Unahitaji Usaidizi Wowote &\nMaswali Yanayoulizwa Mara kwa Mara...",
   EnumLocale.txtHaveAnIssue.name: "Una Tatizo?",
-  EnumLocale.txtFrequentlyAskedQuestions.name: "Maswali Yanayoulizwa Mara Kwa Mara",
-  EnumLocale.txtLetEngageMoreUserThrowShareApp.name: "Wacha Tushirikishe Programu Zaidi ya Kushiriki kwa Mtumiaji...",
+  EnumLocale.txtFrequentlyAskedQuestions.name:
+      "Maswali Yanayoulizwa Mara Kwa Mara",
+  EnumLocale.txtLetEngageMoreUserThrowShareApp.name:
+      "Wacha Tushirikishe Programu Zaidi ya Kushiriki kwa Mtumiaji...",
   EnumLocale.txtRateUs.name: "Tukadirie",
   EnumLocale.txtRateYourExperienceWithUs.name: "Kadiria Uzoefu Wako Nasi!",
   EnumLocale.txtYouWantToBecomeListener.name: "Unataka Kuwa\nMsikilizaji...",
   EnumLocale.txtListenerVerification.name: "Uthibitishaji wa Msikilizaji",
   EnumLocale.txtExploreListener.name: "Chunguza Msikilizaji",
-  EnumLocale.txtTakeControlOfYourPrivacyData.name: "Kudhibiti Wewe\nData ya Faragha...",
+  EnumLocale.txtTakeControlOfYourPrivacyData.name:
+      "Kudhibiti Wewe\nData ya Faragha...",
   EnumLocale.txtLocation.name: "Mahali",
   EnumLocale.txtBluetooth.name: "Bluetooth",
   EnumLocale.txtMicrophone.name: "Maikrofoni",
@@ -187,16 +205,20 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtEnterYourAge.name: "Weka Umri Wako",
   EnumLocale.txtEnterYourExperience.name: "Weka Uzoefu wako (mwaka)",
   EnumLocale.txtSUBMIT.name: "WASILISHA",
-  EnumLocale.desWantDeleteAccount.name: "Je, una uhakika unataka kufuta akaunti yako?",
+  EnumLocale.desWantDeleteAccount.name:
+      "Je, una uhakika unataka kufuta akaunti yako?",
   EnumLocale.changeYourImage.name: "Badilisha picha yako",
   EnumLocale.txtTakeAphoto.name: "Piga picha",
   EnumLocale.txtChooseFromYourFile.name: "Chagua kutoka kwa faili yako",
   EnumLocale.txtNext.name: "INAYOFUATA",
-  EnumLocale.txtPleaseSelectProfileImage.name: "Tafadhali chagua picha ya wasifu !!",
+  EnumLocale.txtPleaseSelectProfileImage.name:
+      "Tafadhali chagua picha ya wasifu !!",
   EnumLocale.txtPleaseEnterNickName.name: "Tafadhali weka jina la Nick!!",
   EnumLocale.txtEnterNickName.name: "Ingiza jina la Nick",
-  EnumLocale.txtPleaseEnterMobileNumber.name: "Tafadhali weka nambari ya simu !!",
-  EnumLocale.txtPleaseSelectBirthDate.name: "Tafadhali Chagua tarehe ya kuzaliwa !!",
+  EnumLocale.txtPleaseEnterMobileNumber.name:
+      "Tafadhali weka nambari ya simu !!",
+  EnumLocale.txtPleaseSelectBirthDate.name:
+      "Tafadhali Chagua tarehe ya kuzaliwa !!",
   EnumLocale.txtProfileUpdateSuccessfully.name: "Usasishaji wa wasifu umefaulu",
   EnumLocale.txtForgotPassword.name: "Umesahau Nenosiri",
   EnumLocale.txtForgotYourPassword.name: "Umesahau\nNenosiri lako...",
@@ -205,14 +227,18 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtCreatePassword.name: "Unda Nenosiri",
   EnumLocale.txtForgotPassDescription.name:
       "Weka barua pepe yako au nambari ya simu hapa chini ili kuweka upya nenosiri lako. Tutakutumia nambari ya kuthibitisha ili kukusaidia kurejesha akaunti yako.",
-  EnumLocale.txtLongPressToEnableAudioRecording.name: "Bonyeza kwa muda mrefu ili kuwezesha kurekodi sauti",
+  EnumLocale.txtLongPressToEnableAudioRecording.name:
+      "Bonyeza kwa muda mrefu ili kuwezesha kurekodi sauti",
   EnumLocale.txtAudioRecording.name: "Kurekodi Sauti...",
   EnumLocale.txtPleaseAllowPermission.name: "Tafadhali ruhusu ruhusa!!",
   EnumLocale.txtHostCenterDescription.name:
       "Sasa unaweza kuwa mwenyeji na kupanga matukio yako mwenyewe. Unda matukio mapya na ushiriki huduma zako na wengine.",
-  EnumLocale.txtDataPrivacy.name: "Tunathamini ufaragha wako wa data. Jifunze jinsi maelezo yako ya kibinafsi yanavyokusanywa, kutumiwa na kulindwa.",
-  EnumLocale.txtShareAppDes.name: "Shiriki programu hii na marafiki na familia yako ili waweze pia kufurahia vipengele vyake vya kipekee.",
-  EnumLocale.txtAboutUsDes.name: "Tumejitolea kukupa huduma bora zaidi. Jifunze zaidi kuhusu timu yetu na dhamira yetu.",
+  EnumLocale.txtDataPrivacy.name:
+      "Tunathamini ufaragha wako wa data. Jifunze jinsi maelezo yako ya kibinafsi yanavyokusanywa, kutumiwa na kulindwa.",
+  EnumLocale.txtShareAppDes.name:
+      "Shiriki programu hii na marafiki na familia yako ili waweze pia kufurahia vipengele vyake vya kipekee.",
+  EnumLocale.txtAboutUsDes.name:
+      "Tumejitolea kukupa huduma bora zaidi. Jifunze zaidi kuhusu timu yetu na dhamira yetu.",
   EnumLocale.txtPaymentMethod.name: "Njia ya Malipo",
   EnumLocale.txtListenerWithdrawDescription.name:
       "1. Unaweza kutoa sarafu ulizochuma kama pesa halisi pindi tu utakapofikia kiwango cha chini cha uondoaji kilichowekwa na jukwaa. Hakikisha wasifu na maelezo yako ya malipo yamethibitishwa kikamilifu ili kuepuka ucheleweshaji katika kushughulikia ombi lako la kujiondoa.",
@@ -239,9 +265,11 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtAvailableCoinBalance.name: "Salio la Sarafu Inapatikana",
   EnumLocale.txtWithdrawalDetails.name: "Maelezo ya uondoaji :-",
   EnumLocale.txtEnterCoinAmount.name: "Weka Kiasi cha Sarafu",
-  EnumLocale.txtMinimumWithdrawCoin.name: "*Kima cha chini cha Sarafu ya Kutoa :",
+  EnumLocale.txtMinimumWithdrawCoin.name:
+      "*Kima cha chini cha Sarafu ya Kutoa :",
   EnumLocale.txtMyAmountBalance.name: "Salio Langu la Kiasi:",
-  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name: "Pata Kiasi chako cha Sarafu Unayoweza Kuitoa Hapa...",
+  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
+      "Pata Kiasi chako cha Sarafu Unayoweza Kuitoa Hapa...",
   EnumLocale.txtListenerDetails.name: "Maelezo ya Wasikilizaji:-",
   EnumLocale.txtEnterIntroduction.name: "Ingiza Utangulizi",
   EnumLocale.txtTalkLanguages.name: "Lugha za Maongezi:-",
@@ -261,9 +289,12 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtAddress.name: "Anwani :",
   EnumLocale.txtNOte.name: "Kumbuka :",
   EnumLocale.txtPleaseFillProfile.name: "Tafadhali jaza wasifu",
-  EnumLocale.txtPleaseEnterWithdrawCoin.name: "Tafadhali Ingiza WithdrawCoin",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name: "Tafadhali Chagua Njia ya Kuondoa",
-  EnumLocale.txtPleaseEnterAllPaymentDetails.name: "Tafadhali Weka Maelezo Yote ya Malipo",
+  EnumLocale.txtPleaseEnterWithdrawCoin.name:
+      "Tafadhali ingiza kiasi cha Session Credit",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name:
+      "Tafadhali Chagua Njia ya Kuondoa",
+  EnumLocale.txtPleaseEnterAllPaymentDetails.name:
+      "Tafadhali Weka Maelezo Yote ya Malipo",
   EnumLocale.txtSelectPaymentGateway.name: "Chagua Njia ya Malipo",
   EnumLocale.txtNumberOfCoin.name: "Idadi ya Sarafu :",
   EnumLocale.txtWithdrawalID.name: "Kitambulisho cha uondoaji :",
@@ -274,12 +305,16 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtAcceptDeclineDate.name: "Kubali / Kataa Tarehe :",
   EnumLocale.txtViewLess.name: "Tazama Chini",
   EnumLocale.txtReason.name: "Sababu",
-  EnumLocale.txtPrivateVideoCallRate.name: "Kiwango cha Simu ya Kibinafsi ya Video",
-  EnumLocale.txtPrivateAudioCallRate.name: "Kiwango cha Simu ya Kibinafsi ya Sauti",
+  EnumLocale.txtPrivateVideoCallRate.name:
+      "Kiwango cha Simu ya Kibinafsi ya Video",
+  EnumLocale.txtPrivateAudioCallRate.name:
+      "Kiwango cha Simu ya Kibinafsi ya Sauti",
   EnumLocale.txtPaymentDetails.name: "Maelezo ya Malipo :",
   EnumLocale.txtAppRestart.name: "Ombi Lako la Msikilizaji Limekubaliwa",
-  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name: "Mtumiaji Hana Pesa za Kutosha Kufanya Uondoaji",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
+  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
+      "Mtumiaji Hana Pesa za Kutosha Kufanya Uondoaji",
+  EnumLocale
+          .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
       "Sarafu Iliyoombwa Kutoa Lazima Iwe Kubwa Kuliko Ilivyobainishwa na Msimamizi",
   EnumLocale.txtSkip.name: "Ruka",
   EnumLocale.txtHostHomeDescription.name:
@@ -291,7 +326,8 @@ final Map<String, String> swKE = <String, String>{
       "Chagua lugha ambazo unapenda kuzungumza na wasikilizaji. Hii hutusaidia kukuunganisha na watu wanaofaa wanaohitaji usaidizi katika lugha hizo.",
   EnumLocale.txtSelectTopic.name:
       "Chagua mada unazojisikia kujiamini kuzizungumzia. Hizi zitakusaidia kukulinganisha na watumiaji wanaotafuta usaidizi katika maeneo hayo mahususi.",
-  EnumLocale.txtSureClearNotification.name: "Je, una uhakika unataka kufuta arifa zote?",
+  EnumLocale.txtSureClearNotification.name:
+      "Je, una uhakika unataka kufuta arifa zote?",
   EnumLocale.txtSure.name: "Hakika",
   EnumLocale.txtIntroduction.name: "Utangulizi",
   EnumLocale.txtTryAgain.name: "Jaribu Tena",
@@ -301,13 +337,17 @@ final Map<String, String> swKE = <String, String>{
       "Ikiwa una maswali yoyote au unakabiliwa na maswala yoyote, tuko hapa kukusaidia! Angalia maswali yanayoulizwa sana hapa chini au wasiliana na timu yetu ya usaidizi kwa usaidizi wa kibinafsi.",
   EnumLocale.txtBecomeHostDescription.name:
       "Wasikilizaji wana jukumu muhimu kwa kutoa usaidizi, mwongozo, au sikio la kusikiliza kwa urahisi kwa watumiaji wanaohitaji mtu wa kuzungumza naye. Ikiwa una huruma, mvumilivu, na uko tayari kusaidia wengine, kuwa msikilizaji ndiyo njia kamili ya kuleta matokeo chanya.",
-  EnumLocale.txtListenerReqSentSuccessfully.name: "Ombi la Msikilizaji Limetumwa Kwa Mafanikio....",
+  EnumLocale.txtListenerReqSentSuccessfully.name:
+      "Ombi la Msikilizaji Limetumwa Kwa Mafanikio....",
   EnumLocale.txtSearchLanguage.name: "Tafuta lugha...",
-  EnumLocale.txtSelectTalkaboutTxt.name: "Chagua mazungumzo kuhusu maudhui Katika programu.",
-  EnumLocale.txtSelectAppLanguageTxt.name: "Chagua lugha ya programu unayopendelea.",
+  EnumLocale.txtSelectTalkaboutTxt.name:
+      "Chagua mazungumzo kuhusu maudhui Katika programu.",
+  EnumLocale.txtSelectAppLanguageTxt.name:
+      "Chagua lugha ya programu unayopendelea.",
   EnumLocale.txtHostVerificationFillForm.name:
       "Tafadhali jaza fomu kwa maelezo sahihi. Weka kitambulisho chako halali cha barua pepe ili kupokea masasisho muhimu na matokeo ya uthibitishaji. Hakikisha sehemu zote zimejazwa ipasavyo kabla ya kuendelea.",
-  EnumLocale.txtUserName.name: "Chagua mazungumzo kuhusu maudhui Katika programu.",
+  EnumLocale.txtUserName.name:
+      "Chagua mazungumzo kuhusu maudhui Katika programu.",
   EnumLocale.txtUserDetails.name: "Chagua lugha ya programu unayopendelea.",
   EnumLocale.txtUserNickName.name:
       "Tafadhali jaza fomu kwa maelezo sahihi. Weka kitambulisho chako halali cha barua pepe ili kupokea masasisho muhimu na matokeo ya uthibitishaji. Hakikisha sehemu zote zimejazwa ipasavyo kabla ya kuendelea.",
@@ -349,20 +389,27 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtPrivacyPolicy.name: 'Maoni',
   EnumLocale.txtListenerAvailableForPrivateVideoCall.name: 'Ni mechi!',
   EnumLocale.txtListenerAvailableForPrivateAudioCall.name: 'Nakubaliana na',
-  EnumLocale.txtListenerDisableForPrivateVideoCall.name: 'Msikilizaji Anapatikana Kwa Simu ya Kibinafsi ya Sauti.',
-  EnumLocale.txtListenerDisableForPrivateAudioCall.name: 'Msikilizaji Anapatikana kwa Simu ya Video ya Nasibu.',
+  EnumLocale.txtListenerDisableForPrivateVideoCall.name:
+      'Msikilizaji Anapatikana Kwa Simu ya Kibinafsi ya Sauti.',
+  EnumLocale.txtListenerDisableForPrivateAudioCall.name:
+      'Msikilizaji Anapatikana kwa Simu ya Video ya Nasibu.',
   EnumLocale.txtEarpiece.name: 'Vifaa vya masikioni',
   EnumLocale.txtEnterProperValue.name: 'Ingiza Thamani Inayofaa',
-  EnumLocale.txtYourHostRequestSentSuccessfully.name: 'Ombi Lako la Mwenyeji Limetumwa Kwa Mafanikio',
-  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name: 'Ombi lako limewasilishwa. Tafadhali subiri tunapoikagua na kuidhinisha.',
+  EnumLocale.txtYourHostRequestSentSuccessfully.name:
+      'Ombi Lako la Mwenyeji Limetumwa Kwa Mafanikio',
+  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
+      'Ombi lako limewasilishwa. Tafadhali subiri tunapoikagua na kuidhinisha.',
   EnumLocale.txtViewRequest.name: 'Tazama Ombi',
-  EnumLocale.txtDEmoListenerText.name: "Lo! huna ruhusa.Huku ni kuingia kwenye onyesho",
+  EnumLocale.txtDEmoListenerText.name:
+      "Lo! huna ruhusa.Huku ni kuingia kwenye onyesho",
   EnumLocale.txtVideoCalling.name: "Simu ya Video",
   EnumLocale.txtAudioCalling.name: "Simu ya Sauti",
   EnumLocale.txtIncomingVoiceCalling.name: 'Simu ya Video inayoingia',
   EnumLocale.txtIncomingAudioCalling.name: 'Simu ya Sauti inayoingia',
-  EnumLocale.txtNoAccountFoundForThisEmail.name: "Hakuna akaunti iliyopatikana ya barua pepe hii",
-  EnumLocale.txtResetLinkSentToYourEmail.name: "Weka upya kiungo kilichotumwa kwa barua pepe yako",
+  EnumLocale.txtNoAccountFoundForThisEmail.name:
+      "Hakuna akaunti iliyopatikana ya barua pepe hii",
+  EnumLocale.txtResetLinkSentToYourEmail.name:
+      "Weka upya kiungo kilichotumwa kwa barua pepe yako",
   EnumLocale.txtForgetPasswordDescription.name:
       "Lazima uwe umepokea kiungo cha kusahau nenosiri kwenye akaunti yako ya Gmail, angalia. Ikiwa sivyo, basi angalia sehemu ya barua taka.",
 };

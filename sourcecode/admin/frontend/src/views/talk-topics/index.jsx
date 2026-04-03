@@ -234,7 +234,7 @@ const TalkTopics = () => {
                   {talkTopics.length === 0
                     ? // <tr>
                     //   <td colSpan={columns.length} className='text-center py-6'>
-                    //     No Talk Topics Found
+                    //     No Categories Found
                     //   </td>
                     // </tr>
                     ''

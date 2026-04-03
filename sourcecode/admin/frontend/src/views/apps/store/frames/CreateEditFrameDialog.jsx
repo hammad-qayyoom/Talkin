@@ -150,7 +150,7 @@ const CreateEditFrameDialog = ({ open, onClose, mode = 'create', frame = null })
     const newErrors = {}
 
     if (!formData.name.trim()) newErrors.name = 'Name is required'
-    if (!formData.coin || Number(formData.coin) <= 0) newErrors.coin = 'Enter a valid coin amount'
+    if (!formData.coin || Number(formData.coin) <= 0) newErrors.coin = 'Enter a valid session credit amount'
     if (!formData.validity || Number(formData.validity) <= 0) newErrors.validity = 'Enter valid duration'
     if (!file && mode === 'create') newErrors.file = 'Please upload a file'
     setErrors(newErrors)
@@ -248,7 +248,7 @@ const CreateEditFrameDialog = ({ open, onClose, mode = 'create', frame = null })
           onChange={e => handleChange('name', e.target.value)}
         />
         <TextField
-          label='Coins'
+          label='Session Credits'
           type='number'
           fullWidth
           value={formData.coin}

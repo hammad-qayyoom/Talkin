@@ -505,7 +505,7 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
                                                           ).paddingOnly(right: 4),
                                                           Text(
                                                             item.type == 2
-                                                                ? "Coin Purchase"
+                                                                ? "Subscription Purchase"
                                                                 : item.type == 3
                                                                     ? "Private Audio Call"
                                                                     : item.type == 4
@@ -517,9 +517,9 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
                                                                                 : item.type == 7
                                                                           ? "Withdrawal by Expert" // 🔹 NEW
                                                                                     : item.type == 8
-                                                                                        ? "Admin Added Coin" // 🔹 NEW
+                                                                                        ? "Admin Added Session Credit" // 🔹 NEW
                                                                                         : item.type == 9
-                                                                                            ? "Admin Deducted Coin" // 🔹 NEW
+                                                                                            ? "Admin Deducted Session Credit" // 🔹 NEW
                                                                                             : "Log In Bonus",
                                                             style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.historyCallType),
                                                           ).paddingOnly(right: 6),

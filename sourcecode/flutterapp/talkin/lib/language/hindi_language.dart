@@ -5,9 +5,12 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtRegisterTitle1.name: "खोजो",
   EnumLocale.txtRegisterTitle2.name: "बात करना",
   EnumLocale.txtRegisterTitle3.name: "वीडियो कॉल",
-  EnumLocale.txtRegisterSubTitle1.name: "आप दुनिया भर के लोगों से चैट, संदेश भेजने और उनके साथ संबंध बनाने के लिए जुड़ सकते हैं।",
-  EnumLocale.txtRegisterSubTitle2.name: 'एक दूसरे को बेहतर तरीके से जानने और अच्छी अनुकूलता रखने के लिए अजनबियों से बातचीत करें।',
-  EnumLocale.txtRegisterSubTitle3.name: "आप अपने वीडियो और फ़ोटो अपने मित्रों और संपर्कों के साथ साझा कर सकते हैं।",
+  EnumLocale.txtRegisterSubTitle1.name:
+      "आप दुनिया भर के लोगों से चैट, संदेश भेजने और उनके साथ संबंध बनाने के लिए जुड़ सकते हैं।",
+  EnumLocale.txtRegisterSubTitle2.name:
+      'एक दूसरे को बेहतर तरीके से जानने और अच्छी अनुकूलता रखने के लिए अजनबियों से बातचीत करें।',
+  EnumLocale.txtRegisterSubTitle3.name:
+      "आप अपने वीडियो और फ़ोटो अपने मित्रों और संपर्कों के साथ साझा कर सकते हैं।",
   EnumLocale.txtEnterYourMail.name: "अपना ईमेल आईडी दर्ज करें",
   EnumLocale.txtEnterPassword.name: "अपना कूटशब्द भरें",
   EnumLocale.txtCoinRechargeSuccess.name: "सिक्का रिचार्ज सफल",
@@ -30,10 +33,12 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtPay.name: "वेतन",
   EnumLocale.txtRegister.name: "पंजीकरण करवाना",
   EnumLocale.desEnterEmail.name: "कृपया ईमेल दर्ज करें",
-  EnumLocale.desEnterValidEmailAddress.name: "कृपया एक मान्य ईमेल पता प्रविष्ट करें",
+  EnumLocale.desEnterValidEmailAddress.name:
+      "कृपया एक मान्य ईमेल पता प्रविष्ट करें",
   EnumLocale.desEnterPassword.name: "कृपया पासवर्ड दर्ज करें",
   EnumLocale.desReEnterPassword.name: "कृपया पुनः पासवर्ड दर्ज करें",
-  EnumLocale.desPasswordCharacters.name: "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए",
+  EnumLocale.desPasswordCharacters.name:
+      "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए",
   EnumLocale.desPasswordNotMatch.name: "पासवर्ड मेल नहीं खाता",
   EnumLocale.txtEnterName.name: "अपना नाम दर्ज करें",
   EnumLocale.desEnterFullName.name: "कृपया पूरा नाम दर्ज करें",
@@ -44,7 +49,8 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.desEnterMobile.name: "कृपया मोबाइल नंबर दर्ज करें",
   EnumLocale.txtGetOtp.name: "ओटीपी प्राप्त करें",
   EnumLocale.txtEnterOtp.name: "ओटीपी दर्ज करें",
-  EnumLocale.txtEnterOtpWithRegisterNumber.name: "OTP दर्ज करें\nरजिस्टर नंबर के साथ...",
+  EnumLocale.txtEnterOtpWithRegisterNumber.name:
+      "OTP दर्ज करें\nरजिस्टर नंबर के साथ...",
   EnumLocale.txtYouHaveNotGetOtp.name: "अगर आपको ओटीपी नहीं मिला है?",
   EnumLocale.txtResendOtp.name: "OTP पुनः भेजें",
   EnumLocale.txtExitApp.name: 'ऐप से बाहर निकलें',
@@ -57,7 +63,8 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtFreeTalk.name: 'मुफ़्त बातचीत',
   EnumLocale.txtCalling.name: 'कॉलिंग',
   EnumLocale.txtHomeFastLalk.name: 'अब तेजी से लालक, बेहतर महसूस करो',
-  EnumLocale.txtHomeDescription.name: 'अपने पसंदीदा श्रोता से बात करें और हल्का और उज्ज्वल महसूस करें!',
+  EnumLocale.txtHomeDescription.name:
+      'अपने पसंदीदा श्रोता से बात करें और हल्का और उज्ज्वल महसूस करें!',
   EnumLocale.txtFindMoreListener.name: 'अधिक श्रोता खोजें',
   EnumLocale.txtTopListener.name: 'शीर्ष श्रोता',
   EnumLocale.txtViewAll.name: 'सभी को देखें',
@@ -82,8 +89,10 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtTalkAbout.name: "के बारे में बात",
   EnumLocale.txtSelectPaymentMethod.name: "भुगतान विधि चुनें",
   EnumLocale.txtAPPLanguage.name: "एपीपी भाषा",
-  EnumLocale.txtSelectLanguageForApp.name: "मेल खाते श्रोताओं को देखने के लिए एक भाषा का चयन करें.",
-  EnumLocale.txtSelectTalkAboutForApp.name: "ऐप में सामग्री के बारे में बात करें का चयन करें",
+  EnumLocale.txtSelectLanguageForApp.name:
+      "मेल खाते श्रोताओं को देखने के लिए एक भाषा का चयन करें.",
+  EnumLocale.txtSelectTalkAboutForApp.name:
+      "ऐप में सामग्री के बारे में बात करें का चयन करें",
   EnumLocale.txtRecommendedProfile.name: "अनुशंसित प्रोफ़ाइल",
   EnumLocale.txtSelectCallTypeNote.name:
       "कृपया अजनबियों से मिलने वाली धोखाधड़ी वाली जानकारी जैसे कि मनी ट्रांसफर, लॉटरी आदि पर भरोसा न करें। कृपया कोई भी व्यक्तिगत जानकारी जैसे कि पासवर्ड, मोबाइल नंबर, ओटीपी आदि साझा न करें। कृपया नग्नता, पोर्नोग्राफी या किसी भी अश्लील कृत्य में शामिल न हों।",
@@ -105,12 +114,14 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtShareListenersApp.name: "शेयर श्रोता ऐप",
   EnumLocale.txtRatingDescription.name:
       "आपकी प्रतिक्रिया अन्य सदस्यों को अपना श्रोता चुनने में मदद करेगी और हमारी सेवा को बेहतर बनाने में हमारी मदद करेगी!",
-  EnumLocale.txtShareListenersAppDescription.name: "ऐप को दोस्तों और परिवार के साथ साझा करें और खुशियाँ फैलाएँ...!",
+  EnumLocale.txtShareListenersAppDescription.name:
+      "ऐप को दोस्तों और परिवार के साथ साझा करें और खुशियाँ फैलाएँ...!",
   EnumLocale.txtShareAppNow.name: "ऐप अभी शेयर करें",
   EnumLocale.txtCompleteTrailCall.name: "आपके कॉल के लिए धन्यवाद",
   EnumLocale.txtCompleteTrailCall1.name: "- हमें बताएँ आप क्या सोचते हैं!",
   EnumLocale.txtDidYouLikeService.name: "क्या आपको श्रोता सेवा पसंद आई?",
-  EnumLocale.txtAddFilderToYourFavListeners.name: "एंड्रयू फिल्डर को अपने पसंदीदा श्रोताओं में शामिल करें?",
+  EnumLocale.txtAddFilderToYourFavListeners.name:
+      "एंड्रयू फिल्डर को अपने पसंदीदा श्रोताओं में शामिल करें?",
   EnumLocale.txtEditProfile.name: "प्रोफ़ाइल संपादित करें",
   EnumLocale.txtMyWallet.name: "मेरा बटुआ",
   EnumLocale.txtHelpCenter.name: "सहायता केंद्र",
@@ -131,14 +142,16 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtSaveGender.name: "लिंग बचाओ",
   EnumLocale.txtChooseYourGender.name: "अपना लिंग चुनें",
   EnumLocale.txtSelectYourGender.name: "अपना लिंग चुनें",
-  EnumLocale.txtIfSelectWrongGenderLifeBan.name: "यदि आप गलत लिंग चुनते हैं =\nजीवन प्रतिबंध️🚫",
+  EnumLocale.txtIfSelectWrongGenderLifeBan.name:
+      "यदि आप गलत लिंग चुनते हैं =\nजीवन प्रतिबंध️🚫",
   EnumLocale.txtMale.name: "पुरुष",
   EnumLocale.txtFemale.name: "महिला",
   EnumLocale.txtBecomeListener.name: "श्रोता बनें",
   EnumLocale.txtViewCoinHistory.name: "सिक्के का इतिहास देखें",
   EnumLocale.txtCurrentCoinBalance.name: "वर्तमान सिक्का शेष",
   EnumLocale.txtWalletGuide.name: "वॉलेट गाइड:-",
-  EnumLocale.txtAddCoinBalanceSelectPlan.name: "सिक्का शेष जोड़ें, योजना का चयन करें:-",
+  EnumLocale.txtAddCoinBalanceSelectPlan.name:
+      "सिक्का शेष जोड़ें, योजना का चयन करें:-",
   EnumLocale.txtMostPopularPlan.name: "सर्वाधिक लोकप्रिय योजना",
   EnumLocale.txtHistory.name: "इतिहास",
   EnumLocale.txtPayment.name: "भुगतान",
@@ -150,22 +163,27 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtFailed.name: "असफल",
   EnumLocale.txtSuccess.name: "सफलता",
   EnumLocale.txtCallDuration.name: "कॉल अवधि",
-  EnumLocale.txtManageYourAccountSettings.name: "अपना खाता प्रबंधित करें\nसेटिंग्स...",
+  EnumLocale.txtManageYourAccountSettings.name:
+      "अपना खाता प्रबंधित करें\nसेटिंग्स...",
   EnumLocale.txtLogoutApp.name: "लॉगआउट ऐप",
   EnumLocale.txtLogout.name: "लॉग आउट",
   EnumLocale.txtCancel.name: "रद्द करना",
-  EnumLocale.txtDesLogout.name: "क्या आप वाकई अपना खाता लॉग आउट करना चाहते हैं?",
+  EnumLocale.txtDesLogout.name:
+      "क्या आप वाकई अपना खाता लॉग आउट करना चाहते हैं?",
   EnumLocale.txtDeleteAccount.name: "खाता हटा दो",
   EnumLocale.txtNeedAnyHelpFAQ.name: "किसी भी सहायता की आवश्यकता है &\nFAQ...",
   EnumLocale.txtHaveAnIssue.name: "कोई समस्या है?",
   EnumLocale.txtFrequentlyAskedQuestions.name: "अक्सर पूछे जाने वाले प्रश्नों",
-  EnumLocale.txtLetEngageMoreUserThrowShareApp.name: "आइए शेयर ऐप के माध्यम से अधिक उपयोगकर्ताओं को जोड़ें...",
+  EnumLocale.txtLetEngageMoreUserThrowShareApp.name:
+      "आइए शेयर ऐप के माध्यम से अधिक उपयोगकर्ताओं को जोड़ें...",
   EnumLocale.txtRateUs.name: "हमें रेटिंग दें",
-  EnumLocale.txtRateYourExperienceWithUs.name: "हमारे साथ अपने अनुभव का मूल्यांकन करें!",
+  EnumLocale.txtRateYourExperienceWithUs.name:
+      "हमारे साथ अपने अनुभव का मूल्यांकन करें!",
   EnumLocale.txtYouWantToBecomeListener.name: "आप श्रोता बनना चाहते हैं...",
   EnumLocale.txtListenerVerification.name: "श्रोता सत्यापन",
   EnumLocale.txtExploreListener.name: "श्रोता का अन्वेषण करें",
-  EnumLocale.txtTakeControlOfYourPrivacyData.name: "अपने गोपनीयता डेटा पर नियंत्रण रखें...",
+  EnumLocale.txtTakeControlOfYourPrivacyData.name:
+      "अपने गोपनीयता डेटा पर नियंत्रण रखें...",
   EnumLocale.txtLocation.name: "जगह",
   EnumLocale.txtBluetooth.name: "ब्लूटूथ",
   EnumLocale.txtMicrophone.name: "माइक्रोफ़ोन",
@@ -187,17 +205,20 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtEnterYourAge.name: "अपनी आयु दर्ज करें",
   EnumLocale.txtEnterYourExperience.name: "अपना अनुभव दर्ज करें(वर्ष में)",
   EnumLocale.txtSUBMIT.name: "जमा करना",
-  EnumLocale.desWantDeleteAccount.name: "क्या आप इस खाते को हटाने के लिए सुनिश्चित हैं?",
+  EnumLocale.desWantDeleteAccount.name:
+      "क्या आप इस खाते को हटाने के लिए सुनिश्चित हैं?",
   EnumLocale.changeYourImage.name: "अपनी तस्वीर बदलें",
   EnumLocale.txtTakeAphoto.name: "एक तस्वीर लें",
   EnumLocale.txtChooseFromYourFile.name: "अपनी फ़ाइल से चुनें",
   EnumLocale.txtNext.name: "अगला",
-  EnumLocale.txtPleaseSelectProfileImage.name: "कृपया प्रोफ़ाइल चित्र का चयन करें!!",
+  EnumLocale.txtPleaseSelectProfileImage.name:
+      "कृपया प्रोफ़ाइल चित्र का चयन करें!!",
   EnumLocale.txtPleaseEnterNickName.name: "कृपया उपनाम दर्ज करें!!",
   EnumLocale.txtEnterNickName.name: "उपनाम दर्ज करें",
   EnumLocale.txtPleaseEnterMobileNumber.name: "कृपया मोबाइल नंबर दर्ज करें!!",
   EnumLocale.txtPleaseSelectBirthDate.name: "कृपया जन्म तिथि चुनें!!",
-  EnumLocale.txtProfileUpdateSuccessfully.name: "प्रोफ़ाइल अपडेट सफलतापूर्वक हुआ",
+  EnumLocale.txtProfileUpdateSuccessfully.name:
+      "प्रोफ़ाइल अपडेट सफलतापूर्वक हुआ",
   EnumLocale.txtForgotPassword.name: "पासवर्ड भूल गए",
   EnumLocale.txtForgotYourPassword.name: "अपना पासवर्ड भूल गए...",
   EnumLocale.txtEnterMailMobileNumber.name: "मेल/मोबाइल नंबर दर्ज करें",
@@ -205,15 +226,18 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtCreatePassword.name: "पासवर्ड बनाएं",
   EnumLocale.txtForgotPassDescription.name:
       "अपना पासवर्ड रीसेट करने के लिए नीचे अपना ईमेल पता या मोबाइल नंबर दर्ज करें। हम आपको अपना खाता पुनः प्राप्त करने में सहायता के लिए एक सत्यापन कोड भेजेंगे।",
-  EnumLocale.txtLongPressToEnableAudioRecording.name: "ऑडियो रिकॉर्डिंग सक्षम करने के लिए देर तक दबाएँ",
+  EnumLocale.txtLongPressToEnableAudioRecording.name:
+      "ऑडियो रिकॉर्डिंग सक्षम करने के लिए देर तक दबाएँ",
   EnumLocale.txtAudioRecording.name: "ऑडियो रिकॉर्डिंग...",
   EnumLocale.txtPleaseAllowPermission.name: "कृपया अनुमति दीजिये!!",
   EnumLocale.txtHostCenterDescription.name:
       "अब आप मेज़बान बन सकते हैं और अपने खुद के कार्यक्रम आयोजित कर सकते हैं। नए कार्यक्रम बनाएँ और अपनी सेवाएँ दूसरों के साथ साझा करें।",
   EnumLocale.txtDataPrivacy.name:
       "हम आपकी डेटा गोपनीयता को महत्व देते हैं। जानें कि आपकी व्यक्तिगत जानकारी कैसे एकत्रित, उपयोग और संरक्षित की जाती है।",
-  EnumLocale.txtShareAppDes.name: "इस ऐप को अपने मित्रों और परिवार के साथ साझा करें ताकि वे भी इसकी अनूठी विशेषताओं का आनंद ले सकें।",
-  EnumLocale.txtAboutUsDes.name: "हम आपको सर्वोत्तम सेवा प्रदान करने के लिए प्रतिबद्ध हैं। हमारी टीम और हमारे मिशन के बारे में अधिक जानें।",
+  EnumLocale.txtShareAppDes.name:
+      "इस ऐप को अपने मित्रों और परिवार के साथ साझा करें ताकि वे भी इसकी अनूठी विशेषताओं का आनंद ले सकें।",
+  EnumLocale.txtAboutUsDes.name:
+      "हम आपको सर्वोत्तम सेवा प्रदान करने के लिए प्रतिबद्ध हैं। हमारी टीम और हमारे मिशन के बारे में अधिक जानें।",
   EnumLocale.txtPaymentMethod.name: "भुगतान विधि",
   EnumLocale.txtListenerWithdrawDescription.name:
       "1. प्लेटफ़ॉर्म द्वारा निर्धारित न्यूनतम निकासी सीमा को पूरा करने के बाद आप अपने अर्जित सिक्कों को असली पैसे के रूप में निकाल सकते हैं। सुनिश्चित करें कि आपकी प्रोफ़ाइल और भुगतान विवरण पूरी तरह से सत्यापित हैं ताकि आपके निकासी अनुरोध को संसाधित करने में देरी से बचा जा सके।",
@@ -242,7 +266,8 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtEnterCoinAmount.name: "सिक्का राशि दर्ज करें",
   EnumLocale.txtMinimumWithdrawCoin.name: "*न्यूनतम निकासी सिक्का :",
   EnumLocale.txtMyAmountBalance.name: "मेरी राशि शेष :",
-  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name: "अपनी निकासी योग्य सिक्का राशि यहां प्राप्त करें...",
+  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
+      "अपनी निकासी योग्य सिक्का राशि यहां प्राप्त करें...",
   EnumLocale.txtListenerDetails.name: "श्रोता विवरण:-",
   EnumLocale.txtEnterIntroduction.name: "परिचय दर्ज करें",
   EnumLocale.txtTalkLanguages.name: "बातचीत की भाषाएँ:-",
@@ -262,9 +287,11 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtAddress.name: "पता :",
   EnumLocale.txtNOte.name: "टिप्पणी :",
   EnumLocale.txtPleaseFillProfile.name: "कृपया प्रोफ़ाइल भरें",
-  EnumLocale.txtPleaseEnterWithdrawCoin.name: "कृपया WithdrawCoin दर्ज करें",
+  EnumLocale.txtPleaseEnterWithdrawCoin.name:
+      "कृपया Session Credit राशि दर्ज करें",
   EnumLocale.txtPleaseSelectWithdrawMethod.name: "कृपया निकासी विधि चुनें",
-  EnumLocale.txtPleaseEnterAllPaymentDetails.name: "कृपया सभी भुगतान विवरण दर्ज करें",
+  EnumLocale.txtPleaseEnterAllPaymentDetails.name:
+      "कृपया सभी भुगतान विवरण दर्ज करें",
   EnumLocale.txtSelectPaymentGateway.name: "भुगतान गेटवे चुनें",
   EnumLocale.txtNumberOfCoin.name: "सिक्कों की संख्या :",
   EnumLocale.txtWithdrawalID.name: "निकासी आईडी :",
@@ -279,8 +306,10 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtPrivateAudioCallRate.name: "निजी ऑडियो कॉल दर",
   EnumLocale.txtPaymentDetails.name: "भुगतान विवरण :",
   EnumLocale.txtAppRestart.name: "आपका श्रोता अनुरोध स्वीकार किया गया है",
-  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name: "उपयोगकर्ता के पास निकासी के लिए पर्याप्त धनराशि नहीं है",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
+  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
+      "उपयोगकर्ता के पास निकासी के लिए पर्याप्त धनराशि नहीं है",
+  EnumLocale
+          .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
       "निकासी हेतु अनुरोधित सिक्का एडमिन द्वारा निर्दिष्ट राशि से अधिक होना चाहिए",
   EnumLocale.txtSkip.name: "छोडना",
   EnumLocale.txtHostHomeDescription.name:
@@ -292,7 +321,8 @@ final Map<String, String> hiIN = <String, String>{
       "श्रोताओं के साथ बोलने में आपको जो भाषाएँ सहज लगती हैं, उन्हें चुनें। इससे हमें आपको उन सही लोगों से जोड़ने में मदद मिलती है जिन्हें उन भाषाओं में सहायता की ज़रूरत है।",
   EnumLocale.txtSelectTopic.name:
       "उन विषयों का चयन करें जिनके बारे में बात करने में आपको आत्मविश्वास महसूस हो। इससे आपको उन विशिष्ट क्षेत्रों में सहायता चाहने वाले उपयोगकर्ताओं से मिलान करने में मदद मिलेगी।",
-  EnumLocale.txtSureClearNotification.name: "क्या आप वाकई सभी सूचनाएं साफ़ करना चाहते हैं?",
+  EnumLocale.txtSureClearNotification.name:
+      "क्या आप वाकई सभी सूचनाएं साफ़ करना चाहते हैं?",
   EnumLocale.txtSure.name: "ज़रूर",
   EnumLocale.txtIntroduction.name: "परिचय",
   EnumLocale.txtTryAgain.name: "पुनः प्रयास करें",
@@ -302,13 +332,16 @@ final Map<String, String> hiIN = <String, String>{
       "अगर आपके कोई सवाल हैं या आपको कोई समस्या आ रही है, तो हम आपकी मदद के लिए मौजूद हैं! नीचे अक्सर पूछे जाने वाले सवाल देखें या व्यक्तिगत सहायता के लिए हमारी सहायता टीम से संपर्क करें।s",
   EnumLocale.txtBecomeHostDescription.name:
       "श्रोता उन उपयोगकर्ताओं को सहायता, मार्गदर्शन या सिर्फ़ सुनने के लिए कान देकर महत्वपूर्ण भूमिका निभाते हैं जिन्हें किसी से बात करने की ज़रूरत होती है। अगर आप सहानुभूतिपूर्ण, धैर्यवान और दूसरों की मदद करने के लिए तैयार हैं, तो श्रोता बनना सकारात्मक प्रभाव डालने का सबसे बढ़िया तरीका है।",
-  EnumLocale.txtListenerReqSentSuccessfully.name: "श्रोता अनुरोध सफलतापूर्वक भेजा गया....",
+  EnumLocale.txtListenerReqSentSuccessfully.name:
+      "श्रोता अनुरोध सफलतापूर्वक भेजा गया....",
   EnumLocale.txtSearchLanguage.name: "Search languageभाषा खोजें...",
-  EnumLocale.txtSelectTalkaboutTxt.name: "ऐप में सामग्री के बारे में बात करें का चयन करें।",
+  EnumLocale.txtSelectTalkaboutTxt.name:
+      "ऐप में सामग्री के बारे में बात करें का चयन करें।",
   EnumLocale.txtSelectAppLanguageTxt.name: "अपनी पसंदीदा ऐप भाषा चुनें.",
   EnumLocale.txtHostVerificationFillForm.name:
       "कृपया फ़ॉर्म को सटीक विवरण के साथ भरें। महत्वपूर्ण अपडेट और सत्यापन परिणाम प्राप्त करने के लिए अपनी मान्य ईमेल आईडी दर्ज करें। आगे बढ़ने से पहले सुनिश्चित करें कि सभी फ़ील्ड सही ढंग से भरी गई हैं।",
-  EnumLocale.txtUserName.name: "ऐप में सामग्री के बारे में बात करें का चयन करें।",
+  EnumLocale.txtUserName.name:
+      "ऐप में सामग्री के बारे में बात करें का चयन करें।",
   EnumLocale.txtUserDetails.name: "अपनी पसंदीदा ऐप भाषा चुनें.",
   EnumLocale.txtUserNickName.name:
       "कृपया फ़ॉर्म को सटीक विवरण के साथ भरें। महत्वपूर्ण अपडेट और सत्यापन परिणाम प्राप्त करने के लिए अपनी मान्य ईमेल आईडी दर्ज करें। आगे बढ़ने से पहले सुनिश्चित करें कि सभी फ़ील्ड सही ढंग से भरी गई हैं।",
@@ -349,22 +382,29 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtAgreePrivacyPolicy.name: 'इनकमिंग ऑडियो कॉल....',
   EnumLocale.txtPrivacyPolicy.name: 'प्रतिक्रिया',
   EnumLocale.txtListenerAvailableForPrivateVideoCall.name: 'यह एक मैच है!',
-  EnumLocale.txtListenerAvailableForPrivateAudioCall.name: 'मैं करने के लिए सहमत हूं',
-  EnumLocale.txtListenerDisableForPrivateVideoCall.name: 'निजी ऑडियो कॉल के लिए श्रोता उपलब्ध है।',
-  EnumLocale.txtListenerDisableForPrivateAudioCall.name: 'रैंडम वीडियो कॉल के लिए श्रोता उपलब्ध है।',
+  EnumLocale.txtListenerAvailableForPrivateAudioCall.name:
+      'मैं करने के लिए सहमत हूं',
+  EnumLocale.txtListenerDisableForPrivateVideoCall.name:
+      'निजी ऑडियो कॉल के लिए श्रोता उपलब्ध है।',
+  EnumLocale.txtListenerDisableForPrivateAudioCall.name:
+      'रैंडम वीडियो कॉल के लिए श्रोता उपलब्ध है।',
   EnumLocale.txtEarpiece.name: 'इयरपीस',
   EnumLocale.txtEnterProperValue.name: 'उचित मान दर्ज करें',
-  EnumLocale.txtYourHostRequestSentSuccessfully.name: 'आपका होस्ट अनुरोध सफलतापूर्वक भेजा गया',
+  EnumLocale.txtYourHostRequestSentSuccessfully.name:
+      'आपका होस्ट अनुरोध सफलतापूर्वक भेजा गया',
   EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
       'आपका अनुरोध सबमिट कर दिया गया है। कृपया प्रतीक्षा करें जब तक हम इसकी समीक्षा और अनुमोदन नहीं कर लेते।',
   EnumLocale.txtViewRequest.name: 'अनुरोध देखें',
-  EnumLocale.txtDEmoListenerText.name: "ओह! आपके पास अनुमति नहीं है। यह डेमो लॉगिन है",
+  EnumLocale.txtDEmoListenerText.name:
+      "ओह! आपके पास अनुमति नहीं है। यह डेमो लॉगिन है",
   EnumLocale.txtVideoCalling.name: "वीडियो कॉल करना",
   EnumLocale.txtAudioCalling.name: "ऑडियो कॉलिंग",
   EnumLocale.txtIncomingVoiceCalling.name: 'इनकमिंग वीडियो कॉलिंग',
   EnumLocale.txtIncomingAudioCalling.name: 'इनकमिंग ऑडियो कॉलिंग',
-  EnumLocale.txtNoAccountFoundForThisEmail.name: "इस ईमेल के लिए कोई खाता नहीं मिला",
-  EnumLocale.txtResetLinkSentToYourEmail.name: "रीसेट लिंक आपके ईमेल पर भेजा गया",
+  EnumLocale.txtNoAccountFoundForThisEmail.name:
+      "इस ईमेल के लिए कोई खाता नहीं मिला",
+  EnumLocale.txtResetLinkSentToYourEmail.name:
+      "रीसेट लिंक आपके ईमेल पर भेजा गया",
   EnumLocale.txtForgetPasswordDescription.name:
       "आपको अपने जीमेल अकाउंट पर पासवर्ड भूल जाने का लिंक मिला होगा, उसे चेक करें। अगर नहीं आया है, तो स्पैम सेक्शन चेक करें।",
 };

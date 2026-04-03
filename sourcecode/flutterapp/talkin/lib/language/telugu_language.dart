@@ -7,8 +7,10 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtRegisterTitle3.name: "వీడియో కాల్",
   EnumLocale.txtRegisterSubTitle1.name:
       "మీరు చాట్ చేయడం, సందేశాలు చేయడం మరియు\nవారితో కనెక్షన్‌లు చేయడం కోసం ప్రపంచవ్యాప్తంగా\nప్రపంచంలోని వ్యక్తులతో కనెక్ట్ అవ్వవచ్చు.",
-  EnumLocale.txtRegisterSubTitle2.name: 'ఒకరినొకరు బాగా తెలుసుకోవడం కోసం అపరిచితులతో చాట్ చేయండి మరియు చక్కటి\nఅనుకూలతను కలిగి ఉండండి.',
-  EnumLocale.txtRegisterSubTitle3.name: "మీరు మీ వీడియోలు మరియు ఫోటోలను\nమీ స్నేహితుడు మరియు కనెక్షన్‌లతో పంచుకోవచ్చు.",
+  EnumLocale.txtRegisterSubTitle2.name:
+      'ఒకరినొకరు బాగా తెలుసుకోవడం కోసం అపరిచితులతో చాట్ చేయండి మరియు చక్కటి\nఅనుకూలతను కలిగి ఉండండి.',
+  EnumLocale.txtRegisterSubTitle3.name:
+      "మీరు మీ వీడియోలు మరియు ఫోటోలను\nమీ స్నేహితుడు మరియు కనెక్షన్‌లతో పంచుకోవచ్చు.",
   EnumLocale.txtEnterYourMail.name: "మీ ఇమెయిల్ ఐడిని నమోదు చేయండి",
   EnumLocale.txtEnterPassword.name: "మీ పాస్‌వర్డ్‌ని నమోదు చేయండి",
   EnumLocale.txtCoinRechargeSuccess.name: "కాయిన్ రీఛార్జ్ విజయం",
@@ -31,10 +33,12 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtPay.name: "చెల్లించండి",
   EnumLocale.txtRegister.name: "నమోదు చేసుకోండి",
   EnumLocale.desEnterEmail.name: "దయచేసి ఇమెయిల్‌ని నమోదు చేయండి",
-  EnumLocale.desEnterValidEmailAddress.name: "దయచేసి చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామాను నమోదు చేయండి",
+  EnumLocale.desEnterValidEmailAddress.name:
+      "దయచేసి చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామాను నమోదు చేయండి",
   EnumLocale.desEnterPassword.name: "దయచేసి పాస్‌వర్డ్‌ని నమోదు చేయండి",
   EnumLocale.desReEnterPassword.name: "దయచేసి మళ్లీ పాస్‌వర్డ్‌ని నమోదు చేయండి",
-  EnumLocale.desPasswordCharacters.name: "పాస్‌వర్డ్ తప్పనిసరిగా కనీసం 6 అక్షరాల పొడవు ఉండాలి",
+  EnumLocale.desPasswordCharacters.name:
+      "పాస్‌వర్డ్ తప్పనిసరిగా కనీసం 6 అక్షరాల పొడవు ఉండాలి",
   EnumLocale.desPasswordNotMatch.name: "పాస్‌వర్డ్ సరిపోలలేదు",
   EnumLocale.txtEnterName.name: "మీ పేరును నమోదు చేయండి",
   EnumLocale.desEnterFullName.name: "దయచేసి పూర్తి పేరును నమోదు చేయండి",
@@ -45,11 +49,13 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.desEnterMobile.name: "దయచేసి మొబైల్ నంబర్‌ని నమోదు చేయండి",
   EnumLocale.txtGetOtp.name: "OTP పొందండి",
   EnumLocale.txtEnterOtp.name: "OTPని నమోదు చేయండి",
-  EnumLocale.txtEnterOtpWithRegisterNumber.name: "OTPని నమోదు చేయండి\nరిజిస్టర్ నంబర్‌తో...",
+  EnumLocale.txtEnterOtpWithRegisterNumber.name:
+      "OTPని నమోదు చేయండి\nరిజిస్టర్ నంబర్‌తో...",
   EnumLocale.txtYouHaveNotGetOtp.name: "మీరు OTP పొందకపోతే?",
   EnumLocale.txtResendOtp.name: "OTPని మళ్లీ పంపండి",
   EnumLocale.txtExitApp.name: 'యాప్ నుండి నిష్క్రమించండి',
-  EnumLocale.desWantExitApp.name: 'మీరు ఈ యాప్ నుండి నిష్క్రమించాలనుకుంటున్నారా?',
+  EnumLocale.desWantExitApp.name:
+      'మీరు ఈ యాప్ నుండి నిష్క్రమించాలనుకుంటున్నారా?',
   EnumLocale.txtClose.name: 'మూసివేయి',
   EnumLocale.txtHome.name: 'హోమ్',
   EnumLocale.txtListener.name: 'వినేవాడు',
@@ -58,7 +64,8 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtFreeTalk.name: 'ఉచిత చర్చ',
   EnumLocale.txtCalling.name: 'పిలుస్తోంది',
   EnumLocale.txtHomeFastLalk.name: 'ఇప్పుడు ఫాస్ట్ లాల్క్, ఫీల్ బెటర్',
-  EnumLocale.txtHomeDescription.name: 'మీకు ఇష్టమైన శ్రోతతో మాట్లాడండి మరియు తేలికగా మరియు ప్రకాశవంతంగా అనుభూతి చెందండి!',
+  EnumLocale.txtHomeDescription.name:
+      'మీకు ఇష్టమైన శ్రోతతో మాట్లాడండి మరియు తేలికగా మరియు ప్రకాశవంతంగా అనుభూతి చెందండి!',
   EnumLocale.txtFindMoreListener.name: 'మరింత వినేవారిని కనుగొనండి',
   EnumLocale.txtTopListener.name: 'అగ్రశ్రేణి శ్రోతలు',
   EnumLocale.txtViewAll.name: 'అన్నీ వీక్షించండి',
@@ -83,8 +90,10 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtTalkAbout.name: "గురించి మాట్లాడండి",
   EnumLocale.txtSelectPaymentMethod.name: "చెల్లింపు పద్ధతిని ఎంచుకోండి",
   EnumLocale.txtAPPLanguage.name: "APP భాష",
-  EnumLocale.txtSelectLanguageForApp.name: "సరిపోలే శ్రోతలను చూడటానికి భాషను ఎంచుకోండి.",
-  EnumLocale.txtSelectTalkAboutForApp.name: "యాప్‌లోని కంటెంట్ గురించి చర్చను ఎంచుకోండి",
+  EnumLocale.txtSelectLanguageForApp.name:
+      "సరిపోలే శ్రోతలను చూడటానికి భాషను ఎంచుకోండి.",
+  EnumLocale.txtSelectTalkAboutForApp.name:
+      "యాప్‌లోని కంటెంట్ గురించి చర్చను ఎంచుకోండి",
   EnumLocale.txtRecommendedProfile.name: "సిఫార్సు చేయబడిన ప్రొఫైల్",
   EnumLocale.txtSelectCallTypeNote.name:
       "దయచేసి అపరిచితుల నుండి డబ్బు బదిలీ, లాటరీ మొదలైన మోసపూరిత సమాచారాన్ని విశ్వసించవద్దు. దయచేసి పాస్‌వర్డ్‌లు, మొబైల్ నంబర్‌లు, ఓటీపీ మొదలైన వ్యక్తిగత సమాచారాన్ని షేర్ చేయవద్దు. దయచేసి నగ్నత్వం, అశ్లీలత లేదా ఏదైనా అసభ్యకర చర్యలలో పాల్గొనవద్దు.",
@@ -106,12 +115,15 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtShareListenersApp.name: "లిజనర్ యాప్‌ను షేర్ చేయండి",
   EnumLocale.txtRatingDescription.name:
       "మీ అభిప్రాయం ఇతర సభ్యులకు వారి శ్రోతలను ఎంచుకోవడానికి సహాయం చేస్తుంది, మా సేవను మెరుగుపరచడంలో మాకు సహాయం చేస్తుంది!",
-  EnumLocale.txtShareListenersAppDescription.name: "స్నేహితులు & కుటుంబ సభ్యులతో యాప్‌ను పంచుకోండి మరియు ఆనందాన్ని పంచండి...!",
+  EnumLocale.txtShareListenersAppDescription.name:
+      "స్నేహితులు & కుటుంబ సభ్యులతో యాప్‌ను పంచుకోండి మరియు ఆనందాన్ని పంచండి...!",
   EnumLocale.txtShareAppNow.name: "యాప్‌ను ఇప్పుడే షేర్ చేయండి",
   EnumLocale.txtCompleteTrailCall.name: "మీ కాల్ చేసినందుకు ధన్యవాదాలు",
-  EnumLocale.txtCompleteTrailCall1.name: "- మీరు ఏమనుకుంటున్నారో మాకు చెప్పండి!",
+  EnumLocale.txtCompleteTrailCall1.name:
+      "- మీరు ఏమనుకుంటున్నారో మాకు చెప్పండి!",
   EnumLocale.txtDidYouLikeService.name: "మీకు శ్రోతల సేవ నచ్చిందా?",
-  EnumLocale.txtAddFilderToYourFavListeners.name: "మీకు ఇష్టమైన శ్రోతలకు ఆండ్రూ ఫిల్డర్‌ని జోడించాలా?",
+  EnumLocale.txtAddFilderToYourFavListeners.name:
+      "మీకు ఇష్టమైన శ్రోతలకు ఆండ్రూ ఫిల్డర్‌ని జోడించాలా?",
   EnumLocale.txtEditProfile.name: "ప్రొఫైల్‌ని సవరించండి",
   EnumLocale.txtMyWallet.name: "నా వాలెట్",
   EnumLocale.txtHelpCenter.name: "సహాయ కేంద్రం",
@@ -132,14 +144,16 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtSaveGender.name: "లింగాన్ని సేవ్ చేయండి",
   EnumLocale.txtChooseYourGender.name: "మీ లింగాన్ని ఎంచుకోండి",
   EnumLocale.txtSelectYourGender.name: "మీ లింగాన్ని ఎంచుకోండి",
-  EnumLocale.txtIfSelectWrongGenderLifeBan.name: "మీరు తప్పు లింగాన్ని ఎంచుకుంటే =\nజీవిత నిషేధం️🚫",
+  EnumLocale.txtIfSelectWrongGenderLifeBan.name:
+      "మీరు తప్పు లింగాన్ని ఎంచుకుంటే =\nజీవిత నిషేధం️🚫",
   EnumLocale.txtMale.name: "పురుషుడు",
   EnumLocale.txtFemale.name: "స్త్రీ",
   EnumLocale.txtBecomeListener.name: "వినేవారు అవ్వండి",
   EnumLocale.txtViewCoinHistory.name: "కాయిన్ చరిత్రను వీక్షించండి",
   EnumLocale.txtCurrentCoinBalance.name: "ప్రస్తుత కాయిన్ బ్యాలెన్స్",
   EnumLocale.txtWalletGuide.name: "వాలెట్ గైడ్:-",
-  EnumLocale.txtAddCoinBalanceSelectPlan.name: "కాయిన్ బ్యాలెన్స్ జోడించండి, ప్లాన్ ఎంచుకోండి:-",
+  EnumLocale.txtAddCoinBalanceSelectPlan.name:
+      "కాయిన్ బ్యాలెన్స్ జోడించండి, ప్లాన్ ఎంచుకోండి:-",
   EnumLocale.txtMostPopularPlan.name: "అత్యంత ప్రజాదరణ పొందిన ప్రణాళిక",
   EnumLocale.txtHistory.name: "చరిత్ర",
   EnumLocale.txtPayment.name: "చెల్లింపు",
@@ -151,22 +165,28 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtFailed.name: "విఫలమైంది",
   EnumLocale.txtSuccess.name: "విజయం",
   EnumLocale.txtCallDuration.name: "కాల్ వ్యవధి",
-  EnumLocale.txtManageYourAccountSettings.name: "మీ ఖాతాను నిర్వహించండి\nసెట్టింగ్‌లు...",
+  EnumLocale.txtManageYourAccountSettings.name:
+      "మీ ఖాతాను నిర్వహించండి\nసెట్టింగ్‌లు...",
   EnumLocale.txtLogoutApp.name: "లాగ్అవుట్ యాప్",
   EnumLocale.txtLogout.name: "లాగ్అవుట్",
   EnumLocale.txtCancel.name: "రద్దు చేయి",
-  EnumLocale.txtDesLogout.name: "మీరు ఖచ్చితంగా మీ ఖాతాను లాగ్ అవుట్ చేయాలనుకుంటున్నారా?",
+  EnumLocale.txtDesLogout.name:
+      "మీరు ఖచ్చితంగా మీ ఖాతాను లాగ్ అవుట్ చేయాలనుకుంటున్నారా?",
   EnumLocale.txtDeleteAccount.name: "ఖాతాను తొలగించండి",
   EnumLocale.txtNeedAnyHelpFAQ.name: "ఏదైనా సహాయం కావాలి &\nతరచూ ప్రశ్నలు...",
   EnumLocale.txtHaveAnIssue.name: "సమస్య ఉందా?",
   EnumLocale.txtFrequentlyAskedQuestions.name: "తరచుగా అడిగే ప్రశ్నలు",
-  EnumLocale.txtLetEngageMoreUserThrowShareApp.name: "మరింత యూజర్ త్రో షేర్ యాప్‌ని ఎంగేజ్ చేద్దాం...",
+  EnumLocale.txtLetEngageMoreUserThrowShareApp.name:
+      "మరింత యూజర్ త్రో షేర్ యాప్‌ని ఎంగేజ్ చేద్దాం...",
   EnumLocale.txtRateUs.name: "మాకు రేట్ చేయండి",
-  EnumLocale.txtRateYourExperienceWithUs.name: "మాతో మీ అనుభవాన్ని రేట్ చేయండి!",
-  EnumLocale.txtYouWantToBecomeListener.name: "మీరు \nశ్రోతలుగా మారాలనుకుంటున్నారు...",
+  EnumLocale.txtRateYourExperienceWithUs.name:
+      "మాతో మీ అనుభవాన్ని రేట్ చేయండి!",
+  EnumLocale.txtYouWantToBecomeListener.name:
+      "మీరు \nశ్రోతలుగా మారాలనుకుంటున్నారు...",
   EnumLocale.txtListenerVerification.name: "వినేవారి ధృవీకరణ",
   EnumLocale.txtExploreListener.name: "శ్రోతలను అన్వేషించండి",
-  EnumLocale.txtTakeControlOfYourPrivacyData.name: "మీపై నియంత్రణ తీసుకోండి\nగోప్యతా డేటా...",
+  EnumLocale.txtTakeControlOfYourPrivacyData.name:
+      "మీపై నియంత్రణ తీసుకోండి\nగోప్యతా డేటా...",
   EnumLocale.txtLocation.name: "స్థానం",
   EnumLocale.txtBluetooth.name: "బ్లూటూత్",
   EnumLocale.txtMicrophone.name: "మైక్రోఫోన్",
@@ -186,27 +206,34 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtRequestID.name: "అభ్యర్థన ID",
   EnumLocale.txtEnterYourAddress.name: "మీ చిరునామాను నమోదు చేయండి",
   EnumLocale.txtEnterYourAge.name: "మీ వయస్సును నమోదు చేయండి",
-  EnumLocale.txtEnterYourExperience.name: "మీ అనుభవాన్ని నమోదు చేయండి (సంవత్సరంలో)",
+  EnumLocale.txtEnterYourExperience.name:
+      "మీ అనుభవాన్ని నమోదు చేయండి (సంవత్సరంలో)",
   EnumLocale.txtSUBMIT.name: "సమర్పించండి",
-  EnumLocale.desWantDeleteAccount.name: "మీరు ఖచ్చితంగా మీ ఖాతాను తొలగించాలనుకుంటున్నారా?",
+  EnumLocale.desWantDeleteAccount.name:
+      "మీరు ఖచ్చితంగా మీ ఖాతాను తొలగించాలనుకుంటున్నారా?",
   EnumLocale.changeYourImage.name: "మీ చిత్రాన్ని మార్చండి",
   EnumLocale.txtTakeAphoto.name: "ఫోటో తీయండి",
   EnumLocale.txtChooseFromYourFile.name: "మీ ఫైల్ నుండి ఎంచుకోండి",
   EnumLocale.txtNext.name: "తదుపరి",
-  EnumLocale.txtPleaseSelectProfileImage.name: "దయచేసి ప్రొఫైల్ చిత్రాన్ని ఎంచుకోండి !!",
+  EnumLocale.txtPleaseSelectProfileImage.name:
+      "దయచేసి ప్రొఫైల్ చిత్రాన్ని ఎంచుకోండి !!",
   EnumLocale.txtPleaseEnterNickName.name: "దయచేసి మారుపేరును నమోదు చేయండి !!",
   EnumLocale.txtEnterNickName.name: "నిక్ పేరును నమోదు చేయండి",
-  EnumLocale.txtPleaseEnterMobileNumber.name: "దయచేసి మొబైల్ నంబర్‌ని నమోదు చేయండి !!",
-  EnumLocale.txtPleaseSelectBirthDate.name: "దయచేసి పుట్టిన తేదీని ఎంచుకోండి !!",
+  EnumLocale.txtPleaseEnterMobileNumber.name:
+      "దయచేసి మొబైల్ నంబర్‌ని నమోదు చేయండి !!",
+  EnumLocale.txtPleaseSelectBirthDate.name:
+      "దయచేసి పుట్టిన తేదీని ఎంచుకోండి !!",
   EnumLocale.txtProfileUpdateSuccessfully.name: "ప్రొఫైల్ నవీకరణ విజయవంతంగా",
   EnumLocale.txtForgotPassword.name: "పాస్‌వర్డ్ మర్చిపోయాను",
   EnumLocale.txtForgotYourPassword.name: "మీ పాస్‌వర్డ్\n మర్చిపోయారా...",
-  EnumLocale.txtEnterMailMobileNumber.name: "మెయిల్/మొబైల్ నంబర్‌ను నమోదు చేయండి",
+  EnumLocale.txtEnterMailMobileNumber.name:
+      "మెయిల్/మొబైల్ నంబర్‌ను నమోదు చేయండి",
   EnumLocale.txtVerify.name: "ధృవీకరించండి",
   EnumLocale.txtCreatePassword.name: "పాస్వర్డ్ను సృష్టించండి",
   EnumLocale.txtForgotPassDescription.name:
       "మీ పాస్‌వర్డ్‌ని రీసెట్ చేయడానికి దిగువన మీ ఇమెయిల్ చిరునామా లేదా మొబైల్ నంబర్‌ను నమోదు చేయండి. మీ ఖాతాను పునరుద్ధరించడంలో మీకు సహాయపడటానికి మేము మీకు ధృవీకరణ కోడ్‌ని పంపుతాము.",
-  EnumLocale.txtLongPressToEnableAudioRecording.name: "ఆడియో రికార్డింగ్‌ని ప్రారంభించడానికి ఎక్కువసేపు నొక్కండి",
+  EnumLocale.txtLongPressToEnableAudioRecording.name:
+      "ఆడియో రికార్డింగ్‌ని ప్రారంభించడానికి ఎక్కువసేపు నొక్కండి",
   EnumLocale.txtAudioRecording.name: "ఆడియో రికార్డింగ్...",
   EnumLocale.txtPleaseAllowPermission.name: "దయచేసి అనుమతిని అనుమతించండి !!",
   EnumLocale.txtHostCenterDescription.name:
@@ -215,7 +242,8 @@ final Map<String, String> teIN = <String, String>{
       "మేము మీ డేటా గోప్యతకు విలువనిస్తాము. మీ వ్యక్తిగత సమాచారం ఎలా సేకరించబడుతుందో, ఉపయోగించబడుతుంది మరియు రక్షించబడుతుందో తెలుసుకోండి.",
   EnumLocale.txtShareAppDes.name:
       "ఈ యాప్‌ని మీ స్నేహితులు మరియు కుటుంబ సభ్యులతో షేర్ చేయండి, తద్వారా వారు దాని ప్రత్యేక లక్షణాలను కూడా ఆస్వాదించగలరు.",
-  EnumLocale.txtAboutUsDes.name: "మేము మీకు ఉత్తమమైన సేవను అందించడానికి కట్టుబడి ఉన్నాము. మా బృందం మరియు మా మిషన్ గురించి మరింత తెలుసుకోండి.",
+  EnumLocale.txtAboutUsDes.name:
+      "మేము మీకు ఉత్తమమైన సేవను అందించడానికి కట్టుబడి ఉన్నాము. మా బృందం మరియు మా మిషన్ గురించి మరింత తెలుసుకోండి.",
   EnumLocale.txtPaymentMethod.name: "చెల్లింపు విధానం",
   EnumLocale.txtListenerWithdrawDescription.name:
       "1. మీరు ప్లాట్‌ఫారమ్ ద్వారా నిర్దేశించిన కనీస ఉపసంహరణ థ్రెషోల్డ్‌ను చేరుకున్న తర్వాత మీరు సంపాదించిన నాణేలను నిజమైన డబ్బుగా ఉపసంహరించుకోవచ్చు. మీ ఉపసంహరణ అభ్యర్థనను ప్రాసెస్ చేయడంలో జాప్యాన్ని నివారించడానికి మీ ప్రొఫైల్ మరియు చెల్లింపు వివరాలు పూర్తిగా ధృవీకరించబడ్డాయని నిర్ధారించుకోండి.",
@@ -244,7 +272,8 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtEnterCoinAmount.name: "కాయిన్ మొత్తాన్ని నమోదు చేయండి",
   EnumLocale.txtMinimumWithdrawCoin.name: "*కనీస ఉపసంహరణ నాణెం:",
   EnumLocale.txtMyAmountBalance.name: "నా మొత్తం బ్యాలెన్స్:",
-  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name: "మీ విత్‌డ్రా చేయగల కాయిన్ మొత్తాన్ని ఇక్కడ పొందండి...",
+  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
+      "మీ విత్‌డ్రా చేయగల కాయిన్ మొత్తాన్ని ఇక్కడ పొందండి...",
   EnumLocale.txtListenerDetails.name: "శ్రోతల వివరాలు:-",
   EnumLocale.txtEnterIntroduction.name: "పరిచయాన్ని నమోదు చేయండి",
   EnumLocale.txtTalkLanguages.name: "చర్చా భాషలు:-",
@@ -253,7 +282,8 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtSelectPaymentMode.name: "చెల్లింపు మోడ్‌ని ఎంచుకోండి",
   EnumLocale.txtAvailableBalance.name: "అందుబాటులో ఉన్న బ్యాలెన్స్",
   EnumLocale.txtSomeThingWentWrong.name: "ఏదో తప్పు జరిగింది !!",
-  EnumLocale.txtYoumusthavesignup.name: "మీరు తప్పనిసరిగా సైన్అప్ కలిగి ఉండాలి !!",
+  EnumLocale.txtYoumusthavesignup.name:
+      "మీరు తప్పనిసరిగా సైన్అప్ కలిగి ఉండాలి !!",
   EnumLocale.txtSelectIdentityProof.name: "గుర్తింపు రుజువును ఎంచుకోండి",
   EnumLocale.txtBackToHome.name: "ఇంటికి తిరిగి వెళ్ళు",
   EnumLocale.txtListenersName.name: "శ్రోతల పేరు:",
@@ -264,9 +294,12 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtAddress.name: "చిరునామా:",
   EnumLocale.txtNOte.name: "గమనిక:",
   EnumLocale.txtPleaseFillProfile.name: "దయచేసి ప్రొఫైల్‌ను పూరించండి",
-  EnumLocale.txtPleaseEnterWithdrawCoin.name: "దయచేసి WithdrawCoinని నమోదు చేయండి",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name: "దయచేసి ఉపసంహరణ పద్ధతిని ఎంచుకోండి",
-  EnumLocale.txtPleaseEnterAllPaymentDetails.name: "దయచేసి అన్ని చెల్లింపు వివరాలను నమోదు చేయండి",
+  EnumLocale.txtPleaseEnterWithdrawCoin.name:
+      "దయచేసి Session Credit మొత్తాన్ని నమోదు చేయండి",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name:
+      "దయచేసి ఉపసంహరణ పద్ధతిని ఎంచుకోండి",
+  EnumLocale.txtPleaseEnterAllPaymentDetails.name:
+      "దయచేసి అన్ని చెల్లింపు వివరాలను నమోదు చేయండి",
   EnumLocale.txtSelectPaymentGateway.name: "చెల్లింపు గేట్‌వేని ఎంచుకోండి",
   EnumLocale.txtNumberOfCoin.name: "నాణెం సంఖ్య:",
   EnumLocale.txtWithdrawalID.name: "ఉపసంహరణ ID:",
@@ -281,8 +314,10 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtPrivateAudioCallRate.name: "ప్రైవేట్ ఆడియో కాల్ రేట్",
   EnumLocale.txtPaymentDetails.name: "చెల్లింపు వివరాలు:",
   EnumLocale.txtAppRestart.name: "మీ శ్రోతల అభ్యర్థన ఆమోదించబడింది",
-  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name: "ఉపసంహరణ చేయడానికి వినియోగదారు వద్ద తగినంత నిధులు లేవు",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
+  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
+      "ఉపసంహరణ చేయడానికి వినియోగదారు వద్ద తగినంత నిధులు లేవు",
+  EnumLocale
+          .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
       "ఉపసంహరణ అభ్యర్థించిన నాణెం తప్పనిసరిగా నిర్వాహకులు పేర్కొన్న దానికంటే ఎక్కువగా ఉండాలి",
   EnumLocale.txtSkip.name: "దాటవేయి",
   EnumLocale.txtHostHomeDescription.name:
@@ -294,7 +329,8 @@ final Map<String, String> teIN = <String, String>{
       "మీరు శ్రోతలతో మాట్లాడటానికి సౌకర్యంగా ఉండే భాషలను ఎంచుకోండి. ఆ భాషలలో మద్దతు అవసరమైన సరైన వ్యక్తులతో మిమ్మల్ని కనెక్ట్ చేయడంలో ఇది మాకు సహాయపడుతుంది.",
   EnumLocale.txtSelectTopic.name:
       "మీకు నమ్మకంగా మాట్లాడే అంశాలను ఎంచుకోండి. నిర్దిష్ట ప్రాంతాలలో మద్దతుని కోరుకునే వినియోగదారులతో సరిపోలడానికి ఇవి మీకు సహాయపడతాయి.",
-  EnumLocale.txtSureClearNotification.name: "మీరు ఖచ్చితంగా అన్ని నోటిఫికేషన్‌లను క్లియర్ చేయాలనుకుంటున్నారా?",
+  EnumLocale.txtSureClearNotification.name:
+      "మీరు ఖచ్చితంగా అన్ని నోటిఫికేషన్‌లను క్లియర్ చేయాలనుకుంటున్నారా?",
   EnumLocale.txtSure.name: "ఖచ్చితంగా",
   EnumLocale.txtIntroduction.name: "పరిచయం",
   EnumLocale.txtTryAgain.name: "మళ్లీ ప్రయత్నించండి",
@@ -304,10 +340,13 @@ final Map<String, String> teIN = <String, String>{
       "మీకు ఏవైనా ప్రశ్నలు ఉంటే లేదా ఏవైనా సమస్యలను ఎదుర్కొంటే, మేము సహాయం చేయడానికి ఇక్కడ ఉన్నాము! దిగువ తరచుగా అడిగే ప్రశ్నలను చూడండి లేదా వ్యక్తిగతీకరించిన సహాయం కోసం మా మద్దతు బృందాన్ని సంప్రదించండి.",
   EnumLocale.txtBecomeHostDescription.name:
       "ఎవరితోనైనా మాట్లాడాల్సిన అవసరం ఉన్న వినియోగదారులకు మద్దతు, మార్గదర్శకత్వం లేదా వినడం ద్వారా శ్రోతలు కీలక పాత్ర పోషిస్తారు. మీరు సానుభూతితో, సహనంతో మరియు ఇతరులకు సహాయం చేయడానికి సిద్ధంగా ఉన్నట్లయితే, వినేవారిగా మారడం సానుకూల ప్రభావం చూపడానికి సరైన మార్గం.",
-  EnumLocale.txtListenerReqSentSuccessfully.name: "వినేవారి అభ్యర్థన విజయవంతంగా పంపబడింది....",
+  EnumLocale.txtListenerReqSentSuccessfully.name:
+      "వినేవారి అభ్యర్థన విజయవంతంగా పంపబడింది....",
   EnumLocale.txtSearchLanguage.name: "శోధన భాష...",
-  EnumLocale.txtSelectTalkaboutTxt.name: "యాప్‌లోని కంటెంట్ గురించి చర్చను ఎంచుకోండి.",
-  EnumLocale.txtSelectAppLanguageTxt.name: "మీ ప్రాధాన్య అనువర్తన భాషను ఎంచుకోండి.",
+  EnumLocale.txtSelectTalkaboutTxt.name:
+      "యాప్‌లోని కంటెంట్ గురించి చర్చను ఎంచుకోండి.",
+  EnumLocale.txtSelectAppLanguageTxt.name:
+      "మీ ప్రాధాన్య అనువర్తన భాషను ఎంచుకోండి.",
   EnumLocale.txtHostVerificationFillForm.name:
       "దయచేసి ఖచ్చితమైన వివరాలతో ఫారమ్‌ను పూర్తి చేయండి. ముఖ్యమైన నవీకరణలు మరియు ధృవీకరణ ఫలితాలను స్వీకరించడానికి మీ చెల్లుబాటు అయ్యే ఇమెయిల్ IDని నమోదు చేయండి. కొనసాగడానికి ముందు అన్ని ఫీల్డ్‌లు సరిగ్గా పూరించబడ్డాయని నిర్ధారించుకోండి.",
   EnumLocale.txtUserName.name: "యాప్‌లోని కంటెంట్ గురించి చర్చను ఎంచుకోండి.",
@@ -351,22 +390,29 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtAgreePrivacyPolicy.name: 'ఇన్‌కమింగ్ ఆడియో కాల్....',
   EnumLocale.txtPrivacyPolicy.name: 'అభిప్రాయం',
   EnumLocale.txtListenerAvailableForPrivateVideoCall.name: 'ఇది ఒక మ్యాచ్!',
-  EnumLocale.txtListenerAvailableForPrivateAudioCall.name: 'నేను అంగీకరిస్తున్నాను',
-  EnumLocale.txtListenerDisableForPrivateVideoCall.name: 'ప్రైవేట్ ఆడియో కాల్ కోసం లిజనర్ అందుబాటులో ఉన్నారు.',
-  EnumLocale.txtListenerDisableForPrivateAudioCall.name: 'యాదృచ్ఛిక వీడియో కాల్ కోసం వినేవారు అందుబాటులో ఉన్నారు.',
+  EnumLocale.txtListenerAvailableForPrivateAudioCall.name:
+      'నేను అంగీకరిస్తున్నాను',
+  EnumLocale.txtListenerDisableForPrivateVideoCall.name:
+      'ప్రైవేట్ ఆడియో కాల్ కోసం లిజనర్ అందుబాటులో ఉన్నారు.',
+  EnumLocale.txtListenerDisableForPrivateAudioCall.name:
+      'యాదృచ్ఛిక వీడియో కాల్ కోసం వినేవారు అందుబాటులో ఉన్నారు.',
   EnumLocale.txtEarpiece.name: 'ఇయర్ పీస్',
   EnumLocale.txtEnterProperValue.name: 'సరైన విలువను నమోదు చేయండి',
-  EnumLocale.txtYourHostRequestSentSuccessfully.name: 'మీ హోస్ట్ అభ్యర్థన విజయవంతంగా పంపబడింది',
+  EnumLocale.txtYourHostRequestSentSuccessfully.name:
+      'మీ హోస్ట్ అభ్యర్థన విజయవంతంగా పంపబడింది',
   EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
       'మీ అభ్యర్థన సమర్పించబడింది. మేము దానిని సమీక్షించి, ఆమోదించే వరకు దయచేసి వేచి ఉండండి.',
   EnumLocale.txtViewRequest.name: 'అభ్యర్థనను వీక్షించండి',
-  EnumLocale.txtDEmoListenerText.name: "అయ్యో! మీకు అనుమతి లేదు. ఇది డెమో లాగిన్",
+  EnumLocale.txtDEmoListenerText.name:
+      "అయ్యో! మీకు అనుమతి లేదు. ఇది డెమో లాగిన్",
   EnumLocale.txtVideoCalling.name: "వీడియో కాలింగ్",
   EnumLocale.txtAudioCalling.name: "ఆడియో కాలింగ్",
   EnumLocale.txtIncomingVoiceCalling.name: 'ఇన్‌కమింగ్ వీడియో కాలింగ్',
   EnumLocale.txtIncomingAudioCalling.name: 'ఇన్‌కమింగ్ ఆడియో కాలింగ్',
-  EnumLocale.txtNoAccountFoundForThisEmail.name: "ఈ ఇమెయిల్ కోసం ఖాతా కనుగొనబడలేదు",
-  EnumLocale.txtResetLinkSentToYourEmail.name: "మీ ఇమెయిల్‌కి పంపబడిన లింక్‌ని రీసెట్ చేయండి",
+  EnumLocale.txtNoAccountFoundForThisEmail.name:
+      "ఈ ఇమెయిల్ కోసం ఖాతా కనుగొనబడలేదు",
+  EnumLocale.txtResetLinkSentToYourEmail.name:
+      "మీ ఇమెయిల్‌కి పంపబడిన లింక్‌ని రీసెట్ చేయండి",
   EnumLocale.txtForgetPasswordDescription.name:
       "మీరు తప్పనిసరిగా మీ Gmail ఖాతాలో మర్చిపోయి పాస్‌వర్డ్ లింక్‌ను స్వీకరించి ఉండాలి, దాన్ని తనిఖీ చేయండి. కాకపోతే, స్పామ్ విభాగాన్ని తనిఖీ చేయండి.",
 };

@@ -126,20 +126,20 @@ const VerticalMenu = ({ scrollMenu }) => {
           </MenuItem>
         
           <MenuItem href='/talk-topics' icon={<i className='tabler-message-circle' />}>
-            Talk Topic
+            Category
           </MenuItem>
           <MenuItem href='/identity-proofs' icon={<i className='tabler-id' />}>
             Identity Proof
           </MenuItem>
          
           {/* CoinTrader */}
-          <MenuItem disabled>PACKAGE</MenuItem>
+          <MenuItem disabled>SUBSCRIPTION</MenuItem>
           <MenuItem href='/coin-plans' icon={<i className='tabler-coins' />}>
-            Coin Plan
+            Subscription Plan
           </MenuItem>
           <MenuItem href='/coin-plan-history'  exactMatch={false}
             activeUrl='/coin-plan-history' icon={<i className='tabler-history' />}>
-            Coin Plan History 
+            Subscription History
           </MenuItem>
          
           {/* Finance */}

@@ -36,13 +36,13 @@ class HostCoinHistoryApi {
     final headers = {
       ApiParams.key: Api.secretKey,
     };
-    Utils.showLog("Host Coin history Api uri :: $uri");
-    Utils.showLog("Host Coin history Api headers :: $headers");
+    Utils.showLog("Host Session Credit history Api uri :: $uri");
+    Utils.showLog("Host Session Credit history Api headers :: $headers");
 
     try {
       final response = await http.get(uri, headers: headers);
 
-      log('Host Coin history API STATUS CODE :: ${response.statusCode} \n Host history API RESPONSE :: ${response.body}');
+      log('Host Session Credit history API STATUS CODE :: ${response.statusCode} \n Host history API RESPONSE :: ${response.body}');
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);

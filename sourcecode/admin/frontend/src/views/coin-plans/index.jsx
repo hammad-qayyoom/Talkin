@@ -129,12 +129,12 @@ const CoinPlans = () => {
     () => [
       columnHelper.accessor(row => row.productId, {
         id: 'productId',
-        header: 'Product ID',
+        header: 'Plan Slug',
         cell: ({ getValue }) => <Typography>{getValue() || '-'}</Typography>
       }),
       columnHelper.accessor(row => row.coins, {
         id: 'coins',
-        header: 'Coins',
+        header: 'Session Credits',
         cell: ({ getValue }) => <Typography>{getValue() || '-'}</Typography>
       }),
       columnHelper.accessor(row => row.price, {
@@ -241,10 +241,10 @@ const CoinPlans = () => {
 
       <Box className='mb-3'>
         <Typography variant='h4'>
-          Coin Plan
+          Subscription Plans
         </Typography>
         <Typography variant='body2' color='text.secondary'>
-          Create and manage in-app coin packages, pricing, availability, and product settings.
+          Create and manage subscription plans, session credits, pricing, and plan availability.
         </Typography>
       </Box>
 
@@ -269,7 +269,7 @@ const CoinPlans = () => {
               setOpenDialog(true)
             }}
           >
-            + Create Coin Plan
+            + Create Subscription Plan
           </Button>
         </div>
 
@@ -302,7 +302,7 @@ const CoinPlans = () => {
                       ))}
                     </tr>
                   ))}
-                  <EmprtyTableRow limit={9} data={coinPlans} columns={columns} noDataLebel={"No coin plans found"} />
+                  <EmprtyTableRow limit={9} data={coinPlans} columns={columns} noDataLebel={"No subscription plans found"} />
                 </tbody>
               </table>
             )}
@@ -325,7 +325,7 @@ const CoinPlans = () => {
         type={confirmType}
         title={
           confirmType === 'delete-coin-plan'
-            ? 'Are you sure you want to delete this coin plan?'
+            ? 'Are you sure you want to delete this subscription plan?'
             : confirmType === 'toggle-isActive'
               ? 'Are you sure you want to change the active status?'
               : 'Are you sure you want to change the popular status?'

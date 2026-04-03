@@ -200,7 +200,7 @@ const PayoutRequestsTable = ({ personType, statusType, showActions, onAccept, on
         )
       }),
       columnHelper.accessor('coin', {
-        header: 'Coins',
+        header: 'Session Credits',
         cell: ({ row }) => <Typography color='text.primary'>{row.original.coin || '0'}</Typography>
       }),
       columnHelper.accessor('amount', {

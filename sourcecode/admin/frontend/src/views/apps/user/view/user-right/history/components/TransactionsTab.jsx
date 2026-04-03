@@ -218,18 +218,18 @@ const TransactionsTab = ({ history, transactionTab, setTransactionTab, loadTrans
               <>
                 <Grid item xs={12} sm={6} md={4}>
                   <Typography variant='body2' color='text.secondary'>
-                    Coins Received:
+                    Session Credits Received:
                   </Typography>
                   <Typography variant='h6' color='success.main' align='center'>
-                    +{totalIncoming} Coins
+                    +{totalIncoming} Session Credits
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
                   <Typography variant='body2' color='text.secondary'>
-                    Coins Spent:
+                    Session Credits Spent:
                   </Typography>
                   <Typography variant='h6' color='error.main' align='center'>
-                    -{totalOutgoing} Coins
+                    -{totalOutgoing} Session Credits
                   </Typography>
                 </Grid>
               </>
@@ -238,10 +238,10 @@ const TransactionsTab = ({ history, transactionTab, setTransactionTab, loadTrans
             {transactionTab === TRANSACTION_TYPES.COIN_PLAN_PURCHASE && (
               <Grid item xs={12} sm={6} md={4}>
                 <Typography variant='body2' color='text.secondary'>
-                  Coins Purchased:
+                  Session Credits Purchased:
                 </Typography>
                 <Typography variant='h6' color='success.main' align='center'>
-                  +{totalIncoming} Coins
+                  +{totalIncoming} Session Credits
                 </Typography>
               </Grid>
             )}
@@ -253,10 +253,10 @@ const TransactionsTab = ({ history, transactionTab, setTransactionTab, loadTrans
             ].includes(transactionTab) && (
               <Grid item xs={12} sm={6} md={4}>
                 <Typography variant='body2' color='text.secondary'>
-                  Total Coins Spent:
+                  Total Session Credits Used:
                 </Typography>
                 <Typography variant='h6' color='error.main' align='center'>
-                  -{totalOutgoing} Coins
+                  -{totalOutgoing} Session Credits
                 </Typography>
               </Grid>
             )}
@@ -282,7 +282,7 @@ const TransactionsTab = ({ history, transactionTab, setTransactionTab, loadTrans
           <Tab label='Ride Purchase' value={TRANSACTION_TYPES.PURCHASE_RIDE} />
           <Tab label='Private Call' value={TRANSACTION_TYPES.PRIVATE_CALL} />
           <Tab label='Live Gift' value={TRANSACTION_TYPES.LIVE_GIFT} />
-          <Tab label='Coin Plan Purchase' value={TRANSACTION_TYPES.COIN_PLAN_PURCHASE} />
+          <Tab label='Subscription Purchase' value={TRANSACTION_TYPES.COIN_PLAN_PURCHASE} />
         </Tabs>
       </Box>
 

@@ -62,7 +62,7 @@ class Constant {
   static var idPhoneFieldUpdate = 'idPhoneFieldUpdate';
   static var idGetListenerReview = 'idGetListenerReview';
 
-  /// =================== Id For Coin Plan =================== ///
+  /// =================== Id For Subscription Plan =================== ///
   static var idGetCoinPlan = 'idGetCoinPlan';
 
   /// =================== Get Storage (Local Storage) =================== ///

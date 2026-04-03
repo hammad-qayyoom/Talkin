@@ -170,7 +170,7 @@ const RidesTable = () => {
                     <div>
                       <Typography className='block'>Price</Typography>
                       <Typography variant='body2' color='text.primary'>
-                        {ride.coin.toLocaleString()} Coins
+                        {ride.coin.toLocaleString()} Session Credits
                       </Typography>
                     </div>
                     <div>

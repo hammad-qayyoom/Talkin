@@ -68,7 +68,7 @@ const WithdrawalSettings = () => {
     const minimumCoinsForPayout = formData.minimumCoinsForPayout === '' ? 0 : Number(formData.minimumCoinsForPayout)
 
     if (minimumCoinsForConversion < 0 || minimumCoinsForPayout < 0) {
-      setJsonError('Minimum coins cannot be negative')
+      setJsonError('Minimum session credits cannot be negative')
 
       return false
     }
@@ -147,13 +147,13 @@ const WithdrawalSettings = () => {
         <CardContent>
           {/* <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
             <i className='tabler-settings mr-2' />
-            Minimum Coin Setting
+            Minimum Session Credit Setting
           </Typography> */}
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
             <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
               <i className='tabler-settings mr-2' />
-              Minimum Coin Setting
+              Minimum Session Credit Setting
             </Typography>
             <HoverPopover
               popoverContent={
@@ -201,7 +201,7 @@ const WithdrawalSettings = () => {
               <TextField
                 fullWidth
                 type='text'
-                label='Coins'
+                label='Session Credits'
                 value={formData.minimumCoinsForConversion || ''}
                 onChange={e => handleFieldChange('minimumCoinsForConversion', e.target.value)}
                 InputProps={{
@@ -209,7 +209,7 @@ const WithdrawalSettings = () => {
                   endAdornment: (
                     <InputAdornment position='end'>
                       <Typography variant='caption' color='text.secondary'>
-                        coins
+                        session credits
                       </Typography>
                     </InputAdornment>
                   )
@@ -221,7 +221,7 @@ const WithdrawalSettings = () => {
             <TextField
               fullWidth
               type='text'
-              label='Minimum Coins Payout For Agency'
+              label='Minimum Session Credits Payout For Agency'
               value={formData.agencyMinPayout}
               onChange={e => handleFieldChange('agencyMinPayout', e.target.value)}
               InputProps={{
@@ -244,13 +244,13 @@ const WithdrawalSettings = () => {
         <CardContent>
           {/* <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
             <i className='tabler-settings mr-2' />
-            Minimum Coin Payout Setting
+            Minimum Session Credit Payout Setting
           </Typography> */}
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
             <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
               <i className='tabler-settings mr-2' />
-              Minimum Coin Payout Setting
+              Minimum Session Credit Payout Setting
             </Typography>
             <HoverPopover
               popoverContent={
@@ -277,7 +277,7 @@ const WithdrawalSettings = () => {
               <TextField
                 fullWidth
                 type='text'
-                label='Minimum Coins Payout For Expert'
+                label='Minimum Session Credits Payout For Expert'
                 value={formData.minimumCoinsForPayout || ''}
                 onChange={e => handleFieldChange('minimumCoinsForPayout', e.target.value)}
                 InputProps={{
@@ -285,7 +285,7 @@ const WithdrawalSettings = () => {
                   endAdornment: (
                     <InputAdornment position='end'>
                       <Typography variant='caption' color='text.secondary'>
-                        coins
+                        session credits
                       </Typography>
                     </InputAdornment>
                   )

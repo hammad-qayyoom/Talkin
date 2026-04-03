@@ -161,27 +161,23 @@ class SocketEmit {
       userCoinModel = await UserCoinApi.callApi();
       Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
 
-
-
       listenerCoinModel = await HostCoinApi.callApi();
       Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
 
-      Utils.showLog("user coin emit ::::::::::::::::::::::::${Database.userCoin}");
-      Utils.showLog("user coin emit ::::::::::::::::::::::::${userCoinModel?.coin.toString()}");
+      Utils.showLog(
+          "user session credit emit ::::::::::::::::::::::::${Database.userCoin}");
+      Utils.showLog(
+          "user session credit emit ::::::::::::::::::::::::${userCoinModel?.coin.toString()}");
 
-      Utils.showLog("listenerCoinModel emit ::::::::::::::::::::::::${Database.listenerCoin}");
-      Utils.showLog("listenerCoinModel emit ::::::::::::::::::::::::${listenerCoinModel.coin.toString()}");
+      Utils.showLog(
+          "listener session credit emit ::::::::::::::::::::::::${Database.listenerCoin}");
+      Utils.showLog(
+          "listener session credit emit ::::::::::::::::::::::::${listenerCoinModel.coin.toString()}");
 
       if (Get.isRegistered<HomeScreenController>()) {
-        Get.find<HomeScreenController>()
-            .update([Constant.idCoinUpdate]);}
+        Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
+      }
       // Get.find<VideoCallController>().update([Constant.idCoinUpdate]);
-
-
-
-
-
-
 
       Utils.showLog("Socket Emit => callTerminated: $data");
     } else {
@@ -189,7 +185,7 @@ class SocketEmit {
     }
   }
 
-  /// coin cut call
+  /// session credit deduction call
   static void callCoinsDeducted({
     required String callerId,
     required String receiverId,
@@ -214,7 +210,8 @@ class SocketEmit {
         SocketParams.receiverRole: receiverRole,
       };
       socket?.emit(SocketEvents.callCoinsDeducted, data);
-      Utils.showLog("Socket Emit => coin cut callCoinsDeducted: $data");
+      Utils.showLog(
+          "Socket Emit => session credit deduction callCoinsDeducted: $data");
     } else {
       Utils.showLog("Socket Not Connected!!");
     }

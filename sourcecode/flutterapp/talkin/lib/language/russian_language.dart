@@ -5,9 +5,12 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtRegisterTitle1.name: "НАХОДИТЬ",
   EnumLocale.txtRegisterTitle2.name: "ЧАТ",
   EnumLocale.txtRegisterTitle3.name: "ВИДЕО ЗВОНОК",
-  EnumLocale.txtRegisterSubTitle1.name: "Вы можете общаться с людьми по всему миру, обмениваться сообщениями и устанавливать с ними связи.",
-  EnumLocale.txtRegisterSubTitle2.name: 'Общайтесь с незнакомцами, чтобы лучше узнать друг друга и добиться хорошей\nсовместимости.',
-  EnumLocale.txtRegisterSubTitle3.name: "Вы можете поделиться своими видео и фотографиями\nс друзьями и знакомыми.",
+  EnumLocale.txtRegisterSubTitle1.name:
+      "Вы можете общаться с людьми по всему миру, обмениваться сообщениями и устанавливать с ними связи.",
+  EnumLocale.txtRegisterSubTitle2.name:
+      'Общайтесь с незнакомцами, чтобы лучше узнать друг друга и добиться хорошей\nсовместимости.',
+  EnumLocale.txtRegisterSubTitle3.name:
+      "Вы можете поделиться своими видео и фотографиями\nс друзьями и знакомыми.",
   EnumLocale.txtEnterYourMail.name: "Введите свой адрес электронной почты",
   EnumLocale.txtEnterPassword.name: "Введите ваш пароль",
   EnumLocale.txtCoinRechargeSuccess.name: "Успешное пополнение монет",
@@ -30,21 +33,26 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtPay.name: "Платить",
   EnumLocale.txtRegister.name: "Зарегистрироваться",
   EnumLocale.desEnterEmail.name: "Пожалуйста, введите адрес электронной почты",
-  EnumLocale.desEnterValidEmailAddress.name: "Пожалуйста, введите действительный адрес электронной почты",
+  EnumLocale.desEnterValidEmailAddress.name:
+      "Пожалуйста, введите действительный адрес электронной почты",
   EnumLocale.desEnterPassword.name: "Пожалуйста, введите пароль",
   EnumLocale.desReEnterPassword.name: "Пожалуйста, введите новый пароль",
-  EnumLocale.desPasswordCharacters.name: "Пароль должен быть длиной не менее 6 символов.",
+  EnumLocale.desPasswordCharacters.name:
+      "Пароль должен быть длиной не менее 6 символов.",
   EnumLocale.desPasswordNotMatch.name: "Пароль не совпадает",
   EnumLocale.txtEnterName.name: "Введите свое имя",
   EnumLocale.desEnterFullName.name: "Пожалуйста, введите полное имя",
-  EnumLocale.toastEnterNumber.name: "Пожалуйста, введите номер мобильного телефона",
+  EnumLocale.toastEnterNumber.name:
+      "Пожалуйста, введите номер мобильного телефона",
   EnumLocale.txtLogIn.name: "Авторизоваться",
   EnumLocale.txtLogInWithMobile.name: "Войти\nС мобильного...",
   EnumLocale.txtEnterMobileNumber.name: "Введите номер мобильного телефона",
-  EnumLocale.desEnterMobile.name: "Пожалуйста, введите номер мобильного телефона",
+  EnumLocale.desEnterMobile.name:
+      "Пожалуйста, введите номер мобильного телефона",
   EnumLocale.txtGetOtp.name: "Получить одноразовый пароль",
   EnumLocale.txtEnterOtp.name: "Введите OTP",
-  EnumLocale.txtEnterOtpWithRegisterNumber.name: "Введите OTP\nС регистрационным номером...",
+  EnumLocale.txtEnterOtpWithRegisterNumber.name:
+      "Введите OTP\nС регистрационным номером...",
   EnumLocale.txtYouHaveNotGetOtp.name: "Если вы не получили OTP?",
   EnumLocale.txtResendOtp.name: "Повторно отправить OTP",
   EnumLocale.txtExitApp.name: 'Выйти из приложения',
@@ -57,7 +65,8 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtFreeTalk.name: 'БЕСПЛАТНЫЙ ОБЩЕНИЕ',
   EnumLocale.txtCalling.name: 'Вызов',
   EnumLocale.txtHomeFastLalk.name: 'Теперь быстро Lalk, почувствуй себя лучше',
-  EnumLocale.txtHomeDescription.name: 'Поговорите со своим любимым слушателем и почувствуйте себя легче и ярче!',
+  EnumLocale.txtHomeDescription.name:
+      'Поговорите со своим любимым слушателем и почувствуйте себя легче и ярче!',
   EnumLocale.txtFindMoreListener.name: 'Найти больше слушателей',
   EnumLocale.txtTopListener.name: 'Лучшие слушатели',
   EnumLocale.txtViewAll.name: 'Просмотреть все',
@@ -82,8 +91,10 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtTalkAbout.name: "Поговорим о",
   EnumLocale.txtSelectPaymentMethod.name: "Выберите способ оплаты",
   EnumLocale.txtAPPLanguage.name: "Язык приложения",
-  EnumLocale.txtSelectLanguageForApp.name: "Выберите язык, чтобы увидеть подходящих слушателей.",
-  EnumLocale.txtSelectTalkAboutForApp.name: "Выберите обсуждение для контента в приложении",
+  EnumLocale.txtSelectLanguageForApp.name:
+      "Выберите язык, чтобы увидеть подходящих слушателей.",
+  EnumLocale.txtSelectTalkAboutForApp.name:
+      "Выберите обсуждение для контента в приложении",
   EnumLocale.txtRecommendedProfile.name: "Рекомендуемый профиль",
   EnumLocale.txtSelectCallTypeNote.name:
       "Пожалуйста, не доверяйте мошеннической информации, такой как денежный перевод, лотерея и т. д. от незнакомцев. Пожалуйста, не делитесь никакой личной информацией, такой как пароли, номера мобильных телефонов, otp и т. д. Пожалуйста, не занимайтесь наготой, порнографией или любыми непристойными действиями.",
@@ -103,13 +114,16 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtMyBalance.name: "Мой баланс",
   EnumLocale.txtMyProfile.name: "Мой профиль",
   EnumLocale.txtShareListenersApp.name: "Поделиться приложением Expert",
-  EnumLocale.txtRatingDescription.name: "Ваш отзыв поможет другим участникам лучше выбрать своего слушателя и поможет нам улучшить наш сервис!",
-  EnumLocale.txtShareListenersAppDescription.name: "Поделитесь приложением с друзьями и семьей и поделитесь радостью...!",
+  EnumLocale.txtRatingDescription.name:
+      "Ваш отзыв поможет другим участникам лучше выбрать своего слушателя и поможет нам улучшить наш сервис!",
+  EnumLocale.txtShareListenersAppDescription.name:
+      "Поделитесь приложением с друзьями и семьей и поделитесь радостью...!",
   EnumLocale.txtShareAppNow.name: "Поделиться приложением сейчас",
   EnumLocale.txtCompleteTrailCall.name: "Спасибо за ваш звонок.",
   EnumLocale.txtCompleteTrailCall1.name: "– Расскажите нам, что вы думаете!",
   EnumLocale.txtDidYouLikeService.name: "Вам понравился сервис Expert?",
-  EnumLocale.txtAddFilderToYourFavListeners.name: "Добавить Эндрю Филдера в список любимых слушателей?",
+  EnumLocale.txtAddFilderToYourFavListeners.name:
+      "Добавить Эндрю Филдера в список любимых слушателей?",
   EnumLocale.txtEditProfile.name: "Редактировать профиль",
   EnumLocale.txtMyWallet.name: "Мой кошелек",
   EnumLocale.txtHelpCenter.name: "Центр помощи",
@@ -130,14 +144,16 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtSaveGender.name: "СОХРАНИТЬ ПОЛ",
   EnumLocale.txtChooseYourGender.name: "Выберите свой пол",
   EnumLocale.txtSelectYourGender.name: "Выберите свой пол",
-  EnumLocale.txtIfSelectWrongGenderLifeBan.name: "Если вы выбрали неправильный пол =\nПожизненный бан️🚫",
+  EnumLocale.txtIfSelectWrongGenderLifeBan.name:
+      "Если вы выбрали неправильный пол =\nПожизненный бан️🚫",
   EnumLocale.txtMale.name: "Мужской",
   EnumLocale.txtFemale.name: "Женский",
   EnumLocale.txtBecomeListener.name: "Станьте слушателем",
   EnumLocale.txtViewCoinHistory.name: "Посмотреть историю монет",
   EnumLocale.txtCurrentCoinBalance.name: "Текущий баланс монет",
   EnumLocale.txtWalletGuide.name: "Руководство по кошельку:-",
-  EnumLocale.txtAddCoinBalanceSelectPlan.name: "Добавьте баланс монет, выберите план:-",
+  EnumLocale.txtAddCoinBalanceSelectPlan.name:
+      "Добавьте баланс монет, выберите план:-",
   EnumLocale.txtMostPopularPlan.name: "Самый популярный план",
   EnumLocale.txtHistory.name: "История",
   EnumLocale.txtPayment.name: "Оплата",
@@ -149,22 +165,27 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtFailed.name: "Неуспешный",
   EnumLocale.txtSuccess.name: "Успех",
   EnumLocale.txtCallDuration.name: "Продолжительность звонка",
-  EnumLocale.txtManageYourAccountSettings.name: "Управляйте своей учетной записью\nНастройки...",
+  EnumLocale.txtManageYourAccountSettings.name:
+      "Управляйте своей учетной записью\nНастройки...",
   EnumLocale.txtLogoutApp.name: "Выйти из приложения",
   EnumLocale.txtLogout.name: "Выйти",
   EnumLocale.txtCancel.name: "Отмена",
-  EnumLocale.txtDesLogout.name: "Вы уверены, что хотите выйти из своей учетной записи?",
+  EnumLocale.txtDesLogout.name:
+      "Вы уверены, что хотите выйти из своей учетной записи?",
   EnumLocale.txtDeleteAccount.name: "Удалить аккаунт",
   EnumLocale.txtNeedAnyHelpFAQ.name: "Нужна помощь &\nFAQ...",
   EnumLocale.txtHaveAnIssue.name: "Возникла проблема?",
   EnumLocale.txtFrequentlyAskedQuestions.name: "Часто задаваемые вопросы",
-  EnumLocale.txtLetEngageMoreUserThrowShareApp.name: "Давайте привлекать больше пользователей через приложение «Поделиться»...",
+  EnumLocale.txtLetEngageMoreUserThrowShareApp.name:
+      "Давайте привлекать больше пользователей через приложение «Поделиться»...",
   EnumLocale.txtRateUs.name: "Оцените нас",
-  EnumLocale.txtRateYourExperienceWithUs.name: "Оцените свой опыт работы с нами!",
+  EnumLocale.txtRateYourExperienceWithUs.name:
+      "Оцените свой опыт работы с нами!",
   EnumLocale.txtYouWantToBecomeListener.name: "Вы хотите стать\nСлушателем...",
   EnumLocale.txtListenerVerification.name: "Проверка слушателя",
   EnumLocale.txtExploreListener.name: "Исследуйте Слушателя",
-  EnumLocale.txtTakeControlOfYourPrivacyData.name: "Возьмите под контроль свои данные.\nКонфиденциальность данных...",
+  EnumLocale.txtTakeControlOfYourPrivacyData.name:
+      "Возьмите под контроль свои данные.\nКонфиденциальность данных...",
   EnumLocale.txtLocation.name: "Расположение",
   EnumLocale.txtBluetooth.name: "Bluetooth",
   EnumLocale.txtMicrophone.name: "Микрофон",
@@ -186,33 +207,41 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtEnterYourAge.name: "Введите свой возраст",
   EnumLocale.txtEnterYourExperience.name: "Введите свой опыт (в годах)",
   EnumLocale.txtSUBMIT.name: "ПРЕДСТАВЛЯТЬ НА РАССМОТРЕНИЕ",
-  EnumLocale.desWantDeleteAccount.name: "Вы уверены, что хотите удалить свою учетную запись?",
+  EnumLocale.desWantDeleteAccount.name:
+      "Вы уверены, что хотите удалить свою учетную запись?",
   EnumLocale.changeYourImage.name: "Изменить фотографию",
   EnumLocale.txtTakeAphoto.name: "Сделай фото",
   EnumLocale.txtChooseFromYourFile.name: "Выберите из вашего файла",
   EnumLocale.txtNext.name: "СЛЕДУЮЩИЙ",
-  EnumLocale.txtPleaseSelectProfileImage.name: "Пожалуйста, выберите изображение профиля!!",
+  EnumLocale.txtPleaseSelectProfileImage.name:
+      "Пожалуйста, выберите изображение профиля!!",
   EnumLocale.txtPleaseEnterNickName.name: "Пожалуйста, введите никнейм!!",
   EnumLocale.txtEnterNickName.name: "Введите никнейм",
-  EnumLocale.txtPleaseEnterMobileNumber.name: "Пожалуйста, введите номер мобильного телефона!!",
-  EnumLocale.txtPleaseSelectBirthDate.name: "Пожалуйста, выберите дату рождения!!",
+  EnumLocale.txtPleaseEnterMobileNumber.name:
+      "Пожалуйста, введите номер мобильного телефона!!",
+  EnumLocale.txtPleaseSelectBirthDate.name:
+      "Пожалуйста, выберите дату рождения!!",
   EnumLocale.txtProfileUpdateSuccessfully.name: "Профиль успешно обновлен",
   EnumLocale.txtForgotPassword.name: "Забыли пароль",
   EnumLocale.txtForgotYourPassword.name: "Забыли\nВаш пароль...",
-  EnumLocale.txtEnterMailMobileNumber.name: "Введите почту/номер мобильного телефона",
+  EnumLocale.txtEnterMailMobileNumber.name:
+      "Введите почту/номер мобильного телефона",
   EnumLocale.txtVerify.name: "Проверять",
   EnumLocale.txtCreatePassword.name: "Создать пароль",
   EnumLocale.txtForgotPassDescription.name:
       "Введите ниже свой адрес электронной почты или номер мобильного телефона, чтобы сбросить пароль. Мы отправим вам код подтверждения, который поможет вам восстановить учетную запись.",
-  EnumLocale.txtLongPressToEnableAudioRecording.name: "Длительное нажатие для включения записи звука",
+  EnumLocale.txtLongPressToEnableAudioRecording.name:
+      "Длительное нажатие для включения записи звука",
   EnumLocale.txtAudioRecording.name: "Аудиозапись...",
   EnumLocale.txtPleaseAllowPermission.name: "Пожалуйста, дайте разрешение!!",
   EnumLocale.txtHostCenterDescription.name:
       "Теперь вы можете стать хозяином и организовывать собственные мероприятия. Создавайте новые мероприятия и делитесь своими услугами с другими.",
   EnumLocale.txtDataPrivacy.name:
       "Мы ценим конфиденциальность ваших данных. Узнайте, как собирается, используется и защищается ваша личная информация.",
-  EnumLocale.txtShareAppDes.name: "Поделитесь этим приложением с друзьями и семьей, чтобы они также могли воспользоваться его уникальными функциями.",
-  EnumLocale.txtAboutUsDes.name: "Мы стремимся предоставить вам наилучший сервис. Узнайте больше о нашей команде и нашей миссии.",
+  EnumLocale.txtShareAppDes.name:
+      "Поделитесь этим приложением с друзьями и семьей, чтобы они также могли воспользоваться его уникальными функциями.",
+  EnumLocale.txtAboutUsDes.name:
+      "Мы стремимся предоставить вам наилучший сервис. Узнайте больше о нашей команде и нашей миссии.",
   EnumLocale.txtPaymentMethod.name: "Способ оплаты",
   EnumLocale.txtListenerWithdrawDescription.name:
       "1. Вы можете вывести заработанные монеты в виде реальных денег, как только достигнете минимального порога вывода, установленного платформой. Убедитесь, что ваш профиль и платежные данные полностью проверены, чтобы избежать задержек в обработке вашего запроса на вывод.",
@@ -241,7 +270,8 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtEnterCoinAmount.name: "Введите сумму монет",
   EnumLocale.txtMinimumWithdrawCoin.name: "*Минимальная сумма вывода монет:",
   EnumLocale.txtMyAmountBalance.name: "Мой баланс:",
-  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name: "Получите сумму выводимых монет здесь...",
+  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
+      "Получите сумму выводимых монет здесь...",
   EnumLocale.txtListenerDetails.name: "Данные слушателя:-",
   EnumLocale.txtEnterIntroduction.name: "Введите Введение",
   EnumLocale.txtTalkLanguages.name: "Языки разговора:-",
@@ -261,9 +291,12 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtAddress.name: "Адрес :",
   EnumLocale.txtNOte.name: "Примечание :",
   EnumLocale.txtPleaseFillProfile.name: "Пожалуйста, заполните профиль",
-  EnumLocale.txtPleaseEnterWithdrawCoin.name: "Пожалуйста, введите WithdrawCoin",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name: "Пожалуйста, выберите способ вывода средств",
-  EnumLocale.txtPleaseEnterAllPaymentDetails.name: "Пожалуйста, введите все реквизиты платежа",
+  EnumLocale.txtPleaseEnterWithdrawCoin.name:
+      "Пожалуйста, введите сумму Session Credit",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name:
+      "Пожалуйста, выберите способ вывода средств",
+  EnumLocale.txtPleaseEnterAllPaymentDetails.name:
+      "Пожалуйста, введите все реквизиты платежа",
   EnumLocale.txtSelectPaymentGateway.name: "Выберите платежный шлюз",
   EnumLocale.txtNumberOfCoin.name: "Количество монет:",
   EnumLocale.txtWithdrawalID.name: "Идентификатор вывода средств:",
@@ -278,8 +311,10 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtPrivateAudioCallRate.name: "Тариф на частный аудиовызов",
   EnumLocale.txtPaymentDetails.name: "Реквизиты платежа:",
   EnumLocale.txtAppRestart.name: "Ваш запрос слушателя принят",
-  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name: "У пользователя недостаточно средств для вывода средств",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
+  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
+      "У пользователя недостаточно средств для вывода средств",
+  EnumLocale
+          .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
       "Запрошенная сумма вывода должна быть больше, чем указано администратором",
   EnumLocale.txtSkip.name: "Пропускать",
   EnumLocale.txtHostHomeDescription.name:
@@ -291,7 +326,8 @@ final Map<String, String> ruRU = <String, String>{
       "Выберите языки, на которых вам удобно общаться со слушателями. Это поможет нам связать вас с нужными людьми, которым нужна поддержка на этих языках.",
   EnumLocale.txtSelectTopic.name:
       "Выберите темы, о которых вы чувствуете себя уверенно, говоря. Это поможет вам найти пользователей, ищущих поддержку в этих конкретных областях.",
-  EnumLocale.txtSureClearNotification.name: "Вы уверены, что хотите удалить все уведомления?",
+  EnumLocale.txtSureClearNotification.name:
+      "Вы уверены, что хотите удалить все уведомления?",
   EnumLocale.txtSure.name: "Конечно",
   EnumLocale.txtIntroduction.name: "Введение",
   EnumLocale.txtTryAgain.name: "Попробуйте еще раз",
@@ -301,10 +337,13 @@ final Map<String, String> ruRU = <String, String>{
       "Если у вас есть вопросы или вы столкнулись с какими-либо проблемами, мы здесь, чтобы помочь! Ознакомьтесь с наиболее часто задаваемыми вопросами ниже или обратитесь в нашу службу поддержки для получения индивидуальной помощи.",
   EnumLocale.txtBecomeHostDescription.name:
       "Слушатели играют важную роль, предлагая поддержку, руководство или просто выслушивая пользователей, которым нужно с кем-то поговорить. Если вы чутки, терпеливы и готовы помогать другим, стать слушателем — идеальный способ оказать положительное влияние.",
-  EnumLocale.txtListenerReqSentSuccessfully.name: "Запрос слушателя успешно отправлен...",
+  EnumLocale.txtListenerReqSentSuccessfully.name:
+      "Запрос слушателя успешно отправлен...",
   EnumLocale.txtSearchLanguage.name: "Язык поиска...",
-  EnumLocale.txtSelectTalkaboutTxt.name: "Выберите «Обсуждение контента в приложении».",
-  EnumLocale.txtSelectAppLanguageTxt.name: "Выберите предпочитаемый язык приложения.",
+  EnumLocale.txtSelectTalkaboutTxt.name:
+      "Выберите «Обсуждение контента в приложении».",
+  EnumLocale.txtSelectAppLanguageTxt.name:
+      "Выберите предпочитаемый язык приложения.",
   EnumLocale.txtHostVerificationFillForm.name:
       "Пожалуйста, заполните форму, указав точные данные. Введите действительный адрес электронной почты, чтобы получать важные обновления и результаты проверки. Прежде чем продолжить, убедитесь, что все поля заполнены правильно.",
   EnumLocale.txtUserName.name: "Выберите «Обсуждение контента в приложении».",
@@ -349,20 +388,27 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtPrivacyPolicy.name: 'Обратная связь',
   EnumLocale.txtListenerAvailableForPrivateVideoCall.name: 'Это совпадение!',
   EnumLocale.txtListenerAvailableForPrivateAudioCall.name: 'Я согласен с',
-  EnumLocale.txtListenerDisableForPrivateVideoCall.name: 'Слушатель доступен для частного аудиозвонка.',
-  EnumLocale.txtListenerDisableForPrivateAudioCall.name: 'Слушатель доступен для случайного видеозвонка.',
+  EnumLocale.txtListenerDisableForPrivateVideoCall.name:
+      'Слушатель доступен для частного аудиозвонка.',
+  EnumLocale.txtListenerDisableForPrivateAudioCall.name:
+      'Слушатель доступен для случайного видеозвонка.',
   EnumLocale.txtEarpiece.name: 'Наушник',
   EnumLocale.txtEnterProperValue.name: 'Введите правильное значение',
-  EnumLocale.txtYourHostRequestSentSuccessfully.name: 'Ваш запрос на хостинг успешно отправлен',
-  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name: 'Ваш запрос отправлен. Пожалуйста, подождите, пока мы его рассмотрим и одобрим.',
+  EnumLocale.txtYourHostRequestSentSuccessfully.name:
+      'Ваш запрос на хостинг успешно отправлен',
+  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
+      'Ваш запрос отправлен. Пожалуйста, подождите, пока мы его рассмотрим и одобрим.',
   EnumLocale.txtViewRequest.name: 'Просмотреть запрос',
-  EnumLocale.txtDEmoListenerText.name: "Упс! У вас нет разрешения. Это демо-вход.",
+  EnumLocale.txtDEmoListenerText.name:
+      "Упс! У вас нет разрешения. Это демо-вход.",
   EnumLocale.txtVideoCalling.name: "Видеозвонки",
   EnumLocale.txtAudioCalling.name: "Аудиозвонки",
   EnumLocale.txtIncomingVoiceCalling.name: 'Входящий видеозвонок',
   EnumLocale.txtIncomingAudioCalling.name: 'Входящий аудиовызов',
-  EnumLocale.txtNoAccountFoundForThisEmail.name: "Для этого адреса электронной почты не найдено ни одного аккаунта.",
-  EnumLocale.txtResetLinkSentToYourEmail.name: "Ссылка для сброса отправлена ​​на вашу электронную почту",
+  EnumLocale.txtNoAccountFoundForThisEmail.name:
+      "Для этого адреса электронной почты не найдено ни одного аккаунта.",
+  EnumLocale.txtResetLinkSentToYourEmail.name:
+      "Ссылка для сброса отправлена ​​на вашу электронную почту",
   EnumLocale.txtForgetPasswordDescription.name:
       "Вы наверняка получили ссылку для восстановления пароля на свой аккаунт Gmail. Проверьте её. Если нет, проверьте раздел «Спам».",
 };

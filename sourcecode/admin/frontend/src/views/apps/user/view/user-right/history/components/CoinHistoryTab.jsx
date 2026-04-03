@@ -200,7 +200,7 @@ const CoinHistoryTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
   const getTransactionTypeName = type => {
     switch (type) {
       case TRANSACTION_TYPES.COIN_HISTORY:
-        return 'Coin History'
+        return 'Session Credit History'
       case TRANSACTION_TYPES.PURCHASE_THEME:
         return 'Theme Purchase'
       case TRANSACTION_TYPES.PURCHASE_AVTARFRAME:
@@ -212,7 +212,7 @@ const CoinHistoryTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
       case TRANSACTION_TYPES.LIVE_GIFT:
         return 'Live Gift'
       case TRANSACTION_TYPES.COIN_PLAN_PURCHASE:
-        return 'Coin Purchase'
+        return 'Subscription Purchase'
       case TRANSACTION_TYPES.REFERRAL_REWARD:
         return 'Referral Reward'
       case TRANSACTION_TYPES.LOGIN_BONUS:
@@ -294,7 +294,7 @@ const CoinHistoryTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
 
   return (
     <>
-      {/* Summary cards: only show for Coin History tab */}
+      {/* Summary cards: only show for Session Credit History tab */}
       {!history.initialLoading && (
         <Card
           variant='outlined'
@@ -329,7 +329,7 @@ const CoinHistoryTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
                 <i className='tabler-coins' style={{ fontSize: '1.5rem', color: 'white' }}></i>
               </Box>
               <Typography variant='h6' sx={{ color: 'white', fontWeight: 600 }}>
-                Coin History Summary
+                Session Credit History Summary
               </Typography>
             </Box>
           </Box>
@@ -413,7 +413,7 @@ const CoinHistoryTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
                   <Typography variant='h4' fontWeight={700} color='success.main' sx={{ pl: 1 }}>
                     +{history.totalIncome || 0}
                     <Typography component='span' variant='caption' sx={{ ml: 0.5 }}>
-                      Coins
+                      Session Credits
                     </Typography>
                   </Typography>
                 </Card>
@@ -456,7 +456,7 @@ const CoinHistoryTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
                   <Typography variant='h4' fontWeight={700} color='error.main' sx={{ pl: 1 }}>
                     -{history.totalOutgoing || 0}
                     <Typography component='span' variant='caption' sx={{ ml: 0.5 }}>
-                      Coins
+                      Session Credits
                     </Typography>
                   </Typography>
                 </Card>
@@ -501,7 +501,7 @@ const CoinHistoryTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
           )}
         </Box>
       ) : (
-        <EmptyState message='No coin history transactions found for this user.' icon='tabler-coins' />
+        <EmptyState message='No session credit history transactions found for this user.' icon='tabler-coins' />
       )}
     </>
   )

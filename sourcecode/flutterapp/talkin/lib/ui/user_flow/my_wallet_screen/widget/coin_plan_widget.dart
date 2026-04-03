@@ -26,7 +26,7 @@ class CoinPlanWidget extends GetView<MyWalletController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            EnumLocale.txtAddCoinBalanceSelectPlan.name.tr,
+            "Choose a Subscription Plan",
             style: AppFontStyle.fontStyleW800(
               fontSize: 17,
               fontColor: AppColors.black,
@@ -157,6 +157,8 @@ class CoinPlanTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final credits = coinPlan.sessionCredits ?? coinPlan.coins ?? 0;
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -182,12 +184,26 @@ class CoinPlanTile extends StatelessWidget {
                 ),
               ).paddingAll(6),
               Expanded(
-                child: Text(
-                  '${coinPlan.coins} coin',
-                  style: AppFontStyle.fontStyleW700(
-                    fontSize: 16,
-                    fontColor: AppColors.yellowDark800,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      (coinPlan.name?.trim().isNotEmpty == true) ? coinPlan.name!.trim() : 'Subscription Plan',
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: 14,
+                        fontColor: AppColors.yellowDark800,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      '$credits session credits',
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: 13,
+                        fontColor: AppColors.yellowDark800,
+                      ),
+                    ),
+                  ],
                 ).paddingOnly(left: 6),
               ),
               Text(

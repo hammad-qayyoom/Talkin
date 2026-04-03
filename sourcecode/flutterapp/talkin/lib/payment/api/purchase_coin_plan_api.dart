@@ -14,7 +14,7 @@ class PurchaseCoinPlanApi {
     required String token,
     required String uid,
   }) async {
-    Utils.showLog("Create Coin Plan Api Calling...");
+    Utils.showLog("Create Subscription Plan Api Calling...");
 
     final queryParameters = {
       ApiParams.coinPlanId: coinPlanId,
@@ -24,7 +24,7 @@ class PurchaseCoinPlanApi {
 
     final uri = Uri.parse(Api.purchasedCoinPlan + query);
 
-    Utils.showLog("Create Coin Plan Api Url $uri");
+    Utils.showLog("Create Subscription Plan Api Url $uri");
 
     final headers = {ApiParams.key: Api.secretKey, ApiParams.authToken: ApiParams.tokenStartPoint + token, ApiParams.authUid: uid};
 
@@ -32,16 +32,16 @@ class PurchaseCoinPlanApi {
       final response = await http.post(uri, headers: headers);
 
       if (response.statusCode == 200) {
-        Utils.showLog("Create Coin Plan Api Response => ${response.body}");
+        Utils.showLog("Create Subscription Plan Api Response => ${response.body}");
 
         final jsonResponse = jsonDecode(response.body);
 
         return PurchaseCoinPlan.fromJson(jsonResponse);
       } else {
-        Utils.showLog("Create Coin Plan Api StateCode Error");
+        Utils.showLog("Create Subscription Plan Api StateCode Error");
       }
     } catch (error) {
-      Utils.showLog("Create Coin Plan Api Error => $error");
+      Utils.showLog("Create Subscription Plan Api Error => $error");
     }
     return null;
   }

@@ -12,6 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { Box, Button, CircularProgress } from '@mui/material'
 import Card from '@mui/material/Card'
+import Chip from '@mui/material/Chip'
 import IconButton from '@mui/material/IconButton'
 import { useTheme } from '@mui/material/styles'
 import Switch from '@mui/material/Switch'
@@ -259,7 +260,7 @@ const ListenerListTable = () => {
         )
       }),
       columnHelper.accessor('talkTopics', {
-        header: () => <div className='text-center'>Talk Topics</div>,
+        header: () => <div className='text-center'>Categories</div>,
         cell: ({ row }) => {
           const talkTopics = row.original.talkTopics || []
 

@@ -130,8 +130,7 @@ class MyWalletController extends GetxController implements IAPCallback {
             Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
             log("Database.userCoin  ${Database.userCoin}");
 
-            Utils.showToast(
-                Get.context!, EnumLocale.txtCoinRechargeSuccess.name.tr);
+            Utils.showToast(Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
           } else {
             Utils.showToast(
@@ -176,8 +175,7 @@ class MyWalletController extends GetxController implements IAPCallback {
           if (purchaseCoinPlan?.status == true) {
             fetchCoinPlanList();
 
-            Utils.showToast(
-                Get.context!, EnumLocale.txtCoinRechargeSuccess.name.tr);
+            Utils.showToast(Get.context!, "Subscription activated successfully");
             userCoinModel = await UserCoinApi.callApi();
             Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
             Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
@@ -234,8 +232,7 @@ class MyWalletController extends GetxController implements IAPCallback {
             Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
             Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
 
-            Utils.showToast(
-                Get.context!, EnumLocale.txtCoinRechargeSuccess.name.tr);
+            Utils.showToast(Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
             Get.toNamed(AppRoutes.coinPurchaseScreen, arguments: {
               "date": purchaseCoinPlan?.historyRecord?.date,
@@ -334,8 +331,7 @@ class MyWalletController extends GetxController implements IAPCallback {
             Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
             log("Database.userCoin  ${Database.userCoin}");
 
-            Utils.showToast(
-                Get.context!, EnumLocale.txtCoinRechargeSuccess.name.tr);
+            Utils.showToast(Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
           } else {
             Utils.showToast(
@@ -384,8 +380,7 @@ class MyWalletController extends GetxController implements IAPCallback {
             Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
             log("Database.userCoin  ${Database.userCoin}");
 
-            Utils.showToast(
-                Get.context!, EnumLocale.txtCoinRechargeSuccess.name.tr);
+            Utils.showToast(Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
           } else {
             Utils.showToast(
@@ -434,8 +429,7 @@ class MyWalletController extends GetxController implements IAPCallback {
             Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
             log("Database.userCoin  ${Database.userCoin}");
 
-            Utils.showToast(
-                Get.context!, EnumLocale.txtCoinRechargeSuccess.name.tr);
+            Utils.showToast(Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
           } else {
             Utils.showToast(
@@ -496,8 +490,7 @@ class MyWalletController extends GetxController implements IAPCallback {
       Get.back();
 
       if (isSuccess?.status == true) {
-        Utils.showToast(
-            Get.context!, EnumLocale.txtCoinRechargeSuccess.name.tr);
+        Utils.showToast(Get.context!, "Subscription activated successfully");
         Get.close(2); // Close payment screens
       } else {
         Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);

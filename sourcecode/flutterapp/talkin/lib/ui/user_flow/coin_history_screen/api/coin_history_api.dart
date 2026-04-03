@@ -19,7 +19,7 @@ class CoinHistoryApi {
   }) async {
     final token = await FirebaseAccessToken.onGet();
 
-    Utils.showLog("Coin history Api Calling...");
+    Utils.showLog("Session Credit history Api Calling...");
     startPagination += 1;
 
     final Map<String, dynamic> queryParameters = {
@@ -29,7 +29,7 @@ class CoinHistoryApi {
       ApiParams.limit: limitPagination.toString(),
     };
 
-    log("Coin history queryParameters ::$queryParameters");
+    log("Session Credit history queryParameters ::$queryParameters");
 
     String query = Uri(queryParameters: queryParameters).query;
 
@@ -41,13 +41,13 @@ class CoinHistoryApi {
       ApiParams.authUid: Database.loginUserFirebaseId,
       ApiParams.contentType: "application/json",
     };
-    Utils.showLog("Coin history Api uri :: $uri");
-    Utils.showLog("Coin history Api headers :: $headers");
+    Utils.showLog("Session Credit history Api uri :: $uri");
+    Utils.showLog("Session Credit history Api headers :: $headers");
 
     try {
       final response = await http.get(uri, headers: headers);
 
-      log('Coin history API STATUS CODE :: ${response.statusCode} \n Coin history API RESPONSE :: ${response.body}');
+      log('Session Credit history API STATUS CODE :: ${response.statusCode} \n Session Credit history API RESPONSE :: ${response.body}');
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
@@ -56,7 +56,7 @@ class CoinHistoryApi {
         throw Exception('Status code is not 200');
       }
     } catch (e) {
-      log("Coin history :: $e");
+      log("Session Credit history :: $e");
     }
     return null;
   }

@@ -5,8 +5,10 @@ final Map<String, String> koKR = {
   EnumLocale.txtRegisterTitle1.name: "찾다",
   EnumLocale.txtRegisterTitle2.name: "채팅",
   EnumLocale.txtRegisterTitle3.name: "영상 통화",
-  EnumLocale.txtRegisterSubTitle1.name: "전 세계 사람들과 채팅, 메시지를 주고받으며 소통하고 관계를 맺을 수 있습니다.",
-  EnumLocale.txtRegisterSubTitle2.name: '낯선 사람들과 채팅을 하여 서로를 더 잘 알고 좋은 관계를 맺으세요.',
+  EnumLocale.txtRegisterSubTitle1.name:
+      "전 세계 사람들과 채팅, 메시지를 주고받으며 소통하고 관계를 맺을 수 있습니다.",
+  EnumLocale.txtRegisterSubTitle2.name:
+      '낯선 사람들과 채팅을 하여 서로를 더 잘 알고 좋은 관계를 맺으세요.',
   EnumLocale.txtRegisterSubTitle3.name: "귀하의 비디오와 사진을 친구 및 지인들과 공유할 수 있습니다.",
   EnumLocale.txtEnterYourMail.name: "이메일 주소를 입력하세요",
   EnumLocale.txtEnterPassword.name: "비밀번호를 입력하세요",
@@ -67,8 +69,10 @@ final Map<String, String> koKR = {
   EnumLocale.txtTalkNow.name: '지금 대화하세요',
   EnumLocale.txtChatNow.name: '지금 채팅하기',
   EnumLocale.txtAllListeners.name: '모든 청취자',
-  EnumLocale.txtMobileLoginDescription.name: '휴대폰 번호만으로 여정을 시작하세요. 본인 확인을 위한 일회용 비밀번호(OTP)를 보내드리고 바로 시작하실 수 있습니다.',
-  EnumLocale.txtVerifyOtpDescription.name: "계정 보안을 위해 고유 5자리 코드를 SMS로 전송해 드렸습니다. 아래에 코드를 입력하여 본인 확인을 완료하고 로그인 절차를 진행하세요.",
+  EnumLocale.txtMobileLoginDescription.name:
+      '휴대폰 번호만으로 여정을 시작하세요. 본인 확인을 위한 일회용 비밀번호(OTP)를 보내드리고 바로 시작하실 수 있습니다.',
+  EnumLocale.txtVerifyOtpDescription.name:
+      "계정 보안을 위해 고유 5자리 코드를 SMS로 전송해 드렸습니다. 아래에 코드를 입력하여 본인 확인을 완료하고 로그인 절차를 진행하세요.",
   EnumLocale.txtVideoCall.name: "영상 통화",
   EnumLocale.txtSelectCallType.name: "통화 유형 선택",
   EnumLocale.txtAudioCall.name: "오디오 통화",
@@ -101,13 +105,16 @@ final Map<String, String> koKR = {
   EnumLocale.txtMyBalance.name: "내 잔액",
   EnumLocale.txtMyProfile.name: "내 프로필",
   EnumLocale.txtShareListenersApp.name: "리스너 앱 공유",
-  EnumLocale.txtRatingDescription.name: "귀하의 피드백은 다른 회원들이 리스너를 더 잘 선택하는 데 도움이 되며, 이는 저희 서비스를 개선하는 데 도움이 됩니다!",
-  EnumLocale.txtShareListenersAppDescription.name: "친구 및 가족과 앱을 공유하고 기쁨을 전파하세요...!",
+  EnumLocale.txtRatingDescription.name:
+      "귀하의 피드백은 다른 회원들이 리스너를 더 잘 선택하는 데 도움이 되며, 이는 저희 서비스를 개선하는 데 도움이 됩니다!",
+  EnumLocale.txtShareListenersAppDescription.name:
+      "친구 및 가족과 앱을 공유하고 기쁨을 전파하세요...!",
   EnumLocale.txtShareAppNow.name: "지금 앱 공유하기",
   EnumLocale.txtCompleteTrailCall.name: "전화 주셔서 감사합니다",
   EnumLocale.txtCompleteTrailCall1.name: "– 여러분의 의견을 들려주세요!",
   EnumLocale.txtDidYouLikeService.name: "리스너 서비스가 마음에 드셨나요?",
-  EnumLocale.txtAddFilderToYourFavListeners.name: "Andrew Filder를 즐겨찾는 청취자에 추가하시겠습니까?",
+  EnumLocale.txtAddFilderToYourFavListeners.name:
+      "Andrew Filder를 즐겨찾는 청취자에 추가하시겠습니까?",
   EnumLocale.txtEditProfile.name: "프로필 편집",
   EnumLocale.txtMyWallet.name: "내 지갑",
   EnumLocale.txtHelpCenter.name: "도움말 센터",
@@ -156,7 +163,8 @@ final Map<String, String> koKR = {
   EnumLocale.txtNeedAnyHelpFAQ.name: "도움이 필요하신가요? &\nFAQ...",
   EnumLocale.txtHaveAnIssue.name: "문제가 있나요?",
   EnumLocale.txtFrequentlyAskedQuestions.name: "자주 묻는 질문",
-  EnumLocale.txtLetEngageMoreUserThrowShareApp.name: "공유 앱을 통해 더 많은 사용자 참여를 유도해 보세요.",
+  EnumLocale.txtLetEngageMoreUserThrowShareApp.name:
+      "공유 앱을 통해 더 많은 사용자 참여를 유도해 보세요.",
   EnumLocale.txtRateUs.name: "우리를 평가해주세요",
   EnumLocale.txtRateYourExperienceWithUs.name: "저희와 함께한 경험을 평가해 주세요!",
   EnumLocale.txtYouWantToBecomeListener.name: "당신은 청취자가 되고 싶어합니다...",
@@ -200,14 +208,19 @@ final Map<String, String> koKR = {
   EnumLocale.txtEnterMailMobileNumber.name: "메일/휴대폰 번호를 입력하세요",
   EnumLocale.txtVerify.name: "확인하다",
   EnumLocale.txtCreatePassword.name: "비밀번호 생성",
-  EnumLocale.txtForgotPassDescription.name: "비밀번호를 재설정하려면 아래에 이메일 주소 또는 휴대전화 번호를 입력하세요. 계정 복구에 도움이 되는 인증 코드를 보내드리겠습니다.",
+  EnumLocale.txtForgotPassDescription.name:
+      "비밀번호를 재설정하려면 아래에 이메일 주소 또는 휴대전화 번호를 입력하세요. 계정 복구에 도움이 되는 인증 코드를 보내드리겠습니다.",
   EnumLocale.txtLongPressToEnableAudioRecording.name: "오디오 녹음을 활성화하려면 길게 누르세요",
   EnumLocale.txtAudioRecording.name: "오디오 녹음...",
   EnumLocale.txtPleaseAllowPermission.name: "허락해 주세요!!",
-  EnumLocale.txtHostCenterDescription.name: "이제 직접 호스트가 되어 이벤트를 기획해 보세요. 새로운 이벤트를 만들고 다른 사람들과 서비스를 공유해 보세요.",
-  EnumLocale.txtDataPrivacy.name: "저희는 귀하의 데이터 개인정보 보호를 소중히 여깁니다. 귀하의 개인정보가 수집, 사용 및 보호되는 방식에 대해 알아보세요.",
-  EnumLocale.txtShareAppDes.name: "이 앱을 친구와 가족에게 공유하여 그들도 이 앱의 독특한 기능을 즐길 수 있도록 하세요.",
-  EnumLocale.txtAboutUsDes.name: "저희는 최고의 서비스를 제공하기 위해 최선을 다하고 있습니다. 저희 팀과 사명에 대해 자세히 알아보세요.",
+  EnumLocale.txtHostCenterDescription.name:
+      "이제 직접 호스트가 되어 이벤트를 기획해 보세요. 새로운 이벤트를 만들고 다른 사람들과 서비스를 공유해 보세요.",
+  EnumLocale.txtDataPrivacy.name:
+      "저희는 귀하의 데이터 개인정보 보호를 소중히 여깁니다. 귀하의 개인정보가 수집, 사용 및 보호되는 방식에 대해 알아보세요.",
+  EnumLocale.txtShareAppDes.name:
+      "이 앱을 친구와 가족에게 공유하여 그들도 이 앱의 독특한 기능을 즐길 수 있도록 하세요.",
+  EnumLocale.txtAboutUsDes.name:
+      "저희는 최고의 서비스를 제공하기 위해 최선을 다하고 있습니다. 저희 팀과 사명에 대해 자세히 알아보세요.",
   EnumLocale.txtPaymentMethod.name: "결제 방법",
   EnumLocale.txtListenerWithdrawDescription.name:
       "1. 플랫폼에서 정한 최소 출금 한도를 충족하면 획득하신 코인을 실제 현금으로 출금하실 수 있습니다. 출금 요청 처리가 지연되지 않도록 프로필 및 결제 정보를 완전히 인증해 주시기 바랍니다.",
@@ -220,7 +233,8 @@ final Map<String, String> koKR = {
   EnumLocale.txtRecentCalling.name: "최근 호출",
   EnumLocale.txtEarnMoney.name: "돈을 벌다",
   EnumLocale.txtPermissionAllow.name: "허가 허용",
-  EnumLocale.txtHostHomeNote.name: "낯선 사람이 제공하는 송금, 복권 등 사기성 정보를 믿지 마세요. 비밀번호, 휴대폰 번호, OTP 등의 개인 정보를 공유하지 마세요. 나체 사진, 음란물 또는 기타 외설적인 행위에 관여하지 마세요.",
+  EnumLocale.txtHostHomeNote.name:
+      "낯선 사람이 제공하는 송금, 복권 등 사기성 정보를 믿지 마세요. 비밀번호, 휴대폰 번호, OTP 등의 개인 정보를 공유하지 마세요. 나체 사진, 음란물 또는 기타 외설적인 행위에 관여하지 마세요.",
   EnumLocale.txtWithdrawCoin.name: "코인 인출",
   EnumLocale.txtSecurePayment.name: "안전한 결제",
   EnumLocale.txtGuarantedChat.name: "보장된 채팅",
@@ -235,7 +249,8 @@ final Map<String, String> koKR = {
   EnumLocale.txtEnterCoinAmount.name: "코인 금액 입력",
   EnumLocale.txtMinimumWithdrawCoin.name: "*최소 출금 코인 :",
   EnumLocale.txtMyAmountBalance.name: "내 잔액 :",
-  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name: "출금 가능한 코인 금액을 여기서 확인하세요...",
+  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
+      "출금 가능한 코인 금액을 여기서 확인하세요...",
   EnumLocale.txtListenerDetails.name: "청취자 세부 정보 :-",
   EnumLocale.txtEnterIntroduction.name: "소개 입력",
   EnumLocale.txtTalkLanguages.name: "대화 언어 :-",
@@ -255,7 +270,7 @@ final Map<String, String> koKR = {
   EnumLocale.txtAddress.name: "주소 :",
   EnumLocale.txtNOte.name: "메모 :",
   EnumLocale.txtPleaseFillProfile.name: "프로필을 작성해주세요",
-  EnumLocale.txtPleaseEnterWithdrawCoin.name: "WithdrawCoin을 입력하세요",
+  EnumLocale.txtPleaseEnterWithdrawCoin.name: "Session Credit 금액을 입력하세요",
   EnumLocale.txtPleaseSelectWithdrawMethod.name: "출금 방법을 선택해주세요",
   EnumLocale.txtPleaseEnterAllPaymentDetails.name: "모든 결제 세부 정보를 입력하세요",
   EnumLocale.txtSelectPaymentGateway.name: "결제 게이트웨이 선택",
@@ -272,21 +287,28 @@ final Map<String, String> koKR = {
   EnumLocale.txtPrivateAudioCallRate.name: "개인 오디오 통화 요금",
   EnumLocale.txtPaymentDetails.name: "결제 세부 정보 :",
   EnumLocale.txtAppRestart.name: "귀하의 청취자 요청이 수락되었습니다",
-  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name: "사용자에게 인출을 위한 충분한 자금이 없습니다.",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name: "출금 요청 코인은 관리자가 지정한 것보다 커야 합니다.",
+  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
+      "사용자에게 인출을 위한 충분한 자금이 없습니다.",
+  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin
+      .name: "출금 요청 코인은 관리자가 지정한 것보다 커야 합니다.",
   EnumLocale.txtSkip.name: "건너뛰다",
-  EnumLocale.txtHostHomeDescription.name: "다른 사람을 도우면서 보상을 받으세요! 청취자로서 무작위 통화를 통해 분당 코인을 획득할 수 있습니다. 도움이 필요한 사람을 돕고 동시에 수익을 창출하세요.",
-  EnumLocale.txtManageYourAccountSettingsSubText.name: "언어 변경, 로그아웃 또는 계정 영구 삭제를 통해 앱 환경을 맞춤설정하세요. 변경하기 전에 각 옵션을 신중하게 검토하세요.",
+  EnumLocale.txtHostHomeDescription.name:
+      "다른 사람을 도우면서 보상을 받으세요! 청취자로서 무작위 통화를 통해 분당 코인을 획득할 수 있습니다. 도움이 필요한 사람을 돕고 동시에 수익을 창출하세요.",
+  EnumLocale.txtManageYourAccountSettingsSubText.name:
+      "언어 변경, 로그아웃 또는 계정 영구 삭제를 통해 앱 환경을 맞춤설정하세요. 변경하기 전에 각 옵션을 신중하게 검토하세요.",
   EnumLocale.txtSelectLanguage.name: "언어 선택",
-  EnumLocale.txtSelectLanguages.name: "청취자와 편안하게 소통할 수 있는 언어를 선택하세요. 그러면 해당 언어로 지원이 필요한 담당자와 연결해 드릴 수 있습니다.",
-  EnumLocale.txtSelectTopic.name: "자신 있게 이야기할 수 있는 주제를 선택하세요. 그러면 해당 분야에서 지원을 원하는 사용자와 연결될 수 있습니다.",
+  EnumLocale.txtSelectLanguages.name:
+      "청취자와 편안하게 소통할 수 있는 언어를 선택하세요. 그러면 해당 언어로 지원이 필요한 담당자와 연결해 드릴 수 있습니다.",
+  EnumLocale.txtSelectTopic.name:
+      "자신 있게 이야기할 수 있는 주제를 선택하세요. 그러면 해당 분야에서 지원을 원하는 사용자와 연결될 수 있습니다.",
   EnumLocale.txtSureClearNotification.name: "모든 알림을 지우시겠습니까?",
   EnumLocale.txtSure.name: "확신하는",
   EnumLocale.txtIntroduction.name: "소개",
   EnumLocale.txtTryAgain.name: "다시 시도하세요",
   EnumLocale.txtSelectDate.name: "날짜 선택 :",
   EnumLocale.txtAll.name: "모두",
-  EnumLocale.txtHelpCenterDescription.name: "궁금한 점이 있거나 문제가 발생하면 언제든지 도와드리겠습니다! 아래에서 자주 묻는 질문을 확인하시거나, 고객 지원팀에 문의하여 맞춤형 지원을 받으세요.",
+  EnumLocale.txtHelpCenterDescription.name:
+      "궁금한 점이 있거나 문제가 발생하면 언제든지 도와드리겠습니다! 아래에서 자주 묻는 질문을 확인하시거나, 고객 지원팀에 문의하여 맞춤형 지원을 받으세요.",
   EnumLocale.txtBecomeHostDescription.name:
       "경청자는 대화 상대가 필요한 사용자에게 지원, 안내, 또는 단순히 귀 기울여 들어주는 역할을 함으로써 중요한 역할을 합니다. 공감 능력과 인내심이 뛰어나고 다른 사람을 도울 준비가 되어 있다면, 경청자가 되는 것은 긍정적인 영향을 미칠 수 있는 완벽한 방법입니다.",
   EnumLocale.txtListenerReqSentSuccessfully.name: "리스너 요청이 성공적으로 전송되었습니다....",
@@ -297,7 +319,8 @@ final Map<String, String> koKR = {
       "정확한 정보를 입력하여 양식을 작성해 주세요. 중요한 업데이트 및 확인 결과를 받아보시려면 유효한 이메일 주소를 입력해 주세요. 진행하기 전에 모든 항목을 정확하게 입력했는지 확인하세요.",
   EnumLocale.txtUserName.name: "앱 내 콘텐츠에 대해 토론을 선택하세요.",
   EnumLocale.txtUserDetails.name: "원하는 앱 언어를 선택하세요.",
-  EnumLocale.txtUserNickName.name: "정확한 정보를 입력하여 양식을 작성해 주세요. 중요한 업데이트 및 확인 결과를 받아보시려면 유효한 이메일 주소를 입력해 주세요. 진행하기 전에 모든 항목을 정확하게 입력했는지 확인하세요.",
+  EnumLocale.txtUserNickName.name:
+      "정확한 정보를 입력하여 양식을 작성해 주세요. 중요한 업데이트 및 확인 결과를 받아보시려면 유효한 이메일 주소를 입력해 주세요. 진행하기 전에 모든 항목을 정확하게 입력했는지 확인하세요.",
   EnumLocale.txtGender.name: "사용자 이름",
   EnumLocale.txtCountry.name: "사용자 세부 정보",
   EnumLocale.txtPersonalDetails.name: "사용자 닉네임 :",
@@ -336,12 +359,15 @@ final Map<String, String> koKR = {
   EnumLocale.txtPrivacyPolicy.name: '피드백',
   EnumLocale.txtListenerAvailableForPrivateVideoCall.name: '매치가 됐어요!',
   EnumLocale.txtListenerAvailableForPrivateAudioCall.name: '나는 동의합니다',
-  EnumLocale.txtListenerDisableForPrivateVideoCall.name: '청취자가 개인 오디오 통화를 할 수 있습니다.',
-  EnumLocale.txtListenerDisableForPrivateAudioCall.name: '청취자가 무작위 영상 통화에 참여할 수 있습니다.',
+  EnumLocale.txtListenerDisableForPrivateVideoCall.name:
+      '청취자가 개인 오디오 통화를 할 수 있습니다.',
+  EnumLocale.txtListenerDisableForPrivateAudioCall.name:
+      '청취자가 무작위 영상 통화에 참여할 수 있습니다.',
   EnumLocale.txtEarpiece.name: '이어폰',
   EnumLocale.txtEnterProperValue.name: '적절한 값을 입력하세요',
   EnumLocale.txtYourHostRequestSentSuccessfully.name: '호스트 요청이 성공적으로 전송되었습니다.',
-  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name: '요청이 제출되었습니다. 검토 및 승인될 때까지 잠시 기다려 주세요.',
+  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
+      '요청이 제출되었습니다. 검토 및 승인될 때까지 잠시 기다려 주세요.',
   EnumLocale.txtViewRequest.name: '요청 보기',
   EnumLocale.txtDEmoListenerText.name: "죄송합니다! 권한이 없습니다. 데모 로그인입니다.",
   EnumLocale.txtVideoCalling.name: "영상 통화",
@@ -350,5 +376,6 @@ final Map<String, String> koKR = {
   EnumLocale.txtIncomingAudioCalling.name: '수신 오디오 통화',
   EnumLocale.txtNoAccountFoundForThisEmail.name: "이 이메일에 대한 계정을 찾을 수 없습니다.",
   EnumLocale.txtResetLinkSentToYourEmail.name: "이메일로 재설정 링크가 전송되었습니다.",
-  EnumLocale.txtForgetPasswordDescription.name: "Gmail 계정으로 비밀번호 찾기 링크를 받으셨을 겁니다. 확인해 보세요. 받지 못하셨다면 스팸 메일함을 확인해 보세요.",
+  EnumLocale.txtForgetPasswordDescription.name:
+      "Gmail 계정으로 비밀번호 찾기 링크를 받으셨을 겁니다. 확인해 보세요. 받지 못하셨다면 스팸 메일함을 확인해 보세요.",
 };

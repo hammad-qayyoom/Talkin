@@ -42,7 +42,8 @@ class HostWithdrawCoinTopView extends StatelessWidget {
     return Container(
       // height: 200,
       decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage(AppAsset.withdrawBg), fit: BoxFit.cover),
+        image: DecorationImage(
+            image: AssetImage(AppAsset.withdrawBg), fit: BoxFit.cover),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -83,7 +84,8 @@ class HostWithdrawCoinTopView extends StatelessWidget {
               ).paddingOnly(bottom: 6, top: 15),
               Text(
                 Database.listenerCoin,
-                style: AppFontStyle.fontStyleW900(fontSize: 44, fontColor: AppColors.yellowDark800),
+                style: AppFontStyle.fontStyleW900(
+                    fontSize: 44, fontColor: AppColors.yellowDark800),
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 7, vertical: 7),
@@ -99,8 +101,9 @@ class HostWithdrawCoinTopView extends StatelessWidget {
                       width: 26,
                     ).paddingOnly(right: 6),
                     Text(
-                      "${Database.settingApiModel?.data?.minimumCoinsForConversion} Coin = ${Database.settingApiModel?.data?.currency?.symbol} 1.00",
-                      style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.orangeButton),
+                      "${Database.settingApiModel?.data?.minimumCoinsForConversion} Session Credit = ${Database.settingApiModel?.data?.currency?.symbol} 1.00",
+                      style: AppFontStyle.fontStyleW700(
+                          fontSize: 16, fontColor: AppColors.orangeButton),
                     ).paddingOnly(right: 4),
                   ],
                 ),
@@ -138,7 +141,8 @@ class HostWithdrawCoinView extends StatelessWidget {
               children: [
                 Text(
                   EnumLocale.txtWithdrawalDetails.name.tr,
-                  style: AppFontStyle.fontStyleW700(fontSize: 17, fontColor: AppColors.black),
+                  style: AppFontStyle.fontStyleW700(
+                      fontSize: 17, fontColor: AppColors.black),
                 ).paddingOnly(top: 16, bottom: 16),
 
                 TextFormField(
@@ -149,14 +153,17 @@ class HostWithdrawCoinView extends StatelessWidget {
                     fontColor: AppColors.black,
                   ),
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')), // Only digits allowed
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'[0-9]')), // Only digits allowed
                   ],
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      Utils.showToast(Get.context!, "Please enter coins");
+                      Utils.showToast(
+                          Get.context!, "Please enter Session Credit amount");
                       return '';
                     } else if (value.contains(' ') || value.contains('.')) {
-                      Utils.showToast(Get.context!, "Invalid characters (space or .) not allowed");
+                      Utils.showToast(Get.context!,
+                          "Invalid characters (space or .) not allowed");
                       return '';
                     }
                     return null;
@@ -172,14 +179,16 @@ class HostWithdrawCoinView extends StatelessWidget {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: AppColors.grey.withValues(alpha: 0.2)),
+                      borderSide: BorderSide(
+                          color: AppColors.grey.withValues(alpha: 0.2)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: AppColors.grey.withValues(alpha: 0.2)),
+                      borderSide: BorderSide(
+                          color: AppColors.grey.withValues(alpha: 0.2)),
                     ),
                     fillColor: AppColors.white,
-                    hintText: "Enter Coin",
+                    hintText: "Enter Session Credit",
                     hintStyle: AppFontStyle.fontStyleW500(
                       fontSize: 13,
                       fontColor: AppColors.black.withValues(alpha: 0.3),
@@ -190,7 +199,8 @@ class HostWithdrawCoinView extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: Text(
                     "${EnumLocale.txtMinimumWithdrawCoin.name.tr}${Database.settingApiModel?.data?.minimumCoinsForPayout}",
-                    style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.red),
+                    style: AppFontStyle.fontStyleW500(
+                        fontSize: 11, fontColor: AppColors.red),
                   ).paddingOnly(top: 8, bottom: 18),
                 ),
                 GetBuilder<HostWithdrawCoinController>(
@@ -203,7 +213,8 @@ class HostWithdrawCoinView extends StatelessWidget {
                       decoration: BoxDecoration(
                         // color: AppColors.grey.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: AppColors.grey.withValues(alpha: 0.2)),
+                        border: Border.all(
+                            color: AppColors.grey.withValues(alpha: 0.2)),
                       ),
                       child: controller.selectedPaymentMethod == null
                           ? Row(
@@ -211,7 +222,10 @@ class HostWithdrawCoinView extends StatelessWidget {
                                 // 5.width,
                                 Text(
                                   EnumLocale.txtSelectPaymentGateway.name.tr,
-                                  style: AppFontStyle.fontStyleW500(fontColor: AppColors.black.withValues(alpha: 0.3), fontSize: 14),
+                                  style: AppFontStyle.fontStyleW500(
+                                      fontColor: AppColors.black
+                                          .withValues(alpha: 0.3),
+                                      fontSize: 14),
                                 ),
                                 Spacer(),
                                 Icon(
@@ -226,15 +240,26 @@ class HostWithdrawCoinView extends StatelessWidget {
                                   width: 35,
                                   child: Center(
                                     child: CustomProfileImage(
-                                      image: controller.withdrawMethods[controller.selectedPaymentMethod ?? 0].image ?? "",
+                                      image: controller
+                                              .withdrawMethods[controller
+                                                      .selectedPaymentMethod ??
+                                                  0]
+                                              .image ??
+                                          "",
                                       fit: BoxFit.contain,
                                     ),
                                   ),
                                 ),
                                 15.width,
                                 Text(
-                                  controller.withdrawMethods[controller.selectedPaymentMethod ?? 0].name ?? "",
-                                  style: AppFontStyle.fontStyleW700(fontColor: AppColors.black, fontSize: 15),
+                                  controller
+                                          .withdrawMethods[controller
+                                                  .selectedPaymentMethod ??
+                                              0]
+                                          .name ??
+                                      "",
+                                  style: AppFontStyle.fontStyleW700(
+                                      fontColor: AppColors.black, fontSize: 15),
                                 ),
                                 Spacer(),
                                 Icon(Icons.arrow_drop_down)
@@ -246,16 +271,21 @@ class HostWithdrawCoinView extends StatelessWidget {
                 GetBuilder<HostWithdrawCoinController>(
                   builder: (controller) => AnimatedContainer(
                     duration: Duration(milliseconds: 1000),
-                    height: controller.isShowPaymentMethod ? (controller.withdrawMethods.length * 70) : 0,
+                    height: controller.isShowPaymentMethod
+                        ? (controller.withdrawMethods.length * 70)
+                        : 0,
                     color: AppColors.transparent,
                     curve: Curves.linearToEaseOut,
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
                           15.height,
-                          for (int index = 0; index < controller.withdrawMethods.length; index++)
+                          for (int index = 0;
+                              index < controller.withdrawMethods.length;
+                              index++)
                             GestureDetector(
-                              onTap: () => controller.onChangePaymentMethod(index),
+                              onTap: () =>
+                                  controller.onChangePaymentMethod(index),
                               child: Container(
                                 height: 54,
                                 width: Get.width,
@@ -264,7 +294,9 @@ class HostWithdrawCoinView extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   // color: AppColors.grey.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(14),
-                                  border: Border.all(color: AppColors.grey.withValues(alpha: 0.2)),
+                                  border: Border.all(
+                                      color: AppColors.grey
+                                          .withValues(alpha: 0.2)),
                                 ),
                                 child: Row(
                                   children: [
@@ -272,14 +304,20 @@ class HostWithdrawCoinView extends StatelessWidget {
                                       width: 35,
                                       child: Center(
                                         child: CustomProfileImage(
-                                          image: controller.withdrawMethods[index].image ?? "",
+                                          image: controller
+                                                  .withdrawMethods[index]
+                                                  .image ??
+                                              "",
                                         ),
                                       ),
                                     ),
                                     15.width,
                                     Text(
-                                      controller.withdrawMethods[index].name ?? "",
-                                      style: AppFontStyle.fontStyleW700(fontColor: AppColors.black, fontSize: 15),
+                                      controller.withdrawMethods[index].name ??
+                                          "",
+                                      style: AppFontStyle.fontStyleW700(
+                                          fontColor: AppColors.black,
+                                          fontSize: 15),
                                     ),
                                     Spacer(),
                                     // RadioItem(isSelected: controller.selectedPaymentMethod == index),
@@ -294,14 +332,29 @@ class HostWithdrawCoinView extends StatelessWidget {
                 ),
                 15.height,
                 GetBuilder<HostWithdrawCoinController>(
-                  builder: (controller) => controller.selectedPaymentMethod == null
+                  builder: (controller) => controller.selectedPaymentMethod ==
+                          null
                       ? Offstage()
                       : Column(
                           children: [
-                            for (int i = 0; i < controller.withdrawMethods[controller.selectedPaymentMethod ?? 0].details!.length; i++)
+                            for (int i = 0;
+                                i <
+                                    controller
+                                        .withdrawMethods[
+                                            controller.selectedPaymentMethod ??
+                                                0]
+                                        .details!
+                                        .length;
+                                i++)
                               WithdrawDetailsItemUi(
-                                title: controller.withdrawMethods[controller.selectedPaymentMethod ?? 0].details?[i] ?? "",
-                                controller: controller.withdrawPaymentDetails[i],
+                                title: controller
+                                        .withdrawMethods[
+                                            controller.selectedPaymentMethod ??
+                                                0]
+                                        .details?[i] ??
+                                    "",
+                                controller:
+                                    controller.withdrawPaymentDetails[i],
                               ),
                           ],
                         ),
@@ -310,7 +363,8 @@ class HostWithdrawCoinView extends StatelessWidget {
                   height: 47,
                   onTap: () {
                     if (Database.demoListener == true) {
-                      Utils.showToast(Get.context!, EnumLocale.txtDEmoListenerText.name.tr);
+                      Utils.showToast(
+                          Get.context!, EnumLocale.txtDEmoListenerText.name.tr);
                     } else {
                       controller.onClickWithdraw();
                     }
@@ -319,7 +373,8 @@ class HostWithdrawCoinView extends StatelessWidget {
                   child: Center(
                     child: Text(
                       EnumLocale.txtWithdrawCoin.name.tr,
-                      style: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
+                      style: AppFontStyle.fontStyleW600(
+                          fontSize: 16, fontColor: AppColors.white),
                     ),
                   ),
                 ).paddingOnly(bottom: 16, top: 18) // borderRadius: 30,
@@ -349,14 +404,16 @@ class WithdrawDetailsItemUi extends StatelessWidget {
       children: [
         Text(
           title,
-          style: AppFontStyle.fontStyleW500(fontColor: AppColors.black.withValues(alpha: 0.3), fontSize: 13),
+          style: AppFontStyle.fontStyleW500(
+              fontColor: AppColors.black.withValues(alpha: 0.3), fontSize: 13),
         ),
         5.height,
         TextFormField(
           maxLines: 1,
           keyboardType: TextInputType.name,
           controller: controller,
-          style: AppFontStyle.fontStyleW700(fontColor: AppColors.black, fontSize: 14),
+          style: AppFontStyle.fontStyleW700(
+              fontColor: AppColors.black, fontSize: 14),
           cursorColor: AppColors.grey,
           decoration: InputDecoration(
             border: OutlineInputBorder(
@@ -369,14 +426,17 @@ class WithdrawDetailsItemUi extends StatelessWidget {
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColors.grey.withValues(alpha: 0.2)),
+              borderSide:
+                  BorderSide(color: AppColors.grey.withValues(alpha: 0.2)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColors.grey.withValues(alpha: 0.2)),
+              borderSide:
+                  BorderSide(color: AppColors.grey.withValues(alpha: 0.2)),
             ),
             hintText: "Enter your ${title.toLowerCase()}...",
-            hintStyle: AppFontStyle.fontStyleW400(fontColor: AppColors.grey, fontSize: 12),
+            hintStyle: AppFontStyle.fontStyleW400(
+                fontColor: AppColors.grey, fontSize: 12),
           ),
         ).paddingOnly(bottom: 14),
       ],

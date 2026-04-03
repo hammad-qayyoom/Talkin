@@ -5,9 +5,12 @@ final Map<String, String> deat = {
   EnumLocale.txtRegisterTitle1.name: "FINDEN",
   EnumLocale.txtRegisterTitle2.name: "CHAT",
   EnumLocale.txtRegisterTitle3.name: "VIDEOANRUF",
-  EnumLocale.txtRegisterSubTitle1.name: "Sie können mit Menschen auf der ganzen Welt chatten, Nachrichten senden und Kontakte knüpfen.",
-  EnumLocale.txtRegisterSubTitle2.name: 'Chatten Sie mit Fremden, um sich besser kennenzulernen und eine gute Kompatibilität aufzubauen.',
-  EnumLocale.txtRegisterSubTitle3.name: "Sie können Ihre Videos und Fotos\nmit Ihren Freunden und Bekannten teilen.",
+  EnumLocale.txtRegisterSubTitle1.name:
+      "Sie können mit Menschen auf der ganzen Welt chatten, Nachrichten senden und Kontakte knüpfen.",
+  EnumLocale.txtRegisterSubTitle2.name:
+      'Chatten Sie mit Fremden, um sich besser kennenzulernen und eine gute Kompatibilität aufzubauen.',
+  EnumLocale.txtRegisterSubTitle3.name:
+      "Sie können Ihre Videos und Fotos\nmit Ihren Freunden und Bekannten teilen.",
   EnumLocale.txtEnterYourMail.name: "Geben Sie Ihre E-Mail-ID ein",
   EnumLocale.txtEnterPassword.name: "Geben Sie Ihr Passwort ein",
   EnumLocale.txtCoinRechargeSuccess.name: "Münzaufladung erfolgreich",
@@ -30,13 +33,16 @@ final Map<String, String> deat = {
   EnumLocale.txtPay.name: "Zahlen",
   EnumLocale.txtRegister.name: "Registrieren",
   EnumLocale.desEnterEmail.name: "Bitte geben Sie eine E-Mail-Adresse ein",
-  EnumLocale.desEnterValidEmailAddress.name: "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+  EnumLocale.desEnterValidEmailAddress.name:
+      "Bitte geben Sie eine gültige E-Mail-Adresse ein",
   EnumLocale.desEnterPassword.name: "Bitte geben Sie das Passwort ein",
   EnumLocale.desReEnterPassword.name: "Bitte geben Sie das Passwort erneut ein",
-  EnumLocale.desPasswordCharacters.name: "Das Passwort muss mindestens 6 Zeichen lang sein",
+  EnumLocale.desPasswordCharacters.name:
+      "Das Passwort muss mindestens 6 Zeichen lang sein",
   EnumLocale.desPasswordNotMatch.name: "Das Passwort stimmt nicht überein",
   EnumLocale.txtEnterName.name: "Geben Sie Ihren Namen ein",
-  EnumLocale.desEnterFullName.name: "Bitte geben Sie den vollständigen Namen ein",
+  EnumLocale.desEnterFullName.name:
+      "Bitte geben Sie den vollständigen Namen ein",
   EnumLocale.toastEnterNumber.name: "Bitte geben Sie die Handynummer ein",
   EnumLocale.txtLogIn.name: "Einloggen",
   EnumLocale.txtLogInWithMobile.name: "Anmelden\nMit Mobilgerät...",
@@ -44,7 +50,8 @@ final Map<String, String> deat = {
   EnumLocale.desEnterMobile.name: "Bitte geben Sie die Handynummer ein",
   EnumLocale.txtGetOtp.name: "OTP erhalten",
   EnumLocale.txtEnterOtp.name: "OTP eingeben",
-  EnumLocale.txtEnterOtpWithRegisterNumber.name: "Geben Sie OTP\nmit Registriernummer ein...",
+  EnumLocale.txtEnterOtpWithRegisterNumber.name:
+      "Geben Sie OTP\nmit Registriernummer ein...",
   EnumLocale.txtYouHaveNotGetOtp.name: "Wenn Sie kein OTP erhalten haben?",
   EnumLocale.txtResendOtp.name: "OTP erneut senden",
   EnumLocale.txtExitApp.name: 'App beenden',
@@ -57,7 +64,8 @@ final Map<String, String> deat = {
   EnumLocale.txtFreeTalk.name: 'KOSTENLOSES GESPRÄCH',
   EnumLocale.txtCalling.name: 'Berufung',
   EnumLocale.txtHomeFastLalk.name: 'Jetzt schnell lachen, gute Besserung',
-  EnumLocale.txtHomeDescription.name: 'Sprechen Sie mit Ihrem Lieblingszuhörer und fühlen Sie sich leichter und fröhlicher!',
+  EnumLocale.txtHomeDescription.name:
+      'Sprechen Sie mit Ihrem Lieblingszuhörer und fühlen Sie sich leichter und fröhlicher!',
   EnumLocale.txtFindMoreListener.name: 'Mehr Zuhörer finden',
   EnumLocale.txtTopListener.name: 'Top-Hörer',
   EnumLocale.txtViewAll.name: 'Alle',
@@ -82,8 +90,10 @@ final Map<String, String> deat = {
   EnumLocale.txtTalkAbout.name: "Sprechen Sie über",
   EnumLocale.txtSelectPaymentMethod.name: "Zahlungsmethode auswählen",
   EnumLocale.txtAPPLanguage.name: "APP-Sprache",
-  EnumLocale.txtSelectLanguageForApp.name: "Wählen Sie eine Sprache aus, um passende Hörer anzuzeigen.",
-  EnumLocale.txtSelectTalkAboutForApp.name: "Wählen Sie „Sprechen über“ für den Inhalt in der App.",
+  EnumLocale.txtSelectLanguageForApp.name:
+      "Wählen Sie eine Sprache aus, um passende Hörer anzuzeigen.",
+  EnumLocale.txtSelectTalkAboutForApp.name:
+      "Wählen Sie „Sprechen über“ für den Inhalt in der App.",
   EnumLocale.txtRecommendedProfile.name: "Empfohlenes Profil",
   EnumLocale.txtSelectCallTypeNote.name:
       "Bitte vertrauen Sie nicht auf betrügerische Informationen wie Geldtransfers, Lotterien usw. von Fremden. Bitte geben Sie keine persönlichen Informationen wie Passwörter, Handynummern, OTP usw. weiter. Bitte verzichten Sie auf Nacktheit, Pornografie oder obszöne Handlungen.",
@@ -105,12 +115,15 @@ final Map<String, String> deat = {
   EnumLocale.txtShareListenersApp.name: "Expert-App teilen",
   EnumLocale.txtRatingDescription.name:
       "Ihr Feedback hilft anderen Mitgliedern, ihren Zuhörer besser auszuwählen und hilft uns, unseren Service zu verbessern!",
-  EnumLocale.txtShareListenersAppDescription.name: "Teilen Sie die App mit Freunden und Familie und verbreiten Sie Freude …!",
+  EnumLocale.txtShareListenersAppDescription.name:
+      "Teilen Sie die App mit Freunden und Familie und verbreiten Sie Freude …!",
   EnumLocale.txtShareAppNow.name: "App jetzt teilen",
   EnumLocale.txtCompleteTrailCall.name: "Vielen Dank für Ihren Anruf mit",
   EnumLocale.txtCompleteTrailCall1.name: "– Sagen Sie uns Ihre Meinung!",
-  EnumLocale.txtDidYouLikeService.name: "Hat Ihnen der Expert-Service gefallen?",
-  EnumLocale.txtAddFilderToYourFavListeners.name: "Andrew Filder zu Ihren Lieblingshörern hinzufügen?",
+  EnumLocale.txtDidYouLikeService.name:
+      "Hat Ihnen der Expert-Service gefallen?",
+  EnumLocale.txtAddFilderToYourFavListeners.name:
+      "Andrew Filder zu Ihren Lieblingshörern hinzufügen?",
   EnumLocale.txtEditProfile.name: "Profil bearbeiten",
   EnumLocale.txtMyWallet.name: "Mein Wallet",
   EnumLocale.txtHelpCenter.name: "Hilfecenter",
@@ -123,7 +136,8 @@ final Map<String, String> deat = {
   EnumLocale.txtNickName.name: "Spitzname",
   EnumLocale.txtAddYourNickName.name: "Fügen Sie Ihren Spitznamen hinzu",
   EnumLocale.txtFullName.name: "Vollständiger Name",
-  EnumLocale.txtAddYOurFullName.name: "Fügen Sie Ihren vollständigen Namen hinzu",
+  EnumLocale.txtAddYOurFullName.name:
+      "Fügen Sie Ihren vollständigen Namen hinzu",
   EnumLocale.txtDateOfBirth.name: "Geburtsdatum",
   EnumLocale.txtGenderIdentity.name: "Geschlechtsidentität",
   EnumLocale.txtMobileNumber.name: "Handynummer",
@@ -131,14 +145,16 @@ final Map<String, String> deat = {
   EnumLocale.txtSaveGender.name: "GESCHLECHT SPEICHERN",
   EnumLocale.txtChooseYourGender.name: "Wähle dein Geschlecht",
   EnumLocale.txtSelectYourGender.name: "Wählen Sie Ihr Geschlecht",
-  EnumLocale.txtIfSelectWrongGenderLifeBan.name: "Wenn Sie das falsche Geschlecht auswählen =\nLebenslanges Verbot️🚫",
+  EnumLocale.txtIfSelectWrongGenderLifeBan.name:
+      "Wenn Sie das falsche Geschlecht auswählen =\nLebenslanges Verbot️🚫",
   EnumLocale.txtMale.name: "Männlich",
   EnumLocale.txtFemale.name: "Weiblich",
   EnumLocale.txtBecomeListener.name: "Werde Zuhörer",
   EnumLocale.txtViewCoinHistory.name: "Münzverlauf anzeigen",
   EnumLocale.txtCurrentCoinBalance.name: "Aktueller Münzstand",
   EnumLocale.txtWalletGuide.name: "Brieftaschenhandbuch: -",
-  EnumLocale.txtAddCoinBalanceSelectPlan.name: "Münzguthaben hinzufügen, Plan auswählen: -",
+  EnumLocale.txtAddCoinBalanceSelectPlan.name:
+      "Münzguthaben hinzufügen, Plan auswählen: -",
   EnumLocale.txtMostPopularPlan.name: "Beliebtester Plan",
   EnumLocale.txtHistory.name: "Geschichte",
   EnumLocale.txtPayment.name: "Zahlung",
@@ -150,7 +166,8 @@ final Map<String, String> deat = {
   EnumLocale.txtFailed.name: "Fehlgeschlagen",
   EnumLocale.txtSuccess.name: "Erfolg",
   EnumLocale.txtCallDuration.name: "Anrufdauer",
-  EnumLocale.txtManageYourAccountSettings.name: "Verwalten Sie Ihre Kontoeinstellungen...",
+  EnumLocale.txtManageYourAccountSettings.name:
+      "Verwalten Sie Ihre Kontoeinstellungen...",
   EnumLocale.txtLogoutApp.name: "App abmelden",
   EnumLocale.txtLogout.name: "Ausloggen",
   EnumLocale.txtCancel.name: "Stornieren",
@@ -159,13 +176,16 @@ final Map<String, String> deat = {
   EnumLocale.txtNeedAnyHelpFAQ.name: "Brauchen Sie Hilfe und\nFAQ...",
   EnumLocale.txtHaveAnIssue.name: "Haben Sie ein Problem?",
   EnumLocale.txtFrequentlyAskedQuestions.name: "Häufig gestellte Fragen",
-  EnumLocale.txtLetEngageMoreUserThrowShareApp.name: "Lassen Sie uns mehr Benutzer einbinden, indem Sie die App teilen ...",
+  EnumLocale.txtLetEngageMoreUserThrowShareApp.name:
+      "Lassen Sie uns mehr Benutzer einbinden, indem Sie die App teilen ...",
   EnumLocale.txtRateUs.name: "Bewerten Sie uns",
-  EnumLocale.txtRateYourExperienceWithUs.name: "Bewerten Sie Ihre Erfahrungen mit uns!",
+  EnumLocale.txtRateYourExperienceWithUs.name:
+      "Bewerten Sie Ihre Erfahrungen mit uns!",
   EnumLocale.txtYouWantToBecomeListener.name: "Sie möchten \nZuhörer werden...",
   EnumLocale.txtListenerVerification.name: "Hörerüberprüfung",
   EnumLocale.txtExploreListener.name: "Expert erkunden",
-  EnumLocale.txtTakeControlOfYourPrivacyData.name: "Übernehmen Sie die Kontrolle über Ihre\nDatenschutzdaten...",
+  EnumLocale.txtTakeControlOfYourPrivacyData.name:
+      "Übernehmen Sie die Kontrolle über Ihre\nDatenschutzdaten...",
   EnumLocale.txtLocation.name: "Standort",
   EnumLocale.txtBluetooth.name: "Bluetooth",
   EnumLocale.txtMicrophone.name: "Mikrofon",
@@ -185,19 +205,24 @@ final Map<String, String> deat = {
   EnumLocale.txtRequestID.name: "Anforderungs-ID",
   EnumLocale.txtEnterYourAddress.name: "Geben Sie Ihre Adresse ein",
   EnumLocale.txtEnterYourAge.name: "Geben Sie Ihr Alter ein",
-  EnumLocale.txtEnterYourExperience.name: "Geben Sie Ihre Erfahrung ein (in Jahren)",
+  EnumLocale.txtEnterYourExperience.name:
+      "Geben Sie Ihre Erfahrung ein (in Jahren)",
   EnumLocale.txtSUBMIT.name: "EINREICHEN",
-  EnumLocale.desWantDeleteAccount.name: "Möchten Sie Ihr Konto wirklich löschen?",
+  EnumLocale.desWantDeleteAccount.name:
+      "Möchten Sie Ihr Konto wirklich löschen?",
   EnumLocale.changeYourImage.name: "Ändern Sie Ihr Bild",
   EnumLocale.txtTakeAphoto.name: "Machen Sie ein Foto",
   EnumLocale.txtChooseFromYourFile.name: "Wählen Sie aus Ihrer Datei",
   EnumLocale.txtNext.name: "NÄCHSTE",
   EnumLocale.txtPleaseSelectProfileImage.name: "Bitte Profilbild auswählen!!",
-  EnumLocale.txtPleaseEnterNickName.name: "Bitte geben Sie den Spitznamen ein!!",
+  EnumLocale.txtPleaseEnterNickName.name:
+      "Bitte geben Sie den Spitznamen ein!!",
   EnumLocale.txtEnterNickName.name: "Geben Sie den Spitznamen ein",
   EnumLocale.txtPleaseEnterMobileNumber.name: "Bitte Handynummer eingeben!!",
-  EnumLocale.txtPleaseSelectBirthDate.name: "Bitte wählen Sie das Geburtsdatum!!",
-  EnumLocale.txtProfileUpdateSuccessfully.name: "Profilaktualisierung erfolgreich",
+  EnumLocale.txtPleaseSelectBirthDate.name:
+      "Bitte wählen Sie das Geburtsdatum!!",
+  EnumLocale.txtProfileUpdateSuccessfully.name:
+      "Profilaktualisierung erfolgreich",
   EnumLocale.txtForgotPassword.name: "Passwort vergessen",
   EnumLocale.txtForgotYourPassword.name: "Passwort vergessen\n...",
   EnumLocale.txtEnterMailMobileNumber.name: "E-Mail-/Mobilnummer eingeben",
@@ -205,7 +230,8 @@ final Map<String, String> deat = {
   EnumLocale.txtCreatePassword.name: "Passwort erstellen",
   EnumLocale.txtForgotPassDescription.name:
       "Geben Sie unten Ihre E-Mail-Adresse oder Handynummer ein, um Ihr Passwort zurückzusetzen. Wir senden Ihnen einen Bestätigungscode, mit dem Sie Ihr Konto wiederherstellen können.",
-  EnumLocale.txtLongPressToEnableAudioRecording.name: "Lange drücken, um die Audioaufnahme zu aktivieren",
+  EnumLocale.txtLongPressToEnableAudioRecording.name:
+      "Lange drücken, um die Audioaufnahme zu aktivieren",
   EnumLocale.txtAudioRecording.name: "Audioaufnahme...",
   EnumLocale.txtPleaseAllowPermission.name: "Bitte Erlaubnis erteilen!!",
   EnumLocale.txtHostCenterDescription.name:
@@ -214,14 +240,15 @@ final Map<String, String> deat = {
       "Der Schutz Ihrer Daten ist uns wichtig. Erfahren Sie, wie Ihre persönlichen Daten erfasst, verwendet und geschützt werden.",
   EnumLocale.txtShareAppDes.name:
       "Teilen Sie diese App mit Ihren Freunden und Ihrer Familie, damit auch sie ihre einzigartigen Funktionen nutzen können.",
-  EnumLocale.txtAboutUsDes.name: "Wir sind bestrebt, Ihnen den besten Service zu bieten. Erfahren Sie mehr über unser Team und unsere Mission.",
+  EnumLocale.txtAboutUsDes.name:
+      "Wir sind bestrebt, Ihnen den besten Service zu bieten. Erfahren Sie mehr über unser Team und unsere Mission.",
   EnumLocale.txtPaymentMethod.name: "Zahlungsmethode",
   EnumLocale.txtListenerWithdrawDescription.name:
-      "1. Sobald Sie den von der Plattform festgelegten Mindestbetrag erreicht haben, können Sie Ihre verdienten Coins als Echtgeld abheben. Stellen Sie sicher, dass Ihr Profil und Ihre Zahlungsdaten vollständig verifiziert sind, um Verzögerungen bei der Bearbeitung Ihres Auszahlungsantrags zu vermeiden.",
+      "1. Sobald Sie den von der Plattform festgelegten Mindestbetrag erreicht haben, können Sie Ihre verdienten Session Credits als Echtgeld abheben. Stellen Sie sicher, dass Ihr Profil und Ihre Zahlungsdaten vollständig verifiziert sind, um Verzögerungen bei der Bearbeitung Ihres Auszahlungsantrags zu vermeiden.",
   EnumLocale.txtListenerGuide.name:
-      "1. Dein Wallet-Guthaben zeigt die Gesamtzahl der Coins an, die du von Nutzern erhalten hast, die dich als Zuhörer anrufen. Diese Coins werden dir für deine Zeit und dein Engagement während des Anrufs gutgeschrieben.\n\n2. Nutzer kaufen Coins und geben sie aus, indem sie Zuhörer wie dich anrufen. Je mehr Nutzer dich anrufen, desto mehr Coins verdienst du in deinem Wallet.\n\n3. Verdiente Coins können gesammelt und später, abhängig von den Auszahlungsregeln der Plattform, als Geld abgehoben werden. Aktiv bleiben, um dein Wallet-Guthaben zu erhöhen.",
+      "1. Dein Wallet-Guthaben zeigt die Gesamtzahl der Session Credits an, die du von Nutzern erhalten hast, die dich als Zuhörer anrufen. Diese Session Credits werden dir für deine Zeit und dein Engagement während des Anrufs gutgeschrieben.\n\n2. Nutzer kaufen Session Credits und geben sie aus, indem sie Zuhörer wie dich anrufen. Je mehr Nutzer dich anrufen, desto mehr Session Credits verdienst du in deinem Wallet.\n\n3. Verdiente Session Credits können gesammelt und später, abhängig von den Auszahlungsregeln der Plattform, als Geld abgehoben werden. Aktiv bleiben, um dein Wallet-Guthaben zu erhöhen.",
   EnumLocale.txtUserGuide.name:
-      "1. Dein Wallet-Guthaben entspricht der Anzahl der verfügbaren Coins in deinem Konto. Mit diesen Coins kannst du Premium-Funktionen nutzen, dich mit Hörern vernetzen oder In-App-Käufe tätigen.\n\n2. Du kannst dein Coin-Guthaben aufladen, indem du einen der unten stehenden Tarife auswählst. Jeder Tarif bietet einen anderen Coin-zu-Dollar-Kurs. Wähle also den Tarif, der am besten zu deinen Bedürfnissen passt.\n\n3. Je mehr Coins du kaufst, desto besser ist der Wert. Höhere Tarife bieten oft Bonus-Coins oder Sonderangebote. Achte auf die Markierung „Beliebtester Tarif“, um Empfehlungen zu erhalten.",
+      "1. Dein Wallet-Guthaben entspricht der Anzahl der verfügbaren Session Credits in deinem Konto. Mit diesen Session Credits kannst du Premium-Funktionen nutzen, dich mit Hörern vernetzen oder In-App-Käufe tätigen.\n\n2. Du kannst dein Session Credit-Guthaben aufladen, indem du einen der unten stehenden Tarife auswählst. Jeder Tarif bietet einen anderen Session Credit-zu-Dollar-Kurs. Wähle also den Tarif, der am besten zu deinen Bedürfnissen passt.\n\n3. Je mehr Session Credits du kaufst, desto besser ist der Wert. Höhere Tarife bieten oft Bonus-Session Credits oder Sonderangebote. Achte auf die Markierung „Beliebtester Tarif“, um Empfehlungen zu erhalten.",
   EnumLocale.txtWallet.name: "Geldbörse",
   EnumLocale.txtProfile.name: "Profil",
   EnumLocale.txtRecentCalling.name: "Letzte Anrufe",
@@ -243,7 +270,8 @@ final Map<String, String> deat = {
   EnumLocale.txtEnterCoinAmount.name: "Münzbetrag eingeben",
   EnumLocale.txtMinimumWithdrawCoin.name: "*Mindestauszahlungsbetrag:",
   EnumLocale.txtMyAmountBalance.name: "Mein Kontostand:",
-  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name: "Holen Sie sich hier Ihren auszahlbaren Münzbetrag ...",
+  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
+      "Holen Sie sich hier Ihren auszahlbaren Münzbetrag ...",
   EnumLocale.txtListenerDetails.name: "Hörerdetails: -",
   EnumLocale.txtEnterIntroduction.name: "Einführung eingeben",
   EnumLocale.txtTalkLanguages.name: "Gesprächssprachen: -",
@@ -263,9 +291,12 @@ final Map<String, String> deat = {
   EnumLocale.txtAddress.name: "Adresse :",
   EnumLocale.txtNOte.name: "Notiz :",
   EnumLocale.txtPleaseFillProfile.name: "Bitte Profil ausfüllen",
-  EnumLocale.txtPleaseEnterWithdrawCoin.name: "Bitte geben Sie WithdrawCoin ein",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name: "Bitte wählen Sie die Auszahlungsmethode",
-  EnumLocale.txtPleaseEnterAllPaymentDetails.name: "Bitte geben Sie alle Zahlungsdetails ein",
+  EnumLocale.txtPleaseEnterWithdrawCoin.name:
+      "Bitte geben Sie den Session Credit Betrag ein",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name:
+      "Bitte wählen Sie die Auszahlungsmethode",
+  EnumLocale.txtPleaseEnterAllPaymentDetails.name:
+      "Bitte geben Sie alle Zahlungsdetails ein",
   EnumLocale.txtSelectPaymentGateway.name: "Zahlungsgateway auswählen",
   EnumLocale.txtNumberOfCoin.name: "Anzahl der Münzen:",
   EnumLocale.txtWithdrawalID.name: "Auszahlungs-ID:",
@@ -282,7 +313,8 @@ final Map<String, String> deat = {
   EnumLocale.txtAppRestart.name: "Ihre Höreranfrage wurde angenommen",
   EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
       "Der Benutzer verfügt nicht über ausreichende Mittel, um die Auszahlung vorzunehmen",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
+  EnumLocale
+          .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
       "Die angeforderte Auszahlungsmenge muss größer sein als vom Administrator angegeben",
   EnumLocale.txtSkip.name: "Überspringen",
   EnumLocale.txtHostHomeDescription.name:
@@ -294,7 +326,8 @@ final Map<String, String> deat = {
       "Wählen Sie die Sprachen, in denen Sie mit Ihren Zuhörern gut sprechen können. So können wir Sie mit den richtigen Ansprechpartnern in diesen Sprachen verbinden.",
   EnumLocale.txtSelectTopic.name:
       "Wählen Sie die Themen aus, über die Sie gerne sprechen. So finden Sie passende Nutzer, die in diesen Bereichen Unterstützung suchen.",
-  EnumLocale.txtSureClearNotification.name: "Möchten Sie wirklich alle Benachrichtigungen löschen?",
+  EnumLocale.txtSureClearNotification.name:
+      "Möchten Sie wirklich alle Benachrichtigungen löschen?",
   EnumLocale.txtSure.name: "Sicher",
   EnumLocale.txtIntroduction.name: "Einführung",
   EnumLocale.txtTryAgain.name: "Versuchen Sie es erneut",
@@ -304,13 +337,17 @@ final Map<String, String> deat = {
       "Bei Fragen oder Problemen helfen wir Ihnen gerne weiter! Sehen Sie sich unten die am häufigsten gestellten Fragen an oder wenden Sie sich für persönliche Unterstützung an unser Support-Team.",
   EnumLocale.txtBecomeHostDescription.name:
       "Zuhörer spielen eine wichtige Rolle, indem sie Nutzern, die jemanden zum Reden brauchen, Unterstützung, Beratung oder einfach ein offenes Ohr bieten. Wenn Sie einfühlsam, geduldig und hilfsbereit sind, ist die Rolle des Zuhörers der perfekte Weg, einen positiven Einfluss auszuüben.",
-  EnumLocale.txtListenerReqSentSuccessfully.name: "Expert-Anforderung erfolgreich gesendet...",
+  EnumLocale.txtListenerReqSentSuccessfully.name:
+      "Expert-Anforderung erfolgreich gesendet...",
   EnumLocale.txtSearchLanguage.name: "Suchsprache...",
-  EnumLocale.txtSelectTalkaboutTxt.name: "Wählen Sie „Sprechen über“ für den Inhalt in der App.",
-  EnumLocale.txtSelectAppLanguageTxt.name: "Wählen Sie Ihre bevorzugte App-Sprache.",
+  EnumLocale.txtSelectTalkaboutTxt.name:
+      "Wählen Sie „Sprechen über“ für den Inhalt in der App.",
+  EnumLocale.txtSelectAppLanguageTxt.name:
+      "Wählen Sie Ihre bevorzugte App-Sprache.",
   EnumLocale.txtHostVerificationFillForm.name:
       "Bitte füllen Sie das Formular mit korrekten Angaben aus. Geben Sie Ihre gültige E-Mail-Adresse ein, um wichtige Updates und Verifizierungsergebnisse zu erhalten. Stellen Sie sicher, dass alle Felder korrekt ausgefüllt sind, bevor Sie fortfahren.",
-  EnumLocale.txtUserName.name: "Wählen Sie „Sprechen über“ für den Inhalt in der App.",
+  EnumLocale.txtUserName.name:
+      "Wählen Sie „Sprechen über“ für den Inhalt in der App.",
   EnumLocale.txtUserDetails.name: "Wählen Sie Ihre bevorzugte App-Sprache.",
   EnumLocale.txtUserNickName.name:
       "Bitte füllen Sie das Formular mit korrekten Angaben aus. Geben Sie Ihre gültige E-Mail-Adresse ein, um wichtige Updates und Verifizierungsergebnisse zu erhalten. Stellen Sie sicher, dass alle Felder korrekt ausgefüllt sind, bevor Sie fortfahren.",
@@ -352,21 +389,27 @@ final Map<String, String> deat = {
   EnumLocale.txtPrivacyPolicy.name: 'Rückmeldung',
   EnumLocale.txtListenerAvailableForPrivateVideoCall.name: 'Es ist ein Match!',
   EnumLocale.txtListenerAvailableForPrivateAudioCall.name: 'Ich stimme zu',
-  EnumLocale.txtListenerDisableForPrivateVideoCall.name: 'Zuhörer für privaten Audioanruf verfügbar.',
-  EnumLocale.txtListenerDisableForPrivateAudioCall.name: 'Zuhörer für zufälligen Videoanruf verfügbar.',
+  EnumLocale.txtListenerDisableForPrivateVideoCall.name:
+      'Zuhörer für privaten Audioanruf verfügbar.',
+  EnumLocale.txtListenerDisableForPrivateAudioCall.name:
+      'Zuhörer für zufälligen Videoanruf verfügbar.',
   EnumLocale.txtEarpiece.name: 'Hörmuschel',
   EnumLocale.txtEnterProperValue.name: 'Geben Sie den richtigen Wert ein',
-  EnumLocale.txtYourHostRequestSentSuccessfully.name: 'Ihre Host-Anfrage wurde erfolgreich gesendet',
+  EnumLocale.txtYourHostRequestSentSuccessfully.name:
+      'Ihre Host-Anfrage wurde erfolgreich gesendet',
   EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
       'Ihre Anfrage wurde übermittelt. Bitte warten Sie, bis wir sie geprüft und genehmigt haben.',
   EnumLocale.txtViewRequest.name: 'Anfrage anzeigen',
-  EnumLocale.txtDEmoListenerText.name: "Hoppla! Sie haben keine Berechtigung. Dies ist ein Demo-Login",
+  EnumLocale.txtDEmoListenerText.name:
+      "Hoppla! Sie haben keine Berechtigung. Dies ist ein Demo-Login",
   EnumLocale.txtVideoCalling.name: "Videoanrufe",
   EnumLocale.txtAudioCalling.name: "Audioanrufe",
   EnumLocale.txtIncomingVoiceCalling.name: 'Eingehende Videoanrufe',
   EnumLocale.txtIncomingAudioCalling.name: 'Eingehende Audioanrufe',
-  EnumLocale.txtNoAccountFoundForThisEmail.name: "Für diese E-Mail wurde kein Konto gefunden",
-  EnumLocale.txtResetLinkSentToYourEmail.name: "Link zum Zurücksetzen an Ihre E-Mail gesendet",
+  EnumLocale.txtNoAccountFoundForThisEmail.name:
+      "Für diese E-Mail wurde kein Konto gefunden",
+  EnumLocale.txtResetLinkSentToYourEmail.name:
+      "Link zum Zurücksetzen an Ihre E-Mail gesendet",
   EnumLocale.txtForgetPasswordDescription.name:
       "Sie müssen den Link zum Vergessen des Passworts in Ihrem Gmail-Konto erhalten haben. Überprüfen Sie ihn. Wenn nicht, überprüfen Sie den Spam-Bereich.",
 };

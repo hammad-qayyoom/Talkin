@@ -7,11 +7,13 @@ final Map<String, String> trTR = {
   EnumLocale.txtRegisterTitle3.name: "GÖRÜNTÜLÜ ARAMA",
   EnumLocale.txtRegisterSubTitle1.name:
       "Dünyanın dört bir yanındaki insanlarla sohbet etmek, mesajlaşmak ve bağlantı kurmak için bağlantı kurabilirsiniz.",
-  EnumLocale.txtRegisterSubTitle2.name: 'Birbirinizi daha iyi tanımak ve iyi bir uyum sağlamak için yabancılarla sohbet edin.',
-  EnumLocale.txtRegisterSubTitle3.name: "Videolarınızı ve fotoğraflarınızı arkadaşlarınız ve bağlantılarınızla paylaşabilirsiniz.",
+  EnumLocale.txtRegisterSubTitle2.name:
+      'Birbirinizi daha iyi tanımak ve iyi bir uyum sağlamak için yabancılarla sohbet edin.',
+  EnumLocale.txtRegisterSubTitle3.name:
+      "Videolarınızı ve fotoğraflarınızı arkadaşlarınız ve bağlantılarınızla paylaşabilirsiniz.",
   EnumLocale.txtEnterYourMail.name: "E-posta Kimliğinizi Girin",
   EnumLocale.txtEnterPassword.name: "Şifrenizi Girin",
-  EnumLocale.txtCoinRechargeSuccess.name: "Coin şarjı başarısı",
+  EnumLocale.txtCoinRechargeSuccess.name: "Session Credit şarjı başarısı",
   EnumLocale.txtPassword.name: "Şifre",
   EnumLocale.txtTypeSomething.name: "Birşeyler yazın..",
   EnumLocale.txtSelectCountry.name: "Ülke Seçin",
@@ -34,7 +36,8 @@ final Map<String, String> trTR = {
   EnumLocale.desEnterValidEmailAddress.name: "Geçerli bir e",
   EnumLocale.desEnterPassword.name: "Lütfen şifrenizi giriniz",
   EnumLocale.desReEnterPassword.name: "Lütfen şifrenizi tekrar giriniz",
-  EnumLocale.desPasswordCharacters.name: "Şifre en az 6 karakter uzunluğunda olmalıdır",
+  EnumLocale.desPasswordCharacters.name:
+      "Şifre en az 6 karakter uzunluğunda olmalıdır",
   EnumLocale.desPasswordNotMatch.name: "Şifre eşleşmiyor",
   EnumLocale.txtEnterName.name: "Adınızı girin",
   EnumLocale.desEnterFullName.name: "Lütfen tam adınızı girin",
@@ -45,7 +48,8 @@ final Map<String, String> trTR = {
   EnumLocale.desEnterMobile.name: "Lütfen cep telefonu numaranızı giriniz",
   EnumLocale.txtGetOtp.name: "OTP'yi al",
   EnumLocale.txtEnterOtp.name: "OTP'yi girin",
-  EnumLocale.txtEnterOtpWithRegisterNumber.name: "OTP\n'yi Kayıt Numarasıyla Girin...",
+  EnumLocale.txtEnterOtpWithRegisterNumber.name:
+      "OTP\n'yi Kayıt Numarasıyla Girin...",
   EnumLocale.txtYouHaveNotGetOtp.name: "OTP almadıysanız?",
   EnumLocale.txtResendOtp.name: "OTP'yi yeniden gönder",
   EnumLocale.txtExitApp.name: 'Uygulamadan çık',
@@ -58,7 +62,8 @@ final Map<String, String> trTR = {
   EnumLocale.txtFreeTalk.name: 'SERBEST KONUŞMA',
   EnumLocale.txtCalling.name: 'Çağrı',
   EnumLocale.txtHomeFastLalk.name: 'Şimdi Hızlı Lalk, Kendini Daha İyi Hisset',
-  EnumLocale.txtHomeDescription.name: 'Sevdiğiniz Dinleyicinizle konuşun ve kendinizi daha hafif ve parlak hissedin!',
+  EnumLocale.txtHomeDescription.name:
+      'Sevdiğiniz Dinleyicinizle konuşun ve kendinizi daha hafif ve parlak hissedin!',
   EnumLocale.txtFindMoreListener.name: 'Daha Fazla Dinleyici Bul',
   EnumLocale.txtTopListener.name: 'En İyi Dinleyiciler',
   EnumLocale.txtViewAll.name: 'Tümünü Görüntüle',
@@ -75,7 +80,7 @@ final Map<String, String> trTR = {
   EnumLocale.txtVideoCall.name: "Görüntülü Arama",
   EnumLocale.txtSelectCallType.name: "ÇAĞRI TİPİNİ SEÇİN",
   EnumLocale.txtAudioCall.name: "Sesli Arama",
-  EnumLocale.txtFreeCoin.name: "Ücretsiz Jeton",
+  EnumLocale.txtFreeCoin.name: "Ücretsiz Session Credit",
   EnumLocale.txtNote.name: "Not :",
   EnumLocale.txtSearchPeople.name: "Kişileri Ara...",
   EnumLocale.txtRecentPeople.name: "Son Arama",
@@ -83,8 +88,10 @@ final Map<String, String> trTR = {
   EnumLocale.txtTalkAbout.name: "Hakkında Konuş",
   EnumLocale.txtSelectPaymentMethod.name: "Ödeme Yöntemini Seçin",
   EnumLocale.txtAPPLanguage.name: "APP Dili",
-  EnumLocale.txtSelectLanguageForApp.name: "Eşleşen dinleyicileri görmek için bir dil seçin.",
-  EnumLocale.txtSelectTalkAboutForApp.name: "Uygulamada içerik hakkında konuşmayı seçin",
+  EnumLocale.txtSelectLanguageForApp.name:
+      "Eşleşen dinleyicileri görmek için bir dil seçin.",
+  EnumLocale.txtSelectTalkAboutForApp.name:
+      "Uygulamada içerik hakkında konuşmayı seçin",
   EnumLocale.txtRecommendedProfile.name: "Önerilen Profil",
   EnumLocale.txtSelectCallTypeNote.name:
       "Lütfen yabancılardan gelen para transferi, piyango vb. gibi sahte bilgilere güvenmeyin. Lütfen şifreler, cep telefonu numaraları, otp vb. gibi hiçbir kişisel bilgiyi paylaşmayın. Lütfen çıplaklık, pornografi veya herhangi bir müstehcen eylemde bulunmayın.",
@@ -106,12 +113,14 @@ final Map<String, String> trTR = {
   EnumLocale.txtShareListenersApp.name: "Paylaş Dinleyici Uygulaması",
   EnumLocale.txtRatingDescription.name:
       "Geri bildiriminiz diğer üyelerin dinleyicilerini daha iyi seçmelerine yardımcı olacak ve hizmetimizi iyileştirmemize yardımcı olacak!",
-  EnumLocale.txtShareListenersAppDescription.name: "Uygulamayı Arkadaşlarınız ve Ailenizle Paylaşın ve Sevinci Yayın...!",
+  EnumLocale.txtShareListenersAppDescription.name:
+      "Uygulamayı Arkadaşlarınız ve Ailenizle Paylaşın ve Sevinci Yayın...!",
   EnumLocale.txtShareAppNow.name: "Uygulamayı Şimdi Paylaş",
   EnumLocale.txtCompleteTrailCall.name: "Aradığınız için teşekkür ederiz",
   EnumLocale.txtCompleteTrailCall1.name: "– Düşüncelerinizi bizimle paylaşın!",
   EnumLocale.txtDidYouLikeService.name: "Expert servisini beğendiniz mi?",
-  EnumLocale.txtAddFilderToYourFavListeners.name: "Andrew Filder'ı Favori Dinleyicilerinize Ekleyin?",
+  EnumLocale.txtAddFilderToYourFavListeners.name:
+      "Andrew Filder'ı Favori Dinleyicilerinize Ekleyin?",
   EnumLocale.txtEditProfile.name: "Profili Düzenle",
   EnumLocale.txtMyWallet.name: "Cüzdanım",
   EnumLocale.txtHelpCenter.name: "Yardım Merkezi",
@@ -132,18 +141,20 @@ final Map<String, String> trTR = {
   EnumLocale.txtSaveGender.name: "CİNSİYETİ KAYDETMELİ",
   EnumLocale.txtChooseYourGender.name: "Cinsiyetinizi seçin",
   EnumLocale.txtSelectYourGender.name: "Cinsiyetinizi Seçin",
-  EnumLocale.txtIfSelectWrongGenderLifeBan.name: "Yanlış Cinsiyeti Seçerseniz =\nÖmür Boyu Yasak🚫",
+  EnumLocale.txtIfSelectWrongGenderLifeBan.name:
+      "Yanlış Cinsiyeti Seçerseniz =\nÖmür Boyu Yasak🚫",
   EnumLocale.txtMale.name: "Erkek",
   EnumLocale.txtFemale.name: "Dişi",
   EnumLocale.txtBecomeListener.name: "Dinleyici Olun",
-  EnumLocale.txtViewCoinHistory.name: "Coin Geçmişini Görüntüle",
-  EnumLocale.txtCurrentCoinBalance.name: "Güncel Coin Bakiyesi",
+  EnumLocale.txtViewCoinHistory.name: "Session Credit Geçmişini Görüntüle",
+  EnumLocale.txtCurrentCoinBalance.name: "Güncel Session Credit Bakiyesi",
   EnumLocale.txtWalletGuide.name: "Cüzdan Rehberi :-",
-  EnumLocale.txtAddCoinBalanceSelectPlan.name: "Coin Bakiyesi Ekle, Plan Seç :-",
-  EnumLocale.txtMostPopularPlan.name: "En Popüler Plan",
+  EnumLocale.txtAddCoinBalanceSelectPlan.name:
+      "Session Credit Bakiyesi Ekle, Abonelik Seç :-",
+  EnumLocale.txtMostPopularPlan.name: "En Popüler Abonelik",
   EnumLocale.txtHistory.name: "Tarih",
   EnumLocale.txtPayment.name: "Ödeme",
-  EnumLocale.txtCoinHistory.name: "Madeni Para Tarihi",
+  EnumLocale.txtCoinHistory.name: "Session Credit Geçmişi",
   EnumLocale.txtDetails.name: "Detaylar",
   EnumLocale.txtAmount.name: "Miktar",
   EnumLocale.txtStatus.name: "Durum",
@@ -151,22 +162,28 @@ final Map<String, String> trTR = {
   EnumLocale.txtFailed.name: "Arızalı",
   EnumLocale.txtSuccess.name: "Başarı",
   EnumLocale.txtCallDuration.name: "Çağrı Süresi",
-  EnumLocale.txtManageYourAccountSettings.name: "Hesabınızı Yönetin\nAyarlar...",
+  EnumLocale.txtManageYourAccountSettings.name:
+      "Hesabınızı Yönetin\nAyarlar...",
   EnumLocale.txtLogoutApp.name: "Uygulamadan Çıkış Yap",
   EnumLocale.txtLogout.name: "Çıkış Yap",
   EnumLocale.txtCancel.name: "İptal etmek",
-  EnumLocale.txtDesLogout.name: "Hesabınızdan çıkış yapmak istediğinizden emin misiniz?",
+  EnumLocale.txtDesLogout.name:
+      "Hesabınızdan çıkış yapmak istediğinizden emin misiniz?",
   EnumLocale.txtDeleteAccount.name: "Hesabı Sil",
-  EnumLocale.txtNeedAnyHelpFAQ.name: "Herhangi Bir Yardıma İhtiyacınız Var Mı &\nSSS...",
+  EnumLocale.txtNeedAnyHelpFAQ.name:
+      "Herhangi Bir Yardıma İhtiyacınız Var Mı &\nSSS...",
   EnumLocale.txtHaveAnIssue.name: "Bir Sorununuz mu Var?",
   EnumLocale.txtFrequentlyAskedQuestions.name: "Sıkça Sorulan Sorular",
-  EnumLocale.txtLetEngageMoreUserThrowShareApp.name: "Daha Fazla Kullanıcıyla Etkileşime Girelim Paylaşım Uygulaması...",
+  EnumLocale.txtLetEngageMoreUserThrowShareApp.name:
+      "Daha Fazla Kullanıcıyla Etkileşime Girelim Paylaşım Uygulaması...",
   EnumLocale.txtRateUs.name: "Bizi Derecelendirin",
-  EnumLocale.txtRateYourExperienceWithUs.name: "Bizimle Yaşadığınız Deneyimi Değerlendirin!",
+  EnumLocale.txtRateYourExperienceWithUs.name:
+      "Bizimle Yaşadığınız Deneyimi Değerlendirin!",
   EnumLocale.txtYouWantToBecomeListener.name: "Dinleyici Olmak İstiyorsunuz...",
   EnumLocale.txtListenerVerification.name: "Dinleyici Doğrulaması",
   EnumLocale.txtExploreListener.name: "Dinleyiciyi Keşfet",
-  EnumLocale.txtTakeControlOfYourPrivacyData.name: "Gizlilik Verilerinizin Kontrolünü Elinize Alın...",
+  EnumLocale.txtTakeControlOfYourPrivacyData.name:
+      "Gizlilik Verilerinizin Kontrolünü Elinize Alın...",
   EnumLocale.txtLocation.name: "Konum",
   EnumLocale.txtBluetooth.name: "Bluetooth",
   EnumLocale.txtMicrophone.name: "Mikrofon",
@@ -188,25 +205,31 @@ final Map<String, String> trTR = {
   EnumLocale.txtEnterYourAge.name: "Yaşınızı Girin",
   EnumLocale.txtEnterYourExperience.name: "Deneyiminizi Girin (yıl olarak)",
   EnumLocale.txtSUBMIT.name: "GÖNDERMEK",
-  EnumLocale.desWantDeleteAccount.name: "Hesabınızı silmek istediğinizden emin misiniz?",
+  EnumLocale.desWantDeleteAccount.name:
+      "Hesabınızı silmek istediğinizden emin misiniz?",
   EnumLocale.changeYourImage.name: "Resminizi değiştirin",
   EnumLocale.txtTakeAphoto.name: "Bir fotoğraf çek",
   EnumLocale.txtChooseFromYourFile.name: "Dosyanızdan seçin",
   EnumLocale.txtNext.name: "SONRAKİ",
-  EnumLocale.txtPleaseSelectProfileImage.name: "Lütfen profil resminizi seçin!!",
+  EnumLocale.txtPleaseSelectProfileImage.name:
+      "Lütfen profil resminizi seçin!!",
   EnumLocale.txtPleaseEnterNickName.name: "Lütfen Nickinizi giriniz!!",
   EnumLocale.txtEnterNickName.name: "Takma adınızı girin",
-  EnumLocale.txtPleaseEnterMobileNumber.name: "Lütfen cep telefonu numaranızı giriniz!!",
+  EnumLocale.txtPleaseEnterMobileNumber.name:
+      "Lütfen cep telefonu numaranızı giriniz!!",
   EnumLocale.txtPleaseSelectBirthDate.name: "Lütfen doğum tarihinizi seçiniz!!",
-  EnumLocale.txtProfileUpdateSuccessfully.name: "Profil güncellemesi başarıyla gerçekleştirildi",
+  EnumLocale.txtProfileUpdateSuccessfully.name:
+      "Profil güncellemesi başarıyla gerçekleştirildi",
   EnumLocale.txtForgotPassword.name: "Parolanızı mı unuttunuz",
   EnumLocale.txtForgotYourPassword.name: "Şifrenizi mi unuttunuz?",
-  EnumLocale.txtEnterMailMobileNumber.name: "E-posta/cep telefonu numarasını girin",
+  EnumLocale.txtEnterMailMobileNumber.name:
+      "E-posta/cep telefonu numarasını girin",
   EnumLocale.txtVerify.name: "Doğrulamak",
   EnumLocale.txtCreatePassword.name: "Şifre Oluştur",
   EnumLocale.txtForgotPassDescription.name:
       "Şifrenizi sıfırlamak için aşağıya e-posta adresinizi veya cep telefonu numaranızı girin. Hesabınızı kurtarmanıza yardımcı olmak için size bir doğrulama kodu göndereceğiz.",
-  EnumLocale.txtLongPressToEnableAudioRecording.name: "Ses kaydını etkinleştirmek için uzun basın",
+  EnumLocale.txtLongPressToEnableAudioRecording.name:
+      "Ses kaydını etkinleştirmek için uzun basın",
   EnumLocale.txtAudioRecording.name: "Ses Kaydı...",
   EnumLocale.txtPleaseAllowPermission.name: "Lütfen izin verin!!",
   EnumLocale.txtHostCenterDescription.name:
@@ -215,14 +238,15 @@ final Map<String, String> trTR = {
       "Verilerinizin gizliliğine değer veriyoruz. Kişisel bilgilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu öğrenin.",
   EnumLocale.txtShareAppDes.name:
       "Bu uygulamayı arkadaşlarınızla ve ailenizle paylaşarak onların da benzersiz özelliklerinden yararlanmasını sağlayın.",
-  EnumLocale.txtAboutUsDes.name: "Size en iyi hizmeti sunmaya kararlıyız. Ekibimiz ve misyonumuz hakkında daha fazla bilgi edinin.",
+  EnumLocale.txtAboutUsDes.name:
+      "Size en iyi hizmeti sunmaya kararlıyız. Ekibimiz ve misyonumuz hakkında daha fazla bilgi edinin.",
   EnumLocale.txtPaymentMethod.name: "Ödeme yöntemi",
   EnumLocale.txtListenerWithdrawDescription.name:
-      "1. Platform tarafından belirlenen minimum çekim eşiğine ulaştığınızda kazandığınız coinleri gerçek para olarak çekebilirsiniz. Çekim talebinizin işlenmesinde gecikmeleri önlemek için profilinizin ve ödeme bilgilerinizin tamamen doğrulandığından emin olun.",
+      "1. Platform tarafından belirlenen minimum çekim eşiğine ulaştığınızda kazandığınız Session Credit bakiyesini gerçek para olarak çekebilirsiniz. Çekim talebinizin işlenmesinde gecikmeleri önlemek için profilinizin ve ödeme bilgilerinizin tamamen doğrulandığından emin olun.",
   EnumLocale.txtListenerGuide.name:
-      "1. Cüzdan bakiyeniz, sizi dinleyici olarak arayan kullanıcılardan kazandığınız toplam coinleri gösterir. Bu coinler, arama sırasında harcadığınız zaman ve etkileşim için size ödüllendirilir.\n\n2. Kullanıcılar coin satın alır ve sizin gibi dinleyicileri arayarak harcarlar. Sizi ne kadar çok kullanıcı ararsa, cüzdanınızda o kadar çok coin kazanırsınız.\n\n3. Kazanılan coinler biriktirilebilir ve daha sonra platformun çekim kurallarına bağlı olarak para olarak çekilebilir. Cüzdan bakiyenizi büyütmek için aktif olarak etkileşimde bulunmaya devam edin.",
+      "1. Cüzdan bakiyeniz, kullanıcı görüşmelerinden kazandığınız toplam Session Credit miktarını gösterir. Bu Session Creditler, görüşme sırasında harcadığınız zaman ve etkileşim için size ödül olarak verilir.\n\n2. Kullanıcılar Session Credit satın alır ve sizin gibi uzmanları arayarak harcar. Sizi ne kadar çok kullanıcı ararsa, cüzdanınızda o kadar çok Session Credit birikir.\n\n3. Kazandığınız Session Creditler biriktirilebilir ve platformun çekim kurallarına bağlı olarak daha sonra para olarak çekilebilir. Cüzdan bakiyenizi büyütmek için aktif olarak etkileşimde bulunmaya devam edin.",
   EnumLocale.txtUserGuide.name:
-      "1. Cüzdan bakiyeniz, hesabınızda bulunan jeton sayısını temsil eder. Bu jetonlar, premium özelliklere erişmek, dinleyicilerle bağlantı kurmak veya uygulama içi satın alımlar yapmak için kullanılabilir.\n\n2. Aşağıdaki seçeneklerden bir plan seçerek jeton bakiyenizi doldurabilirsiniz. Her plan farklı bir jeton-dolar oranı sunar, bu nedenle ihtiyaçlarınıza en uygun olanı seçin.\n\n3. Ne kadar çok jeton satın alırsanız, değer o kadar iyi olur. Daha yüksek planlar genellikle bonus jetonlar veya özel tekliflerle gelir. Önerilen seçenekler için 'En Popüler Plan' etiketini kontrol ettiğinizden emin olun.",
+      "1. Cüzdan bakiyeniz, hesabınızda bulunan Session Credit miktarını temsil eder. Bu Session Creditler, premium özelliklere erişmek, uzmanlarla bağlantı kurmak veya uygulama içi satın alımlar yapmak için kullanılabilir.\n\n2. Aşağıdaki seçeneklerden bir abonelik seçerek Session Credit bakiyenizi doldurabilirsiniz. Her abonelik farklı bir Session Credit-dolar oranı sunar, bu nedenle ihtiyaçlarınıza en uygun olanı seçin.\n\n3. Ne kadar çok Session Credit satın alırsanız, değer o kadar iyi olur. Daha yüksek abonelikler genellikle bonus Session Credit veya özel tekliflerle gelir. Önerilen seçenekler için 'En Popüler Abonelik' etiketini kontrol ettiğinizden emin olun.",
   EnumLocale.txtWallet.name: "Cüzdan",
   EnumLocale.txtProfile.name: "Profil",
   EnumLocale.txtRecentCalling.name: "Son Çağrı",
@@ -230,21 +254,23 @@ final Map<String, String> trTR = {
   EnumLocale.txtPermissionAllow.name: "İzin Ver",
   EnumLocale.txtHostHomeNote.name:
       "Lütfen yabancılardan gelen para transferi, piyango vb. gibi sahte bilgilere güvenmeyin. Lütfen şifreler, cep telefonu numaraları, otp vb. gibi hiçbir kişisel bilgiyi paylaşmayın. Lütfen çıplaklık, pornografi veya herhangi bir müstehcen eylemde bulunmayın.",
-  EnumLocale.txtWithdrawCoin.name: "Para Çekme",
+  EnumLocale.txtWithdrawCoin.name: "Session Credit Çekme",
   EnumLocale.txtSecurePayment.name: "Güvenli Ödeme",
   EnumLocale.txtGuarantedChat.name: "Garantili Sohbet",
   EnumLocale.txt1CrPayments.name: "1 Cr+ Ödemeler",
   EnumLocale.txtTrustedUser.name: "Güvenilir Kullanıcı",
-  EnumLocale.txtReceiveCoin.name: "Madeni Para Al",
+  EnumLocale.txtReceiveCoin.name: "Session Credit Al",
   EnumLocale.txtWithdrawAmount.name: "Çekilecek Miktar",
   EnumLocale.txtWithdraw.name: "Geri çekilmek",
-  EnumLocale.txtCoin.name: "Madeni para",
-  EnumLocale.txtAvailableCoinBalance.name: "Mevcut Coin Bakiyesi",
+  EnumLocale.txtCoin.name: "Session Credit",
+  EnumLocale.txtAvailableCoinBalance.name: "Mevcut Session Credit Bakiyesi",
   EnumLocale.txtWithdrawalDetails.name: "Para Çekme Ayrıntıları :-",
-  EnumLocale.txtEnterCoinAmount.name: "Madeni Para Miktarını Girin",
-  EnumLocale.txtMinimumWithdrawCoin.name: "*Minimum Para Çekme Tutarı :",
+  EnumLocale.txtEnterCoinAmount.name: "Session Credit Miktarını Girin",
+  EnumLocale.txtMinimumWithdrawCoin.name:
+      "*Minimum Session Credit Çekim Tutarı :",
   EnumLocale.txtMyAmountBalance.name: "Bakiyem Miktarı :",
-  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name: "Çekilebilir Para Miktarınızı Buradan Öğrenin...",
+  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
+      "Çekilebilir Session Credit Tutarınızı Buradan Görün...",
   EnumLocale.txtListenerDetails.name: "Dinleyici Ayrıntıları :-",
   EnumLocale.txtEnterIntroduction.name: "Giriş Giriş",
   EnumLocale.txtTalkLanguages.name: "Konuşma Dilleri :-",
@@ -264,11 +290,14 @@ final Map<String, String> trTR = {
   EnumLocale.txtAddress.name: "Adres :",
   EnumLocale.txtNOte.name: "Not :",
   EnumLocale.txtPleaseFillProfile.name: "Lütfen profili doldurun",
-  EnumLocale.txtPleaseEnterWithdrawCoin.name: "Lütfen WithdrawCoin'i girin",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name: "Lütfen Para Çekme Yöntemini Seçin",
-  EnumLocale.txtPleaseEnterAllPaymentDetails.name: "Lütfen Tüm Ödeme Ayrıntılarını Girin",
+  EnumLocale.txtPleaseEnterWithdrawCoin.name:
+      "Lütfen çekilecek Session Credit miktarını girin",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name:
+      "Lütfen Para Çekme Yöntemini Seçin",
+  EnumLocale.txtPleaseEnterAllPaymentDetails.name:
+      "Lütfen Tüm Ödeme Ayrıntılarını Girin",
   EnumLocale.txtSelectPaymentGateway.name: "Ödeme Ağ Geçidini Seçin",
-  EnumLocale.txtNumberOfCoin.name: "Madeni Para Sayısı :",
+  EnumLocale.txtNumberOfCoin.name: "Session Credit Sayısı :",
   EnumLocale.txtWithdrawalID.name: "Para Çekme Kimliği :",
   EnumLocale.txtTransactionID.name: "İşlem Kimliği :",
   EnumLocale.txtViewMore.name: "Daha Fazlasını Gör",
@@ -281,12 +310,14 @@ final Map<String, String> trTR = {
   EnumLocale.txtPrivateAudioCallRate.name: "Özel Sesli Arama Ücreti",
   EnumLocale.txtPaymentDetails.name: "Ödeme Detayları :",
   EnumLocale.txtAppRestart.name: "Dinleyici İsteğiniz Kabul Edildi",
-  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name: "Kullanıcının Para Çekme İşlemini Gerçekleştirmek İçin Yeterli Parası Yok",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
-      "İstenen Para Çekme Miktarı Yönetici Tarafından Belirtilen Miktardan Daha Büyük Olmalıdır",
+  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
+      "Kullanıcının Para Çekme İşlemini Gerçekleştirmek İçin Yeterli Parası Yok",
+  EnumLocale
+          .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
+      "Talep edilen Session Credit çekim miktarı yönetici tarafından belirtilen tutardan daha büyük olmalıdır",
   EnumLocale.txtSkip.name: "Atlamak",
   EnumLocale.txtHostHomeDescription.name:
-      "Başkalarına yardım ederken ödüllendiril! Bir dinleyici olarak, rastgele aramalar sırasında dakikada  jeton kazanabilirsiniz. İhtiyaç sahibi birine destek olun ve aynı zamanda kazanın.",
+      "Başkalarına yardım ederken ödüllendiril! Bir uzman olarak, rastgele aramalar sırasında oturum başına Session Credit kazanabilirsiniz. İhtiyacı olan kullanıcılara destek olun ve aynı zamanda kazanın.",
   EnumLocale.txtManageYourAccountSettingsSubText.name:
       "Dilinizi değiştirerek, oturumu kapatarak veya hesabınızı kalıcı olarak silerek uygulama deneyiminizi özelleştirin. Değişiklik yapmadan önce her seçeneği dikkatlice incelediğinizden emin olun.",
   EnumLocale.txtSelectLanguage.name: "Dil Seçin",
@@ -294,7 +325,8 @@ final Map<String, String> trTR = {
       "Dinleyicilerle rahatça konuşabileceğiniz dilleri seçin. Bu, o dillerde desteğe ihtiyaç duyan doğru kişilerle bağlantı kurmanıza yardımcı olur.",
   EnumLocale.txtSelectTopic.name:
       "Konuşurken kendinizi güvende hissettiğiniz konuları seçin. Bunlar, sizi belirli alanlarda destek arayan kullanıcılarla eşleştirmeye yardımcı olacaktır.",
-  EnumLocale.txtSureClearNotification.name: "Tüm bildirimleri temizlemek istediğinizden emin misiniz?",
+  EnumLocale.txtSureClearNotification.name:
+      "Tüm bildirimleri temizlemek istediğinizden emin misiniz?",
   EnumLocale.txtSure.name: "Elbette",
   EnumLocale.txtIntroduction.name: "giriiş",
   EnumLocale.txtTryAgain.name: "Tekrar deneyin",
@@ -304,10 +336,13 @@ final Map<String, String> trTR = {
       "Herhangi bir sorunuz varsa veya herhangi bir sorunla karşılaşırsanız, size yardımcı olmak için buradayız! Aşağıdaki en sık sorulan sorulara göz atın veya kişiselleştirilmiş yardım için destek ekibimize ulaşın.",
   EnumLocale.txtBecomeHostDescription.name:
       "Dinleyiciler, konuşacak birine ihtiyaç duyan kullanıcılara destek, rehberlik veya sadece dinleyen bir kulak sunarak hayati bir rol oynarlar. Empatik, sabırlı ve başkalarına yardım etmeye hazırsanız, dinleyici olmak olumlu bir etki yaratmanın mükemmel bir yoludur.",
-  EnumLocale.txtListenerReqSentSuccessfully.name: "Dinleyici İsteği Başarıyla Gönderildi....",
+  EnumLocale.txtListenerReqSentSuccessfully.name:
+      "Dinleyici İsteği Başarıyla Gönderildi....",
   EnumLocale.txtSearchLanguage.name: "Dil ara...",
-  EnumLocale.txtSelectTalkaboutTxt.name: "Uygulama içi içerik için konuşmayı seçin.",
-  EnumLocale.txtSelectAppLanguageTxt.name: "Tercih ettiğiniz uygulama dilini seçin.",
+  EnumLocale.txtSelectTalkaboutTxt.name:
+      "Uygulama içi içerik için konuşmayı seçin.",
+  EnumLocale.txtSelectAppLanguageTxt.name:
+      "Tercih ettiğiniz uygulama dilini seçin.",
   EnumLocale.txtHostVerificationFillForm.name:
       "Lütfen formu doğru bilgilerle doldurun. Önemli güncellemeleri ve doğrulama sonuçlarını almak için geçerli e-posta kimliğinizi girin. Devam etmeden önce tüm alanların doğru şekilde doldurulduğundan emin olun.",
   EnumLocale.txtUserName.name: "Uygulama içi içerik için konuşmayı seçin.",
@@ -352,20 +387,27 @@ final Map<String, String> trTR = {
   EnumLocale.txtPrivacyPolicy.name: 'Geri bildirim',
   EnumLocale.txtListenerAvailableForPrivateVideoCall.name: 'Maç oldu!',
   EnumLocale.txtListenerAvailableForPrivateAudioCall.name: 'Kabul ediyorum',
-  EnumLocale.txtListenerDisableForPrivateVideoCall.name: 'Özel Sesli Arama İçin Dinleyici Mevcut.',
-  EnumLocale.txtListenerDisableForPrivateAudioCall.name: 'Rastgele Görüntülü Arama İçin Dinleyici Mevcut.',
+  EnumLocale.txtListenerDisableForPrivateVideoCall.name:
+      'Özel Sesli Arama İçin Dinleyici Mevcut.',
+  EnumLocale.txtListenerDisableForPrivateAudioCall.name:
+      'Rastgele Görüntülü Arama İçin Dinleyici Mevcut.',
   EnumLocale.txtEarpiece.name: 'Kulaklık',
   EnumLocale.txtEnterProperValue.name: 'Uygun Değeri Girin',
-  EnumLocale.txtYourHostRequestSentSuccessfully.name: 'Ev Sahibi Talebiniz Başarıyla Gönderildi',
-  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name: 'Talebiniz iletildi. Lütfen inceleyip onaylayana kadar bekleyin.',
+  EnumLocale.txtYourHostRequestSentSuccessfully.name:
+      'Ev Sahibi Talebiniz Başarıyla Gönderildi',
+  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
+      'Talebiniz iletildi. Lütfen inceleyip onaylayana kadar bekleyin.',
   EnumLocale.txtViewRequest.name: 'Talebi Görüntüle',
-  EnumLocale.txtDEmoListenerText.name: "Üzgünüz! İzniniz yok. Bu bir demo girişidir.",
+  EnumLocale.txtDEmoListenerText.name:
+      "Üzgünüz! İzniniz yok. Bu bir demo girişidir.",
   EnumLocale.txtVideoCalling.name: "Görüntülü Arama",
   EnumLocale.txtAudioCalling.name: "Sesli Arama",
   EnumLocale.txtIncomingVoiceCalling.name: 'Gelen Görüntülü Arama',
   EnumLocale.txtIncomingAudioCalling.name: 'Gelen Sesli Arama',
-  EnumLocale.txtNoAccountFoundForThisEmail.name: "Bu e-posta için hesap bulunamadı",
-  EnumLocale.txtResetLinkSentToYourEmail.name: "Sıfırlama bağlantısı e-postanıza gönderildi",
+  EnumLocale.txtNoAccountFoundForThisEmail.name:
+      "Bu e-posta için hesap bulunamadı",
+  EnumLocale.txtResetLinkSentToYourEmail.name:
+      "Sıfırlama bağlantısı e-postanıza gönderildi",
   EnumLocale.txtForgetPasswordDescription.name:
       "Gmail hesabınıza şifremi unuttum bağlantısı gelmiş olmalı, kontrol edin. Gelmediyse, spam bölümünü kontrol edin.",
 };

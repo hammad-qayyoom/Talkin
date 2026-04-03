@@ -76,7 +76,7 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', plan = null }) => {
   const handleValidation = () => {
     const newErrors = {}
 
-    if (!formData.coin || Number(formData.coin) <= 0) newErrors.coin = 'Enter a valid coin value'
+    if (!formData.coin || Number(formData.coin) <= 0) newErrors.coin = 'Enter a valid session credit value'
     if (!formData.amount || Number(formData.amount) <= 0) newErrors.amount = 'Enter a valid amount'
     if (!formData.productKey) newErrors.productKey = 'Product key is required'
 
@@ -97,6 +97,7 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', plan = null }) => {
 
       if (mode === 'edit') {
         const updatedFields = {}
+
         if (formData.coin !== plan.coin) updatedFields.coin = formData.coin
         if (formData.amount !== plan.amount) updatedFields.amount = formData.amount
         if (formData.productKey !== plan.productKey) updatedFields.productKey = formData.productKey
@@ -149,7 +150,7 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', plan = null }) => {
     >
       <DialogTitle id='coin-plan-dialog-title'>
         <Typography variant='h5' component='span'>
-          {mode === 'edit' ? 'Edit Coin Plan' : 'Create Coin Plan'}
+          {mode === 'edit' ? 'Edit Subscription Plan' : 'Create Subscription Plan'}
         </Typography>
         <DialogCloseButton onClick={handleClose}>
           <i className='tabler-x' />
@@ -158,7 +159,7 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', plan = null }) => {
 
       <DialogContent className='flex flex-col gap-4 py-4'>
         <TextField
-          label='Coins'
+          label='Session Credits'
           type='number'
           fullWidth
           value={formData.coin}

@@ -154,26 +154,26 @@ const AboutOverview = ({ data }) => {
             </div>
             <div className='flex flex-col gap-4'>
               <Typography className='uppercase' variant='body2' color='text.disabled'>
-                Coin
+                Session Credit
               </Typography>
               <div className='flex items-center gap-2'>
                 <i className='tabler-coin ' />
                 <div className='flex items-center flex-wrap gap-2'>
-                  <Typography className='font-medium'>Coin :</Typography>
+                  <Typography className='font-medium'>Session Credit :</Typography>
                   <Typography className='text-succes'> {userDetails?.coins || 0}</Typography>
                 </div>
               </div>
               <div className='flex items-center gap-2'>
                 <i className='tabler-coin' />
                 <div className='flex items-center flex-wrap gap-2'>
-                  <Typography className='font-medium'>Coin Spent :</Typography>
+                  <Typography className='font-medium'>Session Credit Spent :</Typography>
                   <Typography className='text-erro'> {userDetails?.coinsSpent || 0}</Typography>
                 </div>
               </div>
               <div className='flex items-center gap-2'>
                 <i className='tabler-coin ' />
                 <div className='flex items-center flex-wrap gap-2'>
-                  <Typography className='font-medium'>Coin Recharged :</Typography>
+                  <Typography className='font-medium'>Session Credit Recharged :</Typography>
                   <Typography className='text-inf'> {userDetails?.coinsRecharged || 0}</Typography>
                 </div>
               </div>

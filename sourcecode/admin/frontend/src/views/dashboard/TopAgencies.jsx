@@ -62,7 +62,7 @@ const TopAgencies = ({ topAgencies }) => {
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography sx={{ color: 'primary.main', fontWeight: 500, mr: 1 }}>{row.totalEarnings}</Typography>
-                    <Typography sx={{ color: 'text.disabled' }}>Coins</Typography>
+                    <Typography sx={{ color: 'text.disabled' }}>Session Credits</Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

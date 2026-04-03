@@ -307,7 +307,7 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                                           ).paddingOnly(right: 4),
                                                           Text(
                                                             item.type == 2
-                                                                ? "Coin Purchase"
+                                                                ? "Subscription Purchase"
                                                                 : item.type == 3
                                                                     ? "Private audio call"
                                                                     : item.type == 4
@@ -452,7 +452,7 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                     ],
                                   ).paddingOnly(bottom: 16),
 
-                                  // Coin count
+                                  // Session Credit count
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [

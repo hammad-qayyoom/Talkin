@@ -84,7 +84,7 @@ const CoinPlanTable = () => {
     () => [
       columnHelper.accessor(row => row.coin, {
         id: 'coin',
-        header: 'Coins',
+        header: 'Session Credits',
         cell: ({ getValue }) => <Typography>{getValue() || '-'}</Typography>
       }),
       columnHelper.accessor(row => row.amount, {
@@ -165,7 +165,7 @@ const CoinPlanTable = () => {
   return (
     <>
       <Box className='flex justify-between items-center mb-4'>
-        <Typography variant='h5'>Coin Plans</Typography>
+        <Typography variant='h5'>Subscription Plans</Typography>
       </Box>
       <Card className='p-4'>
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 gap-4'>
@@ -191,7 +191,7 @@ const CoinPlanTable = () => {
               setOpenDialog(true)
             }}
           >
-            + Create Coin Plan
+            + Create Subscription Plan
           </Button>
         </div>
 
@@ -217,7 +217,7 @@ const CoinPlanTable = () => {
                   {plans.length === 0 ? (
                     <tr>
                       <td colSpan={columns.length} className='text-center py-6'>
-                        No Coin Plans Found
+                        No Subscription Plans Found
                       </td>
                     </tr>
                   ) : (

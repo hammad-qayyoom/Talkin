@@ -31,7 +31,7 @@ const TopHosts = ({ topHosts }) => {
     <Card>
       <CardHeader
         title='Top Earning Hosts'
-        subheader='Based on total coins earned'
+        subheader='Based on total session credits earned'
         subheaderTypographyProps={{ sx: { color: 'text.disabled' } }}
       />
       <CardContent>
@@ -53,7 +53,7 @@ const TopHosts = ({ topHosts }) => {
                   </Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography sx={{ color: 'primary.main', fontWeight: 500, mr: 1 }}>{row.totalCoins}</Typography>
-                    <Typography sx={{ color: 'text.disabled' }}>Coins</Typography>
+                    <Typography sx={{ color: 'text.disabled' }}>Session Credits</Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>

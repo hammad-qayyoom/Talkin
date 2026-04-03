@@ -39,13 +39,13 @@ import DateRangePicker from '@/components/common/DateRangePicker'
 // Transaction Type Labels
 const TYPE_LABELS = {
   [TRANSACTION_TYPES.ALL]: 'All',
-  [TRANSACTION_TYPES.COIN_HISTORY]: 'Coin History',
+  [TRANSACTION_TYPES.COIN_HISTORY]: 'Session Credit History',
   [TRANSACTION_TYPES.PURCHASE_THEME]: 'Theme Purchase',
   [TRANSACTION_TYPES.PURCHASE_AVTARFRAME]: 'Avatar Frame',
   [TRANSACTION_TYPES.PURCHASE_RIDE]: 'Ride Purchase',
   [TRANSACTION_TYPES.PRIVATE_CALL]: 'Private Call',
   [TRANSACTION_TYPES.LIVE_GIFT]: 'Live Gift',
-  [TRANSACTION_TYPES.COIN_PLAN_PURCHASE]: 'Coin Plan Purchase',
+  [TRANSACTION_TYPES.COIN_PLAN_PURCHASE]: 'Subscription Purchase',
   [TRANSACTION_TYPES.TEENPATTI_GAME]: 'Teen Patti Game',
   [TRANSACTION_TYPES.FERRYWHEEL_GAME]: 'Ferry Wheel Game',
   [TRANSACTION_TYPES.CASINO_GAME]: 'Casino Game'
@@ -122,7 +122,7 @@ const HistoryTab = ({ userDetails }) => {
     }
 
     if (mainTab === 0) {
-      // Coin History Tab
+      // Session Credit History Tab
       dispatch(fetchCoinHistory(params))
       setHasInitiallyLoaded(true)
     } else if (mainTab === 1) {
@@ -192,16 +192,16 @@ const HistoryTab = ({ userDetails }) => {
               <Divider />
             </Box>
 
-            {/* Main tabs: Coin History, Transactions, and Live Stream */}
+            {/* Main tabs: Session Credit History, Transactions, and Live Stream */}
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={mainTab} onChange={handleMainTabChange} aria-label='history main tabs'>
-                <Tab label='Coin History' />
+                <Tab label='Session Credit History' />
                 <Tab label='Transactions' />
                 <Tab label='Live Stream' />
               </Tabs>
             </Box>
 
-            {/* Coin History Tab Content */}
+            {/* Session Credit History Tab Content */}
             <TabPanel value={mainTab} index={0}>
               <CoinHistoryTab
                 history={history}

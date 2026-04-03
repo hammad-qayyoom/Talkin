@@ -197,7 +197,7 @@ const LiveStreamTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
 
             <Grid item xs={6} md={3}>
               <Typography variant='body2' color='text.secondary'>
-                Total Coins Earned
+                Total Session Credits Earned
               </Typography>
               <Typography variant='h6' align='center' color='success.main'>
                 {totalCoins}
@@ -315,7 +315,7 @@ const LiveStreamTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
                         color={stream.isIncome ? 'success.main' : 'error.main'}
                       >
                         {stream.isIncome ? '+' : '-'}
-                        {stream.userCoin} Coins
+                        {stream.userCoin} Session Credits
                       </Typography>
                     </Box>
                   </Box>
@@ -424,17 +424,17 @@ const LiveStreamTab = ({ history, loadTransactions, hasInitiallyLoaded }) => {
 
                     // sx={{ borderBottom: '1px solid', borderColor: 'divider', pb: 2, mb: 2 }}
                   >
-                    <Chip variant='tonal' label={`User : ${stream?.userCoin || '0'} Coins`} size='small' color='info' />
+                    <Chip variant='tonal' label={`User : ${stream?.userCoin || '0'} Session Credits`} size='small' color='info' />
 
                     <Chip
                       variant='tonal'
-                      label={`Expert : ${stream?.listenerCoin || '0'} Coins`}
+                      label={`Expert : ${stream?.listenerCoin || '0'} Session Credits`}
                       size='small'
                       color='success'
                     />
                     <Chip
                       variant='tonal'
-                      label={`Admin : ${stream?.adminCoin || '0'} Coins`}
+                      label={`Admin : ${stream?.adminCoin || '0'} Session Credits`}
                       size='small'
                       color='warning'
                     />

@@ -66,6 +66,9 @@ const initialState = {
   loading: false,
   history: [],
   adminEarnings: 0,
+  grossRevenue: 0,
+  platformCommission: 0,
+  expertPayouts: 0,
   status: 'idle',
   error: null,
   page: 1,
@@ -124,6 +127,9 @@ const coinPlanHistorySlice = createSlice({
         state.history = action.payload.data
         state.total = action.payload.total || 0
         state.adminEarnings = action.payload.adminEarnings || 0
+        state.grossRevenue = action.payload.grossRevenue || 0
+        state.platformCommission = action.payload.platformCommission || 0
+        state.expertPayouts = action.payload.expertPayouts || 0
       } else {
         state.error = action.payload.message
         toast.error(action.payload.message)
@@ -134,6 +140,7 @@ const coinPlanHistorySlice = createSlice({
       state.error = action.payload
       toast.error(action.payload)
     })
+
       // Purchase History
       .addCase(fetchCoinPurchaseHistory.pending, state => {
         state.coinhistory.loading = true

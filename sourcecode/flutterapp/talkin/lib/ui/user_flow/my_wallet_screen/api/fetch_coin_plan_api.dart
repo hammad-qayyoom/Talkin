@@ -10,28 +10,28 @@ class FetchCoinPlanApi {
     required String uid,
     required String token,
   }) async {
-    Utils.showLog("Fetch Coin plan Api Calling...");
+    Utils.showLog("Fetch Session Credit plan Api Calling...");
 
     final uri = Uri.parse(Api.fetchCoinPlan);
 
-    Utils.showLog("Fetch Coin plan Api url => $uri");
+    Utils.showLog("Fetch Session Credit plan Api url => $uri");
 
     final headers = {ApiParams.key: Api.secretKey, ApiParams.authToken: ApiParams.tokenStartPoint + token, ApiParams.authUid: uid};
 
     try {
       final response = await http.get(uri, headers: headers);
 
-      Utils.showLog("Fetch Coin plan Api Response => ${response.body}");
+      Utils.showLog("Fetch Session Credit plan Api Response => ${response.body}");
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
 
         return FetchCoinPlan.fromJson(jsonResponse);
       } else {
-        Utils.showLog("Fetch Coin plan Api StateCode Error");
+        Utils.showLog("Fetch Session Credit plan Api StateCode Error");
       }
     } catch (error) {
-      Utils.showLog("Fetch Coin plan Api Error => $error");
+      Utils.showLog("Fetch Session Credit plan Api Error => $error");
     }
     return null;
   }

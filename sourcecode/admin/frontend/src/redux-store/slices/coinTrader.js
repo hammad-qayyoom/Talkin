@@ -65,7 +65,7 @@ export const createCoinTrader = createAsyncThunk('coinTrader/createCoinTrader', 
       throw new Error(result.data.message || 'Failed to create coin trader')
     }
 
-    toast.success(result.data.message || 'Coin trader created successfully')
+    toast.success(result.data.message || 'Session Credit trader created successfully')
 
     return result.data
   } catch (err) {
@@ -97,7 +97,7 @@ export const updateCoinTrader = createAsyncThunk('coinTrader/updateCoinTrader', 
       throw new Error(result.data.message || 'Failed to update coin trader')
     }
 
-    toast.success(result.data.message || 'Coin trader updated successfully')
+    toast.success(result.data.message || 'Session Credit trader updated successfully')
 
     return result.data
   } catch (err) {
@@ -126,10 +126,10 @@ export const updateCoinForTrader = createAsyncThunk('coinTrader/updateCoinForTra
     )
 
     if (!result.data.status) {
-      throw new Error(result.data.message || 'Failed to update coins')
+      throw new Error(result.data.message || 'Failed to update session credits')
     }
 
-    toast.success(result.data.message || 'Coins updated successfully')
+    toast.success(result.data.message || 'Session Credits updated successfully')
 
     return result.data
   } catch (err) {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/custom/app_button/primary_app_button.dart';
@@ -182,29 +180,21 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
             ],
           );
         } else {
-          if (callerRole == "user" && (int.parse(Database.userCoin.toString()) < int.parse(audioCallRatePrivate))) {
-            log("<<<<<<<<<<<<<<<<<<<<<<  ${Database.userCoin.toString()}");
-            Get.back();
-
-            Get.toNamed(AppRoutes.myWalletScreen);
-            Utils.showToast(Get.context!, "You have not enough coins.");
-          } else {
-            PermissionHandler.onGetMicrophonePermission(
-              onGranted: () async {
-                SocketEmit.emitCallOutgoingRinging(
-                  callerId: callerId,
-                  receiverId: receiverId,
-                  callType: "audio",
-                  callerRole: callerRole,
-                  receiverRole: receiverRole,
-                  callerImage: callerImage,
-                  callerName: callerName,
-                  receiverImage: receiverImage,
-                  receiverName: receiverName,
-                );
-              },
-            );
-          }
+          PermissionHandler.onGetMicrophonePermission(
+            onGranted: () async {
+              SocketEmit.emitCallOutgoingRinging(
+                callerId: callerId,
+                receiverId: receiverId,
+                callType: "audio",
+                callerRole: callerRole,
+                receiverRole: receiverRole,
+                callerImage: callerImage,
+                callerName: callerName,
+                receiverImage: receiverImage,
+                receiverName: receiverName,
+              );
+            },
+          );
         }
 
         // Get.toNamed(AppRoutes.outgoingCallScreen);
@@ -234,7 +224,7 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
                   children: [
                     Image.asset(AppAsset.dimondCoin, height: 14).paddingOnly(right: 4),
                     Text(
-                      "$audioCallRatePrivate Coin",
+                      "$audioCallRatePrivate / Session",
                       style: AppFontStyle.fontStyleW600(fontSize: 12, fontColor: AppColors.white),
                     ),
                   ],
@@ -277,34 +267,25 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
             },
           );
         } else {
-          if (callerRole == "user" && (int.parse(Database.userCoin.toString()) < int.parse(videoCallRatePrivate))) {
-            log("<<<<<<<<<<<<<<<<<<<<<<  ${Database.userCoin.toString()} >>>>>>>>>>> $videoCallRatePrivate");
-            log("<<<<<<<<<<<<<<<<<<<<<<  $callerRole");
-            Get.back();
-
-            Get.toNamed(AppRoutes.myWalletScreen);
-            Utils.showToast(Get.context!, "You have not enough coins");
-          } else {
-            PermissionHandler.onGetCameraPermission(
-              onGranted: () {
-                PermissionHandler.onGetMicrophonePermission(
-                  onGranted: () async {
-                    SocketEmit.emitCallOutgoingRinging(
-                      callerId: callerId,
-                      receiverId: receiverId,
-                      callType: "video",
-                      callerRole: callerRole,
-                      receiverRole: receiverRole,
-                      callerImage: callerImage,
-                      callerName: callerName,
-                      receiverImage: receiverImage,
-                      receiverName: receiverName,
-                    );
-                  },
-                );
-              },
-            );
-          }
+          PermissionHandler.onGetCameraPermission(
+            onGranted: () {
+              PermissionHandler.onGetMicrophonePermission(
+                onGranted: () async {
+                  SocketEmit.emitCallOutgoingRinging(
+                    callerId: callerId,
+                    receiverId: receiverId,
+                    callType: "video",
+                    callerRole: callerRole,
+                    receiverRole: receiverRole,
+                    callerImage: callerImage,
+                    callerName: callerName,
+                    receiverImage: receiverImage,
+                    receiverName: receiverName,
+                  );
+                },
+              );
+            },
+          );
         }
       },
       color: AppColors.appColor,
@@ -332,7 +313,7 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
                   children: [
                     Image.asset(AppAsset.dimondCoin, height: 14).paddingOnly(right: 4),
                     Text(
-                      "$videoCallRatePrivate Coin",
+                      "$videoCallRatePrivate / Session",
                       style: AppFontStyle.fontStyleW600(fontSize: 12, fontColor: AppColors.white),
                     ),
                   ],

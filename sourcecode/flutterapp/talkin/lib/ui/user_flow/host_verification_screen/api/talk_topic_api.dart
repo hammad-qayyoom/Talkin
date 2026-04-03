@@ -9,18 +9,18 @@ import 'package:talk_in/utils/utils.dart';
 
 class TalkTopicApi {
   static Future<TalkTopicsModel?> callApi() async {
-    Utils.showLog("Talk Topics Api Calling...");
+    Utils.showLog("Categories Api Calling...");
 
     final uri = Uri.parse(Api.getTalkTopics);
     final headers = {ApiParams.key: Api.secretKey};
 
-    Utils.showLog("Talk Topics Api uri :: $uri");
-    Utils.showLog("Talk Topics Api headers :: $headers");
+    Utils.showLog("Categories Api uri :: $uri");
+    Utils.showLog("Categories Api headers :: $headers");
 
     try {
       final response = await http.get(uri, headers: headers);
 
-      log('Talk Topics API STATUS CODE :: ${response.statusCode} \n RESPONSE :: ${response.body}');
+      log('Categories API STATUS CODE :: ${response.statusCode} \n RESPONSE :: ${response.body}');
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
@@ -29,7 +29,7 @@ class TalkTopicApi {
         throw Exception('Status code is not 200');
       }
     } catch (e) {
-      log("Talk Topics api  :: $e");
+      log("Categories api  :: $e");
     }
     return null;
   }

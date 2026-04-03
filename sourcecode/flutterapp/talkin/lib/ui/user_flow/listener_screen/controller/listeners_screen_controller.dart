@@ -171,7 +171,7 @@ class ListenersScreenController extends GetxController {
     }
   }
 
-  /// get talk topic
+  /// get category list
   void getTalkTopic() async {
     try {
       isLoading = true;
@@ -191,7 +191,7 @@ class ListenersScreenController extends GetxController {
     }
   }
 
-  /// select talk topic
+  /// select category
   // void selectTopic(int index) {
   //   selectedTopic = index;
   //   log("talkTopic[selectedTopic].name  :: ${talkTopic[selectedTopic].name}");
@@ -212,7 +212,7 @@ class ListenersScreenController extends GetxController {
     update([Constant.talkAboutTopic]);
   }
 
-  /// filter by talk topic api
+  /// filter by category api
   // void filterListenerByTalkTopic() async {
   //   try {
   //     isLoading = true;
@@ -260,9 +260,9 @@ class ListenersScreenController extends GetxController {
       topListenersModel = data;
       allListener = data?.data ?? [];
 
-      log('Talk topic filter result: $allListener');
+      log('Category filter result: $allListener');
     } catch (e, st) {
-      log('filterListenerByTalkTopic error: $e\n$st');
+      log('filterListenerByCategory error: $e\n$st');
     } finally {
       isLoading = false;
       update([Constant.idAllListener]);

@@ -84,7 +84,7 @@ abstract class Api {
 
   static const ipApi = "http://ip-api.com/json";
 
-  // >>>>> >>>>>  Coin Plan <<<<< <<<<<
+  // >>>>> >>>>>  Subscription Plan <<<<< <<<<<
 
   static const fetchCoinPlan = "${baseUrl}api/user/coinplan/getAvailableCoinPackage";
 }
