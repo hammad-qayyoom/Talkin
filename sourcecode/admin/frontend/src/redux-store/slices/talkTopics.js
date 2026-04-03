@@ -7,17 +7,22 @@ import { toast } from 'react-toastify'
 import { baseURL, secretKey } from '@/config'
 
 // Helpers
-const getAuthHeaders = () => {
+const getAuthHeaders = ({ isMultipart = false } = {}) => {
   if (typeof window !== 'undefined') {
     const token = localStorage.getItem('admin_token')
     const uid = localStorage.getItem('uid')
 
-    return {
-      'Content-Type': 'application/json',
+    const headers = {
       key: secretKey,
       Authorization: `Bearer ${token}`,
       'x-admin-uid': uid
     }
+
+    if (!isMultipart) {
+      headers['Content-Type'] = 'application/json'
+    }
+
+    return headers
   }
 
   return {}
@@ -25,13 +30,15 @@ const getAuthHeaders = () => {
 
 export const fetchTalkTopics = createAsyncThunk('talkTopics/fetchTalkTopics', async (params = {}, thunkAPI) => {
   try {
-    const { page, pageSize } = params
+    const { page, pageSize, isActive, search } = params
     
-    const response = await axios.get(`${baseURL}/api/admin/talkTopic/getTalkTopics`, {
+    const response = await axios.get(`${baseURL}/api/v2/categories/list`, {
       headers: getAuthHeaders(),
       params: {
-        page: page || 1,
-        limit: pageSize || 10
+        start: page || 1,
+        limit: pageSize || 10,
+        ...(isActive !== undefined ? { isActive } : { isActive: true }),
+        ...(search ? { search } : {})
       }
     })
 
@@ -43,13 +50,16 @@ export const fetchTalkTopics = createAsyncThunk('talkTopics/fetchTalkTopics', as
 
 export const createTalkTopic = createAsyncThunk('talkTopics/createTalkTopic', async (payload, thunkAPI) => {
   try {
-    const response = await axios.post(
-      `${baseURL}/api/admin/talkTopic/createTalkTopic?name=${payload.name}`,
-      {},
-      {
-        headers: getAuthHeaders()
-      }
-    )
+    const formData = new FormData()
+
+    if (payload.name !== undefined) formData.append('name', payload.name)
+    if (payload.icon !== undefined) formData.append('icon', payload.icon)
+    if (payload.description !== undefined) formData.append('description', payload.description)
+    if (payload.image) formData.append('image', payload.image)
+
+    const response = await axios.post(`${baseURL}/api/v2/categories/create`, formData, {
+      headers: getAuthHeaders({ isMultipart: true })
+    })
 
     return response.data
   } catch (error) {
@@ -59,11 +69,18 @@ export const createTalkTopic = createAsyncThunk('talkTopics/createTalkTopic', as
 
 export const updateTalkTopic = createAsyncThunk('talkTopics/updateTalkTopic', async (payload, thunkAPI) => {
   try {
+    const formData = new FormData()
+
+    if (payload.name !== undefined) formData.append('name', payload.name)
+    if (payload.icon !== undefined) formData.append('icon', payload.icon)
+    if (payload.description !== undefined) formData.append('description', payload.description)
+    if (payload.image) formData.append('image', payload.image)
+
     const response = await axios.patch(
-      `${baseURL}/api/admin/talkTopic/updateTalkTopic?name=${payload.name}&talkTopicId=${payload.talkTopicId}`,
-      {},
+      `${baseURL}/api/v2/categories/update?categoryId=${payload.talkTopicId}`,
+      formData,
       {
-        headers: getAuthHeaders()
+        headers: getAuthHeaders({ isMultipart: true })
       }
     )
 
@@ -75,7 +92,7 @@ export const updateTalkTopic = createAsyncThunk('talkTopics/updateTalkTopic', as
 
 export const deleteTalkTopic = createAsyncThunk('talkTopics/deleteTalkTopic', async (talkTopicId, thunkAPI) => {
   try {
-    const response = await axios.delete(`${baseURL}/api/admin/talkTopic/deleteTalkTopic?talkTopicId=${talkTopicId}`, {
+    const response = await axios.delete(`${baseURL}/api/v2/categories/delete?categoryId=${talkTopicId}`, {
       headers: getAuthHeaders()
     })
 

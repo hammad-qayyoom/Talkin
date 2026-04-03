@@ -58,6 +58,7 @@ class Constant {
   static var idSearchListener = 'idSearchListener';
   static var idUserNotification = 'idUserNotification';
   static var idCoinUpdate = 'idCoinUpdate';
+  static var idHomeCategories = 'idHomeCategories';
   static var idPhoneFieldUpdate = 'idPhoneFieldUpdate';
   static var idGetListenerReview = 'idGetListenerReview';
 

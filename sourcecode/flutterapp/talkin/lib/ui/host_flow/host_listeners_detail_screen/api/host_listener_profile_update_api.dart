@@ -18,6 +18,7 @@ class HostListenerProfileUpdateApi {
     required String? ratePrivateAudioCall,
     required String? language,
     required String? talkTopics,
+    required String? categoryIds,
   }) async {
     Utils.showLog("Listener Edit Profile Api Calling...");
 
@@ -42,6 +43,7 @@ class HostListenerProfileUpdateApi {
         ApiParams.nickName: nickName ?? "",
         ApiParams.language: language ?? '',
         ApiParams.talkTopics: talkTopics ?? '',
+        'categoryIds': categoryIds ?? '',
         ApiParams.ratePrivateAudioCall: ratePrivateAudioCall ?? '',
         ApiParams.ratePrivateVideoCall: ratePrivateVideoCall ?? '',
         ApiParams.image: image ?? ''

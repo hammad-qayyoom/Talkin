@@ -21,6 +21,9 @@ class TopListenerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeScreenController homeController =
+        Get.find<HomeScreenController>();
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
@@ -41,18 +44,28 @@ class TopListenerWidget extends StatelessWidget {
             children: [
               Text(
                 EnumLocale.txtTopListener.name.tr,
-                style: AppFontStyle.fontStyleW600(fontSize: 18, fontColor: AppColors.appDarkColor),
+                style: AppFontStyle.fontStyleW600(
+                    fontSize: 18, fontColor: AppColors.appDarkColor),
               ),
               InkWell(
                 onTap: () {
-                  Get.toNamed(AppRoutes.topListenersViewAll);
+                  Get.toNamed(
+                    AppRoutes.topListenersViewAll,
+                    arguments: {
+                      'categoryId': homeController.selectedCategoryId,
+                    },
+                  );
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 4).copyWith(left: 5),
                   color: AppColors.transparent,
                   child: Text(
                     EnumLocale.txtViewAll.name.tr,
-                    style: AppFontStyle.fontStyleW500(decorationColor: AppColors.appTextColor, textDecoration: TextDecoration.underline, fontSize: 13, fontColor: AppColors.appTextColor),
+                    style: AppFontStyle.fontStyleW500(
+                        decorationColor: AppColors.appTextColor,
+                        textDecoration: TextDecoration.underline,
+                        fontSize: 13,
+                        fontColor: AppColors.appTextColor),
                   ),
                 ),
               ),
@@ -72,20 +85,36 @@ class TopListenerWidget extends StatelessWidget {
                           itemCount: controller.topListeners.take(4).length,
                           itemBuilder: (context, index) {
                             return CustomListeners(
-                                fake: controller.topListeners[index].isFake ?? false,
-                                availableForPrivateAudioCall: controller.topListeners[index].isAvailableForPrivateAudioCall ?? false,
-                                availableForPrivateVideoCall: controller.topListeners[index].isAvailableForPrivateVideoCall ?? false,
-                                uniqueId: controller.topListeners[index].uniqueId ?? '',
-                                statusTxtColor: controller.topListeners[index].statusLabel == "Offline" ? AppColors.appTextColor : AppColors.white,
-                                statusColor: controller.topListeners[index].statusLabel == "Available"
+                                fake: controller.topListeners[index].isFake ??
+                                    false,
+                                availableForPrivateAudioCall: controller
+                                        .topListeners[index]
+                                        .isAvailableForPrivateAudioCall ??
+                                    false,
+                                availableForPrivateVideoCall: controller
+                                        .topListeners[index]
+                                        .isAvailableForPrivateVideoCall ??
+                                    false,
+                                uniqueId: controller.topListeners[index].uniqueId ??
+                                    '',
+                                statusTxtColor:
+                                    controller.topListeners[index].statusLabel ==
+                                            "Offline"
+                                        ? AppColors.appTextColor
+                                        : AppColors.white,
+                                statusColor: controller
+                                            .topListeners[index].statusLabel ==
+                                        "Available"
                                     ? AppColors.green
-                                    : controller.topListeners[index].statusLabel == "On Call"
+                                    : controller.topListeners[index].statusLabel ==
+                                            "On Call"
                                         ? AppColors.red
                                         : AppColors.lightGrey1,
                                 statusImage: controller.topListeners[index].statusLabel == "Available"
                                     ? Container(
                                         decoration: BoxDecoration(
-                                          color: AppColors.white.withValues(alpha: 0.5),
+                                          color: AppColors.white
+                                              .withValues(alpha: 0.5),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Container(
@@ -107,7 +136,8 @@ class TopListenerWidget extends StatelessWidget {
                                             // height: 12,
                                             // width: 12,
                                             decoration: BoxDecoration(
-                                              color: AppColors.onBoardingTxt.withValues(alpha: 0.3),
+                                              color: AppColors.onBoardingTxt
+                                                  .withValues(alpha: 0.3),
                                               shape: BoxShape.circle,
                                             ),
                                             child: Container(
@@ -129,15 +159,23 @@ class TopListenerWidget extends StatelessWidget {
                                 name: controller.topListeners[index].name ?? '',
                                 age: controller.topListeners[index].age == null ? "" : ",${controller.topListeners[index].age.toString()}",
                                 viewProfileOnTap: () {
-                                  Utils.showLog("Call Matching ==>> ${controller.topListeners[index].id}");
+                                  Utils.showLog(
+                                      "Call Matching ==>> ${controller.topListeners[index].id}");
                                   Get.delete<ProfileDetailScreenController>();
                                   Get.toNamed(
                                     AppRoutes.profileDetailScreenView,
-                                    arguments: controller.topListeners[index].id,
+                                    arguments:
+                                        controller.topListeners[index].id,
                                   );
                                 },
                                 talkNowOnTap: () {
-                                  String role = Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'user' : 'listener';
+                                  String role = Database
+                                              .fetchLoginUserProfileModel
+                                              ?.user
+                                              ?.isListener ==
+                                          false
+                                      ? 'user'
+                                      : 'listener';
 
                                   log("################################$role");
                                   // if (controller.topListenersModel?.data?[index].isFake == true) {
@@ -159,35 +197,113 @@ class TopListenerWidget extends StatelessWidget {
                                         Get.toNamed(
                                           AppRoutes.personalChatScreen,
                                           arguments: [
-                                            controller.topListenersModel?.data?[index].id,
-                                            controller.topListenersModel?.data?[index].name,
-                                            controller.topListenersModel?.data?[index].statusLabel,
-                                            controller.topListenersModel?.data?[index].image,
-                                            controller.topListenersModel?.data?[index].ratePrivateAudioCall,
-                                            controller.topListenersModel?.data?[index].ratePrivateVideoCall,
-                                            controller.topListenersModel?.data?[index].isFake,
-                                            controller.topListenersModel?.data?[index].video,
-                                            controller.topListenersModel?.data?[index].isAvailableForPrivateVideoCall,
-                                            controller.topListenersModel?.data?[index].isAvailableForPrivateAudioCall,
+                                            controller.topListenersModel
+                                                ?.data?[index].id,
+                                            controller.topListenersModel
+                                                ?.data?[index].name,
+                                            controller.topListenersModel
+                                                ?.data?[index].statusLabel,
+                                            controller.topListenersModel
+                                                ?.data?[index].image,
+                                            controller
+                                                .topListenersModel
+                                                ?.data?[index]
+                                                .ratePrivateAudioCall,
+                                            controller
+                                                .topListenersModel
+                                                ?.data?[index]
+                                                .ratePrivateVideoCall,
+                                            controller.topListenersModel
+                                                ?.data?[index].isFake,
+                                            controller.topListenersModel
+                                                ?.data?[index].video,
+                                            controller
+                                                .topListenersModel
+                                                ?.data?[index]
+                                                .isAvailableForPrivateVideoCall,
+                                            controller
+                                                .topListenersModel
+                                                ?.data?[index]
+                                                .isAvailableForPrivateAudioCall,
                                           ],
                                         );
                                       },
-                                      availableForPrivateAudioCall: controller.topListenersModel?.data?[index].isAvailableForPrivateAudioCall ?? false,
-                                      availableForPrivateVideoCall: controller.topListenersModel?.data?[index].isAvailableForPrivateVideoCall ?? false,
-                                      fakeVideo: controller.topListenersModel?.data?[index].video ?? [],
-                                      fakeAudio: controller.topListenersModel?.data?[index].audio ?? "",
-                                      isFake: controller.topListenersModel?.data?[index].isFake ?? false,
-                                      videoCallRatePrivate: controller.topListenersModel?.data?[index].ratePrivateVideoCall.toString() ?? '',
-                                      audioCallRatePrivate: controller.topListenersModel?.data?[index].ratePrivateAudioCall.toString() ?? '',
-                                      callerId: Database.fetchLoginUserProfileModel?.user?.isListener == false ? Database.fetchLoginUserProfileModel?.user?.id ?? '' : Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
-                                      receiverId: controller.topListeners[index].id ?? '',
-                                      receiverName: controller.topListeners[index].name ?? '',
-                                      receiverImage: controller.topListeners[index].image ?? '',
-                                      callerName: Database.fetchLoginUserProfileModel?.user?.fullName ?? '',
-                                      callerImage: Database.fetchLoginUserProfileModel?.user?.profilePic ?? '',
+                                      availableForPrivateAudioCall: controller
+                                              .topListenersModel
+                                              ?.data?[index]
+                                              .isAvailableForPrivateAudioCall ??
+                                          false,
+                                      availableForPrivateVideoCall: controller
+                                              .topListenersModel
+                                              ?.data?[index]
+                                              .isAvailableForPrivateVideoCall ??
+                                          false,
+                                      fakeVideo: controller.topListenersModel
+                                              ?.data?[index].video ??
+                                          [],
+                                      fakeAudio: controller.topListenersModel
+                                              ?.data?[index].audio ??
+                                          "",
+                                      isFake: controller.topListenersModel
+                                              ?.data?[index].isFake ??
+                                          false,
+                                      videoCallRatePrivate: controller
+                                              .topListenersModel
+                                              ?.data?[index]
+                                              .ratePrivateVideoCall
+                                              .toString() ??
+                                          '',
+                                      audioCallRatePrivate: controller
+                                              .topListenersModel
+                                              ?.data?[index]
+                                              .ratePrivateAudioCall
+                                              .toString() ??
+                                          '',
+                                      callerId: Database
+                                                  .fetchLoginUserProfileModel
+                                                  ?.user
+                                                  ?.isListener ==
+                                              false
+                                          ? Database.fetchLoginUserProfileModel
+                                                  ?.user?.id ??
+                                              ''
+                                          : Database.fetchLoginUserProfileModel
+                                                  ?.user?.listenerId ??
+                                              '',
+                                      receiverId:
+                                          controller.topListeners[index].id ??
+                                              '',
+                                      receiverName:
+                                          controller.topListeners[index].name ??
+                                              '',
+                                      receiverImage: controller
+                                              .topListeners[index].image ??
+                                          '',
+                                      callerName: Database
+                                              .fetchLoginUserProfileModel
+                                              ?.user
+                                              ?.fullName ??
+                                          '',
+                                      callerImage: Database
+                                              .fetchLoginUserProfileModel
+                                              ?.user
+                                              ?.profilePic ??
+                                          '',
                                       // callType: "video",
-                                      callerRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'user' : 'listener',
-                                      receiverRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'listener' : 'user',
+                                      callerRole: Database
+                                                  .fetchLoginUserProfileModel
+                                                  ?.user
+                                                  ?.isListener ==
+                                              false
+                                          ? 'user'
+                                          : 'listener',
+                                      receiverRole: Database
+                                                  .fetchLoginUserProfileModel
+                                                  ?.user
+                                                  ?.isListener ==
+                                              false
+                                          ? 'listener'
+                                          : 'user',
                                     ),
                                     isScrollControlled: true,
                                     backgroundColor: Colors.transparent,

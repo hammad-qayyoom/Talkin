@@ -132,12 +132,23 @@ class HostListenersDetailController extends GetxController {
       talkTopicsModel = data;
       talkTopic = data?.talkTopics ?? [];
 
+      final savedCategoryIds = Database.fetchListenerProfileModel?.data?.categoryIds ?? [];
       final savedTopics = Database.fetchListenerProfileModel?.data?.talkTopics ?? [];
       selectedTopics.clear(); // Reset selection
-      for (var saved in savedTopics) {
-        final matchIndex = talkTopic.indexWhere((element) => element.name == saved);
-        if (matchIndex != -1) {
-          selectedTopics.add(matchIndex);
+
+      if (savedCategoryIds.isNotEmpty) {
+        for (final savedCategoryId in savedCategoryIds) {
+          final matchIndex = talkTopic.indexWhere((element) => element.id == savedCategoryId);
+          if (matchIndex != -1) {
+            selectedTopics.add(matchIndex);
+          }
+        }
+      } else {
+        for (var saved in savedTopics) {
+          final matchIndex = talkTopic.indexWhere((element) => element.name == saved);
+          if (matchIndex != -1) {
+            selectedTopics.add(matchIndex);
+          }
         }
       }
 
@@ -174,17 +185,29 @@ class HostListenersDetailController extends GetxController {
   Future<void> callEditApi() async {
     final languageString =
         selectedLanguages.isNotEmpty ? selectedLanguages.join(',') : (Database.fetchListenerProfileModel?.data?.language?.join(',') ?? '');
-    // String? talkTopics;
-    // final selectedTopicNames = selectedTopics.map((i) => talkTopic[i].name).toList();
-    // var talkTopics = selectedTopicNames.join(',');
+    final selectedTopicNames = selectedTopics
+        .where((index) => index >= 0 && index < talkTopic.length)
+        .map((index) => (talkTopic[index].name ?? '').trim())
+        .where((name) => name.isNotEmpty)
+        .toList();
 
-    String talkTopics = selectedTopics.map((i) => talkTopic[i].name).join(',');
+    final selectedCategoryIds = selectedTopics
+        .where((index) => index >= 0 && index < talkTopic.length)
+        .map((index) => (talkTopic[index].id ?? '').trim())
+        .where((id) => id.isNotEmpty)
+        .toList();
+
+    String talkTopics = selectedTopicNames.isNotEmpty
+        ? selectedTopicNames.join(',')
+        : (Database.fetchListenerProfileModel?.data?.talkTopics?.join(',') ?? '');
 
     if (selectedTopicName != null && selectedTopicName!.isNotEmpty) {
       talkTopics = selectedTopicName!;
-    } else if (Database.fetchListenerProfileModel?.data?.talkTopics != null && Database.fetchListenerProfileModel!.data!.talkTopics!.isNotEmpty) {
-      talkTopics = Database.fetchListenerProfileModel!.data!.talkTopics!.first;
     }
+
+    String categoryIds = selectedCategoryIds.isNotEmpty
+        ? selectedCategoryIds.join(',')
+        : (Database.fetchListenerProfileModel?.data?.categoryIds?.join(',') ?? '');
 
     hostListenerProfileUpdateModel = await HostListenerProfileUpdateApi.callApi(
       name: nameCnt.text,
@@ -196,6 +219,7 @@ class HostListenersDetailController extends GetxController {
       ratePrivateAudioCall: ratePrivateAudioCallCnt.text,
       ratePrivateVideoCall: ratePrivateVideoCallCnt.text,
       talkTopics: talkTopics,
+      categoryIds: categoryIds,
     );
 
     if (hostListenerProfileUpdateModel?.status == true) {

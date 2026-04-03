@@ -79,7 +79,6 @@ class ListenersScreenController extends GetxController {
     }
   }
 
-
   /// all listeners get
   allListeners() async {
     isLoading = true;
@@ -96,7 +95,8 @@ class ListenersScreenController extends GetxController {
   /// all language get
   Future<void> loadAllLanguages() async {
     try {
-      final String response = await rootBundle.loadString('assets/all_language.json');
+      final String response =
+          await rootBundle.loadString('assets/all_language.json');
       final Map<String, dynamic> data = json.decode(response);
 
       allLanguages = data.values.map<String>((e) => e.toString()).toList();
@@ -125,7 +125,10 @@ class ListenersScreenController extends GetxController {
   /// search language
   List<String> get filteredLanguages {
     if (languageSearchQuery.isEmpty) return allLanguages;
-    return allLanguages.where((lang) => lang.toLowerCase().contains(languageSearchQuery.toLowerCase())).toList();
+    return allLanguages
+        .where((lang) =>
+            lang.toLowerCase().contains(languageSearchQuery.toLowerCase()))
+        .toList();
   }
 
   void updateLanguageSearchQuery(String query) {
@@ -243,11 +246,15 @@ class ListenersScreenController extends GetxController {
 
       AllListenersApi.startPagination = 0;
 
-      // Collect topic names
-      List<String> selectedTopicNames = selectedTopics.map((i) => talkTopic[i].name).whereType<String>().toList();
+      final selectedCategoryIds = selectedTopics
+          .map((i) => talkTopic[i].id)
+          .whereType<String>()
+          .map((item) => item.trim())
+          .where((item) => item.isNotEmpty)
+          .toList();
 
       var data = await AllListenersApi.callApi(
-        talkTopic: selectedTopicNames.join(', '), // Send as comma-separated
+        categoryId: selectedCategoryIds.join(','),
       );
 
       topListenersModel = data;
@@ -265,7 +272,6 @@ class ListenersScreenController extends GetxController {
   Future<void> onTopListenersPagination() async {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-
       isPaginationLoading = true;
       update([Constant.idPaginationListener]);
 
@@ -280,7 +286,6 @@ class ListenersScreenController extends GetxController {
     }
   }
 
-
   Future<void> onRefresh() async {
     searchController.clear();
     searchQuery = '';
@@ -292,5 +297,4 @@ class ListenersScreenController extends GetxController {
 
     await allListeners();
   }
-
 }

@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-TopListenersModel topListenersModelFromJson(String str) => TopListenersModel.fromJson(json.decode(str));
+TopListenersModel topListenersModelFromJson(String str) =>
+    TopListenersModel.fromJson(json.decode(str));
 
-String topListenersModelToJson(TopListenersModel data) => json.encode(data.toJson());
+String topListenersModelToJson(TopListenersModel data) =>
+    json.encode(data.toJson());
 
 class TopListenersModel {
   bool? status;
@@ -19,16 +21,22 @@ class TopListenersModel {
     this.data,
   });
 
-  factory TopListenersModel.fromJson(Map<String, dynamic> json) => TopListenersModel(
+  factory TopListenersModel.fromJson(Map<String, dynamic> json) =>
+      TopListenersModel(
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? [] : List<TopListeners>.from(json["data"]!.map((x) => TopListeners.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<TopListeners>.from(
+                json["data"]!.map((x) => TopListeners.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
@@ -49,6 +57,7 @@ class TopListeners {
   bool? isOnline;
   String? statusLabel;
   String? uniqueId;
+  List<String>? categoryIds;
   bool? isAvailableForPrivateAudioCall;
   bool? isAvailableForPrivateVideoCall;
   bool? isAvailableForChat;
@@ -71,6 +80,7 @@ class TopListeners {
     this.isOnline,
     this.statusLabel,
     this.uniqueId,
+    this.categoryIds,
     this.isAvailableForPrivateAudioCall,
     this.isAvailableForPrivateVideoCall,
     this.isAvailableForChat,
@@ -81,12 +91,18 @@ class TopListeners {
         id: json["_id"],
         name: json["name"],
         age: json["age"],
-        talkTopics: json["talkTopics"] == null ? [] : List<String>.from(json["talkTopics"]!.map((x) => x)),
-        language: json["language"] == null ? [] : List<String>.from(json["language"]!.map((x) => x)),
+        talkTopics: json["talkTopics"] == null
+            ? []
+            : List<String>.from(json["talkTopics"]!.map((x) => x)),
+        language: json["language"] == null
+            ? []
+            : List<String>.from(json["language"]!.map((x) => x)),
         image: json["image"],
         ratePrivateVideoCall: json["ratePrivateVideoCall"],
         ratePrivateAudioCall: json["ratePrivateAudioCall"],
-        video: json["video"] == null ? [] : List<String>.from(json["video"]!.map((x) => x)),
+        video: json["video"] == null
+            ? []
+            : List<String>.from(json["video"]!.map((x) => x)),
         rating: json["rating"]?.toDouble(),
         callCount: json["callCount"],
         experience: json["experience"],
@@ -94,6 +110,9 @@ class TopListeners {
         isOnline: json["isOnline"],
         statusLabel: json["statusLabel"],
         uniqueId: json["uniqueId"],
+        categoryIds: json["categoryIds"] == null
+            ? []
+            : List<String>.from(json["categoryIds"]!.map((x) => x)),
         isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],
         isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],
         isAvailableForChat: json["isAvailableForChat"],
@@ -104,8 +123,11 @@ class TopListeners {
         "_id": id,
         "name": name,
         "age": age,
-        "talkTopics": talkTopics == null ? [] : List<dynamic>.from(talkTopics!.map((x) => x)),
-        "language": language == null ? [] : List<dynamic>.from(language!.map((x) => x)),
+        "talkTopics": talkTopics == null
+            ? []
+            : List<dynamic>.from(talkTopics!.map((x) => x)),
+        "language":
+            language == null ? [] : List<dynamic>.from(language!.map((x) => x)),
         "image": image,
         "ratePrivateVideoCall": ratePrivateVideoCall,
         "ratePrivateAudioCall": ratePrivateAudioCall,
@@ -117,6 +139,9 @@ class TopListeners {
         "isOnline": isOnline,
         "statusLabel": statusLabel,
         "uniqueId": uniqueId,
+        "categoryIds": categoryIds == null
+            ? []
+            : List<dynamic>.from(categoryIds!.map((x) => x)),
         "isAvailableForPrivateAudioCall": isAvailableForPrivateAudioCall,
         "isAvailableForPrivateVideoCall": isAvailableForPrivateVideoCall,
         "isAvailableForChat": isAvailableForChat,

@@ -41,6 +41,7 @@ class Data {
   String? email;
   String? selfIntro;
   List<String>? talkTopics;
+  List<String>? categoryIds;
   List<String>? language;
   String? image;
   num? ratePrivateVideoCall;
@@ -64,6 +65,7 @@ class Data {
     this.email,
     this.selfIntro,
     this.talkTopics,
+    this.categoryIds,
     this.language,
     this.image,
     this.ratePrivateVideoCall,
@@ -88,6 +90,7 @@ class Data {
         email: json["email"],
         selfIntro: json["selfIntro"],
         talkTopics: json["talkTopics"] == null ? [] : List<String>.from(json["talkTopics"]!.map((x) => x)),
+        categoryIds: json["categoryIds"] == null ? [] : List<String>.from(json["categoryIds"]!.map((x) => x.toString())),
         language: json["language"] == null ? [] : List<String>.from(json["language"]!.map((x) => x)),
         image: json["image"],
         ratePrivateVideoCall: json["ratePrivateVideoCall"],
@@ -112,6 +115,7 @@ class Data {
         "email": email,
         "selfIntro": selfIntro,
         "talkTopics": talkTopics == null ? [] : List<dynamic>.from(talkTopics!.map((x) => x)),
+        "categoryIds": categoryIds == null ? [] : List<dynamic>.from(categoryIds!.map((x) => x)),
         "language": language == null ? [] : List<dynamic>.from(language!.map((x) => x)),
         "image": image,
         "ratePrivateVideoCall": ratePrivateVideoCall,

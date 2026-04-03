@@ -12,6 +12,7 @@ class TopListenersViewAllController extends GetxController {
   bool isLoading = false;
   bool isPaginationLoading = false;
   bool isBackProfile = false;
+  String? selectedCategoryId;
   TopListenersModel? topListenersModel;
   List<TopListeners> topListeners = [];
   TextEditingController allListenersSearch = TextEditingController();
@@ -20,8 +21,8 @@ class TopListenersViewAllController extends GetxController {
   @override
   void onInit() {
     log("Enter top all listener controller");
-    getTopListeners();
     init();
+    getTopListeners();
     super.onInit();
   }
 
@@ -35,6 +36,13 @@ class TopListenersViewAllController extends GetxController {
   init() async {
     scrollController.addListener(onTopListenersPagination);
     TopListenersApi.startPagination = 0;
+
+    final args = Get.arguments;
+    if (args is Map && args['categoryId'] != null) {
+      final categoryId = args['categoryId'].toString().trim();
+      selectedCategoryId = categoryId.isEmpty ? null : categoryId;
+    }
+
     // await getTopListeners();
   }
 
@@ -46,7 +54,12 @@ class TopListenersViewAllController extends GetxController {
     isLoading = true;
     update([Constant.idGetListener]);
 
-    topListenersModel = await TopListenersApi.callApi(token: token, uid: uid, searchString: "All");
+    topListenersModel = await TopListenersApi.callApi(
+      token: token,
+      uid: uid,
+      searchString: "All",
+      categoryId: selectedCategoryId,
+    );
     topListeners.addAll(topListenersModel?.data ?? []);
 
     isLoading = false;
@@ -58,11 +71,17 @@ class TopListenersViewAllController extends GetxController {
     final uid = Database.loginUserFirebaseId;
     final token = await FirebaseAccessToken.onGet() ?? "";
 
-    if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
       isPaginationLoading = true;
       update([Constant.idPaginationListener, Constant.idGetListener]);
 
-      topListenersModel = await TopListenersApi.callApi(token: token, uid: uid, searchString: "All");
+      topListenersModel = await TopListenersApi.callApi(
+        token: token,
+        uid: uid,
+        searchString: "All",
+        categoryId: selectedCategoryId,
+      );
       topListeners.addAll(topListenersModel?.data ?? []);
 
       isPaginationLoading = false;

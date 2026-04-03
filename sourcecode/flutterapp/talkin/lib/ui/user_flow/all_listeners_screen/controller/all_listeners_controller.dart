@@ -13,6 +13,7 @@ class AllListenersController extends GetxController {
   ScrollController scrollController = ScrollController();
   bool isPaginationLoading = false;
   bool isBackProfile = false;
+  String? selectedCategoryId;
 
   @override
   void onInit() async {
@@ -25,6 +26,12 @@ class AllListenersController extends GetxController {
     log("Enter In all listener screen Controller");
     scrollController.addListener(onTopListenersPagination);
 
+    final args = Get.arguments;
+    if (args is Map && args['categoryId'] != null) {
+      final categoryId = args['categoryId'].toString().trim();
+      selectedCategoryId = categoryId.isEmpty ? null : categoryId;
+    }
+
     AllListenersApi.startPagination = 0;
     await allListeners();
   }
@@ -34,7 +41,8 @@ class AllListenersController extends GetxController {
     isLoading = true;
     update([Constant.idGetListener]);
 
-    topListenersModel = await AllListenersApi.callApi(searchString: "All");
+    topListenersModel = await AllListenersApi.callApi(
+        searchString: "All", categoryId: selectedCategoryId);
     allListener.addAll(topListenersModel?.data ?? []);
     log("topListenersModel :::::02 $allListener");
 
@@ -45,11 +53,13 @@ class AllListenersController extends GetxController {
 
   /// pagination
   Future<void> onTopListenersPagination() async {
-    if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
       isPaginationLoading = true;
-      update([Constant.idPaginationListener,Constant.idGetListener]);
+      update([Constant.idPaginationListener, Constant.idGetListener]);
 
-      topListenersModel = await AllListenersApi.callApi(searchString: "All");
+      topListenersModel = await AllListenersApi.callApi(
+          searchString: "All", categoryId: selectedCategoryId);
       allListener.addAll(topListenersModel?.data ?? []);
       log("topListenersModel :::::01 $allListener");
 

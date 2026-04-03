@@ -165,18 +165,18 @@ const ListenerDialog = ({ open, onClose, expert = null, role }) => {
 
   // Fetch available languages and talk topics from API
   useEffect(() => {
-    if (!talkTopics.length) {
-      dispatch(fetchTalkTopics())
+    if (open) {
+      dispatch(fetchTalkTopics({ page: 1, pageSize: 200, isActive: true }))
     }
 
-    if (role === 'real') {
+    if (open && role === 'real') {
       dispatch(fetchDropdownUser())
     }
-  }, [dispatch, role, talkTopics.length])
+  }, [dispatch, open, role])
 
   useEffect(() => {
     setLanguages(Languages.map(item => item.name))
-    setTalkTopicsKey(talkTopics.map(item => item.name))
+    setTalkTopicsKey(talkTopics.map(item => item.name).filter(Boolean))
   }, [talkTopics])
 
   // Form setup

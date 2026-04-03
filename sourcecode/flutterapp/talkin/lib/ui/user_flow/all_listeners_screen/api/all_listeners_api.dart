@@ -17,6 +17,7 @@ class AllListenersApi {
     String? searchString,
     String? talkTopic,
     String? language,
+    String? categoryId,
   }) async {
     final token = await FirebaseAccessToken.onGet();
 
@@ -33,6 +34,9 @@ class AllListenersApi {
     }
     if (talkTopic != null && talkTopic.isNotEmpty) {
       queryParameters[ApiParams.talkTopic] = talkTopic;
+    }
+    if (categoryId != null && categoryId.isNotEmpty) {
+      queryParameters[ApiParams.categoryId] = categoryId;
     }
     if (language != null && language.isNotEmpty) {
       queryParameters[ApiParams.language] = language;

@@ -27,6 +27,7 @@ class ApiParams {
   static const searchString = "searchString";
   static const expertId = "expertId";
   static const listenerId = "listenerId";
+  static const categoryId = "categoryId";
   static const talkTopic = "talkTopic";
   static const language = "language";
   static const startDate = "startDate";

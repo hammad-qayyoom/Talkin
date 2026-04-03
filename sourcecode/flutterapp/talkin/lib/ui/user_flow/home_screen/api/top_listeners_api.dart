@@ -11,7 +11,12 @@ class TopListenersApi {
   static int startPagination = 0;
   static int limitPagination = 20;
 
-  static Future<TopListenersModel?> callApi({required String searchString, required String token, required String uid}) async {
+  static Future<TopListenersModel?> callApi({
+    required String searchString,
+    required String token,
+    required String uid,
+    String? categoryId,
+  }) async {
     Utils.showLog("Top Listeners Api Calling...");
 
     startPagination += 1;
@@ -20,6 +25,8 @@ class TopListenersApi {
       ApiParams.start: startPagination.toString(),
       ApiParams.limit: limitPagination.toString(),
       ApiParams.searchString: searchString,
+      if (categoryId != null && categoryId.isNotEmpty)
+        ApiParams.categoryId: categoryId,
     };
 
     String query = Uri(queryParameters: queryParameters).query;
@@ -28,7 +35,11 @@ class TopListenersApi {
 
     Utils.showLog("Top Listeners Api url => $uri");
 
-    final headers = {ApiParams.key: Api.secretKey, ApiParams.authToken: ApiParams.tokenStartPoint + token, ApiParams.authUid: Database.loginUserFirebaseId};
+    final headers = {
+      ApiParams.key: Api.secretKey,
+      ApiParams.authToken: ApiParams.tokenStartPoint + token,
+      ApiParams.authUid: Database.loginUserFirebaseId
+    };
 
     try {
       final response = await http.get(uri, headers: headers);

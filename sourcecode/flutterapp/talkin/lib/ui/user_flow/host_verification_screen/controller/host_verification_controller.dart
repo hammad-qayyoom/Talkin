@@ -314,7 +314,20 @@ class HostVerificationController extends GetxController {
     log("Name: ${nameController.text}");
     log("Nick Name: ${nickNameController.text}");
     log("Self Introduction: ${introCnt.text}");
-    log("Talk Topic: ${talkTopic[selectedTopic].name.toString()}");
+    final selectedTopicNames = selectedTopics
+      .where((index) => index >= 0 && index < talkTopic.length)
+      .map((index) => (talkTopic[index].name ?? '').trim())
+      .where((name) => name.isNotEmpty)
+      .toList();
+
+    final selectedCategoryIds = selectedTopics
+      .where((index) => index >= 0 && index < talkTopic.length)
+      .map((index) => (talkTopic[index].id ?? '').trim())
+      .where((id) => id.isNotEmpty)
+      .toList();
+
+    log("Talk Topics: ${selectedTopicNames.join(', ')}");
+    log("Category IDs: ${selectedCategoryIds.join(', ')}");
     log("User ID: ${Database.loginUserFirebaseId}");
     log("Age: ${ageController.text}");
     log("Gender ::: ${genderCnt.text}");
@@ -331,7 +344,8 @@ class HostVerificationController extends GetxController {
       name: nameController.text,
       nickName: nickNameController.text,
       selfIntro: introCnt.text,
-      talkTopic: selectedTopics.map((i) => talkTopic[i].name).join(', '),
+      talkTopic: selectedTopicNames.join(', '),
+      categoryIds: selectedCategoryIds.join(','),
       uid: Database.loginUserFirebaseId,
       age: ageController.text,
       gender: genderCnt.text,

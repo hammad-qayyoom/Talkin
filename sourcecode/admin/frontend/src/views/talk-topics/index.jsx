@@ -13,14 +13,14 @@ import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import CircularProgress from '@mui/material/CircularProgress'
-import Pagination from '@mui/material/Pagination'
 import Box from '@mui/material/Box'
-import { toast } from 'react-toastify'
+import Avatar from '@mui/material/Avatar'
 
 import { fetchTalkTopics, deleteTalkTopic, setPage, setPageSize } from '@/redux-store/slices/talkTopics'
 import tableStyles from '@core/styles/table.module.css'
 import CustomTextField from '@/@core/components/mui/TextField'
 import ConfirmationDialog from '@/components/dialogs/confirmation-dialog'
+import { getFullImageUrl } from '@/utils/commonfunctions'
 
 import TalkTopicDialog from './TalkTopicDialog'
 
@@ -49,9 +49,6 @@ const TalkTopics = () => {
   const { talkTopics, initialLoading, loading, error, page, pageSize, total } = useSelector(
     state => state.talkTopicsReducer
   )
-
-  const { profileData } = useSelector(state => state.adminSlice)
-
   
 
   const [openDialog, setOpenDialog] = useState(false)
@@ -81,9 +78,28 @@ const TalkTopics = () => {
 
   const columns = useMemo(
     () => [
+      columnHelper.display({
+        id: 'visual',
+        header: 'Visual',
+        cell: ({ row }) => {
+          const imageUrl = row.original?.image ? getFullImageUrl(row.original.image) : ''
+          const iconClass = row.original?.icon?.trim()
+          const fallbackText = row.original?.name?.charAt(0)?.toUpperCase() || 'C'
+
+          return (
+            <Avatar
+              variant='rounded'
+              src={imageUrl || undefined}
+              sx={{ width: 42, height: 42, bgcolor: 'action.hover' }}
+            >
+              {!imageUrl && iconClass ? <i className={iconClass} style={{ fontSize: 18 }} /> : !imageUrl ? fallbackText : null}
+            </Avatar>
+          )
+        }
+      }),
       columnHelper.accessor(row => row.name, {
         id: 'name',
-        header: 'Topic Name',
+        header: 'Category Name',
         cell: ({ getValue }) => <Typography>{getValue() || '-'}</Typography>
       }),
       columnHelper.accessor(row => row.createdAt, {
@@ -165,10 +181,10 @@ const TalkTopics = () => {
     <>
       <Box className='mb-3'>
         <Typography variant='h4'>
-          Talk Topic
+          Categories
         </Typography>
         <Typography variant='body2' color='text.secondary'>
-          Create and manage conversation topics to organize user-expert interactions.
+          Create and manage expert categories used across onboarding and discovery.
         </Typography>
       </Box>
 
@@ -193,7 +209,7 @@ const TalkTopics = () => {
               setOpenDialog(true)
             }}
           >
-            + Create Talk Topic
+            + Create Category
           </Button>
         </div>
 
@@ -229,7 +245,7 @@ const TalkTopics = () => {
                         ))}
                       </tr>
                     ))}
-                  <EmprtyTableRow limit={9} data={talkTopics} columns={columns} noDataLebel={'No Talk Topics Found'} />
+                    <EmprtyTableRow limit={9} data={talkTopics} columns={columns} noDataLebel={'No Categories Found'} />
                 </tbody>
               </table>
             </div>

@@ -1,4 +1,4 @@
-import ListenerManagement from '@/views/listener'
+import ListenerManagement from '@/views/apps/listener/list'
 
 export const metadata = {
   title: 'Expert Management'

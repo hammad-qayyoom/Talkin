@@ -2,7 +2,7 @@
 
 import React, { forwardRef, useEffect, useState } from 'react'
 
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import Slide from '@mui/material/Slide'
 import Dialog from '@mui/material/Dialog'
@@ -13,12 +13,15 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import CircularProgress from '@mui/material/CircularProgress'
+import Avatar from '@mui/material/Avatar'
+import Box from '@mui/material/Box'
 
 import { toast } from 'react-toastify'
 
 import DialogCloseButton from '@components/dialogs/DialogCloseButton'
 
 import { createTalkTopic, updateTalkTopic } from '@/redux-store/slices/talkTopics'
+import { getFullImageUrl } from '@/utils/commonfunctions'
 
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -29,8 +32,12 @@ const TalkTopicDialog = ({ open, onClose, mode = 'create', talkTopic = null }) =
   const dispatch = useDispatch()
 
   const [formData, setFormData] = useState({
-    name: ''
+    name: '',
+    icon: ''
   })
+
+  const [imageFile, setImageFile] = useState(null)
+  const [previewImage, setPreviewImage] = useState('')
 
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
@@ -38,14 +45,20 @@ const TalkTopicDialog = ({ open, onClose, mode = 'create', talkTopic = null }) =
   useEffect(() => {
     if (mode === 'edit' && talkTopic) {
       setFormData({
-        name: talkTopic.name || ''
+        name: talkTopic.name || '',
+        icon: talkTopic.icon || ''
       })
+      setPreviewImage(talkTopic.image ? getFullImageUrl(talkTopic.image) : '')
+      setImageFile(null)
     } else {
       setFormData({
-        name: ''
+        name: '',
+        icon: ''
       })
+      setPreviewImage('')
+      setImageFile(null)
     }
-  }, [mode, talkTopic,open])
+  }, [mode, talkTopic, open])
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -66,7 +79,7 @@ const TalkTopicDialog = ({ open, onClose, mode = 'create', talkTopic = null }) =
     const newErrors = {}
 
     if (!formData.name || formData.name.trim() === '') {
-      newErrors.name = 'Topic name is required'
+      newErrors.name = 'Category name is required'
     }
 
     setErrors(newErrors)
@@ -74,20 +87,37 @@ const TalkTopicDialog = ({ open, onClose, mode = 'create', talkTopic = null }) =
     return Object.keys(newErrors).length === 0
   }
 
-  const { profileData } = useSelector(state => state.adminSlice)
-  
+  const handleImageChange = event => {
+    const file = event.target.files?.[0]
+
+    if (!file) return
+
+    setImageFile(file)
+    setPreviewImage(URL.createObjectURL(file))
+  }
 
   const handleSubmit = async () => {
-    
     if (!handleValidation()) return
 
     try {
       setLoading(true)
 
+      const trimmedName = formData.name.trim()
+      const trimmedIcon = formData.icon.trim()
+
       if (mode === 'edit') {
         const updatedPayload = {}
-        if (formData.name !== talkTopic.name) {
-          updatedPayload.name = formData.name
+
+        if (trimmedName !== (talkTopic.name || '').trim()) {
+          updatedPayload.name = trimmedName
+        }
+
+        if (trimmedIcon !== (talkTopic.icon || '').trim()) {
+          updatedPayload.icon = trimmedIcon
+        }
+
+        if (imageFile) {
+          updatedPayload.image = imageFile
         }
 
         if (Object.keys(updatedPayload).length === 0) {
@@ -100,12 +130,16 @@ const TalkTopicDialog = ({ open, onClose, mode = 'create', talkTopic = null }) =
       } else {
         await dispatch(
           createTalkTopic({
-            name: formData.name
+            name: trimmedName,
+            icon: trimmedIcon,
+            image: imageFile
           })
         ).unwrap()
       }
 
-      setFormData({ name: '' })
+      setFormData({ name: '', icon: '' })
+      setImageFile(null)
+      setPreviewImage('')
       onClose()
     } catch (error) {
       console.error('Error submitting form:', error)
@@ -116,7 +150,9 @@ const TalkTopicDialog = ({ open, onClose, mode = 'create', talkTopic = null }) =
   }
 
   const resetForm = () => {
-    setFormData({ name: '' })
+    setFormData({ name: '', icon: '' })
+    setImageFile(null)
+    setPreviewImage('')
     setErrors({})
   }
 
@@ -144,7 +180,7 @@ const TalkTopicDialog = ({ open, onClose, mode = 'create', talkTopic = null }) =
     >
       <DialogTitle id='talktopic-dialog-title'>
         <Typography variant='h5' component='span'>
-          {mode === 'edit' ? 'Edit Talk Topic' : 'Create Talk Topic'}
+          {mode === 'edit' ? 'Edit Category' : 'Create Category'}
         </Typography>
         <DialogCloseButton onClick={handleClose}>
           <i className='tabler-x' />
@@ -153,14 +189,48 @@ const TalkTopicDialog = ({ open, onClose, mode = 'create', talkTopic = null }) =
 
       <DialogContent className='flex flex-col gap-4 py-4'>
         <TextField
-          label='Topic Name'
+          label='Category Name'
           fullWidth
           value={formData.name}
           error={!!errors.name}
           helperText={errors.name || ''}
           onChange={e => handleChange('name', e.target.value)}
-          placeholder='Family Issues'
+          placeholder='Family Guidance'
         />
+
+        <TextField
+          label='Icon Class (optional)'
+          fullWidth
+          value={formData.icon}
+          onChange={e => handleChange('icon', e.target.value)}
+          placeholder='tabler-heart-handshake'
+          helperText='Optional tabler icon class used in web/admin previews.'
+        />
+
+        <Box className='flex items-center gap-4'>
+          <Avatar
+            variant='rounded'
+            src={previewImage || undefined}
+            sx={{ width: 72, height: 72, bgcolor: 'action.hover' }}
+          >
+            {!previewImage && (
+              <i
+                className={formData.icon?.trim() || 'tabler-photo'}
+                style={{ fontSize: 24 }}
+              />
+            )}
+          </Avatar>
+
+          <Box className='flex flex-col gap-1'>
+            <Button component='label' variant='tonal'>
+              Upload Category Image
+              <input hidden accept='image/*' type='file' onChange={handleImageChange} />
+            </Button>
+            <Typography variant='caption' color='text.secondary'>
+              PNG/JPG/WebP recommended. Square image gives best result.
+            </Typography>
+          </Box>
+        </Box>
 
         {errors.submit && (
           <Typography color='error' variant='body2'>
