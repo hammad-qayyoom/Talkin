@@ -216,8 +216,10 @@ class FindMoreWidget extends StatelessWidget {
                       (value) async {
                         UserCoinModel? userCoinModel;
                         userCoinModel = await UserCoinApi.callApi();
-                        Database.onSetUserCoin(
-                            userCoinModel?.coin.toString() ?? "0");
+                        if (userCoinModel?.status == true) {
+                          Database.onSetUserCoin(
+                              (userCoinModel?.coin ?? 0).toString());
+                        }
                       },
                     );
                   },

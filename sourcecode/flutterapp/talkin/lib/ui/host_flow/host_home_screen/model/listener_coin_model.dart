@@ -11,7 +11,7 @@ String listenerCoinModelToJson(ListenerCoinModel data) => json.encode(data.toJso
 class ListenerCoinModel {
   bool? status;
   String? message;
-  int? coin;
+  num? coin;
 
   ListenerCoinModel({
     this.status,
@@ -22,7 +22,9 @@ class ListenerCoinModel {
   factory ListenerCoinModel.fromJson(Map<String, dynamic> json) => ListenerCoinModel(
         status: json["status"],
         message: json["message"],
-        coin: json["coin"],
+        coin: json["coin"] is num
+            ? json["coin"]
+            : num.tryParse(json["coin"]?.toString() ?? "0") ?? 0,
       );
 
   Map<String, dynamic> toJson() => {

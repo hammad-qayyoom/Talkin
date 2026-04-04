@@ -183,6 +183,13 @@ const GeneralSettings = () => {
     }
   }
 
+  const isSessionCreditMode = String(formData.monetizationMode || '').trim().toLowerCase() === 'subscription_session_commission'
+  const callRateSectionTitle = isSessionCreditMode ? 'Call Credit Setting' : 'Call Rate Setting'
+  const privateRateSectionTitle = isSessionCreditMode ? 'Private Session Credits' : 'Private Rate'
+  const privateAudioLabel = isSessionCreditMode ? 'Private Audio Credits' : 'Private Audio Rate'
+  const privateVideoLabel = isSessionCreditMode ? 'Private Video Credits' : 'Private Video Rate'
+  const privateRateUnitLabel = isSessionCreditMode ? 'credits/session' : 'coins/minute'
+
   const handleToggle = type => {
 
     if (settings?._id) {
@@ -512,7 +519,7 @@ const GeneralSettings = () => {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
             <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
               <i className='tabler-settings mr-2' />
-              Call Rate Setting
+              {callRateSectionTitle}
             </Typography>
             <HoverPopover
               popoverContent={
@@ -550,7 +557,7 @@ const GeneralSettings = () => {
             <CardContent className=''>
               <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
                 <i className='tabler-settings mr-2' />
-                Private Rate
+                {privateRateSectionTitle}
               </Typography>
               <Divider sx={{ mb: 3 }} />
               <div className='flex gap-3 flex-col'>
@@ -558,7 +565,7 @@ const GeneralSettings = () => {
                   <TextField
                     fullWidth
                     type='text'
-                    label='Private Audio Rate'
+                    label={privateAudioLabel}
                     value={formData.audioCallRatePrivate || ''}
                     onChange={e => handleFieldChange('audioCallRatePrivate', e.target.value)}
                     InputProps={{
@@ -566,7 +573,7 @@ const GeneralSettings = () => {
                       endAdornment: (
                         <InputAdornment position='end'>
                           <Typography variant='caption' color='text.secondary'>
-                            coins/minute
+                            {privateRateUnitLabel}
                           </Typography>
                         </InputAdornment>
                       )
@@ -577,7 +584,7 @@ const GeneralSettings = () => {
                   <TextField
                     fullWidth
                     type='text'
-                    label='Private Video Rate'
+                    label={privateVideoLabel}
                     value={formData.videoCallRatePrivate || ''}
                     onChange={e => handleFieldChange('videoCallRatePrivate', e.target.value)}
                     InputProps={{
@@ -585,7 +592,7 @@ const GeneralSettings = () => {
                       endAdornment: (
                         <InputAdornment position='end'>
                           <Typography variant='caption' color='text.secondary'>
-                            coins/minute
+                            {privateRateUnitLabel}
                           </Typography>
                         </InputAdornment>
                       )

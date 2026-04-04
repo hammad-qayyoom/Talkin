@@ -159,10 +159,14 @@ class SocketEmit {
       };
       socket!.emit(SocketEvents.callTerminated, data);
       userCoinModel = await UserCoinApi.callApi();
-      Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
+      if (userCoinModel?.status == true) {
+        Database.onSetUserCoin((userCoinModel?.coin ?? 0).toString());
+      }
 
       listenerCoinModel = await HostCoinApi.callApi();
-      Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
+      if (listenerCoinModel?.status == true) {
+        Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
+      }
 
       Utils.showLog(
           "user session credit emit ::::::::::::::::::::::::${Database.userCoin}");
@@ -172,7 +176,7 @@ class SocketEmit {
       Utils.showLog(
           "listener session credit emit ::::::::::::::::::::::::${Database.listenerCoin}");
       Utils.showLog(
-          "listener session credit emit ::::::::::::::::::::::::${listenerCoinModel.coin.toString()}");
+          "listener session credit emit ::::::::::::::::::::::::${(listenerCoinModel?.coin ?? 0).toString()}");
 
       if (Get.isRegistered<HomeScreenController>()) {
         Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);

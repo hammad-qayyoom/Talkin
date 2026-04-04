@@ -11,7 +11,7 @@ String fetchCoinPlanToJson(FetchCoinPlan data) => json.encode(data.toJson());
 class FetchCoinPlan {
   bool? status;
   String? message;
-  int? userCoin;
+  num? userCoin;
   bool? hasActiveSubscription;
   dynamic activeSubscription;
   List<CoinPlan>? data;
@@ -28,7 +28,9 @@ class FetchCoinPlan {
   factory FetchCoinPlan.fromJson(Map<String, dynamic> json) => FetchCoinPlan(
         status: json["status"],
         message: json["message"],
-        userCoin: json["userCoin"],
+        userCoin: json["userCoin"] is num
+            ? json["userCoin"]
+            : num.tryParse(json["userCoin"]?.toString() ?? "0") ?? 0,
         hasActiveSubscription: json["hasActiveSubscription"],
         activeSubscription: json["activeSubscription"],
         data: json["data"] == null ? [] : List<CoinPlan>.from(json["data"]!.map((x) => CoinPlan.fromJson(x))),

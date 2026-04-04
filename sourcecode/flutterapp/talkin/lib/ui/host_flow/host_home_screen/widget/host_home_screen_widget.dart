@@ -22,46 +22,59 @@ class HostTopHomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        DottedBorder(
-          options: CircularDottedBorderOptions(
-            color: Colors.black,
-            dashPattern: [3, 2],
-            strokeWidth: 1,
-          ),
-          child: GestureDetector(
-            onTap: () {
-              Utils.showLog(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double availableWidth = constraints.maxWidth;
+        final double profileSize =
+            (Get.height * 0.06).clamp(40.0, 50.0).toDouble();
+        final double idMaxWidth =
+            (availableWidth * 0.24).clamp(72.0, 108.0).toDouble();
+        final double coinChipMaxWidth =
+            (availableWidth * 0.24).clamp(88.0, 112.0).toDouble();
 
-              Get.find<HostBottomBarController>().onClick(4);
-
-              // Get.toNamed(AppRoutes.hostProfileScreen);
-            },
-            child: Container(
-              clipBehavior: Clip.hardEdge,
-              height: Get.height * 0.06,
-              width: Get.height * 0.06,
-              decoration: BoxDecoration(
-                color: AppColors.lightGrey,
-                shape: BoxShape.circle,
-              ),
-              child: CustomProfileImage(
-                image: Database.fetchListenerProfileModel?.data?.image ?? '',
-              ),
-            ),
-          ),
-        ).paddingOnly(right: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        return Row(
           children: [
-            Text(
-              maxLines: 1,
-              Database.fetchListenerProfileModel?.data?.name ?? "",
-              overflow: TextOverflow.ellipsis,
-              style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.black),
-            ).paddingOnly(right: 5, bottom: 3),
-            /* Text(
+            DottedBorder(
+              options: CircularDottedBorderOptions(
+                color: Colors.black,
+                dashPattern: [3, 2],
+                strokeWidth: 1,
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  Utils.showLog(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+                  Get.find<HostBottomBarController>().onClick(4);
+
+                  // Get.toNamed(AppRoutes.hostProfileScreen);
+                },
+                child: Container(
+                  clipBehavior: Clip.hardEdge,
+                  height: profileSize,
+                  width: profileSize,
+                  decoration: BoxDecoration(
+                    color: AppColors.lightGrey,
+                    shape: BoxShape.circle,
+                  ),
+                  child: CustomProfileImage(
+                    image:
+                        Database.fetchListenerProfileModel?.data?.image ?? '',
+                  ),
+                ),
+              ),
+            ).paddingOnly(right: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    maxLines: 1,
+                    Database.fetchListenerProfileModel?.data?.name ?? "",
+                    overflow: TextOverflow.ellipsis,
+                    style: AppFontStyle.fontStyleW700(
+                        fontSize: 16, fontColor: AppColors.black),
+                  ).paddingOnly(right: 5, bottom: 3),
+                  /* Text(
               Database.loginType == 2
                   ? Database.fetchListenerProfileModel?.data?.nickName ?? ''
                   : Database.fetchListenerProfileModel?.data?.email ?? '',
@@ -69,102 +82,148 @@ class HostTopHomeView extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: AppColors.black),
             )*/
-            GetBuilder<HostHomeScreenController>(builder: (controller) {
-              return GestureDetector(
-                onTap: () {
-                  if (!controller.isToastVisible) {
-                    Utils.copyText(Database.fetchLoginUserProfileModel?.user?.uniqueId ?? "");
-                    Utils.showToast(context, "copied");
+                  GetBuilder<HostHomeScreenController>(builder: (controller) {
+                    return GestureDetector(
+                      onTap: () {
+                        if (!controller.isToastVisible) {
+                          Utils.copyText(Database
+                                  .fetchLoginUserProfileModel?.user?.uniqueId ??
+                              "");
+                          Utils.showToast(context, "copied");
 
-                    controller.isToastVisible = true;
+                          controller.isToastVisible = true;
 
-                    Future.delayed(Duration(seconds: 3), () {
-                      controller.isToastVisible = false;
-                    });
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.only(bottom: 3, left: 6, right: 6, top: 3),
-                  decoration: BoxDecoration(color: AppColors.idContainerColor, borderRadius: BorderRadius.circular(60)),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        // width: Get.width * 0.15,
-                        child: Text("ID: ${Database.fetchListenerProfileModel?.data?.uniqueId ?? ""}", overflow: TextOverflow.ellipsis, style: AppFontStyle.fontStyleW600(fontSize: 11, fontColor: AppColors.idTxtColor)).paddingOnly(right: 3),
-                      ),
-                      Image.asset(
-                        AppAsset.copyIcon,
-                        height: 13,
-                        width: 13,
-                      )
-                    ],
-                  ),
-                ),
-              );
-            })
-          ],
-        ),
-        Spacer(),
-        GetBuilder<HostHomeScreenController>(
-            id: Constant.idCoinUpdate,
-            builder: (controller) {
-              return GestureDetector(
-                onTap: () {
-                  Get.toNamed(AppRoutes.hostViewCoinHistory);
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: AppColors.border.withValues(alpha: 0.6),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        AppAsset.starCoin,
-                        height: 26,
-                        width: 26,
-                      ),
-                      controller.isCoinLoading
-                          ? Shimmer.fromColors(
-                              baseColor: AppColors.lightGrey1,
-                              highlightColor: AppColors.grey.withValues(alpha: 0.2),
+                          Future.delayed(Duration(seconds: 3), () {
+                            controller.isToastVisible = false;
+                          });
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            bottom: 3, left: 6, right: 6, top: 3),
+                        decoration: BoxDecoration(
+                            color: AppColors.idContainerColor,
+                            borderRadius: BorderRadius.circular(60)),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: idMaxWidth,
                               child: Text(
-                                Database.listenerCoin.toString(),
-                                style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.orange),
-                              ),
-                            ).paddingOnly(left: 6, right: 6)
-                          : Text(
-                              Database.listenerCoin.toString(),
-                              style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.orange),
-                            ).paddingOnly(left: 6, right: 6)
-                    ],
-                  ),
-                ).paddingOnly(right: 8),
-              );
-            }),
-        GestureDetector(
-          onTap: () {
-            Get.toNamed(AppRoutes.hostNotificationView);
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              color: AppColors.lightRed.withValues(alpha: 0.5),
+                                "ID: ${Database.fetchListenerProfileModel?.data?.uniqueId ?? ""}",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppFontStyle.fontStyleW600(
+                                    fontSize: 11,
+                                    fontColor: AppColors.idTxtColor),
+                              ).paddingOnly(right: 3),
+                            ),
+                            Image.asset(
+                              AppAsset.copyIcon,
+                              height: 13,
+                              width: 13,
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  })
+                ],
+              ),
             ),
-            child: Image.asset(
-              AppAsset.notificationIconRed,
-              height: 21,
-              width: 21,
+            4.width,
+            GetBuilder<HostHomeScreenController>(
+                id: Constant.idCoinUpdate,
+                builder: (controller) {
+                  return GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.hostViewCoinHistory);
+                    },
+                    child: Container(
+                      constraints: BoxConstraints(maxWidth: coinChipMaxWidth),
+                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(
+                          color: AppColors.border.withValues(alpha: 0.6),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            AppAsset.starCoin,
+                            height: 26,
+                            width: 26,
+                          ),
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 6, right: 6),
+                              child: controller.isCoinLoading
+                                  ? Shimmer.fromColors(
+                                      baseColor: AppColors.lightGrey1,
+                                      highlightColor:
+                                          AppColors.grey.withValues(alpha: 0.2),
+                                      child: SizedBox(
+                                        height: 20,
+                                        width: double.infinity,
+                                        child: FittedBox(
+                                          alignment: Alignment.centerLeft,
+                                          fit: BoxFit.scaleDown,
+                                          child: Text(
+                                            Database.listenerCoin.toString(),
+                                            maxLines: 1,
+                                            style: AppFontStyle.fontStyleW700(
+                                                fontSize: 16,
+                                                fontColor: AppColors.orange),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      height: 20,
+                                      width: double.infinity,
+                                      child: FittedBox(
+                                        alignment: Alignment.centerLeft,
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          Database.listenerCoin.toString(),
+                                          maxLines: 1,
+                                          style: AppFontStyle.fontStyleW700(
+                                              fontSize: 16,
+                                              fontColor: AppColors.orange),
+                                        ),
+                                      ),
+                                    ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+            4.width,
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(AppRoutes.hostNotificationView);
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: AppColors.lightRed.withValues(alpha: 0.5),
+                ),
+                child: Image.asset(
+                  AppAsset.notificationIconRed,
+                  height: 20,
+                  width: 20,
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
-    ).paddingOnly(top: Get.height * 0.042, bottom: 10);
+          ],
+        ).paddingOnly(top: Get.height * 0.042, bottom: 10);
+      },
+    );
   }
 }
 
@@ -224,7 +283,9 @@ class HostImageView extends StatelessWidget {
                   width: isSelected ? 16 : 5,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.appColor : AppColors.indicatorColor,
+                    color: isSelected
+                        ? AppColors.appColor
+                        : AppColors.indicatorColor,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 );
@@ -282,23 +343,31 @@ class PermissionView extends StatelessWidget {
               // }),
               GetBuilder<HostHomeScreenController>(builder: (controller) {
                 return CustomSwitchView(
-                  callCoin: Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall.toString() ?? '0',
+                  callCoin: Database
+                          .fetchListenerProfileModel?.data?.ratePrivateAudioCall
+                          .toString() ??
+                      '0',
                   coinShow: true,
                   text: EnumLocale.txtAvailableForAudioCall.name.tr,
                   value: controller.isAvailableForPrivateAudioCall,
                   onChanged: (val) {
-                    controller.permissionSwitch(val, "isAvailableForPrivateAudioCall");
+                    controller.permissionSwitch(
+                        val, "isAvailableForPrivateAudioCall");
                   },
                 );
               }),
               GetBuilder<HostHomeScreenController>(builder: (controller) {
                 return CustomSwitchView(
-                  callCoin: Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall.toString() ?? '0',
+                  callCoin: Database
+                          .fetchListenerProfileModel?.data?.ratePrivateVideoCall
+                          .toString() ??
+                      '0',
                   coinShow: true,
                   text: EnumLocale.txtAvailableForVideoCall.name.tr,
                   value: controller.isAvailableForPrivateVideoCall,
                   onChanged: (val) {
-                    controller.permissionSwitch(val, "isAvailableForPrivateVideoCall");
+                    controller.permissionSwitch(
+                        val, "isAvailableForPrivateVideoCall");
                   },
                 );
               }),
@@ -385,7 +454,8 @@ class CustomSwitchView extends StatelessWidget {
                     ),
                     Text(
                       "${callCoin ?? ''}/Session",
-                      style: AppFontStyle.fontStyleW700(fontSize: 12, fontColor: AppColors.orange),
+                      style: AppFontStyle.fontStyleW700(
+                          fontSize: 12, fontColor: AppColors.orange),
                     ).paddingOnly(left: 6, right: 6)
                   ],
                 ),

@@ -18,10 +18,14 @@ class UserCoinApi {
 
     Utils.showLog("User Session Credit Api url => $uri");
 
+    final authUid = Database.loginUserFirebaseId.isNotEmpty
+        ? Database.loginUserFirebaseId
+        : (Database.fetchLoginUserProfileModel?.user?.firebaseId ?? "");
+
     final headers = {
       ApiParams.key: Api.secretKey,
       ApiParams.authToken: ApiParams.tokenStartPoint + token,
-      ApiParams.authUid: Database.loginUserFirebaseId
+      ApiParams.authUid: authUid,
     };
 
     try {

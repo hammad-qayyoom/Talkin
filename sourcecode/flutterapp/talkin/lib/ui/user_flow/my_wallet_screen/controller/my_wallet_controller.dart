@@ -38,6 +38,24 @@ class MyWalletController extends GetxController implements IAPCallback {
     super.onInit();
   }
 
+  Future<void> syncSessionCredits({bool refreshHome = true}) async {
+    userCoinModel = await UserCoinApi.callApi();
+
+    if (userCoinModel?.status == true) {
+      final normalizedCredits = userCoinModel?.coin ?? 0;
+      Database.onSetUserCoin(normalizedCredits.toString());
+      fetchCoinPlan?.userCoin = normalizedCredits;
+
+      if (refreshHome && Get.isRegistered<HomeScreenController>()) {
+        Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
+      }
+
+      update([Constant.idGetCoinPlan]);
+
+      log("Database.userCoin  ${Database.userCoin}");
+    }
+  }
+
   /// fetch coin plan
   Future<void> fetchCoinPlanList() async {
     final uid = Database.loginUserFirebaseId;
@@ -52,6 +70,7 @@ class MyWalletController extends GetxController implements IAPCallback {
     );
     coinPlan.clear();
     coinPlan.addAll(fetchCoinPlan?.data ?? []);
+    await syncSessionCredits(refreshHome: false);
 
     isLoading = false;
     update([Constant.idGetCoinPlan]);
@@ -124,11 +143,8 @@ class MyWalletController extends GetxController implements IAPCallback {
           Get.back(); // Stop Loading...
 
           if (purchaseCoinPlan?.status == true) {
-            fetchCoinPlanList();
-            userCoinModel = await UserCoinApi.callApi();
-            Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
-            Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
-            log("Database.userCoin  ${Database.userCoin}");
+            await fetchCoinPlanList();
+            await syncSessionCredits();
 
             Utils.showToast(Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
@@ -173,13 +189,10 @@ class MyWalletController extends GetxController implements IAPCallback {
           Get.back(); // Stop Loading...
 
           if (purchaseCoinPlan?.status == true) {
-            fetchCoinPlanList();
+            await fetchCoinPlanList();
 
             Utils.showToast(Get.context!, "Subscription activated successfully");
-            userCoinModel = await UserCoinApi.callApi();
-            Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
-            Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
-            log("Database.userCoin  ${Database.userCoin}");
+            await syncSessionCredits();
             Get.back(); // Close Bottom Sheet...
           } else {
             Utils.showToast(
@@ -227,10 +240,8 @@ class MyWalletController extends GetxController implements IAPCallback {
           Get.back(); // Stop Loading...
 
           if (purchaseCoinPlan?.status == true) {
-            fetchCoinPlanList();
-            userCoinModel = await UserCoinApi.callApi();
-            Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
-            Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
+            await fetchCoinPlanList();
+            await syncSessionCredits();
 
             Utils.showToast(Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
@@ -325,11 +336,8 @@ class MyWalletController extends GetxController implements IAPCallback {
           Get.back(); // Stop Loading...
 
           if (purchaseCoinPlan?.status == true) {
-            fetchCoinPlanList();
-            userCoinModel = await UserCoinApi.callApi();
-            Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
-            Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
-            log("Database.userCoin  ${Database.userCoin}");
+            await fetchCoinPlanList();
+            await syncSessionCredits();
 
             Utils.showToast(Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
@@ -374,11 +382,8 @@ class MyWalletController extends GetxController implements IAPCallback {
           Get.back(); // Stop Loading...
 
           if (purchaseCoinPlan?.status == true) {
-            fetchCoinPlanList();
-            userCoinModel = await UserCoinApi.callApi();
-            Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
-            Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
-            log("Database.userCoin  ${Database.userCoin}");
+            await fetchCoinPlanList();
+            await syncSessionCredits();
 
             Utils.showToast(Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
@@ -423,11 +428,8 @@ class MyWalletController extends GetxController implements IAPCallback {
           Get.back(); // Stop Loading...
 
           if (purchaseCoinPlan?.status == true) {
-            fetchCoinPlanList();
-            userCoinModel = await UserCoinApi.callApi();
-            Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
-            Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
-            log("Database.userCoin  ${Database.userCoin}");
+            await fetchCoinPlanList();
+            await syncSessionCredits();
 
             Utils.showToast(Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
@@ -490,6 +492,8 @@ class MyWalletController extends GetxController implements IAPCallback {
       Get.back();
 
       if (isSuccess?.status == true) {
+        await fetchCoinPlanList();
+        await syncSessionCredits();
         Utils.showToast(Get.context!, "Subscription activated successfully");
         Get.close(2); // Close payment screens
       } else {

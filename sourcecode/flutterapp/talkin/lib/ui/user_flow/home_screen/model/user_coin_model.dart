@@ -11,7 +11,7 @@ String userCoinModelToJson(UserCoinModel data) => json.encode(data.toJson());
 class UserCoinModel {
   bool? status;
   String? message;
-  int? coin;
+  num? coin;
 
   UserCoinModel({
     this.status,
@@ -22,7 +22,9 @@ class UserCoinModel {
   factory UserCoinModel.fromJson(Map<String, dynamic> json) => UserCoinModel(
         status: json["status"],
         message: json["message"],
-        coin: json["coin"],
+        coin: json["coin"] is num
+            ? json["coin"]
+            : num.tryParse(json["coin"]?.toString() ?? "0") ?? 0,
       );
 
   Map<String, dynamic> toJson() => {

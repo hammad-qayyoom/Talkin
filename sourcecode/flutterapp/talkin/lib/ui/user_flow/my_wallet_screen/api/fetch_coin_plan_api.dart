@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:talk_in/ui/user_flow/my_wallet_screen/model/fetch_coin_plan.dart';
 import 'package:talk_in/utils/api.dart';
 import 'package:talk_in/utils/api_params.dart';
+import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/utils.dart';
 
 class FetchCoinPlanApi {
@@ -16,7 +17,9 @@ class FetchCoinPlanApi {
 
     Utils.showLog("Fetch Session Credit plan Api url => $uri");
 
-    final headers = {ApiParams.key: Api.secretKey, ApiParams.authToken: ApiParams.tokenStartPoint + token, ApiParams.authUid: uid};
+    final authUid = uid.isNotEmpty ? uid : (Database.fetchLoginUserProfileModel?.user?.firebaseId ?? "");
+
+    final headers = {ApiParams.key: Api.secretKey, ApiParams.authToken: ApiParams.tokenStartPoint + token, ApiParams.authUid: authUid};
 
     try {
       final response = await http.get(uri, headers: headers);

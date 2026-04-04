@@ -5,6 +5,7 @@ import 'package:talk_in/ui/user_flow/my_wallet_screen/controller/my_wallet_contr
 import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/constant.dart';
+import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/enums.dart';
 import 'package:talk_in/utils/font_style.dart';
 
@@ -80,7 +81,7 @@ class MyWalletScreenTopView extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${controller.fetchCoinPlan?.userCoin ?? 0}",
+                            Database.userCoin,
                             style: AppFontStyle.fontStyleW900(
                                 fontSize: 44,
                                 fontColor: AppColors.yellowDark800),

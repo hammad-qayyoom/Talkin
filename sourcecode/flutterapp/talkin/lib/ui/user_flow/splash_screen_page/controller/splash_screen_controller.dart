@@ -8,13 +8,17 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:talk_in/custom/dialog/exit_app_dialog.dart';
 import 'package:talk_in/custom/dialog/force_update_dialog.dart';
 import 'package:talk_in/routes/app_routes.dart';
+import 'package:talk_in/ui/host_flow/host_home_screen/api/host_coin_api.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/api/fetch_login_user_profile_api.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/api/ip_api.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/api/setting_api.dart';
+import 'package:talk_in/ui/user_flow/home_screen/api/user_coin_api.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/model/aap_configuration_model.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/model/fetch_listener_profile_model.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/model/fetch_login_user_profile_model.dart';
+import 'package:talk_in/ui/user_flow/home_screen/model/user_coin_model.dart';
+import 'package:talk_in/ui/host_flow/host_home_screen/model/listener_coin_model.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/model/ip_api_response_model.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/model/setting_api_model.dart';
 import 'package:talk_in/utils/app_color.dart';
@@ -30,6 +34,23 @@ class SplashScreenController extends GetxController {
   FetchListenerProfileModel? fetchListenerProfileModel;
   IpApiResponseModel? ipApiResponseModel;
   AppConfigurationModel? appConfigurationModel;
+
+  Future<void> syncInitialBalances() async {
+    if (fetchLoginUserProfileModel?.status != true) return;
+
+    if (fetchLoginUserProfileModel?.user?.isListener == true) {
+      ListenerCoinModel? listenerCoinModel = await HostCoinApi.callApi();
+      if (listenerCoinModel?.status == true) {
+        Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
+      }
+      return;
+    }
+
+    UserCoinModel? userCoinModel = await UserCoinApi.callApi();
+    if (userCoinModel?.status == true) {
+      Database.onSetUserCoin((userCoinModel?.coin ?? 0).toString());
+    }
+  }
 
   @override
   void onInit() {
@@ -48,6 +69,12 @@ class SplashScreenController extends GetxController {
     fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(
         loginUserId: Database.loginUserFirebaseId, token: token ?? '');
     Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
+
+    if (Database.loginUserFirebaseId.isEmpty &&
+      (fetchLoginUserProfileModel?.user?.firebaseId ?? '').isNotEmpty) {
+      Database.onSetLoginUserFirebaseId(
+        fetchLoginUserProfileModel?.user?.firebaseId ?? '');
+    }
 
     ///version update dialog show in splash screen not go main screen
     final bool waitter = await checkForceUpdate();
@@ -82,6 +109,8 @@ class SplashScreenController extends GetxController {
       }
       Database.fetchListenerProfileModel = fetchListenerProfileModel;
     }
+
+    await syncInitialBalances();
 
     ipApiResponseModel = await IpApi.callApi();
     Database.onSetSelectedCountryCode(ipApiResponseModel?.countryCode ?? '');

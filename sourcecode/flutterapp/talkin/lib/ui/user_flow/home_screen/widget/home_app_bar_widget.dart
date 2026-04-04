@@ -153,7 +153,7 @@ class HomeAppBarWidget extends StatelessWidget {
                               baseColor: AppColors.lightGrey1,
                               highlightColor: AppColors.grey.withValues(alpha: 0.2),
                               child: Text(
-                                Database.listenerCoin.toString(),
+                                Database.userCoin.toString(),
                                 style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.orange),
                               ),
                             ).paddingOnly(left: 6, right: 6)

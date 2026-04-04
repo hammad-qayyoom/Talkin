@@ -39,6 +39,8 @@ class HostWithdrawCoinTopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double coinArtSize = (Get.width * 0.30).clamp(100.0, 120.0);
+
     return Container(
       // height: 200,
       decoration: BoxDecoration(
@@ -46,11 +48,11 @@ class HostWithdrawCoinTopView extends StatelessWidget {
             image: AssetImage(AppAsset.withdrawBg), fit: BoxFit.cover),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 120,
-            width: 120,
+            height: coinArtSize,
+            width: coinArtSize,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               boxShadow: [
@@ -65,50 +67,68 @@ class HostWithdrawCoinTopView extends StatelessWidget {
             child: Center(
                 child: Image.asset(
               AppAsset.starCoinBig,
-              height: 114,
-              width: 114,
+              height: coinArtSize - 6,
+              width: coinArtSize - 6,
             )),
           ),
-          Spacer(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                EnumLocale.txtAvailableCoinBalance.name.tr,
-                style: AppFontStyle.fontStyleW600(
-                  fontSize: 14,
-                  fontColor: AppColors.yellowDark800,
-                  decorationColor: AppColors.yellowDark800,
-                  textDecoration: TextDecoration.underline,
+          10.width,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  EnumLocale.txtAvailableCoinBalance.name.tr,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 14,
+                    fontColor: AppColors.yellowDark800,
+                    decorationColor: AppColors.yellowDark800,
+                    textDecoration: TextDecoration.underline,
+                  ),
+                ).paddingOnly(bottom: 6, top: 15),
+                SizedBox(
+                  height: 52,
+                  width: double.infinity,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      Database.listenerCoin,
+                      maxLines: 1,
+                      style: AppFontStyle.fontStyleW900(
+                          fontSize: 44, fontColor: AppColors.yellowDark800),
+                    ),
+                  ),
                 ),
-              ).paddingOnly(bottom: 6, top: 15),
-              Text(
-                Database.listenerCoin,
-                style: AppFontStyle.fontStyleW900(
-                    fontSize: 44, fontColor: AppColors.yellowDark800),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 7, vertical: 7),
-                decoration: BoxDecoration(
-                  color: AppColors.black,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      AppAsset.starCoin,
-                      height: 26,
-                      width: 26,
-                    ).paddingOnly(right: 6),
-                    Text(
-                      "${Database.settingApiModel?.data?.minimumCoinsForConversion} Session Credit = ${Database.settingApiModel?.data?.currency?.symbol} 1.00",
-                      style: AppFontStyle.fontStyleW700(
-                          fontSize: 16, fontColor: AppColors.orangeButton),
-                    ).paddingOnly(right: 4),
-                  ],
-                ),
-              ).paddingOnly(right: 14).paddingOnly(bottom: 20, top: 4),
-            ],
+                Container(
+                  constraints: BoxConstraints(maxWidth: Get.width * 0.56),
+                  padding: EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+                  decoration: BoxDecoration(
+                    color: AppColors.black,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        AppAsset.starCoin,
+                        height: 26,
+                        width: 26,
+                      ).paddingOnly(right: 6),
+                      Flexible(
+                        child: Text(
+                          "${Database.settingApiModel?.data?.minimumCoinsForConversion} Session Credit = ${Database.settingApiModel?.data?.currency?.symbol} 1.00",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppFontStyle.fontStyleW700(
+                              fontSize: 16, fontColor: AppColors.orangeButton),
+                        ).paddingOnly(right: 4),
+                      ),
+                    ],
+                  ),
+                ).paddingOnly(right: 14, bottom: 20, top: 4),
+              ],
+            ),
           ),
         ],
       ).paddingOnly(bottom: 7, left: 12, right: 16, top: 7),
@@ -219,15 +239,18 @@ class HostWithdrawCoinView extends StatelessWidget {
                       child: controller.selectedPaymentMethod == null
                           ? Row(
                               children: [
-                                // 5.width,
-                                Text(
-                                  EnumLocale.txtSelectPaymentGateway.name.tr,
-                                  style: AppFontStyle.fontStyleW500(
-                                      fontColor: AppColors.black
-                                          .withValues(alpha: 0.3),
-                                      fontSize: 14),
+                                Flexible(
+                                  child: Text(
+                                    EnumLocale.txtSelectPaymentGateway.name.tr,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppFontStyle.fontStyleW500(
+                                        fontColor: AppColors.black
+                                            .withValues(alpha: 0.3),
+                                        fontSize: 14),
+                                  ),
                                 ),
-                                Spacer(),
+                                8.width,
                                 Icon(
                                   Icons.arrow_drop_down,
                                   size: 20,
@@ -251,17 +274,22 @@ class HostWithdrawCoinView extends StatelessWidget {
                                   ),
                                 ),
                                 15.width,
-                                Text(
-                                  controller
-                                          .withdrawMethods[controller
-                                                  .selectedPaymentMethod ??
-                                              0]
-                                          .name ??
-                                      "",
-                                  style: AppFontStyle.fontStyleW700(
-                                      fontColor: AppColors.black, fontSize: 15),
+                                Expanded(
+                                  child: Text(
+                                    controller
+                                            .withdrawMethods[controller
+                                                    .selectedPaymentMethod ??
+                                                0]
+                                            .name ??
+                                        "",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppFontStyle.fontStyleW700(
+                                        fontColor: AppColors.black,
+                                        fontSize: 15),
+                                  ),
                                 ),
-                                Spacer(),
+                                8.width,
                                 Icon(Icons.arrow_drop_down)
                               ],
                             ),
@@ -312,14 +340,18 @@ class HostWithdrawCoinView extends StatelessWidget {
                                       ),
                                     ),
                                     15.width,
-                                    Text(
-                                      controller.withdrawMethods[index].name ??
-                                          "",
-                                      style: AppFontStyle.fontStyleW700(
-                                          fontColor: AppColors.black,
-                                          fontSize: 15),
+                                    Expanded(
+                                      child: Text(
+                                        controller
+                                                .withdrawMethods[index].name ??
+                                            "",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: AppFontStyle.fontStyleW700(
+                                            fontColor: AppColors.black,
+                                            fontSize: 15),
+                                      ),
                                     ),
-                                    Spacer(),
                                     // RadioItem(isSelected: controller.selectedPaymentMethod == index),
                                   ],
                                 ),

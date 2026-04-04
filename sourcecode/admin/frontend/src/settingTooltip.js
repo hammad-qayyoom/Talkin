@@ -78,12 +78,12 @@ export const toolTipData = {
     tooltip: 'Enable dummy/demo data in the app for testing.'
   },
   videoCallRatePrivate: {
-    title: 'Private Video Call Rate',
-    tooltip: 'Per-minute coin cost for private video calls.'
+    title: 'Private Video Session Credits',
+    tooltip: 'Session credits required for each private video call.'
   },
   audioCallRatePrivate: {
-    title: 'Audio Call Rate',
-    tooltip: 'Per-minute coin cost for audio calls.'
+    title: 'Private Audio Session Credits',
+    tooltip: 'Session credits required for each private audio call.'
   },
   dailyLoginBonusCoins: {
     title: 'Login Bonus Session Credits',

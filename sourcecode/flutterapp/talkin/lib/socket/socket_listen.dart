@@ -357,6 +357,26 @@ class SocketListen {
   static void handleCallAnswered(dynamic data) {
     Utils.showLog("Socket Listen => callAnswered event: $data");
 
+    final updatedUserCredits = data['remainingSessionCredits'] ??
+        data['updatedUserSessionCredits'];
+    if (updatedUserCredits != null) {
+      Database.onSetUserCoin(updatedUserCredits.toString());
+
+      if (Get.isRegistered<HomeScreenController>()) {
+        Get.find<HomeScreenController>().update([Constant.idCoinUpdate]);
+      }
+    }
+
+    final updatedListenerBalance = data['updatedListenerCoinBalance'] ??
+        data['updatedExpertEarningsBalance'];
+    if (updatedListenerBalance != null) {
+      Database.onSetListenerCoin(updatedListenerBalance.toString());
+
+      if (Get.isRegistered<HostHomeScreenController>()) {
+        Get.find<HostHomeScreenController>().update([Constant.idCoinUpdate]);
+      }
+    }
+
     if (Get.currentRoute == AppRoutes.voiceCallScreen ||
         Get.currentRoute == AppRoutes.videoCallScreen) {
       Utils.showLog("Call screen already open, skipping duplicate navigation.");
@@ -497,7 +517,9 @@ class SocketListen {
     }
 
     userCoinModel = await UserCoinApi.callApi();
-    Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
+    if (userCoinModel?.status == true) {
+      Database.onSetUserCoin((userCoinModel?.coin ?? 0).toString());
+    }
 
     Utils.showLog(
         "user session credit listen ::::::::::::::::::${userCoinModel?.coin}");
@@ -509,7 +531,9 @@ class SocketListen {
       hostHomeScreenController.isCoinLoading = true;
       hostHomeScreenController.update([Constant.idCoinUpdate]);
       listenerCoinModel = await HostCoinApi.callApi();
-      Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
+      if (listenerCoinModel?.status == true) {
+        Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
+      }
       hostHomeScreenController.isCoinLoading = false;
       hostHomeScreenController.update([Constant.idCoinUpdate]);
     }
@@ -551,7 +575,12 @@ class SocketListen {
         receiverImage: voiceCallController.receiverImage.toString(),
       );
     }
-    Utils.showToast(Get.context!, data);
+    final errorMessage = data is Map
+      ? (data['message']?.toString() ??
+        "Insufficient session credits for this call.")
+      : data.toString();
+
+    Utils.showToast(Get.context!, errorMessage);
   }
 
   /// if Invalid callerRole or receiverRole  or Caller, Receiver, or CallHistory not found then listen also in coinDeductionError

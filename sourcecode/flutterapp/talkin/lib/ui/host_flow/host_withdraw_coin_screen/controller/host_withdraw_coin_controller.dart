@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
+import 'package:talk_in/ui/host_flow/host_home_screen/api/host_coin_api.dart';
 import 'package:talk_in/ui/host_flow/host_withdraw_coin_screen/api/payment_option_api.dart';
 import 'package:talk_in/ui/host_flow/host_withdraw_coin_screen/api/withdraw_coin_submit_api.dart';
 import 'package:talk_in/ui/host_flow/host_withdraw_coin_screen/model/payment_option_model.dart';
@@ -22,6 +23,44 @@ class HostWithdrawCoinController extends GetxController {
 
   List<TextEditingController> withdrawPaymentDetails = [];
   WithdrawCoinSubmitModel? withdrawCoinSubmitModel;
+
+  num _parseNumeric(Object? value, {num fallback = 0}) {
+    if (value == null) return fallback;
+    if (value is num) return value;
+    return num.tryParse(value.toString()) ?? fallback;
+  }
+
+  Future<num> _getFreshAvailableBalance() async {
+    final cachedWalletBalance =
+        _parseNumeric(Database.listenerCoin, fallback: 0);
+    final cachedProfileBalance = _parseNumeric(
+        Database.fetchListenerProfileModel?.data?.currentCoinBalance,
+        fallback: 0);
+
+    num localBalance = cachedWalletBalance > cachedProfileBalance
+        ? cachedWalletBalance
+        : cachedProfileBalance;
+
+    try {
+      final latestBalance = await HostCoinApi.callApi();
+
+      if (latestBalance?.status == true && latestBalance?.coin != null) {
+        final normalizedBalance =
+            _parseNumeric(latestBalance?.coin, fallback: localBalance);
+
+        Database.onSetListenerCoin(normalizedBalance.toString());
+        if (Database.fetchListenerProfileModel?.data != null) {
+          Database.fetchListenerProfileModel?.data?.currentCoinBalance =
+              normalizedBalance;
+        }
+
+        return normalizedBalance;
+      }
+    } catch (_) {}
+
+    return localBalance;
+  }
+
   @override
   void onInit() {
     onGetWithdrawMethods();
@@ -32,7 +71,8 @@ class HostWithdrawCoinController extends GetxController {
   onGetWithdrawMethods() async {
     isLoading = true;
     update([Constant.idPaymentOption]);
-    paymentOptionModel = await PaymentOptionApi.callApi(endDate: "All", startDate: "All");
+    paymentOptionModel =
+        await PaymentOptionApi.callApi(endDate: "All", startDate: "All");
 
     if (paymentOptionModel?.data != null) {
       withdrawMethods.addAll(paymentOptionModel?.data ?? []);
@@ -55,32 +95,46 @@ class HostWithdrawCoinController extends GetxController {
     if (isShowPaymentMethod) {
       onSwitchWithdrawMethod();
     }
-    withdrawPaymentDetails = List<TextEditingController>.generate(withdrawMethods[index].details?.length ?? 0, (counter) => TextEditingController());
+    withdrawPaymentDetails = List<TextEditingController>.generate(
+        withdrawMethods[index].details?.length ?? 0,
+        (counter) => TextEditingController());
 
     update();
   }
 
   /// validation withdraw coin
   Future<void> onClickWithdraw() async {
-    bool isWithdrawDetailsEmpty = false;
-    for (int i = 0; i < withdrawPaymentDetails.length; i++) {
-      if (withdrawPaymentDetails[i].text.isEmpty) {
-        isWithdrawDetailsEmpty = true;
-      } else {
-        isWithdrawDetailsEmpty = false;
-      }
-    }
+    final requestedCoins =
+        _parseNumeric(coinController.text.trim(), fallback: 0);
+    final minimumCoinsForPayout = _parseNumeric(
+        Database.settingApiModel?.data?.minimumCoinsForPayout,
+        fallback: 0);
+    final availableBalance = await _getFreshAvailableBalance();
+
+    final isWithdrawDetailsEmpty = withdrawPaymentDetails
+        .any((controller) => controller.text.trim().isEmpty);
 
     if (coinController.text.trim().isEmpty) {
-      Utils.showToast(Get.context!, EnumLocale.txtPleaseEnterWithdrawCoin.name.tr);
-    } else if (int.parse(coinController.text) < (Database.settingApiModel?.data?.minimumCoinsForPayout ?? 0)) {
-      Utils.showToast(Get.context!, EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name.tr);
-    } else if (int.parse(coinController.text) > (Database.fetchListenerProfileModel?.data?.currentCoinBalance ?? 0)) {
-      Utils.showToast(Get.context!, EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name.tr);
+      Utils.showToast(
+          Get.context!, EnumLocale.txtPleaseEnterWithdrawCoin.name.tr);
+    } else if (requestedCoins < minimumCoinsForPayout) {
+      Utils.showToast(
+          Get.context!,
+          EnumLocale
+              .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin
+              .name
+              .tr);
+    } else if (requestedCoins > availableBalance) {
+      Utils.showToast(
+          Get.context!,
+          EnumLocale
+              .txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name.tr);
     } else if (selectedPaymentMethod == null) {
-      Utils.showToast(Get.context!, EnumLocale.txtPleaseSelectWithdrawMethod.name.tr);
+      Utils.showToast(
+          Get.context!, EnumLocale.txtPleaseSelectWithdrawMethod.name.tr);
     } else if (isWithdrawDetailsEmpty) {
-      Utils.showToast(Get.context!, EnumLocale.txtPleaseEnterAllPaymentDetails.name.tr);
+      Utils.showToast(
+          Get.context!, EnumLocale.txtPleaseEnterAllPaymentDetails.name.tr);
     } else {
       onWithdraw();
     }
@@ -90,10 +144,13 @@ class HostWithdrawCoinController extends GetxController {
   Future<void> onWithdraw() async {
     FocusManager.instance.primaryFocus?.unfocus();
 
-    Get.dialog(const LoadingWidget(), barrierDismissible: false); // Start Loading...
+    Get.dialog(const LoadingWidget(),
+        barrierDismissible: false); // Start Loading...
     Map<String, String> details = {};
 
-    for (int i = 0; i < withdrawMethods[selectedPaymentMethod ?? 0].details!.length; i++) {
+    for (int i = 0;
+        i < withdrawMethods[selectedPaymentMethod ?? 0].details!.length;
+        i++) {
       final key = withdrawMethods[selectedPaymentMethod ?? 0].details![i];
       final value = withdrawPaymentDetails[i].text;
       details[key] = value;
@@ -109,15 +166,18 @@ class HostWithdrawCoinController extends GetxController {
       paymentDetails: details,
     );
 
+    if (Get.isDialogOpen ?? false) {
+      Get.back(); // Stop Loading / Close Dialog
+    }
+
     if (withdrawCoinSubmitModel?.status == true) {
       log("withdrawCoinSubmitModel?.status  :: ${withdrawCoinSubmitModel?.status}");
       Utils.showToast(Get.context!, withdrawCoinSubmitModel?.message ?? "");
-      Get.back(); // Close Withdraw Page...
+      if (Get.context != null) {
+        Get.back(); // Close Withdraw Page only on success
+      }
     } else {
       Utils.showToast(Get.context!, withdrawCoinSubmitModel?.message ?? "");
-      Get.back();
     }
-
-    Get.back(); // Stop Loading / Close Dialog
   }
 }

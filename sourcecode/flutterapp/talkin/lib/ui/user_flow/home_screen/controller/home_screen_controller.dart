@@ -43,7 +43,9 @@ class HomeScreenController extends GetxController {
     isCoinLoading = true;
     update([Constant.idCoinUpdate]);
     userCoinModel = await UserCoinApi.callApi();
-    Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
+    if (userCoinModel?.status == true) {
+      Database.onSetUserCoin((userCoinModel?.coin ?? 0).toString());
+    }
     isCoinLoading = false;
     update([Constant.idCoinUpdate]);
 
@@ -128,7 +130,9 @@ class HomeScreenController extends GetxController {
     topListeners.clear();
     await loadHomeCategories();
     userCoinModel = await UserCoinApi.callApi();
-    Database.onSetUserCoin(userCoinModel?.coin.toString() ?? "0");
+    if (userCoinModel?.status == true) {
+      Database.onSetUserCoin((userCoinModel?.coin ?? 0).toString());
+    }
     update([Constant.idCoinUpdate]);
 
     await getTopListeners();
