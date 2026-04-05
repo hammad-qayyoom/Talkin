@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:talk_in/routes/app_routes.dart';
 import 'package:talk_in/ui/host_flow/host_app_language_screen/binding/host_app_language_screen_binding.dart';
 import 'package:talk_in/ui/host_flow/host_app_language_screen/view/host_app_language_screen.dart';
+import 'package:talk_in/ui/host_flow/expert_availability_screen/view/expert_availability_screen.dart';
+import 'package:talk_in/ui/host_flow/expert_sessions_screen/view/expert_sessions_screen.dart';
 import 'package:talk_in/ui/host_flow/host_bottom_bar/binding/host_bottom_bar_binding.dart';
 import 'package:talk_in/ui/host_flow/host_bottom_bar/view/host_bottom_bar_screen.dart';
 import 'package:talk_in/ui/host_flow/host_chat_list_search_screen/binding/host_chat_list_search_binding.dart';
@@ -77,6 +79,7 @@ import 'package:talk_in/ui/user_flow/mobile_number_screen/binding/mobile_number_
 import 'package:talk_in/ui/user_flow/mobile_number_screen/view/mobile_number_screen.dart';
 import 'package:talk_in/ui/user_flow/my_profile_screen/binding/my_profile_screen_binding.dart';
 import 'package:talk_in/ui/user_flow/my_profile_screen/view/my_profile_screen_view.dart';
+import 'package:talk_in/ui/user_flow/my_sessions_screen/view/my_sessions_screen.dart';
 import 'package:talk_in/ui/user_flow/my_wallet_screen/binding/my_wallet_screen_binding.dart';
 import 'package:talk_in/ui/user_flow/my_wallet_screen/view/my_wallet_screen.dart';
 import 'package:talk_in/ui/user_flow/on_boarding_screen/binding/on_boarding_binding.dart';
@@ -92,6 +95,7 @@ import 'package:talk_in/ui/user_flow/registration_screen/binding/registration_bi
 import 'package:talk_in/ui/user_flow/registration_screen/view/registration_screen.dart';
 import 'package:talk_in/ui/user_flow/search_screen/binding/search_screen_binding.dart';
 import 'package:talk_in/ui/user_flow/search_screen/view/search_screen_view.dart';
+import 'package:talk_in/ui/user_flow/session_booking_screen/view/user_book_session_screen.dart';
 import 'package:talk_in/ui/user_flow/select_gender_screen/binding/select_gender_screen_binding.dart';
 import 'package:talk_in/ui/user_flow/select_gender_screen/view/select_gender_screen.dart';
 import 'package:talk_in/ui/user_flow/setting_screen/binding/setting_binding.dart';
@@ -403,6 +407,22 @@ class AppPages {
       name: AppRoutes.coinPurchaseScreen,
       page: () => CoinPurchaseScreen(),
       binding: CoinPurchaseScreenBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.userBookSessionScreen,
+      page: () => const UserBookSessionScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.userMySessionsScreen,
+      page: () => const UserMySessionsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.hostAvailabilityScreen,
+      page: () => const ExpertAvailabilityScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.hostSessionsScreen,
+      page: () => const ExpertSessionsScreen(),
     ),
   ];
 }

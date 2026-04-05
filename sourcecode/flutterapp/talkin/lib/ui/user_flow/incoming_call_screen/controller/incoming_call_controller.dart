@@ -186,6 +186,8 @@ class IncomingCallController extends GetxController
   String? callType;
   String? callMode;
   String? callerRole;
+  String? sessionId;
+  String? bookingId;
 
   bool isCallResponse = false;
   AudioPlayer audioPlayer = AudioPlayer();
@@ -277,6 +279,8 @@ class IncomingCallController extends GetxController
     callMode = args['callMode'];
     callType = args['callType'];
     callerRole = args['callerRole'];
+    sessionId = args['sessionId'];
+    bookingId = args['bookingId'];
 
     log("callerId :: $callerId");
     log("receiverId :: $receiverId");
@@ -289,6 +293,8 @@ class IncomingCallController extends GetxController
     log("callMode :: $callMode");
     log("callType :: $callType");
     log("callerRole :: $callerRole");
+    log("sessionId :: $sessionId");
+    log("bookingId :: $bookingId");
   }
 
   @override
@@ -456,6 +462,8 @@ class IncomingCallController extends GetxController
         receiverImage: receiverImage ?? '',
         callerName: callerName ?? '',
         callerImage: callerImage ?? '',
+        sessionId: sessionId,
+        bookingId: bookingId,
       );
 
       Utils.showLog("Call decline emit event sent");
@@ -499,6 +507,8 @@ class IncomingCallController extends GetxController
         receiverImage: receiverImage ?? '',
         callerName: callerName ?? '',
         callerImage: callerImage ?? '',
+        sessionId: sessionId,
+        bookingId: bookingId,
       );
 
       Utils.showLog("Call accept emit event sent");
@@ -521,6 +531,8 @@ class IncomingCallController extends GetxController
           'callerImage': callerImage,
           'callerfullName': callerName,
           'callerName': callerName,
+          'sessionId': sessionId,
+          'bookingId': bookingId,
         });
       }
     } catch (e) {

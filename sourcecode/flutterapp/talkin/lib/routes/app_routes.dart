@@ -63,4 +63,8 @@ class AppRoutes {
   static const String hostNotificationView = '/hostNotificationView';
   static const String userProfileDetailScreen = '/userProfileDetailScreen';
   static const String coinPurchaseScreen = '/coinPurchaseScreen';
+  static const String userBookSessionScreen = '/userBookSessionScreen';
+  static const String userMySessionsScreen = '/userMySessionsScreen';
+  static const String hostAvailabilityScreen = '/hostAvailabilityScreen';
+  static const String hostSessionsScreen = '/hostSessionsScreen';
 }

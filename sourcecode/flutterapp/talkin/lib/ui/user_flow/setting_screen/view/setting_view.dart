@@ -13,10 +13,12 @@ class SettingScreen extends StatelessWidget {
         flexibleSpace: const SettingScreenAppBar(),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            SettingView(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SettingView(),
+            ],
+          ),
         ),
       ),
     );

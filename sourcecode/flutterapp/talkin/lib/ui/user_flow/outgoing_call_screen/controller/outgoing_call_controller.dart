@@ -31,6 +31,8 @@ class OutgoingCallController extends GetxController with WidgetsBindingObserver 
   String? callType;
   String? callerRole;
   String? callMode;
+  String? sessionId;
+  String? bookingId;
 
   Widget? localView;
   Widget? remoteView;
@@ -82,6 +84,8 @@ class OutgoingCallController extends GetxController with WidgetsBindingObserver 
     callerRole = args['callerRole'];
     callType = args['callType'];
     callMode = args['callMode'];
+    sessionId = args['sessionId'];
+    bookingId = args['bookingId'];
 
     log("callerId :: $callerId");
     log("receiverId :: $receiverId");
@@ -93,6 +97,8 @@ class OutgoingCallController extends GetxController with WidgetsBindingObserver 
     log("receiverRole :: $receiverRole");
     log("callerRole :: $callerRole");
     log("callType :: $callType");
+    log("sessionId :: $sessionId");
+    log("bookingId :: $bookingId");
   }
 
   void startCallTimer() {
@@ -125,6 +131,8 @@ class OutgoingCallController extends GetxController with WidgetsBindingObserver 
         callMode: callMode!,
         callerRole: callerRole ?? '',
         receiverRole: receiverRole ?? '',
+        sessionId: sessionId,
+        bookingId: bookingId,
       );
       log("Call Terminated Event Emitted");
 

@@ -156,52 +156,53 @@ class HostChatScreenAppBar extends StatelessWidget {
                   ),
                 ),
               )),
-              GestureDetector(
-                onTap: () {
-                  String role = Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'user' : 'listener';
+              if (controller.hasBookedSessionCallContext)
+                GestureDetector(
+                  onTap: () {
+                    if (controller.isBookedSessionWindowEnded) {
+                      Utils.showToast(context,
+                          'Session slot time is completed. Call is no longer allowed.');
+                      return;
+                    }
 
-                  log("################################$role");
+                    final sessionType =
+                        (controller.bookedSessionCallType ?? '').toLowerCase();
+                    final allowAudio = sessionType == 'audio';
+                    final allowVideo = sessionType == 'video';
 
-                  Utils.showLog(" listenerId >>>>>>>>>>>>>>>>>  ${Database.fetchLoginUserProfileModel?.user?.listenerId}");
-                  Utils.showLog("receiverId  >>>>>>>>>>>>>>>>>  ${controller.receiverId}");
-                  Utils.showLog(" receiverName >>>>>>>>>>>>>>>>>  ${controller.receiverName}");
-                  Utils.showLog(" receiverImage >>>>>>>>>>>>>>>>>  ${controller.receiverImage}");
-                  Utils.showLog(" fetchListenerProfileModel?.data?.name >>>>>>>>>>>>>>>>>  ${Database.fetchListenerProfileModel?.data?.name}");
-                  Utils.showLog("fetchListenerProfileModel?.data?.image  >>>>>>>>>>>>>>>>>  ${Database.fetchListenerProfileModel?.data?.image}");
-                  Utils.showLog("fetchLoginUserProfileModel?.user?.isListener  >>>>>>>>>>>>>>>>>  ${Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'user' : 'listener'}");
-                  Utils.showLog("fetchLoginUserProfileModel?.user?.isListener >>>>>>>>>>>>>>>>>  ${Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'listener' : 'user'}");
-
-                  Get.bottomSheet(
-                    TalkNowButtonBottomSheet(
-                      showMessage: false,
-                      availableForPrivateAudioCall: true,
-                      availableForPrivateVideoCall: true,
-                      isFake: false,
-                      fakeVideo: [],
-                      fakeAudio: "",
-                      videoCallRatePrivate: '',
-                      audioCallRatePrivate: '',
-                      callerId: Database.fetchListenerProfileModel?.data?.id ?? '',
-                      receiverId: controller.receiverId ?? '',
-                      receiverName: controller.receiverName ?? '',
-                      receiverImage: controller.receiverImage ?? '',
-                      callerName: Database.fetchListenerProfileModel?.data?.name ?? '',
-                      callerImage: Database.fetchListenerProfileModel?.data?.image ?? '',
-                      callerRole: 'listener',
-                      receiverRole: 'user',
+                    Get.bottomSheet(
+                      TalkNowButtonBottomSheet(
+                        showMessage: false,
+                        availableForPrivateAudioCall: allowAudio,
+                        availableForPrivateVideoCall: allowVideo,
+                        isFake: false,
+                        fakeVideo: const [],
+                        fakeAudio: "",
+                        videoCallRatePrivate: '',
+                        audioCallRatePrivate: '',
+                        callerId: Database.fetchListenerProfileModel?.data?.id ?? '',
+                        receiverId: controller.receiverId ?? '',
+                        receiverName: controller.receiverName ?? '',
+                        receiverImage: controller.receiverImage ?? '',
+                        callerName: Database.fetchListenerProfileModel?.data?.name ?? '',
+                        callerImage: Database.fetchListenerProfileModel?.data?.image ?? '',
+                        callerRole: 'listener',
+                        receiverRole: 'user',
+                        sessionId: controller.sessionId,
+                        bookingId: controller.bookingId,
+                      ),
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                    );
+                  },
+                  child: Center(
+                    child: Image.asset(
+                      AppAsset.callGradiant,
+                      height: 28,
+                      width: 28,
                     ),
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                  );
-                },
-                child: Center(
-                  child: Image.asset(
-                    AppAsset.callGradiant,
-                    height: 28,
-                    width: 28,
-                  ),
-                ).paddingOnly(right: 18),
-              ),
+                  ).paddingOnly(right: 18),
+                ),
               InkWell(
                 onTap: () {
                   showMoreOptionsBottomSheet(

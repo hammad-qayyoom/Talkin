@@ -50,6 +50,15 @@ abstract class Api {
   static const groupSessionJoin = "${baseUrl}api/v2/sessions/group/join";
   static const groupSessionLeave = "${baseUrl}api/v2/sessions/group/leave";
   static const groupSessionCancel = "${baseUrl}api/v2/sessions/group/cancel";
+  static const sessionGetAvailableSlots = "${baseUrl}api/v2/sessions/getAvailableSlots?";
+  static const sessionBookSession = "${baseUrl}api/v2/sessions/bookSession";
+  static const sessionCancelBooking = "${baseUrl}api/v2/sessions/cancelSessionBooking";
+  static const sessionAccessCheck = "${baseUrl}api/v2/sessions/getSessionAccess";
+  static const sessionReportCallOutcome = "${baseUrl}api/v2/sessions/reportSessionCallOutcome";
+  static const sessionGetUserSessions = "${baseUrl}api/v2/sessions/getUserSessions?";
+  static const sessionGetExpertSessions = "${baseUrl}api/v2/sessions/getExpertSessions?";
+  static const expertSetAvailability = "${baseUrl}api/v2/experts/setAvailability";
+  static const expertGetAvailability = "${baseUrl}api/v2/experts/getAvailability?";
 
   static const feedPostsCreate = "${baseUrl}api/v2/feed/posts/create";
   static const feedPostsFeed = "${baseUrl}api/v2/feed/posts/feed?";

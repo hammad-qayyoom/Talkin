@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -25,6 +25,66 @@ import { toast } from 'react-toastify'
 import { toggleSetting, updateSettings } from '@/redux-store/slices/settings'
 import HoverPopover from '@/common/HoverPopover'
 import { toolTipData } from '@/settingTooltip'
+
+const getTimezoneOffsetMinutes = (timezone, referenceDate = new Date()) => {
+  try {
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone,
+      hour12: false,
+      hourCycle: 'h23',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    })
+
+    const parts = formatter.formatToParts(referenceDate)
+    const partMap = {}
+
+    parts.forEach(part => {
+      if (part.type !== 'literal') {
+        partMap[part.type] = part.value
+      }
+    })
+
+    const year = Number(partMap.year)
+    const month = Number(partMap.month)
+    const day = Number(partMap.day)
+    let hour = Number(partMap.hour)
+    const minute = Number(partMap.minute)
+    const second = Number(partMap.second)
+
+    if (hour === 24) {
+      hour = 0
+    }
+
+    if (
+      ![year, month, day, hour, minute, second].every(Number.isFinite) ||
+      hour < 0 ||
+      hour > 23
+    ) {
+      return 0
+    }
+
+    const reconstructedUtcMs = Date.UTC(year, month - 1, day, hour, minute, second, 0)
+
+    return Math.round((reconstructedUtcMs - referenceDate.getTime()) / (60 * 1000))
+  } catch (error) {
+    return 0
+  }
+}
+
+const formatUtcOffset = offsetMinutes => {
+  const normalizedOffset = Number.isFinite(offsetMinutes) ? Math.trunc(offsetMinutes) : 0
+  const sign = normalizedOffset >= 0 ? '+' : '-'
+  const absoluteOffset = Math.abs(normalizedOffset)
+  const hours = String(Math.floor(absoluteOffset / 60)).padStart(2, '0')
+  const minutes = String(absoluteOffset % 60).padStart(2, '0')
+
+  return `UTC${sign}${hours}:${minutes}`
+}
 
 const GeneralSettings = () => {
   const [initialData, setInitialData] = useState({})
@@ -69,7 +129,16 @@ const GeneralSettings = () => {
     sessionCommissionPercent: '',
     monetizationMode: 'subscription_session_commission',
     requireActiveSubscriptionForSessionBooking: false,
-    allowDirectPaidSessionBooking: true
+    allowDirectPaidSessionBooking: true,
+    sessionSlotDurationMinutes: 30,
+    sessionBookingTimezone: 'UTC',
+    sessionUserCancellationTimeLimitMinutes: '',
+    sessionUserCancellationRefundPercent: '',
+    sessionUserCancellationRefundCredits: true,
+    sessionUserCancellationRefundCreditsCount: '',
+    sessionExpertCancellationPenaltyPercent: '',
+    sessionJoinEarlyWindowMinutes: '',
+    sessionJoinLateWindowMinutes: ''
   })
 
   const [privateKeyJson, setPrivateKeyJson] = useState('')
@@ -106,6 +175,15 @@ const GeneralSettings = () => {
         monetizationMode: settings.monetizationMode || 'subscription_session_commission',
         requireActiveSubscriptionForSessionBooking: settings.requireActiveSubscriptionForSessionBooking || false,
         allowDirectPaidSessionBooking: settings.allowDirectPaidSessionBooking !== false,
+        sessionSlotDurationMinutes: settings.sessionSlotDurationMinutes ?? 30,
+        sessionBookingTimezone: settings.sessionBookingTimezone || 'UTC',
+        sessionUserCancellationTimeLimitMinutes: settings.sessionUserCancellationTimeLimitMinutes ?? 60,
+        sessionUserCancellationRefundPercent: settings.sessionUserCancellationRefundPercent ?? 100,
+        sessionUserCancellationRefundCredits: settings.sessionUserCancellationRefundCredits !== false,
+        sessionUserCancellationRefundCreditsCount: settings.sessionUserCancellationRefundCreditsCount ?? 1,
+        sessionExpertCancellationPenaltyPercent: settings.sessionExpertCancellationPenaltyPercent ?? 10,
+        sessionJoinEarlyWindowMinutes: settings.sessionJoinEarlyWindowMinutes ?? 5,
+        sessionJoinLateWindowMinutes: settings.sessionJoinLateWindowMinutes ?? 5,
         allowBecomeHostOption: settings.allowBecomeHostOption || false,
         isApplicationLive: settings.isApplicationLive || false,
         isDemoContentEnabled: settings.isDemoContentEnabled || false,
@@ -142,7 +220,14 @@ const GeneralSettings = () => {
         'minCoinsForPayout',
         'dailyLoginBonusCoins',
         'adminCommissionPercent',
-        'sessionCommissionPercent'
+        'sessionCommissionPercent',
+        'sessionSlotDurationMinutes',
+        'sessionUserCancellationTimeLimitMinutes',
+        'sessionUserCancellationRefundPercent',
+        'sessionUserCancellationRefundCreditsCount',
+        'sessionExpertCancellationPenaltyPercent',
+        'sessionJoinEarlyWindowMinutes',
+        'sessionJoinLateWindowMinutes'
       ].includes(field)
     ) {
       // Allow empty string or valid numbers
@@ -190,6 +275,43 @@ const GeneralSettings = () => {
   const privateVideoLabel = isSessionCreditMode ? 'Private Video Credits' : 'Private Video Rate'
   const privateRateUnitLabel = isSessionCreditMode ? 'credits/session' : 'coins/minute'
 
+  const timezoneOptions = useMemo(() => {
+    const currentSelectedTimezone = String(formData.sessionBookingTimezone || '').trim()
+    let supported = []
+
+    if (typeof Intl !== 'undefined' && typeof Intl.supportedValuesOf === 'function') {
+      const candidate = Intl.supportedValuesOf('timeZone')
+
+      if (Array.isArray(candidate) && candidate.length) {
+        supported = candidate
+      }
+    }
+
+    const uniqueTimezones = new Set(['UTC', ...supported])
+
+    if (currentSelectedTimezone) {
+      uniqueTimezones.add(currentSelectedTimezone)
+    }
+
+    return Array.from(uniqueTimezones)
+      .map(timezoneValue => {
+        const offsetMinutes = getTimezoneOffsetMinutes(timezoneValue)
+
+        return {
+          value: timezoneValue,
+          offsetMinutes,
+          label: `${timezoneValue} (${formatUtcOffset(offsetMinutes)})`
+        }
+      })
+      .sort((left, right) => {
+        if (left.offsetMinutes !== right.offsetMinutes) {
+          return left.offsetMinutes - right.offsetMinutes
+        }
+
+        return left.value.localeCompare(right.value)
+      })
+  }, [formData.sessionBookingTimezone])
+
   const handleToggle = type => {
 
     if (settings?._id) {
@@ -208,7 +330,14 @@ const GeneralSettings = () => {
     'audioCallRatePrivate',
     'dailyLoginBonusCoins',
     'adminCommissionPercent',
-    'sessionCommissionPercent'
+    'sessionCommissionPercent',
+    'sessionSlotDurationMinutes',
+    'sessionUserCancellationTimeLimitMinutes',
+    'sessionUserCancellationRefundPercent',
+    'sessionUserCancellationRefundCreditsCount',
+    'sessionExpertCancellationPenaltyPercent',
+    'sessionJoinEarlyWindowMinutes',
+    'sessionJoinLateWindowMinutes'
   ]
 
   const getUpdatedFields = () => {
@@ -445,6 +574,46 @@ const GeneralSettings = () => {
                 <MenuItem value='coin_per_minute'>Legacy Session Credit Per Minute (deprecated)</MenuItem>
               </TextField>
             </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                select
+                label='Session Slot Duration (minutes)'
+                value={formData.sessionSlotDurationMinutes || 30}
+                onChange={e => handleFieldChange('sessionSlotDurationMinutes', e.target.value)}
+              >
+                {[15, 30, 45, 60, 90, 120, 180, 240].map(duration => (
+                  <MenuItem key={duration} value={duration}>
+                    {duration} minutes
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                select
+                label='Session Booking Timezone'
+                value={formData.sessionBookingTimezone || 'UTC'}
+                onChange={e => handleFieldChange('sessionBookingTimezone', e.target.value)}
+                helperText={`Availability and booking policy are anchored to this timezone. Showing ${timezoneOptions.length} supported timezones with UTC offsets.`}
+                SelectProps={{
+                  MenuProps: {
+                    PaperProps: {
+                      style: {
+                        maxHeight: 320
+                      }
+                    }
+                  }
+                }}
+              >
+                {timezoneOptions.map(timezoneOption => (
+                  <MenuItem key={timezoneOption.value} value={timezoneOption.value}>
+                    {timezoneOption.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
             <Grid item size={12}>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', columnGap: 4 }}>
                 <FormControlLabel
@@ -466,6 +635,108 @@ const GeneralSettings = () => {
                   label='Allow Direct Paid Session Booking'
                 />
               </Box>
+            </Grid>
+            <Grid item size={12}>
+              <Typography variant='subtitle2' sx={{ mt: 1, mb: 1, fontWeight: 600 }}>
+                One-to-One Cancellation & Start Window Policy
+              </Typography>
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='User Cancellation Time Limit (minutes before start)'
+                value={formData.sessionUserCancellationTimeLimitMinutes || ''}
+                onChange={e => handleFieldChange('sessionUserCancellationTimeLimitMinutes', e.target.value)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+                }}
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='User Cancellation Refund (%)'
+                value={formData.sessionUserCancellationRefundPercent || ''}
+                onChange={e => handleFieldChange('sessionUserCancellationRefundPercent', e.target.value)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Typography variant='caption' color='text.secondary'>
+                        %
+                      </Typography>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='Expert Cancellation Penalty (%)'
+                value={formData.sessionExpertCancellationPenaltyPercent || ''}
+                onChange={e => handleFieldChange('sessionExpertCancellationPenaltyPercent', e.target.value)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Typography variant='caption' color='text.secondary'>
+                        %
+                      </Typography>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+            <Grid item size={6}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.sessionUserCancellationRefundCredits)}
+                    onChange={e => handleFieldChange('sessionUserCancellationRefundCredits', e.target.checked)}
+                  />
+                }
+                label='Restore Subscription Credits On Eligible User Cancellation'
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='User Cancellation Refund Credits (count)'
+                value={formData.sessionUserCancellationRefundCreditsCount || ''}
+                onChange={e => handleFieldChange('sessionUserCancellationRefundCreditsCount', e.target.value)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+                }}
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='Join Early Window (minutes)'
+                value={formData.sessionJoinEarlyWindowMinutes || ''}
+                onChange={e => handleFieldChange('sessionJoinEarlyWindowMinutes', e.target.value)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+                }}
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='Join Late Window (minutes after end)'
+                value={formData.sessionJoinLateWindowMinutes || ''}
+                onChange={e => handleFieldChange('sessionJoinLateWindowMinutes', e.target.value)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+                }}
+              />
             </Grid>
             <Grid item size={6}>
               <TextField

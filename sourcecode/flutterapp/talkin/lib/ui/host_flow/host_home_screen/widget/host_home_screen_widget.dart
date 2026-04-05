@@ -44,7 +44,7 @@ class HostTopHomeView extends StatelessWidget {
                 onTap: () {
                   Utils.showLog(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-                  Get.find<HostBottomBarController>().onClick(4);
+                  Get.find<HostBottomBarController>().onClick(5);
 
                   // Get.toNamed(AppRoutes.hostProfileScreen);
                 },

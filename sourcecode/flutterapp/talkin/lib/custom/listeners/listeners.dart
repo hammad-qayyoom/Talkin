@@ -201,31 +201,30 @@ class CustomListeners extends StatelessWidget {
                   textStyle: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: AppColors.appColor),
                 ),
               ),
-              if (availableForPrivateAudioCall || availableForPrivateVideoCall == true || fake == true) SizedBox(width: 14),
-              availableForPrivateAudioCall || availableForPrivateVideoCall == true || fake == true
-                  ? Expanded(
-                      child: PrimaryAppButton(
-                        onTap: talkNowOnTap,
-                        height: 38,
-                        color: AppColors.appColor,
-                        borderColor: AppColors.appColor,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              AppAsset.callIcon,
-                              color: AppColors.white,
-                              height: 20,
-                            ).paddingOnly(right: 12),
-                            Text(
-                              EnumLocale.txtTalkNow.name.tr,
-                              style: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: AppColors.white),
-                            ),
-                          ],
-                        ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: PrimaryAppButton(
+                  onTap: talkNowOnTap,
+                  height: 38,
+                  color: AppColors.appColor,
+                  borderColor: AppColors.appColor,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        AppAsset.calendar,
+                        color: AppColors.white,
+                        height: 19,
+                        width: 19,
+                      ).paddingOnly(right: 8),
+                      Text(
+                        'Book Session',
+                        style: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: AppColors.white),
                       ),
-                    )
-                  : SizedBox(),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ).paddingOnly(top: 13, left: 6, right: 6, bottom: 10)
         ],

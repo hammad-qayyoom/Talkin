@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/bottom_sheet/talk_now_button_bottom_sheet.dart';
 import 'package:talk_in/custom/listeners/listeners.dart';
 import 'package:talk_in/routes/app_routes.dart';
 import 'package:talk_in/ui/user_flow/home_screen/controller/home_screen_controller.dart';
@@ -11,7 +8,6 @@ import 'package:talk_in/ui/user_flow/profile_detail_screen/controller/profile_de
 import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/enums.dart';
 import 'package:talk_in/utils/font_style.dart';
 import 'package:talk_in/utils/utils.dart';
@@ -169,148 +165,37 @@ class TopListenerWidget extends StatelessWidget {
                                   );
                                 },
                                 talkNowOnTap: () {
-                                  String role = Database
-                                              .fetchLoginUserProfileModel
-                                              ?.user
-                                              ?.isListener ==
-                                          false
-                                      ? 'user'
-                                      : 'listener';
-
-                                  log("################################$role");
-                                  // if (controller.topListenersModel?.data?[index].isFake == true) {
-                                  //   Utils.showLog("this is fake Listener>>>>>>>>>");
-                                  //   Get.toNamed(
-                                  //     AppRoutes.fakeOutgoingCall,
-                                  //     arguments: [
-                                  //       controller.topListenersModel?.data?[index].name,
-                                  //       controller.topListenersModel?.data?[index].image,
-                                  //       controller.topListenersModel?.data?[index].video,
-                                  //       controller.isBackProfile,
-                                  //     ],
-                                  //   );
-                                  // }
-                                  // else {
-                                  Get.bottomSheet(
-                                    TalkNowButtonBottomSheet(
-                                      chatOnTap: () {
-                                        Get.toNamed(
-                                          AppRoutes.personalChatScreen,
-                                          arguments: [
-                                            controller.topListenersModel
-                                                ?.data?[index].id,
-                                            controller.topListenersModel
-                                                ?.data?[index].name,
-                                            controller.topListenersModel
-                                                ?.data?[index].statusLabel,
-                                            controller.topListenersModel
-                                                ?.data?[index].image,
-                                            controller
-                                                .topListenersModel
-                                                ?.data?[index]
-                                                .ratePrivateAudioCall,
-                                            controller
-                                                .topListenersModel
-                                                ?.data?[index]
-                                                .ratePrivateVideoCall,
-                                            controller.topListenersModel
-                                                ?.data?[index].isFake,
-                                            controller.topListenersModel
-                                                ?.data?[index].video,
-                                            controller
-                                                .topListenersModel
-                                                ?.data?[index]
-                                                .isAvailableForPrivateVideoCall,
-                                            controller
-                                                .topListenersModel
-                                                ?.data?[index]
-                                                .isAvailableForPrivateAudioCall,
-                                          ],
-                                        );
-                                      },
-                                      availableForPrivateAudioCall: controller
-                                              .topListenersModel
-                                              ?.data?[index]
-                                              .isAvailableForPrivateAudioCall ??
-                                          false,
-                                      availableForPrivateVideoCall: controller
-                                              .topListenersModel
-                                              ?.data?[index]
-                                              .isAvailableForPrivateVideoCall ??
-                                          false,
-                                      fakeVideo: controller.topListenersModel
-                                              ?.data?[index].video ??
-                                          [],
-                                      fakeAudio: controller.topListenersModel
-                                              ?.data?[index].audio ??
-                                          "",
-                                      isFake: controller.topListenersModel
-                                              ?.data?[index].isFake ??
-                                          false,
-                                      videoCallRatePrivate: controller
-                                              .topListenersModel
-                                              ?.data?[index]
-                                              .ratePrivateVideoCall
-                                              .toString() ??
-                                          '',
-                                      audioCallRatePrivate: controller
-                                              .topListenersModel
-                                              ?.data?[index]
-                                              .ratePrivateAudioCall
-                                              .toString() ??
-                                          '',
-                                      callerId: Database
-                                                  .fetchLoginUserProfileModel
-                                                  ?.user
-                                                  ?.isListener ==
-                                              false
-                                          ? Database.fetchLoginUserProfileModel
-                                                  ?.user?.id ??
-                                              ''
-                                          : Database.fetchLoginUserProfileModel
-                                                  ?.user?.listenerId ??
-                                              '',
-                                      receiverId:
+                                  Get.toNamed(
+                                    AppRoutes.userBookSessionScreen,
+                                    arguments: {
+                                      'listenerId':
                                           controller.topListeners[index].id ??
                                               '',
-                                      receiverName:
+                                      'listenerName':
                                           controller.topListeners[index].name ??
                                               '',
-                                      receiverImage: controller
+                                      'listenerImage': controller
                                               .topListeners[index].image ??
                                           '',
-                                      callerName: Database
-                                              .fetchLoginUserProfileModel
-                                              ?.user
-                                              ?.fullName ??
-                                          '',
-                                      callerImage: Database
-                                              .fetchLoginUserProfileModel
-                                              ?.user
-                                              ?.profilePic ??
-                                          '',
-                                      // callType: "video",
-                                      callerRole: Database
-                                                  .fetchLoginUserProfileModel
-                                                  ?.user
-                                                  ?.isListener ==
-                                              false
-                                          ? 'user'
-                                          : 'listener',
-                                      receiverRole: Database
-                                                  .fetchLoginUserProfileModel
-                                                  ?.user
-                                                  ?.isListener ==
-                                              false
-                                          ? 'listener'
-                                          : 'user',
-                                    ),
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
+                                      'availableForPrivateAudioCall': controller
+                                              .topListeners[index]
+                                              .isAvailableForPrivateAudioCall ??
+                                          false,
+                                      'availableForPrivateVideoCall': controller
+                                              .topListeners[index]
+                                              .isAvailableForPrivateVideoCall ??
+                                          false,
+                                      'ratePrivateAudioCall': controller
+                                              .topListeners[index]
+                                              .ratePrivateAudioCall ??
+                                          0,
+                                      'ratePrivateVideoCall': controller
+                                              .topListeners[index]
+                                              .ratePrivateVideoCall ??
+                                          0,
+                                    },
                                   );
-                                }
-                                // },
-                                ).paddingOnly(bottom: 12);
+                                }).paddingOnly(bottom: 12);
                           },
                         );
             },

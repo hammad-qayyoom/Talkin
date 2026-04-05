@@ -86,6 +86,8 @@ class Data {
   final String? androidAppVersion;
   final String? iosAppLink;
   final String? iosAppVersion;
+  final int? sessionSlotDurationMinutes;
+  final String? sessionBookingTimezone;
 
   Data({
     this.currency,
@@ -141,6 +143,8 @@ class Data {
     this.androidAppVersion,
     this.iosAppLink,
     this.iosAppVersion,
+    this.sessionSlotDurationMinutes,
+    this.sessionBookingTimezone,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -197,6 +201,8 @@ class Data {
     androidAppVersion:json["androidAppVersion"],
     iosAppLink:json["iosAppLink"],
     iosAppVersion:json["iosAppVersion"],
+    sessionSlotDurationMinutes: json["sessionSlotDurationMinutes"],
+    sessionBookingTimezone: json["sessionBookingTimezone"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -253,6 +259,8 @@ class Data {
     "androidAppVersion":androidAppVersion,
     "iosAppLink":iosAppLink,
     "iosAppVersion":iosAppVersion,
+    "sessionSlotDurationMinutes": sessionSlotDurationMinutes,
+    "sessionBookingTimezone": sessionBookingTimezone,
   };
 }
 

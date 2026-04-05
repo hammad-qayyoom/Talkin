@@ -6,6 +6,7 @@ import 'package:talk_in/socket/socket_listen.dart';
 import 'package:talk_in/socket/socket_service.dart';
 import 'package:talk_in/ui/host_flow/host_calling_screen/view/host_calling_screen.dart';
 import 'package:talk_in/ui/host_flow/host_chat_screen/view/host_chat_screen.dart';
+import 'package:talk_in/ui/host_flow/expert_sessions_screen/view/expert_sessions_screen.dart';
 import 'package:talk_in/ui/host_flow/host_home_screen/view/host_home_screen.dart';
 import 'package:talk_in/ui/host_flow/host_profile_screen/view/host_profile_screen_view.dart';
 import 'package:talk_in/ui/host_flow/host_wallet_screen/view/host_wallet_screen.dart';
@@ -45,6 +46,7 @@ class HostBottomBarController extends GetxController {
     HostCallingScreen(),
     HostChatScreen(),
     HostWalletScreen(),
+    const ExpertSessionsScreen(),
     HostProfileScreen(),
     // ChatScreen(),
     // CallingScreen(),

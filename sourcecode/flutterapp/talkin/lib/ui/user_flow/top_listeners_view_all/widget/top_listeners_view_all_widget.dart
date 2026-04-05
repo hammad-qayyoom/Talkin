@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/custom/app_bar/custom_app_bar.dart';
-import 'package:talk_in/custom/bottom_sheet/talk_now_button_bottom_sheet.dart';
 import 'package:talk_in/custom/listeners/listeners.dart';
 import 'package:talk_in/routes/app_routes.dart';
 import 'package:talk_in/ui/user_flow/home_screen/shimmer/top_listener_shimmer.dart';
@@ -11,7 +8,6 @@ import 'package:talk_in/ui/user_flow/top_listeners_view_all/controller/top_liste
 import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/enums.dart';
 
 class TopListenersViewAllAppBar extends StatelessWidget {
@@ -26,7 +22,6 @@ class TopListenersViewAllAppBar extends StatelessWidget {
         GestureDetector(
           onTap: () {
             Get.toNamed(AppRoutes.searchScreen);
-            log(">>>>>>>>>>.");
           },
           child: Container(
             height: 42,
@@ -60,9 +55,12 @@ class TopListenersViewAllView extends StatelessWidget {
         return RefreshIndicator(
           onRefresh: () async => controller.onRefresh(),
           child: controller.isLoading
-              ? TopListenerShimmer().paddingSymmetric(horizontal: 14, vertical: 12)
+              ? TopListenerShimmer()
+                  .paddingSymmetric(horizontal: 14, vertical: 12)
               : controller.topListeners.isEmpty
-                  ? Center(child: Image.asset(AppAsset.noListenerFound).paddingAll(60))
+                  ? Center(
+                      child:
+                          Image.asset(AppAsset.noListenerFound).paddingAll(60))
                   : SingleChildScrollView(
                       controller: controller.scrollController,
                       physics: const AlwaysScrollableScrollPhysics(),
@@ -75,20 +73,40 @@ class TopListenersViewAllView extends StatelessWidget {
                             itemCount: controller.topListeners.length,
                             itemBuilder: (context, index) {
                               return CustomListeners(
-                                fake: controller.topListeners[index].isFake ?? false,
-                                availableForPrivateAudioCall: controller.topListeners[index].isAvailableForPrivateAudioCall ?? false,
-                                availableForPrivateVideoCall: controller.topListeners[index].isAvailableForPrivateVideoCall ?? false,
-                                uniqueId: controller.topListeners[index].uniqueId ?? '',
-                                statusTxtColor: controller.topListeners[index].statusLabel == "Offline" ? AppColors.appTextColor : AppColors.white,
-                                statusColor: controller.topListeners[index].statusLabel == "Available"
+                                fake: controller.topListeners[index].isFake ??
+                                    false,
+                                availableForPrivateAudioCall: controller
+                                        .topListeners[index]
+                                        .isAvailableForPrivateAudioCall ??
+                                    false,
+                                availableForPrivateVideoCall: controller
+                                        .topListeners[index]
+                                        .isAvailableForPrivateVideoCall ??
+                                    false,
+                                uniqueId:
+                                    controller.topListeners[index].uniqueId ??
+                                        '',
+                                statusTxtColor: controller
+                                            .topListeners[index].statusLabel ==
+                                        "Offline"
+                                    ? AppColors.appTextColor
+                                    : AppColors.white,
+                                statusColor: controller
+                                            .topListeners[index].statusLabel ==
+                                        "Available"
                                     ? AppColors.green
-                                    : controller.topListeners[index].statusLabel == "On Call"
+                                    : controller.topListeners[index]
+                                                .statusLabel ==
+                                            "On Call"
                                         ? AppColors.red
                                         : AppColors.lightGrey1,
-                                statusImage: controller.topListeners[index].statusLabel == "Available"
+                                statusImage: controller
+                                            .topListeners[index].statusLabel ==
+                                        "Available"
                                     ? Container(
                                         decoration: BoxDecoration(
-                                          color: AppColors.white.withValues(alpha: 0.5),
+                                          color: AppColors.white
+                                              .withValues(alpha: 0.5),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Container(
@@ -100,7 +118,9 @@ class TopListenersViewAllView extends StatelessWidget {
                                           ),
                                         ).paddingAll(1.8),
                                       ).paddingOnly(right: 4)
-                                    : controller.topListeners[index].statusLabel == "On Call"
+                                    : controller.topListeners[index]
+                                                .statusLabel ==
+                                            "On Call"
                                         ? Image.asset(
                                             AppAsset.onCallIcon,
                                             height: 10,
@@ -108,7 +128,8 @@ class TopListenersViewAllView extends StatelessWidget {
                                           ).paddingOnly(right: 3)
                                         : Container(
                                             decoration: BoxDecoration(
-                                              color: AppColors.appTextColor.withValues(alpha: 0.3),
+                                              color: AppColors.appTextColor
+                                                  .withValues(alpha: 0.3),
                                               shape: BoxShape.circle,
                                             ),
                                             child: Container(
@@ -120,58 +141,67 @@ class TopListenersViewAllView extends StatelessWidget {
                                               ),
                                             ).paddingAll(1.8),
                                           ).paddingOnly(right: 4),
-                                image: controller.topListeners[index].image ?? '',
-                                status: controller.topListeners[index].statusLabel ?? '',
-                                language: controller.topListeners[index].language?[0].toString() ?? '',
-                                callCount: controller.topListeners[index].callCount ?? 0,
-                                talkTopicName: controller.topListeners[index].talkTopics ?? [],
-                                talkTopicLength: controller.topListeners[index].talkTopics?.length ?? 0,
+                                image:
+                                    controller.topListeners[index].image ?? '',
+                                status: controller
+                                        .topListeners[index].statusLabel ??
+                                    '',
+                                language: controller
+                                        .topListeners[index].language?[0]
+                                        .toString() ??
+                                    '',
+                                callCount:
+                                    controller.topListeners[index].callCount ??
+                                        0,
+                                talkTopicName:
+                                    controller.topListeners[index].talkTopics ??
+                                        [],
+                                talkTopicLength: controller.topListeners[index]
+                                        .talkTopics?.length ??
+                                    0,
                                 index: index,
                                 name: controller.topListeners[index].name ?? '',
-                                age: controller.topListeners[index].age == null ? "" : ",${controller.topListeners[index].age.toString()}",
+                                age: controller.topListeners[index].age == null
+                                    ? ""
+                                    : ",${controller.topListeners[index].age.toString()}",
                                 viewProfileOnTap: () {
                                   Get.toNamed(
                                     AppRoutes.profileDetailScreenView,
-                                    arguments: controller.topListeners[index].id,
+                                    arguments:
+                                        controller.topListeners[index].id,
                                   );
                                 },
                                 talkNowOnTap: () {
-                                  // if (controller.topListeners[index].isFake == true) {
-                                  //   Utils.showLog("this is fake Listener>>>>>>>>>");
-                                  //   Get.toNamed(
-                                  //     AppRoutes.fakeOutgoingCall,
-                                  //     arguments: [
-                                  //       controller.topListeners[index].name,
-                                  //       controller.topListeners[index].image,
-                                  //       controller.topListeners[index].video,
-                                  //       controller.isBackProfile
-                                  //     ],
-                                  //   );
-                                  // } else {
-                                  Get.bottomSheet(
-                                    TalkNowButtonBottomSheet(
-                                      availableForPrivateAudioCall: controller.topListeners[index].isAvailableForPrivateAudioCall ?? false,
-                                      availableForPrivateVideoCall: controller.topListeners[index].isAvailableForPrivateVideoCall ?? false,
-                                      isFake: controller.topListeners[index].isFake ?? false,
-                                      fakeVideo: controller.topListeners[index].video ?? [],
-                                      fakeAudio: controller.topListeners[index].audio ?? "",
-                                      audioCallRatePrivate: controller.topListeners[index].ratePrivateAudioCall.toString(),
-                                      videoCallRatePrivate: controller.topListeners[index].ratePrivateVideoCall.toString(),
-                                      callerId: Database.fetchLoginUserProfileModel?.user?.isListener == false
-                                          ? Database.fetchLoginUserProfileModel?.user?.id ?? ''
-                                          : Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
-                                      receiverId: controller.topListeners[index].id ?? '',
-                                      receiverName: controller.topListeners[index].name ?? '',
-                                      receiverImage: controller.topListeners[index].image ?? '',
-                                      callerName: Database.fetchLoginUserProfileModel?.user?.fullName ?? '',
-                                      callerImage: Database.fetchLoginUserProfileModel?.user?.profilePic ?? '',
-                                      callerRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'user' : 'listener',
-                                      receiverRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'listener' : 'user',
-                                    ),
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
+                                  Get.toNamed(
+                                    AppRoutes.userBookSessionScreen,
+                                    arguments: {
+                                      'listenerId':
+                                          controller.topListeners[index].id ??
+                                              '',
+                                      'listenerName':
+                                          controller.topListeners[index].name ??
+                                              '',
+                                      'listenerImage': controller
+                                              .topListeners[index].image ??
+                                          '',
+                                      'availableForPrivateAudioCall': controller
+                                              .topListeners[index]
+                                              .isAvailableForPrivateAudioCall ??
+                                          false,
+                                      'availableForPrivateVideoCall': controller
+                                              .topListeners[index]
+                                              .isAvailableForPrivateVideoCall ??
+                                          false,
+                                      'ratePrivateAudioCall': controller
+                                              .topListeners[index]
+                                              .ratePrivateAudioCall ??
+                                          0,
+                                      'ratePrivateVideoCall': controller
+                                              .topListeners[index]
+                                              .ratePrivateVideoCall ??
+                                          0,
+                                    },
                                   );
-                                  // }
                                 },
                               ).paddingOnly(bottom: 12);
                             },
@@ -180,7 +210,8 @@ class TopListenersViewAllView extends StatelessWidget {
                             id: Constant.idPaginationListener,
                             builder: (controller) => Visibility(
                               visible: controller.isPaginationLoading,
-                              child: CircularProgressIndicator(color: AppColors.primary),
+                              child: CircularProgressIndicator(
+                                  color: AppColors.primary),
                             ),
                           ),
                         ],

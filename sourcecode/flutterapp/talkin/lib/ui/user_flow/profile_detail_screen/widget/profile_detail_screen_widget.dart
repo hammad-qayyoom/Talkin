@@ -2,7 +2,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/custom/app_button/primary_app_button.dart';
-import 'package:talk_in/custom/bottom_sheet/talk_now_button_bottom_sheet.dart';
 import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
 import 'package:talk_in/routes/app_routes.dart';
 import 'package:talk_in/ui/user_flow/profile_detail_screen/controller/profile_detail_screen_controller.dart';
@@ -43,6 +42,51 @@ class TopImageView extends StatelessWidget {
 class UserProfileInfoView extends StatelessWidget {
   const UserProfileInfoView({super.key});
 
+  Widget _buildSlotChips({
+    required String title,
+    required List<Map<String, dynamic>> slots,
+    required ProfileDetailScreenController controller,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: AppFontStyle.fontStyleW600(
+              fontSize: 12, fontColor: AppColors.black),
+        ).paddingOnly(bottom: 6),
+        slots.isEmpty
+            ? Text(
+                'No slots available',
+                style: AppFontStyle.fontStyleW500(
+                    fontSize: 11, fontColor: AppColors.grey),
+              )
+            : Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: slots
+                    .map(
+                      (slot) => Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 7),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: AppColors.border),
+                        ),
+                        child: Text(
+                          controller.formatSlotLabel(slot),
+                          style: AppFontStyle.fontStyleW500(
+                              fontSize: 10, fontColor: AppColors.black),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProfileDetailScreenController>(
@@ -81,7 +125,8 @@ class UserProfileInfoView extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: CustomProfileImage(
-                        image: controller.listenerProfileModel?.data?.image ?? '',
+                        image:
+                            controller.listenerProfileModel?.data?.image ?? '',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -91,14 +136,19 @@ class UserProfileInfoView extends StatelessWidget {
                     children: [
                       Text(
                         "${controller.listenerProfileModel?.data?.name ?? ''} ,${controller.listenerProfileModel?.data?.age ?? ''}",
-                        style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.black),
+                        style: AppFontStyle.fontStyleW700(
+                            fontSize: 16, fontColor: AppColors.black),
                       ).paddingOnly(bottom: 8),
                       Row(
                         children: [
-                          controller.listenerProfileModel?.data?.statusLabel == "Offline"
+                          controller.listenerProfileModel?.data?.statusLabel ==
+                                  "Offline"
                               ? Container(
-                                  padding: EdgeInsets.only(right: 6, bottom: 4, top: 4, left: 6),
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColors.lightGrey1),
+                                  padding: EdgeInsets.only(
+                                      right: 6, bottom: 4, top: 4, left: 6),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: AppColors.lightGrey1),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -111,7 +161,8 @@ class UserProfileInfoView extends StatelessWidget {
                                         // height: 12,
                                         // width: 12,
                                         decoration: BoxDecoration(
-                                          color: AppColors.onBoardingTxt.withValues(alpha: 0.3),
+                                          color: AppColors.onBoardingTxt
+                                              .withValues(alpha: 0.3),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Container(
@@ -124,18 +175,29 @@ class UserProfileInfoView extends StatelessWidget {
                                         ).paddingAll(1.8),
                                       ).paddingOnly(right: 4),
                                       Text(
-                                        controller.listenerProfileModel?.data?.statusLabel ?? '',
-                                        style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.appTextColor),
+                                        controller.listenerProfileModel?.data
+                                                ?.statusLabel ??
+                                            '',
+                                        style: AppFontStyle.fontStyleW500(
+                                            fontSize: 10,
+                                            fontColor: AppColors.appTextColor),
                                       ).paddingOnly(right: 4),
                                     ],
                                   ),
                                 )
-                              : controller.listenerProfileModel?.data?.statusLabel == "On Call"
+                              : controller.listenerProfileModel?.data
+                                          ?.statusLabel ==
+                                      "On Call"
                                   ? Container(
-                                      padding: EdgeInsets.only(right: 6, bottom: 4, top: 4, left: 6),
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColors.red),
+                                      padding: EdgeInsets.only(
+                                          right: 6, bottom: 4, top: 4, left: 6),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: AppColors.red),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           // Image.asset(
                                           //   AppAsset.availableIcon,
@@ -146,7 +208,8 @@ class UserProfileInfoView extends StatelessWidget {
                                             // height: 12,
                                             // width: 12,
                                             decoration: BoxDecoration(
-                                              color: AppColors.white.withValues(alpha: 0.5),
+                                              color: AppColors.white
+                                                  .withValues(alpha: 0.5),
                                               shape: BoxShape.circle,
                                             ),
                                             child: Container(
@@ -159,17 +222,26 @@ class UserProfileInfoView extends StatelessWidget {
                                             ).paddingAll(1.8),
                                           ).paddingOnly(right: 4),
                                           Text(
-                                            controller.listenerProfileModel?.data?.statusLabel ?? '',
-                                            style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.white),
+                                            controller.listenerProfileModel
+                                                    ?.data?.statusLabel ??
+                                                '',
+                                            style: AppFontStyle.fontStyleW500(
+                                                fontSize: 10,
+                                                fontColor: AppColors.white),
                                           ).paddingOnly(right: 4),
                                         ],
                                       ),
                                     )
                                   : Container(
-                                      padding: EdgeInsets.only(right: 6, bottom: 4, top: 4, left: 6),
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColors.green),
+                                      padding: EdgeInsets.only(
+                                          right: 6, bottom: 4, top: 4, left: 6),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: AppColors.green),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           // Image.asset(
                                           //   AppAsset.availableIcon,
@@ -180,7 +252,8 @@ class UserProfileInfoView extends StatelessWidget {
                                             // height: 12,
                                             // width: 12,
                                             decoration: BoxDecoration(
-                                              color: AppColors.white.withValues(alpha: 0.5),
+                                              color: AppColors.white
+                                                  .withValues(alpha: 0.5),
                                               shape: BoxShape.circle,
                                             ),
                                             child: Container(
@@ -193,8 +266,12 @@ class UserProfileInfoView extends StatelessWidget {
                                             ).paddingAll(1.8),
                                           ).paddingOnly(right: 4),
                                           Text(
-                                            controller.listenerProfileModel?.data?.statusLabel ?? '',
-                                            style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.white),
+                                            controller.listenerProfileModel
+                                                    ?.data?.statusLabel ??
+                                                '',
+                                            style: AppFontStyle.fontStyleW500(
+                                                fontSize: 10,
+                                                fontColor: AppColors.white),
                                           ).paddingOnly(right: 4),
                                         ],
                                       ),
@@ -202,7 +279,11 @@ class UserProfileInfoView extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               if (!controller.isToastVisible) {
-                                Utils.copyText(Database.fetchLoginUserProfileModel?.user?.uniqueId ?? "");
+                                Utils.copyText(Database
+                                        .fetchLoginUserProfileModel
+                                        ?.user
+                                        ?.uniqueId ??
+                                    "");
                                 Utils.showToast(context, "copied");
 
                                 controller.isToastVisible = true;
@@ -213,13 +294,23 @@ class UserProfileInfoView extends StatelessWidget {
                               }
                             },
                             child: Container(
-                              padding: EdgeInsets.only(bottom: 4, left: 6, right: 6, top: 4),
-                              decoration: BoxDecoration(color: AppColors.idContainerColor2, borderRadius: BorderRadius.circular(60)),
+                              padding: EdgeInsets.only(
+                                  bottom: 4, left: 6, right: 6, top: 4),
+                              decoration: BoxDecoration(
+                                  color: AppColors.idContainerColor2,
+                                  borderRadius: BorderRadius.circular(60)),
                               child: Row(
                                 children: [
                                   SizedBox(
                                     // width: Get.width * 0.15,
-                                    child: Text("ID: ${controller.listenerProfileModel?.data?.uniqueId ?? ''}", overflow: TextOverflow.ellipsis, style: AppFontStyle.fontStyleW600(fontSize: 10, fontColor: AppColors.idTxtColor2)).paddingOnly(right: 3),
+                                    child: Text(
+                                            "ID: ${controller.listenerProfileModel?.data?.uniqueId ?? ''}",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: AppFontStyle.fontStyleW600(
+                                                fontSize: 10,
+                                                fontColor:
+                                                    AppColors.idTxtColor2))
+                                        .paddingOnly(right: 3),
                                   ),
                                   Image.asset(
                                     AppAsset.copyIcon,
@@ -251,7 +342,8 @@ class UserProfileInfoView extends StatelessWidget {
                         ),
                         Text(
                           "${controller.listenerProfileModel?.data?.totalCoins.toString() ?? ''} Session Credit",
-                          style: AppFontStyle.fontStyleW700(fontSize: 12, fontColor: AppColors.orange),
+                          style: AppFontStyle.fontStyleW700(
+                              fontSize: 12, fontColor: AppColors.orange),
                         ).paddingOnly(left: 6, right: 6)
                       ],
                     ),
@@ -280,9 +372,7 @@ class UserProfileInfoView extends StatelessWidget {
                   ),
                 ),
               ],
-            ).paddingOnly(top: 12, left: 10,right: 12),
-
-
+            ).paddingOnly(top: 12, left: 10, right: 12),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -300,7 +390,9 @@ class UserProfileInfoView extends StatelessWidget {
                 ).paddingOnly(left: 8),
                 Expanded(
                   child: Text(
-                    controller.listenerProfileModel?.data?.language?.join(', ') ?? '',
+                    controller.listenerProfileModel?.data?.language
+                            ?.join(', ') ??
+                        '',
                     style: AppFontStyle.fontStyleW600(
                       fontSize: 14,
                       fontColor: AppColors.black,
@@ -312,11 +404,15 @@ class UserProfileInfoView extends StatelessWidget {
             SizedBox(
               height: Get.height * 0.035,
               child: ListView.builder(
-                itemCount: controller.listenerProfileModel?.data?.talkTopics?.length ?? 0,
+                itemCount:
+                    controller.listenerProfileModel?.data?.talkTopics?.length ??
+                        0,
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  final topic = controller.listenerProfileModel?.data?.talkTopics?[index] ?? '';
+                  final topic = controller
+                          .listenerProfileModel?.data?.talkTopics?[index] ??
+                      '';
 
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -336,7 +432,74 @@ class UserProfileInfoView extends StatelessWidget {
                   ).paddingOnly(right: 5);
                 },
               ),
-            ).paddingOnly(left: 12, top: 20, bottom: 20)
+            ).paddingOnly(left: 12, top: 20, bottom: 18),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.profileOptionColor,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Session Pricing',
+                    style: AppFontStyle.fontStyleW700(
+                        fontSize: 13, fontColor: AppColors.black),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Audio: ${controller.listenerProfileModel?.data?.ratePrivateAudioCall ?? 0} credits',
+                          style: AppFontStyle.fontStyleW500(
+                              fontSize: 12, fontColor: AppColors.black),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Video: ${controller.listenerProfileModel?.data?.ratePrivateVideoCall ?? 0} credits',
+                          style: AppFontStyle.fontStyleW500(
+                              fontSize: 12, fontColor: AppColors.black),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Available Slots',
+                    style: AppFontStyle.fontStyleW700(
+                        fontSize: 13, fontColor: AppColors.black),
+                  ),
+                  const SizedBox(height: 8),
+                  controller.isSlotsPreviewLoading
+                      ? const SizedBox(
+                          height: 22,
+                          width: 22,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSlotChips(
+                              title: 'Audio Slots',
+                              slots: controller.audioSlotsPreview,
+                              controller: controller,
+                            ),
+                            const SizedBox(height: 10),
+                            _buildSlotChips(
+                              title: 'Video Slots',
+                              slots: controller.videoSlotsPreview,
+                              controller: controller,
+                            ),
+                          ],
+                        ),
+                ],
+              ),
+            ).paddingOnly(bottom: 20),
           ],
         );
       },
@@ -376,11 +539,13 @@ class StatusView extends StatelessWidget {
                       ).paddingOnly(bottom: 10),
                       Text(
                         item['title'].toString(),
-                        style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.profileLanguage),
+                        style: AppFontStyle.fontStyleW500(
+                            fontSize: 11, fontColor: AppColors.profileLanguage),
                       ).paddingOnly(bottom: 5),
                       Text(
                         item['count'].toString(),
-                        style: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.black),
+                        style: AppFontStyle.fontStyleW600(
+                            fontSize: 16, fontColor: AppColors.black),
                       ),
                     ],
                   ),
@@ -409,17 +574,26 @@ class ReviewShow extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(EnumLocale.txtReviews.name.tr, style: AppFontStyle.fontStyleW600(fontSize: 18, fontColor: AppColors.black)).paddingOnly(top: 26, bottom: 18),
+                        Text(EnumLocale.txtReviews.name.tr,
+                                style: AppFontStyle.fontStyleW600(
+                                    fontSize: 18, fontColor: AppColors.black))
+                            .paddingOnly(top: 26, bottom: 18),
                         InkWell(
                           onTap: () {
-                            Get.toNamed(AppRoutes.allReviewScreen, arguments: controller.listenerId);
+                            Get.toNamed(AppRoutes.allReviewScreen,
+                                arguments: controller.listenerId);
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 4).copyWith(left: 5),
+                            padding: EdgeInsets.symmetric(vertical: 4)
+                                .copyWith(left: 5),
                             color: AppColors.transparent,
                             child: Text(
                               EnumLocale.txtViewAll.name.tr,
-                              style: AppFontStyle.fontStyleW500(decorationColor: AppColors.appTextColor, textDecoration: TextDecoration.underline, fontSize: 13, fontColor: AppColors.appTextColor),
+                              style: AppFontStyle.fontStyleW500(
+                                  decorationColor: AppColors.appTextColor,
+                                  textDecoration: TextDecoration.underline,
+                                  fontSize: 13,
+                                  fontColor: AppColors.appTextColor),
                             ),
                           ),
                         ),
@@ -462,31 +636,46 @@ class ReviewShow extends StatelessWidget {
                                           shape: BoxShape.circle,
                                         ),
                                         child: CustomListenerProfileImage(
-                                          image: controller.reviews?[index].profilePic ?? '',
+                                          image: controller
+                                                  .reviews?[index].profilePic ??
+                                              '',
                                         ),
                                       ),
                                     ),
                                   ).paddingOnly(right: 13),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        controller.reviews?[index].fullName ?? '',
-                                        style: AppFontStyle.fontStyleW600(fontSize: 15, fontColor: AppColors.black),
+                                        controller.reviews?[index].fullName ??
+                                            '',
+                                        style: AppFontStyle.fontStyleW600(
+                                            fontSize: 15,
+                                            fontColor: AppColors.black),
                                       ),
                                       StarRating(
-                                        rating: controller.reviews?[index].rating?.toDouble() ?? 0.0,
+                                        rating: controller
+                                                .reviews?[index].rating
+                                                ?.toDouble() ??
+                                            0.0,
                                         size: 22,
                                       ),
                                     ],
                                   ),
                                   Spacer(),
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(color: Color(0xffE7EBF7), borderRadius: BorderRadius.circular(34)),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xffE7EBF7),
+                                        borderRadius:
+                                            BorderRadius.circular(34)),
                                     child: Text(
                                       controller.reviews?[index].time ?? '',
-                                      style: AppFontStyle.fontStyleW600(fontSize: 10, fontColor: AppColors.profileLanguage),
+                                      style: AppFontStyle.fontStyleW600(
+                                          fontSize: 10,
+                                          fontColor: AppColors.profileLanguage),
                                     ),
                                   )
                                 ],
@@ -546,14 +735,19 @@ class ProfileBottomButtonView extends StatelessWidget {
                             arguments: [
                               controller.listenerProfileModel?.data?.id,
                               controller.listenerProfileModel?.data?.name,
-                              controller.listenerProfileModel?.data?.statusLabel,
+                              controller
+                                  .listenerProfileModel?.data?.statusLabel,
                               controller.listenerProfileModel?.data?.image,
-                              controller.listenerProfileModel?.data?.ratePrivateAudioCall,
-                              controller.listenerProfileModel?.data?.ratePrivateVideoCall,
+                              controller.listenerProfileModel?.data
+                                  ?.ratePrivateAudioCall,
+                              controller.listenerProfileModel?.data
+                                  ?.ratePrivateVideoCall,
                               controller.listenerProfileModel?.data?.isFake,
                               controller.listenerProfileModel?.data?.video,
-                              controller.listenerProfileModel?.data?.isAvailableForPrivateVideoCall,
-                              controller.listenerProfileModel?.data?.isAvailableForPrivateAudioCall,
+                              controller.listenerProfileModel?.data
+                                  ?.isAvailableForPrivateVideoCall,
+                              controller.listenerProfileModel?.data
+                                  ?.isAvailableForPrivateAudioCall,
                             ],
                           );
                         },
@@ -565,73 +759,71 @@ class ProfileBottomButtonView extends StatelessWidget {
                           children: [
                             Text(
                               EnumLocale.txtChatNow.name.tr,
-                              style: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
+                              style: AppFontStyle.fontStyleW600(
+                                  fontSize: 16, fontColor: AppColors.white),
                             )
                           ],
                         ),
                       ).paddingOnly(bottom: 10),
                     ),
-                    (controller.listenerProfileModel?.data?.isAvailableForPrivateVideoCall == true || controller.listenerProfileModel?.data?.isAvailableForPrivateAudioCall == true || controller.listenerProfileModel?.data?.isFake == true) ? 12.width : Offstage(),
-                    (controller.listenerProfileModel?.data?.isAvailableForPrivateVideoCall == true || controller.listenerProfileModel?.data?.isAvailableForPrivateAudioCall == true || controller.listenerProfileModel?.data?.isFake == true)
-                        ? Expanded(
-                            child: PrimaryAppButton(
-                              height: Get.height * 0.06,
-                              onTap: () {
-                                // if (controller.listenerProfileModel?.data?.isFake == true) {
-                                //   Utils.showLog("this is fake Listener>>>>>>>>>");
-                                //   Get.toNamed(
-                                //     AppRoutes.fakeOutgoingCall,
-                                //     arguments: [
-                                //       controller.listenerProfileModel?.data?.name,
-                                //       controller.listenerProfileModel?.data?.image,
-                                //       controller.listenerProfileModel?.data?.video,
-                                //       controller.isBackProfile
-                                //     ],
-                                //   );
-                                // } else {
-                                Get.bottomSheet(
-                                  TalkNowButtonBottomSheet(
-                                    availableForPrivateAudioCall: controller.listenerProfileModel?.data?.isAvailableForPrivateAudioCall ?? false,
-                                    availableForPrivateVideoCall: controller.listenerProfileModel?.data?.isAvailableForPrivateVideoCall ?? false,
-                                    isFake: controller.listenerProfileModel?.data?.isFake ?? false,
-                                    fakeVideo: controller.listenerProfileModel?.data?.video ?? [],
-                                    fakeAudio: controller.listenerProfileModel?.data?.audio ?? "",
-                                    videoCallRatePrivate: controller.listenerProfileModel?.data?.ratePrivateVideoCall.toString() ?? '',
-                                    audioCallRatePrivate: controller.listenerProfileModel?.data?.ratePrivateAudioCall.toString() ?? '',
-                                    callerId: Database.fetchLoginUserProfileModel?.user?.isListener == false ? Database.fetchLoginUserProfileModel?.user?.id ?? '' : Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
-                                    receiverId: controller.listenerProfileModel?.data?.id ?? '',
-                                    receiverName: controller.listenerProfileModel?.data?.name ?? '',
-                                    receiverImage: controller.listenerProfileModel?.data?.image ?? '',
-                                    callerName: Database.fetchLoginUserProfileModel?.user?.fullName ?? '',
-                                    callerImage: Database.fetchLoginUserProfileModel?.user?.profilePic ?? '',
-                                    // callType: "video",
-                                    callerRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'user' : 'listener',
-                                    receiverRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'listener' : 'user',
-                                  ),
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                );
-                                // }
-                              },
-                              // borderRadius: 30,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    AppAsset.callIcon,
-                                    height: 22,
-                                    width: 22,
-                                    color: AppColors.white,
-                                  ).paddingOnly(right: 8),
-                                  Text(
-                                    EnumLocale.txtTalkNow.name.tr,
-                                    style: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
-                                  )
-                                ],
-                              ),
-                            ).paddingOnly(bottom: 10),
-                          )
-                        : SizedBox(),
+                    12.width,
+                    Expanded(
+                      child: PrimaryAppButton(
+                        height: Get.height * 0.06,
+                        onTap: () {
+                          Get.toNamed(
+                            AppRoutes.userBookSessionScreen,
+                            arguments: {
+                              "listenerId":
+                                  controller.listenerProfileModel?.data?.id ??
+                                      "",
+                              "listenerName":
+                                  controller.listenerProfileModel?.data?.name ??
+                                      "",
+                              "listenerImage": controller
+                                      .listenerProfileModel?.data?.image ??
+                                  "",
+                              "availableForPrivateAudioCall": controller
+                                      .listenerProfileModel
+                                      ?.data
+                                      ?.isAvailableForPrivateAudioCall ??
+                                  false,
+                              "availableForPrivateVideoCall": controller
+                                      .listenerProfileModel
+                                      ?.data
+                                      ?.isAvailableForPrivateVideoCall ??
+                                  false,
+                              "ratePrivateAudioCall": controller
+                                      .listenerProfileModel
+                                      ?.data
+                                      ?.ratePrivateAudioCall ??
+                                  0,
+                              "ratePrivateVideoCall": controller
+                                      .listenerProfileModel
+                                      ?.data
+                                      ?.ratePrivateVideoCall ??
+                                  0,
+                            },
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              AppAsset.calendar,
+                              height: 20,
+                              width: 20,
+                              color: AppColors.white,
+                            ).paddingOnly(right: 8),
+                            Text(
+                              "Book Session",
+                              style: AppFontStyle.fontStyleW600(
+                                  fontSize: 16, fontColor: AppColors.white),
+                            )
+                          ],
+                        ),
+                      ).paddingOnly(bottom: 10),
+                    ),
                   ],
                 ));
       },
@@ -659,7 +851,8 @@ class StarRating extends StatelessWidget {
         return Icon(
           Icons.star_rounded,
           size: size,
-          color: index < rating ? AppColors.rateStarColor : Colors.grey.shade300,
+          color:
+              index < rating ? AppColors.rateStarColor : Colors.grey.shade300,
         );
       }),
     );

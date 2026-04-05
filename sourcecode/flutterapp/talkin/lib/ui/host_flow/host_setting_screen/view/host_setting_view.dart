@@ -15,10 +15,12 @@ class HostSettingScreen extends StatelessWidget {
         flexibleSpace: const HostSettingScreenAppBar(),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            HostSettingView(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              HostSettingView(),
+            ],
+          ),
         ),
       ),
     );

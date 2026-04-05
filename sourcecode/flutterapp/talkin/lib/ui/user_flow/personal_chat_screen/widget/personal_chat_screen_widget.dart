@@ -53,7 +53,8 @@ class ChatScreenAppBar extends StatelessWidget {
                   Get.back();
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 22, top: 22, right: 15, left: 22),
+                  padding: const EdgeInsets.only(
+                      bottom: 22, top: 22, right: 15, left: 22),
                   child: Image.asset(
                     height: 16,
                     AppAsset.backArrowIcon,
@@ -84,11 +85,13 @@ class ChatScreenAppBar extends StatelessWidget {
                           height: Get.height * 0.058,
                           width: Get.height * 0.058,
                           decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.white, width: 1),
+                            border:
+                                Border.all(color: AppColors.white, width: 1),
                             shape: BoxShape.circle,
                           ),
                           child: ClipOval(
-                            child: CustomProfileImage(image: controller.receiverImage.toString()),
+                            child: CustomProfileImage(
+                                image: controller.receiverImage.toString()),
                           ),
                         ).paddingAll(1),
                       ).paddingOnly(right: 12),
@@ -97,18 +100,24 @@ class ChatScreenAppBar extends StatelessWidget {
                         children: [
                           Text(
                             controller.receiverName.toString(),
-                            style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.black),
+                            style: AppFontStyle.fontStyleW700(
+                                fontSize: 16, fontColor: AppColors.black),
                           ).paddingOnly(bottom: 2),
-                          controller.receiverStatusLabel == "true" || controller.receiverStatusLabel == "Available"
+                          controller.receiverStatusLabel == "true" ||
+                                  controller.receiverStatusLabel == "Available"
                               ? Container(
-                                  padding: EdgeInsets.only(right: 5, bottom: 3, top: 3, left: 5),
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColors.green),
+                                  padding: EdgeInsets.only(
+                                      right: 5, bottom: 3, top: 3, left: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: AppColors.green),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
-                                          color: AppColors.white.withValues(alpha: 0.5),
+                                          color: AppColors.white
+                                              .withValues(alpha: 0.5),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Container(
@@ -122,20 +131,26 @@ class ChatScreenAppBar extends StatelessWidget {
                                       ).paddingOnly(right: 4),
                                       Text(
                                         EnumLocale.txtOnline.name.tr,
-                                        style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.white),
+                                        style: AppFontStyle.fontStyleW500(
+                                            fontSize: 10,
+                                            fontColor: AppColors.white),
                                       ).paddingOnly(right: 4),
                                     ],
                                   ),
                                 )
                               : Container(
-                                  padding: EdgeInsets.only(right: 5, bottom: 3, top: 3, left: 5),
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColors.lightGrey1),
+                                  padding: EdgeInsets.only(
+                                      right: 5, bottom: 3, top: 3, left: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: AppColors.lightGrey1),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
-                                          color: AppColors.onBoardingTxt.withValues(alpha: 0.3),
+                                          color: AppColors.onBoardingTxt
+                                              .withValues(alpha: 0.3),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Container(
@@ -149,7 +164,9 @@ class ChatScreenAppBar extends StatelessWidget {
                                       ).paddingOnly(right: 4),
                                       Text(
                                         "Offline",
-                                        style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.appTextColor),
+                                        style: AppFontStyle.fontStyleW500(
+                                            fontSize: 10,
+                                            fontColor: AppColors.appTextColor),
                                       ).paddingOnly(right: 4),
                                     ],
                                   ),
@@ -161,53 +178,87 @@ class ChatScreenAppBar extends StatelessWidget {
                 ),
               )),
               // Spacer(),
-              if (controller.availableForPrivateAudioCall == true || controller.availableForPrivateVideoCall == true)
+              if ((controller.receiverId ?? '').isNotEmpty)
                 GestureDetector(
                   onTap: () {
-                    // controller.onClickVideoCall();
-                    // if (controller.isFake == true) {
-                    //   Utils.showLog("this is fake Listener>>>>>>>>>");
-                    //   Get.toNamed(
-                    //     AppRoutes.fakeOutgoingCall,
-                    //     arguments: [
-                    //       controller.receiverName,
-                    //       controller.receiverImage,
-                    //       controller.fakeVideoUrl,
-                    //       controller.isBackProfile,
-                    //     ],
-                    //   );
-                    // } else {
+                    Get.toNamed(
+                      AppRoutes.userBookSessionScreen,
+                      arguments: {
+                        'listenerId': controller.receiverId ?? '',
+                        'listenerName': controller.receiverName ?? '',
+                        'listenerImage': controller.receiverImage ?? '',
+                        'availableForPrivateAudioCall':
+                            controller.availableForPrivateAudioCall ?? true,
+                        'availableForPrivateVideoCall':
+                            controller.availableForPrivateVideoCall ?? true,
+                        'ratePrivateAudioCall':
+                            controller.ratePrivateAudioCall ?? 0,
+                        'ratePrivateVideoCall':
+                            controller.ratePrivateVideoCall ?? 0,
+                      },
+                    );
+                  },
+                  child: Center(
+                    child: Image.asset(
+                      AppAsset.calendar,
+                      height: 24,
+                      width: 24,
+                      color: AppColors.appColor,
+                    ),
+                  ).paddingOnly(right: 18),
+                ),
+              if (controller.hasBookedSessionCallContext)
+                GestureDetector(
+                  onTap: () {
+                    if (controller.isBookedSessionWindowEnded) {
+                      Utils.showToast(context,
+                          'Session slot time is completed. Call is no longer allowed.');
+                      return;
+                    }
+
+                    final sessionType =
+                        (controller.bookedSessionCallType ?? '').toLowerCase();
+                    final allowAudio = sessionType == 'audio';
+                    final allowVideo = sessionType == 'video';
+
                     Get.bottomSheet(
                       TalkNowButtonBottomSheet(
                         showMessage: false,
-                        availableForPrivateAudioCall: controller.availableForPrivateAudioCall ?? false,
-                        availableForPrivateVideoCall: controller.availableForPrivateVideoCall ?? false,
-                        isFake: controller.isFake ?? false,
-                        fakeVideo: controller.fakeVideoUrl ?? [],
-                        fakeAudio: controller.fakeAudioUrl ?? "",
-                        videoCallRatePrivate: controller.ratePrivateVideoCall.toString(),
-                        audioCallRatePrivate: controller.ratePrivateAudioCall.toString(),
-                        callerId: Database.fetchLoginUserProfileModel?.user?.isListener == false ? Database.fetchLoginUserProfileModel?.user?.id ?? '' : Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
+                        isFake: false,
+                        fakeVideo: const [],
+                        fakeAudio: '',
+                        callerId: Database.loginUserId,
                         receiverId: controller.receiverId ?? '',
                         receiverName: controller.receiverName ?? '',
                         receiverImage: controller.receiverImage ?? '',
-                        callerName: Database.fetchLoginUserProfileModel?.user?.fullName ?? '',
-                        callerImage: Database.fetchLoginUserProfileModel?.user?.profilePic ?? '',
-                        // callType: "video",
-                        callerRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'user' : 'listener',
-                        receiverRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'listener' : 'user',
+                        callerName: Database
+                                .fetchLoginUserProfileModel?.user?.fullName
+                                ?.toString() ??
+                            '',
+                        callerImage: Database
+                                .fetchLoginUserProfileModel?.user?.profilePic
+                                ?.toString() ??
+                            '',
+                        callerRole: 'user',
+                        receiverRole: 'listener',
+                        audioCallRatePrivate:
+                            (controller.ratePrivateAudioCall ?? '0').toString(),
+                        videoCallRatePrivate:
+                            (controller.ratePrivateVideoCall ?? '0').toString(),
+                        availableForPrivateAudioCall: allowAudio,
+                        availableForPrivateVideoCall: allowVideo,
+                        sessionId: controller.sessionId,
+                        bookingId: controller.bookingId,
                       ),
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
                     );
-                    // }
-                    // Get.toNamed(AppRoutes.searchScreen);
                   },
                   child: Center(
                     child: Image.asset(
                       AppAsset.callGradiant,
-                      height: 28,
-                      width: 28,
+                      height: 24,
+                      width: 24,
                     ),
                   ).paddingOnly(right: 18),
                 ),
@@ -266,7 +317,8 @@ class PersonalChatBottomView extends StatelessWidget {
     return GetBuilder<PersonalChatScreenController>(
       builder: (controller) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10).copyWith(bottom: 18),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10)
+              .copyWith(bottom: 18),
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -292,7 +344,8 @@ class PersonalChatBottomView extends StatelessWidget {
                   }) {
                     return null; // This hides the counter
                   },
-                  style: AppFontStyle.fontStyleW500(fontSize: 15, fontColor: AppColors.darkPurple),
+                  style: AppFontStyle.fontStyleW500(
+                      fontSize: 15, fontColor: AppColors.darkPurple),
                   decoration: InputDecoration(
                     suffixIcon: SizedBox(
                       width: Get.width * 0.23,
@@ -302,17 +355,24 @@ class PersonalChatBottomView extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 // Vibration.vibrate(duration: 50, amplitude: 128);
-                                Utils.showToast(Get.context!, EnumLocale.txtLongPressToEnableAudioRecording.name.tr);
+                                Utils.showToast(
+                                    Get.context!,
+                                    EnumLocale
+                                        .txtLongPressToEnableAudioRecording
+                                        .name
+                                        .tr);
                               },
                               onLongPressStart: (details) {
                                 if (controller.isSendingAudioFile == false) {
-                                  Vibration.vibrate(duration: 50, amplitude: 128);
+                                  Vibration.vibrate(
+                                      duration: 50, amplitude: 128);
                                   controller.onLongPressStartMic();
                                 }
                               },
                               onLongPressEnd: (details) {
                                 if (controller.isSendingAudioFile == false) {
-                                  Vibration.vibrate(duration: 50, amplitude: 128);
+                                  Vibration.vibrate(
+                                      duration: 50, amplitude: 128);
                                   controller.onLongPressEndMic();
                                 }
                               },
@@ -339,7 +399,8 @@ class PersonalChatBottomView extends StatelessWidget {
                       ),
                     ),
                     hintText: "Type Something...",
-                    hintStyle: AppFontStyle.fontStyleW500(fontSize: 15, fontColor: AppColors.darkPurple),
+                    hintStyle: AppFontStyle.fontStyleW500(
+                        fontSize: 15, fontColor: AppColors.darkPurple),
                     filled: true,
                     fillColor: Colors.grey.shade200,
                     contentPadding: EdgeInsets.symmetric(horizontal: 12),
@@ -359,7 +420,8 @@ class PersonalChatBottomView extends StatelessWidget {
                       },
                       child: Container(
                         padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.appColor),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: AppColors.appColor),
                         child: Image.asset(
                           AppAsset.msgSendIcon,
                           height: 26,
@@ -390,11 +452,13 @@ class ChatImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSender = msg.senderId == Database.fetchLoginUserProfileModel?.user?.id;
+    final isSender =
+        msg.senderId == Database.fetchLoginUserProfileModel?.user?.id;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment:
+          isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         if (!isSender) ...[
           Container(
@@ -416,7 +480,8 @@ class ChatImageWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
-                    child: CustomProfileImage(image: controller.receiverImage.toString()),
+                    child: CustomProfileImage(
+                        image: controller.receiverImage.toString()),
                   ),
                 ).paddingAll(1),
               )).paddingOnly(bottom: 17),
@@ -425,19 +490,24 @@ class ChatImageWidget extends StatelessWidget {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 7),
           child: Column(
-            crossAxisAlignment: msg.senderId == Database.loginUserId ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            crossAxisAlignment: msg.senderId == Database.loginUserId
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.start,
             children: [
               GestureDetector(
                 onTap: () {
-                  Get.to(() => FullScreenImageView(imageUrl: msg.image.toString()));
+                  Get.to(() =>
+                      FullScreenImageView(imageUrl: msg.image.toString()));
                 },
                 child: Container(
                   width: 150,
                   height: 200,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(16)),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: SendMessageImage(image: msg.image.toString(), fit: BoxFit.cover),
+                    child: SendMessageImage(
+                        image: msg.image.toString(), fit: BoxFit.cover),
                   ),
                 ),
               ),
@@ -451,7 +521,8 @@ class ChatImageWidget extends StatelessWidget {
                     const Spacer(),
                     Text(
                       controller.formatTimeFromDate(msg.date),
-                      style: AppFontStyle.fontStyleW500(fontSize: 8, fontColor: AppColors.darkPurple),
+                      style: AppFontStyle.fontStyleW500(
+                          fontSize: 8, fontColor: AppColors.darkPurple),
                     ).paddingOnly(right: 2),
                     if (Database.loginUserId == msg.senderId)
                       Image.asset(
@@ -487,7 +558,11 @@ class ChatImageWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
-                    child: CustomProfileImage(image: Database.fetchLoginUserProfileModel?.user?.profilePic.toString() ?? ''),
+                    child: CustomProfileImage(
+                        image: Database
+                                .fetchLoginUserProfileModel?.user?.profilePic
+                                .toString() ??
+                            ''),
                   ),
                 ).paddingAll(1),
               )).paddingOnly(bottom: 11),
@@ -515,7 +590,8 @@ class ChatTextWidget extends StatelessWidget {
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment:
+          isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         if (!isSender) ...[
           Container(
@@ -537,7 +613,8 @@ class ChatTextWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
-                    child: CustomProfileImage(image: controller.receiverImage.toString()),
+                    child: CustomProfileImage(
+                        image: controller.receiverImage.toString()),
                   ),
                 ).paddingAll(1),
               )).paddingOnly(bottom: 4),
@@ -568,7 +645,8 @@ class ChatTextWidget extends StatelessWidget {
                 Flexible(
                   child: Text(
                     msg.message.toString(),
-                    style: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
+                    style: AppFontStyle.fontStyleW600(
+                        fontSize: 16, fontColor: AppColors.white),
                   ).paddingOnly(right: 6, top: 7, bottom: 7),
                 ),
                 Row(
@@ -578,7 +656,8 @@ class ChatTextWidget extends StatelessWidget {
                   children: [
                     Text(
                       controller.formatTimeFromDate(msg.date),
-                      style: AppFontStyle.fontStyleW500(fontSize: 8, fontColor: AppColors.white),
+                      style: AppFontStyle.fontStyleW500(
+                          fontSize: 8, fontColor: AppColors.white),
                     ).paddingOnly(right: 2, bottom: 4),
                     if (isSender)
                       Image.asset(
@@ -613,7 +692,11 @@ class ChatTextWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
-                    child: CustomProfileImage(image: Database.fetchLoginUserProfileModel?.user?.profilePic.toString() ?? ''),
+                    child: CustomProfileImage(
+                        image: Database
+                                .fetchLoginUserProfileModel?.user?.profilePic
+                                .toString() ??
+                            ''),
                   ),
                 ).paddingAll(1),
               )).paddingOnly(bottom: 4),
@@ -654,7 +737,9 @@ class ChatVideoCallWidget extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: Image.asset(
-              msg.callType == 1 || msg.callType == 2 ? AppAsset.chatVideoCallIcon : AppAsset.missedVideoCall,
+              msg.callType == 1 || msg.callType == 2
+                  ? AppAsset.chatVideoCallIcon
+                  : AppAsset.missedVideoCall,
               height: 26,
               width: 26,
               // color: AppColors.darkPurple,
@@ -665,18 +750,21 @@ class ChatVideoCallWidget extends StatelessWidget {
             children: [
               Text(
                 EnumLocale.txtVideoCall.name.tr,
-                style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: AppColors.black),
+                style: AppFontStyle.fontStyleW700(
+                    fontSize: 15, fontColor: AppColors.black),
               ).paddingOnly(bottom: 4),
               if (msg.callType == 1)
                 Text(
                   callDuration.toString(),
-                  style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.darkPurple),
+                  style: AppFontStyle.fontStyleW500(
+                      fontSize: 12, fontColor: AppColors.darkPurple),
                 ),
             ],
           ).paddingOnly(right: 19),
           Text(
             controller.formatTimeFromDate(msg.date),
-            style: AppFontStyle.fontStyleW500(fontSize: 9, fontColor: AppColors.darkPurple),
+            style: AppFontStyle.fontStyleW500(
+                fontSize: 9, fontColor: AppColors.darkPurple),
           ).paddingOnly(top: Get.height * 0.06),
         ],
       ),
@@ -715,7 +803,9 @@ class ChatAudioCallWidget extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: Image.asset(
-              msg.callType == 1 || msg.callType == 2 ? AppAsset.callIcon : AppAsset.missedAudioCall,
+              msg.callType == 1 || msg.callType == 2
+                  ? AppAsset.callIcon
+                  : AppAsset.missedAudioCall,
               height: 26,
               width: 26,
               color: msg.callType == 3 ? AppColors.red : AppColors.darkPurple,
@@ -726,18 +816,21 @@ class ChatAudioCallWidget extends StatelessWidget {
             children: [
               Text(
                 EnumLocale.txtAudioCall.name.tr,
-                style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: AppColors.black),
+                style: AppFontStyle.fontStyleW700(
+                    fontSize: 15, fontColor: AppColors.black),
               ).paddingOnly(bottom: 4),
               if (msg.callType == 1)
                 Text(
                   audioCallDuration.toString(),
-                  style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.darkPurple),
+                  style: AppFontStyle.fontStyleW500(
+                      fontSize: 12, fontColor: AppColors.darkPurple),
                 ),
             ],
           ).paddingOnly(right: 19),
           Text(
             controller.formatTimeFromDate(msg.date),
-            style: AppFontStyle.fontStyleW500(fontSize: 9, fontColor: AppColors.darkPurple),
+            style: AppFontStyle.fontStyleW500(
+                fontSize: 9, fontColor: AppColors.darkPurple),
           ).paddingOnly(top: Get.height * 0.06),
         ],
       ),
@@ -762,7 +855,8 @@ class SenderAudioMessageWidget extends StatefulWidget {
   });
 
   @override
-  State<SenderAudioMessageWidget> createState() => _SenderAudioMessageWidgetState();
+  State<SenderAudioMessageWidget> createState() =>
+      _SenderAudioMessageWidgetState();
 }
 
 class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
@@ -882,7 +976,9 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                                         : GestureDetector(
                                             onTap: () => onPlayAudio(),
                                             child: Icon(
-                                              isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                                              isPlaying
+                                                  ? Icons.pause_rounded
+                                                  : Icons.play_arrow_rounded,
                                               size: 30,
                                               color: AppColors.chatPurple,
                                             )
@@ -892,7 +988,9 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                                     : GestureDetector(
                                         onTap: () => onPlayAudio(),
                                         child: Icon(
-                                          isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                                          isPlaying
+                                              ? Icons.pause_rounded
+                                              : Icons.play_arrow_rounded,
                                           size: 30,
                                           color: AppColors.chatPurple,
                                         )
@@ -907,16 +1005,22 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                                   overlayShape: SliderComponentShape.noOverlay,
                                   activeTrackColor: AppColors.primary,
                                   thumbColor: AppColors.primary,
-                                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                                  thumbShape: const RoundSliderThumbShape(
+                                      enabledThumbRadius: 10),
                                   trackHeight: 5,
                                 ),
                                 child: Slider(
                                   activeColor: AppColors.chatPurple,
                                   min: 0,
-                                  max: duration.inSeconds.toDouble() > 0 ? duration.inSeconds.toDouble() : 1,
-                                  value: position.inSeconds.toDouble().clamp(0, duration.inSeconds.toDouble()),
+                                  max: duration.inSeconds.toDouble() > 0
+                                      ? duration.inSeconds.toDouble()
+                                      : 1,
+                                  value: position.inSeconds
+                                      .toDouble()
+                                      .clamp(0, duration.inSeconds.toDouble()),
                                   onChanged: (value) {
-                                    player.seek(Duration(seconds: value.toInt()));
+                                    player
+                                        .seek(Duration(seconds: value.toInt()));
                                   },
                                 ),
                               ),
@@ -926,7 +1030,9 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                               height: 44,
                               width: 44,
                               alignment: Alignment.center,
-                              decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.chatPurple),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.chatPurple),
                               child: Image.asset(
                                 AppAsset.microPhoneIcon,
                                 width: 20,
@@ -940,8 +1046,11 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                         bottom: 20,
                         right: 70,
                         child: Text(
-                          isPlaying ? formatTime(position) : formatTime(duration),
-                          style: AppFontStyle.fontStyleW600(fontColor: AppColors.chatPurple, fontSize: 9),
+                          isPlaying
+                              ? formatTime(position)
+                              : formatTime(duration),
+                          style: AppFontStyle.fontStyleW600(
+                              fontColor: AppColors.chatPurple, fontSize: 9),
                         ),
                       ),
                     ],
@@ -951,7 +1060,8 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                   builder: (logic) {
                     return Text(
                       logic.formatTimeFromDate(widget.chat.date),
-                      style: AppFontStyle.fontStyleW600(fontColor: AppColors.white, fontSize: 8),
+                      style: AppFontStyle.fontStyleW600(
+                          fontColor: AppColors.white, fontSize: 8),
                     );
                   },
                 ),
@@ -1008,7 +1118,8 @@ class UploadAudioUi extends StatelessWidget {
                           overlayShape: SliderComponentShape.noOverlay,
                           activeTrackColor: AppColors.grey,
                           thumbColor: AppColors.grey,
-                          thumbShape: RoundSliderThumbShape(enabledThumbRadius: 10),
+                          thumbShape:
+                              RoundSliderThumbShape(enabledThumbRadius: 10),
                           trackHeight: 5,
                         ),
                         child: Slider(
@@ -1042,7 +1153,8 @@ class UploadAudioUi extends StatelessWidget {
                 right: 70,
                 child: Text(
                   CustomFormatAudioTime.convert(0),
-                  style: AppFontStyle.fontStyleW500(fontColor: AppColors.primary, fontSize: 9),
+                  style: AppFontStyle.fontStyleW500(
+                      fontColor: AppColors.primary, fontSize: 9),
                 ),
               ),
               Positioned(
@@ -1050,7 +1162,8 @@ class UploadAudioUi extends StatelessWidget {
                 right: 8,
                 child: Text(
                   CustomFormatChatTime.convert(DateTime.now().toString()),
-                  style: AppFontStyle.fontStyleW500(fontColor: AppColors.white, fontSize: 8),
+                  style: AppFontStyle.fontStyleW500(
+                      fontColor: AppColors.white, fontSize: 8),
                 ),
               ),
             ],
@@ -1075,10 +1188,12 @@ class ReceiverAudioMessageWidget extends StatefulWidget {
   });
 
   @override
-  State<ReceiverAudioMessageWidget> createState() => _ReceiverAudioMessageWidgetState();
+  State<ReceiverAudioMessageWidget> createState() =>
+      _ReceiverAudioMessageWidgetState();
 }
 
-class _ReceiverAudioMessageWidgetState extends State<ReceiverAudioMessageWidget> {
+class _ReceiverAudioMessageWidgetState
+    extends State<ReceiverAudioMessageWidget> {
   final AudioPlayer player = AudioPlayer();
   bool isPlaying = false;
   Duration duration = Duration.zero;
@@ -1179,7 +1294,9 @@ class _ReceiverAudioMessageWidgetState extends State<ReceiverAudioMessageWidget>
                             GestureDetector(
                                 onTap: () => onPlayAudio(),
                                 child: Icon(
-                                  isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                                  isPlaying
+                                      ? Icons.pause_rounded
+                                      : Icons.play_arrow_rounded,
                                   size: 30,
                                   color: AppColors.chatPink,
                                 )
@@ -1193,16 +1310,22 @@ class _ReceiverAudioMessageWidgetState extends State<ReceiverAudioMessageWidget>
                                   overlayShape: SliderComponentShape.noOverlay,
                                   activeTrackColor: AppColors.primary,
                                   thumbColor: AppColors.primary,
-                                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                                  thumbShape: const RoundSliderThumbShape(
+                                      enabledThumbRadius: 10),
                                   trackHeight: 5,
                                 ),
                                 child: Slider(
                                   activeColor: AppColors.chatPink,
                                   min: 0,
-                                  max: duration.inSeconds.toDouble() > 0 ? duration.inSeconds.toDouble() : 1,
-                                  value: position.inSeconds.toDouble().clamp(0, duration.inSeconds.toDouble()),
+                                  max: duration.inSeconds.toDouble() > 0
+                                      ? duration.inSeconds.toDouble()
+                                      : 1,
+                                  value: position.inSeconds
+                                      .toDouble()
+                                      .clamp(0, duration.inSeconds.toDouble()),
                                   onChanged: (value) {
-                                    player.seek(Duration(seconds: value.toInt()));
+                                    player
+                                        .seek(Duration(seconds: value.toInt()));
                                   },
                                 ),
                               ),
@@ -1212,7 +1335,9 @@ class _ReceiverAudioMessageWidgetState extends State<ReceiverAudioMessageWidget>
                               height: 44,
                               width: 44,
                               alignment: Alignment.center,
-                              decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.chatPink),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.chatPink),
                               child: Image.asset(
                                 AppAsset.microPhoneIcon,
                                 width: 20,
@@ -1227,7 +1352,8 @@ class _ReceiverAudioMessageWidgetState extends State<ReceiverAudioMessageWidget>
                         right: 70,
                         child: Text(
                           formatTime(position),
-                          style: AppFontStyle.fontStyleW600(fontColor: AppColors.chatPink, fontSize: 9),
+                          style: AppFontStyle.fontStyleW600(
+                              fontColor: AppColors.chatPink, fontSize: 9),
                         ),
                       ),
                     ],
@@ -1237,7 +1363,8 @@ class _ReceiverAudioMessageWidgetState extends State<ReceiverAudioMessageWidget>
                   builder: (logic) {
                     return Text(
                       logic.formatTimeFromDate(widget.chat.date),
-                      style: AppFontStyle.fontStyleW600(fontColor: AppColors.white, fontSize: 8),
+                      style: AppFontStyle.fontStyleW600(
+                          fontColor: AppColors.white, fontSize: 8),
                     );
                   },
                 ),

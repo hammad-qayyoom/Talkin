@@ -42,7 +42,8 @@ class HostBottomBarView extends StatelessWidget {
                 logic.onClick(value);
               },
               curve: Curves.easeInOut,
-              margin: EdgeInsets.only(left: 10, right: 10, top: Platform.isIOS ? 10 : 0),
+              margin: EdgeInsets.only(
+                  left: 10, right: 10, top: Platform.isIOS ? 10 : 0),
               selectedColorOpacity: 1,
               items: [
                 bottomBarItemView(
@@ -71,6 +72,12 @@ class HostBottomBarView extends StatelessWidget {
                 ),
                 bottomBarItemView(
                   index: 4,
+                  selectIndex: logic.selectIndex,
+                  image: AppAsset.calendar,
+                  label: 'Sessions',
+                ),
+                bottomBarItemView(
+                  index: 5,
                   selectIndex: logic.selectIndex,
                   image: AppAsset.profileIcon,
                   label: EnumLocale.txtProfile.name.tr,

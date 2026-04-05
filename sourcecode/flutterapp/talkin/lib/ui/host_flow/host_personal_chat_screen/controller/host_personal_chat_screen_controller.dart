@@ -27,6 +27,10 @@ class HostPersonalChatScreenController extends GetxController {
   String? receiverName;
   String? receiverStatusLabel;
   String? receiverImage;
+  String? sessionId;
+  String? bookingId;
+  String? bookedSessionCallType;
+  DateTime? bookedSessionEndAt;
   XFile? pickedImage;
   String? chatRoomId;
   bool isMsgSeen = false;
@@ -51,6 +55,15 @@ class HostPersonalChatScreenController extends GetxController {
 
   String currentPlayAudioId = "";
 
+  bool get hasBookedSessionCallContext {
+    return (sessionId ?? '').trim().isNotEmpty &&
+        (bookingId ?? '').trim().isNotEmpty;
+  }
+
+  bool get isBookedSessionWindowEnded {
+    return bookedSessionEndAt != null && DateTime.now().isAfter(bookedSessionEndAt!);
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -63,6 +76,14 @@ class HostPersonalChatScreenController extends GetxController {
       receiverName = args[1]?.toString();
       receiverStatusLabel = args[2]?.toString();
       receiverImage = args[3]?.toString();
+
+      if (args.length >= 8) {
+        sessionId = args[4]?.toString();
+        bookingId = args[5]?.toString();
+        bookedSessionCallType = args[6]?.toString().trim().toLowerCase();
+        final rawEndAt = args[7]?.toString() ?? '';
+        bookedSessionEndAt = DateTime.tryParse(rawEndAt)?.toLocal();
+      }
     }
     // getOldChats();
     init();
@@ -71,6 +92,10 @@ class HostPersonalChatScreenController extends GetxController {
     Utils.showLog("status label: $receiverStatusLabel");
     Utils.showLog("image: $receiverImage");
     Utils.showLog("chat topic id: ${hostPersonalChatModel?.chatTopic}");
+    Utils.showLog("sessionId: $sessionId");
+    Utils.showLog("bookingId: $bookingId");
+    Utils.showLog("bookedSessionCallType: $bookedSessionCallType");
+    Utils.showLog("bookedSessionEndAt: $bookedSessionEndAt");
   }
 
   @override

@@ -46,6 +46,8 @@ class SocketEmit {
     required String receiverImage,
     required String callerName,
     required String callerImage,
+    String? sessionId,
+    String? bookingId,
   }) {
     if (socket != null && socket?.connected == true) {
       final data = {
@@ -58,6 +60,10 @@ class SocketEmit {
         SocketParams.receiverImage: receiverImage,
         SocketParams.callerName: callerName,
         SocketParams.callerImage: callerImage,
+        if ((sessionId ?? '').trim().isNotEmpty)
+          SocketParams.sessionId: sessionId,
+        if ((bookingId ?? '').trim().isNotEmpty)
+          SocketParams.bookingId: bookingId,
       };
       socket?.emit(SocketEvents.callOutgoingRinging, data);
       Utils.showLog("Socket Emit => callOutgoingRinging: $data");
@@ -80,6 +86,8 @@ class SocketEmit {
     required String receiverImage,
     required String callerName,
     required String callerImage,
+    String? sessionId,
+    String? bookingId,
   }) {
     if (socket != null && socket!.connected) {
       final data = {
@@ -95,6 +103,10 @@ class SocketEmit {
         SocketParams.callerImage: callerImage,
         SocketParams.isAccept: isAccept,
         SocketParams.callMode: callMode,
+        if ((sessionId ?? '').trim().isNotEmpty)
+          SocketParams.sessionId: sessionId,
+        if ((bookingId ?? '').trim().isNotEmpty)
+          SocketParams.bookingId: bookingId,
       };
       socket!.emit(SocketEvents.callResponseProcessed, data);
       Utils.showLog("Socket Emit => callResponseProcessed: $data");
@@ -112,6 +124,8 @@ class SocketEmit {
     required String callMode,
     required String callerRole,
     required String receiverRole,
+    String? sessionId,
+    String? bookingId,
   }) {
     if (socket != null && socket!.connected) {
       final data = {
@@ -122,6 +136,10 @@ class SocketEmit {
         SocketParams.callMode: callMode,
         SocketParams.callerRole: callerRole,
         SocketParams.receiverRole: receiverRole,
+        if ((sessionId ?? '').trim().isNotEmpty)
+          SocketParams.sessionId: sessionId,
+        if ((bookingId ?? '').trim().isNotEmpty)
+          SocketParams.bookingId: bookingId,
       };
       socket!.emit(SocketEvents.callerCallCut, data);
       Utils.showLog("Socket Emit => callRejected: $data");
@@ -142,6 +160,8 @@ class SocketEmit {
     required String receiverRole,
     required String receiverName,
     required String receiverImage,
+    String? sessionId,
+    String? bookingId,
   }) async {
     if (socket != null && socket!.connected) {
       UserCoinModel? userCoinModel;
@@ -156,6 +176,10 @@ class SocketEmit {
         SocketParams.callMode: callMode,
         SocketParams.receiverName: receiverName,
         SocketParams.receiverImage: receiverImage,
+        if ((sessionId ?? '').trim().isNotEmpty)
+          SocketParams.sessionId: sessionId,
+        if ((bookingId ?? '').trim().isNotEmpty)
+          SocketParams.bookingId: bookingId,
       };
       socket!.emit(SocketEvents.callTerminated, data);
       userCoinModel = await UserCoinApi.callApi();

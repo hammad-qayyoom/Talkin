@@ -36,6 +36,10 @@ class PersonalChatScreenController extends GetxController {
   bool? isFake;
   bool? availableForPrivateVideoCall;
   bool? availableForPrivateAudioCall;
+  String? sessionId;
+  String? bookingId;
+  String? bookedSessionCallType;
+  DateTime? bookedSessionEndAt;
   final TextEditingController messageController = TextEditingController();
   bool isLoading = false;
   PersonalChatModel? personalChatModel;
@@ -53,6 +57,15 @@ class PersonalChatScreenController extends GetxController {
   bool isLoadingImage = false;
   bool isMsgSeen = false;
 
+  bool get hasBookedSessionCallContext {
+    return (sessionId ?? '').trim().isNotEmpty &&
+        (bookingId ?? '').trim().isNotEmpty;
+  }
+
+  bool get isBookedSessionWindowEnded {
+    return bookedSessionEndAt != null && DateTime.now().isAfter(bookedSessionEndAt!);
+  }
+
   bool isSendingAudioFile = false;
 
   String currentPlayAudioId = "";
@@ -66,7 +79,7 @@ class PersonalChatScreenController extends GetxController {
 
     List args = Get.arguments ?? [];
 
-    if (args.length >= 9) {
+    if (args.length >= 10) {
       receiverId = args[0]?.toString();
       receiverName = args[1]?.toString();
       receiverStatusLabel = args[2]?.toString();
@@ -87,6 +100,14 @@ class PersonalChatScreenController extends GetxController {
       }
       availableForPrivateVideoCall = args[8] is bool ? args[8] : args[8].toString().toLowerCase() == 'true';
       availableForPrivateAudioCall = args[9] is bool ? args[9] : args[9].toString().toLowerCase() == 'true';
+
+      if (args.length >= 14) {
+        sessionId = args[10]?.toString();
+        bookingId = args[11]?.toString();
+        bookedSessionCallType = args[12]?.toString().trim().toLowerCase();
+        final rawEndAt = args[13]?.toString() ?? '';
+        bookedSessionEndAt = DateTime.tryParse(rawEndAt)?.toLocal();
+      }
     }
     // getOldChats();
     init();
@@ -99,6 +120,10 @@ class PersonalChatScreenController extends GetxController {
     Utils.showLog("ratePrivateVideoCall: $ratePrivateVideoCall");
     Utils.showLog("availableForPrivateVideoCall: $availableForPrivateVideoCall");
     Utils.showLog("availableForPrivateAudioCall: $availableForPrivateAudioCall");
+    Utils.showLog("sessionId: $sessionId");
+    Utils.showLog("bookingId: $bookingId");
+    Utils.showLog("bookedSessionCallType: $bookedSessionCallType");
+    Utils.showLog("bookedSessionEndAt: $bookedSessionEndAt");
   }
 
   Future<void> init() async {

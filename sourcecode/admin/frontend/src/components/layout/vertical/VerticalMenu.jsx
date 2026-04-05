@@ -119,6 +119,9 @@ const VerticalMenu = ({ scrollMenu }) => {
           <MenuItem href='/listener/request' icon={<i className='tabler-user-scan' />}>
             Expert Request
           </MenuItem>
+          <MenuItem href='/sessions' icon={<i className='tabler-calendar-time' />}>
+            Sessions
+          </MenuItem>
 
           <MenuItem disabled>CONTENT</MenuItem>
           <MenuItem href='/faq' icon={<i className='tabler-device-ipad-question' />}>

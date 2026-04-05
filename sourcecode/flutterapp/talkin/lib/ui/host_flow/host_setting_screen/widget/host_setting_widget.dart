@@ -71,6 +71,20 @@ class HostSettingView extends StatelessWidget {
           },
         ).paddingOnly(bottom: 22),
         SettingMenu(
+          icon: AppAsset.calendar,
+          title: 'Manage Availability',
+          onTap: () {
+            Get.toNamed(AppRoutes.hostAvailabilityScreen);
+          },
+        ).paddingOnly(bottom: 22),
+        SettingMenu(
+          icon: AppAsset.callIcon,
+          title: 'My Sessions',
+          onTap: () {
+            Get.toNamed(AppRoutes.hostSessionsScreen);
+          },
+        ).paddingOnly(bottom: 22),
+        SettingMenu(
           icon: AppAsset.logOut,
           title: EnumLocale.txtLogoutApp.name.tr,
           onTap: () {

@@ -15,6 +15,7 @@ import 'package:talk_in/ui/user_flow/call_cut_screen/controller/call_cut_control
 import 'package:talk_in/ui/user_flow/home_screen/api/user_coin_api.dart';
 import 'package:talk_in/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:talk_in/ui/user_flow/home_screen/model/user_coin_model.dart';
+import 'package:talk_in/ui/common/session_booking/session_booking_service.dart';
 import 'package:talk_in/ui/user_flow/personal_chat_screen/controller/personal_chat_screen_controller.dart';
 import 'package:talk_in/ui/user_flow/personal_chat_screen/model/personal_chat_model.dart';
 import 'package:talk_in/ui/user_flow/video_call_screen/controller/video_call_controller.dart';
@@ -33,6 +34,31 @@ class SocketListen {
   static bool _listenersAttached = false;
   static bool _connectHookAttached = false;
   static int? _socketIdentity;
+
+  static Future<void> _reportSessionCallOutcomeIfNeeded(
+    dynamic data, {
+    required String outcome,
+  }) async {
+    if (data is! Map) {
+      return;
+    }
+
+    final bookingId = (data['bookingId'] ?? '').toString().trim();
+    final sessionId = (data['sessionId'] ?? '').toString().trim();
+
+    if (bookingId.isEmpty || sessionId.isEmpty) {
+      return;
+    }
+
+    final response = await SessionBookingService.reportSessionCallOutcome(
+      bookingId: bookingId,
+      sessionId: sessionId,
+      outcome: outcome,
+    );
+
+    Utils.showLog(
+        'Session call outcome reported => outcome: $outcome, bookingId: $bookingId, status: ${response['status']}');
+  }
 
   static void _attachCallAndChatListeners() {
     if (socket == null) return;
@@ -345,6 +371,22 @@ class SocketListen {
   /// receiver call cut listen this event
   static void handleCallDeclined(dynamic data) {
     Utils.showLog("Socket Listen => callDeclined event: $data");
+
+    final callerRole = (data is Map ? (data['callerRole'] ?? '') : '')
+        .toString()
+        .trim()
+        .toLowerCase();
+    final receiverRole = (data is Map ? (data['receiverRole'] ?? '') : '')
+        .toString()
+        .trim()
+        .toLowerCase();
+
+    if (callerRole == 'user' && receiverRole == 'listener') {
+      _reportSessionCallOutcomeIfNeeded(data, outcome: 'expert_no_answer');
+    } else if (callerRole == 'listener' && receiverRole == 'user') {
+      _reportSessionCallOutcomeIfNeeded(data, outcome: 'user_no_answer');
+    }
+
     if (Get.currentRoute == AppRoutes.outgoingCallScreen ||
         Get.currentRoute == AppRoutes.incomingCallScreen ||
         Get.currentRoute == AppRoutes.outgoingAudioCallScreen) {
@@ -483,6 +525,7 @@ class SocketListen {
     UserCoinModel? userCoinModel;
     ListenerCoinModel? listenerCoinModel;
     Utils.showLog("Socket Listen => callTerminated event: $data");
+    _reportSessionCallOutcomeIfNeeded(data, outcome: 'connected');
     VoiceCallController? controller;
     if (Get.currentRoute == AppRoutes.voiceCallScreen) {
       if (Get.isRegistered<VoiceCallController>()) {

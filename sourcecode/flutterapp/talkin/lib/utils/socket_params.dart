@@ -20,6 +20,8 @@ class SocketParams {
   static const receiverImage = "receiverImage";
   static const callerName = "callerfullName";
   static const callerImage = "callerImage";
+  static const sessionId = "sessionId";
+  static const bookingId = "bookingId";
   static const name = "name";
   static const profilePic = "profilePic";
   static const ratePrivateAudioCall = "ratePrivateAudioCall";

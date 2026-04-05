@@ -29,6 +29,8 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
   final bool? availableForPrivateVideoCall;
   final VoidCallback? chatOnTap;
   final bool showMessage;
+  final String? sessionId;
+  final String? bookingId;
 
   const TalkNowButtonBottomSheet({
     super.key,
@@ -49,6 +51,8 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
     required this.fakeAudio,
     this.chatOnTap,
     this.showMessage = true,
+    this.sessionId,
+    this.bookingId,
   });
 
   @override
@@ -192,6 +196,8 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
                 callerName: callerName,
                 receiverImage: receiverImage,
                 receiverName: receiverName,
+                sessionId: sessionId,
+                bookingId: bookingId,
               );
             },
           );
@@ -281,6 +287,8 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
                     callerName: callerName,
                     receiverImage: receiverImage,
                     receiverName: receiverName,
+                    sessionId: sessionId,
+                    bookingId: bookingId,
                   );
                 },
               );
