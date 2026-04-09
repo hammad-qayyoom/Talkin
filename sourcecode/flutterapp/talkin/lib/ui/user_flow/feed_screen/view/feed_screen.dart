@@ -249,12 +249,16 @@ class _ComposerView extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 52,
-                width: 52,
-                child: ClipOval(
-                  child: CustomProfileImage(
-                    image: profileImage,
+              InkWell(
+                onTap: controller.openMyPostsManager,
+                borderRadius: BorderRadius.circular(26),
+                child: SizedBox(
+                  height: 52,
+                  width: 52,
+                  child: ClipOval(
+                    child: CustomProfileImage(
+                      image: profileImage,
+                    ),
                   ),
                 ),
               ),
@@ -725,6 +729,26 @@ class _FeedPostCard extends StatelessWidget {
             children: [
               if (controller.isMyPost(post))
                 ListTile(
+                  leading: Icon(Icons.edit_outlined, color: AppColors.appColor),
+                  title: Text(
+                    'Edit post',
+                    style: AppFontStyle.fontStyleW600(
+                      fontSize: 14,
+                      fontColor: AppColors.black,
+                    ),
+                  ),
+                  onTap: () {
+                    Get.back();
+                    Future.delayed(const Duration(milliseconds: 120), () {
+                      _openEditPostSheet(
+                        post: post,
+                        controller: controller,
+                      );
+                    });
+                  },
+                ),
+              if (controller.isMyPost(post))
+                ListTile(
                   leading: Icon(Icons.delete_outline, color: AppColors.red),
                   title: Text(
                     'Delete post',
@@ -761,6 +785,131 @@ class _FeedPostCard extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _openEditPostSheet({
+    required FeedPostItem post,
+    required FeedScreenController controller,
+  }) {
+    final activeContext = Get.context;
+    if (activeContext == null) return;
+
+    final textController = TextEditingController(text: post.content);
+    bool isSaving = false;
+
+    showModalBottomSheet(
+      context: activeContext,
+      isScrollControlled: true,
+      backgroundColor: AppColors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (context, setStateModal) {
+            return SafeArea(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: 14,
+                  right: 14,
+                  top: 14,
+                  bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 14,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Edit post',
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: 16,
+                        fontColor: AppColors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: textController,
+                      maxLines: 6,
+                      minLines: 3,
+                      maxLength: 4000,
+                      decoration: InputDecoration(
+                        hintText: "What's on your mind?",
+                        hintStyle: AppFontStyle.fontStyleW500(
+                          fontSize: 13,
+                          fontColor: AppColors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColors.borderColor),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColors.appColor),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: isSaving ? null : () => Get.back(),
+                            child: const Text('Cancel'),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: isSaving
+                                ? null
+                                : () async {
+                                    setStateModal(() {
+                                      isSaving = true;
+                                    });
+
+                                    final isUpdated = await controller.editPost(
+                                      post: post,
+                                      content: textController.text,
+                                    );
+
+                                    if (!(Get.isBottomSheetOpen ?? false)) {
+                                      return;
+                                    }
+
+                                    setStateModal(() {
+                                      isSaving = false;
+                                    });
+
+                                    if (isUpdated &&
+                                        (Get.isBottomSheetOpen ?? false)) {
+                                      Get.back();
+                                    }
+                                  },
+                            child: isSaving
+                                ? SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppColors.white,
+                                    ),
+                                  )
+                                : const Text('Save'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ).whenComplete(() => textController.dispose());
   }
 
   void _openCommentSheet({

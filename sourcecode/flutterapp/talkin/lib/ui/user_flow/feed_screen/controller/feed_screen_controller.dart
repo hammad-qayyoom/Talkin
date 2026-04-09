@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:talk_in/routes/app_routes.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:talk_in/ui/user_flow/feed_screen/api/feed_api.dart';
 import 'package:talk_in/utils/constant.dart';
@@ -307,6 +308,62 @@ class FeedScreenController extends GetxController {
     _showToast((response['message'] ?? 'Unable to delete post.').toString());
   }
 
+  Future<bool> editPost({
+    required FeedPostItem post,
+    required String content,
+  }) async {
+    if (!isMyPost(post)) {
+      _showToast('You can only edit your own post.');
+      return false;
+    }
+
+    final normalized = content.trim();
+    if (normalized.isEmpty && post.mediaUrls.isEmpty) {
+      _showToast('Post cannot be empty.');
+      return false;
+    }
+
+    final response = await FeedApi.updatePost(
+      postId: post.id,
+      content: normalized,
+    );
+
+    if (response['status'] == true) {
+      final payload = response['data'];
+      if (payload is Map<String, dynamic>) {
+        _replacePost(FeedPostItem.fromJson(payload));
+      } else {
+        _replacePost(post.copyWith(content: normalized));
+      }
+
+      _showToast(
+        (response['message'] ?? 'Post updated successfully.').toString(),
+      );
+      return true;
+    }
+
+    _showToast((response['message'] ?? 'Unable to update post.').toString());
+    return false;
+  }
+
+  Future<void> openMyPostsManager() async {
+    final me = currentUserId().trim();
+    if (me.isEmpty) {
+      _showToast('Unable to open your posts right now.');
+      return;
+    }
+
+    await Get.toNamed(
+      AppRoutes.feedScreen,
+      arguments: {
+        'standalone': true,
+        'title': 'My Posts',
+        'showComposer': true,
+        'userId': me,
+      },
+    );
+  }
+
   Future<void> sharePost(FeedPostItem post) async {
     final response =
         await FeedApi.sharePost(postId: post.id, channel: 'external');
@@ -467,7 +524,9 @@ class FeedScreenController extends GetxController {
   }
 
   String currentUserId() {
-    return (Database.fetchLoginUserProfileModel?.user?.id ?? '').toString();
+    return (Database.fetchLoginUserProfileModel?.user?.id ??
+            Database.loginUserId)
+        .toString();
   }
 
   bool isMyPost(FeedPostItem post) {
@@ -583,6 +642,7 @@ class FeedPostItem {
   }
 
   FeedPostItem copyWith({
+    String? content,
     int? likeCount,
     int? commentCount,
     int? shareCount,
@@ -592,7 +652,7 @@ class FeedPostItem {
       id: id,
       userId: userId,
       expertId: expertId,
-      content: content,
+      content: content ?? this.content,
       mediaUrls: mediaUrls,
       mediaUrl: mediaUrl,
       mediaType: mediaType,

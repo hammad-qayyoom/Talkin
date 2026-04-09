@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
@@ -49,7 +50,13 @@ class FeedApi {
         'status': false,
         'message': 'Invalid feed response format.',
       };
-    } catch (e) { print("API CREATE ERROR: $e"); return { "status": false, "message": "Failed to fetch feed posts. $e" }; }
+    } catch (e) {
+      debugPrint('Feed fetch error: $e');
+      return {
+        'status': false,
+        'message': 'Failed to fetch feed posts. $e',
+      };
+    }
   }
 
   static Future<Map<String, dynamic>> createPost({
@@ -58,7 +65,8 @@ class FeedApi {
   }) async {
     try {
       final token = await FirebaseAccessToken.onGet();
-      final request = http.MultipartRequest('POST', Uri.parse(Api.feedPostsCreate));
+      final request =
+          http.MultipartRequest('POST', Uri.parse(Api.feedPostsCreate));
 
       request.headers.addAll({
         ApiParams.key: Api.secretKey,
@@ -72,10 +80,14 @@ class FeedApi {
 
       if (mediaFile != null && await mediaFile.exists()) {
         final path = mediaFile.path.toLowerCase();
-        final isVideo = path.endsWith('.mp4') || path.endsWith('.mov') || path.endsWith('.mkv') || path.endsWith('.webm') || path.endsWith('.avi');
+        final isVideo = path.endsWith('.mp4') ||
+            path.endsWith('.mov') ||
+            path.endsWith('.mkv') ||
+            path.endsWith('.webm') ||
+            path.endsWith('.avi');
         final isPng = path.endsWith('.png');
         final isGif = path.endsWith('.gif');
-        
+
         request.files.add(await http.MultipartFile.fromPath(
           'media',
           mediaFile.path,
@@ -99,7 +111,7 @@ class FeedApi {
         'message': 'Invalid create post response format.',
       };
     } catch (e) {
-      print("API CREATE ERROR: $e");
+      debugPrint('Feed create post error: $e');
       return {
         'status': false,
         'message': 'Failed to create post. $e',
@@ -192,6 +204,37 @@ class FeedApi {
       return {
         'status': false,
         'message': 'Failed to delete post.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> updatePost({
+    required String postId,
+    required String content,
+  }) async {
+    try {
+      final headers = await _headers();
+      final response = await http.patch(
+        Uri.parse('${Api.feedPostsDeletePrefix}$postId'),
+        headers: headers,
+        body: json.encode({
+          'content': content,
+        }),
+      );
+      final decoded = json.decode(response.body);
+
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid update response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to update post.',
       };
     }
   }
