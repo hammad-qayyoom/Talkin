@@ -1,5 +1,7 @@
 // MUI Imports
 
+import { useEffect, useState } from 'react'
+
 
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -11,9 +13,27 @@ import CustomAvatar from '@/@core/components/mui/Avatar'
 
 const UserProfileHeader = ({ data }) => {
   //  const { userDetails } = useSelector(state => state.userReducer)
-   const userDetails  = localStorage.getItem('selectedUser') ? JSON.parse(localStorage.getItem('selectedUser')) : {}
+  const [userDetails, setUserDetails] = useState({})
 
-console.log(userDetails)
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const selectedUser = localStorage.getItem('selectedUser')
+
+    if (!selectedUser) {
+      setUserDetails({})
+
+      return
+    }
+
+    try {
+      setUserDetails(JSON.parse(selectedUser))
+    } catch (_) {
+      setUserDetails({})
+    }
+  }, [])
 
   return (
     <Card>

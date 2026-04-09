@@ -51,20 +51,26 @@ class BottomBarView extends StatelessWidget {
                   image: AppAsset.homeFilled,
                   label: EnumLocale.txtHome.name.tr,
                 ),
-                bottomBarItemView(
+                bottomBarIconItemView(
                   index: 1,
+                  selectIndex: logic.selectIndex,
+                  icon: Icons.dynamic_feed_rounded,
+                  label: 'Feed',
+                ),
+                bottomBarItemView(
+                  index: 2,
                   selectIndex: logic.selectIndex,
                   image: AppAsset.listener,
                   label: EnumLocale.txtListener.name.tr,
                 ),
                 bottomBarItemView(
-                  index: 2,
+                  index: 3,
                   selectIndex: logic.selectIndex,
                   image: AppAsset.chat,
                   label: EnumLocale.txtChat.name.tr,
                 ),
                 bottomBarItemView(
-                  index: 3,
+                  index: 4,
                   selectIndex: logic.selectIndex,
                   image: AppAsset.calling,
                   label: EnumLocale.txtCalling.name.tr,
@@ -89,6 +95,30 @@ SalomonBottomBarItem bottomBarItemView({
       image,
       height: 26,
       width: 26,
+      color: selectIndex == index ? AppColors.white : AppColors.unSelected,
+    ),
+    title: Text(
+      label,
+      style: TextStyle(
+        fontSize: 11,
+        fontWeight: selectIndex == index ? FontWeight.w700 : FontWeight.w500,
+        color: selectIndex == index ? AppColors.appColor : AppColors.unSelected,
+      ),
+    ).paddingOnly(bottom: 5),
+    selectedColor: AppColors.appColor,
+  );
+}
+
+SalomonBottomBarItem bottomBarIconItemView({
+  required final int index,
+  required final int selectIndex,
+  required final IconData icon,
+  required final String label,
+}) {
+  return SalomonBottomBarItem(
+    icon: Icon(
+      icon,
+      size: 26,
       color: selectIndex == index ? AppColors.white : AppColors.unSelected,
     ),
     title: Text(

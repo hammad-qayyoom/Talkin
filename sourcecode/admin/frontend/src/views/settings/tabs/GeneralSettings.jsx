@@ -138,7 +138,13 @@ const GeneralSettings = () => {
     sessionUserCancellationRefundCreditsCount: '',
     sessionExpertCancellationPenaltyPercent: '',
     sessionJoinEarlyWindowMinutes: '',
-    sessionJoinLateWindowMinutes: ''
+    sessionJoinLateWindowMinutes: '',
+    groupAudioSessionPricingMode: 'paid',
+    groupVideoSessionPricingMode: 'paid',
+    groupAudioSessionCredits: 1,
+    groupVideoSessionCredits: 1,
+    groupSessionCommissionPercent: '',
+    groupSessionMinimumExpertTalkTimeMinutes: '',
   })
 
   const [privateKeyJson, setPrivateKeyJson] = useState('')
@@ -184,6 +190,12 @@ const GeneralSettings = () => {
         sessionExpertCancellationPenaltyPercent: settings.sessionExpertCancellationPenaltyPercent ?? 10,
         sessionJoinEarlyWindowMinutes: settings.sessionJoinEarlyWindowMinutes ?? 5,
         sessionJoinLateWindowMinutes: settings.sessionJoinLateWindowMinutes ?? 5,
+        groupAudioSessionPricingMode: settings.groupAudioSessionPricingMode || 'paid',
+        groupVideoSessionPricingMode: settings.groupVideoSessionPricingMode || 'paid',
+        groupAudioSessionCredits: settings.groupAudioSessionCredits ?? 1,
+        groupVideoSessionCredits: settings.groupVideoSessionCredits ?? 1,
+        groupSessionCommissionPercent: settings.groupSessionCommissionPercent ?? settings.sessionCommissionPercent ?? 0,
+        groupSessionMinimumExpertTalkTimeMinutes: settings.groupSessionMinimumExpertTalkTimeMinutes ?? 10,
         allowBecomeHostOption: settings.allowBecomeHostOption || false,
         isApplicationLive: settings.isApplicationLive || false,
         isDemoContentEnabled: settings.isDemoContentEnabled || false,
@@ -227,7 +239,11 @@ const GeneralSettings = () => {
         'sessionUserCancellationRefundCreditsCount',
         'sessionExpertCancellationPenaltyPercent',
         'sessionJoinEarlyWindowMinutes',
-        'sessionJoinLateWindowMinutes'
+        'sessionJoinLateWindowMinutes',
+        'groupAudioSessionCredits',
+        'groupVideoSessionCredits',
+        'groupSessionCommissionPercent',
+        'groupSessionMinimumExpertTalkTimeMinutes'
       ].includes(field)
     ) {
       // Allow empty string or valid numbers
@@ -269,6 +285,8 @@ const GeneralSettings = () => {
   }
 
   const isSessionCreditMode = String(formData.monetizationMode || '').trim().toLowerCase() === 'subscription_session_commission'
+  const isGroupAudioFree = String(formData.groupAudioSessionPricingMode || '').trim().toLowerCase() === 'free'
+  const isGroupVideoFree = String(formData.groupVideoSessionPricingMode || '').trim().toLowerCase() === 'free'
   const callRateSectionTitle = isSessionCreditMode ? 'Call Credit Setting' : 'Call Rate Setting'
   const privateRateSectionTitle = isSessionCreditMode ? 'Private Session Credits' : 'Private Rate'
   const privateAudioLabel = isSessionCreditMode ? 'Private Audio Credits' : 'Private Audio Rate'
@@ -337,7 +355,11 @@ const GeneralSettings = () => {
     'sessionUserCancellationRefundCreditsCount',
     'sessionExpertCancellationPenaltyPercent',
     'sessionJoinEarlyWindowMinutes',
-    'sessionJoinLateWindowMinutes'
+    'sessionJoinLateWindowMinutes',
+    'groupAudioSessionCredits',
+    'groupVideoSessionCredits',
+    'groupSessionCommissionPercent',
+    'groupSessionMinimumExpertTalkTimeMinutes'
   ]
 
   const getUpdatedFields = () => {
@@ -873,6 +895,124 @@ const GeneralSettings = () => {
               </div>
             </CardContent>
           </Card>
+        </CardContent>
+      </Card>
+
+      <Card sx={{ mb: 4 }}>
+        <CardContent>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
+              <i className='tabler-users-group mr-2' />
+              Live Group Session Setting
+            </Typography>
+          </Box>
+
+          <Divider sx={{ mb: 3 }} />
+
+          <Grid container spacing={3}>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                select
+                label='Group Audio Session Mode'
+                value={formData.groupAudioSessionPricingMode || 'paid'}
+                onChange={e => handleFieldChange('groupAudioSessionPricingMode', e.target.value)}
+              >
+                <MenuItem value='paid'>Paid (Session Credits)</MenuItem>
+                <MenuItem value='free'>Free</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='Group Audio Session Credits'
+                value={formData.groupAudioSessionCredits ?? ''}
+                disabled={isGroupAudioFree}
+                onChange={e => handleFieldChange('groupAudioSessionCredits', e.target.value)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Typography variant='caption' color='text.secondary'>
+                        credits
+                      </Typography>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                select
+                label='Group Video Session Mode'
+                value={formData.groupVideoSessionPricingMode || 'paid'}
+                onChange={e => handleFieldChange('groupVideoSessionPricingMode', e.target.value)}
+              >
+                <MenuItem value='paid'>Paid (Session Credits)</MenuItem>
+                <MenuItem value='free'>Free</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='Group Video Session Credits'
+                value={formData.groupVideoSessionCredits ?? ''}
+                disabled={isGroupVideoFree}
+                onChange={e => handleFieldChange('groupVideoSessionCredits', e.target.value)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Typography variant='caption' color='text.secondary'>
+                        credits
+                      </Typography>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='Group Session Commission (%)'
+                value={formData.groupSessionCommissionPercent || ''}
+                onChange={e => handleFieldChange('groupSessionCommissionPercent', e.target.value)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Typography variant='caption' color='text.secondary'>
+                        %
+                      </Typography>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='Minimum Expert Talk Time (minutes)'
+                value={formData.groupSessionMinimumExpertTalkTimeMinutes || ''}
+                onChange={e => handleFieldChange('groupSessionMinimumExpertTalkTimeMinutes', e.target.value)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Typography variant='caption' color='text.secondary'>
+                        minutes
+                      </Typography>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+          </Grid>
         </CardContent>
       </Card>
 

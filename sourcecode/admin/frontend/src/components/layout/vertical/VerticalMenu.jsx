@@ -134,6 +134,12 @@ const VerticalMenu = ({ scrollMenu }) => {
           <MenuItem href='/identity-proofs' icon={<i className='tabler-id' />}>
             Identity Proof
           </MenuItem>
+          <MenuItem href='/feed/posts' icon={<i className='tabler-news' />}>
+            Feed Posts
+          </MenuItem>
+          <MenuItem href='/feed/reported' icon={<i className='tabler-flag-3' />}>
+            Reported Feed Posts
+          </MenuItem>
          
           {/* CoinTrader */}
           <MenuItem disabled>SUBSCRIPTION</MenuItem>

@@ -1,5 +1,7 @@
 // MUI Imports
 
+import { useEffect, useState } from 'react'
+
 import { Chip } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -27,7 +29,27 @@ const LoginTypeColor = {
 
 const AboutOverview = ({ data }) => {
   // const { userDetails } = useSelector(state => state.userReducer)
-  const userDetails = localStorage.getItem('selectedUser') ? JSON.parse(localStorage.getItem('selectedUser')) : {}
+  const [userDetails, setUserDetails] = useState({})
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const selectedUser = localStorage.getItem('selectedUser')
+
+    if (!selectedUser) {
+      setUserDetails({})
+
+      return
+    }
+
+    try {
+      setUserDetails(JSON.parse(selectedUser))
+    } catch (_) {
+      setUserDetails({})
+    }
+  }, [])
 
   return (
     <Grid container spacing={6}>

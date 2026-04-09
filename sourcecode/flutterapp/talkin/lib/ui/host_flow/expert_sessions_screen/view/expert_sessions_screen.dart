@@ -206,6 +206,15 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
           style: AppFontStyle.fontStyleW700(
               fontSize: 18, fontColor: AppColors.black),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.toNamed(AppRoutes.hostGroupSessionsScreen);
+            },
+            icon: const Icon(Icons.groups_outlined),
+            tooltip: 'Group Sessions',
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(

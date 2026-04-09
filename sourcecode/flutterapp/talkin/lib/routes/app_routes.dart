@@ -10,6 +10,7 @@ class AppRoutes {
   static const String verifyOtp = '/verifyOtp';
   static const String bottomBar = '/bottomBar';
   static const String homeScreen = '/homeScreen';
+  static const String feedScreen = '/feedScreen';
   static const String hostHomeScreen = '/hostHomeScreen';
   static const String topListenersViewAll = '/topListenersViewAll';
   static const String allListeners = '/allListeners';
@@ -65,6 +66,8 @@ class AppRoutes {
   static const String coinPurchaseScreen = '/coinPurchaseScreen';
   static const String userBookSessionScreen = '/userBookSessionScreen';
   static const String userMySessionsScreen = '/userMySessionsScreen';
+  static const String userGroupSessionsScreen = '/userGroupSessionsScreen';
   static const String hostAvailabilityScreen = '/hostAvailabilityScreen';
   static const String hostSessionsScreen = '/hostSessionsScreen';
+  static const String hostGroupSessionsScreen = '/hostGroupSessionsScreen';
 }

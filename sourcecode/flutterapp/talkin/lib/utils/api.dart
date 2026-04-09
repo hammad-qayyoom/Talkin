@@ -50,6 +50,7 @@ abstract class Api {
   static const groupSessionJoin = "${baseUrl}api/v2/sessions/group/join";
   static const groupSessionLeave = "${baseUrl}api/v2/sessions/group/leave";
   static const groupSessionCancel = "${baseUrl}api/v2/sessions/group/cancel";
+  static const groupSessionExpertPresence = "${baseUrl}api/v2/sessions/group/expert/presence";
   static const sessionGetAvailableSlots = "${baseUrl}api/v2/sessions/getAvailableSlots?";
   static const sessionBookSession = "${baseUrl}api/v2/sessions/bookSession";
   static const sessionCancelBooking = "${baseUrl}api/v2/sessions/cancelSessionBooking";
@@ -63,6 +64,12 @@ abstract class Api {
   static const feedPostsCreate = "${baseUrl}api/v2/feed/posts/create";
   static const feedPostsFeed = "${baseUrl}api/v2/feed/posts/feed?";
   static const feedPostsLike = "${baseUrl}api/v2/feed/posts/like";
+  static const feedPostsShare = "${baseUrl}api/v2/feed/posts/share";
+  static const feedCommentsCreate = "${baseUrl}api/v2/feed/comments/create";
+  static const feedCommentsList = "${baseUrl}api/v2/feed/comments/list?";
+  static const feedExpertsFollow = "${baseUrl}api/v2/feed/experts/follow";
+  static const feedExpertsFollowStatus = "${baseUrl}api/v2/feed/experts/follow/status?";
+  static const feedExpertsFollowing = "${baseUrl}api/v2/feed/experts/following?";
   static const feedPostsDeletePrefix = "${baseUrl}api/v2/feed/posts/";
 
   static const moderationReportUser = "${baseUrl}api/v2/moderation/reports/user";

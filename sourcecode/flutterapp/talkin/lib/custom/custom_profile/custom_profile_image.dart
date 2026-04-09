@@ -18,7 +18,7 @@ class CustomProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (image.startsWith("http"))
+    return (image.trim().isEmpty) ? Image.asset(AppAsset.profilePlaceHolder, fit: fit ?? BoxFit.cover) : (image.startsWith("http"))
         ? CachedNetworkImage(
             imageUrl: image,
             fit: fit ?? BoxFit.cover,
@@ -36,7 +36,7 @@ class CustomProfileImage extends StatelessWidget {
             },
           )
         : CachedNetworkImage(
-            imageUrl: "${Api.baseUrl}$image",
+            imageUrl: "${Api.baseUrl}${image.startsWith('/') ? image.substring(1) : image}",
             fit: fit ?? BoxFit.cover,
             placeholder: (context, url) {
               return Image.asset(
@@ -65,7 +65,7 @@ class CustomListenerProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (image.startsWith("http"))
+    return (image.trim().isEmpty) ? Image.asset(AppAsset.profilePlaceHolder, fit: fit ?? BoxFit.cover) : (image.startsWith("http"))
         ? CachedNetworkImage(
             imageUrl: image,
             fit: fit ?? BoxFit.cover,
@@ -83,7 +83,7 @@ class CustomListenerProfileImage extends StatelessWidget {
             },
           )
         : CachedNetworkImage(
-            imageUrl: "${Api.baseUrl}$image",
+            imageUrl: "${Api.baseUrl}${image.startsWith('/') ? image.substring(1) : image}",
             fit: fit ?? BoxFit.cover,
             placeholder: (context, url) {
               return Image.asset(
@@ -112,7 +112,7 @@ class SendMessageImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (image.startsWith("http"))
+    return (image.trim().isEmpty) ? Image.asset(AppAsset.profilePlaceHolder, fit: fit ?? BoxFit.cover) : (image.startsWith("http"))
         ? CachedNetworkImage(
             imageUrl: image,
             fit: fit ?? BoxFit.cover,
@@ -147,7 +147,7 @@ class SendMessageImage extends StatelessWidget {
             },
           )
         : CachedNetworkImage(
-            imageUrl: "${Api.baseUrl}$image",
+            imageUrl: "${Api.baseUrl}${image.startsWith('/') ? image.substring(1) : image}",
             fit: fit ?? BoxFit.cover,
             placeholder: (context, url) {
               return Container(
@@ -194,7 +194,7 @@ class SendMessageImageFullScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (image.startsWith("http"))
+    return (image.trim().isEmpty) ? Image.asset(AppAsset.profilePlaceHolder, fit: fit ?? BoxFit.cover) : (image.startsWith("http"))
         ? CachedNetworkImage(
             imageUrl: image,
             fit: fit ?? BoxFit.cover,
@@ -220,7 +220,7 @@ class SendMessageImageFullScreen extends StatelessWidget {
             },
           )
         : CachedNetworkImage(
-            imageUrl: "${Api.baseUrl}$image",
+            imageUrl: "${Api.baseUrl}${image.startsWith('/') ? image.substring(1) : image}",
             fit: fit ?? BoxFit.cover,
             placeholder: (context, url) {
               return Center(

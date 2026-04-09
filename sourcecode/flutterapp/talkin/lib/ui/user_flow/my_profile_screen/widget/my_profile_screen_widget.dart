@@ -108,6 +108,43 @@ class MyProfileTopView extends StatelessWidget {
                     Spacer(),
                     GestureDetector(
                       onTap: () {
+                        Get.toNamed(
+                          AppRoutes.feedScreen,
+                          arguments: {
+                            'standalone': true,
+                            'title': 'My Posts',
+                            'userId': Database.loginUserId,
+                            'showComposer': true,
+                          },
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.dynamic_feed_rounded,
+                              size: 17,
+                              color: AppColors.appColor,
+                            ),
+                            SizedBox(
+                              width: Get.width * 0.14,
+                              child: Text(
+                                'My Posts',
+                                overflow: TextOverflow.ellipsis,
+                                style: AppFontStyle.fontStyleW700(fontSize: 11, fontColor: AppColors.appColor),
+                              ).paddingOnly(left: 5),
+                            )
+                          ],
+                        ),
+                      ).paddingOnly(right: 8),
+                    ).paddingOnly(top: 3),
+                    GestureDetector(
+                      onTap: () {
                         Get.toNamed(AppRoutes.editProfileScreen);
                       },
                       child: Container(

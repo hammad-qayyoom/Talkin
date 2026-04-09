@@ -4,6 +4,7 @@ import 'package:talk_in/ui/host_flow/host_app_language_screen/binding/host_app_l
 import 'package:talk_in/ui/host_flow/host_app_language_screen/view/host_app_language_screen.dart';
 import 'package:talk_in/ui/host_flow/expert_availability_screen/view/expert_availability_screen.dart';
 import 'package:talk_in/ui/host_flow/expert_sessions_screen/view/expert_sessions_screen.dart';
+import 'package:talk_in/ui/host_flow/group_sessions_screen/view/host_group_sessions_screen.dart';
 import 'package:talk_in/ui/host_flow/host_bottom_bar/binding/host_bottom_bar_binding.dart';
 import 'package:talk_in/ui/host_flow/host_bottom_bar/view/host_bottom_bar_screen.dart';
 import 'package:talk_in/ui/host_flow/host_chat_list_search_screen/binding/host_chat_list_search_binding.dart';
@@ -60,12 +61,15 @@ import 'package:talk_in/ui/user_flow/fake_video_call_screen/binding/fake_video_c
 import 'package:talk_in/ui/user_flow/fake_video_call_screen/view/fake_video_call_view.dart';
 import 'package:talk_in/ui/user_flow/fill_profile_screen/binding/fill_profile_screen_binding.dart';
 import 'package:talk_in/ui/user_flow/fill_profile_screen/view/fill_profile_screen_view.dart';
+import 'package:talk_in/ui/user_flow/feed_screen/binding/feed_screen_binding.dart';
+import 'package:talk_in/ui/user_flow/feed_screen/view/feed_screen.dart';
 import 'package:talk_in/ui/user_flow/forgot_password_screen/binding/forgot_password_binding.dart';
 import 'package:talk_in/ui/user_flow/forgot_password_screen/view/forgot_password_screen.dart';
 import 'package:talk_in/ui/user_flow/help_center_screen/binding/help_center_screen_binding.dart';
 import 'package:talk_in/ui/user_flow/help_center_screen/view/help_center_screen.dart';
 import 'package:talk_in/ui/user_flow/home_screen/binding/home_screen_binding.dart';
 import 'package:talk_in/ui/user_flow/home_screen/view/home_screen.dart';
+import 'package:talk_in/ui/user_flow/group_sessions_screen/view/user_group_sessions_screen.dart';
 import 'package:talk_in/ui/user_flow/host_request_sent_successfully_screen/binding/host_request_sent_successfully_binding.dart';
 import 'package:talk_in/ui/user_flow/host_request_sent_successfully_screen/view/host_request_sent_successfully_screen.dart';
 import 'package:talk_in/ui/user_flow/host_verification_listeners_detail_screen/view/host_verification_listeners_detail_screen.dart';
@@ -161,6 +165,11 @@ class AppPages {
       name: AppRoutes.homeScreen,
       page: () => const HomeScreen(),
       binding: HomeScreenBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.feedScreen,
+      page: () => const FeedScreen(),
+      binding: FeedScreenBinding(),
     ),
     GetPage(
       name: AppRoutes.topListenersViewAll,
@@ -417,12 +426,20 @@ class AppPages {
       page: () => const UserMySessionsScreen(),
     ),
     GetPage(
+      name: AppRoutes.userGroupSessionsScreen,
+      page: () => const UserGroupSessionsScreen(),
+    ),
+    GetPage(
       name: AppRoutes.hostAvailabilityScreen,
       page: () => const ExpertAvailabilityScreen(),
     ),
     GetPage(
       name: AppRoutes.hostSessionsScreen,
       page: () => const ExpertSessionsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.hostGroupSessionsScreen,
+      page: () => const HostGroupSessionsScreen(),
     ),
   ];
 }

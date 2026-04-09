@@ -10,6 +10,7 @@ import 'package:talk_in/ui/host_flow/expert_sessions_screen/view/expert_sessions
 import 'package:talk_in/ui/host_flow/host_home_screen/view/host_home_screen.dart';
 import 'package:talk_in/ui/host_flow/host_profile_screen/view/host_profile_screen_view.dart';
 import 'package:talk_in/ui/host_flow/host_wallet_screen/view/host_wallet_screen.dart';
+import 'package:talk_in/ui/user_flow/feed_screen/view/feed_screen.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/api/setting_api.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/model/setting_api_model.dart';
 import 'package:talk_in/utils/constant.dart';
@@ -43,6 +44,7 @@ class HostBottomBarController extends GetxController {
 
   final pages = [
     const HostHomeScreen(),
+    const FeedScreen(controllerTag: 'hostFeed'),
     HostCallingScreen(),
     HostChatScreen(),
     HostWalletScreen(),

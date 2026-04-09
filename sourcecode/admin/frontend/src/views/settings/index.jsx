@@ -61,7 +61,12 @@ const Settings = () => {
     
 
   useEffect(() => {
-    if (activeTab === 'general' || activeTab === 'payment' || activeTab === 'ads' || activeTab === 'withdrawal') {
+    if (
+      activeTab === 'general' ||
+      activeTab === 'payment' ||
+      activeTab === 'ads' ||
+      activeTab === 'withdrawal'
+    ) {
       dispatch(fetchSettings())
     }
 

@@ -4,6 +4,7 @@ import 'package:talk_in/ui/user_flow/bottom_bar/controller/bottom_bar_controller
 import 'package:talk_in/ui/user_flow/calling_screen/controller/calling_screen_controller.dart';
 import 'package:talk_in/ui/user_flow/chat_screen/controller/chat_screen_controller.dart';
 import 'package:talk_in/ui/user_flow/edit_profile_screen/controller/edit_profile_screen_controller.dart';
+import 'package:talk_in/ui/user_flow/feed_screen/controller/feed_screen_controller.dart';
 import 'package:talk_in/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:talk_in/ui/user_flow/listener_screen/controller/listeners_screen_controller.dart';
 
@@ -12,6 +13,7 @@ class BottomBarBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<BottomBarController>(() => BottomBarController());
     Get.lazyPut<HomeScreenController>(() => HomeScreenController(), fenix: true);
+    Get.lazyPut<FeedScreenController>(() => FeedScreenController(), tag: 'bottomFeed', fenix: true);
     Get.lazyPut<EditProfileController>(() => EditProfileController(), fenix: true);
     Get.lazyPut<ListenersScreenController>(() => ListenersScreenController(), fenix: true);
     Get.lazyPut<AllListenersController>(() => AllListenersController());

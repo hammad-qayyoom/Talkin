@@ -54,10 +54,30 @@ const HistoryTables = () => {
   const DateRangeRef = useRef(false)
 
   const { history, startDate, endDate, page, pageSize } = useSelector(state => state.userReducer)
+  const [selectedUser, setSelectedUser] = useState({})
 
-  const userDetails = localStorage.getItem('selectedUser') ? JSON.parse(localStorage.getItem('selectedUser')) : {}
-  const userId = userDetails?._id
+  const userId = selectedUser?._id
   const typeWiseStats = history.typeWiseStats || []
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const storedSelectedUser = localStorage.getItem('selectedUser')
+
+    if (!storedSelectedUser) {
+      setSelectedUser({})
+
+      return
+    }
+
+    try {
+      setSelectedUser(JSON.parse(storedSelectedUser))
+    } catch (_) {
+      setSelectedUser({})
+    }
+  }, [])
 
   const getTransactionTypeDistribution = () => {
     const getTransactionTypeName = type => {

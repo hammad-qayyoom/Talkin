@@ -236,6 +236,27 @@ class FindMoreWidget extends StatelessWidget {
                     left: Get.width * 0.22,
                     right: Get.width * 0.22),
               ),
+              Center(
+                child: SizedBox(
+                  height: 40,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Get.toNamed(AppRoutes.userGroupSessionsScreen);
+                    },
+                    child: Text(
+                      'Explore Group Sessions',
+                      style: AppFontStyle.fontStyleW600(
+                        fontSize: 13,
+                        fontColor: AppColors.appColor,
+                      ),
+                    ),
+                  ),
+                ).paddingOnly(
+                  bottom: 8,
+                  left: Get.width * 0.2,
+                  right: Get.width * 0.2,
+                ),
+              ),
               GetBuilder<HomeScreenController>(
                 id: Constant.idHomeCategories,
                 builder: (controller) {

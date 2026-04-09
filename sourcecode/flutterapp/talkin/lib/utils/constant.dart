@@ -61,6 +61,8 @@ class Constant {
   static var idHomeCategories = 'idHomeCategories';
   static var idPhoneFieldUpdate = 'idPhoneFieldUpdate';
   static var idGetListenerReview = 'idGetListenerReview';
+  static var idFeed = 'idFeed';
+  static var idFeedComments = 'idFeedComments';
 
   /// =================== Id For Subscription Plan =================== ///
   static var idGetCoinPlan = 'idGetCoinPlan';

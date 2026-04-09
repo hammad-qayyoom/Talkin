@@ -18,6 +18,21 @@ class SessionBookingService {
     };
   }
 
+  static String _normalizeSessionAccessErrorMessage(dynamic message) {
+    final rawMessage = (message ?? '').toString().trim();
+    final normalized = rawMessage.toLowerCase();
+
+    final isExpertNotJoinedTechnicalError =
+        normalized.contains('joinwindowstate') &&
+        normalized.contains('before initialization');
+
+    if (isExpertNotJoinedTechnicalError) {
+      return 'You can join this session only after the expert has joined.';
+    }
+
+    return rawMessage.isEmpty ? 'Session access denied.' : rawMessage;
+  }
+
   static Future<Map<String, dynamic>> getAvailableSlots({
     String? listenerId,
     String? expertId,
@@ -71,6 +86,284 @@ class SessionBookingService {
       return {
         'status': false,
         'message': 'Failed to fetch available slots.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> getGroupSessions({
+    String? expertId,
+    String? callType,
+    String? status,
+    bool mine = false,
+    bool includePast = false,
+    int start = 1,
+    int limit = 20,
+  }) async {
+    try {
+      final headers = await _headers();
+
+      final queryParameters = <String, String>{
+        'start': '$start',
+        'limit': '$limit',
+        'mine': mine ? 'true' : 'false',
+        'includePast': includePast ? 'true' : 'false',
+      };
+
+      final normalizedExpertId = (expertId ?? '').trim();
+      if (normalizedExpertId.isNotEmpty) {
+        queryParameters['expertId'] = normalizedExpertId;
+      }
+
+      final normalizedCallType = (callType ?? '').trim().toLowerCase();
+      if (normalizedCallType == 'audio' || normalizedCallType == 'video') {
+        queryParameters['callType'] = normalizedCallType;
+      }
+
+      final normalizedStatus = (status ?? '').trim().toLowerCase();
+      if (normalizedStatus.isNotEmpty) {
+        queryParameters['status'] = normalizedStatus;
+      }
+
+      final uri = Uri.parse(Api.groupSessionList).replace(
+        queryParameters: queryParameters,
+      );
+
+      final response = await http.get(uri, headers: headers);
+      final decoded = json.decode(response.body);
+
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid group sessions response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to fetch group sessions.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> createGroupSession({
+    required String title,
+    required String description,
+    required DateTime startAt,
+    required int durationMinutes,
+    required String callType,
+    required int maxParticipants,
+  }) async {
+    try {
+      final headers = await _headers();
+      final normalizedDurationMinutes = durationMinutes <= 0 ? 30 : durationMinutes;
+      final resolvedStartAt = startAt.toUtc();
+      final resolvedEndAt = resolvedStartAt.add(Duration(minutes: normalizedDurationMinutes));
+
+      final response = await http.post(
+        Uri.parse(Api.groupSessionCreate),
+        headers: headers,
+        body: json.encode({
+          'title': title.trim(),
+          'description': description.trim(),
+          'startAt': resolvedStartAt.toIso8601String(),
+          'endAt': resolvedEndAt.toIso8601String(),
+          'callType': callType.trim().toLowerCase() == 'video' ? 'video' : 'audio',
+          'maxParticipants': maxParticipants < 2 ? 2 : maxParticipants,
+          'timezone': startAt.timeZoneName,
+          'joinDeadline': resolvedStartAt.toIso8601String(),
+        }),
+      );
+
+      final decoded = json.decode(response.body);
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid create group session response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to create group session.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> joinGroupSession({
+    required String sessionId,
+    String? userId,
+  }) async {
+    try {
+      final headers = await _headers();
+
+      final body = <String, dynamic>{
+        'sessionId': sessionId,
+      };
+
+      if ((userId ?? '').trim().isNotEmpty) {
+        body['userId'] = userId!.trim();
+      }
+
+      final response = await http.post(
+        Uri.parse(Api.groupSessionJoin),
+        headers: headers,
+        body: json.encode(body),
+      );
+
+      final decoded = json.decode(response.body);
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid join group session response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to join group session.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> leaveGroupSession({
+    required String sessionId,
+    String? userId,
+  }) async {
+    try {
+      final headers = await _headers();
+
+      final body = <String, dynamic>{
+        'sessionId': sessionId,
+      };
+
+      if ((userId ?? '').trim().isNotEmpty) {
+        body['userId'] = userId!.trim();
+      }
+
+      final response = await http.post(
+        Uri.parse(Api.groupSessionLeave),
+        headers: headers,
+        body: json.encode(body),
+      );
+
+      final decoded = json.decode(response.body);
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid leave group session response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to leave group session.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> getGroupSessionParticipants({
+    required String sessionId,
+  }) async {
+    try {
+      final headers = await _headers();
+
+      final uri = Uri.parse(Api.groupSessionParticipants).replace(
+        queryParameters: {
+          'sessionId': sessionId,
+        },
+      );
+
+      final response = await http.get(uri, headers: headers);
+      final decoded = json.decode(response.body);
+
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid group participants response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to fetch group session participants.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> cancelGroupSession({
+    required String sessionId,
+    String? cancelReason,
+  }) async {
+    try {
+      final headers = await _headers();
+
+      final response = await http.post(
+        Uri.parse(Api.groupSessionCancel),
+        headers: headers,
+        body: json.encode({
+          'sessionId': sessionId,
+          if ((cancelReason ?? '').trim().isNotEmpty)
+            'cancelReason': cancelReason!.trim(),
+        }),
+      );
+
+      final decoded = json.decode(response.body);
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid cancel group session response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to cancel group session.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> markGroupSessionExpertPresence({
+    required String sessionId,
+    required String action,
+  }) async {
+    try {
+      final headers = await _headers();
+      final normalizedAction = action.trim().toLowerCase();
+
+      final response = await http.post(
+        Uri.parse(Api.groupSessionExpertPresence),
+        headers: headers,
+        body: json.encode({
+          'sessionId': sessionId,
+          'action': normalizedAction,
+        }),
+      );
+
+      final decoded = json.decode(response.body);
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid group expert presence response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to update group expert presence.',
       };
     }
   }
@@ -184,7 +477,14 @@ class SessionBookingService {
       final decoded = json.decode(response.body);
 
       if (decoded is Map<String, dynamic>) {
-        return decoded;
+        if (decoded['status'] == true) {
+          return decoded;
+        }
+
+        return {
+          ...decoded,
+          'message': _normalizeSessionAccessErrorMessage(decoded['message']),
+        };
       }
 
       return {

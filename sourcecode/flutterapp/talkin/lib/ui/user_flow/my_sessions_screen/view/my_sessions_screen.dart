@@ -114,6 +114,13 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       return;
     }
 
+    final sessionType =
+        (session['sessionType'] ?? '').toString().trim().toLowerCase();
+    if (sessionType == 'group') {
+      Utils.showToast(context, 'Group session access granted.');
+      return;
+    }
+
     final listenerId = (expert['legacyListenerId'] ?? '').toString();
     if (listenerId.isEmpty) {
       Utils.showToast(

@@ -351,6 +351,39 @@ class UserProfileInfoView extends StatelessWidget {
                 ],
               ).paddingOnly(left: 12, right: 12, top: 14, bottom: 8),
             ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  final expertId = (controller.listenerId ?? '').toString().trim();
+                  if (expertId.isEmpty) {
+                    return;
+                  }
+
+                  Get.toNamed(
+                    AppRoutes.feedScreen,
+                    arguments: {
+                      'standalone': true,
+                      'title': 'Profile Posts',
+                      'expertId': expertId,
+                      'showComposer': false,
+                    },
+                  );
+                },
+                icon: Icon(
+                  Icons.dynamic_feed_rounded,
+                  size: 18,
+                  color: AppColors.appColor,
+                ),
+                label: Text(
+                  'View Posts',
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 12,
+                    fontColor: AppColors.appColor,
+                  ),
+                ),
+              ).paddingOnly(left: 12, top: 10),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
