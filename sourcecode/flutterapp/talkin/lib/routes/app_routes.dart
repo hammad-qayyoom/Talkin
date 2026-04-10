@@ -11,6 +11,7 @@ class AppRoutes {
   static const String bottomBar = '/bottomBar';
   static const String homeScreen = '/homeScreen';
   static const String feedScreen = '/feedScreen';
+  static const String feedAuthorProfileScreen = '/feedAuthorProfileScreen';
   static const String hostHomeScreen = '/hostHomeScreen';
   static const String topListenersViewAll = '/topListenersViewAll';
   static const String allListeners = '/allListeners';

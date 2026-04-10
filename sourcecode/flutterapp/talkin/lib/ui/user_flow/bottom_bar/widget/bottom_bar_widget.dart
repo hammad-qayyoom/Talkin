@@ -72,8 +72,8 @@ class BottomBarView extends StatelessWidget {
                 bottomBarItemView(
                   index: 4,
                   selectIndex: logic.selectIndex,
-                  image: AppAsset.calling,
-                  label: EnumLocale.txtCalling.name.tr,
+                  image: AppAsset.calendar,
+                  label: 'Sessions',
                 ),
               ],
             ),

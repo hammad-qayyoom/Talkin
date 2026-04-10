@@ -73,13 +73,6 @@ class SettingView extends StatelessWidget {
           },
         ).paddingOnly(bottom: 22),
         SettingMenu(
-          icon: AppAsset.calendar,
-          title: 'My Bookings / My Sessions',
-          onTap: () {
-            Get.toNamed(AppRoutes.userMySessionsScreen);
-          },
-        ).paddingOnly(bottom: 22),
-        SettingMenu(
           icon: AppAsset.logOut,
           title: EnumLocale.txtLogoutApp.name.tr,
           onTap: () {

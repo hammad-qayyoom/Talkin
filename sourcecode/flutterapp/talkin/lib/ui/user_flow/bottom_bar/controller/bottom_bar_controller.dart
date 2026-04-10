@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/socket/socket_listen.dart';
 import 'package:talk_in/socket/socket_service.dart';
-import 'package:talk_in/ui/user_flow/calling_screen/view/calling_screen.dart';
 import 'package:talk_in/ui/user_flow/chat_screen/view/chat_screen.dart';
 import 'package:talk_in/ui/user_flow/feed_screen/view/feed_screen.dart';
 import 'package:talk_in/ui/user_flow/home_screen/view/home_screen.dart';
 import 'package:talk_in/ui/user_flow/listener_screen/view/listeners_screen.dart';
+import 'package:talk_in/ui/user_flow/my_sessions_screen/view/my_sessions_screen.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/api/setting_api.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/model/setting_api_model.dart';
 import 'package:talk_in/utils/constant.dart';
@@ -73,7 +73,7 @@ class BottomBarController extends GetxController {
     FeedScreen(controllerTag: 'bottomFeed'),
     ListenersScreen(),
     ChatScreen(),
-    CallingScreen(),
+    UserMySessionsScreen(),
   ];
 
   onClick(value) async {

@@ -6,12 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/custom/bottom_sheet/report_bottom_sheet.dart';
 import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
+import 'package:talk_in/routes/app_routes.dart';
 import 'package:talk_in/ui/user_flow/feed_screen/controller/feed_screen_controller.dart';
 import 'package:talk_in/utils/api.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/constant.dart';
 import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/font_style.dart';
+import 'package:talk_in/utils/utils.dart';
 import 'package:video_player/video_player.dart';
 
 class FeedScreen extends StatelessWidget {
@@ -221,10 +223,17 @@ class _ComposerView extends StatelessWidget {
     String profileImage =
         (Database.fetchLoginUserProfileModel?.user?.profilePic ?? '')
             .toString();
+    final listenerProfileImage =
+        (Database.fetchListenerProfileModel?.data?.image ?? '').toString();
+    final isListener =
+        Database.fetchLoginUserProfileModel?.user?.isListener == true ||
+            Database.isListener;
+    final hasExpertFilter = (controller.expertIdFilter ?? '').trim().isNotEmpty;
 
-    if (controllerTag == 'hostFeed') {
-      profileImage =
-          (Database.fetchListenerProfileModel?.data?.image ?? '').toString();
+    if (controllerTag == 'hostFeed' || hasExpertFilter || isListener) {
+      if (listenerProfileImage.trim().isNotEmpty) {
+        profileImage = listenerProfileImage;
+      }
     }
 
     return Container(
@@ -554,33 +563,44 @@ class _FeedPostCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 48,
-                width: 48,
-                child: ClipOval(
-                  child: CustomProfileImage(image: post.authorProfilePic),
-                ),
-              ),
-              const SizedBox(width: 10),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      post.displayName,
-                      style: AppFontStyle.fontStyleW700(
-                        fontSize: 15,
-                        fontColor: AppColors.black,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(14),
+                  onTap: () => _openAuthorProfile(post: post),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        height: 48,
+                        width: 48,
+                        child: ClipOval(
+                          child:
+                              CustomProfileImage(image: post.authorProfilePic),
+                        ),
                       ),
-                    ),
-                    Text(
-                      _relativeTime(post.createdAt),
-                      style: AppFontStyle.fontStyleW500(
-                        fontSize: 12,
-                        fontColor: AppColors.grey,
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              post.displayName,
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: 15,
+                                fontColor: AppColors.black,
+                              ),
+                            ),
+                            Text(
+                              _relativeTime(post.createdAt),
+                              style: AppFontStyle.fontStyleW500(
+                                fontSize: 12,
+                                fontColor: AppColors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               if (showFollowButton)
@@ -712,6 +732,32 @@ class _FeedPostCard extends StatelessWidget {
     );
   }
 
+  void _openAuthorProfile({
+    required FeedPostItem post,
+  }) {
+    final expertId = post.expertId.trim();
+    final userId = post.userId.trim();
+    final targetUserId = expertId.isNotEmpty ? '' : userId;
+
+    if (expertId.isEmpty && userId.isEmpty) {
+      final activeContext = Get.context;
+      if (activeContext != null) {
+        Utils.showToast(activeContext, 'Profile unavailable right now.');
+      }
+      return;
+    }
+
+    Get.toNamed(
+      AppRoutes.feedAuthorProfileScreen,
+      arguments: {
+        'userId': targetUserId,
+        'expertId': expertId,
+        'name': post.displayName,
+        'profilePic': post.authorProfilePic,
+      },
+    );
+  }
+
   void _openPostActionSheet({
     required BuildContext context,
     required FeedPostItem post,
@@ -737,14 +783,17 @@ class _FeedPostCard extends StatelessWidget {
                       fontColor: AppColors.black,
                     ),
                   ),
-                  onTap: () {
+                  onTap: () async {
                     Get.back();
-                    Future.delayed(const Duration(milliseconds: 120), () {
-                      _openEditPostSheet(
-                        post: post,
-                        controller: controller,
-                      );
-                    });
+
+                    await Future<void>.delayed(
+                      const Duration(milliseconds: 120),
+                    );
+
+                    await _openEditPostSheet(
+                      post: post,
+                      controller: controller,
+                    );
                   },
                 ),
               if (controller.isMyPost(post))
@@ -787,17 +836,14 @@ class _FeedPostCard extends StatelessWidget {
     );
   }
 
-  void _openEditPostSheet({
+  Future<void> _openEditPostSheet({
     required FeedPostItem post,
     required FeedScreenController controller,
-  }) {
+  }) async {
     final activeContext = Get.context;
     if (activeContext == null) return;
 
-    final textController = TextEditingController(text: post.content);
-    bool isSaving = false;
-
-    showModalBottomSheet(
+    final editedContent = await showModalBottomSheet<String>(
       context: activeContext,
       isScrollControlled: true,
       backgroundColor: AppColors.white,
@@ -805,111 +851,16 @@ class _FeedPostCard extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (sheetContext) {
-        return StatefulBuilder(
-          builder: (context, setStateModal) {
-            return SafeArea(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: 14,
-                  right: 14,
-                  top: 14,
-                  bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 14,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Edit post',
-                      style: AppFontStyle.fontStyleW700(
-                        fontSize: 16,
-                        fontColor: AppColors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: textController,
-                      maxLines: 6,
-                      minLines: 3,
-                      maxLength: 4000,
-                      decoration: InputDecoration(
-                        hintText: "What's on your mind?",
-                        hintStyle: AppFontStyle.fontStyleW500(
-                          fontSize: 13,
-                          fontColor: AppColors.grey,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: AppColors.borderColor),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: AppColors.appColor),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: isSaving ? null : () => Get.back(),
-                            child: const Text('Cancel'),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: isSaving
-                                ? null
-                                : () async {
-                                    setStateModal(() {
-                                      isSaving = true;
-                                    });
-
-                                    final isUpdated = await controller.editPost(
-                                      post: post,
-                                      content: textController.text,
-                                    );
-
-                                    if (!(Get.isBottomSheetOpen ?? false)) {
-                                      return;
-                                    }
-
-                                    setStateModal(() {
-                                      isSaving = false;
-                                    });
-
-                                    if (isUpdated &&
-                                        (Get.isBottomSheetOpen ?? false)) {
-                                      Get.back();
-                                    }
-                                  },
-                            child: isSaving
-                                ? SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: AppColors.white,
-                                    ),
-                                  )
-                                : const Text('Save'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+        return _EditPostSheetContent(initialContent: post.content);
       },
-    ).whenComplete(() => textController.dispose());
+    );
+
+    if (editedContent == null) return;
+
+    await controller.editPost(
+      post: post,
+      content: editedContent,
+    );
   }
 
   void _openCommentSheet({
@@ -1108,7 +1059,10 @@ class _PostMediaView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (post.mediaType == 'video') {
-      final url = _toAbsoluteUrl(post.mediaUrl);
+      final rawVideoUrl = post.mediaUrl.trim().isNotEmpty
+          ? post.mediaUrl
+          : (post.mediaUrls.isNotEmpty ? post.mediaUrls.first : '');
+      final url = _toAbsoluteUrl(rawVideoUrl);
       return _PostVideoPlayer(url: url);
     }
     if (post.mediaUrls.length == 1) {
@@ -1424,28 +1378,73 @@ class _PostVideoPlayer extends StatefulWidget {
 class _PostVideoPlayerState extends State<_PostVideoPlayer> {
   late VideoPlayerController _controller;
   bool _initialized = false;
+  bool _hasError = false;
+  bool _isInitializing = false;
+  bool _controllerCreated = false;
   static const double _targetAspectRatio = 16 / 9;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url))
-      ..initialize().then((_) {
-        if (mounted) {
-          setState(() {
-            _initialized = true;
-          });
-        }
+    _initializeVideo();
+  }
+
+  Future<void> _initializeVideo() async {
+    final videoUrl = widget.url.trim();
+    if (videoUrl.isEmpty) {
+      if (!mounted) return;
+      setState(() {
+        _hasError = true;
+        _initialized = false;
+        _isInitializing = false;
       });
+      return;
+    }
+
+    if (!mounted) return;
+    setState(() {
+      _hasError = false;
+      _initialized = false;
+      _isInitializing = true;
+    });
+
+    if (_controllerCreated) {
+      _controller.dispose();
+      _controllerCreated = false;
+    }
+
+    try {
+      _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+      _controllerCreated = true;
+
+      await _controller.initialize().timeout(const Duration(seconds: 12));
+
+      if (!mounted) return;
+      setState(() {
+        _initialized = true;
+        _isInitializing = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _hasError = true;
+        _initialized = false;
+        _isInitializing = false;
+      });
+    }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (_controllerCreated) {
+      _controller.dispose();
+    }
     super.dispose();
   }
 
   void _togglePlay() {
+    if (!_initialized || !_controllerCreated) return;
+
     if (_controller.value.isPlaying) {
       _controller.pause();
     } else {
@@ -1455,7 +1454,7 @@ class _PostVideoPlayerState extends State<_PostVideoPlayer> {
   }
 
   Future<void> _openFullScreen() async {
-    if (!_initialized) return;
+    if (!_initialized || !_controllerCreated) return;
 
     final wasPlaying = _controller.value.isPlaying;
     final currentPosition = _controller.value.position;
@@ -1492,7 +1491,42 @@ class _PostVideoPlayerState extends State<_PostVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_initialized) {
+    if (_hasError) {
+      return GestureDetector(
+        onTap: _initializeVideo,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: AspectRatio(
+            aspectRatio: _targetAspectRatio,
+            child: Container(
+              width: Get.width,
+              color: AppColors.black.withValues(alpha: 0.88),
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.videocam_off_rounded,
+                    color: AppColors.white.withValues(alpha: 0.9),
+                    size: 30,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Tap to retry',
+                    style: AppFontStyle.fontStyleW600(
+                      fontSize: 12,
+                      fontColor: AppColors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    if (_isInitializing || !_initialized) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: AspectRatio(
@@ -1874,6 +1908,102 @@ class _FeedFullscreenVideoPlayerState
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _EditPostSheetContent extends StatefulWidget {
+  const _EditPostSheetContent({required this.initialContent});
+  final String initialContent;
+
+  @override
+  State<_EditPostSheetContent> createState() => _EditPostSheetContentState();
+}
+
+class _EditPostSheetContentState extends State<_EditPostSheetContent> {
+  late final TextEditingController textController;
+
+  @override
+  void initState() {
+    super.initState();
+    textController = TextEditingController(text: widget.initialContent);
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: 14,
+          right: 14,
+          top: 14,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 14,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Edit post',
+              style: AppFontStyle.fontStyleW700(
+                fontSize: 16,
+                fontColor: AppColors.black,
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: textController,
+              maxLines: 6,
+              minLines: 3,
+              maxLength: 4000,
+              decoration: InputDecoration(
+                hintText: "What's on your mind?",
+                hintStyle: AppFontStyle.fontStyleW500(
+                  fontSize: 13,
+                  fontColor: AppColors.grey,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.borderColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.appColor),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Get.back(),
+                    child: const Text('Cancel'),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Get.back(result: textController.text);
+                    },
+                    child: const Text('Save'),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

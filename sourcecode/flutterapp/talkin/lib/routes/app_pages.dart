@@ -62,6 +62,7 @@ import 'package:talk_in/ui/user_flow/fake_video_call_screen/view/fake_video_call
 import 'package:talk_in/ui/user_flow/fill_profile_screen/binding/fill_profile_screen_binding.dart';
 import 'package:talk_in/ui/user_flow/fill_profile_screen/view/fill_profile_screen_view.dart';
 import 'package:talk_in/ui/user_flow/feed_screen/binding/feed_screen_binding.dart';
+import 'package:talk_in/ui/user_flow/feed_screen/view/feed_author_profile_screen.dart';
 import 'package:talk_in/ui/user_flow/feed_screen/view/feed_screen.dart';
 import 'package:talk_in/ui/user_flow/forgot_password_screen/binding/forgot_password_binding.dart';
 import 'package:talk_in/ui/user_flow/forgot_password_screen/view/forgot_password_screen.dart';
@@ -170,6 +171,10 @@ class AppPages {
       name: AppRoutes.feedScreen,
       page: () => const FeedScreen(),
       binding: FeedScreenBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.feedAuthorProfileScreen,
+      page: () => const FeedAuthorProfileScreen(),
     ),
     GetPage(
       name: AppRoutes.topListenersViewAll,

@@ -47,9 +47,11 @@ class FeedScreenController extends GetxController {
   void onInit() {
     super.onInit();
 
+    var hasShowComposerArg = false;
     final args = Get.arguments;
     if (args is Map<String, dynamic>) {
       isStandalone = args['standalone'] == true;
+      hasShowComposerArg = args.containsKey('showComposer');
       showComposer = args['showComposer'] != false;
 
       final requestedTitle = (args['title'] ?? '').toString().trim();
@@ -65,13 +67,15 @@ class FeedScreenController extends GetxController {
           : (args['expertId'] ?? '').toString().trim();
     }
 
-    if (userIdFilter != null && userIdFilter != currentUserId()) {
-      showComposer = false;
-    }
-    if (expertIdFilter != null &&
-        expertIdFilter!.isNotEmpty &&
-        userIdFilter == null) {
-      showComposer = false;
+    if (!hasShowComposerArg) {
+      if (userIdFilter != null && userIdFilter != currentUserId()) {
+        showComposer = false;
+      }
+      if (expertIdFilter != null &&
+          expertIdFilter!.isNotEmpty &&
+          userIdFilter == null) {
+        showComposer = false;
+      }
     }
 
     scrollController.addListener(_onScroll);
@@ -347,8 +351,18 @@ class FeedScreenController extends GetxController {
   }
 
   Future<void> openMyPostsManager() async {
+    final isListener =
+        Database.fetchLoginUserProfileModel?.user?.isListener == true ||
+            Database.isListener;
     final me = currentUserId().trim();
-    if (me.isEmpty) {
+    final expertId = currentExpertId().trim();
+
+    if (!isListener && me.isEmpty) {
+      _showToast('Unable to open your posts right now.');
+      return;
+    }
+
+    if (isListener && expertId.isEmpty && me.isEmpty) {
       _showToast('Unable to open your posts right now.');
       return;
     }
@@ -359,7 +373,8 @@ class FeedScreenController extends GetxController {
         'standalone': true,
         'title': 'My Posts',
         'showComposer': true,
-        'userId': me,
+        if (isListener && expertId.isNotEmpty) 'expertId': expertId,
+        if (!isListener || expertId.isEmpty) 'userId': me,
       },
     );
   }
@@ -526,6 +541,12 @@ class FeedScreenController extends GetxController {
   String currentUserId() {
     return (Database.fetchLoginUserProfileModel?.user?.id ??
             Database.loginUserId)
+        .toString();
+  }
+
+  String currentExpertId() {
+    return (Database.fetchLoginUserProfileModel?.user?.listenerId ??
+            Database.loginListenerId)
         .toString();
   }
 
