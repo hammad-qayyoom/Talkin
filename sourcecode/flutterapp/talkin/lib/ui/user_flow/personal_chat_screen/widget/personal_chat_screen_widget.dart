@@ -25,6 +25,14 @@ import 'package:talk_in/utils/font_style.dart';
 import 'package:talk_in/utils/utils.dart';
 import 'package:vibration/vibration.dart';
 
+final Color _chatBrandRed = AppColors.redesignBrandRed;
+final Color _chatBrandDark = AppColors.redesignBrandDark;
+final Color _chatSurface = AppColors.redesignChatSurface;
+final Color _chatBorder = AppColors.redesignSoftBorder;
+final Color _chatMutedText = AppColors.redesignMutedText;
+final Color _incomingBubble = AppColors.redesignIncomingBubble;
+final Color _outgoingBubble = AppColors.redesignOutgoingBubble;
+
 class ChatScreenAppBar extends StatelessWidget {
   const ChatScreenAppBar({super.key});
 
@@ -32,154 +40,151 @@ class ChatScreenAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<PersonalChatScreenController>(
       builder: (controller) {
+        final topInset = MediaQuery.of(context).padding.top;
+        final isOnline = controller.receiverStatusLabel == "true" ||
+            controller.receiverStatusLabel == "Available";
+
+        Widget actionButton({
+          required Widget child,
+          required VoidCallback onTap,
+        }) {
+          return GestureDetector(
+            onTap: onTap,
+            child: Container(
+              height: 40,
+              width: 40,
+              margin: const EdgeInsets.only(left: 8),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: _chatBorder),
+              ),
+              child: Center(child: child),
+            ),
+          );
+        }
+
         return Container(
-          padding: EdgeInsets.only(top: Get.height * 0.035),
+          padding: EdgeInsets.only(
+            top: topInset + 8,
+            left: 12,
+            right: 12,
+            bottom: 10,
+          ),
           decoration: BoxDecoration(
-            color: AppColors.lightPurple1,
+            color: _chatSurface,
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.2),
-                spreadRadius: 0.08,
-                offset: const Offset(0.0, 0.0),
-                blurRadius: 2.0,
+                color: AppColors.black.withValues(alpha: 0.06),
+                offset: const Offset(0, 2),
+                blurRadius: 8,
               ),
             ],
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InkWell(
+              actionButton(
                 onTap: () {
                   Get.back();
                 },
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 22, top: 22, right: 15, left: 22),
-                  child: Image.asset(
-                    height: 16,
-                    AppAsset.backArrowIcon,
-                    color: AppColors.black,
-                  ),
+                child: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 18,
+                  color: _chatBrandDark,
                 ),
               ),
+              const SizedBox(width: 10),
               Expanded(
-                  child: GestureDetector(
-                onTap: () {
-                  Get.toNamed(
-                    AppRoutes.profileDetailScreenView,
-                    arguments: controller.receiverId,
-                  );
-                },
-                child: Container(
-                  color: AppColors.transparent,
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed(
+                      AppRoutes.profileDetailScreenView,
+                      arguments: controller.receiverId,
+                    );
+                  },
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Container(
+                        clipBehavior: Clip.hardEdge,
+                        height: 52,
+                        width: 52,
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.grey.withValues(alpha: 0.5),
+                          borderRadius: BorderRadius.circular(14),
+                          color: AppColors.redesignSurfaceNeutral,
                         ),
-                        child: Container(
-                          // clipBehavior: Clip.hardEdge,
-                          height: Get.height * 0.058,
-                          width: Get.height * 0.058,
-                          decoration: BoxDecoration(
-                            border:
-                                Border.all(color: AppColors.white, width: 1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: ClipOval(
-                            child: CustomProfileImage(
-                                image: controller.receiverImage.toString()),
-                          ),
-                        ).paddingAll(1),
-                      ).paddingOnly(right: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            controller.receiverName.toString(),
-                            style: AppFontStyle.fontStyleW700(
-                                fontSize: 16, fontColor: AppColors.black),
-                          ).paddingOnly(bottom: 2),
-                          controller.receiverStatusLabel == "true" ||
-                                  controller.receiverStatusLabel == "Available"
-                              ? Container(
-                                  padding: EdgeInsets.only(
-                                      right: 5, bottom: 3, top: 3, left: 5),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: AppColors.green),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.white
-                                              .withValues(alpha: 0.5),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Container(
-                                          height: 7.5,
-                                          width: 7.5,
-                                          decoration: BoxDecoration(
-                                            color: AppColors.white,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ).paddingAll(1.8),
-                                      ).paddingOnly(right: 4),
-                                      Text(
-                                        EnumLocale.txtOnline.name.tr,
-                                        style: AppFontStyle.fontStyleW500(
-                                            fontSize: 10,
-                                            fontColor: AppColors.white),
-                                      ).paddingOnly(right: 4),
-                                    ],
+                        child: CustomProfileImage(
+                          image: controller.receiverImage.toString(),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              controller.receiverName.toString(),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: 16,
+                                fontColor: _chatBrandDark,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(999),
+                                color: isOnline
+                                    ? AppColors.redesignStatusSuccessBg
+                                    : AppColors.redesignSurfaceNeutral,
+                                border: Border.all(
+                                  color: isOnline
+                                      ? AppColors.redesignStatusSuccessBorder
+                                      : _chatBorder,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    height: 8,
+                                    width: 8,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: isOnline
+                                          ? AppColors.redesignStatusSuccess
+                                          : _chatMutedText,
+                                    ),
                                   ),
-                                )
-                              : Container(
-                                  padding: EdgeInsets.only(
-                                      right: 5, bottom: 3, top: 3, left: 5),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: AppColors.lightGrey1),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.onBoardingTxt
-                                              .withValues(alpha: 0.3),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Container(
-                                          height: 7.5,
-                                          width: 7.5,
-                                          decoration: BoxDecoration(
-                                            color: AppColors.onBoardingTxt,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ).paddingAll(1.8),
-                                      ).paddingOnly(right: 4),
-                                      Text(
-                                        "Offline",
-                                        style: AppFontStyle.fontStyleW500(
-                                            fontSize: 10,
-                                            fontColor: AppColors.appTextColor),
-                                      ).paddingOnly(right: 4),
-                                    ],
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    isOnline
+                                        ? EnumLocale.txtOnline.name.tr
+                                        : 'Offline',
+                                    style: AppFontStyle.fontStyleW500(
+                                      fontSize: 11,
+                                      fontColor: isOnline
+                                          ? AppColors.redesignStatusSuccessDark
+                                          : _chatMutedText,
+                                    ),
                                   ),
-                                )
-                        ],
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              )),
-              // Spacer(),
+              ),
               if ((controller.receiverId ?? '').isNotEmpty)
-                GestureDetector(
+                actionButton(
                   onTap: () {
                     Get.toNamed(
                       AppRoutes.userBookSessionScreen,
@@ -198,21 +203,21 @@ class ChatScreenAppBar extends StatelessWidget {
                       },
                     );
                   },
-                  child: Center(
-                    child: Image.asset(
-                      AppAsset.calendar,
-                      height: 24,
-                      width: 24,
-                      color: AppColors.appColor,
-                    ),
-                  ).paddingOnly(right: 18),
+                  child: Image.asset(
+                    AppAsset.calendar,
+                    height: 22,
+                    width: 22,
+                    color: _chatBrandDark,
+                  ),
                 ),
               if (controller.hasBookedSessionCallContext)
-                GestureDetector(
+                actionButton(
                   onTap: () {
                     if (controller.isBookedSessionWindowEnded) {
-                      Utils.showToast(context,
-                          'Session slot time is completed. Call is no longer allowed.');
+                      Utils.showToast(
+                        context,
+                        'Session slot time is completed. Call is no longer allowed.',
+                      );
                       return;
                     }
 
@@ -251,18 +256,16 @@ class ChatScreenAppBar extends StatelessWidget {
                         bookingId: controller.bookingId,
                       ),
                       isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
+                      backgroundColor: AppColors.transparent,
                     );
                   },
-                  child: Center(
-                    child: Image.asset(
-                      AppAsset.callGradiant,
-                      height: 24,
-                      width: 24,
-                    ),
-                  ).paddingOnly(right: 18),
+                  child: Image.asset(
+                    AppAsset.callGradiant,
+                    height: 22,
+                    width: 22,
+                  ),
                 ),
-              InkWell(
+              actionButton(
                 onTap: () {
                   showMoreOptionsBottomSheet(
                     context: context,
@@ -273,8 +276,8 @@ class ChatScreenAppBar extends StatelessWidget {
                         barrierColor: AppColors.black.withValues(alpha: 0.8),
                         Dialog(
                           backgroundColor: AppColors.transparent,
-                          shadowColor: Colors.transparent,
-                          surfaceTintColor: Colors.transparent,
+                          shadowColor: AppColors.transparent,
+                          surfaceTintColor: AppColors.transparent,
                           elevation: 0,
                           child: BlockDialog(
                             hostId: "",
@@ -293,16 +296,14 @@ class ChatScreenAppBar extends StatelessWidget {
                     },
                   );
                 },
-                child: Center(
-                  child: Image.asset(
-                    AppAsset.circleMoreBlack,
-                    height: 22,
-                    width: 22,
-                  ),
+                child: Image.asset(
+                  AppAsset.circleMoreBlack,
+                  height: 22,
+                  width: 22,
                 ),
-              ).paddingOnly(right: 18),
+              ),
             ],
-          ).paddingOnly(top: 6, bottom: 4),
+          ),
         );
       },
     );
@@ -317,23 +318,26 @@ class PersonalChatBottomView extends StatelessWidget {
     return GetBuilder<PersonalChatScreenController>(
       builder: (controller) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10)
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10)
               .copyWith(bottom: 18),
           decoration: BoxDecoration(
+            color: AppColors.white,
+            border: Border(
+              top: BorderSide(color: _chatBorder),
+            ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                offset: const Offset(0, 0),
-                blurRadius: 6,
+                color: AppColors.black.withValues(alpha: 0.04),
+                offset: const Offset(0, -2),
+                blurRadius: 8,
               ),
             ],
-            color: Colors.white,
           ),
           child: Row(
             children: [
               Expanded(
                 child: TextFormField(
-                  cursorColor: AppColors.darkPurple,
+                  cursorColor: _chatBrandDark,
                   controller: controller.messageController,
                   maxLength: 1000,
                   buildCounter: (
@@ -342,10 +346,12 @@ class PersonalChatBottomView extends StatelessWidget {
                     required bool isFocused,
                     required int? maxLength,
                   }) {
-                    return null; // This hides the counter
+                    return null;
                   },
                   style: AppFontStyle.fontStyleW500(
-                      fontSize: 15, fontColor: AppColors.darkPurple),
+                    fontSize: 15,
+                    fontColor: _chatBrandDark,
+                  ),
                   decoration: InputDecoration(
                     suffixIcon: SizedBox(
                       width: Get.width * 0.23,
@@ -354,13 +360,11 @@ class PersonalChatBottomView extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                // Vibration.vibrate(duration: 50, amplitude: 128);
                                 Utils.showToast(
-                                    Get.context!,
-                                    EnumLocale
-                                        .txtLongPressToEnableAudioRecording
-                                        .name
-                                        .tr);
+                                  Get.context!,
+                                  EnumLocale.txtLongPressToEnableAudioRecording
+                                      .name.tr,
+                                );
                               },
                               onLongPressStart: (details) {
                                 if (controller.isSendingAudioFile == false) {
@@ -380,7 +384,7 @@ class PersonalChatBottomView extends StatelessWidget {
                                 AppAsset.microPhoneIcon,
                                 height: 24,
                                 width: 24,
-                                color: AppColors.darkPurple,
+                                color: _chatMutedText,
                               ).paddingOnly(right: 12, left: 4),
                             ),
                             GestureDetector(
@@ -391,45 +395,50 @@ class PersonalChatBottomView extends StatelessWidget {
                                 AppAsset.chatImageIcon,
                                 height: 24,
                                 width: 24,
-                                color: AppColors.darkPurple,
+                                color: _chatMutedText,
                               ).paddingOnly(right: 16),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    hintText: "Type Something...",
+                    hintText: "Write a message...",
                     hintStyle: AppFontStyle.fontStyleW500(
-                        fontSize: 15, fontColor: AppColors.darkPurple),
+                      fontSize: 15,
+                      fontColor: _chatMutedText,
+                    ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    fillColor: _chatSurface,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                       borderSide: BorderSide.none,
                     ),
                   ),
-                ).paddingOnly(right: 14),
+                ).paddingOnly(right: 12),
               ),
               GetBuilder<PersonalChatScreenController>(
                 id: Constant.idSendMsg,
                 builder: (controller) {
                   return GestureDetector(
-                      onTap: () {
-                        controller.sendMessage();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: AppColors.appColor),
-                        child: Image.asset(
-                          AppAsset.msgSendIcon,
-                          height: 26,
-                          width: 26,
-                        ),
-                      ));
+                    onTap: () {
+                      controller.sendMessage();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(9),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _chatBrandRed,
+                      ),
+                      child: Image.asset(
+                        AppAsset.msgSendIcon,
+                        height: 24,
+                        width: 24,
+                      ),
+                    ),
+                  );
                 },
-              )
+              ),
             ],
           ),
         );
@@ -522,14 +531,16 @@ class ChatImageWidget extends StatelessWidget {
                     Text(
                       controller.formatTimeFromDate(msg.date),
                       style: AppFontStyle.fontStyleW500(
-                          fontSize: 8, fontColor: AppColors.darkPurple),
+                        fontSize: 8,
+                        fontColor: _chatMutedText,
+                      ),
                     ).paddingOnly(right: 2),
                     if (Database.loginUserId == msg.senderId)
                       Image.asset(
                         isRead ? AppAsset.read2Icon : AppAsset.unreadMsgIcon,
                         height: 18,
                         width: 16,
-                        color: AppColors.darkPurple,
+                        color: _chatMutedText,
                       ),
                   ],
                 ),
@@ -625,7 +636,8 @@ class ChatTextWidget extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 7),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
-              color: isSender ? AppColors.chatPurple : AppColors.chatPink,
+              color: isSender ? _outgoingBubble : _incomingBubble,
+              border: isSender ? null : Border.all(color: _chatBorder),
               borderRadius: isSender
                   ? const BorderRadius.only(
                       bottomLeft: Radius.circular(12),
@@ -646,7 +658,9 @@ class ChatTextWidget extends StatelessWidget {
                   child: Text(
                     msg.message.toString(),
                     style: AppFontStyle.fontStyleW600(
-                        fontSize: 16, fontColor: AppColors.white),
+                      fontSize: 16,
+                      fontColor: isSender ? AppColors.white : _chatBrandDark,
+                    ),
                   ).paddingOnly(right: 6, top: 7, bottom: 7),
                 ),
                 Row(
@@ -657,13 +671,16 @@ class ChatTextWidget extends StatelessWidget {
                     Text(
                       controller.formatTimeFromDate(msg.date),
                       style: AppFontStyle.fontStyleW500(
-                          fontSize: 8, fontColor: AppColors.white),
+                        fontSize: 8,
+                        fontColor: isSender ? AppColors.white : _chatMutedText,
+                      ),
                     ).paddingOnly(right: 2, bottom: 4),
                     if (isSender)
                       Image.asset(
                         isRead ? AppAsset.read2Icon : AppAsset.unreadMsgIcon,
                         height: 18,
                         width: 16,
+                        color: AppColors.white,
                       ),
                   ],
                 ).paddingOnly(bottom: 2)
@@ -724,7 +741,8 @@ class ChatVideoCallWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 7),
       padding: const EdgeInsets.only(bottom: 3, left: 12, right: 12),
       decoration: BoxDecoration(
-        color: AppColors.chatCallColor,
+        color: _incomingBubble,
+        border: Border.all(color: _chatBorder),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -751,20 +769,26 @@ class ChatVideoCallWidget extends StatelessWidget {
               Text(
                 EnumLocale.txtVideoCall.name.tr,
                 style: AppFontStyle.fontStyleW700(
-                    fontSize: 15, fontColor: AppColors.black),
+                  fontSize: 15,
+                  fontColor: _chatBrandDark,
+                ),
               ).paddingOnly(bottom: 4),
               if (msg.callType == 1)
                 Text(
                   callDuration.toString(),
                   style: AppFontStyle.fontStyleW500(
-                      fontSize: 12, fontColor: AppColors.darkPurple),
+                    fontSize: 12,
+                    fontColor: _chatMutedText,
+                  ),
                 ),
             ],
           ).paddingOnly(right: 19),
           Text(
             controller.formatTimeFromDate(msg.date),
             style: AppFontStyle.fontStyleW500(
-                fontSize: 9, fontColor: AppColors.darkPurple),
+              fontSize: 9,
+              fontColor: _chatMutedText,
+            ),
           ).paddingOnly(top: Get.height * 0.06),
         ],
       ),
@@ -790,7 +814,8 @@ class ChatAudioCallWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 7),
       padding: const EdgeInsets.only(bottom: 3, left: 12, right: 12),
       decoration: BoxDecoration(
-        color: AppColors.chatCallColor,
+        color: _incomingBubble,
+        border: Border.all(color: _chatBorder),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -808,7 +833,7 @@ class ChatAudioCallWidget extends StatelessWidget {
                   : AppAsset.missedAudioCall,
               height: 26,
               width: 26,
-              color: msg.callType == 3 ? AppColors.red : AppColors.darkPurple,
+              color: msg.callType == 3 ? _chatBrandRed : _chatBrandDark,
             ),
           ).paddingOnly(right: 11),
           Column(
@@ -817,20 +842,26 @@ class ChatAudioCallWidget extends StatelessWidget {
               Text(
                 EnumLocale.txtAudioCall.name.tr,
                 style: AppFontStyle.fontStyleW700(
-                    fontSize: 15, fontColor: AppColors.black),
+                  fontSize: 15,
+                  fontColor: _chatBrandDark,
+                ),
               ).paddingOnly(bottom: 4),
               if (msg.callType == 1)
                 Text(
                   audioCallDuration.toString(),
                   style: AppFontStyle.fontStyleW500(
-                      fontSize: 12, fontColor: AppColors.darkPurple),
+                    fontSize: 12,
+                    fontColor: _chatMutedText,
+                  ),
                 ),
             ],
           ).paddingOnly(right: 19),
           Text(
             controller.formatTimeFromDate(msg.date),
             style: AppFontStyle.fontStyleW500(
-                fontSize: 9, fontColor: AppColors.darkPurple),
+              fontSize: 9,
+              fontColor: _chatMutedText,
+            ),
           ).paddingOnly(top: Get.height * 0.06),
         ],
       ),
@@ -936,7 +967,7 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
             // margin: const EdgeInsets.symmetric(vertical: 10),
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: AppColors.chatPurple,
+              color: _outgoingBubble,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
@@ -970,7 +1001,7 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                                 return widget.isLastMessage
                                     ? logic.isLoadingAudio
                                         ? CupertinoActivityIndicator(
-                                            color: AppColors.chatPurple,
+                                            color: _chatBrandRed,
                                             radius: 12,
                                           )
                                         : GestureDetector(
@@ -980,7 +1011,7 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                                                   ? Icons.pause_rounded
                                                   : Icons.play_arrow_rounded,
                                               size: 30,
-                                              color: AppColors.chatPurple,
+                                              color: _chatBrandRed,
                                             )
 
                                             // Image.asset(isPlaying ? AppAsset.icPause1 : AppAsset.icPlay1, color: AppColors.messageColor, width: 24),
@@ -992,7 +1023,7 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                                               ? Icons.pause_rounded
                                               : Icons.play_arrow_rounded,
                                           size: 30,
-                                          color: AppColors.chatPurple,
+                                          color: _chatBrandRed,
                                         )
                                         // Image.asset(isPlaying ? AppAsset.icPause1 : AppAsset.icPlay1, color: AppColors.messageColor, width: 24),
                                         );
@@ -1003,14 +1034,14 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                               child: SliderTheme(
                                 data: SliderThemeData(
                                   overlayShape: SliderComponentShape.noOverlay,
-                                  activeTrackColor: AppColors.primary,
-                                  thumbColor: AppColors.primary,
+                                  activeTrackColor: _chatBrandRed,
+                                  thumbColor: _chatBrandRed,
                                   thumbShape: const RoundSliderThumbShape(
                                       enabledThumbRadius: 10),
                                   trackHeight: 5,
                                 ),
                                 child: Slider(
-                                  activeColor: AppColors.chatPurple,
+                                  activeColor: _chatBrandRed,
                                   min: 0,
                                   max: duration.inSeconds.toDouble() > 0
                                       ? duration.inSeconds.toDouble()
@@ -1031,8 +1062,7 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                               width: 44,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.chatPurple),
+                                  shape: BoxShape.circle, color: _chatBrandRed),
                               child: Image.asset(
                                 AppAsset.microPhoneIcon,
                                 width: 20,
@@ -1050,7 +1080,7 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                               ? formatTime(position)
                               : formatTime(duration),
                           style: AppFontStyle.fontStyleW600(
-                              fontColor: AppColors.chatPurple, fontSize: 9),
+                              fontColor: _chatBrandRed, fontSize: 9),
                         ),
                       ),
                     ],
@@ -1154,7 +1184,7 @@ class UploadAudioUi extends StatelessWidget {
                 child: Text(
                   CustomFormatAudioTime.convert(0),
                   style: AppFontStyle.fontStyleW500(
-                      fontColor: AppColors.primary, fontSize: 9),
+                      fontColor: _chatBrandRed, fontSize: 9),
                 ),
               ),
               Positioned(
@@ -1263,7 +1293,8 @@ class _ReceiverAudioMessageWidgetState
             width: Get.width / 1.6,
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: AppColors.chatPink,
+              color: _incomingBubble,
+              border: Border.all(color: _chatBorder),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
@@ -1298,7 +1329,7 @@ class _ReceiverAudioMessageWidgetState
                                       ? Icons.pause_rounded
                                       : Icons.play_arrow_rounded,
                                   size: 30,
-                                  color: AppColors.chatPink,
+                                  color: _chatBrandRed,
                                 )
 
                                 // child: Image.asset(isPlaying ? AppAsset.icPause1 : AppAsset.icPlay1, color: AppColors.pinkMessageColor, width: 24),
@@ -1308,14 +1339,14 @@ class _ReceiverAudioMessageWidgetState
                               child: SliderTheme(
                                 data: SliderThemeData(
                                   overlayShape: SliderComponentShape.noOverlay,
-                                  activeTrackColor: AppColors.primary,
-                                  thumbColor: AppColors.primary,
+                                  activeTrackColor: _chatBrandRed,
+                                  thumbColor: _chatBrandRed,
                                   thumbShape: const RoundSliderThumbShape(
                                       enabledThumbRadius: 10),
                                   trackHeight: 5,
                                 ),
                                 child: Slider(
-                                  activeColor: AppColors.chatPink,
+                                  activeColor: _chatBrandRed,
                                   min: 0,
                                   max: duration.inSeconds.toDouble() > 0
                                       ? duration.inSeconds.toDouble()
@@ -1336,8 +1367,7 @@ class _ReceiverAudioMessageWidgetState
                               width: 44,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.chatPink),
+                                  shape: BoxShape.circle, color: _chatBrandRed),
                               child: Image.asset(
                                 AppAsset.microPhoneIcon,
                                 width: 20,
@@ -1353,7 +1383,7 @@ class _ReceiverAudioMessageWidgetState
                         child: Text(
                           formatTime(position),
                           style: AppFontStyle.fontStyleW600(
-                              fontColor: AppColors.chatPink, fontSize: 9),
+                              fontColor: _chatBrandRed, fontSize: 9),
                         ),
                       ),
                     ],
@@ -1364,7 +1394,7 @@ class _ReceiverAudioMessageWidgetState
                     return Text(
                       logic.formatTimeFromDate(widget.chat.date),
                       style: AppFontStyle.fontStyleW600(
-                          fontColor: AppColors.white, fontSize: 8),
+                          fontColor: _chatMutedText, fontSize: 8),
                     );
                   },
                 ),
@@ -1389,7 +1419,7 @@ class FullScreenImageView extends StatelessWidget {
       onDismissed: () => Get.back(), // go back on dismiss
       isFullScreen: true, // optional, ensures it covers the full screen
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.black,
         body: Stack(
           children: [
             Center(
@@ -1405,9 +1435,9 @@ class FullScreenImageView extends StatelessWidget {
               right: 20,
               child: GestureDetector(
                 onTap: () => Get.back(),
-                child: const CircleAvatar(
-                  backgroundColor: Colors.black54,
-                  child: Icon(Icons.close, color: Colors.white),
+                child: CircleAvatar(
+                  backgroundColor: AppColors.black.withValues(alpha: 0.54),
+                  child: Icon(Icons.close, color: AppColors.white),
                 ),
               ),
             ),

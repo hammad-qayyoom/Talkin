@@ -18,19 +18,21 @@ class BottomBarView extends StatelessWidget {
       id: Constant.idBottomBar,
       builder: (logic) {
         return Container(
-          height: Platform.isIOS ? 100 : 80,
+          height: Platform.isIOS ? 94 : 80,
           decoration: BoxDecoration(
             color: AppColors.white,
+            border: Border(
+              top: BorderSide(
+                color: AppColors.black.withValues(alpha: 0.05),
+              ),
+            ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.5),
-                offset: const Offset(
-                  6.0,
-                  6.0,
-                ),
-                blurRadius: 6.0,
-                spreadRadius: 2.0,
-              ), //BoxShadow
+                color: AppColors.black.withValues(alpha: 0.06),
+                offset: const Offset(0.0, -2.0),
+                blurRadius: 14.0,
+                spreadRadius: 0.0,
+              ),
             ],
           ),
           child: OverflowBox(
@@ -42,7 +44,12 @@ class BottomBarView extends StatelessWidget {
                 logic.onClick(value);
               },
               curve: Curves.easeInOut,
-              margin: EdgeInsets.only(left: 10, right: 10, top: 20),
+              margin: EdgeInsets.only(
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: Platform.isIOS ? 10 : 6,
+              ),
               selectedColorOpacity: 1,
               items: [
                 bottomBarItemView(
@@ -50,30 +57,40 @@ class BottomBarView extends StatelessWidget {
                   selectIndex: logic.selectIndex,
                   image: AppAsset.homeFilled,
                   label: EnumLocale.txtHome.name.tr,
+                  selectedColor: AppColors.redesignBrandRed,
+                  unselectedColor: AppColors.redesignBottomBarUnselected,
                 ),
                 bottomBarIconItemView(
                   index: 1,
                   selectIndex: logic.selectIndex,
                   icon: Icons.dynamic_feed_rounded,
                   label: 'Feed',
+                  selectedColor: AppColors.redesignBrandRed,
+                  unselectedColor: AppColors.redesignBottomBarUnselected,
                 ),
                 bottomBarItemView(
                   index: 2,
                   selectIndex: logic.selectIndex,
                   image: AppAsset.listener,
                   label: EnumLocale.txtListener.name.tr,
+                  selectedColor: AppColors.redesignBrandRed,
+                  unselectedColor: AppColors.redesignBottomBarUnselected,
                 ),
                 bottomBarItemView(
                   index: 3,
                   selectIndex: logic.selectIndex,
                   image: AppAsset.chat,
                   label: EnumLocale.txtChat.name.tr,
+                  selectedColor: AppColors.redesignBrandRed,
+                  unselectedColor: AppColors.redesignBottomBarUnselected,
                 ),
                 bottomBarItemView(
                   index: 4,
                   selectIndex: logic.selectIndex,
                   image: AppAsset.calendar,
                   label: 'Sessions',
+                  selectedColor: AppColors.redesignBrandRed,
+                  unselectedColor: AppColors.redesignBottomBarUnselected,
                 ),
               ],
             ),
@@ -89,23 +106,25 @@ SalomonBottomBarItem bottomBarItemView({
   required final int selectIndex,
   required final String image,
   required final String label,
+  required final Color selectedColor,
+  required final Color unselectedColor,
 }) {
   return SalomonBottomBarItem(
     icon: Image.asset(
       image,
       height: 26,
       width: 26,
-      color: selectIndex == index ? AppColors.white : AppColors.unSelected,
+      color: selectIndex == index ? AppColors.white : unselectedColor,
     ),
     title: Text(
       label,
       style: TextStyle(
         fontSize: 11,
         fontWeight: selectIndex == index ? FontWeight.w700 : FontWeight.w500,
-        color: selectIndex == index ? AppColors.appColor : AppColors.unSelected,
+        color: selectIndex == index ? selectedColor : unselectedColor,
       ),
     ).paddingOnly(bottom: 5),
-    selectedColor: AppColors.appColor,
+    selectedColor: selectedColor,
   );
 }
 
@@ -114,21 +133,23 @@ SalomonBottomBarItem bottomBarIconItemView({
   required final int selectIndex,
   required final IconData icon,
   required final String label,
+  required final Color selectedColor,
+  required final Color unselectedColor,
 }) {
   return SalomonBottomBarItem(
     icon: Icon(
       icon,
       size: 26,
-      color: selectIndex == index ? AppColors.white : AppColors.unSelected,
+      color: selectIndex == index ? AppColors.white : unselectedColor,
     ),
     title: Text(
       label,
       style: TextStyle(
         fontSize: 11,
         fontWeight: selectIndex == index ? FontWeight.w700 : FontWeight.w500,
-        color: selectIndex == index ? AppColors.appColor : AppColors.unSelected,
+        color: selectIndex == index ? selectedColor : unselectedColor,
       ),
     ).paddingOnly(bottom: 5),
-    selectedColor: AppColors.appColor,
+    selectedColor: selectedColor,
   );
 }

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_button/primary_app_button.dart';
 import 'package:talk_in/routes/app_routes.dart';
 import 'package:talk_in/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:talk_in/ui/user_flow/home_screen/api/user_coin_api.dart';
@@ -18,13 +17,11 @@ import 'package:talk_in/utils/font_style.dart';
 class FindMoreWidget extends StatelessWidget {
   const FindMoreWidget({super.key});
 
-  static const List<List<Color>> _categoryPalette = [
-    [Color(0xFF4E47C8), Color(0xFF6A64DE)],
-    [Color(0xFFE0C552), Color(0xFFEDD77A)],
-    [Color(0xFFA8D2C3), Color(0xFFBFE1D5)],
-    [Color(0xFFE3B79C), Color(0xFFF0CCB6)],
-    [Color(0xFF6A89CF), Color(0xFF8CA7E2)],
-  ];
+  static final Color _brandRed = AppColors.redesignBrandRed;
+  static final Color _brandRedDark = AppColors.redesignBrandRedDeep;
+  static final Color _brandDark = AppColors.redesignBrandDark;
+  static final Color _neutralText = AppColors.redesignMutedText;
+  static final Color _neutralBorder = AppColors.redesignSoftBorder;
 
   String? _resolveCategoryImageUrl(String? imagePath) {
     final normalized = (imagePath ?? '').trim();
@@ -72,95 +69,104 @@ class FindMoreWidget extends StatelessWidget {
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
-    required int paletteIndex,
     String? imagePath,
     TalkTopic? category,
+    double width = 136,
+    bool isTablet = false,
   }) {
-    final palette = _categoryPalette[paletteIndex % _categoryPalette.length];
     final imageUrl = _resolveCategoryImageUrl(imagePath);
+    final cardColor = isSelected ? _brandRed : AppColors.white;
+    final textColor = isSelected ? AppColors.white : _brandDark;
+    final iconFallbackColor = isSelected ? AppColors.white : _brandDark;
 
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
-        width: 86,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            AnimatedContainer(
-              duration: Duration(milliseconds: 180),
-              curve: Curves.easeOut,
-              height: 64,
-              width: 64,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: palette,
-                ),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
+        width: width,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.symmetric(
+            horizontal: isTablet ? 14 : 12,
+            vertical: isTablet ? 11 : 10,
+          ),
+          decoration: BoxDecoration(
+            color: cardColor,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: isSelected ? _brandRed : _neutralBorder,
+              width: 1.2,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color:
+                    AppColors.black.withValues(alpha: isSelected ? 0.10 : 0.04),
+                blurRadius: isSelected ? 18 : 10,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: isTablet ? 38 : 34,
+                width: isTablet ? 38 : 34,
+                decoration: BoxDecoration(
                   color: isSelected
-                      ? AppColors.appColor
-                      : AppColors.white.withValues(alpha: 0.75),
-                  width: isSelected ? 2 : 1,
+                      ? AppColors.white.withValues(alpha: 0.2)
+                      : AppColors.redesignSurfaceNeutralAlt,
+                  shape: BoxShape.circle,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.black.withValues(alpha: 0.06),
-                    blurRadius: 10,
-                    offset: Offset(0, 5),
+                child: ClipOval(
+                  child: imageUrl == null
+                      ? Center(
+                          child: Icon(
+                            category == null
+                                ? Icons.grid_view_rounded
+                                : _resolveFallbackIcon(category),
+                            color: iconFallbackColor,
+                            size: isTablet ? 21 : 20,
+                          ),
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Center(
+                            child: Icon(
+                              category == null
+                                  ? Icons.grid_view_rounded
+                                  : _resolveFallbackIcon(category),
+                              color: iconFallbackColor,
+                              size: isTablet ? 21 : 20,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Center(
+                            child: Icon(
+                              category == null
+                                  ? Icons.grid_view_rounded
+                                  : _resolveFallbackIcon(category),
+                              color: iconFallbackColor,
+                              size: isTablet ? 21 : 20,
+                            ),
+                          ),
+                        ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: isTablet ? 13 : 12,
+                    fontColor: textColor,
                   ),
-                ],
+                ),
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(14),
-                child: imageUrl == null
-                    ? Center(
-                        child: Icon(
-                          category == null
-                              ? Icons.grid_view_rounded
-                              : _resolveFallbackIcon(category),
-                          color: AppColors.white,
-                          size: 28,
-                        ),
-                      )
-                    : CachedNetworkImage(
-                        imageUrl: imageUrl,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Center(
-                          child: Icon(
-                            category == null
-                                ? Icons.grid_view_rounded
-                                : _resolveFallbackIcon(category),
-                            color: AppColors.white,
-                            size: 28,
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Center(
-                          child: Icon(
-                            category == null
-                                ? Icons.grid_view_rounded
-                                : _resolveFallbackIcon(category),
-                            color: AppColors.white,
-                            size: 28,
-                          ),
-                        ),
-                      ),
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: AppFontStyle.fontStyleW600(
-                fontSize: 12,
-                fontColor:
-                    isSelected ? AppColors.appColor : AppColors.appDarkColor,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -170,152 +176,379 @@ class FindMoreWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeScreenController homeController =
         Get.find<HomeScreenController>();
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final isTabletScreen = screenWidth >= 760;
+    final isLargeTabletScreen = screenWidth >= 1100;
+    final horizontalInset = isLargeTabletScreen
+        ? 28.0
+        : isTabletScreen
+            ? 22.0
+            : 16.0;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Image.asset(AppAsset.homeCallPerson, height: 112, width: 334)
-            .paddingOnly(top: 28, left: 20, right: 20),
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              stops: [0, 1],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [
-                Color(0xffF3F7FF),
-                Color(0xffF3F7FF).withValues(alpha: 0.1),
-              ],
-            ),
-          ),
-          child: Column(
-            children: [
-              Text(
-                EnumLocale.txtHomeFastLalk.name.tr,
-                textAlign: TextAlign.center,
-                style: AppFontStyle.fontStyleW600(
-                    fontSize: 18, fontColor: AppColors.appColor),
-              ).paddingOnly(top: 8),
-              Text(
-                EnumLocale.txtHomeDescription.name.tr,
-                textAlign: TextAlign.center,
-                style: AppFontStyle.fontStyleW500(
-                    fontSize: 12, fontColor: AppColors.grey),
-              ).paddingOnly(top: 4, bottom: 10),
-              Center(
-                child: PrimaryAppButton(
-                  height: 40,
-                  // height: Get.height * 0.056,
-                  // width: Get.width * 0.5,
-                  onTap: () {
-                    Get.toNamed(
-                      AppRoutes.allListeners,
-                      arguments: {
-                        'categoryId': homeController.selectedCategoryId,
-                      },
-                    )?.then(
-                      (value) async {
-                        UserCoinModel? userCoinModel;
-                        userCoinModel = await UserCoinApi.callApi();
-                        if (userCoinModel?.status == true) {
-                          Database.onSetUserCoin(
-                              (userCoinModel?.coin ?? 0).toString());
-                        }
-                      },
-                    );
-                  },
-                  widget: Image.asset(
-                    AppAsset.arrowUp,
-                    height: 15,
-                    width: 15,
-                  ),
-                  text: EnumLocale.txtFindMoreListener.name.tr,
-                  textStyle: AppFontStyle.fontStyleW500(
-                      fontSize: 14, fontColor: AppColors.white),
-                ).paddingOnly(
-                    bottom: 10,
-                    left: Get.width * 0.22,
-                    right: Get.width * 0.22),
-              ),
-              Center(
-                child: SizedBox(
-                  height: 40,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      Get.toNamed(AppRoutes.userGroupSessionsScreen);
-                    },
-                    child: Text(
-                      'Explore Group Sessions',
-                      style: AppFontStyle.fontStyleW600(
-                        fontSize: 13,
-                        fontColor: AppColors.appColor,
-                      ),
-                    ),
-                  ),
-                ).paddingOnly(
-                  bottom: 8,
-                  left: Get.width * 0.2,
-                  right: Get.width * 0.2,
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final isCompact = constraints.maxWidth < 360;
+            final isTablet = constraints.maxWidth >= 760;
+            final isLargeTablet = constraints.maxWidth >= 1100;
+
+            final heroPadding = isLargeTablet
+                ? 26.0
+                : isTablet
+                    ? 22.0
+                    : 18.0;
+            final heroTitleSize = isLargeTablet
+                ? 40.0
+                : isTablet
+                    ? 30.0
+                    : isCompact
+                        ? 20.0
+                        : 24.0;
+            final heroDescriptionSize = isTablet
+                ? 15.0
+                : isCompact
+                    ? 12.0
+                    : 13.0;
+            final ctaHeight = isTablet ? 50.0 : 44.0;
+
+            return Container(
+              margin:
+                  EdgeInsets.fromLTRB(horizontalInset, 10, horizontalInset, 14),
+              padding: EdgeInsets.all(heroPadding),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    _brandRed,
+                    _brandRedDark,
+                  ],
                 ),
+                borderRadius: BorderRadius.circular(28),
+                boxShadow: [
+                  BoxShadow(
+                    color: _brandRed.withValues(alpha: 0.24),
+                    blurRadius: 26,
+                    offset: const Offset(0, 14),
+                  ),
+                ],
               ),
-              GetBuilder<HomeScreenController>(
-                id: Constant.idHomeCategories,
-                builder: (controller) {
-                  final categories = controller.homeCategories;
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
+                      Container(
+                        height: isTablet ? 44 : 38,
+                        width: isTablet ? 44 : 38,
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6),
+                          child: Image.asset(
+                            AppAsset.appLogo,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
                       Text(
-                        'Show all categories',
-                        style: AppFontStyle.fontStyleW600(
-                            fontSize: 13, fontColor: AppColors.appTextColor),
-                      ).paddingOnly(bottom: 10, left: 4),
-                      SizedBox(
-                        height: 96,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: categories.length + 1,
-                          separatorBuilder: (context, index) =>
-                              SizedBox(width: 10),
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return _buildCategoryCard(
-                                label: 'All',
-                                isSelected:
-                                    controller.selectedCategoryId == null,
-                                onTap: () =>
-                                    controller.selectHomeCategory(null),
-                                paletteIndex: 0,
-                              );
-                            }
-
-                            final category = categories[index - 1];
-                            final categoryId = (category.id ?? '').trim();
-                            final isSelected = categoryId.isNotEmpty &&
-                                controller.selectedCategoryId == categoryId;
-
-                            return _buildCategoryCard(
-                              label: (category.name ?? '').trim().isEmpty
-                                  ? 'Category'
-                                  : category.name!.trim(),
-                              isSelected: isSelected,
-                              onTap: () => controller.selectHomeCategory(
-                                categoryId.isEmpty ? null : categoryId,
-                              ),
-                              paletteIndex: index,
-                              imagePath: category.image,
-                              category: category,
-                            );
-                          },
+                        'Talkin Premium',
+                        style: AppFontStyle.fontStyleW700(
+                          fontSize: isTablet ? 18 : 14,
+                          fontColor: AppColors.white,
                         ),
                       ),
                     ],
-                  ).paddingOnly(left: 10, right: 10, bottom: 8);
-                },
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    EnumLocale.txtHomeFastLalk.name.tr,
+                    style: AppFontStyle.fontStyleW600(
+                      fontSize: heroTitleSize,
+                      fontColor: AppColors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    EnumLocale.txtHomeDescription.name.tr,
+                    style: AppFontStyle.fontStyleW500(
+                      fontSize: heroDescriptionSize,
+                      fontColor: AppColors.white.withValues(alpha: 0.86),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  if (isCompact)
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          height: ctaHeight,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Get.toNamed(
+                                AppRoutes.allListeners,
+                                arguments: {
+                                  'categoryId':
+                                      homeController.selectedCategoryId,
+                                },
+                              )?.then(
+                                (value) async {
+                                  UserCoinModel? userCoinModel;
+                                  userCoinModel = await UserCoinApi.callApi();
+                                  if (userCoinModel?.status == true) {
+                                    Database.onSetUserCoin(
+                                        (userCoinModel?.coin ?? 0).toString());
+                                  }
+                                },
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              backgroundColor: _brandDark,
+                              foregroundColor: AppColors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    'Find Experts',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppFontStyle.fontStyleW600(
+                                      fontSize: isTablet ? 15 : 14,
+                                      fontColor: AppColors.white,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                const Icon(
+                                  Icons.arrow_outward_rounded,
+                                  size: 18,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          width: double.infinity,
+                          height: ctaHeight,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              Get.toNamed(AppRoutes.userGroupSessionsScreen);
+                            },
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(
+                                color: AppColors.white.withValues(alpha: 0.62),
+                              ),
+                              foregroundColor: AppColors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                            child: Text(
+                              'Group Sessions',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW600(
+                                fontSize: isTablet ? 14 : 13,
+                                fontColor: AppColors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  else
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: ctaHeight,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Get.toNamed(
+                                  AppRoutes.allListeners,
+                                  arguments: {
+                                    'categoryId':
+                                        homeController.selectedCategoryId,
+                                  },
+                                )?.then(
+                                  (value) async {
+                                    UserCoinModel? userCoinModel;
+                                    userCoinModel = await UserCoinApi.callApi();
+                                    if (userCoinModel?.status == true) {
+                                      Database.onSetUserCoin(
+                                          (userCoinModel?.coin ?? 0)
+                                              .toString());
+                                    }
+                                  },
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor: _brandDark,
+                                foregroundColor: AppColors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      'Find Experts',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppFontStyle.fontStyleW600(
+                                        fontSize: isTablet ? 15 : 14,
+                                        fontColor: AppColors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  const Icon(
+                                    Icons.arrow_outward_rounded,
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: SizedBox(
+                            height: ctaHeight,
+                            child: OutlinedButton(
+                              onPressed: () {
+                                Get.toNamed(AppRoutes.userGroupSessionsScreen);
+                              },
+                              style: OutlinedButton.styleFrom(
+                                side: BorderSide(
+                                  color:
+                                      AppColors.white.withValues(alpha: 0.62),
+                                ),
+                                foregroundColor: AppColors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
+                              child: Text(
+                                'Group Sessions',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppFontStyle.fontStyleW600(
+                                  fontSize: isTablet ? 14 : 13,
+                                  fontColor: AppColors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalInset),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Browse categories',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: isTabletScreen ? 22 : 16,
+                    fontColor: _brandDark,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  'Show all categories',
+                  maxLines: 1,
+                  textAlign: TextAlign.end,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: isTabletScreen ? 15 : 12,
+                    fontColor: _neutralText,
+                  ),
+                ),
               ),
             ],
-          ).paddingSymmetric(horizontal: 10),
-        )
+          ),
+        ),
+        const SizedBox(height: 12),
+        GetBuilder<HomeScreenController>(
+          id: Constant.idHomeCategories,
+          builder: (controller) {
+            final categories = controller.homeCategories;
+            final cardWidth = isLargeTabletScreen
+                ? 190.0
+                : isTabletScreen
+                    ? 170.0
+                    : 136.0;
+            final rowHeight = isTabletScreen ? 62.0 : 56.0;
+
+            return SizedBox(
+              height: rowHeight,
+              child: ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: horizontalInset),
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemCount: categories.length + 1,
+                separatorBuilder: (context, index) => const SizedBox(width: 10),
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return _buildCategoryCard(
+                      label: 'All',
+                      isSelected: controller.selectedCategoryId == null,
+                      onTap: () => controller.selectHomeCategory(null),
+                      width: cardWidth,
+                      isTablet: isTabletScreen,
+                    );
+                  }
+
+                  final category = categories[index - 1];
+                  final categoryId = (category.id ?? '').trim();
+                  final isSelected = categoryId.isNotEmpty &&
+                      controller.selectedCategoryId == categoryId;
+
+                  return _buildCategoryCard(
+                    label: (category.name ?? '').trim().isEmpty
+                        ? 'Category'
+                        : category.name!.trim(),
+                    isSelected: isSelected,
+                    onTap: () => controller.selectHomeCategory(
+                      categoryId.isEmpty ? null : categoryId,
+                    ),
+                    imagePath: category.image,
+                    category: category,
+                    width: cardWidth,
+                    isTablet: isTabletScreen,
+                  );
+                },
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 16),
       ],
     );
   }

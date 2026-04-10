@@ -356,7 +356,7 @@ class PersonalChatScreenController extends GetxController {
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Divider(
               thickness: 1,
-              color: Colors.grey.shade100,
+              color: AppColors.redesignSurfaceGrey100,
             ),
           ),
           GestureDetector(

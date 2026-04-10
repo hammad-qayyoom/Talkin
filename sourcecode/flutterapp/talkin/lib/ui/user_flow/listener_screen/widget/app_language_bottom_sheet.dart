@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_button/primary_app_button.dart';
 import 'package:talk_in/ui/user_flow/listener_screen/controller/listeners_screen_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/enums.dart';
 import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
 
 class AppLanguageBottomSheet extends StatefulWidget {
   const AppLanguageBottomSheet({super.key});
@@ -16,7 +13,13 @@ class AppLanguageBottomSheet extends StatefulWidget {
 }
 
 class _AppLanguageBottomSheetState extends State<AppLanguageBottomSheet> {
-  ListenersScreenController controller = Get.find();
+  final ListenersScreenController controller = Get.find();
+
+  static final Color _brandRed = AppColors.redesignBrandRed;
+  static final Color _brandDark = AppColors.redesignBrandDark;
+  static final Color _mutedText = AppColors.redesignMutedText;
+  static final Color _softBorder = AppColors.redesignSoftBorder;
+  static final Color _chipSurface = AppColors.redesignSurfaceSoft;
 
   @override
   Widget build(BuildContext context) {
@@ -24,185 +27,358 @@ class _AppLanguageBottomSheetState extends State<AppLanguageBottomSheet> {
       context: context,
       removeBottom: true,
       child: DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        minChildSize: 0.4,
+        initialChildSize: 0.82,
+        minChildSize: 0.45,
         maxChildSize: 0.95,
         expand: false,
         builder: (context, scrollController) {
           return Container(
-            // padding: const EdgeInsets.symmetric(
-            //   vertical: 17,
-            // ),
-            padding: EdgeInsets.only(top: 15),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            padding: const EdgeInsets.only(top: 10),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
             ),
-            child: GetBuilder<ListenersScreenController>(builder: (controller) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        AppAsset.speakingBoy,
-                        height: 28,
-                        width: 28,
-                        color: AppColors.darkOrange,
-                      ),
-                      Text(
-                        EnumLocale.txtAPPLanguage.name.tr,
-                        style: AppFontStyle.fontStyleW700(
-                          fontSize: 20,
-                          fontColor: AppColors.darkOrange,
-                        ),
-                      ).paddingOnly(bottom: 12, left: Get.width * 0.03),
-                      Spacer(),
-                      InkWell(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: Image.asset(
-                          AppAsset.closeFillIcon,
-                          height: 26,
-                        ),
-                      )
-                    ],
-                  ).paddingSymmetric(horizontal: 16),
-                  Text(
-                    EnumLocale.txtSelectAppLanguageTxt.name.tr,
-                    style: AppFontStyle.fontStyleW500(
-                      fontSize: 13,
-                      fontColor: AppColors.appTextColor,
-                    ),
-                  ).paddingOnly(bottom: 26, right: 16, left: 16),
-                  GetBuilder<ListenersScreenController>(
-                    builder: (controller) {
-                      return Expanded(
-                        child: SizedBox(
-                          // height: Get.height * 0.45,
-                          child: Column(
-                            children: [
-                              TextField(
-                                cursorColor: AppColors.grey,
-                                onChanged: (value) => controller.updateLanguageSearchQuery(value),
-                                decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    borderSide: BorderSide(
-                                      color: AppColors.grey,
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    borderSide: BorderSide(
-                                      color: AppColors.grey,
-                                    ),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                                  hintText: EnumLocale.txtSearchLanguage.name.tr,
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                  prefixIcon: Icon(Icons.search, color: AppColors.grey),
-                                ),
-                              ).paddingOnly(bottom: 12, left: 16, right: 16),
-                              Expanded(
-                                child: GridView.builder(
-                                  padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
-                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 12,
-                                    crossAxisSpacing: 12,
-                                    childAspectRatio: 2.8,
-                                  ),
-                                  itemCount: controller.filteredLanguages.length,
-                                  itemBuilder: (context, index) {
-                                    final lang = controller.filteredLanguages[index];
-                                    final isSelected = controller.isSelected(lang);
+            child: SafeArea(
+              top: false,
+              child: GetBuilder<ListenersScreenController>(
+                builder: (controller) {
+                  final selectedCount = controller.selectedLanguages.length;
+                  final filteredLanguages = controller.filteredLanguages;
 
-                                    return GestureDetector(
-                                      onTap: () => controller.toggleLanguage(lang),
-                                      child: Container(
-                                        padding: EdgeInsets.only(left: 4, right: 4),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: isSelected ? AppColors.black : AppColors.lightGrey,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(12),
-                                        ),
-                                        child: Stack(
-                                          clipBehavior: Clip.none,
-                                          children: [
-                                            Center(
-                                              child: Text(
-                                                maxLines: 2,
-                                                textAlign: TextAlign.center,
-                                                lang,
-                                                style: AppFontStyle.fontStyleW600(fontSize: 15, fontColor: AppColors.black),
-                                              ),
-                                            ),
-                                            if (isSelected)
-                                              Positioned(
-                                                top: -10,
-                                                right: -5,
-                                                child: Image.asset(
-                                                  AppAsset.selectIcon,
-                                                  height: 24,
-                                                  width: 24,
-                                                ),
-                                              ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          height: 5,
+                          width: 54,
+                          decoration: BoxDecoration(
+                            color: _softBorder,
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 38,
+                              width: 38,
+                              decoration: BoxDecoration(
+                                color: _brandRed.withValues(alpha: 0.10),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                Icons.record_voice_over_rounded,
+                                color: _brandRed,
+                                size: 20,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                EnumLocale.txtAPPLanguage.name.tr,
+                                style: AppFontStyle.fontStyleW700(
+                                  fontSize: 22,
+                                  fontColor: _brandDark,
                                 ),
                               ),
+                            ),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () {
+                                Get.back();
+                              },
+                              child: Container(
+                                height: 36,
+                                width: 36,
+                                decoration: BoxDecoration(
+                                  color: _chipSurface,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: _softBorder),
+                                ),
+                                child: Icon(
+                                  Icons.close_rounded,
+                                  size: 18,
+                                  color: _mutedText,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                        child: Text(
+                          EnumLocale.txtSelectAppLanguageTxt.name.tr,
+                          style: AppFontStyle.fontStyleW500(
+                            fontSize: 13,
+                            fontColor: _mutedText,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: TextField(
+                          cursorColor: _brandDark,
+                          onChanged: (value) {
+                            controller.updateLanguageSearchQuery(value);
+                          },
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: _chipSurface,
+                            hintText: EnumLocale.txtSearchLanguage.name.tr,
+                            hintStyle: AppFontStyle.fontStyleW500(
+                              fontSize: 13,
+                              fontColor: _mutedText,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.search_rounded,
+                              color: _mutedText,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14),
+                              borderSide: BorderSide(color: _softBorder),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14),
+                              borderSide: BorderSide(color: _brandRed),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: selectedCount > 0
+                                    ? _brandRed.withValues(alpha: 0.10)
+                                    : _chipSurface,
+                                borderRadius: BorderRadius.circular(999),
+                              ),
+                              child: Text(
+                                selectedCount > 0
+                                    ? '$selectedCount selected'
+                                    : EnumLocale.txtAll.name.tr,
+                                style: AppFontStyle.fontStyleW600(
+                                  fontSize: 11,
+                                  fontColor: selectedCount > 0
+                                      ? _brandRed
+                                      : _mutedText,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            if (selectedCount > 0)
+                              TextButton(
+                                onPressed: () {
+                                  controller.clearSelectedLanguages();
+                                },
+                                child: Text(
+                                  EnumLocale.txtClear.name.tr,
+                                  style: AppFontStyle.fontStyleW600(
+                                    fontSize: 12,
+                                    fontColor: _brandRed,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: filteredLanguages.isEmpty
+                            ? Center(
+                                child: Text(
+                                  'No language found',
+                                  style: AppFontStyle.fontStyleW500(
+                                    fontSize: 13,
+                                    fontColor: _mutedText,
+                                  ),
+                                ),
+                              )
+                            : LayoutBuilder(
+                                builder: (context, constraints) {
+                                  final crossAxisCount =
+                                      constraints.maxWidth >= 700 ? 3 : 2;
+
+                                  return GridView.builder(
+                                    controller: scrollController,
+                                    padding: const EdgeInsets.fromLTRB(
+                                      16,
+                                      4,
+                                      16,
+                                      12,
+                                    ),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: crossAxisCount,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10,
+                                      childAspectRatio: 2.55,
+                                    ),
+                                    itemCount: filteredLanguages.length,
+                                    itemBuilder: (context, index) {
+                                      final language = filteredLanguages[index];
+                                      final isSelected =
+                                          controller.isSelected(language);
+
+                                      return Material(
+                                        color: AppColors.transparent,
+                                        child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          onTap: () {
+                                            controller.toggleLanguage(language);
+                                          },
+                                          child: AnimatedContainer(
+                                            duration: const Duration(
+                                                milliseconds: 160),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                              vertical: 10,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: isSelected
+                                                  ? _brandRed.withValues(
+                                                      alpha: 0.08)
+                                                  : AppColors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(14),
+                                              border: Border.all(
+                                                color: isSelected
+                                                    ? _brandRed
+                                                    : _softBorder,
+                                              ),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    language,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: AppFontStyle
+                                                        .fontStyleW600(
+                                                      fontSize: 13,
+                                                      fontColor: isSelected
+                                                          ? _brandRed
+                                                          : _brandDark,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Container(
+                                                  height: 20,
+                                                  width: 20,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: isSelected
+                                                        ? _brandRed
+                                                        : AppColors.white,
+                                                    border: Border.all(
+                                                      color: isSelected
+                                                          ? _brandRed
+                                                          : _softBorder,
+                                                    ),
+                                                  ),
+                                                  child: isSelected
+                                                      ? Icon(
+                                                          Icons.check_rounded,
+                                                          size: 14,
+                                                          color:
+                                                              AppColors.white,
+                                                        )
+                                                      : null,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                      ),
+                      SafeArea(
+                        top: false,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 6, 16, 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: 48,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      controller.filterListenerByLanguage();
+                                      Get.back();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      backgroundColor: _brandDark,
+                                      foregroundColor: AppColors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      EnumLocale.txtSubmit.name.tr,
+                                      style: AppFontStyle.fontStyleW600(
+                                        fontSize: 15,
+                                        fontColor: AppColors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (selectedCount > 0) ...[
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 48,
+                                    child: OutlinedButton(
+                                      onPressed: () {
+                                        controller.clearSelectedLanguages();
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                        side: BorderSide(color: _softBorder),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        foregroundColor: _brandDark,
+                                        backgroundColor: _chipSurface,
+                                      ),
+                                      child: Text(
+                                        EnumLocale.txtClear.name.tr,
+                                        style: AppFontStyle.fontStyleW600(
+                                          fontSize: 15,
+                                          fontColor: _brandDark,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ],
                           ),
                         ),
-                      );
-                    },
-                  ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: PrimaryAppButton(
-                            onTap: () {
-                              controller.filterListenerByLanguage();
-                              Get.back();
-                            },
-                            height: 47,
-                            borderRadius: 30,
-                            text: EnumLocale.txtSubmit.name.tr,
-                            textStyle: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
-                          ).paddingOnly(bottom: 10),
-                        ),
-                        controller.selectedLanguages.isNotEmpty ? 15.width : Offstage(),
-                        controller.selectedLanguages.isNotEmpty
-                            ? Expanded(
-                                child: PrimaryAppButton(
-                                  onTap: () {
-                                    controller.clearSelectedLanguages();
-                                    // Get.back();
-                                  },
-                                  height: 47,
-                                  borderRadius: 30,
-                                  text: EnumLocale.txtClear.name.tr,
-                                  textStyle: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
-                                ).paddingOnly(bottom: 10),
-                              )
-                            : Offstage(),
-                      ],
-                    ).paddingOnly(left: 16, right: 16, top: 10),
-                  ),
-                ],
-              );
-            }),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
           );
         },
       ),

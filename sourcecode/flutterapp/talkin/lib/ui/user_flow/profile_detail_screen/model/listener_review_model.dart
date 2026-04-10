@@ -52,13 +52,13 @@ class Review {
   });
 
   factory Review.fromJson(Map<String, dynamic> json) => Review(
-        id: json["_id"],
-        review: json["review"],
-        rating: json["rating"],
-        nickName: json["nickName"],
-        fullName: json["fullName"],
-        profilePic: json["profilePic"],
-        time: json["time"],
+        id: json["_id"]?.toString(),
+        review: json["review"]?.toString(),
+        rating: (json["rating"] is num) ? (json["rating"] as num).toInt() : int.tryParse(json["rating"]?.toString() ?? ''),
+        nickName: json["nickName"]?.toString(),
+        fullName: json["fullName"]?.toString(),
+        profilePic: json["profilePic"]?.toString(),
+        time: json["time"]?.toString(),
       );
 
   Map<String, dynamic> toJson() => {

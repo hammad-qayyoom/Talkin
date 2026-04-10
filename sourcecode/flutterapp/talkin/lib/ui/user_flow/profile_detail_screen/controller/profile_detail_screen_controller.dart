@@ -12,6 +12,7 @@ import 'package:talk_in/utils/enums.dart';
 
 class ProfileDetailScreenController extends GetxController {
   String? listenerId;
+  String? expertId;
   bool isLoading = false;
   bool isBackProfile = true;
   bool isToastVisible = false;
@@ -43,8 +44,20 @@ class ProfileDetailScreenController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    listenerId = Get.arguments ?? '';
+    final args = Get.arguments;
+    if (args is Map<String, dynamic>) {
+      listenerId =
+          (args['listenerId'] ?? args['id'] ?? args['_id'] ?? '').toString();
+      expertId = (args['expertId'] ?? '').toString();
+    } else {
+      final routeId = (args ?? '').toString();
+      listenerId = routeId;
+      expertId = routeId;
+    }
+    listenerId = listenerId?.trim();
+    expertId = expertId?.trim();
     log("Received listenerId: $listenerId");
+    log("Received expertId: $expertId");
     listenerProfile();
     listenerReview();
     fetchAvailabilityPreview();
@@ -55,12 +68,50 @@ class ProfileDetailScreenController extends GetxController {
     try {
       isLoading = true;
       update([Constant.listenerProfile]);
-      var data = await ListenerProfileApi.callApi(listenerId: listenerId ?? '');
+
+      final listenerCandidate = (listenerId ?? '').trim();
+      final expertCandidate = (expertId ?? '').trim();
+
+      ListenerProfileModel? data;
+
+      if (listenerCandidate.isNotEmpty) {
+        data = await ListenerProfileApi.callApi(listenerId: listenerCandidate);
+      }
+
+      var hasResolvedData = data?.status == true && data?.data != null;
+
+      if (!hasResolvedData && expertCandidate.isNotEmpty) {
+        data = await ListenerProfileApi.callApi(expertId: expertCandidate);
+      }
+
+      hasResolvedData = data?.status == true && data?.data != null;
+
+      // If route ID source is unknown, try the opposite interpretation.
+      if (!hasResolvedData && listenerCandidate.isNotEmpty) {
+        data = await ListenerProfileApi.callApi(expertId: listenerCandidate);
+      }
+
+      hasResolvedData = data?.status == true && data?.data != null;
+
+      if (!hasResolvedData && expertCandidate.isNotEmpty) {
+        data = await ListenerProfileApi.callApi(listenerId: expertCandidate);
+      }
+
       listenerProfileModel = data;
 
-      statsList[0]['count'] = listenerProfileModel?.data?.callCount?.toString() ?? '0';
-      statsList[1]['count'] = listenerProfileModel?.data?.rating?.toStringAsFixed(1) ?? '0.0';
-      statsList[2]['count'] = listenerProfileModel?.data?.experience == null ? '0+' : '${listenerProfileModel?.data?.experience}+';
+      final resolvedListenerId =
+          (listenerProfileModel?.data?.id ?? '').toString().trim();
+      if (resolvedListenerId.isNotEmpty) {
+        listenerId = resolvedListenerId;
+      }
+
+      statsList[0]['count'] =
+          listenerProfileModel?.data?.callCount?.toString() ?? '0';
+      statsList[1]['count'] =
+          listenerProfileModel?.data?.rating?.toStringAsFixed(1) ?? '0.0';
+      statsList[2]['count'] = listenerProfileModel?.data?.experience == null
+          ? '0+'
+          : '${listenerProfileModel?.data?.experience}+';
     } catch (e) {
       log('Error fetching Listener profile api: $e');
     } finally {
@@ -74,7 +125,21 @@ class ProfileDetailScreenController extends GetxController {
     isLoading = true;
     update([Constant.idGetListenerReview]);
 
-    listenerReviewModel = await ListenerReviewApi.callApi(listenerId: listenerId ?? '');
+    final listenerCandidate = (listenerId ?? '').trim();
+    final expertCandidate = (expertId ?? '').trim();
+
+    listenerReviewModel = await ListenerReviewApi.callApi(
+      listenerId: listenerCandidate,
+      expertId: expertCandidate,
+    );
+
+    if ((listenerReviewModel?.status != true) && expertCandidate.isNotEmpty) {
+      listenerReviewModel = await ListenerReviewApi.callApi(
+        listenerId: '',
+        expertId: expertCandidate,
+      );
+    }
+
     reviews?.clear();
     reviews?.addAll(listenerReviewModel?.reviews ?? []);
 
@@ -115,7 +180,9 @@ class ProfileDetailScreenController extends GetxController {
   }) async {
     final List<Map<String, dynamic>> collected = [];
 
-    for (int dayOffset = 0; dayOffset < 7 && collected.length < 4; dayOffset++) {
+    for (int dayOffset = 0;
+        dayOffset < 7 && collected.length < 4;
+        dayOffset++) {
       final date = DateTime.now().add(Duration(days: dayOffset));
       final response = await SessionBookingService.getAvailableSlots(
         listenerId: listenerId,
@@ -128,7 +195,9 @@ class ProfileDetailScreenController extends GetxController {
       }
 
       final data = response['data'];
-      final slotsRaw = data is Map<String, dynamic> ? (data['slots'] as List<dynamic>? ?? []) : <dynamic>[];
+      final slotsRaw = data is Map<String, dynamic>
+          ? (data['slots'] as List<dynamic>? ?? [])
+          : <dynamic>[];
 
       for (final slot in slotsRaw) {
         if (slot is! Map<String, dynamic>) {
@@ -146,8 +215,10 @@ class ProfileDetailScreenController extends GetxController {
   }
 
   String formatSlotLabel(Map<String, dynamic> slot) {
-    final startAt = DateTime.tryParse((slot['startAt'] ?? '').toString())?.toLocal();
-    final endAt = DateTime.tryParse((slot['endAt'] ?? '').toString())?.toLocal();
+    final startAt =
+        DateTime.tryParse((slot['startAt'] ?? '').toString())?.toLocal();
+    final endAt =
+        DateTime.tryParse((slot['endAt'] ?? '').toString())?.toLocal();
 
     if (startAt == null || endAt == null) {
       return 'No slot';

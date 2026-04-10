@@ -73,12 +73,56 @@ class AppColors {
   static Color reviewBorder = const Color(0xffEEEEF7);
   static Color rateStarColor = const Color(0xffFEA622);
 
+  // Shared palette for redesigned user flow screens.
+  static Color redesignScreenBackground = const Color(0xFFF4F5F7);
+  static Color redesignBrandRed = const Color(0xFFC71F37);
+  static Color redesignBrandRedDark = const Color(0xFFA31830);
+  static Color redesignBrandRedDeep = const Color(0xFF9D152B);
+  static Color redesignBrandDark = const Color(0xFF171A22);
+  static Color redesignBrandDarkAlt = const Color(0xFF1C1F26);
+  static Color redesignMutedText = const Color(0xFF6B7280);
+  static Color redesignSoftBorder = const Color(0xFFE5E7EB);
+  static Color redesignSurfaceSoft = const Color(0xFFF8FAFC);
+  static Color redesignChatSurface = const Color(0xFFF7F8FA);
+  static Color redesignSurfaceInput = const Color(0xFFF3F4F7);
+  static Color redesignSurfaceNeutral = const Color(0xFFF3F4F6);
+  static Color redesignSurfaceNeutralAlt = const Color(0xFFF9FAFB);
+  static Color redesignSurfaceCardAlt = const Color(0xFFF4F6FB);
+  static Color redesignSurfaceChipAlt = const Color(0xFFEEF2FB);
+  static Color redesignAvatarSurface = const Color(0xFFF5F5F5);
+  static Color redesignDarkGradientStart = const Color(0xFF111329);
+  static Color redesignDarkGradientEnd = const Color(0xFF1C2046);
+  static Color redesignProfileGradientEnd = const Color(0xFF2E3354);
+  static Color redesignAccentGradientEnd = const Color(0xFFDC4A5E);
+  static Color redesignStatusSuccess = const Color(0xFF16A34A);
+  static Color redesignStatusSuccessBorder = const Color(0xFFBBF7D0);
+  static Color redesignStatusSuccessDark = const Color(0xFF15803D);
+  static Color redesignStatusSuccessBg = const Color(0xFFEFFDF3);
+  static Color redesignStatusDangerBg = const Color(0xFFFFF1F2);
+  static Color redesignStatusInfoBg = const Color(0xFFE8F0FF);
+  static Color redesignStatusInfoText = const Color(0xFF1D4ED8);
+  static Color redesignAccentSoftBg = const Color(0xFFFEECEF);
+  static Color redesignTextStrong = const Color(0xFF22252E);
+  static Color redesignTextMeta = const Color(0xFF2E3340);
+  static Color redesignPanelBg = const Color(0xFFEAEDF3);
+  static Color redesignMediaSliderActive = const Color(0xFFFF5252);
+  static Color redesignSurfaceGrey100 = const Color(0xFFF5F5F5);
+  static Color redesignShimmerBase = const Color(0xFFE8ECF1);
+  static Color redesignShimmerBaseAlt = const Color(0xFFE9EDF2);
+  static Color redesignShimmerTopBase = const Color(0xFFECEEF1);
+  static Color redesignShimmerCard = const Color(0xFFF8F9FB);
+  static Color redesignShimmerChip = const Color(0xFFF2F4F7);
+  static Color redesignIncomingBubble = const Color(0xFFF0F3F7);
+  static Color redesignOutgoingBubble = const Color(0xFF191D27);
+  static Color redesignBottomBarUnselected = const Color(0xFF8B8E98);
+  static Color redesignCoinText = const Color(0xFFE18D00);
+
   static Color languageContainer = const Color(0xffF6F4FB);
   static Color coinTileColor = const Color(0xffFFFDE3);
-  static Color transparent = Colors.transparent;
-  static Color white = Colors.white;
-  static Color black = Colors.black;
-  static Color red = Colors.red;
+  static const Color transparent = Colors.transparent;
+  static const Color white = Colors.white;
+  static const Color black = Colors.black;
+  static const Color red = Colors.red;
 
   static List<Color> colorList = [
     Color(int.parse('853EEC', radix: 16)).withValues(alpha: 0.07),
@@ -89,7 +133,8 @@ class AppColors {
     Color(int.parse('08ACD0', radix: 16)).withValues(alpha: 0.07),
   ];
 
-  static LinearGradient primaryLinearGradient = LinearGradient(colors: [AppColors.chatPurple, AppColors.grey]);
+  static LinearGradient primaryLinearGradient =
+      LinearGradient(colors: [AppColors.chatPurple, AppColors.grey]);
 
   static List<Color> textColorList = [
     Color(0xffF1EDFF),

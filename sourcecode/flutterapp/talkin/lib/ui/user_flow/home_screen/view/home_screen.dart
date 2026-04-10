@@ -23,8 +23,8 @@ class HomeScreen extends GetView<HomeScreenController> {
           barrierColor: AppColors.black.withValues(alpha: 0.8),
           Dialog(
             backgroundColor: AppColors.transparent,
-            shadowColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
+            shadowColor: AppColors.transparent,
+            surfaceTintColor: AppColors.transparent,
             elevation: 0,
             child: const ExitAppDialog(),
           ),
@@ -34,27 +34,51 @@ class HomeScreen extends GetView<HomeScreenController> {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.backGroundColor,
-        body: GetBuilder<HomeScreenController>(
-          id: Constant.idGetListener,
-          builder: (controller) {
-            return RefreshIndicator(
-              onRefresh: () async => controller.onRefresh(),
-              child: Column(
-                children: [
-                  HomeAppBarWidget().paddingSymmetric(horizontal: 16),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        children: [
-                          FindMoreWidget(),
-                          TopListenerWidget(),
+        backgroundColor: AppColors.redesignScreenBackground,
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth;
+            final horizontalPadding = width >= 1200
+                ? 28.0
+                : width >= 760
+                    ? 22.0
+                    : 16.0;
+            final maxContentWidth = width >= 1400 ? 1280.0 : double.infinity;
+
+            return Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                child: GetBuilder<HomeScreenController>(
+                  id: Constant.idGetListener,
+                  builder: (controller) {
+                    return RefreshIndicator(
+                      color: AppColors.redesignBrandRed,
+                      backgroundColor: AppColors.white,
+                      onRefresh: () async => controller.onRefresh(),
+                      child: CustomScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics(),
+                        ),
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: HomeAppBarWidget().paddingSymmetric(
+                              horizontal: horizontalPadding,
+                            ),
+                          ),
+                          const SliverToBoxAdapter(
+                            child: FindMoreWidget(),
+                          ),
+                          const SliverToBoxAdapter(
+                            child: TopListenerWidget(),
+                          ),
+                          const SliverToBoxAdapter(
+                            child: SizedBox(height: 12),
+                          ),
                         ],
                       ),
-                    ),
-                  ),
-                ],
+                    );
+                  },
+                ),
               ),
             );
           },

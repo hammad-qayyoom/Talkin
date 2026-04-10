@@ -24,6 +24,10 @@ class FeedScreen extends StatelessWidget {
 
   final String? controllerTag;
 
+  static final Color _screenBackground = AppColors.redesignScreenBackground;
+  static final Color _brandRed = AppColors.redesignBrandRed;
+  static final Color _brandDark = AppColors.redesignBrandDark;
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<FeedScreenController>(
@@ -31,60 +35,68 @@ class FeedScreen extends StatelessWidget {
       tag: controllerTag,
       builder: (controller) {
         return Scaffold(
-          backgroundColor: const Color(0xffF1F3F9),
+          backgroundColor: _screenBackground,
           appBar: controller.isStandalone
               ? AppBar(
+                  backgroundColor: _screenBackground,
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
+                  surfaceTintColor: _screenBackground,
                   title: Text(
                     controller.screenTitle,
                     style: AppFontStyle.fontStyleW700(
-                      fontSize: 17,
-                      fontColor: AppColors.black,
+                      fontSize: 20,
+                      fontColor: _brandDark,
                     ),
                   ),
                   centerTitle: true,
-                  elevation: 0,
-                  surfaceTintColor: AppColors.white,
-                  backgroundColor: AppColors.white,
                 )
               : null,
           body: SafeArea(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          const Color(0xffF8FAFE),
-                          const Color(0xffECEFF6),
-                        ],
-                      ),
+            child: LayoutBuilder(
+              builder: (context, viewportConstraints) {
+                final viewportWidth = viewportConstraints.maxWidth;
+                final maxContentWidth =
+                    viewportWidth >= 1400 ? 1280.0 : double.infinity;
+
+                return Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: maxContentWidth),
+                    child: LayoutBuilder(
+                      builder: (context, contentConstraints) {
+                        final width = contentConstraints.maxWidth;
+                        final horizontalInset = width >= 1100
+                            ? 28.0
+                            : width >= 760
+                                ? 22.0
+                                : 12.0;
+
+                        return Column(
+                          children: [
+                            if (controller.showComposer)
+                              _ComposerView(
+                                controller: controller,
+                                controllerTag: controllerTag,
+                              ).paddingOnly(
+                                left: horizontalInset,
+                                right: horizontalInset,
+                                top: 8,
+                                bottom: 10,
+                              ),
+                            Expanded(
+                              child: _FeedListView(
+                                controller: controller,
+                                controllerTag: controllerTag,
+                                horizontalInset: horizontalInset,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
-                ),
-                Column(
-                  children: [
-                    if (controller.showComposer)
-                      _ComposerView(
-                        controller: controller,
-                        controllerTag: controllerTag,
-                      ).paddingOnly(
-                        left: 10,
-                        right: 10,
-                        top: 8,
-                        bottom: 8,
-                      ),
-                    Expanded(
-                      child: _FeedListView(
-                        controller: controller,
-                        controllerTag: controllerTag,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                );
+              },
             ),
           ),
         );
@@ -97,22 +109,26 @@ class _FeedListView extends StatelessWidget {
   const _FeedListView({
     required this.controller,
     required this.controllerTag,
+    required this.horizontalInset,
   });
 
   final FeedScreenController controller;
   final String? controllerTag;
+  final double horizontalInset;
 
   @override
   Widget build(BuildContext context) {
     if (controller.isLoading && controller.posts.isEmpty) {
       return Center(
         child: CircularProgressIndicator(
-          color: AppColors.appColor,
+          color: FeedScreen._brandRed,
         ),
       );
     }
 
     return RefreshIndicator(
+      color: FeedScreen._brandRed,
+      backgroundColor: AppColors.white,
       onRefresh: controller.onRefresh,
       child: controller.posts.isEmpty
           ? ListView(
@@ -120,12 +136,13 @@ class _FeedListView extends StatelessWidget {
               children: [
                 SizedBox(height: Get.height * 0.18),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  margin: EdgeInsets.symmetric(horizontal: horizontalInset),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
                   decoration: BoxDecoration(
                     color: AppColors.white,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(color: AppColors.redesignSoftBorder),
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.black.withValues(alpha: 0.05),
@@ -141,12 +158,12 @@ class _FeedListView extends StatelessWidget {
                         width: 56,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: AppColors.appColor.withValues(alpha: 0.08),
+                          color: FeedScreen._brandRed.withValues(alpha: 0.10),
                         ),
                         child: Icon(
                           Icons.dynamic_feed_rounded,
                           size: 30,
-                          color: AppColors.appColor,
+                          color: FeedScreen._brandRed,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -175,7 +192,9 @@ class _FeedListView extends StatelessWidget {
             )
           : ListView.builder(
               controller: controller.scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
               padding: const EdgeInsets.only(bottom: 18),
               itemCount: controller.posts.length +
                   (controller.isPaginationLoading ? 1 : 0),
@@ -186,7 +205,7 @@ class _FeedListView extends StatelessWidget {
                     child: Center(
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: AppColors.appColor,
+                        color: FeedScreen._brandRed,
                       ),
                     ),
                   );
@@ -198,8 +217,8 @@ class _FeedListView extends StatelessWidget {
                   controller: controller,
                   controllerTag: controllerTag,
                 ).paddingOnly(
-                  left: 10,
-                  right: 10,
+                  left: horizontalInset,
+                  right: horizontalInset,
                   bottom: 10,
                   top: index == 0 ? 2 : 0,
                 );
@@ -220,6 +239,11 @@ class _ComposerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brandRed = AppColors.redesignBrandRed;
+    final brandDark = AppColors.redesignBrandDark;
+    final mutedText = AppColors.redesignMutedText;
+    final softBorder = AppColors.redesignSoftBorder;
+
     String profileImage =
         (Database.fetchLoginUserProfileModel?.user?.profilePic ?? '')
             .toString();
@@ -237,16 +261,16 @@ class _ComposerView extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(26),
         border: Border.all(
-          color: AppColors.borderColor.withValues(alpha: 0.75),
+          color: softBorder,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.06),
+            color: AppColors.black.withValues(alpha: 0.05),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -255,6 +279,20 @@ class _ComposerView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            height: 4,
+            width: 72,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(999),
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.redesignBrandRed,
+                  AppColors.redesignAccentGradientEnd
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -281,7 +319,7 @@ class _ComposerView extends StatelessWidget {
                     hintText: "What's on your mind?",
                     hintStyle: AppFontStyle.fontStyleW500(
                       fontSize: 14,
-                      fontColor: AppColors.grey.withValues(alpha: 0.95),
+                      fontColor: mutedText,
                     ),
                     isDense: true,
                     contentPadding: const EdgeInsets.symmetric(
@@ -289,23 +327,23 @@ class _ComposerView extends StatelessWidget {
                       vertical: 14,
                     ),
                     filled: true,
-                    fillColor: const Color(0xffF1F2F7),
+                    fillColor: AppColors.redesignSurfaceInput,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(28),
                       borderSide: BorderSide(
-                        color: AppColors.borderColor,
+                        color: softBorder,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(28),
                       borderSide: BorderSide(
-                        color: AppColors.borderColor,
+                        color: softBorder,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(28),
                       borderSide: BorderSide(
-                        color: AppColors.appColor.withValues(alpha: 0.45),
+                        color: brandRed,
                       ),
                     ),
                   ),
@@ -318,8 +356,8 @@ class _ComposerView extends StatelessWidget {
               clipBehavior: Clip.hardEdge,
               margin: const EdgeInsets.only(top: 10),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.border),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: softBorder),
               ),
               child: Stack(
                 alignment: Alignment.topRight,
@@ -334,7 +372,7 @@ class _ComposerView extends StatelessWidget {
                       : Container(
                           width: Get.width,
                           height: 132,
-                          color: AppColors.black.withValues(alpha: 0.86),
+                          color: brandDark.withValues(alpha: 0.94),
                           padding: const EdgeInsets.all(12),
                           child: Row(
                             children: [
@@ -422,19 +460,22 @@ class _ComposerActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brandDark = AppColors.redesignBrandDark;
+    final softBorder = AppColors.redesignSoftBorder;
+
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(22),
         onTap: onPressed,
         child: Container(
-          constraints: const BoxConstraints(minHeight: 48),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          constraints: const BoxConstraints(minHeight: 50),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(26),
-            color: const Color(0xffF6F7FA),
+            borderRadius: BorderRadius.circular(22),
+            color: AppColors.white,
             border: Border.all(
-              color: AppColors.borderColor.withValues(alpha: 0.7),
+              color: softBorder,
             ),
           ),
           child: Center(
@@ -446,14 +487,14 @@ class _ComposerActionButton extends StatelessWidget {
                   Icon(
                     icon,
                     size: 19,
-                    color: AppColors.appColor,
+                    color: brandDark,
                   ),
                   const SizedBox(width: 6),
                   Text(
                     label,
                     style: AppFontStyle.fontStyleW700(
                       fontSize: 13,
-                      fontColor: AppColors.appColor,
+                      fontColor: brandDark,
                     ),
                   ),
                 ],
@@ -480,20 +521,20 @@ class _PostPrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(26),
+      borderRadius: BorderRadius.circular(22),
       onTap: onTap,
       child: Container(
-        width: isCompact ? 86 : 90,
-        height: 48,
+        width: isCompact ? 90 : 98,
+        height: 50,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(26),
-          gradient: const LinearGradient(
+          borderRadius: BorderRadius.circular(22),
+          gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color(0xff111329),
-              Color(0xff1C2046),
+              AppColors.redesignDarkGradientStart,
+              AppColors.redesignDarkGradientEnd,
             ],
           ),
           boxShadow: [
@@ -510,7 +551,7 @@ class _PostPrimaryButton extends StatelessWidget {
                 height: 14,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               )
             : Text(
@@ -538,16 +579,22 @@ class _FeedPostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brandDark = AppColors.redesignBrandDark;
+    final mutedText = AppColors.redesignMutedText;
+    final softBorder = AppColors.redesignSoftBorder;
+    final chipSurface = AppColors.redesignSurfaceSoft;
+
     final isMine = controller.isMyPost(post);
     final showFollowButton = !isMine && post.expertId.trim().isNotEmpty;
+    final isFollowing = controller.isFollowingExpert(post.expertId);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.borderColor.withValues(alpha: 0.65),
+          color: softBorder,
         ),
         boxShadow: [
           BoxShadow(
@@ -560,6 +607,20 @@ class _FeedPostCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            height: 4,
+            width: 74,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(999),
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.redesignBrandRed,
+                  AppColors.redesignAccentGradientEnd
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -569,13 +630,15 @@ class _FeedPostCard extends StatelessWidget {
                   onTap: () => _openAuthorProfile(post: post),
                   child: Row(
                     children: [
-                      SizedBox(
-                        height: 48,
-                        width: 48,
-                        child: ClipOval(
-                          child:
-                              CustomProfileImage(image: post.authorProfilePic),
+                      Container(
+                        clipBehavior: Clip.hardEdge,
+                        height: 52,
+                        width: 52,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          color: AppColors.redesignAvatarSurface,
                         ),
+                        child: CustomProfileImage(image: post.authorProfilePic),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
@@ -584,16 +647,19 @@ class _FeedPostCard extends StatelessWidget {
                           children: [
                             Text(
                               post.displayName,
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              softWrap: false,
                               style: AppFontStyle.fontStyleW700(
-                                fontSize: 15,
-                                fontColor: AppColors.black,
+                                fontSize: 17,
+                                fontColor: brandDark,
                               ),
                             ),
                             Text(
                               _relativeTime(post.createdAt),
                               style: AppFontStyle.fontStyleW500(
                                 fontSize: 12,
-                                fontColor: AppColors.grey,
+                                fontColor: mutedText,
                               ),
                             ),
                           ],
@@ -607,8 +673,15 @@ class _FeedPostCard extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(right: 8),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: AppColors.appColor.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(18),
+                    color: isFollowing
+                        ? AppColors.redesignBrandRed.withValues(alpha: 0.12)
+                        : chipSurface,
+                    border: Border.all(
+                      color: isFollowing
+                          ? AppColors.redesignBrandRed.withValues(alpha: 0.40)
+                          : softBorder,
+                    ),
                   ),
                   child: TextButton(
                     onPressed: () => controller.toggleFollowForPost(post),
@@ -620,12 +693,12 @@ class _FeedPostCard extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      controller.isFollowingExpert(post.expertId)
-                          ? 'Following'
-                          : 'Follow',
+                      isFollowing ? 'Following' : 'Follow',
                       style: AppFontStyle.fontStyleW600(
                         fontSize: 11,
-                        fontColor: AppColors.appColor,
+                        fontColor: isFollowing
+                            ? AppColors.redesignBrandRed
+                            : brandDark,
                       ),
                     ),
                   ),
@@ -641,13 +714,14 @@ class _FeedPostCard extends StatelessWidget {
                   height: 40,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: AppColors.lightGrey.withValues(alpha: 0.45),
-                    shape: BoxShape.circle,
+                    color: chipSurface,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: softBorder),
                   ),
                   child: Icon(
                     Icons.more_vert_rounded,
                     size: 18,
-                    color: AppColors.darkGrey,
+                    color: mutedText,
                   ),
                 ),
               ),
@@ -657,30 +731,30 @@ class _FeedPostCard extends StatelessWidget {
             Text(
               post.content,
               style: AppFontStyle.fontStyleW500(
-                fontSize: 15,
-                fontColor: AppColors.black,
+                fontSize: 14,
+                fontColor: AppColors.redesignTextStrong,
                 height: 1.45,
               ),
-            ).paddingOnly(top: 10),
+            ).paddingOnly(top: 12),
           if (post.mediaUrls.isNotEmpty)
-            _PostMediaView(post: post).paddingOnly(top: 10),
+            _PostMediaView(post: post).paddingOnly(top: 12),
           Row(
             children: [
               _MetaPill(
                 icon: Icons.favorite_rounded,
-                iconColor: AppColors.red,
+                iconColor: AppColors.redesignBrandRed,
                 label: '${post.likeCount}',
               ),
               const SizedBox(width: 6),
               _MetaPill(
                 icon: Icons.mode_comment_outlined,
-                iconColor: AppColors.darkGrey,
+                iconColor: AppColors.redesignMutedText,
                 label: '${post.commentCount}',
               ),
               const SizedBox(width: 6),
               _MetaPill(
                 icon: Icons.share_outlined,
-                iconColor: AppColors.darkGrey,
+                iconColor: AppColors.redesignMutedText,
                 label: '${post.shareCount}',
               ),
               const Spacer(),
@@ -688,14 +762,14 @@ class _FeedPostCard extends StatelessWidget {
                 _relativeTime(post.createdAt),
                 style: AppFontStyle.fontStyleW500(
                   fontSize: 11,
-                  fontColor: AppColors.grey,
+                  fontColor: AppColors.redesignMutedText,
                 ),
               ),
             ],
-          ).paddingOnly(top: 10),
+          ).paddingOnly(top: 12),
           Divider(
-            color: AppColors.borderColor.withValues(alpha: 0.6),
-            height: 16,
+            color: AppColors.redesignSoftBorder,
+            height: 18,
           ),
           Row(
             children: [
@@ -763,6 +837,8 @@ class _FeedPostCard extends StatelessWidget {
     required FeedPostItem post,
     required FeedScreenController controller,
   }) {
+    final brandDark = AppColors.redesignBrandDark;
+
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.white,
@@ -775,7 +851,7 @@ class _FeedPostCard extends StatelessWidget {
             children: [
               if (controller.isMyPost(post))
                 ListTile(
-                  leading: Icon(Icons.edit_outlined, color: AppColors.appColor),
+                  leading: Icon(Icons.edit_outlined, color: brandDark),
                   title: Text(
                     'Edit post',
                     style: AppFontStyle.fontStyleW600(
@@ -868,6 +944,11 @@ class _FeedPostCard extends StatelessWidget {
     required FeedPostItem post,
     required String? controllerTag,
   }) async {
+    final brandRed = AppColors.redesignBrandRed;
+    final brandDark = AppColors.redesignBrandDark;
+    final mutedText = AppColors.redesignMutedText;
+    final softBorder = AppColors.redesignSoftBorder;
+
     await controller.openComments(post.id);
 
     Get.bottomSheet(
@@ -887,7 +968,7 @@ class _FeedPostCard extends StatelessWidget {
                 height: 4,
                 width: 52,
                 decoration: BoxDecoration(
-                  color: AppColors.lightGrey,
+                  color: softBorder,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -895,7 +976,7 @@ class _FeedPostCard extends StatelessWidget {
                 'Comments',
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 17,
-                  fontColor: AppColors.black,
+                  fontColor: brandDark,
                 ),
               ),
               const SizedBox(height: 4),
@@ -910,8 +991,10 @@ class _FeedPostCard extends StatelessWidget {
 
                     if (commentController.isCommentsLoading &&
                         comments.isEmpty) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: brandRed,
+                        ),
                       );
                     }
 
@@ -921,7 +1004,7 @@ class _FeedPostCard extends StatelessWidget {
                           'No comments yet.',
                           style: AppFontStyle.fontStyleW500(
                             fontSize: 13,
-                            fontColor: AppColors.grey,
+                            fontColor: mutedText,
                           ),
                         ),
                       );
@@ -959,7 +1042,7 @@ class _FeedPostCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 8),
                           decoration: BoxDecoration(
-                            color: AppColors.appColor.withValues(alpha: 0.08),
+                            color: brandRed.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(
@@ -969,7 +1052,7 @@ class _FeedPostCard extends StatelessWidget {
                                   'Replying to ${commentController.replyingToUserName}',
                                   style: AppFontStyle.fontStyleW600(
                                     fontSize: 11,
-                                    fontColor: AppColors.appColor,
+                                    fontColor: brandRed,
                                   ),
                                 ),
                               ),
@@ -978,7 +1061,7 @@ class _FeedPostCard extends StatelessWidget {
                                 child: Icon(
                                   Icons.close_rounded,
                                   size: 16,
-                                  color: AppColors.darkGrey,
+                                  color: mutedText,
                                 ),
                               ),
                             ],
@@ -990,9 +1073,9 @@ class _FeedPostCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: const Color(0xffF6F8FC),
+                          color: AppColors.redesignSurfaceSoft,
                           borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: softBorder),
                         ),
                         child: Row(
                           children: [
@@ -1008,10 +1091,10 @@ class _FeedPostCard extends StatelessWidget {
                                     horizontal: 6,
                                     vertical: 10,
                                   ),
-                                  hintText: 'Write a comment...',
+                                  hintText: 'Write a comment',
                                   hintStyle: AppFontStyle.fontStyleW500(
                                     fontSize: 13,
-                                    fontColor: AppColors.grey,
+                                    fontColor: mutedText,
                                   ),
                                 ),
                               ),
@@ -1023,12 +1106,12 @@ class _FeedPostCard extends StatelessWidget {
                               child: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: AppColors.appColor,
+                                  color: brandDark,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: const Icon(
                                   Icons.send_rounded,
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   size: 16,
                                 ),
                               ),
@@ -1152,8 +1235,8 @@ class _MetaPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
-        color: const Color(0xffF3F4F8).withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(18),
+        color: AppColors.redesignSurfaceInput,
+        borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
         children: [
@@ -1163,7 +1246,7 @@ class _MetaPill extends StatelessWidget {
             label,
             style: AppFontStyle.fontStyleW600(
               fontSize: 12,
-              fontColor: AppColors.appColor.withValues(alpha: 0.85),
+              fontColor: AppColors.redesignTextMeta,
             ),
           ),
         ],
@@ -1187,10 +1270,12 @@ class _PostActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final actionColor = active ? AppColors.appColor : AppColors.darkGrey;
+    final brandRed = AppColors.redesignBrandRed;
+    final brandDark = AppColors.redesignBrandDark;
+    final actionColor = active ? brandRed : brandDark;
 
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(22),
         onTap: onTap,
@@ -1200,9 +1285,8 @@ class _PostActionButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22),
-            color: active
-                ? AppColors.appColor.withValues(alpha: 0.1)
-                : Colors.transparent,
+            color:
+                active ? brandRed.withValues(alpha: 0.1) : AppColors.transparent,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -1239,6 +1323,11 @@ class _CommentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brandDark = AppColors.redesignBrandDark;
+    final brandRed = AppColors.redesignBrandRed;
+    final mutedText = AppColors.redesignMutedText;
+    final softBorder = AppColors.redesignSoftBorder;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       child: Column(
@@ -1258,10 +1347,10 @@ class _CommentTile extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
                   decoration: BoxDecoration(
-                    color: const Color(0xffF5F8FD),
+                    color: AppColors.redesignSurfaceSoft,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppColors.borderColor.withValues(alpha: 0.75),
+                      color: softBorder,
                     ),
                   ),
                   child: Column(
@@ -1273,7 +1362,7 @@ class _CommentTile extends StatelessWidget {
                             : comment.authorName,
                         style: AppFontStyle.fontStyleW700(
                           fontSize: 12,
-                          fontColor: AppColors.black,
+                          fontColor: brandDark,
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -1281,7 +1370,7 @@ class _CommentTile extends StatelessWidget {
                         comment.text,
                         style: AppFontStyle.fontStyleW500(
                           fontSize: 12.5,
-                          fontColor: AppColors.black,
+                          fontColor: brandDark,
                           height: 1.45,
                         ),
                       ),
@@ -1292,7 +1381,7 @@ class _CommentTile extends StatelessWidget {
                             _relativeTime(comment.createdAt),
                             style: AppFontStyle.fontStyleW500(
                               fontSize: 10,
-                              fontColor: AppColors.grey,
+                              fontColor: mutedText,
                             ),
                           ),
                           const SizedBox(width: 14),
@@ -1302,7 +1391,7 @@ class _CommentTile extends StatelessWidget {
                               'Reply',
                               style: AppFontStyle.fontStyleW600(
                                 fontSize: 11,
-                                fontColor: AppColors.appColor,
+                                fontColor: brandRed,
                               ),
                             ),
                           ),
@@ -1782,7 +1871,7 @@ class _FeedFullscreenVideoPlayerState
         _closePlayer();
       },
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.black,
         body: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: _toggleControls,
@@ -1815,9 +1904,9 @@ class _FeedFullscreenVideoPlayerState
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.black.withValues(alpha: 0.45),
-                        Colors.transparent,
-                        Colors.black.withValues(alpha: 0.6),
+                        AppColors.black.withValues(alpha: 0.45),
+                        AppColors.transparent,
+                        AppColors.black.withValues(alpha: 0.6),
                       ],
                     ),
                   ),
@@ -1830,7 +1919,7 @@ class _FeedFullscreenVideoPlayerState
                               onPressed: _closePlayer,
                               icon: const Icon(
                                 Icons.arrow_back_rounded,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ),
                             const Spacer(),
@@ -1838,7 +1927,7 @@ class _FeedFullscreenVideoPlayerState
                               onPressed: _closePlayer,
                               icon: const Icon(
                                 Icons.fullscreen_exit_rounded,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ),
                           ],
@@ -1851,7 +1940,7 @@ class _FeedFullscreenVideoPlayerState
                             _controller.value.isPlaying
                                 ? Icons.pause_circle_filled_rounded
                                 : Icons.play_circle_fill_rounded,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                         const Spacer(),
@@ -1866,10 +1955,10 @@ class _FeedFullscreenVideoPlayerState
                                   ),
                                   overlayShape: SliderComponentShape.noOverlay,
                                   trackHeight: 3,
-                                  activeTrackColor: Colors.redAccent,
+                                  activeTrackColor: AppColors.redesignMediaSliderActive,
                                   inactiveTrackColor:
-                                      Colors.white.withValues(alpha: 0.35),
-                                  thumbColor: Colors.white,
+                                      AppColors.white.withValues(alpha: 0.35),
+                                  thumbColor: AppColors.white,
                                 ),
                                 child: Slider(
                                   min: 0,
@@ -1883,7 +1972,7 @@ class _FeedFullscreenVideoPlayerState
                                   Text(
                                     _formatDuration(safePosition),
                                     style: const TextStyle(
-                                      color: Colors.white,
+                                      color: AppColors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -1893,7 +1982,7 @@ class _FeedFullscreenVideoPlayerState
                                     '/ ${_formatDuration(duration)}',
                                     style: TextStyle(
                                       color:
-                                          Colors.white.withValues(alpha: 0.8),
+                                          AppColors.white.withValues(alpha: 0.8),
                                       fontSize: 12,
                                     ),
                                   ),

@@ -88,7 +88,7 @@ class TopListeners {
   });
 
   factory TopListeners.fromJson(Map<String, dynamic> json) => TopListeners(
-        id: json["_id"],
+        id: (json["_id"] ?? json["id"] ?? json["listenerId"])?.toString(),
         name: json["name"],
         age: json["age"],
         talkTopics: json["talkTopics"] == null

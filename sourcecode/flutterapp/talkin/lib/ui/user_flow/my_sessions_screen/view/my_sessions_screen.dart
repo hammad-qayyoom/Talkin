@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:talk_in/routes/app_routes.dart';
 import 'package:talk_in/ui/common/session_booking/session_booking_service.dart';
 import 'package:talk_in/utils/app_color.dart';
@@ -22,6 +23,14 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
   List<dynamic> _sessions = [];
   Timer? _autoRefreshTimer;
   String? _cancellingBookingId;
+
+  static final Color _brandRed = AppColors.redesignBrandRed;
+  static final Color _brandRedDark = AppColors.redesignBrandRedDark;
+  static final Color _brandDark = AppColors.redesignBrandDark;
+  static final Color _screenBackground = AppColors.redesignScreenBackground;
+  static final Color _softBorder = AppColors.redesignSoftBorder;
+  static final Color _mutedText = AppColors.redesignMutedText;
+  static final Color _chipSurface = AppColors.redesignSurfaceSoft;
 
   @override
   void initState() {
@@ -44,6 +53,10 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     final userId =
         (Database.fetchLoginUserProfileModel?.user?.id ?? '').toString();
 
+    if (!mounted) {
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
@@ -65,6 +78,52 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     if (response['status'] != true) {
       Utils.showToast(context,
           (response['message'] ?? 'Failed to fetch sessions.').toString());
+    }
+  }
+
+  String _toTitleCase(String value) {
+    final normalized = value.trim();
+    if (normalized.isEmpty) {
+      return 'Unknown';
+    }
+
+    return normalized
+        .split(RegExp(r'[_\s]+'))
+        .where((word) => word.isNotEmpty)
+        .map((word) =>
+            '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}')
+        .join(' ');
+  }
+
+  Color _statusBackground(String status) {
+    switch (status.trim().toLowerCase()) {
+      case 'completed':
+        return AppColors.redesignStatusSuccessBg;
+      case 'cancelled':
+      case 'canceled':
+        return AppColors.redesignStatusDangerBg;
+      case 'live':
+      case 'in-progress':
+        return AppColors.redesignStatusInfoBg;
+      case 'scheduled':
+      default:
+        return AppColors.redesignAccentSoftBg;
+    }
+  }
+
+  Color _statusTextColor(String status) {
+    switch (status.trim().toLowerCase()) {
+      case 'completed':
+        return AppColors.redesignStatusSuccessDark;
+      case 'cancelled':
+      case 'canceled':
+        return _brandRed;
+      case 'live':
+      case 'in-progress':
+        return AppColors.redesignStatusInfoText;
+      case 'scheduled':
+      default:
+        return _brandRedDark;
     }
   }
 
@@ -210,18 +269,23 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
           });
           _fetchSessions();
         },
-        child: Container(
-          height: 40,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          height: 46,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: selected ? AppColors.appColor : AppColors.profileOptionColor,
+            borderRadius: BorderRadius.circular(14),
+            color: selected ? _brandDark : AppColors.transparent,
+            border: Border.all(
+              color: selected ? _brandDark : AppColors.transparent,
+            ),
           ),
           child: Center(
             child: Text(
               label,
               style: AppFontStyle.fontStyleW600(
-                fontSize: 12,
-                fontColor: selected ? AppColors.white : AppColors.black,
+                fontSize: 15,
+                fontColor: selected ? AppColors.white : _brandDark,
               ),
             ),
           ),
@@ -230,176 +294,710 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     );
   }
 
+  Widget _buildMetaChip({required IconData icon, required String text}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: _chipSurface,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: _softBorder),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: _mutedText),
+          const SizedBox(width: 6),
+          Text(
+            text,
+            style: AppFontStyle.fontStyleW500(
+              fontSize: 12,
+              fontColor: _mutedText,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadingCard({double bottomMargin = 12}) {
+    return Container(
+      margin: EdgeInsets.only(bottom: bottomMargin),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: _softBorder),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 16,
+            width: 180,
+            decoration: BoxDecoration(
+              color: AppColors.lightGrey1,
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            height: 12,
+            width: 90,
+            decoration: BoxDecoration(
+              color: AppColors.lightGrey,
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            height: 12,
+            width: 220,
+            decoration: BoxDecoration(
+              color: AppColors.lightGrey,
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            height: 12,
+            width: 170,
+            decoration: BoxDecoration(
+              color: AppColors.lightGrey,
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: AppColors.lightGrey1,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Container(
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: AppColors.lightGrey1,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSessionCard({
+    required Map<String, dynamic> item,
+    required double cardWidth,
+  }) {
+    final session = item['session'] is Map<String, dynamic>
+        ? item['session'] as Map<String, dynamic>
+        : item['sessionId'] is Map<String, dynamic>
+            ? item['sessionId'] as Map<String, dynamic>
+            : <String, dynamic>{};
+    final expert = session['expertId'] is Map<String, dynamic>
+        ? session['expertId'] as Map<String, dynamic>
+        : <String, dynamic>{};
+
+    final callTypeRaw = (session['callType'] ?? '').toString().trim();
+    final callTypeLabel =
+        callTypeRaw.isEmpty ? 'Unknown' : callTypeRaw.toUpperCase();
+    final status =
+        (session['sessionStatus'] ?? session['status'] ?? '').toString();
+    final statusLabel = _toTitleCase(status);
+    final canStart = item['canStartSession'] == true;
+    final showStartSession = _view == 'upcoming';
+    final bookingId = (item['_id'] ?? '').toString();
+    final isCancellingThis = _cancellingBookingId == bookingId;
+    final title = (session['title'] ?? 'Session').toString();
+    final expertName = (expert['displayName'] ?? 'Unknown').toString();
+    final startAt = _formatDateTime((session['startAt'] ?? '').toString());
+    final isNarrowActionLayout = cardWidth < 430;
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: _softBorder),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: 17,
+                    fontColor: _brandDark,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: _statusBackground(status),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  statusLabel,
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 11,
+                    fontColor: _statusTextColor(status),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            expertName,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppFontStyle.fontStyleW600(
+              fontSize: 14,
+              fontColor: _brandDark,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _buildMetaChip(
+                icon: Icons.schedule_rounded,
+                text: startAt,
+              ),
+              _buildMetaChip(
+                icon: callTypeRaw.toLowerCase() == 'video'
+                    ? Icons.videocam_outlined
+                    : Icons.call_outlined,
+                text: callTypeLabel,
+              ),
+            ],
+          ),
+          if (showStartSession) ...[
+            const SizedBox(height: 14),
+            if (isNarrowActionLayout)
+              Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 46,
+                    child: ElevatedButton.icon(
+                      onPressed: canStart
+                          ? () => _onStartSession(item, session, expert)
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        disabledBackgroundColor: AppColors.redesignSoftBorder,
+                        disabledForegroundColor: _mutedText,
+                        backgroundColor: _brandDark,
+                        foregroundColor: AppColors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      icon: Icon(
+                        canStart
+                            ? Icons.play_circle_outline_rounded
+                            : Icons.schedule_rounded,
+                        size: 18,
+                      ),
+                      label: Text(
+                        canStart ? 'Start Session' : 'Not Live Yet',
+                        style: AppFontStyle.fontStyleW600(
+                          fontSize: 14,
+                          fontColor: canStart ? AppColors.white : _mutedText,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 46,
+                    child: OutlinedButton.icon(
+                      onPressed: isCancellingThis
+                          ? null
+                          : () => _onCancelBooking(item, session),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                          color: _brandRed.withValues(alpha: 0.45),
+                        ),
+                        foregroundColor: _brandRedDark,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      icon: isCancellingThis
+                          ? const SizedBox(
+                              height: 16,
+                              width: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.close_rounded, size: 18),
+                      label: Text(
+                        isCancellingThis ? 'Cancelling' : 'Cancel Slot',
+                        style: AppFontStyle.fontStyleW600(
+                          fontSize: 14,
+                          fontColor: _brandRedDark,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            else
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 46,
+                      child: ElevatedButton.icon(
+                        onPressed: canStart
+                            ? () => _onStartSession(item, session, expert)
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          disabledBackgroundColor: AppColors.redesignSoftBorder,
+                          disabledForegroundColor: _mutedText,
+                          backgroundColor: _brandDark,
+                          foregroundColor: AppColors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                        icon: Icon(
+                          canStart
+                              ? Icons.play_circle_outline_rounded
+                              : Icons.schedule_rounded,
+                          size: 18,
+                        ),
+                        label: Text(
+                          canStart ? 'Start Session' : 'Not Live Yet',
+                          style: AppFontStyle.fontStyleW600(
+                            fontSize: 14,
+                            fontColor: canStart ? AppColors.white : _mutedText,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: SizedBox(
+                      height: 46,
+                      child: OutlinedButton.icon(
+                        onPressed: isCancellingThis
+                            ? null
+                            : () => _onCancelBooking(item, session),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: _brandRed.withValues(alpha: 0.45),
+                          ),
+                          foregroundColor: _brandRedDark,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                        icon: isCancellingThis
+                            ? const SizedBox(
+                                height: 16,
+                                width: 16,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Icon(Icons.close_rounded, size: 18),
+                        label: Text(
+                          isCancellingThis ? 'Cancelling' : 'Cancel Slot',
+                          style: AppFontStyle.fontStyleW600(
+                            fontSize: 14,
+                            fontColor: _brandRedDark,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSessionsList({
+    required double horizontalInset,
+  }) {
+    if (_isLoading) {
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final isTablet = constraints.maxWidth >= 760;
+          final columns = constraints.maxWidth >= 1200
+              ? 3
+              : isTablet
+                  ? 2
+                  : 1;
+          const spacing = 14.0;
+          final cardWidth = columns == 1
+              ? constraints.maxWidth
+              : ((constraints.maxWidth - (spacing * (columns - 1))) / columns)
+                  .toDouble();
+
+          return Shimmer.fromColors(
+            baseColor: AppColors.redesignShimmerBase,
+            highlightColor: AppColors.white,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
+              padding:
+                  EdgeInsets.fromLTRB(horizontalInset, 6, horizontalInset, 20),
+              children: [
+                if (columns == 1)
+                  ...List.generate(4, (index) => _buildLoadingCard())
+                else
+                  Wrap(
+                    spacing: spacing,
+                    runSpacing: spacing,
+                    children: List.generate(
+                      4,
+                      (index) => SizedBox(
+                        width: cardWidth,
+                        child: _buildLoadingCard(bottomMargin: 0),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
+    if (_sessions.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 78,
+                width: 78,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: _softBorder),
+                ),
+                child: Icon(
+                  Icons.calendar_month_rounded,
+                  size: 36,
+                  color: _brandRed,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                'No sessions found',
+                style: AppFontStyle.fontStyleW700(
+                  fontSize: 17,
+                  fontColor: _brandDark,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                _view == 'upcoming'
+                    ? 'Your upcoming bookings will appear here.'
+                    : 'Completed sessions will appear here.',
+                textAlign: TextAlign.center,
+                style: AppFontStyle.fontStyleW500(
+                  fontSize: 13,
+                  fontColor: _mutedText,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return RefreshIndicator(
+      color: _brandRed,
+      backgroundColor: AppColors.white,
+      onRefresh: _fetchSessions,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isTablet = constraints.maxWidth >= 760;
+          final columns = constraints.maxWidth >= 1200
+              ? 3
+              : isTablet
+                  ? 2
+                  : 1;
+          const spacing = 14.0;
+          final cardWidth = columns == 1
+              ? constraints.maxWidth
+              : ((constraints.maxWidth - (spacing * (columns - 1))) / columns)
+                  .toDouble();
+
+          return ListView(
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            padding:
+                EdgeInsets.fromLTRB(horizontalInset, 6, horizontalInset, 20),
+            children: [
+              if (columns == 1)
+                ..._sessions.map((rawItem) {
+                  final item = rawItem is Map<String, dynamic>
+                      ? rawItem
+                      : <String, dynamic>{};
+
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: _buildSessionCard(
+                      item: item,
+                      cardWidth: cardWidth,
+                    ),
+                  );
+                })
+              else
+                Wrap(
+                  spacing: spacing,
+                  runSpacing: spacing,
+                  children: _sessions.map((rawItem) {
+                    final item = rawItem is Map<String, dynamic>
+                        ? rawItem
+                        : <String, dynamic>{};
+
+                    return SizedBox(
+                      width: cardWidth,
+                      child: _buildSessionCard(
+                        item: item,
+                        cardWidth: cardWidth,
+                      ),
+                    );
+                  }).toList(),
+                ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final appBarWidth = MediaQuery.sizeOf(context).width;
+    final isTabletAppBar = appBarWidth >= 760;
+
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: _screenBackground,
       appBar: AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        backgroundColor: _screenBackground,
         title: Text(
           'My Sessions',
           style: AppFontStyle.fontStyleW700(
-              fontSize: 18, fontColor: AppColors.black),
+            fontSize: isTabletAppBar ? 24 : 18,
+            fontColor: _brandDark,
+          ),
         ),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                _buildSegment('upcoming', 'Upcoming'),
-                const SizedBox(width: 8),
-                _buildSegment('completed', 'Completed'),
-              ],
-            ).paddingAll(12),
-            Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _sessions.isEmpty
-                      ? Center(
-                          child: Text(
-                            'No sessions found.',
-                            style: AppFontStyle.fontStyleW500(
-                                fontSize: 13, fontColor: AppColors.grey),
+      body: LayoutBuilder(
+        builder: (context, viewportConstraints) {
+          final viewportWidth = viewportConstraints.maxWidth;
+          final maxContentWidth =
+              viewportWidth >= 1400 ? 1280.0 : double.infinity;
+
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxContentWidth),
+              child: LayoutBuilder(
+                builder: (context, contentConstraints) {
+                  final width = contentConstraints.maxWidth;
+                  final isTablet = width >= 760;
+                  final horizontalInset = width >= 1100
+                      ? 28.0
+                      : isTablet
+                          ? 22.0
+                          : 16.0;
+                  final heroSubtitle = _view == 'upcoming'
+                      ? 'Track and manage your upcoming bookings'
+                      : 'View your completed sessions in one place';
+
+                  return SafeArea(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalInset,
+                            8,
+                            horizontalInset,
+                            12,
                           ),
-                        )
-                      : RefreshIndicator(
-                          onRefresh: _fetchSessions,
-                          child: ListView.builder(
-                            padding: const EdgeInsets.all(12),
-                            itemCount: _sessions.length,
-                            itemBuilder: (context, index) {
-                              final item =
-                                  _sessions[index] is Map<String, dynamic>
-                                      ? _sessions[index] as Map<String, dynamic>
-                                      : <String, dynamic>{};
-                              final session = item['session']
-                                      is Map<String, dynamic>
-                                  ? item['session'] as Map<String, dynamic>
-                                  : item['sessionId'] is Map<String, dynamic>
-                                      ? item['sessionId']
-                                          as Map<String, dynamic>
-                                      : <String, dynamic>{};
-                              final expert = session['expertId']
-                                      is Map<String, dynamic>
-                                  ? session['expertId'] as Map<String, dynamic>
-                                  : <String, dynamic>{};
-
-                              final callType = (session['callType'] ?? '')
-                                  .toString()
-                                  .toUpperCase();
-                              final status = (session['sessionStatus'] ??
-                                      session['status'] ??
-                                      '')
-                                  .toString();
-                              final canStart = item['canStartSession'] == true;
-                              final showStartSession = _view == 'upcoming';
-                              final bookingId = (item['_id'] ?? '').toString();
-                              final isCancellingThis =
-                                  _cancellingBookingId == bookingId;
-
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 10),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: AppColors.profileOptionColor,
+                          child: Container(
+                            padding: EdgeInsets.all(isTablet ? 16 : 14),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(22),
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  _brandRed,
+                                  _brandRedDark,
+                                ],
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: _brandRed.withValues(alpha: 0.24),
+                                  blurRadius: 22,
+                                  offset: const Offset(0, 12),
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      (session['title'] ?? 'Session')
-                                          .toString(),
-                                      style: AppFontStyle.fontStyleW700(
-                                          fontSize: 14,
-                                          fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      'Expert: ${(expert['displayName'] ?? 'Unknown').toString()}',
-                                      style: AppFontStyle.fontStyleW500(
-                                          fontSize: 12,
-                                          fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Start: ${_formatDateTime((session['startAt'] ?? '').toString())}',
-                                      style: AppFontStyle.fontStyleW500(
-                                          fontSize: 12,
-                                          fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Type: $callType',
-                                      style: AppFontStyle.fontStyleW500(
-                                          fontSize: 12,
-                                          fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Status: $status',
-                                      style: AppFontStyle.fontStyleW600(
-                                          fontSize: 12,
-                                          fontColor: AppColors.appColor),
-                                    ),
-                                    if (showStartSession) ...[
-                                      const SizedBox(height: 10),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: SizedBox(
-                                              height: 40,
-                                              child: ElevatedButton(
-                                                onPressed: () =>
-                                                    _onStartSession(
-                                                        item, session, expert),
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor: canStart
-                                                      ? AppColors.appColor
-                                                      : AppColors.lightGrey1,
-                                                  foregroundColor:
-                                                      AppColors.white,
-                                                ),
-                                                child: Text(canStart
-                                                    ? 'Start Session'
-                                                    : 'Session not started yet'),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: SizedBox(
-                                              height: 40,
-                                              child: OutlinedButton(
-                                                onPressed: isCancellingThis
-                                                    ? null
-                                                    : () => _onCancelBooking(
-                                                        item, session),
-                                                child: isCancellingThis
-                                                    ? const SizedBox(
-                                                        height: 18,
-                                                        width: 18,
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                                strokeWidth: 2),
-                                                      )
-                                                    : const Text(
-                                                        'Cancel Booking'),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                              ],
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: isTablet ? 44 : 40,
+                                  width: isTablet ? 44 : 40,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.white,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(
+                                    Icons.calendar_month_rounded,
+                                    color: _brandRed,
+                                    size: isTablet ? 24 : 22,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Session Center',
+                                        style: AppFontStyle.fontStyleW700(
+                                          fontSize: isTablet ? 17 : 15,
+                                          fontColor: AppColors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        heroSubtitle,
+                                        style: AppFontStyle.fontStyleW500(
+                                          fontSize: isTablet ? 13 : 12,
+                                          fontColor: AppColors.white
+                                              .withValues(alpha: 0.88),
+                                        ),
                                       ),
                                     ],
-                                  ],
+                                  ),
                                 ),
-                              );
-                            },
+                                const SizedBox(width: 10),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        AppColors.white.withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: AppColors.white
+                                          .withValues(alpha: 0.35),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        '${_sessions.length}',
+                                        style: AppFontStyle.fontStyleW700(
+                                          fontSize: isTablet ? 18 : 16,
+                                          fontColor: AppColors.white,
+                                        ),
+                                      ),
+                                      Text(
+                                        _view == 'upcoming'
+                                            ? 'Upcoming'
+                                            : 'Done',
+                                        style: AppFontStyle.fontStyleW500(
+                                          fontSize: 10,
+                                          fontColor: AppColors.white
+                                              .withValues(alpha: 0.9),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalInset,
+                            0,
+                            horizontalInset,
+                            12,
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppColors.redesignPanelBg,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: _softBorder),
+                            ),
+                            child: Row(
+                              children: [
+                                _buildSegment('upcoming', 'Upcoming'),
+                                const SizedBox(width: 8),
+                                _buildSegment('completed', 'Completed'),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildSessionsList(
+                            horizontalInset: horizontalInset,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

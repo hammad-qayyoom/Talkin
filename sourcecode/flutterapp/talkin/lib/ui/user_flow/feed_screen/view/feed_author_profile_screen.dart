@@ -179,7 +179,7 @@ class _FeedAuthorProfileScreenState extends State<FeedAuthorProfileScreen> {
     );
 
     return Scaffold(
-      backgroundColor: const Color(0xffF1F3F9),
+      backgroundColor: AppColors.redesignScreenBackground,
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () => _fetchPosts(reset: true),
@@ -341,7 +341,7 @@ class _ProfileHeader extends StatelessWidget {
                     end: Alignment.bottomRight,
                     colors: [
                       AppColors.appColor.withValues(alpha: 0.9),
-                      const Color(0xff2E3354),
+                      AppColors.redesignProfileGradientEnd,
                     ],
                   ),
                 ),
@@ -350,13 +350,13 @@ class _ProfileHeader extends StatelessWidget {
                 left: 12,
                 top: 12,
                 child: Material(
-                  color: Colors.white.withValues(alpha: 0.24),
+                  color: AppColors.white.withValues(alpha: 0.24),
                   shape: const CircleBorder(),
                   child: IconButton(
                     onPressed: Get.back,
                     icon: const Icon(
                       Icons.arrow_back_rounded,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
@@ -368,14 +368,14 @@ class _ProfileHeader extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: AppColors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: Text(
                     roleLabel,
                     style: AppFontStyle.fontStyleW600(
                       fontSize: 11,
-                      fontColor: Colors.white,
+                      fontColor: AppColors.white,
                     ),
                   ),
                 ),
@@ -515,7 +515,7 @@ class _HeaderStatTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-        color: const Color(0xffF4F6FB),
+        color: AppColors.redesignSurfaceCardAlt,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
@@ -577,7 +577,7 @@ class _ProfilePostCard extends StatelessWidget {
                   vertical: 5,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xffEEF2FB),
+                  color: AppColors.redesignSurfaceChipAlt,
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Text(
@@ -646,7 +646,7 @@ class _SmallCountPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xffF4F6FB),
+        color: AppColors.redesignSurfaceCardAlt,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Row(
@@ -1081,7 +1081,7 @@ class _FeedAuthorFullscreenVideoPlayerState
         _closePlayer();
       },
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.black,
         body: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: _toggleControls,
@@ -1114,9 +1114,9 @@ class _FeedAuthorFullscreenVideoPlayerState
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.black.withValues(alpha: 0.45),
-                        Colors.transparent,
-                        Colors.black.withValues(alpha: 0.6),
+                        AppColors.black.withValues(alpha: 0.45),
+                        AppColors.transparent,
+                        AppColors.black.withValues(alpha: 0.6),
                       ],
                     ),
                   ),
@@ -1129,7 +1129,7 @@ class _FeedAuthorFullscreenVideoPlayerState
                               onPressed: _closePlayer,
                               icon: const Icon(
                                 Icons.arrow_back_rounded,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ),
                             const Spacer(),
@@ -1137,7 +1137,7 @@ class _FeedAuthorFullscreenVideoPlayerState
                               onPressed: _closePlayer,
                               icon: const Icon(
                                 Icons.fullscreen_exit_rounded,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ),
                           ],
@@ -1150,7 +1150,7 @@ class _FeedAuthorFullscreenVideoPlayerState
                             _controller.value.isPlaying
                                 ? Icons.pause_circle_filled_rounded
                                 : Icons.play_circle_fill_rounded,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                         const Spacer(),
@@ -1165,10 +1165,10 @@ class _FeedAuthorFullscreenVideoPlayerState
                                   ),
                                   overlayShape: SliderComponentShape.noOverlay,
                                   trackHeight: 3,
-                                  activeTrackColor: Colors.redAccent,
+                                  activeTrackColor: AppColors.redesignMediaSliderActive,
                                   inactiveTrackColor:
-                                      Colors.white.withValues(alpha: 0.35),
-                                  thumbColor: Colors.white,
+                                      AppColors.white.withValues(alpha: 0.35),
+                                  thumbColor: AppColors.white,
                                 ),
                                 child: Slider(
                                   min: 0,
@@ -1182,7 +1182,7 @@ class _FeedAuthorFullscreenVideoPlayerState
                                   Text(
                                     _formatDuration(safePosition),
                                     style: const TextStyle(
-                                      color: Colors.white,
+                                      color: AppColors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -1192,7 +1192,7 @@ class _FeedAuthorFullscreenVideoPlayerState
                                     '/ ${_formatDuration(duration)}',
                                     style: TextStyle(
                                       color:
-                                          Colors.white.withValues(alpha: 0.8),
+                                          AppColors.white.withValues(alpha: 0.8),
                                       fontSize: 12,
                                     ),
                                   ),

@@ -1,17 +1,179 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/custom/dialog/exit_app_dialog.dart';
-import 'package:talk_in/custom/listeners/listeners.dart';
+import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
 import 'package:talk_in/routes/app_routes.dart';
+import 'package:talk_in/ui/user_flow/home_screen/model/top_listeners_model.dart';
 import 'package:talk_in/ui/user_flow/home_screen/shimmer/top_listener_shimmer.dart';
 import 'package:talk_in/ui/user_flow/listener_screen/controller/listeners_screen_controller.dart';
 import 'package:talk_in/ui/user_flow/listener_screen/widget/listeners_screen_widget.dart';
-import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/constant.dart';
+import 'package:talk_in/utils/font_style.dart';
 
 class ListenersScreen extends StatelessWidget {
   const ListenersScreen({super.key});
+
+  static final Color _screenBackground = AppColors.redesignScreenBackground;
+  static final Color _brandRed = AppColors.redesignBrandRed;
+  static final Color _brandDark = AppColors.redesignBrandDark;
+  static final Color _mutedText = AppColors.redesignMutedText;
+  static final Color _softBorder = AppColors.redesignSoftBorder;
+
+  Widget _buildEmptyState({required double horizontalInset}) {
+    return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: EdgeInsets.fromLTRB(horizontalInset, 26, horizontalInset, 20),
+      children: [
+        Container(
+          padding: const EdgeInsets.all(22),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: _softBorder),
+          ),
+          child: Column(
+            children: [
+              Container(
+                height: 64,
+                width: 64,
+                decoration: BoxDecoration(
+                  color: _screenBackground,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Icon(
+                  Icons.groups_2_rounded,
+                  color: _brandRed,
+                  size: 34,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                'No experts found',
+                style: AppFontStyle.fontStyleW700(
+                  fontSize: 18,
+                  fontColor: _brandDark,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Try another language or talk topic filter.',
+                textAlign: TextAlign.center,
+                style: AppFontStyle.fontStyleW500(
+                  fontSize: 13,
+                  fontColor: _mutedText,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExpertsList({
+    required BuildContext context,
+    required ListenersScreenController controller,
+    required double horizontalInset,
+  }) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final columns = width >= 1240
+            ? 3
+            : width >= 760
+                ? 2
+                : 1;
+        const spacing = 14.0;
+        final availableWidth = width - (horizontalInset * 2);
+        final cardWidth = columns == 1
+            ? availableWidth
+            : ((availableWidth - (spacing * (columns - 1))) / columns)
+                .clamp(280.0, 520.0)
+                .toDouble();
+
+        final cards = controller.allListener
+            .map(
+              (listener) => _ExpertCard(
+                listener: listener,
+                onProfileTap: () {
+                  Get.toNamed(
+                    AppRoutes.profileDetailScreenView,
+                    arguments: listener.id,
+                  );
+                },
+                onBookTap: () {
+                  Get.toNamed(
+                    AppRoutes.userBookSessionScreen,
+                    arguments: {
+                      'listenerId': listener.id ?? '',
+                      'listenerName': listener.name ?? '',
+                      'listenerImage': listener.image ?? '',
+                      'availableForPrivateAudioCall':
+                          listener.isAvailableForPrivateAudioCall ?? false,
+                      'availableForPrivateVideoCall':
+                          listener.isAvailableForPrivateVideoCall ?? false,
+                      'ratePrivateAudioCall':
+                          listener.ratePrivateAudioCall ?? 0,
+                      'ratePrivateVideoCall':
+                          listener.ratePrivateVideoCall ?? 0,
+                    },
+                  );
+                },
+              ),
+            )
+            .toList();
+
+        return RefreshIndicator(
+          color: _brandRed,
+          backgroundColor: AppColors.white,
+          onRefresh: () async => controller.onRefresh(),
+          child: ListView(
+            controller: controller.scrollController,
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            padding:
+                EdgeInsets.fromLTRB(horizontalInset, 0, horizontalInset, 20),
+            children: [
+              if (columns == 1)
+                ...cards.map(
+                  (card) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: card,
+                  ),
+                )
+              else
+                Wrap(
+                  spacing: spacing,
+                  runSpacing: spacing,
+                  children: cards
+                      .map(
+                        (card) => SizedBox(
+                          width: cardWidth,
+                          child: card,
+                        ),
+                      )
+                      .toList(),
+                ),
+              GetBuilder<ListenersScreenController>(
+                id: Constant.idPaginationListener,
+                builder: (logic) => Visibility(
+                  visible: logic.isPaginationLoading,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 14),
+                    child: Center(
+                      child: CircularProgressIndicator(color: _brandRed),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +184,8 @@ class ListenersScreen extends StatelessWidget {
           barrierColor: AppColors.black.withValues(alpha: 0.8),
           Dialog(
             backgroundColor: AppColors.transparent,
-            shadowColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
+            shadowColor: AppColors.transparent,
+            surfaceTintColor: AppColors.transparent,
             elevation: 0,
             child: const ExitAppDialog(),
           ),
@@ -33,213 +195,451 @@ class ListenersScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.lightPurple1,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          flexibleSpace: const ListenersAppBarView(),
+        backgroundColor: _screenBackground,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(132),
+          child: const ListenersAppBarView(),
         ),
-        body: GetBuilder<ListenersScreenController>(
-          id: Constant.idAllListener,
-          builder: (controller) {
-            return Column(
-              children: [
-                ListenersTopButtonView(),
-                Expanded(
-                  child: Container(
-                    width: Get.width,
-                    height: Get.height,
-                    // padding: EdgeInsets.only(top: 14),
-                    color: AppColors.white,
-                    child: controller.isLoading
-                        ? TopListenerShimmer()
-                            .paddingSymmetric(horizontal: 14, vertical: 12)
-                        : controller.allListener.isEmpty
-                            ? Image.asset(
-                                AppAsset.noListenerFound,
-                              ).paddingSymmetric(horizontal: 62)
-                            : RefreshIndicator(
-                                onRefresh: () async => controller.onRefresh(),
-                                child: SingleChildScrollView(
-                                  controller: controller.scrollController,
-                                  physics: AlwaysScrollableScrollPhysics(),
-                                  child: Column(
-                                    children: [
-                                      ListView.builder(
-                                        shrinkWrap: true,
-                                        padding: EdgeInsets.zero,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemCount:
-                                            controller.allListener.length,
-                                        itemBuilder: (context, index) {
-                                          final allListener =
-                                              controller.allListener[index];
-                                          return CustomListeners(
-                                            fake: controller.allListener[index]
-                                                    .isFake ??
-                                                false,
-                                            availableForPrivateAudioCall:
-                                                allListener
-                                                        .isAvailableForPrivateAudioCall ??
-                                                    false,
-                                            availableForPrivateVideoCall:
-                                                allListener
-                                                        .isAvailableForPrivateVideoCall ??
-                                                    false,
-                                            uniqueId: controller
-                                                    .allListener[index]
-                                                    .uniqueId ??
-                                                '',
-                                            statusTxtColor: controller
-                                                        .allListener[index]
-                                                        .statusLabel ==
-                                                    "Offline"
-                                                ? AppColors.appTextColor
-                                                : AppColors.white,
-                                            statusColor: controller
-                                                        .allListener[index]
-                                                        .statusLabel ==
-                                                    "Available"
-                                                ? AppColors.green
-                                                : controller.allListener[index]
-                                                            .statusLabel ==
-                                                        "On Call"
-                                                    ? AppColors.red
-                                                    : AppColors.lightGrey1,
-                                            statusImage: controller
-                                                        .allListener[index]
-                                                        .statusLabel ==
-                                                    "Available"
-                                                ? Container(
-                                                    // height: 12,
-                                                    // width: 12,
-                                                    decoration: BoxDecoration(
-                                                      color: AppColors.white
-                                                          .withValues(
-                                                              alpha: 0.5),
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                    child: Container(
-                                                      height: 7,
-                                                      width: 7,
-                                                      decoration: BoxDecoration(
-                                                        color: AppColors.white,
-                                                        shape: BoxShape.circle,
-                                                      ),
-                                                    ).paddingAll(1.8),
-                                                  ).paddingOnly(right: 4)
-                                                : controller.allListener[index]
-                                                            .statusLabel ==
-                                                        "On Call"
-                                                    ? Image.asset(
-                                                        AppAsset.onCallIcon,
-                                                        height: 10,
-                                                        width: 10,
-                                                      ).paddingOnly(right: 3)
-                                                    : Container(
-                                                        // height: 12,
-                                                        // width: 12,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: AppColors
-                                                              .onBoardingTxt
-                                                              .withValues(
-                                                                  alpha: 0.3),
-                                                          shape:
-                                                              BoxShape.circle,
-                                                        ),
-                                                        child: Container(
-                                                          height: 7,
-                                                          width: 7,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: AppColors
-                                                                .onBoardingTxt,
-                                                            shape:
-                                                                BoxShape.circle,
-                                                          ),
-                                                        ).paddingAll(1.8),
-                                                      ).paddingOnly(right: 4),
-                                            image: allListener.image ?? '',
-                                            status:
-                                                allListener.statusLabel ?? '',
-                                            language: allListener.language?[0]
-                                                    .toString() ??
-                                                '',
-                                            callCount:
-                                                allListener.callCount ?? 0,
-                                            talkTopicName:
-                                                allListener.talkTopics ?? [],
-                                            talkTopicLength: allListener
-                                                    .talkTopics?.length ??
-                                                0,
-                                            index: index,
-                                            name: allListener.name ?? '',
-                                            age: allListener.age == null
-                                                ? ""
-                                                : ",${allListener.age.toString()}",
-                                            viewProfileOnTap: () {
-                                              Get.toNamed(
-                                                AppRoutes
-                                                    .profileDetailScreenView,
-                                                arguments: allListener.id,
-                                              );
-                                            },
-                                            talkNowOnTap: () {
-                                              Get.toNamed(
-                                                AppRoutes.userBookSessionScreen,
-                                                arguments: {
-                                                  'listenerId':
-                                                      allListener.id ?? '',
-                                                  'listenerName':
-                                                      allListener.name ?? '',
-                                                  'listenerImage':
-                                                      allListener.image ?? '',
-                                                  'availableForPrivateAudioCall':
-                                                      allListener
-                                                              .isAvailableForPrivateAudioCall ??
-                                                          false,
-                                                  'availableForPrivateVideoCall':
-                                                      allListener
-                                                              .isAvailableForPrivateVideoCall ??
-                                                          false,
-                                                  'ratePrivateAudioCall':
-                                                      allListener
-                                                              .ratePrivateAudioCall ??
-                                                          0,
-                                                  'ratePrivateVideoCall':
-                                                      allListener
-                                                              .ratePrivateVideoCall ??
-                                                          0,
-                                                },
-                                              );
-                                            },
-                                          ).paddingOnly(
-                                              bottom: 12,
-                                              left: 14,
-                                              right: 14,
-                                              top: index == 0 ? 12 : 0);
-                                        },
-                                      ),
-                                      GetBuilder<ListenersScreenController>(
-                                        id: Constant.idPaginationListener,
-                                        builder: (controller) => Visibility(
-                                          visible:
-                                              controller.isPaginationLoading,
-                                          child: CircularProgressIndicator(
-                                              color: AppColors.primary),
+        body: LayoutBuilder(
+          builder: (context, viewportConstraints) {
+            final viewportWidth = viewportConstraints.maxWidth;
+            final maxContentWidth =
+                viewportWidth >= 1400 ? 1280.0 : double.infinity;
+
+            return Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                child: GetBuilder<ListenersScreenController>(
+                  id: Constant.idAllListener,
+                  builder: (controller) {
+                    return LayoutBuilder(
+                      builder: (context, contentConstraints) {
+                        final width = contentConstraints.maxWidth;
+                        final horizontalInset = width >= 1100
+                            ? 28.0
+                            : width >= 760
+                                ? 22.0
+                                : 16.0;
+
+                        return Column(
+                          children: [
+                            ListenersTopButtonView(
+                              horizontalInset: horizontalInset,
+                            ),
+                            Expanded(
+                              child: controller.isLoading
+                                  ? TopListenerShimmer().paddingSymmetric(
+                                      horizontal: horizontalInset,
+                                      vertical: 8,
+                                    )
+                                  : controller.allListener.isEmpty
+                                      ? _buildEmptyState(
+                                          horizontalInset: horizontalInset,
+                                        )
+                                      : _buildExpertsList(
+                                          context: context,
+                                          controller: controller,
+                                          horizontalInset: horizontalInset,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                  ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 ),
-              ],
-            ).paddingOnly(top: 8);
+              ),
+            );
           },
         ),
       ),
+    );
+  }
+}
+
+class _ExpertCard extends StatelessWidget {
+  final TopListeners listener;
+  final VoidCallback onProfileTap;
+  final VoidCallback onBookTap;
+
+  const _ExpertCard({
+    required this.listener,
+    required this.onProfileTap,
+    required this.onBookTap,
+  });
+
+  static final Color _brandRed = AppColors.redesignBrandRed;
+  static final Color _brandDark = AppColors.redesignBrandDark;
+  static final Color _mutedText = AppColors.redesignMutedText;
+  static final Color _softBorder = AppColors.redesignSoftBorder;
+  static final Color _chipSurface = AppColors.redesignSurfaceSoft;
+
+  Color _statusBackground(String status) {
+    switch (status.toLowerCase()) {
+      case 'available':
+        return AppColors.redesignStatusSuccess;
+      case 'on call':
+        return _brandRed;
+      default:
+        return AppColors.redesignSurfaceNeutral;
+    }
+  }
+
+  Color _statusTextColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'available':
+      case 'on call':
+        return AppColors.white;
+      default:
+        return _mutedText;
+    }
+  }
+
+  Widget _buildMetaItem({
+    required IconData icon,
+    required String value,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: _chipSurface,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 13, color: _mutedText),
+          const SizedBox(width: 4),
+          Text(
+            value,
+            style: AppFontStyle.fontStyleW500(
+              fontSize: 11,
+              fontColor: _mutedText,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTag({required String label}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: _chipSurface,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: _softBorder),
+      ),
+      child: Text(
+        label,
+        style: AppFontStyle.fontStyleW500(
+          fontSize: 10,
+          fontColor: _mutedText,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final status = (listener.statusLabel ?? 'Offline').trim().isEmpty
+        ? 'Offline'
+        : listener.statusLabel!.trim();
+    final topics = (listener.talkTopics ?? [])
+        .where((item) => item.trim().isNotEmpty)
+        .toList();
+    final visibleTopics = topics.take(3).toList();
+    final remainingTopics = topics.length - visibleTopics.length;
+    final name = listener.name ?? 'Expert';
+    final language = (listener.language ?? []).isEmpty
+        ? 'Unknown'
+        : listener.language!.first;
+    final rating = listener.rating ?? 0;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isCompact = constraints.maxWidth < 360;
+        final imageSize = isCompact ? 78.0 : 86.0;
+        final titleFontSize = isCompact ? 18.0 : 22.0;
+
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: _softBorder),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.05),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 4,
+                  width: 68,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(999),
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.redesignBrandRed,
+                        AppColors.redesignAccentGradientEnd
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                GestureDetector(
+                  onTap: onProfileTap,
+                  behavior: HitTestBehavior.opaque,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        clipBehavior: Clip.hardEdge,
+                        height: imageSize,
+                        width: imageSize,
+                        decoration: BoxDecoration(
+                          color: AppColors.redesignAvatarSurface,
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: CustomListenerProfileImage(
+                          image: listener.image ?? '',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    name,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppFontStyle.fontStyleW700(
+                                      fontSize: titleFontSize,
+                                      fontColor: _brandDark,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Container(
+                                  height: 32,
+                                  width: 32,
+                                  decoration: BoxDecoration(
+                                    color: _chipSurface,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: _softBorder),
+                                  ),
+                                  child: Icon(
+                                    Icons.arrow_outward_rounded,
+                                    size: 16,
+                                    color: _brandDark,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: _statusBackground(status),
+                                    borderRadius: BorderRadius.circular(999),
+                                  ),
+                                  child: Text(
+                                    status,
+                                    style: AppFontStyle.fontStyleW600(
+                                      fontSize: 10,
+                                      fontColor: _statusTextColor(status),
+                                    ),
+                                  ),
+                                ),
+                                if (rating > 0)
+                                  _buildTag(
+                                    label:
+                                        '${rating.toStringAsFixed(1)} rating',
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                _buildMetaItem(
+                                  icon: Icons.language_rounded,
+                                  value: language,
+                                ),
+                                _buildMetaItem(
+                                  icon: Icons.work_outline_rounded,
+                                  value: '${listener.experience ?? '0'} Exp',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ...visibleTopics.map((topic) => _buildTag(label: topic)),
+                    if (remainingTopics > 0)
+                      _buildTag(label: '+$remainingTopics more'),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                if (isCompact)
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: 46,
+                        child: OutlinedButton.icon(
+                          onPressed: onProfileTap,
+                          icon: const Icon(Icons.person_outline_rounded,
+                              size: 18),
+                          label: Text(
+                            'Profile',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 14,
+                              fontColor: _brandDark,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: _softBorder),
+                            foregroundColor: _brandDark,
+                            backgroundColor: _chipSurface,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 46,
+                        child: ElevatedButton.icon(
+                          onPressed: onBookTap,
+                          icon: const Icon(
+                            Icons.calendar_month_rounded,
+                            size: 18,
+                          ),
+                          label: Text(
+                            'Book Session',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 14,
+                              fontColor: AppColors.white,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: _brandDark,
+                            foregroundColor: AppColors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 46,
+                          child: OutlinedButton.icon(
+                            onPressed: onProfileTap,
+                            icon: const Icon(
+                              Icons.person_outline_rounded,
+                              size: 18,
+                            ),
+                            label: Text(
+                              'Profile',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW600(
+                                fontSize: 14,
+                                fontColor: _brandDark,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: _softBorder),
+                              foregroundColor: _brandDark,
+                              backgroundColor: _chipSurface,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        flex: 2,
+                        child: SizedBox(
+                          height: 46,
+                          child: ElevatedButton.icon(
+                            onPressed: onBookTap,
+                            icon: const Icon(
+                              Icons.calendar_month_rounded,
+                              size: 18,
+                            ),
+                            label: Text(
+                              'Book Session',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW600(
+                                fontSize: 14,
+                                fontColor: AppColors.white,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              backgroundColor: _brandDark,
+                              foregroundColor: AppColors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

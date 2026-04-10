@@ -1,8 +1,18 @@
 import 'dart:convert';
 
-ListenerProfileModel listenerProfileModelFromJson(String str) => ListenerProfileModel.fromJson(json.decode(str));
+ListenerProfileModel listenerProfileModelFromJson(String str) =>
+    ListenerProfileModel.fromJson(json.decode(str));
 
-String listenerProfileModelToJson(ListenerProfileModel data) => json.encode(data.toJson());
+int? _parseInt(dynamic val) {
+  if (val == null) return null;
+  if (val is int) return val;
+  if (val is num) return val.toInt();
+  if (val is String) return int.tryParse(val) ?? double.tryParse(val)?.toInt();
+  return null;
+}
+
+String listenerProfileModelToJson(ListenerProfileModel data) =>
+    json.encode(data.toJson());
 
 class ListenerProfileModel {
   final bool? status;
@@ -15,7 +25,8 @@ class ListenerProfileModel {
     this.data,
   });
 
-  factory ListenerProfileModel.fromJson(Map<String, dynamic> json) => ListenerProfileModel(
+  factory ListenerProfileModel.fromJson(Map<String, dynamic> json) =>
+      ListenerProfileModel(
         status: json["status"],
         message: json["message"],
         data: json["data"] == null ? null : ListenerData.fromJson(json["data"]),
@@ -76,27 +87,29 @@ class ListenerData {
   });
 
   factory ListenerData.fromJson(Map<String, dynamic> json) => ListenerData(
-        id: json["_id"],
-        name: json["name"],
-        selfIntro: json["selfIntro"],
-        talkTopics: json["talkTopics"] == null ? [] : List<String>.from(json["talkTopics"]),
-        language: json["language"] == null ? [] : List<String>.from(json["language"]),
-        image: json["image"],
-        ratePrivateVideoCall: json["ratePrivateVideoCall"],
-        ratePrivateAudioCall: json["ratePrivateAudioCall"],
-        rating: json["rating"].toDouble(),
-        callCount: json["callCount"],
-        experience: json["experience"],
-        statusLabel: json["statusLabel"],
-        age: json["age"],
-        totalCoins: json["totalCoins"],
-        video: json["video"] == null ? [] : List<String>.from(json["video"]!.map((x) => x)),
-        isFake: json["isFake"],
-        uniqueId: json["uniqueId"],
-        isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],
-        isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],
-        isAvailableForChat: json["isAvailableForChat"],
-        audio: json["audio"],
+        id: (json["_id"] ?? json["id"] ?? json["listenerId"])?.toString(),
+        name: json["name"]?.toString(),
+        selfIntro: json["selfIntro"]?.toString(),
+        talkTopics: json["talkTopics"] is List ? (json["talkTopics"] as List).map((e) => e.toString()).toList() : [],
+        language: json["language"] is List ? (json["language"] as List).map((e) => e.toString()).toList() : [],
+        image: json["image"]?.toString(),
+        ratePrivateVideoCall: _parseInt(json["ratePrivateVideoCall"]),
+        ratePrivateAudioCall: _parseInt(json["ratePrivateAudioCall"]),
+        rating: (json["rating"] is num)
+            ? (json["rating"] as num).toDouble()
+            : double.tryParse((json["rating"] ?? '').toString()),
+        callCount: _parseInt(json["callCount"]),
+        experience: json["experience"]?.toString(),
+        statusLabel: json["statusLabel"]?.toString(),
+        age: _parseInt(json["age"]),
+        totalCoins: _parseInt(json["totalCoins"]),
+        video: json["video"] is List ? (json["video"] as List).map((e) => e.toString()).toList() : [],
+        isFake: json["isFake"] == true || json["isFake"]?.toString() == 'true',
+        uniqueId: json["uniqueId"]?.toString(),
+        isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"] == true || json["isAvailableForPrivateAudioCall"]?.toString() == 'true',
+        isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"] == true || json["isAvailableForPrivateVideoCall"]?.toString() == 'true',
+        isAvailableForChat: json["isAvailableForChat"] == true || json["isAvailableForChat"]?.toString() == 'true',
+        audio: json["audio"]?.toString(),
       );
 
   Map<String, dynamic> toJson() => {

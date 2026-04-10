@@ -11,13 +11,28 @@ import 'package:talk_in/utils/utils.dart';
 
 class ListenerProfileApi {
   static Future<ListenerProfileModel?> callApi({
-    required String listenerId,
+    String? listenerId,
+    String? expertId,
   }) async {
     final token = await FirebaseAccessToken.onGet();
 
     Utils.showLog("Listener profile Api Calling...");
 
-    final uri = Uri.parse("${Api.listenerProfile}${ApiParams.listenerId}=$listenerId");
+    final resolvedListenerId = (listenerId ?? '').trim();
+    final resolvedExpertId = (expertId ?? '').trim();
+    if (resolvedListenerId.isEmpty && resolvedExpertId.isEmpty) {
+      Utils.showLog(
+          "Listener profile Api skipped: missing listenerId/expertId");
+      return null;
+    }
+
+    final uri = Uri.parse(Api.listenerProfile).replace(
+      queryParameters: {
+        if (resolvedListenerId.isNotEmpty)
+          ApiParams.listenerId: resolvedListenerId,
+        if (resolvedExpertId.isNotEmpty) ApiParams.expertId: resolvedExpertId,
+      },
+    );
     final headers = {
       ApiParams.key: Api.secretKey,
       ApiParams.authToken: "Bearer $token",

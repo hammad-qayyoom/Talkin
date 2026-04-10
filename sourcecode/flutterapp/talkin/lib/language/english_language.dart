@@ -86,13 +86,13 @@ final Map<String, String> enUS = {
   EnumLocale.txtSearchPeople.name: "Search People...",
   EnumLocale.txtRecentPeople.name: "Recent Search",
   EnumLocale.txtLanguage.name: "Language",
-  EnumLocale.txtTalkAbout.name: "Talk About",
+  EnumLocale.txtTalkAbout.name: "Topics",
   EnumLocale.txtSelectPaymentMethod.name: "Select Payment Method",
   EnumLocale.txtAPPLanguage.name: "APP Language",
   EnumLocale.txtSelectLanguageForApp.name:
       "Select a language to see matching experts.",
   EnumLocale.txtSelectTalkAboutForApp.name:
-      "Select talk about for the content In app",
+      "Select topics to find matching experts.",
   EnumLocale.txtRecommendedProfile.name: "Recommended Profile",
   EnumLocale.txtSelectCallTypeNote.name:
       "Please do not trust fraudulent information such as money transfer,lottery etc from strangers. Please do not share any personal information such as passwords,mobile numbers, otp etc. Please do not engage in nudity, pornography or any obscene acts.",
@@ -336,7 +336,7 @@ final Map<String, String> enUS = {
   EnumLocale.txtHostVerificationUploadImageTxt.name:
       "To verify your identity, please upload a recent personal photo and a clear photo of your government-issued ID. Make sure the images are visible and not blurry. Your details will remain confidential and are used only for verification purposes.",
   EnumLocale.txtSelectTalkaboutTxt.name:
-      "Select talk about for the content In app.",
+      "Select topics for the expert content in app.",
   EnumLocale.txtSelectAppLanguageTxt.name:
       "Choose your preferred app language.",
   EnumLocale.txtHostVerificationFillForm.name:

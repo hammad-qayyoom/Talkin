@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_button/primary_app_button.dart';
 import 'package:talk_in/ui/user_flow/listener_screen/controller/listeners_screen_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/constant.dart';
 import 'package:talk_in/utils/enums.dart';
 import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
 
 class TalkAboutBottomSheet extends StatefulWidget {
   const TalkAboutBottomSheet({super.key});
@@ -17,177 +14,329 @@ class TalkAboutBottomSheet extends StatefulWidget {
 }
 
 class _TalkAboutBottomSheetState extends State<TalkAboutBottomSheet> {
-  ListenersScreenController controller = Get.put(ListenersScreenController());
+  final ListenersScreenController controller = Get.find();
+
+  static final Color _brandRed = AppColors.redesignBrandRed;
+  static final Color _brandDark = AppColors.redesignBrandDark;
+  static final Color _mutedText = AppColors.redesignMutedText;
+  static final Color _softBorder = AppColors.redesignSoftBorder;
+  static final Color _chipSurface = AppColors.redesignSurfaceSoft;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: Get.height * 0.6,
-      padding: EdgeInsets.symmetric(vertical: 17, horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                AppAsset.talkAboutIcon,
-                height: 28,
-                width: 28,
-                color: AppColors.blue,
-              ),
-              Text(
-                EnumLocale.txtTalkAbout.name.tr,
-                style: AppFontStyle.fontStyleW700(
-                  fontSize: 20,
-                  fontColor: AppColors.blue,
-                ),
-              ).paddingOnly(bottom: 18, left: Get.width * 0.03),
-              Spacer(),
-              InkWell(
-                onTap: () {
-                  Get.back();
-                },
-                child: Image.asset(
-                  AppAsset.closeFillIcon,
-                  height: 26,
-                ),
-              )
-            ],
-          ),
-          Text(
-            EnumLocale.txtSelectTalkaboutTxt.name.tr,
-            style: AppFontStyle.fontStyleW500(
-              fontSize: 13,
-              fontColor: AppColors.appTextColor,
+    return MediaQuery.removeViewInsets(
+      context: context,
+      removeBottom: true,
+      child: DraggableScrollableSheet(
+        initialChildSize: 0.8,
+        minChildSize: 0.45,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (context, scrollController) {
+          return Container(
+            padding: const EdgeInsets.only(top: 10),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
             ),
-          ).paddingOnly(bottom: 18),
-          Expanded(
-            child: GetBuilder<ListenersScreenController>(
-              id: Constant.talkAboutTopic,
-              builder: (controller) {
-                return ListView.builder(
-                  itemCount: controller.talkTopic.length,
-                  shrinkWrap: true,
-                  physics: AlwaysScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final topic = controller.talkTopic[index];
-                    // bool isSelected = controller.selectedTopic == index;
-                    bool isSelected = controller.selectedTopics.contains(index);
+            child: SafeArea(
+              top: false,
+              child: GetBuilder<ListenersScreenController>(
+                id: Constant.talkAboutTopic,
+                builder: (controller) {
+                  final selectedCount = controller.selectedTopics.length;
 
-                    return GestureDetector(
-                      onTap: () => controller.selectTopic(index),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-                        width: Get.width,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: isSelected ? AppColors.appColor : AppColors.grey.withValues(alpha: 0.2),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          height: 5,
+                          width: 54,
+                          decoration: BoxDecoration(
+                            color: _softBorder,
+                            borderRadius: BorderRadius.circular(999),
                           ),
                         ),
+                      ),
+                      const SizedBox(height: 14),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Row(
                           children: [
-                            Text(
-                              topic.name.toString(),
-                              style: isSelected
-                                  ? AppFontStyle.fontStyleW600(
-                                      fontSize: 14,
-                                      fontColor: AppColors.appColor,
-                                    )
-                                  : AppFontStyle.fontStyleW500(
-                                      fontSize: 14,
-                                      fontColor: AppColors.appTextColor,
-                                    ),
-                            ),
-                            Spacer(),
                             Container(
-                              height: 22,
-                              width: 22,
+                              height: 38,
+                              width: 38,
                               decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: isSelected ? AppColors.transparent : AppColors.grey),
-                                color: isSelected ? Colors.black : AppColors.white,
+                                color: _brandRed.withValues(alpha: 0.10),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              child: isSelected
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                        color: AppColors.appColor,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Container(
-                                        height: 22,
-                                        width: 22,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(color: AppColors.white),
-                                          color: AppColors.appColor,
-                                        ),
-                                      ).paddingAll(0.5),
-                                    )
-                                  : null,
+                              child: Icon(
+                                Icons.question_answer_rounded,
+                                color: _brandRed,
+                                size: 20,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                EnumLocale.txtTalkAbout.name.tr,
+                                style: AppFontStyle.fontStyleW700(
+                                  fontSize: 22,
+                                  fontColor: _brandDark,
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () {
+                                Get.back();
+                              },
+                              child: Container(
+                                height: 36,
+                                width: 36,
+                                decoration: BoxDecoration(
+                                  color: _chipSurface,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: _softBorder),
+                                ),
+                                child: Icon(
+                                  Icons.close_rounded,
+                                  size: 18,
+                                  color: _mutedText,
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                      ).paddingOnly(bottom: 16),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-          // PrimaryAppButton(
-          //   onTap: () {
-          //     controller.filterListenerByTalkTopic();
-          //     Get.back();
-          //   },
-          //   height: 50,
-          //   borderRadius: 30,
-          //   text: EnumLocale.txtSubmit.name.tr,
-          //   textStyle: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
-          // ).paddingOnly(bottom: 10),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                        child: Text(
+                          EnumLocale.txtSelectTalkaboutTxt.name.tr,
+                          style: AppFontStyle.fontStyleW500(
+                            fontSize: 13,
+                            fontColor: _mutedText,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: selectedCount > 0
+                                    ? _brandRed.withValues(alpha: 0.10)
+                                    : _chipSurface,
+                                borderRadius: BorderRadius.circular(999),
+                              ),
+                              child: Text(
+                                selectedCount > 0
+                                    ? '$selectedCount selected'
+                                    : EnumLocale.txtAll.name.tr,
+                                style: AppFontStyle.fontStyleW600(
+                                  fontSize: 11,
+                                  fontColor: selectedCount > 0
+                                      ? _brandRed
+                                      : _mutedText,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            if (selectedCount > 0)
+                              TextButton(
+                                onPressed: () {
+                                  controller.clearSelectedTopics();
+                                },
+                                child: Text(
+                                  EnumLocale.txtClear.name.tr,
+                                  style: AppFontStyle.fontStyleW600(
+                                    fontSize: 12,
+                                    fontColor: _brandRed,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: controller.talkTopic.isEmpty
+                            ? Center(
+                                child: Text(
+                                  'No topics available',
+                                  style: AppFontStyle.fontStyleW500(
+                                    fontSize: 13,
+                                    fontColor: _mutedText,
+                                  ),
+                                ),
+                              )
+                            : ListView.separated(
+                                controller: scrollController,
+                                padding: const EdgeInsets.fromLTRB(
+                                  16,
+                                  4,
+                                  16,
+                                  12,
+                                ),
+                                itemCount: controller.talkTopic.length,
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(height: 10),
+                                itemBuilder: (context, index) {
+                                  final topic = controller.talkTopic[index];
+                                  final isSelected =
+                                      controller.selectedTopics.contains(index);
 
-          GetBuilder<ListenersScreenController>(
-            id: Constant.talkAboutTopic,
-            builder: (controller) {
-              return Row(
-                children: [
-                  Expanded(
-                    child: PrimaryAppButton(
-                      onTap: () {
-                        controller.filterListenerByTalkTopic();
-                        Get.back();
-                      },
-                      height: 50,
-                      borderRadius: 30,
-                      text: EnumLocale.txtSubmit.name.tr,
-                      textStyle: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
-                    ).paddingOnly(bottom: 10),
-                  ),
-                  controller.selectedTopics.isNotEmpty ? 15.width : Offstage(),
-                  controller.selectedTopics.isNotEmpty
-                      ? Expanded(
-                          child: PrimaryAppButton(
-                            onTap: () {
-                              controller.clearSelectedTopics();
-                            },
-                            height: 50,
-                            borderRadius: 30,
-                            text: EnumLocale.txtClear.name.tr,
-                            textStyle: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
-                          ).paddingOnly(bottom: 10),
-                        )
-                      : Offstage(),
-                ],
-              ).paddingOnly(top: 10);
-            },
-          ),
-        ],
+                                  return Material(
+                                    color: AppColors.transparent,
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(14),
+                                      onTap: () {
+                                        controller.selectTopic(index);
+                                      },
+                                      child: AnimatedContainer(
+                                        duration:
+                                            const Duration(milliseconds: 160),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 14,
+                                          vertical: 12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: isSelected
+                                              ? _brandRed.withValues(
+                                                  alpha: 0.08)
+                                              : AppColors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: isSelected
+                                                ? _brandRed
+                                                : _softBorder,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                topic.name.toString(),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style:
+                                                    AppFontStyle.fontStyleW600(
+                                                  fontSize: 14,
+                                                  fontColor: isSelected
+                                                      ? _brandRed
+                                                      : _brandDark,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Container(
+                                              height: 22,
+                                              width: 22,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: isSelected
+                                                    ? _brandRed
+                                                    : AppColors.white,
+                                                border: Border.all(
+                                                  color: isSelected
+                                                      ? _brandRed
+                                                      : _softBorder,
+                                                ),
+                                              ),
+                                              child: isSelected
+                                                  ? Icon(
+                                                      Icons.check_rounded,
+                                                      size: 15,
+                                                      color: AppColors.white,
+                                                    )
+                                                  : null,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                      ),
+                      SafeArea(
+                        top: false,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 6, 16, 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: 48,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      controller.filterListenerByTalkTopic();
+                                      Get.back();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      backgroundColor: _brandDark,
+                                      foregroundColor: AppColors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      EnumLocale.txtSubmit.name.tr,
+                                      style: AppFontStyle.fontStyleW600(
+                                        fontSize: 15,
+                                        fontColor: AppColors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (selectedCount > 0) ...[
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 48,
+                                    child: OutlinedButton(
+                                      onPressed: () {
+                                        controller.clearSelectedTopics();
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                        side: BorderSide(color: _softBorder),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        foregroundColor: _brandDark,
+                                        backgroundColor: _chipSurface,
+                                      ),
+                                      child: Text(
+                                        EnumLocale.txtClear.name.tr,
+                                        style: AppFontStyle.fontStyleW600(
+                                          fontSize: 15,
+                                          fontColor: _brandDark,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          );
+        },
       ),
     );
   }

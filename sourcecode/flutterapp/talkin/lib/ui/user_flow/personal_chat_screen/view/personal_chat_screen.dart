@@ -17,122 +17,186 @@ class PersonalChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          GetBuilder<PersonalChatScreenController>(
-            id: Constant.idGetOldChat,
-            builder: (controller) {
-              return Column(
+      backgroundColor: AppColors.redesignScreenBackground,
+      body: LayoutBuilder(
+        builder: (context, viewportConstraints) {
+          final viewportWidth = viewportConstraints.maxWidth;
+          final maxContentWidth =
+              viewportWidth >= 1400 ? 1280.0 : double.infinity;
+
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxContentWidth),
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  ChatScreenAppBar(),
                   GetBuilder<PersonalChatScreenController>(
-                    id: Constant.idPagination,
-                    builder: (controller) => Visibility(
-                      visible: controller.isPaginationLoading,
-                      child: LinearProgressIndicator(color: AppColors.primary),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage(AppAsset.chatBackGround), fit: BoxFit.cover)),
-                      child: SizedBox(
-                        height: Get.height - 100,
-                        child: controller.isLoading
-                            ? PersonalChatScreenShimmer()
-                            : SingleChildScrollView(
-                                controller: controller.scrollController,
-                                child: ListView.builder(
-                                    reverse: true,
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    // controller: controller.scrollController,
-                                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                                    itemCount: controller.oldChat.length,
-                                    itemBuilder: (context, index) {
-                                      final isLastMessage = index == 0;
-
-                                      final msg = controller.oldChat[index];
-                                      Widget messageWidget = msg.messageType == 1
-                                          ? ChatTextWidget(msg: msg, controller: controller, isRead: msg.isRead ?? false)
-                                          : msg.messageType == 2
-                                              ? ChatImageWidget(msg: msg, controller: controller, isRead: msg.isRead ?? false)
-                                              : msg.messageType == 4
-                                                  ? ChatAudioCallWidget(
-                                                      msg: msg,
-                                                      controller: controller,
-                                                      audioCallDuration: msg.callDuration ?? "00:00:00",
-                                                    )
-                                                  : msg.messageType == 5
-                                                      ? ChatVideoCallWidget(
-                                                          msg: msg,
-                                                          controller: controller,
-                                                          callDuration: msg.callDuration ?? "00:00:00",
-                                                        )
-                                                      : msg.messageType == 3
-                                                          ? msg.senderId == Database.loginUserId
-                                                              ? SenderAudioMessageWidget(
-                                                                  audioUrl: msg.audio ?? "",
-                                                                  time: msg.date ?? "",
-                                                                  id: msg.id ?? "",
-                                                                  chat: msg,
-                                                                  isLastMessage: isLastMessage,
-                                                                )
-                                                              : ReceiverAudioMessageWidget(
-                                                                  audioUrl: msg.audio ?? "",
-                                                                  time: msg.date ?? "",
-                                                                  id: msg.id ?? "",
-                                                                  chat: msg,
-                                                                )
-                                                          : SizedBox();
-
-                                      return Align(
-                                        alignment: msg.senderId == Database.loginUserId ? Alignment.centerRight : Alignment.centerLeft,
-                                        child: messageWidget,
-                                      );
-                                    }),
+                    id: Constant.idGetOldChat,
+                    builder: (controller) {
+                      return Column(
+                        children: [
+                          const ChatScreenAppBar(),
+                          GetBuilder<PersonalChatScreenController>(
+                            id: Constant.idPagination,
+                            builder: (controller) => Visibility(
+                              visible: controller.isPaginationLoading,
+                              child: LinearProgressIndicator(
+                                color: AppColors.redesignBrandRed,
                               ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              color: AppColors.redesignSurfaceSoft,
+                              child: SizedBox(
+                                height: Get.height - 100,
+                                child: controller.isLoading
+                                    ? const PersonalChatScreenShimmer()
+                                    : SingleChildScrollView(
+                                        controller: controller.scrollController,
+                                        child: ListView.builder(
+                                          reverse: true,
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 10,
+                                            horizontal: 8,
+                                          ),
+                                          itemCount: controller.oldChat.length,
+                                          itemBuilder: (context, index) {
+                                            final isLastMessage = index == 0;
+
+                                            final msg =
+                                                controller.oldChat[index];
+                                            Widget messageWidget = msg
+                                                        .messageType ==
+                                                    1
+                                                ? ChatTextWidget(
+                                                    msg: msg,
+                                                    controller: controller,
+                                                    isRead: msg.isRead ?? false,
+                                                  )
+                                                : msg.messageType == 2
+                                                    ? ChatImageWidget(
+                                                        msg: msg,
+                                                        controller: controller,
+                                                        isRead:
+                                                            msg.isRead ?? false,
+                                                      )
+                                                    : msg.messageType == 4
+                                                        ? ChatAudioCallWidget(
+                                                            msg: msg,
+                                                            controller:
+                                                                controller,
+                                                            audioCallDuration:
+                                                                msg.callDuration ??
+                                                                    "00:00:00",
+                                                          )
+                                                        : msg.messageType == 5
+                                                            ? ChatVideoCallWidget(
+                                                                msg: msg,
+                                                                controller:
+                                                                    controller,
+                                                                callDuration: msg
+                                                                        .callDuration ??
+                                                                    "00:00:00",
+                                                              )
+                                                            : msg.messageType ==
+                                                                    3
+                                                                ? msg.senderId ==
+                                                                        Database
+                                                                            .loginUserId
+                                                                    ? SenderAudioMessageWidget(
+                                                                        audioUrl:
+                                                                            msg.audio ??
+                                                                                "",
+                                                                        time: msg.date ??
+                                                                            "",
+                                                                        id: msg.id ??
+                                                                            "",
+                                                                        chat:
+                                                                            msg,
+                                                                        isLastMessage:
+                                                                            isLastMessage,
+                                                                      )
+                                                                    : ReceiverAudioMessageWidget(
+                                                                        audioUrl:
+                                                                            msg.audio ??
+                                                                                "",
+                                                                        time: msg.date ??
+                                                                            "",
+                                                                        id: msg.id ??
+                                                                            "",
+                                                                        chat:
+                                                                            msg,
+                                                                      )
+                                                                : const SizedBox();
+
+                                            return Align(
+                                              alignment: msg.senderId ==
+                                                      Database.loginUserId
+                                                  ? Alignment.centerRight
+                                                  : Alignment.centerLeft,
+                                              child: messageWidget,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ),
+                          const PersonalChatBottomView(),
+                        ],
+                      );
+                    },
+                  ),
+                  Positioned(
+                    bottom: 80,
+                    child: GetBuilder<PersonalChatScreenController>(
+                      id: Constant.idChangeAudioRecordingEvent,
+                      builder: (controller) => Visibility(
+                        visible: controller.isRecordingAudio,
+                        child: Container(
+                          height: 42,
+                          width: 128,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: AppColors.redesignAccentSoftBg,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: AppColors.redesignBrandRed
+                                  .withValues(alpha: 0.35),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                AppAsset.microPhoneIcon,
+                                color: AppColors.redesignBrandRed,
+                                width: 20,
+                              ),
+                              6.width,
+                              Text(
+                                CustomFormatAudioTime.convert(
+                                  controller.countTime,
+                                ),
+                                style: AppFontStyle.fontStyleW600(
+                                  fontColor: AppColors.redesignBrandRed,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  PersonalChatBottomView(),
                 ],
-              );
-            },
-          ),
-          Positioned(
-            bottom: 80,
-            child: GetBuilder<PersonalChatScreenController>(
-              id: Constant.idChangeAudioRecordingEvent,
-              builder: (controller) => Visibility(
-                visible: controller.isRecordingAudio,
-                child: Container(
-                  height: 40,
-                  width: 110,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        AppAsset.microPhoneIcon,
-                        color: AppColors.primary,
-                        width: 20,
-                      ),
-                      5.width,
-                      Text(
-                        CustomFormatAudioTime.convert(controller.countTime),
-                        style: AppFontStyle.fontStyleW500(fontColor: AppColors.black, fontSize: 13),
-                      )
-                    ],
-                  ),
-                ),
               ),
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
