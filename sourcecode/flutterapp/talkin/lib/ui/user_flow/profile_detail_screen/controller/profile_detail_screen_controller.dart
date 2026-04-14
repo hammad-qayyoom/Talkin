@@ -16,17 +16,14 @@ class ProfileDetailScreenController extends GetxController {
   bool isLoading = false;
   bool isBackProfile = true;
   bool isToastVisible = false;
-  bool isSlotsPreviewLoading = false;
   ListenerReviewModel? listenerReviewModel;
   List<Review>? reviews = [];
-  List<Map<String, dynamic>> audioSlotsPreview = [];
-  List<Map<String, dynamic>> videoSlotsPreview = [];
 
   ListenerProfileModel? listenerProfileModel;
   final List<Map<String, String>> statsList = [
     {
       'image': AppAsset.callGradiant,
-      'title': EnumLocale.txtTotalCall.name.tr,
+      'title': 'Completed Sessions',
       'count': '',
     },
     {
@@ -60,7 +57,6 @@ class ProfileDetailScreenController extends GetxController {
     log("Received expertId: $expertId");
     listenerProfile();
     listenerReview();
-    fetchAvailabilityPreview();
   }
 
   /// listener profile
@@ -105,8 +101,13 @@ class ProfileDetailScreenController extends GetxController {
         listenerId = resolvedListenerId;
       }
 
-      statsList[0]['count'] =
-          listenerProfileModel?.data?.callCount?.toString() ?? '0';
+      final completedSessionsCount = await _fetchCompletedSessionCount(
+        listenerCandidate: listenerCandidate,
+        expertCandidate: expertCandidate,
+        resolvedListenerId: resolvedListenerId,
+      );
+
+      statsList[0]['count'] = completedSessionsCount.toString();
       statsList[1]['count'] =
           listenerProfileModel?.data?.rating?.toStringAsFixed(1) ?? '0.0';
       statsList[2]['count'] = listenerProfileModel?.data?.experience == null
@@ -147,91 +148,100 @@ class ProfileDetailScreenController extends GetxController {
     update([Constant.idGetListenerReview]);
   }
 
-  Future<void> fetchAvailabilityPreview() async {
-    final id = (listenerId ?? '').toString().trim();
-    if (id.isEmpty) {
-      return;
-    }
-
-    isSlotsPreviewLoading = true;
-    update([Constant.listenerProfile]);
-
-    try {
-      audioSlotsPreview = await _collectSlotsForType(
-        listenerId: id,
-        callType: 'audio',
-      );
-      videoSlotsPreview = await _collectSlotsForType(
-        listenerId: id,
-        callType: 'video',
-      );
-    } catch (_) {
-      audioSlotsPreview = [];
-      videoSlotsPreview = [];
-    } finally {
-      isSlotsPreviewLoading = false;
-      update([Constant.listenerProfile]);
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> _collectSlotsForType({
-    required String listenerId,
-    required String callType,
-  }) async {
-    final List<Map<String, dynamic>> collected = [];
-
-    for (int dayOffset = 0;
-        dayOffset < 7 && collected.length < 4;
-        dayOffset++) {
-      final date = DateTime.now().add(Duration(days: dayOffset));
-      final response = await SessionBookingService.getAvailableSlots(
-        listenerId: listenerId,
-        date: DateTime(date.year, date.month, date.day),
-        callType: callType,
-      );
-
-      if (response['status'] != true) {
-        continue;
-      }
-
-      final data = response['data'];
-      final slotsRaw = data is Map<String, dynamic>
-          ? (data['slots'] as List<dynamic>? ?? [])
-          : <dynamic>[];
-
-      for (final slot in slotsRaw) {
-        if (slot is! Map<String, dynamic>) {
-          continue;
-        }
-
-        collected.add(slot);
-        if (collected.length >= 4) {
-          break;
-        }
-      }
-    }
-
-    return collected;
-  }
-
-  String formatSlotLabel(Map<String, dynamic> slot) {
-    final startAt =
-        DateTime.tryParse((slot['startAt'] ?? '').toString())?.toLocal();
-    final endAt =
-        DateTime.tryParse((slot['endAt'] ?? '').toString())?.toLocal();
-
-    if (startAt == null || endAt == null) {
-      return 'No slot';
-    }
-
-    String twoDigit(int value) => value.toString().padLeft(2, '0');
-
-    return '${twoDigit(startAt.day)}/${twoDigit(startAt.month)} ${twoDigit(startAt.hour)}:${twoDigit(startAt.minute)} - ${twoDigit(endAt.hour)}:${twoDigit(endAt.minute)}';
-  }
-
   Future<void> onRefresh() async {
     await listenerProfile();
     await listenerReview();
-    await fetchAvailabilityPreview();
+  }
+
+  Future<int> _fetchCompletedSessionCount({
+    required String listenerCandidate,
+    required String expertCandidate,
+    required String resolvedListenerId,
+  }) async {
+    final profileFallback = listenerProfileModel?.data?.completedSessionCount ??
+        listenerProfileModel?.data?.callCount ??
+        0;
+
+    final candidateListenerIds = <String>{
+      resolvedListenerId.trim(),
+      listenerCandidate.trim(),
+      (listenerId ?? '').trim(),
+    }..removeWhere((value) => value.isEmpty);
+
+    final candidateExpertIds = <String>{
+      expertCandidate.trim(),
+      (expertId ?? '').trim(),
+    }..removeWhere((value) => value.isEmpty);
+
+    for (final candidate in candidateListenerIds) {
+      final response = await SessionBookingService.getExpertSessions(
+        listenerId: candidate,
+        view: 'completed',
+      );
+
+      final parsed = _extractCompletedSessionCount(response);
+      if (parsed != null) {
+        return parsed;
+      }
+    }
+
+    for (final candidate in candidateExpertIds) {
+      final response = await SessionBookingService.getExpertSessions(
+        expertId: candidate,
+        view: 'completed',
+      );
+
+      final parsed = _extractCompletedSessionCount(response);
+      if (parsed != null) {
+        return parsed;
+      }
+    }
+
+    return profileFallback;
+  }
+
+  int? _extractCompletedSessionCount(Map<String, dynamic> response) {
+    int? parse(dynamic value) {
+      if (value == null) return null;
+      if (value is int) return value;
+      if (value is num) return value.toInt();
+      return int.tryParse(value.toString());
+    }
+
+    final topLevelCount = parse(response['completedSessionCount']) ??
+        parse(response['totalCompletedSessions']) ??
+        parse(response['completedSessions']) ??
+        parse(response['totalCount']) ??
+        parse(response['count']);
+
+    if (topLevelCount != null) {
+      return topLevelCount;
+    }
+
+    final data = response['data'];
+
+    if (data is List) {
+      return data.length;
+    }
+
+    if (data is Map<String, dynamic>) {
+      final nestedCount = parse(data['completedSessionCount']) ??
+          parse(data['totalCompletedSessions']) ??
+          parse(data['completedSessions']) ??
+          parse(data['totalCount']) ??
+          parse(data['count']) ??
+          parse(data['total']);
+
+      if (nestedCount != null) {
+        return nestedCount;
+      }
+
+      final nestedList = data['sessions'] ?? data['items'] ?? data['list'];
+      if (nestedList is List) {
+        return nestedList.length;
+      }
+    }
+
+    return null;
   }
 }

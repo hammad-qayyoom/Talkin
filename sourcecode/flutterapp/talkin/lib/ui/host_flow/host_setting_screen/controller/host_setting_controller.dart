@@ -11,7 +11,8 @@ import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/utils.dart';
 
 class HostSettingController extends GetxController {
-  bool isShowNotification = Database.fetchListenerProfileModel?.data?.isNotificationEnabled ?? false;
+  bool isShowNotification =
+      Database.fetchListenerProfileModel?.data?.isNotificationEnabled ?? false;
   FetchListenerProfileModel? fetchListenerProfileModel;
   DeleteListenerResponseModel? deleteListenerResponseModel;
 
@@ -24,27 +25,34 @@ class HostSettingController extends GetxController {
       listenerId: Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
     );
 
-    if (notificationUpdateModel != null && notificationUpdateModel.status == true) {
+    if (notificationUpdateModel != null &&
+        notificationUpdateModel.status == true) {
       isShowNotification = currentValue;
     } else {
       isShowNotification = !currentValue;
     }
-    fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(loginListenerId: Database.fetchLoginUserProfileModel?.user?.listenerId ?? '');
+    fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(
+        loginListenerId:
+            Database.fetchLoginUserProfileModel?.user?.listenerId ?? '');
     Database.fetchListenerProfileModel = fetchListenerProfileModel;
 
     if (fetchListenerProfileModel?.status == false) {
       Utils.showLog(fetchListenerProfileModel?.message ?? "");
     }
-    Database.fetchListenerProfileModel?.data?.isNotificationEnabled = isShowNotification;
+    Database.fetchListenerProfileModel?.data?.isNotificationEnabled =
+        isShowNotification;
 
     update();
   }
 
   /// user account delete
   Future<void> onDeleteAccount() async {
-    Get.back(); // Close Dialog...
+    if (Get.isDialogOpen ?? false) {
+      Get.back(); // Close Dialog...
+    }
 
-    Get.dialog(const LoadingWidget(), barrierDismissible: false); // Start Loading...
+    Get.dialog(const LoadingWidget(),
+        barrierDismissible: false); // Start Loading...
 
     deleteListenerResponseModel = await DeleteListenerApi.callApi();
 
@@ -52,7 +60,8 @@ class HostSettingController extends GetxController {
 
     if (deleteListenerResponseModel?.status ?? false) {
       Database.onLogOut();
-      Utils.showLog(deleteListenerResponseModel?.message ?? "User account deleted successfully.");
+      Utils.showLog(deleteListenerResponseModel?.message ??
+          "User account deleted successfully.");
     }
   }
 
@@ -64,6 +73,7 @@ class HostSettingController extends GetxController {
 
   @override
   void onClose() {
-    Utils.onChangeStatusBar(brightness: Brightness.light);    super.onClose();
+    Utils.onChangeStatusBar(brightness: Brightness.light);
+    super.onClose();
   }
 }

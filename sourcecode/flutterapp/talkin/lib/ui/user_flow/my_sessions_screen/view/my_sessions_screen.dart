@@ -1,9 +1,10 @@
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:talk_in/routes/app_routes.dart';
+import 'package:talk_in/services/permission_handler/permission_handler.dart';
+import 'package:talk_in/socket/socket_emit.dart';
 import 'package:talk_in/ui/common/session_booking/session_booking_service.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/database.dart';
@@ -142,6 +143,67 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     return '$day/$month/$year $hour:$minute';
   }
 
+  Future<void> _triggerDirectSessionCall({
+    required String callType,
+    required String receiverId,
+    required String receiverName,
+    required String receiverImage,
+    required String sessionId,
+    required String bookingId,
+  }) async {
+    final normalizedCallType = callType.trim().toLowerCase();
+    if (normalizedCallType != 'audio' && normalizedCallType != 'video') {
+      Utils.showToast(context, 'Unsupported call type for this session.');
+      return;
+    }
+
+    final callerId = Database.loginUserId.trim();
+    final sanitizedReceiverId = receiverId.trim();
+
+    if (callerId.isEmpty || sanitizedReceiverId.isEmpty) {
+      Utils.showToast(
+        context,
+        'Unable to start session call. Missing caller/receiver details.',
+      );
+      return;
+    }
+
+    void emitCall() {
+      SocketEmit.emitCallOutgoingRinging(
+        callerId: callerId,
+        receiverId: sanitizedReceiverId,
+        callType: normalizedCallType,
+        callerRole: 'user',
+        receiverRole: 'listener',
+        receiverName: receiverName,
+        receiverImage: receiverImage,
+        callerName: (Database.fetchLoginUserProfileModel?.user?.fullName ?? '')
+            .toString(),
+        callerImage:
+            (Database.fetchLoginUserProfileModel?.user?.profilePic ?? '')
+                .toString(),
+        sessionId: sessionId,
+        bookingId: bookingId,
+      );
+      _fetchSessions();
+    }
+
+    if (normalizedCallType == 'video') {
+      PermissionHandler.onGetCameraPermission(
+        onGranted: () {
+          PermissionHandler.onGetMicrophonePermission(
+            onGranted: emitCall,
+          );
+        },
+      );
+      return;
+    }
+
+    PermissionHandler.onGetMicrophonePermission(
+      onGranted: emitCall,
+    );
+  }
+
   Future<void> _onStartSession(
     Map<String, dynamic> booking,
     Map<String, dynamic> session,
@@ -155,7 +217,6 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     }
 
     final bookingId = (booking['_id'] ?? '').toString();
-    final sessionEndAt = (session['endAt'] ?? '').toString();
     final accessResponse = await SessionBookingService.getSessionAccess(
       sessionId: sessionId,
       bookingId: bookingId,
@@ -187,35 +248,22 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       return;
     }
 
-    final expertName = (expert['displayName'] ?? 'Expert').toString();
+    final expertName =
+        (expert['displayName'] ?? expert['name'] ?? 'Expert').toString();
+    final expertImage =
+        (expert['image'] ?? expert['imageUrl'] ?? expert['profilePic'] ?? '')
+            .toString();
     final sessionCallType =
         (session['callType'] ?? '').toString().trim().toLowerCase();
-    final isVideoSession = sessionCallType == 'video';
-    final sessionPrice = num.tryParse((session['price'] ?? 0).toString()) ?? 0;
 
-    await Get.toNamed(
-      AppRoutes.personalChatScreen,
-      arguments: [
-        listenerId,
-        expertName,
-        'Available',
-        '',
-        isVideoSession ? 0 : sessionPrice,
-        isVideoSession ? sessionPrice : 0,
-        false,
-        const [],
-        isVideoSession,
-        !isVideoSession,
-        sessionId,
-        bookingId,
-        sessionCallType,
-        sessionEndAt,
-      ],
+    await _triggerDirectSessionCall(
+      callType: sessionCallType,
+      receiverId: listenerId,
+      receiverName: expertName,
+      receiverImage: expertImage,
+      sessionId: sessionId,
+      bookingId: bookingId,
     );
-
-    if (mounted) {
-      _fetchSessions();
-    }
   }
 
   Future<void> _onCancelBooking(

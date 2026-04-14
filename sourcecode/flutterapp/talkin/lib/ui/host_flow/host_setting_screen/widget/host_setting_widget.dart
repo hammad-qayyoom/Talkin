@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/custom/app_bar/custom_app_bar.dart';
-import 'package:talk_in/custom/dialog/delete_account_dialog.dart';
-import 'package:talk_in/custom/dialog/logout_dialog.dart';
 import 'package:talk_in/custom/setting_menu_ui/setting_menu.dart';
 import 'package:talk_in/custom/switch/switch.dart';
 import 'package:talk_in/routes/app_routes.dart';
@@ -88,15 +86,17 @@ class HostSettingView extends StatelessWidget {
           icon: AppAsset.logOut,
           title: EnumLocale.txtLogoutApp.name.tr,
           onTap: () {
-            Get.dialog(
-              barrierColor: AppColors.black.withValues(alpha: 0.8),
-              Dialog(
-                backgroundColor: AppColors.transparent,
-                shadowColor: Colors.transparent,
-                surfaceTintColor: Colors.transparent,
-                elevation: 0,
-                child: LogoutDialog(),
-              ),
+            Utils.showConfirmationSnackBar(
+              context,
+              title: EnumLocale.txtLogout.name.tr,
+              message: EnumLocale.txtDesLogout.name.tr,
+              confirmText: EnumLocale.txtLogout.name.tr,
+              cancelText: EnumLocale.txtCancel.name.tr,
+              icon: Icons.logout_rounded,
+              onConfirm: () {
+                Database.onLogOut();
+                Get.offAllNamed(AppRoutes.main);
+              },
             );
           },
         ).paddingOnly(bottom: 22),
@@ -108,23 +108,24 @@ class HostSettingView extends StatelessWidget {
                   icon: AppAsset.delete,
                   title: EnumLocale.txtDeleteAccount.name.tr,
                   onTap: () {
-                    Get.dialog(
-                      barrierColor: AppColors.black.withValues(alpha: 0.8),
-                      Dialog(
-                        backgroundColor: AppColors.transparent,
-                        shadowColor: Colors.transparent,
-                        surfaceTintColor: Colors.transparent,
-                        elevation: 0,
-                        child: DeleteAccountDialog(
-                          onTap: () {
-                            if (Database.demoListener == true) {
-                              Utils.showToast(Get.context!, EnumLocale.txtDEmoListenerText.name.tr);
-                            } else {
-                              controller.onDeleteAccount();
-                            }
-                          },
-                        ),
-                      ),
+                    Utils.showConfirmationSnackBar(
+                      context,
+                      title: EnumLocale.txtDeleteAccount.name.tr,
+                      message: EnumLocale.desWantDeleteAccount.name.tr,
+                      confirmText: EnumLocale.txtDeleteAccount.name.tr,
+                      cancelText: EnumLocale.txtCancel.name.tr,
+                      icon: Icons.delete_forever_outlined,
+                      confirmBackgroundColor: AppColors.red,
+                      onConfirm: () {
+                        if (Database.demoListener == true) {
+                          Utils.showToast(
+                            Get.context!,
+                            EnumLocale.txtDEmoListenerText.name.tr,
+                          );
+                        } else {
+                          controller.onDeleteAccount();
+                        }
+                      },
                     );
                   },
                 );

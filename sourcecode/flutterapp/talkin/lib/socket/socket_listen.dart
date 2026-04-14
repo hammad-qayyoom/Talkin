@@ -344,7 +344,9 @@ class SocketListen {
 
   /// when caller call then caller this event listen
   static void handleOutGoingCall(dynamic data) {
-    Get.back();
+    if (Get.isBottomSheetOpen == true) {
+      Get.back();
+    }
     Utils.showLog("Socket Listen => callEstablished event: $data");
     if (data['callType'] == "audio") {
       Get.toNamed(AppRoutes.outgoingAudioCallScreen, arguments: data);
@@ -399,8 +401,8 @@ class SocketListen {
   static void handleCallAnswered(dynamic data) {
     Utils.showLog("Socket Listen => callAnswered event: $data");
 
-    final updatedUserCredits = data['remainingSessionCredits'] ??
-        data['updatedUserSessionCredits'];
+    final updatedUserCredits =
+        data['remainingSessionCredits'] ?? data['updatedUserSessionCredits'];
     if (updatedUserCredits != null) {
       Database.onSetUserCoin(updatedUserCredits.toString());
 
@@ -619,9 +621,9 @@ class SocketListen {
       );
     }
     final errorMessage = data is Map
-      ? (data['message']?.toString() ??
-        "Insufficient session credits for this call.")
-      : data.toString();
+        ? (data['message']?.toString() ??
+            "Insufficient session credits for this call.")
+        : data.toString();
 
     Utils.showToast(Get.context!, errorMessage);
   }

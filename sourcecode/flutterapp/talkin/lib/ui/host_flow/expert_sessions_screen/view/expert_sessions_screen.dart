@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/routes/app_routes.dart';
+import 'package:talk_in/services/permission_handler/permission_handler.dart';
+import 'package:talk_in/socket/socket_emit.dart';
 import 'package:talk_in/ui/common/session_booking/session_booking_service.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/database.dart';
@@ -84,6 +86,70 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
     return '$day/$month/$year $hour:$minute';
   }
 
+  Future<void> _triggerDirectSessionCall({
+    required String callType,
+    required String receiverId,
+    required String receiverName,
+    required String receiverImage,
+    required String sessionId,
+    required String bookingId,
+  }) async {
+    final normalizedCallType = callType.trim().toLowerCase();
+    if (normalizedCallType != 'audio' && normalizedCallType != 'video') {
+      Utils.showToast(context, 'Unsupported call type for this session.');
+      return;
+    }
+
+    final callerId = _listenerId.trim();
+    final sanitizedReceiverId = receiverId.trim();
+
+    if (callerId.isEmpty || sanitizedReceiverId.isEmpty) {
+      Utils.showToast(
+        context,
+        'Unable to start session call. Missing caller/receiver details.',
+      );
+      return;
+    }
+
+    void emitCall() {
+      SocketEmit.emitCallOutgoingRinging(
+        callerId: callerId,
+        receiverId: sanitizedReceiverId,
+        callType: normalizedCallType,
+        callerRole: 'listener',
+        receiverRole: 'user',
+        receiverName: receiverName,
+        receiverImage: receiverImage,
+        callerName: (Database.fetchListenerProfileModel?.data?.name ??
+                Database.fetchLoginUserProfileModel?.user?.fullName ??
+                'Expert')
+            .toString(),
+        callerImage: (Database.fetchListenerProfileModel?.data?.image ??
+                Database.fetchLoginUserProfileModel?.user?.profilePic ??
+                '')
+            .toString(),
+        sessionId: sessionId,
+        bookingId: bookingId,
+      );
+      _fetchSessions();
+    }
+
+    if (normalizedCallType == 'video') {
+      PermissionHandler.onGetCameraPermission(
+        onGranted: () {
+          PermissionHandler.onGetMicrophonePermission(
+            onGranted: emitCall,
+          );
+        },
+      );
+      return;
+    }
+
+    PermissionHandler.onGetMicrophonePermission(
+      onGranted: emitCall,
+    );
+  }
+
   Widget _buildSegment(String value, String label) {
     final selected = value == _view;
 
@@ -161,39 +227,32 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
         ? session['bookings'] as List<dynamic>
         : const <dynamic>[];
 
-    final firstBooking = bookings.isNotEmpty && bookings.first is Map<String, dynamic>
-        ? bookings.first as Map<String, dynamic>
-        : <String, dynamic>{};
+    final firstBooking =
+        bookings.isNotEmpty && bookings.first is Map<String, dynamic>
+            ? bookings.first as Map<String, dynamic>
+            : <String, dynamic>{};
 
-    final bookingId = (firstBooking['bookingId'] ?? '').toString();
+    final bookingId =
+        (firstBooking['bookingId'] ?? firstBooking['_id'] ?? '').toString();
     final userId = (firstBooking['userId'] ?? '').toString();
     final userName = (firstBooking['userName'] ?? 'User').toString();
     final userProfilePic = (firstBooking['userProfilePic'] ?? '').toString();
     final sessionCallType = (session['callType'] ?? '').toString();
-    final sessionEndAt = (session['endAt'] ?? '').toString();
 
     if (bookingId.isEmpty || userId.isEmpty) {
-      Utils.showToast(context, 'No confirmed user booking found for this session.');
+      Utils.showToast(
+          context, 'No confirmed user booking found for this session.');
       return;
     }
 
-    await Get.toNamed(
-      AppRoutes.hostPersonalChatScreen,
-      arguments: [
-        userId,
-        userName,
-        'Available',
-        userProfilePic,
-        sessionId,
-        bookingId,
-        sessionCallType,
-        sessionEndAt,
-      ],
+    await _triggerDirectSessionCall(
+      callType: sessionCallType,
+      receiverId: userId,
+      receiverName: userName,
+      receiverImage: userProfilePic,
+      sessionId: sessionId,
+      bookingId: bookingId,
     );
-
-    if (mounted) {
-      _fetchSessions();
-    }
   }
 
   @override
@@ -271,12 +330,12 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                                   .toString();
                               final canCancel = _view == 'upcoming' &&
                                   sessionStatus.toLowerCase() != 'canceled';
-                                final accessWindow =
-                                  session['accessWindow'] is Map<String, dynamic>
-                                    ? session['accessWindow']
+                              final accessWindow = session['accessWindow']
+                                      is Map<String, dynamic>
+                                  ? session['accessWindow']
                                       as Map<String, dynamic>
-                                    : const <String, dynamic>{};
-                                final canStartSession = _view == 'upcoming' &&
+                                  : const <String, dynamic>{};
+                              final canStartSession = _view == 'upcoming' &&
                                   bookingStatus.toLowerCase() == 'confirmed' &&
                                   accessWindow['allowed'] == true;
                               final isCancellingThis =
@@ -347,7 +406,8 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                                         width: double.infinity,
                                         height: 40,
                                         child: ElevatedButton(
-                                          onPressed: () => _onStartSession(session),
+                                          onPressed: () =>
+                                              _onStartSession(session),
                                           child: const Text('Start Session'),
                                         ),
                                       ),

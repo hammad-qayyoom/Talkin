@@ -64,7 +64,9 @@ class SettingController extends GetxController {
 
   /// user account delete
   Future<void> onDeleteAccount() async {
-    Get.back(); // Close Dialog...
+    if (Get.isDialogOpen ?? false) {
+      Get.back(); // Close Dialog...
+    }
 
     Get.dialog(const LoadingWidget(),
         barrierDismissible: false); // Start Loading...

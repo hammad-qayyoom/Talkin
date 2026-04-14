@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/dialog/notification_clear_dialog.dart';
 import 'package:talk_in/ui/host_flow/host_notification/shimmer/notification_shimmer.dart';
 import 'package:talk_in/ui/user_flow/user_notification/controller/user_notification_controller.dart';
 import 'package:talk_in/utils/app_asset.dart';
@@ -8,6 +7,7 @@ import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/constant.dart';
 import 'package:talk_in/utils/enums.dart';
 import 'package:talk_in/utils/font_style.dart';
+import 'package:talk_in/utils/utils.dart';
 
 class UserNotificationAppBar extends StatelessWidget {
   const UserNotificationAppBar({super.key});
@@ -70,18 +70,15 @@ class UserNotificationAppBar extends StatelessWidget {
                       opacity: hasNotifications ? 1 : 0.55,
                       child: GestureDetector(
                         onTap: () {
-                          Get.dialog(
-                            barrierColor:
-                                AppColors.black.withValues(alpha: 0.8),
-                            Dialog(
-                              backgroundColor: AppColors.transparent,
-                              shadowColor: Colors.transparent,
-                              surfaceTintColor: Colors.transparent,
-                              elevation: 0,
-                              child: NotificationClearDialog(
-                                onConfirm: controller.clearNotificationUser,
-                              ),
-                            ),
+                          Utils.showConfirmationSnackBar(
+                            context,
+                            title: EnumLocale.txtNotification.name.tr,
+                            message:
+                                EnumLocale.txtSureClearNotification.name.tr,
+                            confirmText: EnumLocale.txtSure.name.tr,
+                            cancelText: EnumLocale.txtCancel.name.tr,
+                            icon: Icons.notifications_active_outlined,
+                            onConfirm: controller.clearNotificationUser,
                           );
                         },
                         child: Container(

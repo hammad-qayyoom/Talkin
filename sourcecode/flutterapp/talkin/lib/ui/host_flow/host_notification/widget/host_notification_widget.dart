@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/custom/app_bar/custom_app_bar.dart';
-import 'package:talk_in/custom/dialog/notification_clear_dialog.dart';
 import 'package:talk_in/ui/host_flow/host_notification/controller/host_notification_controller.dart';
 import 'package:talk_in/ui/host_flow/host_notification/shimmer/notification_shimmer.dart';
 import 'package:talk_in/utils/app_asset.dart';
@@ -28,15 +27,14 @@ class HostNotificationAppBar extends StatelessWidget {
               builder: (controller) {
                 return GestureDetector(
                   onTap: () {
-                    Get.dialog(
-                      barrierColor: AppColors.black.withValues(alpha: 0.8),
-                      Dialog(
-                        backgroundColor: AppColors.transparent,
-                        shadowColor: Colors.transparent,
-                        surfaceTintColor: Colors.transparent,
-                        elevation: 0,
-                        child: HostNotificationClearDialog(onConfirm: controller.clearNotificationListener),
-                      ),
+                    Utils.showConfirmationSnackBar(
+                      context,
+                      title: EnumLocale.txtNotification.name.tr,
+                      message: EnumLocale.txtSureClearNotification.name.tr,
+                      confirmText: EnumLocale.txtSure.name.tr,
+                      cancelText: EnumLocale.txtCancel.name.tr,
+                      icon: Icons.notifications_active_outlined,
+                      onConfirm: controller.clearNotificationListener,
                     );
                   },
                   child: Container(
@@ -74,7 +72,8 @@ class HostNotificationView extends StatelessWidget {
               ? Expanded(child: NotificationShimmer())
               : controller.hostNotificationList.isEmpty
                   ? Expanded(
-                      child: Image.asset(AppAsset.noNotificationFound).paddingAll(70),
+                      child: Image.asset(AppAsset.noNotificationFound)
+                          .paddingAll(70),
                     )
                   : Expanded(
                       child: RefreshIndicator(
@@ -83,7 +82,8 @@ class HostNotificationView extends StatelessWidget {
                           controller: controller.scrollController,
                           itemCount: controller.hostNotificationList.length + 1,
                           itemBuilder: (context, index) {
-                            if (index == controller.hostNotificationList.length) {
+                            if (index ==
+                                controller.hostNotificationList.length) {
                               return GetBuilder<HostNotificationController>(
                                 id: Constant.idPaginationListener,
                                 builder: (_) => controller.isPaginationLoading
@@ -105,18 +105,24 @@ class HostNotificationView extends StatelessWidget {
                               children: [
                                 Text(
                                   data.title ?? '',
-                                  style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: AppColors.black),
+                                  style: AppFontStyle.fontStyleW700(
+                                      fontSize: 15, fontColor: AppColors.black),
                                 ).paddingOnly(bottom: 3),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Expanded(
                                       child: Text(data.message ?? '',
-                                          style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.notificationTxt)),
+                                          style: AppFontStyle.fontStyleW500(
+                                              fontSize: 11,
+                                              fontColor:
+                                                  AppColors.notificationTxt)),
                                     ),
                                     6.width,
                                     Text(data.date ?? '',
-                                        style: AppFontStyle.fontStyleW600(fontSize: 10, fontColor: AppColors.black))
+                                        style: AppFontStyle.fontStyleW600(
+                                            fontSize: 10,
+                                            fontColor: AppColors.black))
                                   ],
                                 ).paddingOnly(bottom: 5),
                                 Divider(
@@ -129,7 +135,6 @@ class HostNotificationView extends StatelessWidget {
                         ),
                       ),
                     );
-
         });
   }
 }

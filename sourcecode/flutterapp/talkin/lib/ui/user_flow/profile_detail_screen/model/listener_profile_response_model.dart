@@ -50,6 +50,7 @@ class ListenerData {
   final int? ratePrivateAudioCall;
   final double? rating;
   final int? callCount;
+  final int? completedSessionCount;
   final String? experience;
   final String? statusLabel;
   int? totalCoins;
@@ -73,6 +74,7 @@ class ListenerData {
     this.ratePrivateAudioCall,
     this.rating,
     this.callCount,
+    this.completedSessionCount,
     this.experience,
     this.statusLabel,
     this.age,
@@ -90,8 +92,12 @@ class ListenerData {
         id: (json["_id"] ?? json["id"] ?? json["listenerId"])?.toString(),
         name: json["name"]?.toString(),
         selfIntro: json["selfIntro"]?.toString(),
-        talkTopics: json["talkTopics"] is List ? (json["talkTopics"] as List).map((e) => e.toString()).toList() : [],
-        language: json["language"] is List ? (json["language"] as List).map((e) => e.toString()).toList() : [],
+        talkTopics: json["talkTopics"] is List
+            ? (json["talkTopics"] as List).map((e) => e.toString()).toList()
+            : [],
+        language: json["language"] is List
+            ? (json["language"] as List).map((e) => e.toString()).toList()
+            : [],
         image: json["image"]?.toString(),
         ratePrivateVideoCall: _parseInt(json["ratePrivateVideoCall"]),
         ratePrivateAudioCall: _parseInt(json["ratePrivateAudioCall"]),
@@ -99,16 +105,36 @@ class ListenerData {
             ? (json["rating"] as num).toDouble()
             : double.tryParse((json["rating"] ?? '').toString()),
         callCount: _parseInt(json["callCount"]),
+        completedSessionCount: _parseInt(
+          json["completedSessionCount"] ??
+              json["completedSessions"] ??
+              json["bookingCompletedCount"] ??
+              json["completedBookingCount"] ??
+              json["totalCompletedSessions"] ??
+              json["totalCompletedBookings"] ??
+              json["sessionCompletedCount"] ??
+              json["completedBookings"] ??
+              json["sessionCountCompleted"] ??
+              json["totalSessionsCompleted"] ??
+              json["bookingsCompleted"],
+        ),
         experience: json["experience"]?.toString(),
         statusLabel: json["statusLabel"]?.toString(),
         age: _parseInt(json["age"]),
         totalCoins: _parseInt(json["totalCoins"]),
-        video: json["video"] is List ? (json["video"] as List).map((e) => e.toString()).toList() : [],
+        video: json["video"] is List
+            ? (json["video"] as List).map((e) => e.toString()).toList()
+            : [],
         isFake: json["isFake"] == true || json["isFake"]?.toString() == 'true',
         uniqueId: json["uniqueId"]?.toString(),
-        isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"] == true || json["isAvailableForPrivateAudioCall"]?.toString() == 'true',
-        isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"] == true || json["isAvailableForPrivateVideoCall"]?.toString() == 'true',
-        isAvailableForChat: json["isAvailableForChat"] == true || json["isAvailableForChat"]?.toString() == 'true',
+        isAvailableForPrivateAudioCall:
+            json["isAvailableForPrivateAudioCall"] == true ||
+                json["isAvailableForPrivateAudioCall"]?.toString() == 'true',
+        isAvailableForPrivateVideoCall:
+            json["isAvailableForPrivateVideoCall"] == true ||
+                json["isAvailableForPrivateVideoCall"]?.toString() == 'true',
+        isAvailableForChat: json["isAvailableForChat"] == true ||
+            json["isAvailableForChat"]?.toString() == 'true',
         audio: json["audio"]?.toString(),
       );
 
@@ -123,6 +149,7 @@ class ListenerData {
         "ratePrivateAudioCall": ratePrivateAudioCall,
         "rating": rating,
         "callCount": callCount,
+        "completedSessionCount": completedSessionCount,
         "experience": experience,
         "statusLabel": statusLabel,
         "age": age,

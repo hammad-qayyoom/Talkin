@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/dialog/delete_account_dialog.dart';
-import 'package:talk_in/custom/dialog/logout_dialog.dart';
 import 'package:talk_in/routes/app_routes.dart';
 import 'package:talk_in/ui/user_flow/setting_screen/controller/setting_controller.dart';
 import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
+import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/enums.dart';
 import 'package:talk_in/utils/font_style.dart';
 import 'package:talk_in/utils/utils.dart';
@@ -193,16 +192,17 @@ class SettingView extends StatelessWidget {
                         subtitle: 'Sign out from this device',
                         isTablet: isTablet,
                         onTap: () {
-                          Get.dialog(
-                            barrierColor:
-                                AppColors.black.withValues(alpha: 0.75),
-                            Dialog(
-                              backgroundColor: AppColors.transparent,
-                              shadowColor: AppColors.transparent,
-                              surfaceTintColor: AppColors.transparent,
-                              elevation: 0,
-                              child: const LogoutDialog(),
-                            ),
+                          Utils.showConfirmationSnackBar(
+                            context,
+                            title: EnumLocale.txtLogout.name.tr,
+                            message: EnumLocale.txtDesLogout.name.tr,
+                            confirmText: EnumLocale.txtLogout.name.tr,
+                            cancelText: EnumLocale.txtCancel.name.tr,
+                            icon: Icons.logout_rounded,
+                            onConfirm: () {
+                              Database.onLogOut();
+                              Get.offAllNamed(AppRoutes.main);
+                            },
                           );
                         },
                       ),
@@ -214,20 +214,15 @@ class SettingView extends StatelessWidget {
                         isTablet: isTablet,
                         isDestructive: true,
                         onTap: () {
-                          Get.dialog(
-                            barrierColor:
-                                AppColors.black.withValues(alpha: 0.75),
-                            Dialog(
-                              backgroundColor: AppColors.transparent,
-                              shadowColor: AppColors.transparent,
-                              surfaceTintColor: AppColors.transparent,
-                              elevation: 0,
-                              child: DeleteAccountDialog(
-                                onTap: () {
-                                  controller.onDeleteAccount();
-                                },
-                              ),
-                            ),
+                          Utils.showConfirmationSnackBar(
+                            context,
+                            title: EnumLocale.txtDeleteAccount.name.tr,
+                            message: EnumLocale.desWantDeleteAccount.name.tr,
+                            confirmText: EnumLocale.txtDeleteAccount.name.tr,
+                            cancelText: EnumLocale.txtCancel.name.tr,
+                            icon: Icons.delete_forever_outlined,
+                            confirmBackgroundColor: AppColors.red,
+                            onConfirm: controller.onDeleteAccount,
                           );
                         },
                       ),
