@@ -8,124 +8,247 @@ import 'package:talk_in/utils/constant.dart';
 import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/enums.dart';
 import 'package:talk_in/utils/font_style.dart';
+import 'package:talk_in/utils/utils.dart';
+
+class MyWalletScreenAppBar extends StatelessWidget {
+  const MyWalletScreenAppBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final isTablet = width >= 760;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+      child: Row(
+        children: [
+          _HeaderIconButton(
+            icon: Icons.arrow_back_ios_new_rounded,
+            onTap: () {
+              Utils.onChangeStatusBar(brightness: Brightness.dark);
+              Get.back();
+            },
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  EnumLocale.txtMyWallet.name.tr,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: isTablet ? 28 : 22,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Credits, plans and payment history',
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: isTablet ? 12 : 11,
+                    fontColor: AppColors.redesignMutedText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 34,
+            width: 34,
+            decoration: BoxDecoration(
+              color: AppColors.redesignAccentSoftBg,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              Icons.account_balance_wallet_outlined,
+              size: 18,
+              color: AppColors.redesignBrandRed,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeaderIconButton extends StatelessWidget {
+  const _HeaderIconButton({
+    required this.icon,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          height: 40,
+          width: 40,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+          ),
+          child: Icon(
+            icon,
+            size: 20,
+            color: AppColors.redesignBrandDark,
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class MyWalletScreenTopView extends StatelessWidget {
   const MyWalletScreenTopView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage(AppAsset.walletBg), fit: BoxFit.cover),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  Get.back();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(22),
-                  child: Image.asset(
-                    height: 16,
-                    AppAsset.backArrowIcon,
-                    color: AppColors.white,
-                  ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isTablet = constraints.maxWidth >= 760;
+
+        return GetBuilder<MyWalletController>(
+          id: Constant.idGetCoinPlan,
+          builder: (controller) {
+            return Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(isTablet ? 20 : 16),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppColors.redesignBrandRed,
+                    AppColors.redesignBrandRedDeep,
+                  ],
                 ),
-              ),
-              Spacer(),
-              Text(
-                EnumLocale.txtMyWallet.name.tr,
-                style: AppFontStyle.fontStyleW600(
-                    fontSize: 20, fontColor: AppColors.white),
-              ).paddingOnly(right: Get.width * 0.16),
-              Spacer(),
-            ],
-          ).paddingOnly(bottom: 10),
-          GetBuilder<MyWalletController>(
-              id: Constant.idGetCoinPlan,
-              builder: (controller) {
-                return Container(
-                  padding: EdgeInsets.only(top: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.white.withValues(alpha: 0.16),
-                    borderRadius: BorderRadius.circular(22),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.redesignBrandRed.withValues(alpha: 0.24),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        AppAsset.walletCross,
-                        height: 147,
-                        width: 147,
-                      ).paddingOnly(right: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: Get.width * 0.40,
-                            child: FittedBox(
-                              child: Text(
-                                "Current Session Credits",
-                                // overflow: TextOverflow.ellipsis,
-                                style: AppFontStyle.fontStyleW600(
-                                  fontSize: 14,
-                                  fontColor: AppColors.yellowDark800,
-                                  decorationColor: AppColors.yellowDark800,
-                                  textDecoration: TextDecoration.underline,
-                                ),
-                              ).paddingOnly(bottom: 6, top: 15),
+                ],
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.white.withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Text(
+                            'Wallet Balance',
+                            style: AppFontStyle.fontStyleW700(
+                              fontSize: 11,
+                              fontColor: AppColors.white,
                             ),
                           ),
-                          Text(
-                            Database.userCoin,
-                            style: AppFontStyle.fontStyleW900(
-                                fontSize: 44,
-                                fontColor: AppColors.yellowDark800),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Current Session Credits',
+                          style: AppFontStyle.fontStyleW700(
+                            fontSize: isTablet ? 28 : 22,
+                            fontColor: AppColors.white,
                           ),
-                          GestureDetector(
+                        ),
+                        const SizedBox(height: 4),
+                        SizedBox(
+                          height: isTablet ? 56 : 44,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              Database.userCoin,
+                              style: AppFontStyle.fontStyleW900(
+                                fontSize: isTablet ? 54 : 42,
+                                fontColor: AppColors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Material(
+                          color: AppColors.transparent,
+                          child: InkWell(
                             onTap: () {
                               Get.toNamed(AppRoutes.coinHistoryScreen);
                             },
+                            borderRadius: BorderRadius.circular(12),
                             child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 2, vertical: 7),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 8,
+                              ),
                               decoration: BoxDecoration(
                                 color: AppColors.white,
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    "View Payment History",
-                                    style: AppFontStyle.fontStyleW600(
-                                        fontSize: 12,
-                                        fontColor: AppColors.yellowDark800),
-                                  ).paddingOnly(left: 6, right: 6),
-                                  RotatedBox(
-                                    quarterTurns: 2,
-                                    child: Image.asset(
-                                      AppAsset.backArrowIcon,
-                                      height: 10,
-                                      width: 10,
-                                      color: AppColors.yellowDark800,
+                                    'View Payment History',
+                                    style: AppFontStyle.fontStyleW700(
+                                      fontSize: isTablet ? 13 : 12,
+                                      fontColor: AppColors.redesignBrandDark,
                                     ),
-                                  ).paddingOnly(right: 4),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    size: 12,
+                                    color: AppColors.redesignBrandDark,
+                                  ),
                                 ],
                               ),
-                            ).paddingOnly(right: 14),
-                          ).paddingOnly(top: 4, bottom: 14),
-                        ],
-                      ),
-                    ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ).paddingOnly(bottom: 24, left: 20, right: 20);
-              }),
-        ],
-      ).paddingOnly(top: Get.height * 0.042),
+                  const SizedBox(width: 10),
+                  Container(
+                    height: isTablet ? 110 : 88,
+                    width: isTablet ? 110 : 88,
+                    decoration: BoxDecoration(
+                      color: AppColors.white.withValues(alpha: 0.16),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Image.asset(
+                        AppAsset.walletCross,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
@@ -135,20 +258,57 @@ class WalletGuideView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Subscription Guide",
-          style: AppFontStyle.fontStyleW800(
-              fontSize: 17, fontColor: AppColors.black),
-        ),
-        Text(
-          "Pick a subscription plan to unlock session credits. Paid sessions are booked only after successful payment, and each booking is recorded in your payment history.",
-          style: AppFontStyle.fontStyleW500(
-              fontSize: 11, fontColor: AppColors.profileText, height: 1.7),
-        ).paddingOnly(top: 8),
-      ],
-    ).paddingSymmetric(horizontal: 14);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.redesignSoftBorder),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: AppColors.redesignSurfaceNeutralAlt,
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: Text(
+              'How It Works',
+              style: AppFontStyle.fontStyleW600(
+                fontSize: 10,
+                fontColor: AppColors.redesignMutedText,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Subscription Guide',
+            style: AppFontStyle.fontStyleW700(
+              fontSize: 17,
+              fontColor: AppColors.redesignBrandDark,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Pick a subscription plan to unlock session credits. Paid sessions are booked only after successful payment, and each booking is recorded in your payment history.',
+            style: AppFontStyle.fontStyleW500(
+              fontSize: 11,
+              fontColor: AppColors.redesignMutedText,
+              height: 1.75,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

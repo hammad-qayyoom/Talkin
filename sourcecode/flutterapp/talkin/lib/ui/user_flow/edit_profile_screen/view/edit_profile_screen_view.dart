@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:talk_in/ui/user_flow/edit_profile_screen/widget/edit_profile_screen_widget.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/utils.dart';
@@ -7,43 +6,49 @@ import 'package:talk_in/utils/utils.dart';
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
 
-
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-
 class _EditProfileScreenState extends State<EditProfileScreen> {
-
-
   @override
   void dispose() {
-    Utils.onChangeStatusBar(brightness: Brightness.light);
+    Utils.onChangeStatusBar(brightness: Brightness.dark);
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    Utils.onChangeStatusBar(brightness: Brightness.dark);
+
     return Scaffold(
-      bottomNavigationBar: saveProfileButton(),
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        flexibleSpace: const EditProfileScreenAppBar(),
-      ),
+      backgroundColor: AppColors.redesignScreenBackground,
+      bottomNavigationBar: const EditProfileSaveBar(),
       body: GestureDetector(
         onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+          final FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
             currentFocus.focusedChild?.unfocus();
           }
         },
-        child: SingleChildScrollView(
+        child: SafeArea(
           child: Column(
             children: [
-              EditProfileImageView(),
-              EditProfileEditInfoView().paddingSymmetric(horizontal: 18),
+              const EditProfileScreenAppBar(),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                  child: const Column(
+                    children: [
+                      EditProfileImageView(),
+                      SizedBox(height: 14),
+                      EditProfileEditInfoView(),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),

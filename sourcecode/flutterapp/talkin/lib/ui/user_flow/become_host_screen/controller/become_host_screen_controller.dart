@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:ui';
+
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:talk_in/ui/user_flow/become_host_screen/api/listeners_request_check_api.dart';
@@ -13,112 +14,124 @@ import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/utils.dart';
 
 class BecomeHostScreenController extends GetxController {
+  static const List<String> _faqCategoryFallbacks = [
+    'Expert',
+    'Listener',
+  ];
+
   FaqModel? faqModel;
   ListenersRequestCheckModel? listenersRequestCheckModel;
   List<Datum> faqList = [];
+
+  // Kept for request-status screens that also read this controller.
   bool isLoading = false;
+  bool isFaqLoading = false;
+
   SettingApiModel? settingApiModel;
   int expandedIndex = -1;
 
   @override
   void onInit() {
+    super.onInit();
     listenersRequestCheck();
     getFaqData();
     init();
-    super.onInit();
   }
 
-  init() async {
+  Future<void> init() async {
     settingApiModel = await SettingApi.callApi();
     Database.settingApiModel = settingApiModel;
   }
 
-  /// get faq
-  getFaqData() async {
+  Future<void> getFaqData() async {
     try {
-      isLoading = true;
-      update([Constant.idFAQListeners]); // notify UI
-      var data = await GetFaqApi.callApi(category: "Listener");
-      faqModel = data;
-      faqList = data?.data ?? [];
+      isFaqLoading = true;
+      update([Constant.idFAQListeners]);
+
+      FaqModel? resolvedModel;
+      List<Datum> resolvedFaqs = [];
+
+      for (final category in _faqCategoryFallbacks) {
+        final data = await GetFaqApi.callApi(category: category);
+        if (data == null) {
+          continue;
+        }
+
+        resolvedModel ??= data;
+
+        final items = data.data ?? const <Datum>[];
+        if (items.isNotEmpty) {
+          resolvedModel = data;
+          resolvedFaqs = items;
+          break;
+        }
+      }
+
+      faqModel = resolvedModel;
+      faqList = resolvedFaqs;
+
+      if (expandedIndex >= faqList.length) {
+        expandedIndex = -1;
+      }
     } catch (e) {
       log('Error fetching FAQ: $e');
+      faqList = [];
+      expandedIndex = -1;
     } finally {
-      isLoading = false;
-      update([Constant.idFAQListeners]); // notify UI
-      // log('FAQ finally');
+      isFaqLoading = false;
+      update([Constant.idFAQListeners]);
     }
   }
 
-  /// listeners request check
-  listenersRequestCheck() async {
+  Future<void> listenersRequestCheck() async {
     try {
       isLoading = true;
-      update(); // notify UI
+      update();
       listenersRequestCheckModel = await ListenersRequestCheckApi.callApi();
     } catch (e) {
-      log('Error fetching FAQ: $e');
+      log('Error fetching request status: $e');
     } finally {
       isLoading = false;
-      update(); // notify UI
-      // log('Listeners Request check finally');
+      update();
     }
   }
 
-  // String? getFormattedDate(String? dateStr) {
-  //   if (dateStr == null || dateStr.isEmpty) return '';
-  //
-  //   try {
-  //     // Parse the date and time
-  //     DateTime parsedDateTime = DateFormat("M/d/yyyy, h:mm:ss a").parse(dateStr);
-  //
-  //     // Format date and time separately
-  //     String date = DateFormat('MM/dd/yyyy').format(parsedDateTime); // You can customize the format
-  //     String time = DateFormat('hh:mm:ss a').format(parsedDateTime);
-  //
-  //     // Return formatted date and time as separate values (without "Date:" and "Time:")
-  //     return "$date\n$time"; // No labels, just date and time
-  //   } catch (e) {
-  //     log('Error parsing date: $e');
-  //     return ''; // In case of any error, return an empty string
-  //   }
-  // }
-
   Map<String, String> getFormattedDateParts(String? dateStr) {
-    if (dateStr == null || dateStr.isEmpty) return {"date": "", "time": ""};
+    if (dateStr == null || dateStr.isEmpty) {
+      return {'date': '', 'time': ''};
+    }
 
     try {
-      DateTime parsedDateTime = DateFormat("M/d/yyyy, h:mm:ss a").parse(dateStr);
-      String date = DateFormat('MM/dd/yyyy').format(parsedDateTime);
-      String time = DateFormat('hh:mm:ss a').format(parsedDateTime);
+      final parsedDateTime = DateFormat('M/d/yyyy, h:mm:ss a').parse(dateStr);
+      final date = DateFormat('MM/dd/yyyy').format(parsedDateTime);
+      final time = DateFormat('hh:mm:ss a').format(parsedDateTime);
 
-      return {"date": date, "time": time};
+      return {'date': date, 'time': time};
     } catch (e) {
       log('Error parsing date: $e');
-      return {"date": "", "time": ""};
+      return {'date': '', 'time': ''};
     }
   }
 
   void toggleExpanded(int index) {
     if (expandedIndex == index) {
-      expandedIndex = -1; // Collapse if already expanded
+      expandedIndex = -1;
     } else {
-      expandedIndex = index; // Expand new one
+      expandedIndex = index;
     }
     update([Constant.idFAQListeners]);
   }
 
-  /// listener req sent screen refresh
-  onRefresh() async {
-    listenersRequestCheck();
-    update();
+  Future<void> onRefresh() async {
+    await Future.wait([
+      listenersRequestCheck(),
+      getFaqData(),
+    ]);
   }
 
   @override
   void onClose() {
-
-    Utils.onChangeStatusBar(brightness: Brightness.light);
-
+    Utils.onChangeStatusBar(brightness: Brightness.dark);
     super.onClose();
   }
 }

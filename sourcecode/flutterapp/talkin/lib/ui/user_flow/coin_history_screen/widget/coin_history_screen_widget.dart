@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_bar/custom_app_bar.dart';
 import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
 import 'package:talk_in/custom/range_picker/custom_range_picker.dart';
 import 'package:talk_in/ui/user_flow/coin_history_screen/controller/coin_history_screen_controller.dart';
+import 'package:talk_in/ui/user_flow/coin_history_screen/model/coin_history_model.dart';
+import 'package:talk_in/ui/user_flow/coin_history_screen/model/purchase_cpin_plan_model.dart';
 import 'package:talk_in/ui/user_flow/coin_history_screen/shimmer/coin_history_shimmer.dart';
 import 'package:talk_in/ui/user_flow/coin_history_screen/shimmer/payment_history_shimmer.dart';
 import 'package:talk_in/utils/app_asset.dart';
@@ -19,163 +20,343 @@ class CoinHistoryScreenAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(120),
-      child: CustomAppBar(
-        appBarColor: AppColors.lightPurple,
-        title: EnumLocale.txtHistory.name.tr,
-        showLeadingIcon: true,
+    final width = MediaQuery.sizeOf(context).width;
+    final isTablet = width >= 760;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+      child: Row(
+        children: [
+          _HeaderIconButton(
+            icon: Icons.arrow_back_ios_new_rounded,
+            onTap: () {
+              Utils.onChangeStatusBar(brightness: Brightness.dark);
+              Get.back();
+            },
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  EnumLocale.txtHistory.name.tr,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: isTablet ? 28 : 22,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Payments and session credits timeline',
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: isTablet ? 12 : 11,
+                    fontColor: AppColors.redesignMutedText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 34,
+            width: 34,
+            decoration: BoxDecoration(
+              color: AppColors.redesignAccentSoftBg,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              Icons.receipt_long_rounded,
+              size: 18,
+              color: AppColors.redesignBrandRed,
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class CoinHistoryScreenTabBar extends StatelessWidget {
+class _HeaderIconButton extends StatelessWidget {
+  const _HeaderIconButton({
+    required this.icon,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          height: 40,
+          width: 40,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+          ),
+          child: Icon(
+            icon,
+            size: 20,
+            color: AppColors.redesignBrandDark,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CoinHistoryScreenTabBar extends GetView<CoinHistoryScreenController> {
   const CoinHistoryScreenTabBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CoinHistoryScreenController>(
-      id: Constant.idTabChange, // Listen for tab switch and content change
+      id: Constant.idTabChange,
       builder: (controller) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              height: Get.height * 0.06,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                border: Border.all(color: AppColors.borderColor),
-                borderRadius: BorderRadius.circular(24),
+        final isPaymentTab = controller.tabIndex == 0;
+
+        String rangeText = EnumLocale.txtAll.name.tr;
+        if (isPaymentTab && controller.selectedPaymentDateRange != null) {
+          final range = controller.selectedPaymentDateRange!;
+          rangeText =
+              '${Utils.formatShortDate(range.start)} - ${Utils.formatShortDate(range.end)}';
+        } else if (!isPaymentTab && controller.selectedCoinDateRange != null) {
+          final range = controller.selectedCoinDateRange!;
+          rangeText =
+              '${Utils.formatShortDate(range.start)} - ${Utils.formatShortDate(range.end)}';
+        }
+
+        final hasFilter =
+            (isPaymentTab && controller.selectedPaymentDateRange != null) ||
+                (!isPaymentTab && controller.selectedCoinDateRange != null);
+
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          child: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      AppColors.redesignBrandRed,
+                      AppColors.redesignBrandRedDeep,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(22),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.redesignBrandRed.withValues(alpha: 0.2),
+                      blurRadius: 18,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.white.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        'Smart Ledger',
+                        style: AppFontStyle.fontStyleW700(
+                          fontSize: 11,
+                          fontColor: AppColors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Track all payment and credit activity in one clean timeline.',
+                      style: AppFontStyle.fontStyleW500(
+                        fontSize: 12,
+                        fontColor: AppColors.white.withValues(alpha: 0.92),
+                        height: 1.55,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: Row(
+              const SizedBox(height: 12),
+              Container(
+                height: 52,
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(color: AppColors.redesignSoftBorder),
+                ),
+                child: Row(
+                  children: [
+                    _HistoryTab(
+                      isSelected: isPaymentTab,
+                      title: EnumLocale.txtPayment.name.tr,
+                      onTap: () => controller.changeTab(0),
+                    ),
+                    _HistoryTab(
+                      isSelected: !isPaymentTab,
+                      title: EnumLocale.txtCoin.name.tr,
+                      onTap: () => controller.changeTab(1),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
                 children: [
                   Expanded(
-                    child: GestureDetector(
-                      onTap: () => controller.changeTab(0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: controller.tabIndex == 0 ? Colors.black : Colors.transparent,
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          EnumLocale.txtPayment.name.tr,
-                          style: controller.tabIndex == 0
-                              ? AppFontStyle.fontStyleW600(
-                                  fontSize: 14,
-                                  fontColor: AppColors.white,
-                                )
-                              : AppFontStyle.fontStyleW500(
-                                  fontSize: 14,
-                                  fontColor: AppColors.profileText,
-                                ),
-                        ),
-                      ).paddingAll(controller.tabIndex == 0 ? 2 : 0),
+                    child: Text(
+                      EnumLocale.txtSelectDate.name.tr,
+                      style: AppFontStyle.fontStyleW600(
+                        fontSize: 16,
+                        fontColor: AppColors.redesignBrandDark,
+                      ),
                     ),
                   ),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => controller.changeTab(1),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: controller.tabIndex == 1 ? Colors.black : Colors.transparent,
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          EnumLocale.txtCoin.name.tr,
-                          style: controller.tabIndex == 1
-                              ? AppFontStyle.fontStyleW600(
-                                  fontSize: 14,
-                                  fontColor: AppColors.white,
-                                )
-                              : AppFontStyle.fontStyleW500(
-                                  fontSize: 14,
-                                  fontColor: AppColors.profileText,
-                                ),
-                        ),
-                      ).paddingAll(controller.tabIndex == 1 ? 2 : 0),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            10.height,
-            Row(
-              children: [
-                Text(EnumLocale.txtSelectDate.name.tr, style: AppFontStyle.fontStyleW500(fontSize: 14, fontColor: AppColors.black)),
-                Spacer(),
-                GetBuilder<CoinHistoryScreenController>(
-                  id: Constant.idTabChange,
-                  builder: (controller) {
-                    String displayText = EnumLocale.txtAll.name.tr;
-
-                    if (controller.tabIndex == 0 && controller.selectedPaymentDateRange != null) {
-                      final range = controller.selectedPaymentDateRange!;
-                      displayText = "${Utils.formatShortDate(range.start)} - ${Utils.formatShortDate(range.end)}";
-                    } else if (controller.tabIndex == 1 && controller.selectedCoinDateRange != null) {
-                      final range = controller.selectedCoinDateRange!;
-                      displayText = "${Utils.formatShortDate(range.start)} - ${Utils.formatShortDate(range.end)}";
-                    }
-
-                    return GestureDetector(
+                  Material(
+                    color: AppColors.transparent,
+                    child: InkWell(
                       onTap: () async {
                         final picked = await CustomRangePicker.onShow(
                           context,
-                          controller.tabIndex == 0 ? controller.selectedPaymentDateRange : controller.selectedCoinDateRange,
+                          isPaymentTab
+                              ? controller.selectedPaymentDateRange
+                              : controller.selectedCoinDateRange,
                         );
                         if (picked != null) {
-                          controller.applyDateFilter(picked.start, picked.end);
+                          await controller.applyDateFilter(
+                            picked.start,
+                            picked.end,
+                          );
                         }
                       },
+                      borderRadius: BorderRadius.circular(14),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
                         decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.lightGrey),
-                          borderRadius: BorderRadius.circular(8),
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(14),
+                          border:
+                              Border.all(color: AppColors.redesignSoftBorder),
                         ),
                         child: Row(
                           children: [
-                            Text(
-                              displayText,
-                              style: AppFontStyle.fontStyleW500(fontSize: 14, fontColor: AppColors.black),
+                            Icon(
+                              Icons.calendar_month_outlined,
+                              size: 16,
+                              color: AppColors.redesignMutedText,
                             ),
-                            Icon(Icons.keyboard_arrow_down_rounded, size: 20, color: AppColors.black),
+                            const SizedBox(width: 6),
+                            Text(
+                              rangeText,
+                              style: AppFontStyle.fontStyleW600(
+                                fontSize: 13,
+                                fontColor: AppColors.redesignBrandDark,
+                              ),
+                            ),
+                            const SizedBox(width: 3),
+                            Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              size: 18,
+                              color: AppColors.redesignMutedText,
+                            ),
                           ],
                         ),
                       ),
-                    );
-                  },
-                ),
-                12.width,
-                Visibility(
-                  visible: (controller.tabIndex == 0 && controller.selectedPaymentDateRange != null) || (controller.tabIndex == 1 && controller.selectedCoinDateRange != null),
-                  child: GestureDetector(
-                    onTap: () {
-                      controller.clearDateFilter();
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.lightGrey),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Image.asset(
-                        AppAsset.filterClearIcon,
-                        height: 20,
-                        width: 20,
-                      ),
                     ),
                   ),
-                )
-              ],
-            ).paddingSymmetric(horizontal: 16),
-            16.height,
-          ],
+                  if (hasFilter) ...[
+                    const SizedBox(width: 8),
+                    Material(
+                      color: AppColors.transparent,
+                      child: InkWell(
+                        onTap: () async {
+                          await controller.clearDateFilter();
+                        },
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          height: 42,
+                          width: 42,
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border:
+                                Border.all(color: AppColors.redesignSoftBorder),
+                          ),
+                          child: Icon(
+                            Icons.close_rounded,
+                            size: 18,
+                            color: AppColors.redesignMutedText,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ],
+          ),
         );
       },
+    );
+  }
+}
+
+class _HistoryTab extends StatelessWidget {
+  const _HistoryTab({
+    required this.isSelected,
+    required this.title,
+    required this.onTap,
+  });
+
+  final bool isSelected;
+  final String title;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppColors.redesignBrandDark
+                : AppColors.transparent,
+            borderRadius: BorderRadius.circular(999),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            title,
+            style: AppFontStyle.fontStyleW700(
+              fontSize: 16,
+              fontColor:
+                  isSelected ? AppColors.white : AppColors.redesignMutedText,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -183,408 +364,439 @@ class CoinHistoryScreenTabBar extends StatelessWidget {
 class CoinHistoryScreenTabBarScreen extends StatelessWidget {
   const CoinHistoryScreenTabBarScreen({super.key});
 
+  String _coinTypeLabel(int type) {
+    switch (type) {
+      case 2:
+        return 'Subscription Purchase';
+      case 3:
+        return 'Private Audio Call';
+      case 4:
+        return 'Private Video Call';
+      case 5:
+        return 'Audio Call';
+      case 6:
+        return 'Video Call';
+      case 7:
+        return 'Withdrawal by Expert';
+      case 8:
+        return 'Admin Added Session Credit';
+      case 9:
+        return 'Admin Deducted Session Credit';
+      default:
+        return 'Log In Bonus';
+    }
+  }
+
+  IconData _coinTypeIcon(int type) {
+    switch (type) {
+      case 2:
+        return Icons.shopping_bag_outlined;
+      case 3:
+        return Icons.call_outlined;
+      case 4:
+        return Icons.videocam_outlined;
+      case 5:
+        return Icons.call_rounded;
+      case 6:
+        return Icons.videocam_rounded;
+      case 7:
+        return Icons.account_balance_wallet_outlined;
+      case 8:
+        return Icons.add_circle_outline_rounded;
+      case 9:
+        return Icons.remove_circle_outline_rounded;
+      default:
+        return Icons.card_giftcard_rounded;
+    }
+  }
+
+  bool _isIncome(CoinHistory item) {
+    if (item.isIncome != null) {
+      return item.isIncome!;
+    }
+
+    final type = item.type ?? 0;
+    return type == 1 || type == 2 || type == 8;
+  }
+
+  Widget _emptyView({required String subtitle}) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              AppAsset.noHistoryFound,
+              height: 190,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'No History Found',
+              style: AppFontStyle.fontStyleW700(
+                fontSize: 28,
+                fontColor: AppColors.redesignMutedText,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: AppFontStyle.fontStyleW500(
+                fontSize: 13,
+                fontColor: AppColors.redesignMutedText,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _paymentCard(Datum item) {
+    final currency = Database.settingApiModel?.data?.currency?.symbol ?? '';
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.redesignSoftBorder),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.02),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 44,
+            width: 44,
+            decoration: BoxDecoration(
+              color: AppColors.redesignSurfaceSoft,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              Icons.payments_outlined,
+              size: 22,
+              color: AppColors.redesignBrandDark,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.uniqueId?.trim().isNotEmpty == true
+                      ? item.uniqueId!.trim()
+                      : 'Transaction',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: 14,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  item.date ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: 11,
+                    fontColor: AppColors.redesignMutedText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.redesignSurfaceInput,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  item.paymentGateway ?? '-',
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 10,
+                    fontColor: AppColors.redesignMutedText,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                '+${item.userCoin ?? 0} ${EnumLocale.txtCoin.name.tr}',
+                style: AppFontStyle.fontStyleW700(
+                  fontSize: 12,
+                  fontColor: AppColors.redesignStatusSuccessDark,
+                ),
+              ),
+              Text(
+                '$currency${item.price ?? 0}',
+                style: AppFontStyle.fontStyleW700(
+                  fontSize: 14,
+                  fontColor: AppColors.redesignCoinText,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _coinCard(CoinHistory item) {
+    final type = item.type ?? 0;
+    final isIncome = _isIncome(item);
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.redesignSoftBorder),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 46,
+            width: 46,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppColors.redesignSurfaceSoft,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: type == 1 || type == 2
+                  ? CustomProfileImage(
+                      image: Database.loginUserProfilePic,
+                    )
+                  : CustomProfileImage(
+                      image: item.receiverImage ?? '',
+                    ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  (type == 1 || type == 2)
+                      ? Database.loginUserName
+                      : (item.receiverName ?? ''),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: 15,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Icon(
+                      _coinTypeIcon(type),
+                      size: 13,
+                      color: AppColors.redesignMutedText,
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: Text(
+                        _coinTypeLabel(type),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppFontStyle.fontStyleW500(
+                          fontSize: 11,
+                          fontColor: AppColors.redesignMutedText,
+                        ),
+                      ),
+                    ),
+                    if (!(type == 1 ||
+                            type == 2 ||
+                            type == 7 ||
+                            type == 8 ||
+                            type == 9) &&
+                        (item.duration ?? '').trim().isNotEmpty)
+                      Text(
+                        item.duration ?? '',
+                        style: AppFontStyle.fontStyleW600(
+                          fontSize: 11,
+                          fontColor: AppColors.redesignCoinText,
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  item.date ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: 11,
+                    fontColor: AppColors.redesignMutedText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            '${isIncome ? '+' : '-'} ${item.userCoin ?? 0}',
+            style: AppFontStyle.fontStyleW700(
+              fontSize: 18,
+              fontColor: isIncome
+                  ? AppColors.redesignStatusSuccessDark
+                  : AppColors.redesignBrandRed,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CoinHistoryScreenController>(
       id: Constant.idTabChange,
       builder: (controller) {
+        if (controller.tabIndex == 0) {
+          if (controller.isLoading && controller.purchaseCoinList.isEmpty) {
+            return const Expanded(child: PaymentHistoryShimmer());
+          }
+
+          if (controller.purchaseCoinList.isEmpty) {
+            return Expanded(
+              child: RefreshIndicator(
+                color: AppColors.redesignBrandRed,
+                backgroundColor: AppColors.white,
+                onRefresh: controller.onPaymentRefresh,
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    const SizedBox(height: 70),
+                    _emptyView(
+                      subtitle:
+                          'Your payment history will appear here once you purchase credits.',
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          return Expanded(
+            child: RefreshIndicator(
+              color: AppColors.redesignBrandRed,
+              backgroundColor: AppColors.white,
+              onRefresh: controller.onPaymentRefresh,
+              child: ListView.separated(
+                physics: const AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
+                controller: controller.scrollController1,
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+                itemCount: controller.purchaseCoinList.length + 1,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 10),
+                itemBuilder: (context, index) {
+                  if (index == controller.purchaseCoinList.length) {
+                    return GetBuilder<CoinHistoryScreenController>(
+                      id: Constant.idPaginationListener,
+                      builder: (controller) {
+                        return Visibility(
+                          visible: controller.isPaginationLoading,
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+
+                  final item = controller.purchaseCoinList[index];
+                  return _paymentCard(item);
+                },
+              ),
+            ),
+          );
+        }
+
+        if (controller.isLoading && controller.coinHistoryList.isEmpty) {
+          return const Expanded(child: CoinHistoryShimmer());
+        }
+
+        if (controller.coinHistoryList.isEmpty) {
+          return Expanded(
+            child: RefreshIndicator(
+              color: AppColors.redesignBrandRed,
+              backgroundColor: AppColors.white,
+              onRefresh: controller.onRefresh,
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: [
+                  const SizedBox(height: 70),
+                  _emptyView(
+                    subtitle:
+                        'Your session credit ledger will appear here after activity.',
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
         return Expanded(
-          child: controller.tabIndex == 0
-              ? controller.purchaseCoinPlanModel?.data?.isEmpty == true
-                  ? SizedBox(
-                      height: 100,
-                      child: Image.asset(
-                        AppAsset.noHistoryFound,
-                      )).paddingAll(90)
-                  : paymentHistoryList(controller)
-              : (controller.coinHistoryModel!.data!.isEmpty || controller.coinHistoryList.isEmpty)
-                  ? SizedBox(
-                      height: 100,
-                      child: Image.asset(
-                        AppAsset.noHistoryFound,
-                      )).paddingAll(6090)
-                  : coinHistoryList(controller),
+          child: RefreshIndicator(
+            color: AppColors.redesignBrandRed,
+            backgroundColor: AppColors.white,
+            onRefresh: controller.onRefresh,
+            child: ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
+              controller: controller.scrollController,
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+              itemCount: controller.coinHistoryList.length + 1,
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                if (index == controller.coinHistoryList.length) {
+                  return GetBuilder<CoinHistoryScreenController>(
+                    id: Constant.idPaginationListener,
+                    builder: (controller) {
+                      return Visibility(
+                        visible: controller.isPaginationLoading,
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+
+                final item = controller.coinHistoryList[index];
+                return _coinCard(item);
+              },
+            ),
+          ),
         );
       },
     );
-  }
-
-  Widget paymentHistoryList(CoinHistoryScreenController controller) {
-    return GetBuilder<CoinHistoryScreenController>(
-        id: Constant.idTabChange,
-        builder: (controller) {
-          return controller.isLoading
-              ? PaymentHistoryShimmer()
-              : Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(16),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black.withValues(alpha: 0.10),
-                        offset: Offset(0, 0),
-                        blurRadius: 14,
-                        spreadRadius: 0,
-                      ),
-                    ],
-                  ),
-                  child: RefreshIndicator(
-                    onRefresh: () async => controller.onPaymentRefresh(),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 5,
-                              child: Text(
-                                EnumLocale.txtDetails.name.tr,
-                                style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.profileMail),
-                              ),
-                            ),
-
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                EnumLocale.txtPaymentGetway.name.tr,
-                                style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.profileMail),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                EnumLocale.txtCoin.name.tr,
-                                style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.profileMail),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                EnumLocale.txtAmount.name.tr,
-                                style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.profileMail),
-                              ),
-                            ),
-                            // SizedBox(
-                            //   width: Get.width * 0.11,
-                            //   child: Text(
-                            //     EnumLocale.txtInvoice.name.tr,
-                            //     style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.profileMail),
-                            //   ),
-                            // ),
-                          ],
-                        ).paddingSymmetric(horizontal: 16, vertical: 14),
-                        Divider(
-                          color: AppColors.lightGrey,
-                          height: 0,
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: ListView.builder(
-                                  physics: AlwaysScrollableScrollPhysics(),
-                                  controller: controller.scrollController1,
-                                  itemCount: controller.purchaseCoinPlanModel?.data?.length,
-                                  itemBuilder: (context, index) {
-                                    final item = controller.purchaseCoinPlanModel?.data?[index];
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              flex: 5,
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    item?.uniqueId.toString() ?? '',
-                                                    style: AppFontStyle.fontStyleW600(
-                                                      fontSize: 14,
-                                                      fontColor: AppColors.black,
-                                                    ),
-                                                  ).paddingOnly(bottom: 3),
-                                                  Text(
-                                                    item?.date ?? '',
-                                                    style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.profileText),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 3,
-                                              child: Text(
-                                                textAlign: TextAlign.center,
-                                                item?.paymentGateway ?? '',
-                                                style: AppFontStyle.fontStyleW500(
-                                                  fontSize: 13,
-                                                  fontColor: AppColors.black,
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                                flex: 1,
-                                                child: Text(
-                                                  item?.userCoin.toString() ?? '',
-                                                  textAlign: TextAlign.center,
-                                                  style: AppFontStyle.fontStyleW600(fontSize: 13, fontColor: AppColors.black),
-                                                )),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Text(
-                                                textAlign: TextAlign.center,
-                                                "${Database.settingApiModel?.data?.currency?.symbol}${item?.price ?? ''}",
-                                                style: AppFontStyle.fontStyleW700(
-                                                  fontSize: 16,
-                                                  fontColor: AppColors.darkOrange,
-                                                ),
-                                              ),
-                                            ),
-                                            // SizedBox(
-                                            //   width: Get.width * 0.11,
-                                            //   child: Image.asset(
-                                            //     AppAsset.downloadIcon,
-                                            //     height: 23,
-                                            //     width: 23,
-                                            //   ).paddingOnly(left: Get.width * 0.02),
-                                            // ),
-                                          ],
-                                        ).paddingSymmetric(horizontal: 14, vertical: 14),
-                                        Divider(
-                                          color: AppColors.historyDivider,
-                                          height: 0,
-                                          thickness: 0.8,
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ),
-                              GetBuilder<CoinHistoryScreenController>(
-                                id: Constant.idPaginationListener,
-                                builder: (controller) => Visibility(
-                                  visible: controller.isPaginationLoading,
-                                  child: CircularProgressIndicator(color: AppColors.primary),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ).paddingOnly(left: 10, right: 10, top: 8);
-        });
-  }
-
-  Widget coinHistoryList(CoinHistoryScreenController controller) {
-    return GetBuilder<CoinHistoryScreenController>(
-        id: Constant.idTabChange,
-        builder: (controller) {
-          return controller.isLoading
-              ? CoinHistoryShimmer()
-              : Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(16),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black.withValues(alpha: 0.10),
-                        offset: Offset(0, 0),
-                        blurRadius: 14,
-                        spreadRadius: 0,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            EnumLocale.txtDetails.name.tr,
-                            style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.profileMail),
-                          ),
-                          Text(
-                            textAlign: TextAlign.center,
-                            EnumLocale.txtCoin.name.tr,
-                            style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.profileMail),
-                          ),
-                          // SizedBox(
-                          //   width: Get.width * 0.14,
-                          //   child: Text(
-                          //     textAlign: TextAlign.center,
-                          //     EnumLocale.txtCoin.name.tr,
-                          //     style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.profileMail),
-                          //   ),
-                          // ),
-                        ],
-                      ).paddingSymmetric(horizontal: 16, vertical: 14),
-                      Divider(
-                        color: AppColors.lightGrey,
-                        height: 0,
-                      ),
-                      Expanded(
-                        child: RefreshIndicator(
-                          onRefresh: () async => controller.onRefresh(),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: ListView.builder(
-                                  physics: AlwaysScrollableScrollPhysics(),
-                                  controller: controller.scrollController,
-                                  itemCount: controller.coinHistoryList.length, // Safe count
-                                  itemBuilder: (context, index) {
-                                    final item = controller.coinHistoryList[index];
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              flex: 3,
-                                              child: Row(
-                                                children: [
-                                                  SizedBox(
-                                                    height: 40,
-                                                    width: 40,
-                                                    child: ClipOval(
-                                                        child: CustomProfileImage(
-                                                      image: item.type == 1 || item.type == 2 ? Database.loginUserProfilePic : item.receiverImage ?? '',
-                                                    )),
-                                                  ).paddingOnly(right: 10),
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        item.type == 1 || item.type == 2 ? Database.loginUserName : item.receiverName ?? '',
-                                                        style: AppFontStyle.fontStyleW700(
-                                                          fontSize: 13,
-                                                          fontColor: AppColors.black,
-                                                        ),
-                                                      ).paddingOnly(bottom: 3),
-                                                      Row(
-                                                        children: [
-                                                          Image.asset(
-                                                            // item.type == 2
-                                                            //     ? AppAsset.coinPurchaseIcon
-                                                            //     : item.type == 3
-                                                            //         ? AppAsset.callIcon
-                                                            //         : item.type == 4
-                                                            //             ? AppAsset.videoCallIcon
-                                                            //             : item.type == 5
-                                                            //                 ? AppAsset.callIcon
-                                                            //                 : item.type == 6
-                                                            //                     ? AppAsset.videoCallIcon
-                                                            //                     : AppAsset.loginBonusIcon,
-                                                            item.type == 2
-                                                                ? AppAsset.coinPurchaseIcon
-                                                                : item.type == 3
-                                                                    ? AppAsset.callIcon
-                                                                    : item.type == 4
-                                                                        ? AppAsset.videoCallIcon
-                                                                        : item.type == 5
-                                                                            ? AppAsset.callIcon
-                                                                            : item.type == 6
-                                                                                ? AppAsset.videoCallIcon
-                                                                                : item.type == 7
-                                                                                    ? AppAsset.withdrawIcon // 🔹 NEW
-                                                                                    : item.type == 8
-                                                                                        ? AppAsset.addWalletCoin // 🔹 NEW
-                                                                                        : item.type == 9
-                                                                                            ? AppAsset.removeWalletCoin // 🔹 NEW
-                                                                                            : AppAsset.loginBonusIcon,
-                                                            color: AppColors.historyCallType,
-                                                            height: 12,
-                                                            width: 12,
-                                                            fit: BoxFit.fill,
-                                                          ).paddingOnly(right: 4),
-                                                          Text(
-                                                            item.type == 2
-                                                                ? "Subscription Purchase"
-                                                                : item.type == 3
-                                                                    ? "Private Audio Call"
-                                                                    : item.type == 4
-                                                                        ? "Private Video Call"
-                                                                        : item.type == 5
-                                                                      ? "Audio Call"
-                                                                            : item.type == 6
-                                                                        ? "Video Call"
-                                                                                : item.type == 7
-                                                                          ? "Withdrawal by Expert" // 🔹 NEW
-                                                                                    : item.type == 8
-                                                                                        ? "Admin Added Session Credit" // 🔹 NEW
-                                                                                        : item.type == 9
-                                                                                            ? "Admin Deducted Session Credit" // 🔹 NEW
-                                                                                            : "Log In Bonus",
-                                                            style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.historyCallType),
-                                                          ).paddingOnly(right: 6),
-                                                          Text(
-                                                            textAlign: TextAlign.center,
-                                                            (item.type == 1 || item.type == 2 || item.type == 7 || item.type == 8 || item.type == 9)
-                                                                ? ""
-                                                                : item.duration == null
-                                                                    ? ''
-                                                                    : "${item.duration}",
-                                                            style: AppFontStyle.fontStyleW600(
-                                                              fontSize: 11,
-                                                              fontColor: AppColors.darkOrange,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  textAlign: TextAlign.center,
-                                                  "${item.isIncome == true ? '+' : '-'} ${item.userCoin}",
-                                                  style: AppFontStyle.fontStyleW700(
-                                                    fontSize: 13,
-                                                    fontColor: item.isIncome == true ? AppColors.green : AppColors.red,
-                                                  ),
-                                                ).paddingOnly(bottom: 4),
-                                                Text(
-                                                  item.date.toString(),
-                                                  style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.profileMail),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ).paddingOnly(right: 14, bottom: 14, top: 14, left: 10),
-                                        Divider(
-                                          color: AppColors.historyDivider,
-                                          height: 0,
-                                          thickness: 0.8,
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ),
-                              GetBuilder<CoinHistoryScreenController>(
-                                id: Constant.idPaginationListener,
-                                builder: (controller) => Visibility(
-                                  visible: controller.isPaginationLoading,
-                                  child: CircularProgressIndicator(color: AppColors.primary),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ).paddingOnly(left: 10, right: 10, top: 8);
-        });
   }
 }

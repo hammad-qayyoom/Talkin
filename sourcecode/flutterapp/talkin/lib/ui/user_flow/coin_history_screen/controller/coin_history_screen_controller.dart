@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/ui/user_flow/coin_history_screen/api/coin_history_api.dart';
@@ -11,202 +9,201 @@ import 'package:talk_in/utils/utils.dart';
 
 class CoinHistoryScreenController extends GetxController {
   int tabIndex = 0;
+
   GetPurchaseCoinPlanModel? purchaseCoinPlanModel;
-  List<Datum> purchaseCoinList = [];
+  final List<Datum> purchaseCoinList = <Datum>[];
+
   CoinHistoryModel? coinHistoryModel;
-  List<CoinHistory> coinHistoryList = [];
+  final List<CoinHistory> coinHistoryList = <CoinHistory>[];
+
   bool isLoading = false;
   bool isPaginationLoading = false;
-  ScrollController scrollController = ScrollController();
-  ScrollController scrollController1 = ScrollController();
+
+  bool hasMorePaymentData = true;
+  bool hasMoreCoinData = true;
+
+  final ScrollController scrollController = ScrollController();
+  final ScrollController scrollController1 = ScrollController();
+
   DateTimeRange? selectedCoinDateRange;
   DateTimeRange? selectedPaymentDateRange;
+
   @override
   void onInit() {
-    init();
     super.onInit();
+    _init();
   }
 
-  init() async {
-    log(")))))))))))))))))))))))))))))))))))))))))))");
+  Future<void> _init() async {
     scrollController.addListener(onCoinHistoryPagination);
     scrollController1.addListener(onPaymentHistoryPagination);
-    CoinHistoryApi.startPagination = 0;
-    PurchaseCoinGetPlanApi.startPagination = 0;
 
-    await paymentHistory();
-    await coinHistory();
+    await Future.wait([
+      _fetchPaymentHistory(reset: true),
+      _fetchCoinHistory(reset: true),
+    ]);
+  }
+
+  Future<void> _fetchPaymentHistory({required bool reset}) async {
+    if (reset) {
+      PurchaseCoinGetPlanApi.startPagination = 0;
+      hasMorePaymentData = true;
+      isLoading = true;
+      update([Constant.idTabChange]);
+    } else {
+      if (isPaginationLoading || !hasMorePaymentData) {
+        return;
+      }
+      isPaginationLoading = true;
+      update([Constant.idPaginationListener]);
+    }
+
+    final range = selectedPaymentDateRange;
+
+    try {
+      final data = await PurchaseCoinGetPlanApi.callApi(
+        startDate: range != null ? Utils.formatDateToApi(range.start) : 'All',
+        endDate: range != null ? Utils.formatDateToApi(range.end) : 'All',
+      );
+
+      final items = data?.data ?? <Datum>[];
+
+      purchaseCoinPlanModel = data ?? purchaseCoinPlanModel;
+
+      if (reset) {
+        purchaseCoinList.clear();
+      }
+
+      purchaseCoinList.addAll(items);
+      hasMorePaymentData =
+          items.length >= PurchaseCoinGetPlanApi.limitPagination;
+    } finally {
+      if (reset) {
+        isLoading = false;
+        update([Constant.idTabChange]);
+      } else {
+        isPaginationLoading = false;
+        update([Constant.idPaginationListener, Constant.idTabChange]);
+      }
+    }
+  }
+
+  Future<void> _fetchCoinHistory({required bool reset}) async {
+    if (reset) {
+      CoinHistoryApi.startPagination = 0;
+      hasMoreCoinData = true;
+      isLoading = true;
+      update([Constant.idTabChange]);
+    } else {
+      if (isPaginationLoading || !hasMoreCoinData) {
+        return;
+      }
+      isPaginationLoading = true;
+      update([Constant.idPaginationListener]);
+    }
+
+    final range = selectedCoinDateRange;
+
+    try {
+      final data = await CoinHistoryApi.callApi(
+        startDate: range != null ? Utils.formatDateToApi(range.start) : 'All',
+        endDate: range != null ? Utils.formatDateToApi(range.end) : 'All',
+      );
+
+      final items = data?.data ?? <CoinHistory>[];
+
+      coinHistoryModel = data ?? coinHistoryModel;
+
+      if (reset) {
+        coinHistoryList.clear();
+      }
+
+      coinHistoryList.addAll(items);
+      hasMoreCoinData = items.length >= CoinHistoryApi.limitPagination;
+    } finally {
+      if (reset) {
+        isLoading = false;
+        update([Constant.idTabChange]);
+      } else {
+        isPaginationLoading = false;
+        update([Constant.idPaginationListener, Constant.idTabChange]);
+      }
+    }
   }
 
   void changeTab(int index) {
     tabIndex = index;
     update([Constant.idTabChange]);
+
+    if (index == 0 && purchaseCoinList.isEmpty && !isLoading) {
+      onPaymentRefresh();
+    }
+
+    if (index == 1 && coinHistoryList.isEmpty && !isLoading) {
+      onRefresh();
+    }
   }
 
-  /// get payment history
-  paymentHistory() async {
-    isLoading = true;
-    // update([Constant.idCoinHistory, Constant.idPaymentHistory]);
-    update([Constant.idTabChange]);
-
-    purchaseCoinPlanModel = await PurchaseCoinGetPlanApi.callApi(endDate: "All", startDate: "All");
-    purchaseCoinList.clear();
-    purchaseCoinList.addAll((purchaseCoinPlanModel?.data ?? []));
-
-    isLoading = false;
-    update([Constant.idTabChange]);
-
-    // update([Constant.idCoinHistory, Constant.idPaymentHistory]);
-  }
-
-  /// get coin history
-  coinHistory() async {
-    isLoading = true;
-    // update([Constant.idCoinHistory, Constant.idPaymentHistory]);
-    update([Constant.idTabChange]);
-
-    coinHistoryModel = await CoinHistoryApi.callApi(endDate: "All", startDate: "All");
-    coinHistoryList.clear();
-
-    coinHistoryList.addAll((coinHistoryModel?.data ?? []));
-
-    isLoading = false;
-    update([Constant.idTabChange]);
-  }
-
-  /// coin history refresh
   Future<void> onRefresh() async {
-    CoinHistoryApi.startPagination = 0;
-    final range = selectedCoinDateRange;
-    coinHistoryModel = await CoinHistoryApi.callApi(
-      startDate: range != null ? Utils.formatDateToApi(range.start) : "All",
-      endDate: range != null ? Utils.formatDateToApi(range.end) : "All",
-    );
-    coinHistoryList.clear();
-    coinHistoryList.addAll((coinHistoryModel?.data ?? []));
-    update([Constant.idTabChange]);
+    await _fetchCoinHistory(reset: true);
   }
 
-  /// purchase coin plan history refresh
   Future<void> onPaymentRefresh() async {
-    PurchaseCoinGetPlanApi.startPagination = 0;
-    final range = selectedPaymentDateRange;
-    purchaseCoinPlanModel = await PurchaseCoinGetPlanApi.callApi(
-      startDate: range != null ? Utils.formatDateToApi(range.start) : "All",
-      endDate: range != null ? Utils.formatDateToApi(range.end) : "All",
-    );
-    purchaseCoinList.clear();
-    purchaseCoinList.addAll((purchaseCoinPlanModel?.data ?? []));
-    update([Constant.idTabChange]);
+    await _fetchPaymentHistory(reset: true);
   }
 
-  /// coin history pagination
   Future<void> onCoinHistoryPagination() async {
-    if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-      isPaginationLoading = true;
-      update([Constant.idPaginationListener]);
+    if (!scrollController.hasClients || isLoading) {
+      return;
+    }
 
-      final result = await CoinHistoryApi.callApi(
-        endDate: selectedCoinDateRange != null ? Utils.formatDateToApi(selectedCoinDateRange!.end) : "All",
-        startDate: selectedCoinDateRange != null ? Utils.formatDateToApi(selectedCoinDateRange!.start) : "All",
-      );
+    final maxScroll = scrollController.position.maxScrollExtent;
+    final current = scrollController.position.pixels;
 
-      final newItems = result?.data ?? [];
-
-      if (newItems.isNotEmpty) {
-        coinHistoryList.addAll(newItems);
-      }
-
-      isPaginationLoading = false;
-      update([Constant.idPaginationListener, Constant.idTabChange]);
+    if (current >= maxScroll - 40) {
+      await _fetchCoinHistory(reset: false);
     }
   }
 
-  /// payment history pagination
   Future<void> onPaymentHistoryPagination() async {
-    if (scrollController1.position.pixels == scrollController1.position.maxScrollExtent) {
-      isPaginationLoading = true;
-      update([Constant.idPaginationListener]);
+    if (!scrollController1.hasClients || isLoading) {
+      return;
+    }
 
-      final result = await PurchaseCoinGetPlanApi.callApi(
-        endDate: selectedPaymentDateRange != null ? Utils.formatDateToApi(selectedPaymentDateRange!.end) : "All",
-        startDate: selectedPaymentDateRange != null ? Utils.formatDateToApi(selectedPaymentDateRange!.start) : "All",
-      );
+    final maxScroll = scrollController1.position.maxScrollExtent;
+    final current = scrollController1.position.pixels;
 
-      final newItems = result?.data ?? [];
-      if (newItems.isNotEmpty) {
-        purchaseCoinList.addAll(newItems);
-      }
-
-      isPaginationLoading = false;
-      update([Constant.idPaginationListener, Constant.idTabChange]);
+    if (current >= maxScroll - 40) {
+      await _fetchPaymentHistory(reset: false);
     }
   }
 
-  /// apply date filter
   Future<void> applyDateFilter(DateTime startDate, DateTime endDate) async {
     if (tabIndex == 0) {
       selectedPaymentDateRange = DateTimeRange(start: startDate, end: endDate);
-      purchaseCoinList.clear();
-      isLoading = true;
-      update([Constant.idTabChange]);
-      PurchaseCoinGetPlanApi.startPagination = 0;
-
-      purchaseCoinPlanModel = await PurchaseCoinGetPlanApi.callApi(
-        startDate: Utils.formatDateToApi(startDate),
-        endDate: Utils.formatDateToApi(endDate),
-      );
-      purchaseCoinList.addAll((purchaseCoinPlanModel?.data ?? []));
+      await _fetchPaymentHistory(reset: true);
     } else {
       selectedCoinDateRange = DateTimeRange(start: startDate, end: endDate);
-      coinHistoryList.clear();
-      isLoading = true;
-      update([Constant.idTabChange]);
-      CoinHistoryApi.startPagination = 0;
-
-      coinHistoryModel = await CoinHistoryApi.callApi(
-        startDate: Utils.formatDateToApi(startDate),
-        endDate: Utils.formatDateToApi(endDate),
-      );
-      coinHistoryList.addAll((coinHistoryModel?.data ?? []));
+      await _fetchCoinHistory(reset: true);
     }
-
-    isLoading = false;
-    update([Constant.idTabChange]);
   }
 
-  /// clear filter
-  void clearDateFilter() async {
+  Future<void> clearDateFilter() async {
     if (tabIndex == 0) {
-      /// Clear payment date filter
-      isLoading = true;
       selectedPaymentDateRange = null;
-      purchaseCoinList.clear();
-      update([Constant.idTabChange]);
-
-      PurchaseCoinGetPlanApi.startPagination = 0;
-
-      purchaseCoinPlanModel = await PurchaseCoinGetPlanApi.callApi(
-        startDate: "All",
-        endDate: "All",
-      );
-      purchaseCoinList.addAll((purchaseCoinPlanModel?.data ?? []));
+      await _fetchPaymentHistory(reset: true);
     } else {
-      /// Clear coin date filter
-      isLoading = true;
       selectedCoinDateRange = null;
-      coinHistoryList.clear();
-      update([Constant.idTabChange]);
-      CoinHistoryApi.startPagination = 0;
-
-      coinHistoryModel = await CoinHistoryApi.callApi(
-        startDate: "All",
-        endDate: "All",
-      );
-      coinHistoryList.addAll((coinHistoryModel?.data ?? []));
+      await _fetchCoinHistory(reset: true);
     }
+  }
 
-    isLoading = false;
-    update([Constant.idTabChange]);
+  @override
+  void onClose() {
+    scrollController.removeListener(onCoinHistoryPagination);
+    scrollController1.removeListener(onPaymentHistoryPagination);
+    scrollController.dispose();
+    scrollController1.dispose();
+    super.onClose();
   }
 }

@@ -117,6 +117,37 @@ class AppColors {
   static Color redesignBottomBarUnselected = const Color(0xFF8B8E98);
   static Color redesignCoinText = const Color(0xFFE18D00);
 
+  // Semantic tokens for redesigned bottom sheets.
+  static Color redesignSheetBg = white;
+  static Color redesignSheetHandle = redesignSoftBorder;
+  static Color redesignSheetTitle = redesignBrandDark;
+  static Color redesignSheetCloseBorder = redesignBrandDark;
+  static Color redesignSheetCloseIcon = redesignBrandDark;
+  static Color redesignSheetDivider = redesignSoftBorder;
+  static Color redesignSheetOptionTitle = redesignBrandDark;
+  static Color redesignSheetOptionChevron = redesignMutedText;
+  static Color redesignSheetBlockIcon = redesignBrandRed;
+  static Color redesignSheetBlockBg = redesignAccentSoftBg;
+  static Color redesignSheetReportIcon = redesignCoinText;
+  static Color redesignSheetReportBg = lightYellow;
+
+  static Color redesignReportOptionBg = redesignSurfaceNeutralAlt;
+  static Color redesignReportOptionSelectedBg = redesignAccentSoftBg;
+  static Color redesignReportOptionBorder = redesignSoftBorder;
+  static Color redesignReportOptionSelectedBorder = redesignBrandRed;
+  static Color redesignReportOptionText = redesignTextMeta;
+  static Color redesignReportOptionSelectedText = redesignBrandDark;
+  static Color redesignReportPrimaryButtonBg = redesignBrandRed;
+  static Color redesignReportPrimaryButtonText = white;
+  static Color redesignReportSecondaryButtonBg = white;
+  static Color redesignReportSecondaryButtonText = redesignBrandDark;
+  static Color redesignReportSecondaryButtonBorder = redesignBrandDark;
+  static Color redesignReportLoading = redesignBrandRed;
+  static Color redesignReportRadioActive = redesignBrandRed;
+  static Color redesignReportRadioInactive = transparent;
+  static Color redesignReportRadioBorderActive = white;
+  static Color redesignReportRadioBorderInactive = redesignMutedText;
+
   static Color languageContainer = const Color(0xffF6F4FB);
   static Color coinTileColor = const Color(0xffFFFDE3);
   static const Color transparent = Colors.transparent;

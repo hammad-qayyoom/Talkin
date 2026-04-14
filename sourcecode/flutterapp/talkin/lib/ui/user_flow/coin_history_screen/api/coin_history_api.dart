@@ -10,7 +10,7 @@ import 'package:talk_in/utils/firebse_access_token.dart';
 import 'package:talk_in/utils/utils.dart';
 
 class CoinHistoryApi {
-  static int startPagination = 1;
+  static int startPagination = 0;
   static int limitPagination = 20;
 
   static Future<CoinHistoryModel?> callApi({
@@ -20,12 +20,12 @@ class CoinHistoryApi {
     final token = await FirebaseAccessToken.onGet();
 
     Utils.showLog("Session Credit history Api Calling...");
-    startPagination += 1;
+    final nextPage = startPagination + 1;
 
     final Map<String, dynamic> queryParameters = {
       ApiParams.startDate: startDate,
       ApiParams.endDate: endDate,
-      ApiParams.start: startPagination.toString(),
+      ApiParams.start: nextPage.toString(),
       ApiParams.limit: limitPagination.toString(),
     };
 
@@ -51,6 +51,7 @@ class CoinHistoryApi {
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
+        startPagination = nextPage;
         return CoinHistoryModel.fromJson(jsonResponse);
       } else {
         throw Exception('Status code is not 200');

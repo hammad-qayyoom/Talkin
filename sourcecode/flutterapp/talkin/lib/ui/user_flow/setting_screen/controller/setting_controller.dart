@@ -18,7 +18,8 @@ class SettingController extends GetxController {
   // final GoogleSignIn _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? googleSignInAccountUser;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  bool isShowNotification = Database.fetchLoginUserProfileModel?.user?.isNotificationEnabled ?? false;
+  bool isShowNotification =
+      Database.fetchLoginUserProfileModel?.user?.isNotificationEnabled ?? false;
   FetchLoginUserProfileModel? fetchLoginUserProfileModel;
   DeleteUserResponseModel? deleteUserModel;
 
@@ -43,17 +44,20 @@ class SettingController extends GetxController {
     // API call to update permission
     final notificationUpdateModel = await UserNotificationUpdateApi.callApi();
 
-    if (notificationUpdateModel != null && notificationUpdateModel.status == true) {
+    if (notificationUpdateModel != null &&
+        notificationUpdateModel.status == true) {
       // Success, keep toggled value
       isShowNotification = currentValue;
     } else {
       // Failure, revert to previous value
       isShowNotification = !currentValue;
     }
-    fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(loginUserId: Database.loginUserFirebaseId, token: token ?? '');
+    fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(
+        loginUserId: Database.loginUserFirebaseId, token: token ?? '');
     Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
 
-    Database.fetchLoginUserProfileModel?.user?.isNotificationEnabled = isShowNotification;
+    Database.fetchLoginUserProfileModel?.user?.isNotificationEnabled =
+        isShowNotification;
 
     update(); // Trigger UI update after API call
   }
@@ -62,7 +66,8 @@ class SettingController extends GetxController {
   Future<void> onDeleteAccount() async {
     Get.back(); // Close Dialog...
 
-    Get.dialog(const LoadingWidget(), barrierDismissible: false); // Start Loading...
+    Get.dialog(const LoadingWidget(),
+        barrierDismissible: false); // Start Loading...
 
     deleteUserModel = await DeleteUserApi.callApi();
 
@@ -70,14 +75,14 @@ class SettingController extends GetxController {
 
     if (deleteUserModel?.status ?? false) {
       Database.onLogOut();
-      Utils.showLog(deleteUserModel?.message ?? "User account deleted successfully.");
+      Utils.showLog(
+          deleteUserModel?.message ?? "User account deleted successfully.");
     }
   }
 
   @override
   void onClose() {
-
-    Utils.onChangeStatusBar(brightness: Brightness.light);
+    Utils.onChangeStatusBar(brightness: Brightness.dark);
 
     super.onClose();
   }

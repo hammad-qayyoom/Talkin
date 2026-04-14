@@ -1,18 +1,14 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:talk_in/custom/app_bar/custom_app_bar.dart';
 import 'package:talk_in/custom/app_button/primary_app_button.dart';
 import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
 import 'package:talk_in/custom/custom_select_gender_bottom_sheet/custom_select_gender_bottom_sheet.dart';
 import 'package:talk_in/custom/text_field/custom_text_field.dart';
-import 'package:talk_in/custom/title/custom_title.dart';
 import 'package:talk_in/ui/user_flow/edit_profile_screen/controller/edit_profile_screen_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/constant.dart';
 import 'package:talk_in/utils/database.dart';
@@ -25,16 +21,63 @@ class EditProfileScreenAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(120),
-      child: CustomAppBar(
-        appBarColor: AppColors.lightPurple,
-        title: EnumLocale.txtMyProfile.name.tr,
-        showLeadingIcon: true,
-        onTap:() {
-          Utils.onChangeStatusBar(brightness: Brightness.light);
-          Get.back();
-        },
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(4, 0, 4, 10),
+      child: Row(
+        children: [
+          _HeaderIconButton(
+            icon: Icons.arrow_back_ios_new_rounded,
+            onTap: () {
+              Utils.onChangeStatusBar(brightness: Brightness.dark);
+              Get.back();
+            },
+          ),
+          const Spacer(),
+          Text(
+            EnumLocale.txtMyProfile.name.tr,
+            style: AppFontStyle.fontStyleW700(
+              fontSize: 34,
+              fontColor: AppColors.redesignBrandDark,
+            ),
+          ),
+          const Spacer(),
+          const SizedBox(height: 42, width: 42),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeaderIconButton extends StatelessWidget {
+  const _HeaderIconButton({
+    required this.icon,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          height: 42,
+          width: 42,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+          ),
+          child: Icon(
+            icon,
+            size: 20,
+            color: AppColors.redesignBrandDark,
+          ),
+        ),
       ),
     );
   }
@@ -43,149 +86,213 @@ class EditProfileScreenAppBar extends StatelessWidget {
 class EditProfileImageView extends StatelessWidget {
   const EditProfileImageView({super.key});
 
+  void _openImagePickerSheet(EditProfileController controller) {
+    Get.bottomSheet(
+      SafeArea(
+        top: false,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(28),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 10),
+              Container(
+                height: 5,
+                width: 44,
+                decoration: BoxDecoration(
+                  color: AppColors.redesignSoftBorder,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                EnumLocale.changeYourImage.name.tr,
+                style: AppFontStyle.fontStyleW700(
+                  fontSize: 18,
+                  fontColor: AppColors.redesignBrandDark,
+                ),
+              ),
+              const SizedBox(height: 10),
+              _ImageActionTile(
+                icon: Icons.photo_camera_outlined,
+                title: EnumLocale.txtTakeAphoto.name.tr,
+                onTap: () {
+                  Get.back();
+                  controller.takePhoto();
+                },
+              ),
+              _ImageActionTile(
+                icon: Icons.image_outlined,
+                title: EnumLocale.txtChooseFromYourFile.name.tr,
+                onTap: () {
+                  Get.back();
+                  controller.getImageFromGallery();
+                },
+                showDivider: false,
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        ),
+      ),
+      backgroundColor: AppColors.transparent,
+      isScrollControlled: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        GetBuilder<EditProfileController>(
-          builder: (controller) {
-            final String? localImagePath = controller.pickImage;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.redesignSoftBorder),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.05),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: GetBuilder<EditProfileController>(
+        builder: (controller) {
+          final String? localImagePath = controller.pickImage;
 
-            return Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColors.appColor),
-                shape: BoxShape.circle,
-              ),
-              child: Container(
-                // clipBehavior: Clip.hardEdge,
-                height: Get.height * 0.1,
-                width: Get.height * 0.1,
+          return Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(3),
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white),
-                  color: AppColors.lightGrey,
                   shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.redesignBrandRed.withValues(alpha: 0.28),
+                    width: 2,
+                  ),
                 ),
-                child: ClipOval(
-                  child: localImagePath != null
-                      ? Image.file(
-                          File(localImagePath),
-                          fit: BoxFit.cover,
-                        )
-                      : CustomProfileImage(
-                          image: Database.loginUserProfilePic,
-                        ),
+                child: Container(
+                  height: 116,
+                  width: 116,
+                  decoration: BoxDecoration(
+                    color: AppColors.redesignSurfaceGrey100,
+                    shape: BoxShape.circle,
+                  ),
+                  child: ClipOval(
+                    child: localImagePath != null
+                        ? Image.file(
+                            File(localImagePath),
+                            fit: BoxFit.cover,
+                          )
+                        : CustomProfileImage(
+                            image: Database.loginUserProfilePic,
+                          ),
+                  ),
                 ),
-              ).paddingAll(1),
-            ).paddingOnly(top: 34, bottom: 16);
-          },
-        ),
-        GestureDetector(
-          onTap: () {
-            Get.defaultDialog(
-                backgroundColor: AppColors.white,
-                title: EnumLocale.changeYourImage.name.tr,
-                titlePadding: const EdgeInsets.only(top: 30),
-                titleStyle: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.appColor),
-                content: GetBuilder<EditProfileController>(
-                  builder: (controller) {
-                    return Column(
+              ),
+              const SizedBox(height: 14),
+              Material(
+                color: AppColors.transparent,
+                child: InkWell(
+                  onTap: () => _openImagePickerSheet(controller),
+                  borderRadius: BorderRadius.circular(999),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(color: AppColors.redesignBrandDark),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Divider(
-                            thickness: 1,
-                            color: Colors.grey.shade100,
-                          ),
+                        Icon(
+                          Icons.cloud_upload_outlined,
+                          size: 18,
+                          color: AppColors.redesignBrandDark,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.back();
-                            controller.takePhoto();
-                          },
-                          child: Container(
-                            height: 60,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                                  child: Image(
-                                    color: AppColors.appColor,
-                                    image: const AssetImage(AppAsset.cameraFlipIcon),
-                                    height: 20,
-                                  ),
-                                ),
-                                Text(
-                                  EnumLocale.txtTakeAphoto.name.tr,
-                                  style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: AppColors.appColor),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.back();
-                              controller.getImageFromGallery();
-                            },
-                            child: Container(
-                              height: 60,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                                    child: Image(
-                                      color: AppColors.appColor,
-                                      image: const AssetImage(AppAsset.chatImageIcon),
-                                      height: 20,
-                                    ),
-                                  ),
-                                  Text(
-                                    EnumLocale.txtChooseFromYourFile.name.tr,
-                                    style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: AppColors.appColor),
-                                  )
-                                ],
-                              ),
-                            ),
+                        const SizedBox(width: 8),
+                        Text(
+                          EnumLocale.txtChangeImage.name.tr,
+                          style: AppFontStyle.fontStyleW700(
+                            fontSize: 14,
+                            fontColor: AppColors.redesignBrandDark,
                           ),
                         ),
                       ],
-                    );
-                  },
-                ));
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: AppColors.appColor,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  AppAsset.uploadImageIcon,
-                  height: 22,
-                  width: 22,
+                    ),
+                  ),
                 ),
-                Text(
-                  EnumLocale.txtChangeImage.name.tr,
-                  style: AppFontStyle.fontStyleW700(fontSize: 12, fontColor: AppColors.appColor),
-                ).paddingOnly(left: 6, right: 6)
-              ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ImageActionTile extends StatelessWidget {
+  const _ImageActionTile({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+    this.showDivider = true,
+  });
+
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+  final bool showDivider;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Material(
+          color: AppColors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                children: [
+                  Icon(
+                    icon,
+                    size: 22,
+                    color: AppColors.redesignBrandRed,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: AppFontStyle.fontStyleW600(
+                        fontSize: 15,
+                        fontColor: AppColors.redesignBrandDark,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
+        if (showDivider)
+          Divider(
+            color: AppColors.redesignSoftBorder,
+            height: 1,
+            indent: 16,
+            endIndent: 16,
+          ),
       ],
     );
   }
@@ -194,282 +301,304 @@ class EditProfileImageView extends StatelessWidget {
 class EditProfileEditInfoView extends StatelessWidget {
   const EditProfileEditInfoView({super.key});
 
+  Widget _sectionLabel(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 9),
+      child: Text(
+        title,
+        style: AppFontStyle.fontStyleW700(
+          fontSize: 16,
+          fontColor: AppColors.redesignBrandDark,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<EditProfileController>(
       builder: (logic) {
-        return Form(
-          // key: logic.formKey,
-          child: Column(
-            children: [
-              CustomTitle(
-                title: EnumLocale.txtNickName.name.tr,
-                method: CustomTextField(
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(14, 16, 14, 6),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.04),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Form(
+            key: logic.formKey,
+            child: Column(
+              children: [
+                _sectionLabel(EnumLocale.txtNickName.name.tr),
+                CustomTextField(
                   filled: true,
                   hintText: EnumLocale.txtAddYourNickName.name.tr,
                   controller: logic.nickNameCnt,
-                  fillColor: AppColors.white,
-                  cursorColor: AppColors.black,
-                  fontColor: AppColors.black,
-                  fontSize: 15,
+                  borderColor: AppColors.redesignSoftBorder,
+                  cursorColor: AppColors.redesignBrandDark,
+                  fontColor: AppColors.redesignBrandDark,
+                  hintTextColor: AppColors.redesignMutedText,
+                  fontSize: 16,
                   textInputAction: TextInputAction.next,
-                  // inputFormatters: [UpperCaseTextFormatter()],
                 ),
-              ).paddingOnly(bottom: 30, top: 30),
-              CustomTitle(
-                title: EnumLocale.txtFullName.name.tr,
-                method: CustomTextField(
+                const SizedBox(height: 18),
+                _sectionLabel(EnumLocale.txtFullName.name.tr),
+                CustomTextField(
                   filled: true,
                   hintText: EnumLocale.txtAddYOurFullName.name.tr,
                   controller: logic.nameCnt,
-                  fillColor: AppColors.white,
-                  cursorColor: AppColors.black,
-                  fontColor: AppColors.black,
-                  fontSize: 15,
+                  borderColor: AppColors.redesignSoftBorder,
+                  cursorColor: AppColors.redesignBrandDark,
+                  fontColor: AppColors.redesignBrandDark,
+                  hintTextColor: AppColors.redesignMutedText,
+                  fontSize: 16,
                   textInputAction: TextInputAction.next,
                 ),
-              ).paddingOnly(bottom: 30),
-              if (Database.loginType != 2)
-                CustomTitle(
-                  title: EnumLocale.txtEnterMail.name.tr,
-                  method: CustomTextField(
-                      filled: true,
-                      hintText: EnumLocale.txtEnterYourMail.name.tr,
-                      controller: logic.emailCnt,
-                      fillColor: AppColors.white,
-                      cursorColor: AppColors.black,
-                      fontColor: AppColors.black,
-                      fontSize: 15,
-                      textInputAction: TextInputAction.next,
-                      textInputType: TextInputType.emailAddress,
-                      readOnly: Database.loginType == 1 || Database.loginType == 4|| Database.loginType == 5),
-                ).paddingOnly(bottom: 30),
-              GetBuilder<EditProfileController>(
-                // init: DatePickerController(),
-                builder: (controller) {
-                  return CustomTitle(
-                    title: EnumLocale.txtDateOfBirth.name.tr,
-                    method: CustomTextField(
-                      filled: true,
-                      hintText: "DD / MM / YYYY",
-                      controller: controller.dateController,
-                      fillColor: AppColors.white,
-                      cursorColor: AppColors.black,
-                      fontColor: AppColors.black,
-                      fontSize: 15,
-                      textInputAction: TextInputAction.next,
-                      maxLines: 1,
-                      readOnly: true,
-                      onTap: () => controller.selectDate(context),
-                    ),
-                  ).paddingOnly(bottom: 30);
-                },
-              ),
-              CustomTitle(
-                title: EnumLocale.txtGenderIdentity.name.tr,
-                method: GetBuilder<EditProfileController>(
-                  // init: SelectGenderScreenController(), // <<=== ADD THIS
-
-                  builder: (logic) {
+                const SizedBox(height: 18),
+                if (Database.loginType != 2) ...[
+                  _sectionLabel(EnumLocale.txtEnterMail.name.tr),
+                  CustomTextField(
+                    filled: true,
+                    hintText: EnumLocale.txtEnterYourMail.name.tr,
+                    controller: logic.emailCnt,
+                    borderColor: AppColors.redesignSoftBorder,
+                    cursorColor: AppColors.redesignBrandDark,
+                    fontColor: AppColors.redesignBrandDark,
+                    hintTextColor: AppColors.redesignMutedText,
+                    fontSize: 16,
+                    textInputAction: TextInputAction.next,
+                    textInputType: TextInputType.emailAddress,
+                    readOnly: Database.loginType == 1 ||
+                        Database.loginType == 4 ||
+                        Database.loginType == 5,
+                  ),
+                  const SizedBox(height: 18),
+                ],
+                _sectionLabel(EnumLocale.txtDateOfBirth.name.tr),
+                CustomTextField(
+                  filled: true,
+                  hintText: 'DD / MM / YYYY',
+                  controller: logic.dateController,
+                  borderColor: AppColors.redesignSoftBorder,
+                  cursorColor: AppColors.redesignBrandDark,
+                  fontColor: AppColors.redesignBrandDark,
+                  hintTextColor: AppColors.redesignMutedText,
+                  fontSize: 16,
+                  textInputAction: TextInputAction.next,
+                  maxLines: 1,
+                  readOnly: true,
+                  onTap: () => logic.selectDate(context),
+                ),
+                const SizedBox(height: 18),
+                _sectionLabel(EnumLocale.txtGenderIdentity.name.tr),
+                GetBuilder<EditProfileController>(
+                  builder: (genderLogic) {
                     return CustomTextField(
                       onTap: () {
-                        // Get.toNamed(AppRoutes.selectGenderScreen);
                         Get.bottomSheet(
                           const CustomSelectGenderBottomSheet(),
                           isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: AppColors.transparent,
                         );
                       },
                       filled: true,
-                      controller: logic.genderCnt,
-                      fillColor: AppColors.white,
-                      cursorColor: AppColors.black,
-                      fontColor: AppColors.black,
-                      fontSize: 15,
+                      controller: genderLogic.genderCnt,
+                      borderColor: AppColors.redesignSoftBorder,
+                      cursorColor: AppColors.redesignBrandDark,
+                      fontColor: AppColors.redesignBrandDark,
+                      hintTextColor: AppColors.redesignMutedText,
+                      fontSize: 16,
                       textInputAction: TextInputAction.next,
                       maxLines: 1,
                       readOnly: true,
-                      suffixIcon: SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: RotatedBox(
-                          quarterTurns: 2,
-                          child: Image.asset(
-                            AppAsset.backArrowIcon,
-                            height: 8,
-                            width: 8,
-                          ).paddingAll(17),
-                        ),
+                      suffixIcon: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: AppColors.redesignMutedText,
+                        size: 26,
                       ),
                     );
                   },
                 ),
-              ).paddingOnly(bottom: 30),
-              CustomTitle(
-                title: EnumLocale.txtSelectCountry.name.tr,
-                method: GetBuilder<EditProfileController>(
+                const SizedBox(height: 18),
+                _sectionLabel(EnumLocale.txtSelectCountry.name.tr),
+                GetBuilder<EditProfileController>(
                   id: Constant.idChangeCountry,
-                  builder: (logic) {
-                    return GestureDetector(
-                      onTap: () {
-                        debugPrint("GestureDetector TAPPED");
+                  builder: (countryLogic) {
+                    final selectedCountry =
+                        countryLogic.countryController.text.trim();
+                    final selectedFlag = countryLogic.flagController.text;
 
-                        logic.onChangeCountry(context);
-                      },
-                      child: Container(
-                        height: 55,
-                        width: Get.width,
-                        // padding: const EdgeInsets.only(left: 20),
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          border: Border.all(color: AppColors.black),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: logic.countryController.text.isEmpty
-                            ? Row(
-                                children: [
-                                  Text(
-                                    EnumLocale.txtSelectCountry.name.tr,
-                                    style: AppFontStyle.fontStyleW500(
-                                      fontSize: 13,
-                                      fontColor: AppColors.black.withValues(alpha: 0.2),
-                                    ),
-                                  ).paddingOnly(left: 10),
-                                ],
-                              )
-                            : Row(
-                                children: [
-                                  Text(
-                                    logic.flagController.text,
-                                    style: AppFontStyle.fontStyleW500(fontColor: AppColors.black, fontSize: 20),
-                                  ),
-                                  10.width,
-                                  Text(
-                                    logic.countryController.text,
-                                    style: AppFontStyle.fontStyleW600(fontColor: AppColors.black, fontSize: 15),
-                                  ),
-                                  const Spacer(),
-                                  Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                                      child: Icon(
-                                        Icons.keyboard_arrow_down_sharp,
-                                        color: AppColors.black,
-                                        size: 18,
-                                      )),
-                                  10.width,
-                                ],
-                              ).paddingOnly(left: 10),
-                      ),
-                    );
-                  },
-                ).paddingOnly(bottom: 30),
-              ),
-              CustomTitle(
-                title: EnumLocale.txtEnterMobileNumber.name.tr,
-                method: GetBuilder<EditProfileController>(
-                  builder: (logic) {
-                    return Form(
-                      key: logic.formKey,
-                      child: IntlPhoneField(
-                        flagsButtonPadding: const EdgeInsets.all(8),
-                        flagsButtonMargin: const EdgeInsets.only(right: 13),
-                        dropdownIconPosition: IconPosition.trailing,
-                        controller: logic.mobileNumberCnt,
-                        obscureText: false,
-                        validator: (value) {
-                          if (value == null) {
-                            return EnumLocale.desEnterMobile.name.tr;
-                          }
-                          return null;
+                    return Material(
+                      color: AppColors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          countryLogic.onChangeCountry(context);
                         },
-                        style: AppFontStyle.fontStyleW600(
-                          // Style for phone number text
-                          fontSize: 14, // Increased font size here
-                          fontColor: AppColors.appColor,
-                        ),
-                        cursorColor: AppColors.appColor,
-                        dropdownTextStyle: AppFontStyle.fontStyleW700(
-                          fontSize: 16,
-                          fontColor: AppColors.black,
-                        ),
-                        pickerDialogStyle: PickerDialogStyle(
-                          countryCodeStyle: AppFontStyle.fontStyleW700(
-                            fontSize: 13,
-                            fontColor: AppColors.appColor,
-                          ),
-                          countryNameStyle: AppFontStyle.fontStyleW700(
-                            fontSize: 13,
-                            fontColor: AppColors.appColor,
-                          ),
-                          searchFieldCursorColor: AppColors.appColor,
-                          searchFieldInputDecoration: InputDecoration(
-                            hintStyle: AppFontStyle.fontStyleW400(
-                              fontSize: 14,
-                              fontColor: AppColors.grey,
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          height: 55,
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            border: Border.all(
+                              color: AppColors.redesignSoftBorder,
                             ),
-                            hintText: EnumLocale.txtSearchCountryCode.name.tr,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              if (selectedCountry.isEmpty)
+                                Text(
+                                  EnumLocale.txtSelectCountry.name.tr,
+                                  style: AppFontStyle.fontStyleW500(
+                                    fontSize: 14,
+                                    fontColor: AppColors.redesignMutedText,
+                                  ),
+                                )
+                              else ...[
+                                Text(
+                                  selectedFlag,
+                                  style: AppFontStyle.fontStyleW500(
+                                    fontColor: AppColors.redesignBrandDark,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    selectedCountry,
+                                    style: AppFontStyle.fontStyleW600(
+                                      fontColor: AppColors.redesignBrandDark,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              const Spacer(),
+                              Icon(
+                                Icons.keyboard_arrow_down_rounded,
+                                color: AppColors.redesignMutedText,
+                                size: 22,
+                              ),
+                            ],
                           ),
                         ),
-                        dropdownIcon: Icon(
-                          Icons.arrow_drop_down_outlined,
-                          color: AppColors.black,
-                        ),
-                        keyboardType: TextInputType.number,
-                        showCountryFlag: false,
-                        decoration: InputDecoration(
-                          counterText: '',
-                          hintStyle: AppFontStyle.fontStyleW600(
-                            fontSize: 12,
-                            fontColor: AppColors.white,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: AppColors.black),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: AppColors.black),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: AppColors.black),
-                          ),
-                          filled: true,
-                          fillColor: AppColors.white,
-                          errorStyle: AppFontStyle.fontStyleW500(
-                            fontSize: 8,
-                            fontColor: AppColors.red,
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: AppColors.red),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: AppColors.red),
-                          ),
-                          counterStyle: AppFontStyle.fontStyleW500(
-                            fontSize: 9,
-                            fontColor: AppColors.grey,
-                          ),
-                        ),
-                        onCountryChanged: (value) {
-                          log("message================= ${value.code}");
-                          Database.onSetSelectedCountryCode(value.code);
-                          Database.getDialCode();
-                          log("Database.selectedCountryCode message================= ${Database.selectedCountryCode}");
-                        },
-                        initialCountryCode: Database.selectedCountryCode,
-                        onChanged: (phone) {
-                          logic.dialCode = phone.countryCode; // example: +91
-                          logic.mobileNumberCnt.text = phone.number; // only number part
-                        },
                       ),
                     );
                   },
                 ),
-              ).paddingOnly(bottom: 30)
-            ],
+                const SizedBox(height: 18),
+                _sectionLabel(EnumLocale.txtEnterMobileNumber.name.tr),
+                IntlPhoneField(
+                  flagsButtonPadding: const EdgeInsets.all(8),
+                  flagsButtonMargin: const EdgeInsets.only(right: 10),
+                  dropdownIconPosition: IconPosition.trailing,
+                  controller: logic.mobileNumberCnt,
+                  obscureText: false,
+                  validator: (value) {
+                    if (value == null) {
+                      return EnumLocale.desEnterMobile.name.tr;
+                    }
+                    return null;
+                  },
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 16,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                  cursorColor: AppColors.redesignBrandDark,
+                  dropdownTextStyle: AppFontStyle.fontStyleW700(
+                    fontSize: 16,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                  pickerDialogStyle: PickerDialogStyle(
+                    countryCodeStyle: AppFontStyle.fontStyleW700(
+                      fontSize: 13,
+                      fontColor: AppColors.redesignBrandDark,
+                    ),
+                    countryNameStyle: AppFontStyle.fontStyleW700(
+                      fontSize: 13,
+                      fontColor: AppColors.redesignBrandDark,
+                    ),
+                    searchFieldCursorColor: AppColors.redesignBrandDark,
+                    searchFieldInputDecoration: InputDecoration(
+                      hintStyle: AppFontStyle.fontStyleW400(
+                        fontSize: 14,
+                        fontColor: AppColors.redesignMutedText,
+                      ),
+                      hintText: EnumLocale.txtSearchCountryCode.name.tr,
+                    ),
+                  ),
+                  dropdownIcon: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: AppColors.redesignMutedText,
+                  ),
+                  keyboardType: TextInputType.number,
+                  showCountryFlag: false,
+                  decoration: InputDecoration(
+                    counterText: '',
+                    hintStyle: AppFontStyle.fontStyleW600(
+                      fontSize: 12,
+                      fontColor: AppColors.redesignMutedText,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: AppColors.redesignSoftBorder,
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: AppColors.redesignSoftBorder,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: AppColors.redesignBrandRed,
+                      ),
+                    ),
+                    filled: true,
+                    fillColor: AppColors.white,
+                    errorStyle: AppFontStyle.fontStyleW500(
+                      fontSize: 10,
+                      fontColor: AppColors.red,
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColors.red),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColors.red),
+                    ),
+                    counterStyle: AppFontStyle.fontStyleW500(
+                      fontSize: 9,
+                      fontColor: AppColors.redesignMutedText,
+                    ),
+                  ),
+                  onCountryChanged: (value) {
+                    Database.onSetSelectedCountryCode(value.code);
+                    Database.getDialCode();
+                  },
+                  initialCountryCode: Database.selectedCountryCode,
+                  onChanged: (phone) {
+                    logic.dialCode = phone.countryCode;
+                    logic.mobileNumberCnt.text = phone.number;
+                  },
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
           ),
         );
       },
@@ -477,36 +606,46 @@ class EditProfileEditInfoView extends StatelessWidget {
   }
 }
 
-GetBuilder<GetxController> saveProfileButton() {
-  return GetBuilder<EditProfileController>(
-    builder: (controller) {
-      return Container(
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.10),
-              blurRadius: 18,
-              offset: Offset(0, 0),
-              spreadRadius: 0,
+class EditProfileSaveBar extends StatelessWidget {
+  const EditProfileSaveBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<EditProfileController>(
+      builder: (controller) {
+        return SafeArea(
+          top: false,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              border: Border(
+                top: BorderSide(color: AppColors.redesignSoftBorder),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.black.withValues(alpha: 0.08),
+                  blurRadius: 18,
+                  offset: const Offset(0, -4),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            PrimaryAppButton(
+            child: PrimaryAppButton(
               onTap: () {
                 controller.onSaveProfile();
               },
-              color: AppColors.appColor,
-              height: Get.height * 0.056,
+              color: AppColors.redesignBrandRed,
+              borderRadius: 16,
+              height: 54,
               text: EnumLocale.txtSaveProfile.name.tr,
-              textStyle: AppFontStyle.fontStyleW500(fontSize: 16, fontColor: AppColors.white),
-            ).paddingSymmetric(horizontal: 24),
-          ],
-        ).paddingOnly(top: 10, bottom: 10),
-      );
-    },
-  );
+              textStyle: AppFontStyle.fontStyleW600(
+                fontSize: 19,
+                fontColor: AppColors.white,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

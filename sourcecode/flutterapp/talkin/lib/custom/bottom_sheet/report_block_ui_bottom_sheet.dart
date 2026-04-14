@@ -1,10 +1,83 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/enums.dart';
 import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+
+class _MoreOptionTile extends StatelessWidget {
+  const _MoreOptionTile({
+    required this.icon,
+    required this.title,
+    required this.iconColor,
+    required this.iconBackground,
+    required this.onTap,
+    this.showDivider = true,
+  });
+
+  final IconData icon;
+  final String title;
+  final Color iconColor;
+  final Color iconBackground;
+  final VoidCallback onTap;
+  final bool showDivider;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Material(
+          color: AppColors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(14),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              child: Row(
+                children: [
+                  Container(
+                    height: 38,
+                    width: 38,
+                    decoration: BoxDecoration(
+                      color: iconBackground,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      icon,
+                      size: 22,
+                      color: iconColor,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: AppFontStyle.fontStyleW700(
+                        fontColor: AppColors.redesignSheetOptionTitle,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    size: 22,
+                    color: AppColors.redesignSheetOptionChevron,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        if (showDivider)
+          Divider(
+            color: AppColors.redesignSheetDivider,
+            height: 1,
+            indent: 14,
+            endIndent: 14,
+          ),
+      ],
+    );
+  }
+}
 
 void showMoreOptionsBottomSheet({
   required BuildContext context,
@@ -14,137 +87,98 @@ void showMoreOptionsBottomSheet({
   required VoidCallback onReport,
 }) {
   showModalBottomSheet(
-    isScrollControlled: true,
     context: context,
+    isScrollControlled: true,
     backgroundColor: AppColors.transparent,
-    builder: (context) => Container(
-      // height: Get.width * 0.52,
-      width: Get.width,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(40),
-          topRight: Radius.circular(40),
+    builder: (context) => SafeArea(
+      top: false,
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          color: AppColors.redesignSheetBg,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
         ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // ===== Header Section =====
-          Container(
-            height: 65,
-            color: AppColors.idContainerColor,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Spacer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 4,
-                      width: 35,
-                      decoration: BoxDecoration(
-                        color: AppColors.darkPurple,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 10, 14, 8),
+              child: Row(
+                children: [
+                  const SizedBox(width: 40),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 5,
+                          width: 44,
+                          decoration: BoxDecoration(
+                            color: AppColors.redesignSheetHandle,
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          EnumLocale.txtMore.name.tr,
+                          style: AppFontStyle.fontStyleW700(
+                            fontColor: AppColors.redesignSheetTitle,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
                     ),
-                    10.height,
-                    Text(
-                      EnumLocale.txtMore.name.tr,
-                      style: AppFontStyle.fontStyleW700(
-                        fontColor: AppColors.black,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ],
-                ).paddingOnly(left: 50),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () => Get.back(),
-                  child: Container(
-                    height: 30,
-                    width: 30,
-                    margin: const EdgeInsets.only(right: 20),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.transparent,
-                      border: Border.all(color: AppColors.black),
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        AppAsset.closeIcon,
-                        width: 18,
-                        color: AppColors.black,
+                  ),
+                  Material(
+                    color: AppColors.transparent,
+                    child: InkWell(
+                      onTap: Get.back,
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.redesignSheetBg,
+                          border: Border.all(
+                            color: AppColors.redesignSheetCloseBorder,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.close_rounded,
+                          size: 24,
+                          color: AppColors.redesignSheetCloseIcon,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-
-          // ===== Options List =====
-          Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Get.back();
-                  onBlock();
-                },
-                child: Container(
-                  height: 55,
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  color: AppColors.transparent,
-                  child: Row(
-                    children: [
-                      const Icon(Icons.block, color: Colors.redAccent),
-                      12.width,
-                      Text(
-                        EnumLocale.txtBlock.name.tr,
-                        style: AppFontStyle.fontStyleW700(
-                          fontColor: AppColors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Divider(color: AppColors.grey.withValues(alpha: 0.3), height: 1),
-              GestureDetector(
-                onTap: () {
-                  Get.back();
-                  onReport();
-                },
-                child: Container(
-                  height: 55,
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  color: AppColors.transparent,
-                  child: Row(
-                    children: [
-                      const Icon(Icons.report, color: Colors.orangeAccent),
-                      12.width,
-                      Text(
-                        EnumLocale.txtReport.name.tr,
-                        style: AppFontStyle.fontStyleW700(
-                          fontColor: AppColors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          10.height
-        ],
+            Divider(color: AppColors.redesignSheetDivider, height: 1),
+            _MoreOptionTile(
+              icon: Icons.block_rounded,
+              title: EnumLocale.txtBlock.name.tr,
+              iconColor: AppColors.redesignSheetBlockIcon,
+              iconBackground: AppColors.redesignSheetBlockBg,
+              onTap: () {
+                Get.back();
+                onBlock();
+              },
+            ),
+            _MoreOptionTile(
+              icon: Icons.report_gmailerrorred_rounded,
+              title: EnumLocale.txtReport.name.tr,
+              iconColor: AppColors.redesignSheetReportIcon,
+              iconBackground: AppColors.redesignSheetReportBg,
+              onTap: () {
+                Get.back();
+                onReport();
+              },
+              showDivider: false,
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
       ),
     ),
   );

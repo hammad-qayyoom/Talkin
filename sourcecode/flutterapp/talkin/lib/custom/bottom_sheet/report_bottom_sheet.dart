@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:talk_in/custom/bottom_sheet/api/moderation_report_api.dart';
-import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/enums.dart';
 import 'package:talk_in/utils/font_style.dart';
@@ -60,7 +59,8 @@ class ReportBottomSheetUi {
 
     isLoading.value = true;
 
-    final selectedIndex = selectedReportType.value.clamp(0, reportTypes.length - 1);
+    final selectedIndex =
+        selectedReportType.value.clamp(0, reportTypes.length - 1);
     final reasonCode = reportReasonCodes[selectedIndex];
     final reasonText = reportTypes[selectedIndex].toString();
 
@@ -79,7 +79,8 @@ class ReportBottomSheetUi {
       return;
     }
 
-    final message = response?['message']?.toString() ?? EnumLocale.txtSomeThingWentWrong.name.tr;
+    final message = response?['message']?.toString() ??
+        EnumLocale.txtSomeThingWentWrong.name.tr;
     Utils.showToast(Get.context!, message);
   }
 
@@ -94,151 +95,234 @@ class ReportBottomSheetUi {
       isScrollControlled: true,
       context: context,
       backgroundColor: AppColors.transparent,
-      builder: (context) => Container(
-        height: 500,
-        width: Get.width,
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(40),
-            topRight: Radius.circular(40),
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              height: 65,
-              color: AppColors.idContainerColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Spacer(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 4,
-                        width: 35,
-                        decoration: BoxDecoration(
-                          color: AppColors.darkPurple,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      10.height,
-                      Text(
-                        EnumLocale.txtReport.name.tr,
-                        style: AppFontStyle.fontStyleW700(
-                          fontColor: AppColors.black,
-                          fontSize: 17,
-                        ),
-                      ),
-                    ],
-                  ).paddingOnly(left: 50),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () => Get.back(),
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      margin: const EdgeInsets.only(right: 20),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.transparent,
-                        border: Border.all(color: AppColors.black),
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          width: 18,
-                          AppAsset.closeIcon,
-                          color: AppColors.black,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+      builder: (context) {
+        final mediaQuery = MediaQuery.of(context);
+        final maxHeight = mediaQuery.size.height * 0.82;
+
+        return SafeArea(
+          top: false,
+          child: Container(
+            constraints: BoxConstraints(maxHeight: maxHeight),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              color: AppColors.redesignSheetBg,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(30)),
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: ListView.builder(
-                  itemCount: reportTypes.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () => selectedReportType.value = index,
-                      child: Container(
-                        height: 46,
-                        color: AppColors.transparent,
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Row(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(14, 10, 14, 8),
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 40),
+                      Expanded(
+                        child: Column(
                           children: [
-                            Obx(() => ReportRadioButtonUi(isSelected: selectedReportType.value == index)),
-                            12.width,
+                            Container(
+                              height: 5,
+                              width: 44,
+                              decoration: BoxDecoration(
+                                color: AppColors.redesignSheetHandle,
+                                borderRadius: BorderRadius.circular(999),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
                             Text(
-                              reportTypes[index] ?? "",
-                              style: AppFontStyle.fontStyleW500(fontColor: AppColors.black, fontSize: 16),
+                              EnumLocale.txtReport.name.tr,
+                              style: AppFontStyle.fontStyleW700(
+                                fontColor: AppColors.redesignSheetTitle,
+                                fontSize: 18,
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            Obx(
-              () => Visibility(
-                visible: !isLoading.value,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () => Get.back(),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 12),
-                          decoration: BoxDecoration(
-                            color: AppColors.grey.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Text(
-                            EnumLocale.txtCancel.name.tr,
-                            style: AppFontStyle.fontStyleW700(fontColor: AppColors.black, fontSize: 16),
-                          ),
-                        ),
-                      ),
-                      15.width,
-                      GestureDetector(
-                        onTap: () async {
-                          await onSendReport(
-                            reportType: reportType,
-                            targetId: targetId,
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 12),
-                          decoration: BoxDecoration(
-                            color: AppColors.appColor,
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Text(
-                            EnumLocale.txtReport.name.tr,
-                            style: AppFontStyle.fontStyleW700(fontColor: AppColors.white, fontSize: 16),
+                      Material(
+                        color: AppColors.transparent,
+                        child: InkWell(
+                          onTap: Get.back,
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.redesignSheetBg,
+                              border: Border.all(
+                                color: AppColors.redesignSheetCloseBorder,
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.close_rounded,
+                              size: 24,
+                              color: AppColors.redesignSheetCloseIcon,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
+                Divider(color: AppColors.redesignSheetDivider, height: 1),
+                Expanded(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+                    itemCount: reportTypes.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    itemBuilder: (context, index) {
+                      return Obx(
+                        () {
+                          final isSelected = selectedReportType.value == index;
+                          return Material(
+                            color: AppColors.transparent,
+                            child: InkWell(
+                              onTap: () => selectedReportType.value = index,
+                              borderRadius: BorderRadius.circular(14),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 180),
+                                curve: Curves.easeOut,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? AppColors.redesignReportOptionSelectedBg
+                                      : AppColors.redesignReportOptionBg,
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? AppColors
+                                            .redesignReportOptionSelectedBorder
+                                        : AppColors.redesignReportOptionBorder,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    ReportRadioButtonUi(isSelected: isSelected),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Text(
+                                        reportTypes[index] ?? '',
+                                        style: AppFontStyle.fontStyleW500(
+                                          fontColor: isSelected
+                                              ? AppColors
+                                                  .redesignReportOptionSelectedText
+                                              : AppColors
+                                                  .redesignReportOptionText,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+                Obx(
+                  () {
+                    if (isLoading.value) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        child: SizedBox(
+                          height: 26,
+                          width: 26,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.6,
+                            color: AppColors.redesignReportLoading,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          14,
+                          8,
+                          14,
+                          mediaQuery.padding.bottom > 0
+                              ? mediaQuery.padding.bottom + 8
+                              : 14),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Material(
+                              color: AppColors.transparent,
+                              child: InkWell(
+                                onTap: Get.back,
+                                borderRadius: BorderRadius.circular(14),
+                                child: Container(
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    color: AppColors
+                                        .redesignReportSecondaryButtonBg,
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(
+                                      color: AppColors
+                                          .redesignReportSecondaryButtonBorder,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      EnumLocale.txtCancel.name.tr,
+                                      style: AppFontStyle.fontStyleW700(
+                                        fontColor: AppColors
+                                            .redesignReportSecondaryButtonText,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Material(
+                              color: AppColors.transparent,
+                              child: InkWell(
+                                onTap: () async {
+                                  await onSendReport(
+                                    reportType: reportType,
+                                    targetId: targetId,
+                                  );
+                                },
+                                borderRadius: BorderRadius.circular(14),
+                                child: Container(
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        AppColors.redesignReportPrimaryButtonBg,
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      EnumLocale.txtReport.name.tr,
+                                      style: AppFontStyle.fontStyleW700(
+                                        fontColor: AppColors
+                                            .redesignReportPrimaryButtonText,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     ).whenComplete(() => onComplete?.call());
   }
 }
@@ -251,24 +335,29 @@ class ReportRadioButtonUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 2),
       color: AppColors.transparent,
       child: Row(
         children: [
           Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isSelected ? AppColors.appColor : AppColors.transparent,
-              // gradient: isSelected ? AppColors.purpleLinearGradient : null,
+              color: isSelected
+                  ? AppColors.redesignReportRadioActive
+                  : AppColors.redesignReportRadioInactive,
             ),
             child: Container(
-              height: 20,
-              width: 20,
-              margin: const EdgeInsets.all(1.5),
+              height: 18,
+              width: 18,
+              margin: const EdgeInsets.all(2),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                // color: isSelected ? null : AppColors.grey,
-                border: Border.all(color: isSelected ? AppColors.white : AppColors.primary.withValues(alpha: 0.5), width: 1.5),
+                border: Border.all(
+                  color: isSelected
+                      ? AppColors.redesignReportRadioBorderActive
+                      : AppColors.redesignReportRadioBorderInactive,
+                  width: 1.6,
+                ),
               ),
             ),
           ),

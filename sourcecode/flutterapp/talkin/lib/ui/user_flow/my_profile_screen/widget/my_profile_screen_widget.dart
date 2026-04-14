@@ -15,169 +15,420 @@ import 'package:talk_in/utils/utils.dart';
 class MyProfileTopView extends StatelessWidget {
   const MyProfileTopView({super.key});
 
+  String _secondaryText() {
+    if (Database.loginType == 2) {
+      return Database.loginUserNickName;
+    }
+
+    return Database.loginUserEmail;
+  }
+
+  void _onCopyId({
+    required BuildContext context,
+    required String uniqueId,
+  }) {
+    if (uniqueId.trim().isEmpty) {
+      return;
+    }
+
+    Utils.copyText(uniqueId);
+    Utils.showToast(context, 'Copied');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final width = mediaQuery.size.width;
+    final topInset = mediaQuery.padding.top;
+    final isTablet = width >= 760;
+
     return GetBuilder<EditProfileController>(
-        id: Constant.idProfile,
-        builder: (context) {
-          return Container(
-            // padding: EdgeInsets.only(left: 16),
-            decoration: BoxDecoration(color: AppColors.appColor),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      color: AppColors.transparent,
-                      child: InkWell(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 22, top: 22, left: 20, right: 6),
-                          child: Image.asset(
-                            height: 16,
-                            AppAsset.backArrowIcon,
-                            color: AppColors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Spacer(),
-                    Text(
+      id: Constant.idProfile,
+      builder: (_) {
+        final userName = Database.loginUserName.trim().isEmpty
+            ? 'User'
+            : Database.loginUserName.trim();
+        final uniqueId =
+            (Database.fetchLoginUserProfileModel?.user?.uniqueId ?? '')
+                .toString();
+
+        return Container(
+          padding: EdgeInsets.fromLTRB(16, topInset + 8, 16, 12),
+          color: AppColors.redesignScreenBackground,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  _HeaderIconButton(
+                    icon: Icons.arrow_back_ios_new_rounded,
+                    onTap: Get.back,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
                       EnumLocale.txtMyProfile.name.tr,
-                      style: AppFontStyle.fontStyleW600(fontSize: 20, fontColor: AppColors.white),
-                    ),
-                    Spacer(),
-                  ],
-                ).paddingOnly(bottom: 10, right: 16),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.white),
-                        shape: BoxShape.circle,
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: isTablet ? 28 : 20,
+                        fontColor: AppColors.redesignBrandDark,
                       ),
-                      child: Container(
-                        // clipBehavior: Clip.hardEdge,
-                        height: 54,
-                        width: 54,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.appColor),
-                          color: AppColors.lightGrey,
-                          shape: BoxShape.circle,
-                        ),
-                        child: ClipOval(
-                          // child: Image.network(
-                          //   Database.loginUserProfilePic,
-                          //   // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCIyTZVXyb90oYHRiiX6YkNUc0CnzGwWjI3Q&s",
-                          //   fit: BoxFit.cover,
-                          // ),
-                          child: CustomProfileImage(
-                            image: Database.loginUserProfilePic,
-                          ),
-                        ),
-                      ).paddingAll(1),
-                    ).paddingOnly(right: 12, left: 16),
-                    SizedBox(
-                      width: Get.width * 0.4,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            Database.loginUserName,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppFontStyle.fontStyleW700(fontSize: 19, fontColor: AppColors.white),
-                          ),
-                          Database.loginType == 2
-                              ? Text(
-                                  Database.loginUserNickName,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppFontStyle.fontStyleW500(fontSize: 15, fontColor: AppColors.profileMail),
-                                )
-                              : Text(
-                                  Database.loginUserEmail,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppFontStyle.fontStyleW500(fontSize: 15, fontColor: AppColors.profileMail),
-                                ),
-                        ],
-                      ).paddingOnly(top: 5),
                     ),
-                    Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(
-                          AppRoutes.feedScreen,
-                          arguments: {
-                            'standalone': true,
-                            'title': 'My Posts',
-                            'userId': Database.loginUserId,
-                            'showComposer': true,
-                          },
-                        );
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.dynamic_feed_rounded,
-                              size: 17,
-                              color: AppColors.appColor,
-                            ),
-                            SizedBox(
-                              width: Get.width * 0.14,
-                              child: Text(
-                                'My Posts',
-                                overflow: TextOverflow.ellipsis,
-                                style: AppFontStyle.fontStyleW700(fontSize: 11, fontColor: AppColors.appColor),
-                              ).paddingOnly(left: 5),
-                            )
-                          ],
-                        ),
-                      ).paddingOnly(right: 8),
-                    ).paddingOnly(top: 3),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.editProfileScreen);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              AppAsset.editIcon,
-                              height: 17,
-                              width: 17,
-                            ),
-                            SizedBox(
-                              width: Get.width * 0.2,
-                              child: Text(
-                                EnumLocale.txtEditProfile.name.tr,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppFontStyle.fontStyleW700(fontSize: 12, fontColor: AppColors.appColor),
-                              ).paddingOnly(left: 6, right: 2),
-                            )
-                          ],
-                        ),
-                      ).paddingOnly(right: 14),
-                    ).paddingOnly(top: 3),
+                  ),
+                  Container(
+                    height: 34,
+                    width: 34,
+                    decoration: BoxDecoration(
+                      color: AppColors.redesignSurfaceNeutralAlt,
+                      borderRadius: BorderRadius.circular(11),
+                      border: Border.all(color: AppColors.redesignSoftBorder),
+                    ),
+                    child: Icon(
+                      Icons.account_circle_outlined,
+                      size: 19,
+                      color: AppColors.redesignBrandDark,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: EdgeInsets.all(isTablet ? 16 : 12),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.redesignSoftBorder),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.black.withValues(alpha: 0.04),
+                      blurRadius: 12,
+                      offset: const Offset(0, 6),
+                    ),
                   ],
-                ).paddingOnly(bottom: 24),
-              ],
-            ).paddingOnly(top: Get.height * 0.042),
-          );
-        });
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: isTablet ? 82 : 70,
+                          width: isTablet ? 82 : 70,
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.redesignBrandRed
+                                  .withValues(alpha: 0.28),
+                              width: 2,
+                            ),
+                          ),
+                          child: ClipOval(
+                            child: CustomProfileImage(
+                              image: Database.loginUserProfilePic,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      userName,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppFontStyle.fontStyleW700(
+                                        fontSize: isTablet ? 24 : 18,
+                                        fontColor: AppColors.redesignBrandDark,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          AppColors.redesignSurfaceNeutralAlt,
+                                      borderRadius: BorderRadius.circular(999),
+                                      border: Border.all(
+                                        color: AppColors.redesignSoftBorder,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Profile',
+                                      style: AppFontStyle.fontStyleW600(
+                                        fontSize: 10,
+                                        fontColor: AppColors.redesignMutedText,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                _secondaryText(),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppFontStyle.fontStyleW500(
+                                  fontSize: isTablet ? 15 : 13,
+                                  fontColor: AppColors.redesignMutedText,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: [
+                                  if (uniqueId.trim().isNotEmpty)
+                                    _IdChip(
+                                      id: uniqueId,
+                                      onTap: () => _onCopyId(
+                                        context: context,
+                                        uniqueId: uniqueId,
+                                      ),
+                                    ),
+                                  const _MetaChip(
+                                    icon: Icons.verified_user_outlined,
+                                    label: 'Secure account',
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _ProfileActionButton(
+                            icon: Icons.dynamic_feed_rounded,
+                            title: 'My Posts',
+                            isPrimary: false,
+                            onTap: () {
+                              Get.toNamed(
+                                AppRoutes.feedScreen,
+                                arguments: {
+                                  'standalone': true,
+                                  'title': 'My Posts',
+                                  'userId': Database.loginUserId,
+                                  'showComposer': true,
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: _ProfileActionButton(
+                            icon: Icons.edit_outlined,
+                            title: EnumLocale.txtEditProfile.name.tr,
+                            isPrimary: true,
+                            onTap: () {
+                              Get.toNamed(AppRoutes.editProfileScreen);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _HeaderIconButton extends StatelessWidget {
+  const _HeaderIconButton({
+    required this.icon,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          height: 40,
+          width: 40,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+          ),
+          child: Icon(
+            icon,
+            size: 20,
+            color: AppColors.redesignBrandDark,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _IdChip extends StatelessWidget {
+  const _IdChip({
+    required this.id,
+    required this.onTap,
+  });
+
+  final String id;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(999),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: BoxDecoration(
+            color: AppColors.redesignSurfaceSoft,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'ID $id',
+                style: AppFontStyle.fontStyleW700(
+                  fontSize: 12,
+                  fontColor: AppColors.redesignBrandRed,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Image.asset(
+                AppAsset.copyIcon,
+                height: 14,
+                width: 14,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MetaChip extends StatelessWidget {
+  const _MetaChip({
+    required this.icon,
+    required this.label,
+  });
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.redesignSurfaceNeutralAlt,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: AppColors.redesignSoftBorder),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 13,
+            color: AppColors.redesignMutedText,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: AppFontStyle.fontStyleW600(
+              fontSize: 10,
+              fontColor: AppColors.redesignMutedText,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProfileActionButton extends StatelessWidget {
+  const _ProfileActionButton({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+    required this.isPrimary,
+  });
+
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+  final bool isPrimary;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          height: 44,
+          decoration: BoxDecoration(
+            color: isPrimary ? AppColors.redesignBrandRed : AppColors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: isPrimary
+                  ? AppColors.redesignBrandRed
+                  : AppColors.redesignSoftBorder,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 17,
+                color:
+                    isPrimary ? AppColors.white : AppColors.redesignBrandDark,
+              ),
+              const SizedBox(width: 7),
+              Flexible(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: 14,
+                    fontColor: isPrimary
+                        ? AppColors.white
+                        : AppColors.redesignBrandDark,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -186,272 +437,301 @@ class ProfileOptionsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: GetBuilder<MyProfileScreenController>(builder: (controller) {
-        return Column(
-          children: [
-            // Top 3 Boxes (Wallet, Help Center, Settings)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                TopItem(
-                  icon: AppAsset.wallet,
-                  title: EnumLocale.txtMyWallet.name.tr,
-                  onTap: () {
-                    Get.toNamed(AppRoutes.myWalletScreen);
-                  },
-                ),
-                TopItem(
-                  icon: AppAsset.helpCenter,
-                  title: EnumLocale.txtHelpCenter.name.tr,
-                  onTap: () {
-                    Get.toNamed(AppRoutes.helpCenterScreen);
-                  },
-                ),
-                TopItem(
-                  icon: AppAsset.setting,
-                  title: EnumLocale.txtSettings.name.tr,
-                  onTap: () {
-                    Get.toNamed(AppRoutes.settingScreen);
-                  },
-                ),
-              ],
-            ).paddingOnly(top: 16, bottom: 24, left: 9, right: 9),
+    return GetBuilder<MyProfileScreenController>(
+      builder: (controller) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final isTablet = constraints.maxWidth >= 760;
+            final maxContentWidth =
+                constraints.maxWidth >= 1100 ? 980.0 : constraints.maxWidth;
 
-            // Host Center Box
-            Database.settingApiModel?.data?.allowBecomeHostOption == true
-                ? CenterOption(
-                    onTap: () {
-                      Get.toNamed(AppRoutes.becomeHostScreen)?.then((value) {
-                        Utils.onChangeStatusBar(brightness: Brightness.light);
-
-                      },);
-                    },
-                    icon: AppAsset.hostCenter,
-                    title: EnumLocale.txtListenersCenter.name.tr,
-                    subtitle: EnumLocale.txtHostCenterDescription.name.tr,
-                    badgeText: EnumLocale.txtBecomeListener.name.tr,
-                  )
-                : SizedBox(),
-            // Privacy Center Box
-            CenterOption(
-              onTap: () async {
-                controller.onClickPrivacyPolicy();
-              },
-              icon: AppAsset.privacyCenter,
-              title: EnumLocale.txtPrivacyCenter.name.tr,
-              subtitle: EnumLocale.txtDataPrivacy.name.tr,
-            ),
-
-            // Share App Box
-            CenterOption(
-              onTap: () {
-                controller.onClickShare();
-                // Get.toNamed(AppRoutes.shareAppScreen);
-              },
-              icon: AppAsset.shareApp,
-              title: EnumLocale.txtShareApp.name.tr,
-              subtitle: EnumLocale.txtShareAppDes.name.tr,
-            ),
-            CenterOption(
-              onTap: () async {
-                controller.onClickAboutUs();
-              },
-              icon: AppAsset.aboutUs,
-              title: EnumLocale.txtAboutUs.name.tr,
-              subtitle: EnumLocale.txtAboutUsDes.name.tr,
-            ),
-          ],
-        );
-      }),
-    );
-  }
-
-/*
-  Widget _buildTopItem(String icon, String title, VoidCallback onTap) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.only(bottom: 10, top: 15),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.borderColor.withValues(alpha: 0.6)),
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                icon,
-                height: 60,
-                width: 60,
-              ).paddingSymmetric(horizontal: 25),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: AppColors.black),
-              ).paddingOnly(top: 8),
-            ],
-          ),
-        ).paddingSymmetric(horizontal: 6),
-      ),
-    );
-  }
-*/
-
-/*  Widget _buildCenterOption({
-    required String icon,
-    required String title,
-    required String subtitle,
-    String? badgeText,
-    Function()? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-        decoration: BoxDecoration(
-          color: AppColors.profileOption.withValues(alpha: 0.6),
-          borderRadius: BorderRadius.circular(18),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: Image.asset(
-                icon,
-                height: 68,
-                width: 68,
-              ).paddingOnly(right: 12),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+            return Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        style: AppFontStyle.fontStyleW800(fontSize: 18, fontColor: AppColors.black),
+                      _SectionTitle(
+                        title: 'Quick Access',
+                        subtitle: 'Shortcuts for your daily actions',
+                        isTablet: isTablet,
                       ),
-                      if (badgeText != null)
-                        Container(
-                          width: Get.width * 0.25,
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: AppColors.appColor,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            overflow: TextOverflow.ellipsis,
-                            badgeText,
-                            style: AppFontStyle.fontStyleW700(fontSize: 10, fontColor: AppColors.white),
-                          ),
-                        ).paddingOnly(left: 5),
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isTablet ? 10 : 8,
+                          vertical: isTablet ? 10 : 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(18),
+                          border:
+                              Border.all(color: AppColors.redesignSoftBorder),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TopItem(
+                                icon: AppAsset.wallet,
+                                title: EnumLocale.txtMyWallet.name.tr,
+                                onTap: () {
+                                  Get.toNamed(AppRoutes.myWalletScreen);
+                                },
+                              ),
+                            ),
+                            _QuickDivider(),
+                            Expanded(
+                              child: TopItem(
+                                icon: AppAsset.helpCenter,
+                                title: EnumLocale.txtHelpCenter.name.tr,
+                                onTap: () {
+                                  Get.toNamed(AppRoutes.helpCenterScreen);
+                                },
+                              ),
+                            ),
+                            _QuickDivider(),
+                            Expanded(
+                              child: TopItem(
+                                icon: AppAsset.setting,
+                                title: EnumLocale.txtSettings.name.tr,
+                                onTap: () {
+                                  Get.toNamed(AppRoutes.settingScreen);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      _SectionTitle(
+                        title: 'Account & More',
+                        subtitle: 'Account tools and privacy controls',
+                        isTablet: isTablet,
+                      ),
+                      const SizedBox(height: 10),
+                      if (Database
+                              .settingApiModel?.data?.allowBecomeHostOption ==
+                          true)
+                        CenterOption(
+                          onTap: () {
+                            Get.toNamed(AppRoutes.becomeHostScreen)?.then(
+                              (value) {
+                                Utils.onChangeStatusBar(
+                                  brightness: Brightness.dark,
+                                );
+                              },
+                            );
+                          },
+                          icon: AppAsset.hostCenter,
+                          title: EnumLocale.txtListenersCenter.name.tr,
+                          badgeText: EnumLocale.txtBecomeListener.name.tr,
+                          isHighlighted: true,
+                        ),
+                      CenterOption(
+                        onTap: () async {
+                          await controller.onClickPrivacyPolicy();
+                        },
+                        icon: AppAsset.privacyCenter,
+                        title: EnumLocale.txtPrivacyCenter.name.tr,
+                      ),
                     ],
                   ),
-                  Text(
-                    subtitle,
-                    style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.profileText, height: 2),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ).paddingOnly(left: 16, right: 16, bottom: 18),
+            );
+          },
+        );
+      },
     );
-  }*/
+  }
+}
+
+class _QuickDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 1,
+      height: 86,
+      color: AppColors.redesignSoftBorder,
+    );
+  }
+}
+
+class _SectionTitle extends StatelessWidget {
+  const _SectionTitle({
+    required this.title,
+    required this.subtitle,
+    required this.isTablet,
+  });
+
+  final String title;
+  final String subtitle;
+  final bool isTablet;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: AppFontStyle.fontStyleW700(
+            fontSize: isTablet ? 20 : 17,
+            fontColor: AppColors.redesignBrandDark,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          subtitle,
+          style: AppFontStyle.fontStyleW500(
+            fontSize: isTablet ? 13 : 11,
+            fontColor: AppColors.redesignMutedText,
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class CenterOption extends StatelessWidget {
-  final String icon;
-  final String title;
-  final String subtitle;
-  final String? badgeText;
-  final Function()? onTap;
-
   const CenterOption({
     super.key,
     required this.icon,
     required this.title,
-    required this.subtitle,
     this.badgeText,
     this.onTap,
+    this.isHighlighted = false,
   });
+
+  final String icon;
+  final String title;
+  final String? badgeText;
+  final VoidCallback? onTap;
+  final bool isHighlighted;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-        decoration: BoxDecoration(
-          color: AppColors.profileOption.withValues(alpha: 0.6),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Material(
+        color: AppColors.transparent,
+        child: InkWell(
+          onTap: onTap,
           borderRadius: BorderRadius.circular(18),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: Image.asset(
-                icon,
-                height: 68,
-                width: 68,
-              ).paddingOnly(right: 12),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: isHighlighted
+                  ? AppColors.redesignAccentSoftBg.withValues(alpha: 0.75)
+                  : AppColors.white,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: isHighlighted
+                    ? AppColors.redesignBrandRed.withValues(alpha: 0.22)
+                    : AppColors.redesignSoftBorder,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.black.withValues(alpha: 0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                ),
+              ],
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        title,
-                        softWrap: true,
-                        style: AppFontStyle.fontStyleW800(fontSize: 18, fontColor: AppColors.black),
-                      ),
-                      if (badgeText != null)
-                        Container(
-                          width: Get.width * 0.18,
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: AppColors.appColor,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            overflow: TextOverflow.ellipsis,
-                            badgeText!,
-                            style: AppFontStyle.fontStyleW700(fontSize: 10, fontColor: AppColors.white),
-                          ),
-                        ).paddingOnly(left: 5),
-                    ],
+            child: Row(
+              children: [
+                Container(
+                  height: 56,
+                  width: 56,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.redesignSoftBorder),
                   ),
-                  Text(
-                    subtitle,
-                    style: AppFontStyle.fontStyleW500(
-                      fontSize: 10,
-                      fontColor: AppColors.profileText,
+                  child: Center(
+                    child: Image.asset(
+                      icon,
+                      height: 40,
+                      width: 40,
                     ),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: 16,
+                                fontColor: AppColors.redesignBrandDark,
+                              ),
+                            ),
+                          ),
+                          if (badgeText != null &&
+                              badgeText!.trim().isNotEmpty) ...[
+                            const SizedBox(width: 6),
+                            Container(
+                              constraints: const BoxConstraints(maxWidth: 116),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.redesignBrandDark,
+                                borderRadius: BorderRadius.circular(999),
+                              ),
+                              child: Text(
+                                badgeText!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppFontStyle.fontStyleW700(
+                                  fontSize: 10,
+                                  fontColor: AppColors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  height: 34,
+                  width: 34,
+                  decoration: BoxDecoration(
+                    color: AppColors.redesignSurfaceInput,
+                    borderRadius: BorderRadius.circular(11),
+                    border: Border.all(color: AppColors.redesignSoftBorder),
+                  ),
+                  child: Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 14,
+                    color: AppColors.redesignMutedText,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ).paddingOnly(left: 16, right: 16, bottom: 18),
+      ),
     );
   }
 }
 
 class TopItem extends StatelessWidget {
-  final String icon;
-  final String title;
-  final VoidCallback onTap;
-
   const TopItem({
     super.key,
     required this.icon,
@@ -459,34 +739,52 @@ class TopItem extends StatelessWidget {
     required this.onTap,
   });
 
+  final String icon;
+  final String title;
+  final VoidCallback onTap;
+
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
         onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.only(bottom: 10, top: 15),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.borderColor.withValues(alpha: 0.6)),
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(24),
-          ),
+        borderRadius: BorderRadius.circular(14),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                icon,
-                height: 60,
-                width: 60,
-              ).paddingSymmetric(horizontal: 25),
+              Container(
+                height: 52,
+                width: 52,
+                decoration: BoxDecoration(
+                  color: AppColors.redesignSurfaceSoft,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: AppColors.redesignSoftBorder),
+                ),
+                child: Center(
+                  child: Image.asset(
+                    icon,
+                    height: 34,
+                    width: 34,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
               Text(
                 title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: AppColors.black),
-              ).paddingOnly(top: 8),
+                style: AppFontStyle.fontStyleW700(
+                  fontSize: 14,
+                  fontColor: AppColors.redesignBrandDark,
+                ),
+              ),
             ],
           ),
-        ).paddingSymmetric(horizontal: 6),
+        ),
       ),
     );
   }
