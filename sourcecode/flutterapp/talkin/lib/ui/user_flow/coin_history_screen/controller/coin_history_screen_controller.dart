@@ -16,7 +16,9 @@ class CoinHistoryScreenController extends GetxController {
   CoinHistoryModel? coinHistoryModel;
   final List<CoinHistory> coinHistoryList = <CoinHistory>[];
 
-  bool isLoading = false;
+  bool isPaymentLoading = false;
+  bool isCoinLoading = false;
+  bool get isLoading => isPaymentLoading || isCoinLoading;
   bool isPaginationLoading = false;
 
   bool hasMorePaymentData = true;
@@ -48,7 +50,7 @@ class CoinHistoryScreenController extends GetxController {
     if (reset) {
       PurchaseCoinGetPlanApi.startPagination = 0;
       hasMorePaymentData = true;
-      isLoading = true;
+      isPaymentLoading = true;
       update([Constant.idTabChange]);
     } else {
       if (isPaginationLoading || !hasMorePaymentData) {
@@ -79,7 +81,7 @@ class CoinHistoryScreenController extends GetxController {
           items.length >= PurchaseCoinGetPlanApi.limitPagination;
     } finally {
       if (reset) {
-        isLoading = false;
+        isPaymentLoading = false;
         update([Constant.idTabChange]);
       } else {
         isPaginationLoading = false;
@@ -92,7 +94,7 @@ class CoinHistoryScreenController extends GetxController {
     if (reset) {
       CoinHistoryApi.startPagination = 0;
       hasMoreCoinData = true;
-      isLoading = true;
+      isCoinLoading = true;
       update([Constant.idTabChange]);
     } else {
       if (isPaginationLoading || !hasMoreCoinData) {
@@ -122,7 +124,7 @@ class CoinHistoryScreenController extends GetxController {
       hasMoreCoinData = items.length >= CoinHistoryApi.limitPagination;
     } finally {
       if (reset) {
-        isLoading = false;
+        isCoinLoading = false;
         update([Constant.idTabChange]);
       } else {
         isPaginationLoading = false;
@@ -135,11 +137,11 @@ class CoinHistoryScreenController extends GetxController {
     tabIndex = index;
     update([Constant.idTabChange]);
 
-    if (index == 0 && purchaseCoinList.isEmpty && !isLoading) {
+    if (index == 0 && purchaseCoinList.isEmpty && !isPaymentLoading) {
       onPaymentRefresh();
     }
 
-    if (index == 1 && coinHistoryList.isEmpty && !isLoading) {
+    if (index == 1 && coinHistoryList.isEmpty && !isCoinLoading) {
       onRefresh();
     }
   }
@@ -153,7 +155,7 @@ class CoinHistoryScreenController extends GetxController {
   }
 
   Future<void> onCoinHistoryPagination() async {
-    if (!scrollController.hasClients || isLoading) {
+    if (!scrollController.hasClients || isCoinLoading) {
       return;
     }
 
@@ -166,7 +168,7 @@ class CoinHistoryScreenController extends GetxController {
   }
 
   Future<void> onPaymentHistoryPagination() async {
-    if (!scrollController1.hasClients || isLoading) {
+    if (!scrollController1.hasClients || isPaymentLoading) {
       return;
     }
 

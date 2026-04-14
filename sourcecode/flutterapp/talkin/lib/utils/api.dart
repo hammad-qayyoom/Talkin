@@ -76,6 +76,7 @@ abstract class Api {
   static const moderationReportChatMessage = "${baseUrl}api/v2/moderation/reports/chat-message";
   static const moderationReportSession = "${baseUrl}api/v2/moderation/reports/session";
   static const moderationReportFeedPost = "${baseUrl}api/v2/moderation/reports/create";
+  static const subscriptionUserList = "${baseUrl}api/v2/subscriptions/users/list?";
 
   // >>>>> >>>>>  Listener  Api <<<<< <<<<<
 

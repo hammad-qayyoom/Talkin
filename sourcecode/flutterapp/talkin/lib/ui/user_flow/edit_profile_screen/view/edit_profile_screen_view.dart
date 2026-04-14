@@ -39,11 +39,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 18),
                   child: const Column(
                     children: [
                       EditProfileImageView(),
-                      SizedBox(height: 14),
+                      SizedBox(height: 12),
                       EditProfileEditInfoView(),
                     ],
                   ),

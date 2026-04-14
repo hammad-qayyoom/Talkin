@@ -368,6 +368,8 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
     switch (type) {
       case 2:
         return 'Subscription Purchase';
+      case 10:
+        return 'Subscription Purchase';
       case 3:
         return 'Private Audio Call';
       case 4:
@@ -390,6 +392,8 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
   IconData _coinTypeIcon(int type) {
     switch (type) {
       case 2:
+        return Icons.shopping_bag_outlined;
+      case 10:
         return Icons.shopping_bag_outlined;
       case 3:
         return Icons.call_outlined;
@@ -416,7 +420,7 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
     }
 
     final type = item.type ?? 0;
-    return type == 1 || type == 2 || type == 8;
+    return type == 1 || type == 2 || type == 8 || type == 10;
   }
 
   Widget _emptyView({required String subtitle}) {
@@ -624,6 +628,7 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
                     ),
                     if (!(type == 1 ||
                             type == 2 ||
+                            type == 10 ||
                             type == 7 ||
                             type == 8 ||
                             type == 9) &&
@@ -671,7 +676,8 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
       id: Constant.idTabChange,
       builder: (controller) {
         if (controller.tabIndex == 0) {
-          if (controller.isLoading && controller.purchaseCoinList.isEmpty) {
+          if (controller.isPaymentLoading &&
+              controller.purchaseCoinList.isEmpty) {
             return const Expanded(child: PaymentHistoryShimmer());
           }
 
@@ -735,7 +741,7 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
           );
         }
 
-        if (controller.isLoading && controller.coinHistoryList.isEmpty) {
+        if (controller.isCoinLoading && controller.coinHistoryList.isEmpty) {
           return const Expanded(child: CoinHistoryShimmer());
         }
 
