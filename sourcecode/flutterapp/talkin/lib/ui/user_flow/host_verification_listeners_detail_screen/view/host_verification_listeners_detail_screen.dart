@@ -8,24 +8,30 @@ class HostVerificationListenersDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightPurple,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        flexibleSpace: const HostVerificationListenersDetailAppBar(),
+      backgroundColor: AppColors.redesignScreenBackground,
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(96),
+        child: HostVerificationListenersDetailAppBar(),
       ),
-      bottomNavigationBar: HostVerificationListenersDetailBottomButton(),
+      bottomNavigationBar: const HostVerificationListenersDetailBottomButton(),
       body: GestureDetector(
         onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+          final FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
             currentFocus.focusedChild?.unfocus();
           }
         },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              HostVerificationListenersDetailView(),
-            ],
+        child: SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
+            child: const Column(
+              children: [
+                HostVerificationListenersDetailView(),
+              ],
+            ),
           ),
         ),
       ),

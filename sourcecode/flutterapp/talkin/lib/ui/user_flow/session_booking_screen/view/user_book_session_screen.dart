@@ -35,7 +35,6 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
   String _listenerId = '';
   String _expertId = '';
   String _listenerName = '';
-  String _listenerImage = '';
   bool _isAudioServiceEnabled = true;
   bool _isVideoServiceEnabled = true;
 
@@ -76,7 +75,6 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
       }
 
       _listenerName = (arguments['listenerName'] ?? '').toString();
-      _listenerImage = (arguments['listenerImage'] ?? '').toString();
 
       final hasAudioFlag =
           arguments.containsKey('availableForPrivateAudioCall');
@@ -279,186 +277,446 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
     return status == 'booked';
   }
 
+  bool _isDateSelected(DateTime date) {
+    return date.year == _selectedDate.year &&
+        date.month == _selectedDate.month &&
+        date.day == _selectedDate.day;
+  }
+
+  bool get _canConfirmBooking {
+    if (_isBooking || _selectedSlot == null) {
+      return false;
+    }
+
+    return !_isSlotBooked(_selectedSlot!);
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.redesignScreenBackground,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+          child: Row(
+            children: [
+              _HeaderIconButton(
+                icon: Icons.arrow_back_ios_new_rounded,
+                onTap: Get.back,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Book Session',
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: 20,
+                        fontColor: AppColors.redesignBrandDark,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Pick a time that works for you',
+                      style: AppFontStyle.fontStyleW500(
+                        fontSize: 11,
+                        fontColor: AppColors.redesignMutedText,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExpertCard() {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.redesignSoftBorder),
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 38,
+            width: 38,
+            decoration: BoxDecoration(
+              color: AppColors.redesignAccentSoftBg,
+              borderRadius: BorderRadius.circular(11),
+            ),
+            child: Icon(
+              Icons.person_outline_rounded,
+              size: 20,
+              color: AppColors.redesignBrandRed,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _listenerName.trim().isEmpty ? 'Expert' : _listenerName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: 18,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  (_isAudioServiceEnabled || _isVideoServiceEnabled)
+                      ? 'Available for private booking'
+                      : 'Private booking unavailable right now',
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: 11,
+                    fontColor: AppColors.redesignMutedText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCallTypeChip({
+    required String value,
+    required String label,
+  }) {
+    final bool isSelected = _callType == value;
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: Material(
+        color: AppColors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            if (isSelected) {
+              return;
+            }
+
+            setState(() {
+              _callType = value;
+            });
+            _fetchSlots();
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            constraints: const BoxConstraints(minWidth: 90),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: isSelected ? AppColors.redesignBrandDark : AppColors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isSelected
+                    ? AppColors.redesignBrandDark
+                    : AppColors.redesignSoftBorder,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.black.withValues(
+                    alpha: isSelected ? 0.10 : 0.03,
+                  ),
+                  blurRadius: isSelected ? 10 : 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isSelected) ...[
+                  const Icon(
+                    Icons.check_rounded,
+                    size: 15,
+                    color: AppColors.white,
+                  ),
+                  const SizedBox(width: 5),
+                ],
+                Text(
+                  label,
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 12,
+                    fontColor: isSelected
+                        ? AppColors.white
+                        : AppColors.redesignBrandDark,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateChip(DateTime date) {
+    final isSelected = _isDateSelected(date);
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: Material(
+        color: AppColors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            if (isSelected) {
+              return;
+            }
+
+            setState(() {
+              _selectedDate = date;
+            });
+            _fetchSlots();
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: isSelected ? AppColors.redesignBrandDark : AppColors.white,
+              border: Border.all(
+                color: isSelected
+                    ? AppColors.redesignBrandDark
+                    : AppColors.redesignSoftBorder,
+              ),
+            ),
+            child: Text(
+              _formatDay(date),
+              style: AppFontStyle.fontStyleW600(
+                fontSize: 12,
+                fontColor:
+                    isSelected ? AppColors.white : AppColors.redesignBrandDark,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSlotsLoading() {
+    return GridView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+      itemCount: 8,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 2.2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemBuilder: (context, index) {
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSlotsEmpty() {
+    return ListView(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      padding: const EdgeInsets.fromLTRB(16, 30, 16, 20),
+      children: [
+        Icon(
+          Icons.event_busy_outlined,
+          size: 52,
+          color: AppColors.redesignSoftBorder,
+        ),
+        const SizedBox(height: 12),
+        Text(
+          'No slots available',
+          textAlign: TextAlign.center,
+          style: AppFontStyle.fontStyleW700(
+            fontSize: 20,
+            fontColor: AppColors.redesignBrandDark,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          'Please choose another date to view available time slots.',
+          textAlign: TextAlign.center,
+          style: AppFontStyle.fontStyleW500(
+            fontSize: 12,
+            fontColor: AppColors.redesignMutedText,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        title: Text(
-          'Book Session',
-          style: AppFontStyle.fontStyleW700(
-              fontSize: 18, fontColor: AppColors.black),
+      backgroundColor: AppColors.redesignScreenBackground,
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+          decoration: BoxDecoration(
+            color: AppColors.redesignScreenBackground,
+            border: Border(
+              top: BorderSide(color: AppColors.redesignSoftBorder),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.04),
+                blurRadius: 12,
+                offset: const Offset(0, -2),
+              ),
+            ],
+          ),
+          child: SizedBox(
+            height: 50,
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _isBooking ? null : _bookSelectedSlot,
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor: AppColors.redesignBrandDark,
+                disabledBackgroundColor: AppColors.redesignSoftBorder,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+              child: _isBooking
+                  ? const SizedBox(
+                      height: 18,
+                      width: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.white,
+                      ),
+                    )
+                  : Text(
+                      'Confirm Booking',
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: 17,
+                        fontColor: _canConfirmBooking
+                            ? AppColors.white
+                            : AppColors.redesignMutedText,
+                      ),
+                    ),
+            ),
+          ),
         ),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.all(12),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: AppColors.profileOptionColor,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _listenerName.isEmpty ? 'Expert' : _listenerName,
-                    style: AppFontStyle.fontStyleW700(
-                        fontSize: 15, fontColor: AppColors.black),
-                  ),
-                  if (_listenerImage.isNotEmpty) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      _listenerImage,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppFontStyle.fontStyleW500(
-                          fontSize: 11, fontColor: AppColors.grey),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+      body: Column(
+        children: [
+          _buildHeader(),
+          _buildExpertCard(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
               child: Row(
                 children: [
                   if (_isAudioServiceEnabled)
-                    ChoiceChip(
-                      label: const Text('Audio'),
-                      selected: _callType == 'audio',
-                      onSelected: (selected) {
-                        if (!selected) return;
-                        setState(() {
-                          _callType = 'audio';
-                        });
-                        _fetchSlots();
-                      },
-                    ),
-                  if (_isAudioServiceEnabled && _isVideoServiceEnabled)
-                    const SizedBox(width: 8),
+                    _buildCallTypeChip(value: 'audio', label: 'Audio'),
                   if (_isVideoServiceEnabled)
-                    ChoiceChip(
-                      label: const Text('Video'),
-                      selected: _callType == 'video',
-                      onSelected: (selected) {
-                        if (!selected) return;
-                        setState(() {
-                          _callType = 'video';
-                        });
-                        _fetchSlots();
-                      },
-                    ),
+                    _buildCallTypeChip(value: 'video', label: 'Video'),
                 ],
               ),
             ),
-            if (!_isAudioServiceEnabled && !_isVideoServiceEnabled)
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Expert is currently unavailable for Audio/Video sessions.',
-                    style: AppFontStyle.fontStyleW500(
-                      fontSize: 12,
-                      fontColor: AppColors.grey,
-                    ),
-                  ),
-                ),
-              ),
-            SizedBox(
-              height: 56,
-              child: ListView.builder(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                scrollDirection: Axis.horizontal,
-                itemCount: _dates.length,
-                itemBuilder: (context, index) {
-                  final date = _dates[index];
-                  final isSelected = date.year == _selectedDate.year &&
-                      date.month == _selectedDate.month &&
-                      date.day == _selectedDate.day;
-
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedDate = date;
-                      });
-                      _fetchSlots();
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 8),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: isSelected
-                            ? AppColors.appColor
-                            : AppColors.profileOptionColor,
-                      ),
-                      child: Center(
-                        child: Text(
-                          _formatDay(date),
-                          style: AppFontStyle.fontStyleW600(
-                            fontSize: 12,
-                            fontColor:
-                                isSelected ? AppColors.white : AppColors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+          ),
+          if (!_isAudioServiceEnabled && !_isVideoServiceEnabled)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Times are shown in your local timezone. Booking policy timezone: $_bookingTimezone.',
+                  'Expert is currently unavailable for Audio/Video sessions.',
                   style: AppFontStyle.fontStyleW500(
-                    fontSize: 11,
-                    fontColor: AppColors.grey,
+                    fontSize: 12,
+                    fontColor: AppColors.redesignMutedText,
                   ),
                 ),
               ),
             ),
-            Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _slots.isEmpty
-                      ? Center(
-                          child: Text(
-                            'No slots available for selected date.',
-                            style: AppFontStyle.fontStyleW500(
-                                fontSize: 13, fontColor: AppColors.grey),
-                          ),
-                        )
-                      : GridView.builder(
-                          padding: const EdgeInsets.all(12),
-                          itemCount: _slots.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 2.6,
-                            crossAxisSpacing: 8,
-                            mainAxisSpacing: 8,
-                          ),
-                          itemBuilder: (context, index) {
-                            final slot = (_slots[index] is Map<String, dynamic>)
-                                ? _slots[index] as Map<String, dynamic>
-                                : <String, dynamic>{};
-                            final isBooked = _isSlotBooked(slot);
-                            final isSelected = _selectedSlot == slot;
-                            final slotStatusLabel =
-                                isBooked ? 'Booked' : 'Available';
+          SizedBox(
+            height: 56,
+            child: ListView.builder(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              scrollDirection: Axis.horizontal,
+              itemCount: _dates.length,
+              itemBuilder: (context, index) => _buildDateChip(_dates[index]),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Times are shown in your local timezone. Booking policy timezone: $_bookingTimezone.',
+                style: AppFontStyle.fontStyleW500(
+                  fontSize: 11,
+                  fontColor: AppColors.redesignMutedText,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: _isLoading
+                ? _buildSlotsLoading()
+                : _slots.isEmpty
+                    ? _buildSlotsEmpty()
+                    : GridView.builder(
+                        padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+                        itemCount: _slots.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 2.15,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemBuilder: (context, index) {
+                          final slot = (_slots[index] is Map<String, dynamic>)
+                              ? _slots[index] as Map<String, dynamic>
+                              : <String, dynamic>{};
+                          final isBooked = _isSlotBooked(slot);
+                          final isSelected = _selectedSlot == slot;
 
-                            return GestureDetector(
+                          final slotStatusLabel = isBooked
+                              ? 'Booked'
+                              : isSelected
+                                  ? 'Selected'
+                                  : 'Available';
+
+                          return Material(
+                            color: AppColors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(14),
                               onTap: isBooked
                                   ? null
                                   : () {
@@ -466,22 +724,22 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
                                         _selectedSlot = slot;
                                       });
                                     },
-                              child: Container(
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 150),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(14),
                                   border: Border.all(
                                     color: isBooked
                                         ? AppColors.red.withValues(alpha: 0.6)
                                         : isSelected
-                                            ? AppColors.green
+                                            ? AppColors.redesignBrandDark
                                             : AppColors.green
                                                 .withValues(alpha: 0.45),
                                   ),
                                   color: isBooked
                                       ? AppColors.lightRed
                                       : isSelected
-                                          ? AppColors.green
-                                              .withValues(alpha: 0.16)
+                                          ? AppColors.redesignBrandDark
                                           : AppColors.green
                                               .withValues(alpha: 0.08),
                                 ),
@@ -491,49 +749,71 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
                                     children: [
                                       Text(
                                         _formatSlotLabel(slot),
-                                        style: AppFontStyle.fontStyleW600(
+                                        style: AppFontStyle.fontStyleW700(
                                           fontSize: 12,
                                           fontColor: isBooked
                                               ? AppColors.red
-                                              : AppColors.black,
+                                              : isSelected
+                                                  ? AppColors.white
+                                                  : AppColors.redesignBrandDark,
                                         ),
                                       ),
-                                      const SizedBox(height: 2),
+                                      const SizedBox(height: 3),
                                       Text(
                                         slotStatusLabel,
                                         style: AppFontStyle.fontStyleW600(
                                           fontSize: 10,
                                           fontColor: isBooked
                                               ? AppColors.red
-                                              : AppColors.green,
+                                              : isSelected
+                                                  ? AppColors.white
+                                                  : AppColors.green,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                        ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: _isBooking ? null : _bookSelectedSlot,
-                  child: _isBooking
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Confirm Booking'),
-                ),
-              ),
-            ),
-          ],
+                            ),
+                          );
+                        },
+                      ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeaderIconButton extends StatelessWidget {
+  const _HeaderIconButton({
+    required this.icon,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: Container(
+          height: 42,
+          width: 42,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+          ),
+          child: Icon(
+            icon,
+            size: 19,
+            color: AppColors.redesignBrandDark,
+          ),
         ),
       ),
     );

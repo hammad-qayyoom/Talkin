@@ -11,7 +11,8 @@ class UserGroupSessionsScreen extends StatefulWidget {
   const UserGroupSessionsScreen({super.key});
 
   @override
-  State<UserGroupSessionsScreen> createState() => _UserGroupSessionsScreenState();
+  State<UserGroupSessionsScreen> createState() =>
+      _UserGroupSessionsScreenState();
 }
 
 class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
@@ -26,7 +27,9 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
   final Map<String, String> _bookingIdBySessionId = {};
 
   String get _currentUserId {
-    return (Database.fetchLoginUserProfileModel?.user?.id ?? '').toString().trim();
+    return (Database.fetchLoginUserProfileModel?.user?.id ?? '')
+        .toString()
+        .trim();
   }
 
   @override
@@ -62,7 +65,10 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
     });
 
     if (response['status'] != true) {
-      Utils.showToast(context, (response['message'] ?? 'Failed to fetch group sessions.').toString());
+      Utils.showToast(
+          context,
+          (response['message'] ?? 'Failed to fetch group sessions.')
+              .toString());
     }
   }
 
@@ -91,10 +97,12 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
   }
 
   String _pricingLabel(Map<String, dynamic> session) {
-    final pricingMode = (session['groupPricingMode'] ?? '').toString().trim().toLowerCase();
+    final pricingMode =
+        (session['groupPricingMode'] ?? '').toString().trim().toLowerCase();
     final sessionCredits = _toInt(session['groupSessionCreditsRequired'], -1);
     final fallbackPrice = _toInt(session['price'], 0);
-    final effectiveCredits = sessionCredits >= 0 ? sessionCredits : fallbackPrice;
+    final effectiveCredits =
+        sessionCredits >= 0 ? sessionCredits : fallbackPrice;
 
     if (pricingMode == 'free' || effectiveCredits <= 0) {
       return 'FREE';
@@ -119,14 +127,17 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
     final now = DateTime.now();
 
     return _sessions.whereType<Map<String, dynamic>>().where((session) {
-      final status =
-          (session['sessionStatus'] ?? session['status'] ?? '').toString().trim().toLowerCase();
+      final status = (session['sessionStatus'] ?? session['status'] ?? '')
+          .toString()
+          .trim()
+          .toLowerCase();
 
       if (!['scheduled', 'live'].contains(status)) {
         return false;
       }
 
-      final endAt = DateTime.tryParse((session['endAt'] ?? '').toString())?.toLocal();
+      final endAt =
+          DateTime.tryParse((session['endAt'] ?? '').toString())?.toLocal();
       if (endAt != null && endAt.isBefore(now)) {
         return false;
       }
@@ -138,20 +149,29 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
   void _openGroupCallRoom(Map<String, dynamic> session, {String? bookingId}) {
     final sessionId = (session['_id'] ?? '').toString().trim();
     final roomId = (session['channelName'] ?? sessionId).toString().trim();
-    final callType = (session['callType'] ?? 'audio').toString().trim().toLowerCase() == 'video'
-        ? 'video'
-        : 'audio';
+    final callType =
+        (session['callType'] ?? 'audio').toString().trim().toLowerCase() ==
+                'video'
+            ? 'video'
+            : 'audio';
 
     final expert = session['expertId'] is Map<String, dynamic>
         ? session['expertId'] as Map<String, dynamic>
         : <String, dynamic>{};
 
     final expertId =
-        (expert['userId'] ?? expert['_id'] ?? session['expertId'] ?? '').toString().trim();
-    final expertName = (expert['displayName'] ?? session['title'] ?? 'Group Host').toString().trim();
+        (expert['userId'] ?? expert['_id'] ?? session['expertId'] ?? '')
+            .toString()
+            .trim();
+    final expertName =
+        (expert['displayName'] ?? session['title'] ?? 'Group Host')
+            .toString()
+            .trim();
     final expertImage = (expert['profilePic'] ?? '').toString();
 
-    final route = callType == 'video' ? AppRoutes.videoCallScreen : AppRoutes.voiceCallScreen;
+    final route = callType == 'video'
+        ? AppRoutes.videoCallScreen
+        : AppRoutes.voiceCallScreen;
 
     Get.toNamed(
       route,
@@ -182,16 +202,18 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
     }
 
     final participantsResponse =
-        await SessionBookingService.getGroupSessionParticipants(sessionId: sessionId);
+        await SessionBookingService.getGroupSessionParticipants(
+            sessionId: sessionId);
 
     if (participantsResponse['status'] != true) {
       return null;
     }
 
     final data = participantsResponse['data'];
-    final participants = data is Map<String, dynamic> && data['participants'] is List<dynamic>
-        ? data['participants'] as List<dynamic>
-        : <dynamic>[];
+    final participants =
+        data is Map<String, dynamic> && data['participants'] is List<dynamic>
+            ? data['participants'] as List<dynamic>
+            : <dynamic>[];
 
     for (final participant in participants) {
       if (participant is! Map<String, dynamic>) {
@@ -235,7 +257,8 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
       _joiningSessionId = null;
     });
 
-    Utils.showToast(context, (response['message'] ?? 'Join request processed.').toString());
+    Utils.showToast(
+        context, (response['message'] ?? 'Join request processed.').toString());
 
     if (response['status'] == true) {
       final booking = response['data'];
@@ -247,7 +270,10 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
       }
 
       final sessionStatus =
-          (session['sessionStatus'] ?? session['status'] ?? '').toString().trim().toLowerCase();
+          (session['sessionStatus'] ?? session['status'] ?? '')
+              .toString()
+              .trim()
+              .toLowerCase();
       if (sessionStatus == 'live') {
         await _onAccessSession(session);
         return;
@@ -289,7 +315,8 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
       _leavingSessionId = null;
     });
 
-    Utils.showToast(context, (response['message'] ?? 'Leave request processed.').toString());
+    Utils.showToast(context,
+        (response['message'] ?? 'Leave request processed.').toString());
 
     if (response['status'] == true) {
       _fetchSessions();
@@ -339,57 +366,625 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
       return;
     }
 
-    Utils.showToast(context, (accessResponse['message'] ?? 'Session access denied.').toString());
+    Utils.showToast(context,
+        (accessResponse['message'] ?? 'Session access denied.').toString());
   }
 
-  Widget _buildCallTypeFilterChip(String value, String label) {
-    final isSelected = _selectedCallType == value;
+  String _statusLabel(String rawStatus) {
+    final normalized = rawStatus.trim().toLowerCase();
+    if (normalized.isEmpty) {
+      return '-';
+    }
 
-    return GestureDetector(
-      onTap: () {
-        if (_selectedCallType == value) {
-          return;
-        }
+    final words =
+        normalized.split('_').where((word) => word.isNotEmpty).map((word) {
+      if (word.length == 1) {
+        return word.toUpperCase();
+      }
+      return '${word[0].toUpperCase()}${word.substring(1)}';
+    }).toList();
 
-        setState(() {
-          _selectedCallType = value;
-        });
+    return words.join(' ');
+  }
 
-        _fetchSessions();
-      },
-      child: Container(
-        margin: const EdgeInsets.only(right: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: isSelected ? AppColors.appColor : AppColors.profileOptionColor,
-        ),
-        child: Text(
-          label,
-          style: AppFontStyle.fontStyleW600(
-            fontSize: 12,
-            fontColor: isSelected ? AppColors.white : AppColors.black,
+  Color _statusTextColor(String rawStatus) {
+    final status = rawStatus.trim().toLowerCase();
+    if (status == 'live') {
+      return AppColors.redesignBrandRed;
+    }
+    if (status == 'scheduled') {
+      return AppColors.redesignStatusInfoText;
+    }
+    return AppColors.redesignMutedText;
+  }
+
+  Color _statusBackgroundColor(String rawStatus) {
+    final status = rawStatus.trim().toLowerCase();
+    if (status == 'live') {
+      return AppColors.redesignAccentSoftBg;
+    }
+    if (status == 'scheduled') {
+      return AppColors.redesignStatusInfoBg;
+    }
+    return AppColors.redesignSurfaceNeutral;
+  }
+
+  Widget _buildAppHeader(int totalSessions) {
+    final selectedTypeLabel = _selectedCallType == 'all'
+        ? 'All Types'
+        : _selectedCallType[0].toUpperCase() + _selectedCallType.substring(1);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.redesignScreenBackground,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  _HeaderIconButton(
+                    icon: Icons.arrow_back_ios_new_rounded,
+                    onTap: Get.back,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Group Sessions',
+                          style: AppFontStyle.fontStyleW700(
+                            fontSize: 20,
+                            fontColor: AppColors.redesignBrandDark,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Join live conversations with experts',
+                          style: AppFontStyle.fontStyleW500(
+                            fontSize: 11,
+                            fontColor: AppColors.redesignMutedText,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      AppColors.redesignBrandRed,
+                      AppColors.redesignBrandRedDark,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: AppColors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        Icons.groups_rounded,
+                        color: AppColors.white,
+                        size: 17,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '$totalSessions Active Sessions',
+                            style: AppFontStyle.fontStyleW700(
+                              fontSize: 13,
+                              fontColor: AppColors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Filter: $selectedTypeLabel',
+                            style: AppFontStyle.fontStyleW500(
+                              fontSize: 11,
+                              fontColor: AppColors.white.withValues(alpha: 0.9),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        title: Text(
-          'Group Sessions',
-          style: AppFontStyle.fontStyleW700(fontSize: 18, fontColor: AppColors.black),
+  Widget _buildCallTypeFilterChip(String value, String label) {
+    final isSelected = _selectedCallType == value;
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: Material(
+        color: AppColors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            if (_selectedCallType == value) {
+              return;
+            }
+
+            setState(() {
+              _selectedCallType = value;
+            });
+
+            _fetchSessions();
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            constraints: const BoxConstraints(minWidth: 92),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: isSelected ? AppColors.redesignBrandDark : AppColors.white,
+              border: Border.all(
+                color: isSelected
+                    ? AppColors.redesignBrandDark
+                    : AppColors.redesignSoftBorder,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.black.withValues(
+                    alpha: isSelected ? 0.10 : 0.03,
+                  ),
+                  blurRadius: isSelected ? 10 : 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              style: AppFontStyle.fontStyleW600(
+                fontSize: 12,
+                fontColor:
+                    isSelected ? AppColors.white : AppColors.redesignBrandDark,
+              ),
+            ),
+          ),
         ),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+    );
+  }
+
+  Widget _buildInfoPill({
+    required IconData icon,
+    required String label,
+    required Color textColor,
+    required Color backgroundColor,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: textColor),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: AppFontStyle.fontStyleW600(
+              fontSize: 11,
+              fontColor: textColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return ListView.separated(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+      itemCount: 3,
+      separatorBuilder: (context, index) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        return Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 14,
+                width: 150,
+                decoration: BoxDecoration(
+                  color: AppColors.redesignSoftBorder,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                height: 12,
+                width: 210,
+                decoration: BoxDecoration(
+                  color: AppColors.redesignSoftBorder,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                height: 12,
+                width: 180,
+                decoration: BoxDecoration(
+                  color: AppColors.redesignSoftBorder,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              const SizedBox(height: 14),
+              Container(
+                height: 44,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: AppColors.redesignSoftBorder,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return ListView(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 20),
+      children: [
+        const SizedBox(height: 50),
+        Icon(
+          Icons.event_busy_outlined,
+          size: 54,
+          color: AppColors.redesignSoftBorder,
+        ),
+        const SizedBox(height: 12),
+        Text(
+          'No active sessions',
+          textAlign: TextAlign.center,
+          style: AppFontStyle.fontStyleW700(
+            fontSize: 20,
+            fontColor: AppColors.redesignBrandDark,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          'New group sessions will appear here once experts schedule them.',
+          textAlign: TextAlign.center,
+          style: AppFontStyle.fontStyleW500(
+            fontSize: 13,
+            fontColor: AppColors.redesignMutedText,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSessionCard(Map<String, dynamic> session) {
+    final sessionId = (session['_id'] ?? '').toString();
+    final joined = _isJoinedByCurrentUser(session);
+    final joining = _joiningSessionId == sessionId;
+    final leaving = _leavingSessionId == sessionId;
+    final accessing = _accessingSessionId == sessionId;
+    final availableSeats = _availableSeats(session);
+    final isFull = availableSeats <= 0;
+
+    final expert = session['expertId'] is Map<String, dynamic>
+        ? session['expertId'] as Map<String, dynamic>
+        : <String, dynamic>{};
+
+    final sessionStatus = (session['sessionStatus'] ?? session['status'] ?? '')
+        .toString()
+        .trim()
+        .toLowerCase();
+    final isJoinable = ['scheduled', 'live'].contains(sessionStatus) && !isFull;
+
+    final title = (session['title'] ?? 'Group Session').toString().trim();
+    final expertName = (expert['displayName'] ?? 'Unknown').toString().trim();
+    final startDate = _formatDateTime((session['startAt'] ?? '').toString());
+    final callType =
+        ((session['callType'] ?? 'audio').toString()).trim().toUpperCase();
+    final pricingText = _pricingLabel(session);
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.redesignSoftBorder),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.03),
+            blurRadius: 12,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  title.isEmpty ? 'Group Session' : title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: 15,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: _statusBackgroundColor(sessionStatus),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  _statusLabel(sessionStatus),
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 11,
+                    fontColor: _statusTextColor(sessionStatus),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Icon(
+                Icons.person_outline_rounded,
+                size: 16,
+                color: AppColors.redesignMutedText,
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  'Expert: $expertName',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: 13,
+                    fontColor: AppColors.redesignTextMeta,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              Icon(
+                Icons.schedule_rounded,
+                size: 16,
+                color: AppColors.redesignMutedText,
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  'Start: $startDate',
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: 13,
+                    fontColor: AppColors.redesignTextMeta,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _buildInfoPill(
+                icon: callType == 'VIDEO'
+                    ? Icons.videocam_outlined
+                    : Icons.mic_none_rounded,
+                label: callType,
+                textColor: AppColors.redesignBrandDark,
+                backgroundColor: AppColors.redesignSurfaceNeutral,
+              ),
+              _buildInfoPill(
+                icon: Icons.local_activity_outlined,
+                label: pricingText,
+                textColor: pricingText == 'FREE'
+                    ? AppColors.redesignStatusSuccessDark
+                    : AppColors.redesignBrandDark,
+                backgroundColor: pricingText == 'FREE'
+                    ? AppColors.redesignStatusSuccessBg
+                    : AppColors.redesignSurfaceNeutral,
+              ),
+              _buildInfoPill(
+                icon: Icons.event_seat_outlined,
+                label: '$availableSeats seats',
+                textColor: isFull
+                    ? AppColors.redesignBrandRed
+                    : AppColors.redesignBrandDark,
+                backgroundColor: isFull
+                    ? AppColors.redesignAccentSoftBg
+                    : AppColors.redesignSurfaceNeutral,
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          if (!joined)
+            SizedBox(
+              width: double.infinity,
+              height: 46,
+              child: ElevatedButton(
+                onPressed: joining || !isJoinable
+                    ? null
+                    : () => _onJoinSession(session),
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: AppColors.redesignBrandDark,
+                  disabledBackgroundColor: AppColors.redesignSoftBorder,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: joining
+                    ? const SizedBox(
+                        height: 18,
+                        width: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.white,
+                        ),
+                      )
+                    : Text(
+                        isJoinable ? 'Join Session' : 'Session Unavailable',
+                        style: AppFontStyle.fontStyleW700(
+                          fontSize: 14,
+                          fontColor: isJoinable
+                              ? AppColors.white
+                              : AppColors.redesignMutedText,
+                        ),
+                      ),
+              ),
+            )
+          else
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 46,
+                    child: ElevatedButton(
+                      onPressed:
+                          accessing ? null : () => _onAccessSession(session),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: AppColors.redesignBrandDark,
+                        disabledBackgroundColor: AppColors.redesignSoftBorder,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: accessing
+                          ? const SizedBox(
+                              height: 18,
+                              width: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.white,
+                              ),
+                            )
+                          : Text(
+                              'Access Session',
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: 13,
+                                fontColor: AppColors.white,
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: SizedBox(
+                    height: 46,
+                    child: OutlinedButton(
+                      onPressed:
+                          leaving ? null : () => _onLeaveSession(session),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: AppColors.redesignBrandDark),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: leaving
+                          ? SizedBox(
+                              height: 18,
+                              width: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.redesignBrandDark,
+                              ),
+                            )
+                          : Text(
+                              'Leave',
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: 13,
+                                fontColor: AppColors.redesignBrandDark,
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final sessions = _activeSessions;
+
+    return Scaffold(
+      backgroundColor: AppColors.redesignScreenBackground,
+      body: Column(
+        children: [
+          _buildAppHeader(sessions.length),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 2),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
               child: Row(
                 children: [
                   _buildCallTypeFilterChip('all', 'All'),
@@ -398,150 +993,70 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
                 ],
               ),
             ),
-            Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _activeSessions.isEmpty
-                      ? Center(
-                          child: Text(
-                            'No active group sessions found.',
-                            style: AppFontStyle.fontStyleW500(fontSize: 13, fontColor: AppColors.grey),
-                          ),
-                        )
-                      : RefreshIndicator(
-                          onRefresh: _fetchSessions,
-                          child: ListView.builder(
-                            padding: const EdgeInsets.all(12),
-                            itemCount: _activeSessions.length,
+          ),
+          Expanded(
+            child: _isLoading
+                ? _buildLoadingState()
+                : RefreshIndicator(
+                    color: AppColors.redesignBrandRed,
+                    backgroundColor: AppColors.white,
+                    onRefresh: _fetchSessions,
+                    child: sessions.isEmpty
+                        ? _buildEmptyState()
+                        : ListView.separated(
+                            physics: const AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics(),
+                            ),
+                            padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+                            itemCount: sessions.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: 12),
                             itemBuilder: (context, index) {
-                              final dynamic raw = _activeSessions[index];
+                              final dynamic raw = sessions[index];
                               final session = raw is Map<String, dynamic>
                                   ? raw
                                   : <String, dynamic>{};
 
-                              final sessionId = (session['_id'] ?? '').toString();
-                              final joined = _isJoinedByCurrentUser(session);
-                              final joining = _joiningSessionId == sessionId;
-                              final leaving = _leavingSessionId == sessionId;
-                              final accessing = _accessingSessionId == sessionId;
-                              final availableSeats = _availableSeats(session);
-                              final isFull = availableSeats <= 0;
-
-                              final expert = session['expertId'] is Map<String, dynamic>
-                                  ? session['expertId'] as Map<String, dynamic>
-                                  : <String, dynamic>{};
-
-                              final sessionStatus =
-                                  (session['sessionStatus'] ?? session['status'] ?? '').toString().trim().toLowerCase();
-                                final isJoinable = ['scheduled', 'live'].contains(sessionStatus) && !isFull;
-
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 10),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: AppColors.profileOptionColor,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      (session['title'] ?? 'Group Session').toString(),
-                                      style: AppFontStyle.fontStyleW700(fontSize: 14, fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      'Expert: ${(expert['displayName'] ?? 'Unknown').toString()}',
-                                      style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Start: ${_formatDateTime((session['startAt'] ?? '').toString())}',
-                                      style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Type: ${((session['callType'] ?? 'audio').toString()).toUpperCase()}',
-                                      style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Price: ${_pricingLabel(session)}',
-                                      style: AppFontStyle.fontStyleW600(
-                                        fontSize: 12,
-                                        fontColor: _pricingLabel(session) == 'FREE' ? Colors.green : AppColors.appColor,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Available Seats: $availableSeats',
-                                      style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Status: ${sessionStatus.isEmpty ? '-' : sessionStatus}',
-                                      style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    if (!joined)
-                                      SizedBox(
-                                        width: double.infinity,
-                                        height: 40,
-                                        child: ElevatedButton(
-                                          onPressed: joining || !isJoinable ? null : () => _onJoinSession(session),
-                                          child: joining
-                                              ? const SizedBox(
-                                                  height: 18,
-                                                  width: 18,
-                                                  child: CircularProgressIndicator(strokeWidth: 2),
-                                                )
-                                              : Text(isJoinable ? 'Join Session' : 'Session Unavailable'),
-                                        ),
-                                      )
-                                    else
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: SizedBox(
-                                              height: 40,
-                                              child: ElevatedButton(
-                                                onPressed: accessing ? null : () => _onAccessSession(session),
-                                                child: accessing
-                                                    ? const SizedBox(
-                                                        height: 18,
-                                                        width: 18,
-                                                        child: CircularProgressIndicator(strokeWidth: 2),
-                                                      )
-                                                    : const Text('Access Session'),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: SizedBox(
-                                              height: 40,
-                                              child: OutlinedButton(
-                                                onPressed: leaving ? null : () => _onLeaveSession(session),
-                                                child: leaving
-                                                    ? const SizedBox(
-                                                        height: 18,
-                                                        width: 18,
-                                                        child: CircularProgressIndicator(strokeWidth: 2),
-                                                      )
-                                                    : const Text('Leave'),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                  ],
-                                ),
-                              );
+                              return _buildSessionCard(session);
                             },
                           ),
-                        ),
-            ),
-          ],
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeaderIconButton extends StatelessWidget {
+  const _HeaderIconButton({
+    required this.icon,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: Container(
+          height: 42,
+          width: 42,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+          ),
+          child: Icon(
+            icon,
+            size: 19,
+            color: AppColors.redesignBrandDark,
+          ),
         ),
       ),
     );

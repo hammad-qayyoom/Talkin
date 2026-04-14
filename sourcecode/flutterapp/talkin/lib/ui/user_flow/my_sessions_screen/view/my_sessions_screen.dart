@@ -272,9 +272,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           curve: Curves.easeOut,
-          height: 46,
+          height: 42,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(12),
             color: selected ? _brandDark : AppColors.transparent,
             border: Border.all(
               color: selected ? _brandDark : AppColors.transparent,
@@ -284,7 +284,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
             child: Text(
               label,
               style: AppFontStyle.fontStyleW600(
-                fontSize: 15,
+                fontSize: 13,
                 fontColor: selected ? AppColors.white : _brandDark,
               ),
             ),
@@ -296,7 +296,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
 
   Widget _buildMetaChip({required IconData icon, required String text}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
       decoration: BoxDecoration(
         color: _chipSurface,
         borderRadius: BorderRadius.circular(999),
@@ -305,12 +305,12 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: _mutedText),
-          const SizedBox(width: 6),
+          Icon(icon, size: 13, color: _mutedText),
+          const SizedBox(width: 5),
           Text(
             text,
             style: AppFontStyle.fontStyleW500(
-              fontSize: 12,
+              fontSize: 11,
               fontColor: _mutedText,
             ),
           ),
@@ -322,10 +322,10 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
   Widget _buildLoadingCard({double bottomMargin = 12}) {
     return Container(
       margin: EdgeInsets.only(bottom: bottomMargin),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: _softBorder),
       ),
       child: Column(
@@ -371,20 +371,20 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
             children: [
               Expanded(
                 child: Container(
-                  height: 42,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: AppColors.lightGrey1,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: Container(
-                  height: 42,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: AppColors.lightGrey1,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
               ),
@@ -424,16 +424,16 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     final isNarrowActionLayout = cardWidth < 430;
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: _softBorder),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
@@ -449,15 +449,14 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: AppFontStyle.fontStyleW700(
-                    fontSize: 17,
+                    fontSize: 14,
                     fontColor: _brandDark,
                   ),
                 ),
               ),
               const SizedBox(width: 10),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
                 decoration: BoxDecoration(
                   color: _statusBackground(status),
                   borderRadius: BorderRadius.circular(999),
@@ -465,24 +464,24 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                 child: Text(
                   statusLabel,
                   style: AppFontStyle.fontStyleW600(
-                    fontSize: 11,
+                    fontSize: 10,
                     fontColor: _statusTextColor(status),
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Text(
             expertName,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: AppFontStyle.fontStyleW600(
-              fontSize: 14,
+              fontSize: 13,
               fontColor: _brandDark,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -500,13 +499,13 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
             ],
           ),
           if (showStartSession) ...[
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
             if (isNarrowActionLayout)
               Column(
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    height: 46,
+                    height: 42,
                     child: ElevatedButton.icon(
                       onPressed: canStart
                           ? () => _onStartSession(item, session, expert)
@@ -518,28 +517,28 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                         backgroundColor: _brandDark,
                         foregroundColor: AppColors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       icon: Icon(
                         canStart
                             ? Icons.play_circle_outline_rounded
                             : Icons.schedule_rounded,
-                        size: 18,
+                        size: 16,
                       ),
                       label: Text(
                         canStart ? 'Start Session' : 'Not Live Yet',
                         style: AppFontStyle.fontStyleW600(
-                          fontSize: 14,
+                          fontSize: 13,
                           fontColor: canStart ? AppColors.white : _mutedText,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
-                    height: 46,
+                    height: 42,
                     child: OutlinedButton.icon(
                       onPressed: isCancellingThis
                           ? null
@@ -550,7 +549,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                         ),
                         foregroundColor: _brandRedDark,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       icon: isCancellingThis
@@ -559,11 +558,11 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                               width: 16,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Icon(Icons.close_rounded, size: 18),
+                          : const Icon(Icons.close_rounded, size: 16),
                       label: Text(
                         isCancellingThis ? 'Cancelling' : 'Cancel Slot',
                         style: AppFontStyle.fontStyleW600(
-                          fontSize: 14,
+                          fontSize: 13,
                           fontColor: _brandRedDark,
                         ),
                       ),
@@ -576,7 +575,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                 children: [
                   Expanded(
                     child: SizedBox(
-                      height: 46,
+                      height: 42,
                       child: ElevatedButton.icon(
                         onPressed: canStart
                             ? () => _onStartSession(item, session, expert)
@@ -588,29 +587,29 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                           backgroundColor: _brandDark,
                           foregroundColor: AppColors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         icon: Icon(
                           canStart
                               ? Icons.play_circle_outline_rounded
                               : Icons.schedule_rounded,
-                          size: 18,
+                          size: 16,
                         ),
                         label: Text(
                           canStart ? 'Start Session' : 'Not Live Yet',
                           style: AppFontStyle.fontStyleW600(
-                            fontSize: 14,
+                            fontSize: 13,
                             fontColor: canStart ? AppColors.white : _mutedText,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: SizedBox(
-                      height: 46,
+                      height: 42,
                       child: OutlinedButton.icon(
                         onPressed: isCancellingThis
                             ? null
@@ -621,7 +620,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                           ),
                           foregroundColor: _brandRedDark,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         icon: isCancellingThis
@@ -631,11 +630,11 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                 child:
                                     CircularProgressIndicator(strokeWidth: 2),
                               )
-                            : const Icon(Icons.close_rounded, size: 18),
+                            : const Icon(Icons.close_rounded, size: 16),
                         label: Text(
                           isCancellingThis ? 'Cancelling' : 'Cancel Slot',
                           style: AppFontStyle.fontStyleW600(
-                            fontSize: 14,
+                            fontSize: 13,
                             fontColor: _brandRedDark,
                           ),
                         ),
@@ -707,24 +706,24 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                height: 78,
-                width: 78,
+                height: 68,
+                width: 68,
                 decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: _softBorder),
                 ),
                 child: Icon(
                   Icons.calendar_month_rounded,
-                  size: 36,
+                  size: 32,
                   color: _brandRed,
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 12),
               Text(
                 'No sessions found',
                 style: AppFontStyle.fontStyleW700(
-                  fontSize: 17,
+                  fontSize: 15,
                   fontColor: _brandDark,
                 ),
               ),
@@ -735,7 +734,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                     : 'Completed sessions will appear here.',
                 textAlign: TextAlign.center,
                 style: AppFontStyle.fontStyleW500(
-                  fontSize: 13,
+                  fontSize: 12,
                   fontColor: _mutedText,
                 ),
               ),
@@ -823,7 +822,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
         title: Text(
           'My Sessions',
           style: AppFontStyle.fontStyleW700(
-            fontSize: isTabletAppBar ? 24 : 18,
+            fontSize: isTabletAppBar ? 22 : 16,
             fontColor: _brandDark,
           ),
         ),
@@ -856,14 +855,14 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(
                             horizontalInset,
-                            8,
+                            6,
                             horizontalInset,
-                            12,
+                            10,
                           ),
                           child: Container(
-                            padding: EdgeInsets.all(isTablet ? 16 : 14),
+                            padding: EdgeInsets.all(isTablet ? 14 : 12),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(22),
+                              borderRadius: BorderRadius.circular(18),
                               gradient: LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -875,8 +874,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                               boxShadow: [
                                 BoxShadow(
                                   color: _brandRed.withValues(alpha: 0.24),
-                                  blurRadius: 22,
-                                  offset: const Offset(0, 12),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 8),
                                 ),
                               ],
                             ),
@@ -884,19 +883,19 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  height: isTablet ? 44 : 40,
-                                  width: isTablet ? 44 : 40,
+                                  height: isTablet ? 40 : 36,
+                                  width: isTablet ? 40 : 36,
                                   decoration: BoxDecoration(
                                     color: AppColors.white,
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Icon(
                                     Icons.calendar_month_rounded,
                                     color: _brandRed,
-                                    size: isTablet ? 24 : 22,
+                                    size: isTablet ? 22 : 20,
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                const SizedBox(width: 8),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -905,15 +904,15 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                       Text(
                                         'Session Center',
                                         style: AppFontStyle.fontStyleW700(
-                                          fontSize: isTablet ? 17 : 15,
+                                          fontSize: isTablet ? 15 : 14,
                                           fontColor: AppColors.white,
                                         ),
                                       ),
-                                      const SizedBox(height: 4),
+                                      const SizedBox(height: 3),
                                       Text(
                                         heroSubtitle,
                                         style: AppFontStyle.fontStyleW500(
-                                          fontSize: isTablet ? 13 : 12,
+                                          fontSize: isTablet ? 12 : 11,
                                           fontColor: AppColors.white
                                               .withValues(alpha: 0.88),
                                         ),
@@ -921,16 +920,16 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                const SizedBox(width: 8),
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 8,
+                                    horizontal: 10,
+                                    vertical: 7,
                                   ),
                                   decoration: BoxDecoration(
                                     color:
                                         AppColors.white.withValues(alpha: 0.2),
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
                                       color: AppColors.white
                                           .withValues(alpha: 0.35),
@@ -941,7 +940,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                       Text(
                                         '${_sessions.length}',
                                         style: AppFontStyle.fontStyleW700(
-                                          fontSize: isTablet ? 18 : 16,
+                                          fontSize: isTablet ? 16 : 14,
                                           fontColor: AppColors.white,
                                         ),
                                       ),
@@ -950,7 +949,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                             ? 'Upcoming'
                                             : 'Done',
                                         style: AppFontStyle.fontStyleW500(
-                                          fontSize: 10,
+                                          fontSize: 9,
                                           fontColor: AppColors.white
                                               .withValues(alpha: 0.9),
                                         ),
@@ -967,19 +966,19 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                             horizontalInset,
                             0,
                             horizontalInset,
-                            12,
+                            10,
                           ),
                           child: Container(
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               color: AppColors.redesignPanelBg,
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(14),
                               border: Border.all(color: _softBorder),
                             ),
                             child: Row(
                               children: [
                                 _buildSegment('upcoming', 'Upcoming'),
-                                const SizedBox(width: 8),
+                                const SizedBox(width: 6),
                                 _buildSegment('completed', 'Completed'),
                               ],
                             ),
