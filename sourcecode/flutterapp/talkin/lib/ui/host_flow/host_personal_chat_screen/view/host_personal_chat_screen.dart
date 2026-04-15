@@ -18,192 +18,197 @@ class HostPersonalChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.redesignScreenBackground,
-      body: LayoutBuilder(
-        builder: (context, viewportConstraints) {
-          final viewportWidth = viewportConstraints.maxWidth;
-          final maxContentWidth =
-              viewportWidth >= 1400 ? 1280.0 : double.infinity;
+      body: SafeArea(
+        bottom: false,
+        child: LayoutBuilder(
+          builder: (context, viewportConstraints) {
+            final viewportWidth = viewportConstraints.maxWidth;
+            final maxContentWidth =
+                viewportWidth >= 760 ? 980.0 : viewportWidth;
 
-          return Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: maxContentWidth),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  GetBuilder<HostPersonalChatScreenController>(
-                    id: Constant.idGetOldChat,
-                    builder: (controller) {
-                      return Column(
-                        children: [
-                          const HostChatScreenAppBar(),
-                          GetBuilder<HostPersonalChatScreenController>(
-                            id: Constant.idPagination,
-                            builder: (controller) => Visibility(
-                              visible: controller.isPaginationLoading,
-                              child: LinearProgressIndicator(
-                                color: AppColors.redesignBrandRed,
+            return Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    GetBuilder<HostPersonalChatScreenController>(
+                      id: Constant.idGetOldChat,
+                      builder: (controller) {
+                        return Column(
+                          children: [
+                            const HostChatScreenAppBar(),
+                            GetBuilder<HostPersonalChatScreenController>(
+                              id: Constant.idPagination,
+                              builder: (controller) => Visibility(
+                                visible: controller.isPaginationLoading,
+                                child: LinearProgressIndicator(
+                                  color: AppColors.redesignBrandRed,
+                                ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              color: AppColors.redesignSurfaceSoft,
-                              child: SizedBox(
-                                height: Get.height - 100,
-                                child: controller.isLoading
-                                    ? const PersonalChatScreenShimmer()
-                                    : SingleChildScrollView(
-                                        controller: controller.scrollController,
-                                        child: ListView.builder(
-                                          reverse: true,
-                                          shrinkWrap: true,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 10,
-                                            horizontal: 8,
+                            Expanded(
+                              child: Container(
+                                color: AppColors.redesignSurfaceSoft,
+                                child: SizedBox(
+                                  height: Get.height - 100,
+                                  child: controller.isLoading
+                                      ? const PersonalChatScreenShimmer()
+                                      : SingleChildScrollView(
+                                          controller:
+                                              controller.scrollController,
+                                          child: ListView.builder(
+                                            reverse: true,
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 10,
+                                              horizontal: 8,
+                                            ),
+                                            itemCount: controller
+                                                .oldChatListener.length,
+                                            itemBuilder: (context, index) {
+                                              final msg = controller
+                                                  .oldChatListener[index];
+                                              final isLastMessage = index == 0;
+
+                                              Widget messageWidget = msg
+                                                          .messageType ==
+                                                      1
+                                                  ? HostChatTextWidget(
+                                                      msg: msg,
+                                                      controller: controller,
+                                                      isRead:
+                                                          msg.isRead ?? false,
+                                                    )
+                                                  : msg.messageType == 4
+                                                      ? HostChatAudioCallWidget(
+                                                          msg: msg,
+                                                          controller:
+                                                              controller,
+                                                          audioCallDuration:
+                                                              msg.callDuration ??
+                                                                  "00:00:00",
+                                                        )
+                                                      : msg.messageType == 5
+                                                          ? HostChatVideoCallWidget(
+                                                              msg: msg,
+                                                              controller:
+                                                                  controller,
+                                                              callDuration:
+                                                                  msg.callDuration ??
+                                                                      "00:00:00",
+                                                            )
+                                                          : msg.messageType == 2
+                                                              ? HostChatImageWidget(
+                                                                  msg: msg,
+                                                                  controller:
+                                                                      controller,
+                                                                  isRead:
+                                                                      msg.isRead ??
+                                                                          false,
+                                                                )
+                                                              : msg.messageType ==
+                                                                      3
+                                                                  ? msg.senderId ==
+                                                                          Database
+                                                                              .fetchLoginUserProfileModel
+                                                                              ?.user
+                                                                              ?.listenerId
+                                                                      ? SenderAudioMessageWidget(
+                                                                          audioUrl:
+                                                                              msg.audio ?? "",
+                                                                          time: msg.date ??
+                                                                              "",
+                                                                          id: msg.id ??
+                                                                              "",
+                                                                          chat:
+                                                                              msg,
+                                                                          isLastMessage:
+                                                                              isLastMessage,
+                                                                        )
+                                                                      : ReceiverAudioMessageWidget(
+                                                                          audioUrl:
+                                                                              msg.audio ?? "",
+                                                                          time: msg.date ??
+                                                                              "",
+                                                                          id: msg.id ??
+                                                                              "",
+                                                                          chat:
+                                                                              msg,
+                                                                        )
+                                                                  : const SizedBox();
+
+                                              return Align(
+                                                alignment: msg.senderId ==
+                                                        Database
+                                                            .fetchLoginUserProfileModel
+                                                            ?.user
+                                                            ?.listenerId
+                                                    ? Alignment.centerRight
+                                                    : Alignment.centerLeft,
+                                                child: messageWidget,
+                                              );
+                                            },
                                           ),
-                                          itemCount:
-                                              controller.oldChatListener.length,
-                                          itemBuilder: (context, index) {
-                                            final msg = controller
-                                                .oldChatListener[index];
-                                            final isLastMessage = index == 0;
-
-                                            Widget messageWidget = msg
-                                                        .messageType ==
-                                                    1
-                                                ? HostChatTextWidget(
-                                                    msg: msg,
-                                                    controller: controller,
-                                                    isRead: msg.isRead ?? false,
-                                                  )
-                                                : msg.messageType == 4
-                                                    ? HostChatAudioCallWidget(
-                                                        msg: msg,
-                                                        controller: controller,
-                                                        audioCallDuration:
-                                                            msg.callDuration ??
-                                                                "00:00:00",
-                                                      )
-                                                    : msg.messageType == 5
-                                                        ? HostChatVideoCallWidget(
-                                                            msg: msg,
-                                                            controller:
-                                                                controller,
-                                                            callDuration:
-                                                                msg.callDuration ??
-                                                                    "00:00:00",
-                                                          )
-                                                        : msg.messageType == 2
-                                                            ? HostChatImageWidget(
-                                                                msg: msg,
-                                                                controller:
-                                                                    controller,
-                                                                isRead:
-                                                                    msg.isRead ??
-                                                                        false,
-                                                              )
-                                                            : msg.messageType ==
-                                                                    3
-                                                                ? msg.senderId ==
-                                                                        Database
-                                                                            .fetchLoginUserProfileModel
-                                                                            ?.user
-                                                                            ?.listenerId
-                                                                    ? SenderAudioMessageWidget(
-                                                                        audioUrl:
-                                                                            msg.audio ??
-                                                                                "",
-                                                                        time: msg.date ??
-                                                                            "",
-                                                                        id: msg.id ??
-                                                                            "",
-                                                                        chat:
-                                                                            msg,
-                                                                        isLastMessage:
-                                                                            isLastMessage,
-                                                                      )
-                                                                    : ReceiverAudioMessageWidget(
-                                                                        audioUrl:
-                                                                            msg.audio ??
-                                                                                "",
-                                                                        time: msg.date ??
-                                                                            "",
-                                                                        id: msg.id ??
-                                                                            "",
-                                                                        chat:
-                                                                            msg,
-                                                                      )
-                                                                : const SizedBox();
-
-                                            return Align(
-                                              alignment: msg.senderId ==
-                                                      Database
-                                                          .fetchLoginUserProfileModel
-                                                          ?.user
-                                                          ?.listenerId
-                                                  ? Alignment.centerRight
-                                                  : Alignment.centerLeft,
-                                              child: messageWidget,
-                                            );
-                                          },
                                         ),
-                                      ),
-                              ),
-                            ),
-                          ),
-                          const HostPersonalChatBottomView(),
-                        ],
-                      );
-                    },
-                  ),
-                  Positioned(
-                    bottom: 80,
-                    child: GetBuilder<HostPersonalChatScreenController>(
-                      id: Constant.idChangeAudioRecordingEvent,
-                      builder: (controller) => Visibility(
-                        visible: controller.isRecordingAudio,
-                        child: Container(
-                          height: 42,
-                          width: 128,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: AppColors.redesignAccentSoftBg,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: AppColors.redesignBrandRed
-                                  .withValues(alpha: 0.35),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                AppAsset.microPhoneIcon,
-                                color: AppColors.redesignBrandRed,
-                                width: 20,
-                              ),
-                              6.width,
-                              Text(
-                                CustomFormatAudioTime.convert(
-                                  controller.countTime,
-                                ),
-                                style: AppFontStyle.fontStyleW600(
-                                  fontColor: AppColors.redesignBrandRed,
-                                  fontSize: 13,
                                 ),
                               ),
-                            ],
+                            ),
+                            const HostPersonalChatBottomView(),
+                          ],
+                        );
+                      },
+                    ),
+                    Positioned(
+                      bottom: 80,
+                      child: GetBuilder<HostPersonalChatScreenController>(
+                        id: Constant.idChangeAudioRecordingEvent,
+                        builder: (controller) => Visibility(
+                          visible: controller.isRecordingAudio,
+                          child: Container(
+                            height: 42,
+                            width: 128,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: AppColors.redesignAccentSoftBg,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: AppColors.redesignBrandRed
+                                    .withValues(alpha: 0.35),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  AppAsset.microPhoneIcon,
+                                  color: AppColors.redesignBrandRed,
+                                  width: 20,
+                                ),
+                                6.width,
+                                Text(
+                                  CustomFormatAudioTime.convert(
+                                    controller.countTime,
+                                  ),
+                                  style: AppFontStyle.fontStyleW600(
+                                    fontColor: AppColors.redesignBrandRed,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

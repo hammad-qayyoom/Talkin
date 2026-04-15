@@ -977,52 +977,68 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.redesignScreenBackground,
-      body: Column(
-        children: [
-          _buildAppHeader(sessions.length),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 2),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              child: Row(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final maxContentWidth =
+              constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
+
+          return Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxContentWidth),
+              child: Column(
                 children: [
-                  _buildCallTypeFilterChip('all', 'All'),
-                  _buildCallTypeFilterChip('audio', 'Audio'),
-                  _buildCallTypeFilterChip('video', 'Video'),
+                  _buildAppHeader(sessions.length),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 10, 16, 2),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      child: Row(
+                        children: [
+                          _buildCallTypeFilterChip('all', 'All'),
+                          _buildCallTypeFilterChip('audio', 'Audio'),
+                          _buildCallTypeFilterChip('video', 'Video'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: _isLoading
+                        ? _buildLoadingState()
+                        : RefreshIndicator(
+                            color: AppColors.redesignBrandRed,
+                            backgroundColor: AppColors.white,
+                            onRefresh: _fetchSessions,
+                            child: sessions.isEmpty
+                                ? _buildEmptyState()
+                                : ListView.separated(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(
+                                      parent: BouncingScrollPhysics(),
+                                    ),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        16, 4, 16, 20),
+                                    itemCount: sessions.length,
+                                    separatorBuilder: (context, index) =>
+                                        const SizedBox(height: 12),
+                                    itemBuilder: (context, index) {
+                                      final dynamic raw = sessions[index];
+                                      final session =
+                                          raw is Map<String, dynamic>
+                                              ? raw
+                                              : <String, dynamic>{};
+
+                                      return _buildSessionCard(session);
+                                    },
+                                  ),
+                          ),
+                  ),
                 ],
               ),
             ),
-          ),
-          Expanded(
-            child: _isLoading
-                ? _buildLoadingState()
-                : RefreshIndicator(
-                    color: AppColors.redesignBrandRed,
-                    backgroundColor: AppColors.white,
-                    onRefresh: _fetchSessions,
-                    child: sessions.isEmpty
-                        ? _buildEmptyState()
-                        : ListView.separated(
-                            physics: const AlwaysScrollableScrollPhysics(
-                              parent: BouncingScrollPhysics(),
-                            ),
-                            padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
-                            itemCount: sessions.length,
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 12),
-                            itemBuilder: (context, index) {
-                              final dynamic raw = sessions[index];
-                              final session = raw is Map<String, dynamic>
-                                  ? raw
-                                  : <String, dynamic>{};
-
-                              return _buildSessionCard(session);
-                            },
-                          ),
-                  ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }

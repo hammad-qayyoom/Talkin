@@ -157,12 +157,31 @@ class TopListenersViewAllScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        flexibleSpace: const TopListenersViewAllAppBar(),
+      backgroundColor: AppColors.redesignScreenBackground,
+      body: SafeArea(
+        bottom: false,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final maxContentWidth =
+                constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
+
+            return Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                child: const Column(
+                  children: [
+                    TopListenersViewAllAppBar(),
+                    Expanded(
+                      child: TopListenersViewAllView(),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
-      body: TopListenersViewAllView(),
     );
   }
 }

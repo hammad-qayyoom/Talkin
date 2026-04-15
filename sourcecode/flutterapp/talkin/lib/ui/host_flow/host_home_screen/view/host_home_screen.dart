@@ -31,30 +31,78 @@ class HostHomeScreen extends GetView<HostHomeScreenController> {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.white,
-        body: GetBuilder<HostHomeScreenController>(builder: (controller) {
-          return RefreshIndicator(
-            onRefresh: () async => controller.onRefresh(),
-            child: Column(
-              children: [
-                HostTopHomeView().paddingSymmetric(horizontal: 16),
-                Expanded(
-                  child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        HostImageView(),
-                        PermissionView().paddingSymmetric(horizontal: 16),
-                        NoteView().paddingSymmetric(horizontal: 16),
-                      ],
-                    ),
-                  ),
+        backgroundColor: AppColors.redesignScreenBackground,
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth;
+            final horizontalPadding = width >= 1200
+                ? 28.0
+                : width >= 760
+                    ? 22.0
+                    : 16.0;
+            final maxContentWidth = width >= 760 ? 980.0 : constraints.maxWidth;
+
+            return Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                child: GetBuilder<HostHomeScreenController>(
+                  builder: (controller) {
+                    return RefreshIndicator(
+                      color: AppColors.redesignBrandRed,
+                      backgroundColor: AppColors.white,
+                      onRefresh: () async => controller.onRefresh(),
+                      child: CustomScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics(),
+                        ),
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: horizontalPadding,
+                              ),
+                              child: const HostTopHomeView(),
+                            ),
+                          ),
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: horizontalPadding,
+                              ),
+                              child: const HostImageView(),
+                            ),
+                          ),
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                left: horizontalPadding,
+                                right: horizontalPadding,
+                                top: 16,
+                              ),
+                              child: const PermissionView(),
+                            ),
+                          ),
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                horizontalPadding,
+                                0,
+                                horizontalPadding,
+                                28,
+                              ),
+                              child: const NoteView(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
-          );
-        }),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

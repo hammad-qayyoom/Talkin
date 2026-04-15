@@ -9,16 +9,42 @@ class UserNotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.redesignScreenBackground,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(96),
-        child: UserNotificationAppBar(),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(96),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final maxContentWidth =
+                constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
+
+            return Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                width: maxContentWidth,
+                child: const UserNotificationAppBar(),
+              ),
+            );
+          },
+        ),
       ),
-      body: const SafeArea(
+      body: SafeArea(
         top: false,
-        child: Column(
-          children: [
-            UserNotificationView(),
-          ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final maxContentWidth =
+                constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
+
+            return Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                width: maxContentWidth,
+                child: const Column(
+                  children: [
+                    UserNotificationView(),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

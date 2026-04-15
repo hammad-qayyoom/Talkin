@@ -2,15 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talk_in/routes/app_routes.dart';
+import 'package:talk_in/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
 import 'package:talk_in/ui/user_flow/home_screen/controller/home_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/home_screen/api/user_coin_api.dart';
-import 'package:talk_in/ui/user_flow/home_screen/model/user_coin_model.dart';
 import 'package:talk_in/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
 import 'package:talk_in/utils/api.dart';
 import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/enums.dart';
 import 'package:talk_in/utils/font_style.dart';
 
@@ -63,6 +61,20 @@ class FindMoreWidget extends StatelessWidget {
     }
 
     return Icons.category_outlined;
+  }
+
+  void _openExpertsTab(HomeScreenController homeController) {
+    if (Get.isRegistered<BottomBarController>()) {
+      Get.find<BottomBarController>().onClick(2);
+      return;
+    }
+
+    Get.toNamed(
+      AppRoutes.allListeners,
+      arguments: {
+        'categoryId': homeController.selectedCategoryId,
+      },
+    );
   }
 
   Widget _buildCategoryCard({
@@ -289,24 +301,7 @@ class FindMoreWidget extends StatelessWidget {
                           width: double.infinity,
                           height: ctaHeight,
                           child: ElevatedButton(
-                            onPressed: () {
-                              Get.toNamed(
-                                AppRoutes.allListeners,
-                                arguments: {
-                                  'categoryId':
-                                      homeController.selectedCategoryId,
-                                },
-                              )?.then(
-                                (value) async {
-                                  UserCoinModel? userCoinModel;
-                                  userCoinModel = await UserCoinApi.callApi();
-                                  if (userCoinModel?.status == true) {
-                                    Database.onSetUserCoin(
-                                        (userCoinModel?.coin ?? 0).toString());
-                                  }
-                                },
-                              );
-                            },
+                            onPressed: () => _openExpertsTab(homeController),
                             style: ElevatedButton.styleFrom(
                               elevation: 0,
                               backgroundColor: _brandDark,
@@ -375,25 +370,7 @@ class FindMoreWidget extends StatelessWidget {
                           child: SizedBox(
                             height: ctaHeight,
                             child: ElevatedButton(
-                              onPressed: () {
-                                Get.toNamed(
-                                  AppRoutes.allListeners,
-                                  arguments: {
-                                    'categoryId':
-                                        homeController.selectedCategoryId,
-                                  },
-                                )?.then(
-                                  (value) async {
-                                    UserCoinModel? userCoinModel;
-                                    userCoinModel = await UserCoinApi.callApi();
-                                    if (userCoinModel?.status == true) {
-                                      Database.onSetUserCoin(
-                                          (userCoinModel?.coin ?? 0)
-                                              .toString());
-                                    }
-                                  },
-                                );
-                              },
+                              onPressed: () => _openExpertsTab(homeController),
                               style: ElevatedButton.styleFrom(
                                 elevation: 0,
                                 backgroundColor: _brandDark,

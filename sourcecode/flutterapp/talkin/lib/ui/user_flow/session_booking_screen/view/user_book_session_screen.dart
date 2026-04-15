@@ -291,7 +291,47 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
     return !_isSlotBooked(_selectedSlot!);
   }
 
-  Widget _buildHeader() {
+  double _maxContentWidthFor(double width) {
+    return width >= 760 ? 980.0 : width;
+  }
+
+  double _horizontalInsetFor(double width) {
+    return width >= 760 ? 22.0 : 16.0;
+  }
+
+  int _slotCrossAxisCountFor(double availableWidth) {
+    if (availableWidth >= 1120) return 4;
+    if (availableWidth >= 860) return 3;
+    if (availableWidth >= 520) return 2;
+    return 1;
+  }
+
+  double _slotAspectRatioFor(double availableWidth, int crossAxisCount) {
+    if (crossAxisCount == 1) return 4.8;
+    if (crossAxisCount == 2) {
+      return availableWidth >= 760 ? 2.7 : 2.35;
+    }
+    if (crossAxisCount == 3) return 2.1;
+    return 1.9;
+  }
+
+  SliverGridDelegate _buildSlotsGridDelegate(double availableWidth) {
+    final crossAxisCount = _slotCrossAxisCountFor(availableWidth);
+    final childAspectRatio =
+        _slotAspectRatioFor(availableWidth, crossAxisCount);
+
+    return SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: crossAxisCount,
+      childAspectRatio: childAspectRatio,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+    );
+  }
+
+  Widget _buildHeader({
+    required double horizontalInset,
+    required bool isTablet,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.redesignScreenBackground,
@@ -306,7 +346,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+          padding: EdgeInsets.fromLTRB(horizontalInset, 8, horizontalInset, 12),
           child: Row(
             children: [
               _HeaderIconButton(
@@ -321,7 +361,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
                     Text(
                       'Book Session',
                       style: AppFontStyle.fontStyleW700(
-                        fontSize: 20,
+                        fontSize: isTablet ? 22 : 20,
                         fontColor: AppColors.redesignBrandDark,
                       ),
                     ),
@@ -343,10 +383,10 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
     );
   }
 
-  Widget _buildExpertCard() {
+  Widget _buildExpertCard({required double horizontalInset}) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+      margin: EdgeInsets.fromLTRB(horizontalInset, 12, horizontalInset, 0),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -518,16 +558,18 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
     );
   }
 
-  Widget _buildSlotsLoading() {
+  Widget _buildSlotsLoading({
+    required double horizontalInset,
+    required double contentWidth,
+  }) {
+    final availableWidth = (contentWidth - (horizontalInset * 2))
+        .clamp(0.0, double.infinity)
+        .toDouble();
+
     return GridView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+      padding: EdgeInsets.fromLTRB(horizontalInset, 8, horizontalInset, 10),
       itemCount: 8,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 2.2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
+      gridDelegate: _buildSlotsGridDelegate(availableWidth),
       itemBuilder: (context, index) {
         return Container(
           decoration: BoxDecoration(
@@ -540,12 +582,12 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
     );
   }
 
-  Widget _buildSlotsEmpty() {
+  Widget _buildSlotsEmpty({required double horizontalInset}) {
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(
         parent: BouncingScrollPhysics(),
       ),
-      padding: const EdgeInsets.fromLTRB(16, 30, 16, 20),
+      padding: EdgeInsets.fromLTRB(horizontalInset, 30, horizontalInset, 20),
       children: [
         Icon(
           Icons.event_busy_outlined,
@@ -578,208 +620,278 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.redesignScreenBackground,
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
-          decoration: BoxDecoration(
-            color: AppColors.redesignScreenBackground,
-            border: Border(
-              top: BorderSide(color: AppColors.redesignSoftBorder),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.04),
-                blurRadius: 12,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
-          child: SizedBox(
-            height: 50,
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _isBooking ? null : _bookSelectedSlot,
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                backgroundColor: AppColors.redesignBrandDark,
-                disabledBackgroundColor: AppColors.redesignSoftBorder,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-              child: _isBooking
-                  ? const SizedBox(
-                      height: 18,
-                      width: 18,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppColors.white,
+      bottomNavigationBar: LayoutBuilder(
+        builder: (context, constraints) {
+          final maxContentWidth = _maxContentWidthFor(constraints.maxWidth);
+          final horizontalInset = _horizontalInsetFor(maxContentWidth);
+
+          return Row(
+            children: [
+              const Spacer(),
+              SizedBox(
+                width: maxContentWidth,
+                child: SafeArea(
+                  top: false,
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(
+                        horizontalInset, 8, horizontalInset, 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.redesignScreenBackground,
+                      border: Border(
+                        top: BorderSide(color: AppColors.redesignSoftBorder),
                       ),
-                    )
-                  : Text(
-                      'Confirm Booking',
-                      style: AppFontStyle.fontStyleW700(
-                        fontSize: 17,
-                        fontColor: _canConfirmBooking
-                            ? AppColors.white
-                            : AppColors.redesignMutedText,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.black.withValues(alpha: 0.04),
+                          blurRadius: 12,
+                          offset: const Offset(0, -2),
+                        ),
+                      ],
+                    ),
+                    child: SizedBox(
+                      height: 50,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed:
+                            _canConfirmBooking ? _bookSelectedSlot : null,
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: AppColors.redesignBrandDark,
+                          disabledBackgroundColor: AppColors.redesignSoftBorder,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                        child: _isBooking
+                            ? const SizedBox(
+                                height: 18,
+                                width: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.white,
+                                ),
+                              )
+                            : Text(
+                                'Confirm Booking',
+                                style: AppFontStyle.fontStyleW700(
+                                  fontSize: 17,
+                                  fontColor: _canConfirmBooking
+                                      ? AppColors.white
+                                      : AppColors.redesignMutedText,
+                                ),
+                              ),
                       ),
                     ),
-            ),
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          _buildHeader(),
-          _buildExpertCard(),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              child: Row(
-                children: [
-                  if (_isAudioServiceEnabled)
-                    _buildCallTypeChip(value: 'audio', label: 'Audio'),
-                  if (_isVideoServiceEnabled)
-                    _buildCallTypeChip(value: 'video', label: 'Video'),
-                ],
-              ),
-            ),
-          ),
-          if (!_isAudioServiceEnabled && !_isVideoServiceEnabled)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Expert is currently unavailable for Audio/Video sessions.',
-                  style: AppFontStyle.fontStyleW500(
-                    fontSize: 12,
-                    fontColor: AppColors.redesignMutedText,
                   ),
                 ),
               ),
-            ),
-          SizedBox(
-            height: 56,
-            child: ListView.builder(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              scrollDirection: Axis.horizontal,
-              itemCount: _dates.length,
-              itemBuilder: (context, index) => _buildDateChip(_dates[index]),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Times are shown in your local timezone. Booking policy timezone: $_bookingTimezone.',
-                style: AppFontStyle.fontStyleW500(
-                  fontSize: 11,
-                  fontColor: AppColors.redesignMutedText,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: _isLoading
-                ? _buildSlotsLoading()
-                : _slots.isEmpty
-                    ? _buildSlotsEmpty()
-                    : GridView.builder(
-                        padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-                        itemCount: _slots.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 2.15,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
+              const Spacer(),
+            ],
+          );
+        },
+      ),
+      body: LayoutBuilder(
+        builder: (context, viewportConstraints) {
+          final maxContentWidth =
+              _maxContentWidthFor(viewportConstraints.maxWidth);
+
+          return Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxContentWidth),
+              child: LayoutBuilder(
+                builder: (context, contentConstraints) {
+                  final contentWidth = contentConstraints.maxWidth;
+                  final isTablet = contentWidth >= 760;
+                  final horizontalInset = _horizontalInsetFor(contentWidth);
+                  final slotAvailableWidth =
+                      (contentWidth - (horizontalInset * 2))
+                          .clamp(0.0, double.infinity)
+                          .toDouble();
+
+                  return Column(
+                    children: [
+                      _buildHeader(
+                        horizontalInset: horizontalInset,
+                        isTablet: isTablet,
+                      ),
+                      _buildExpertCard(horizontalInset: horizontalInset),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                            horizontalInset, 12, horizontalInset, 0),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          child: Row(
+                            children: [
+                              if (_isAudioServiceEnabled)
+                                _buildCallTypeChip(
+                                    value: 'audio', label: 'Audio'),
+                              if (_isVideoServiceEnabled)
+                                _buildCallTypeChip(
+                                    value: 'video', label: 'Video'),
+                            ],
+                          ),
                         ),
-                        itemBuilder: (context, index) {
-                          final slot = (_slots[index] is Map<String, dynamic>)
-                              ? _slots[index] as Map<String, dynamic>
-                              : <String, dynamic>{};
-                          final isBooked = _isSlotBooked(slot);
-                          final isSelected = _selectedSlot == slot;
-
-                          final slotStatusLabel = isBooked
-                              ? 'Booked'
-                              : isSelected
-                                  ? 'Selected'
-                                  : 'Available';
-
-                          return Material(
-                            color: AppColors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(14),
-                              onTap: isBooked
-                                  ? null
-                                  : () {
-                                      setState(() {
-                                        _selectedSlot = slot;
-                                      });
-                                    },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 150),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14),
-                                  border: Border.all(
-                                    color: isBooked
-                                        ? AppColors.red.withValues(alpha: 0.6)
-                                        : isSelected
-                                            ? AppColors.redesignBrandDark
-                                            : AppColors.green
-                                                .withValues(alpha: 0.45),
-                                  ),
-                                  color: isBooked
-                                      ? AppColors.lightRed
-                                      : isSelected
-                                          ? AppColors.redesignBrandDark
-                                          : AppColors.green
-                                              .withValues(alpha: 0.08),
-                                ),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        _formatSlotLabel(slot),
-                                        style: AppFontStyle.fontStyleW700(
-                                          fontSize: 12,
-                                          fontColor: isBooked
-                                              ? AppColors.red
-                                              : isSelected
-                                                  ? AppColors.white
-                                                  : AppColors.redesignBrandDark,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 3),
-                                      Text(
-                                        slotStatusLabel,
-                                        style: AppFontStyle.fontStyleW600(
-                                          fontSize: 10,
-                                          fontColor: isBooked
-                                              ? AppColors.red
-                                              : isSelected
-                                                  ? AppColors.white
-                                                  : AppColors.green,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                      ),
+                      if (!_isAudioServiceEnabled && !_isVideoServiceEnabled)
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              horizontalInset, 8, horizontalInset, 0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Expert is currently unavailable for Audio/Video sessions.',
+                              style: AppFontStyle.fontStyleW500(
+                                fontSize: 12,
+                                fontColor: AppColors.redesignMutedText,
                               ),
                             ),
-                          );
-                        },
+                          ),
+                        ),
+                      SizedBox(
+                        height: 56,
+                        child: ListView.builder(
+                          padding: EdgeInsets.fromLTRB(
+                              horizontalInset, 8, horizontalInset, 0),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _dates.length,
+                          itemBuilder: (context, index) =>
+                              _buildDateChip(_dates[index]),
+                        ),
                       ),
-          ),
-        ],
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                            horizontalInset, 8, horizontalInset, 0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Times are shown in your local timezone. Booking policy timezone: $_bookingTimezone.',
+                            style: AppFontStyle.fontStyleW500(
+                              fontSize: 11,
+                              fontColor: AppColors.redesignMutedText,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: _isLoading
+                            ? _buildSlotsLoading(
+                                horizontalInset: horizontalInset,
+                                contentWidth: contentWidth,
+                              )
+                            : _slots.isEmpty
+                                ? _buildSlotsEmpty(
+                                    horizontalInset: horizontalInset)
+                                : GridView.builder(
+                                    padding: EdgeInsets.fromLTRB(
+                                        horizontalInset,
+                                        10,
+                                        horizontalInset,
+                                        10),
+                                    itemCount: _slots.length,
+                                    gridDelegate: _buildSlotsGridDelegate(
+                                        slotAvailableWidth),
+                                    itemBuilder: (context, index) {
+                                      final slot = (_slots[index]
+                                              is Map<String, dynamic>)
+                                          ? _slots[index]
+                                              as Map<String, dynamic>
+                                          : <String, dynamic>{};
+                                      final isBooked = _isSlotBooked(slot);
+                                      final isSelected = _selectedSlot == slot;
+
+                                      final slotStatusLabel = isBooked
+                                          ? 'Booked'
+                                          : isSelected
+                                              ? 'Selected'
+                                              : 'Available';
+
+                                      return Material(
+                                        color: AppColors.transparent,
+                                        child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          onTap: isBooked
+                                              ? null
+                                              : () {
+                                                  setState(() {
+                                                    _selectedSlot = slot;
+                                                  });
+                                                },
+                                          child: AnimatedContainer(
+                                            duration: const Duration(
+                                                milliseconds: 150),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(14),
+                                              border: Border.all(
+                                                color: isBooked
+                                                    ? AppColors.red
+                                                        .withValues(alpha: 0.6)
+                                                    : isSelected
+                                                        ? AppColors
+                                                            .redesignBrandDark
+                                                        : AppColors.green
+                                                            .withValues(
+                                                                alpha: 0.45),
+                                              ),
+                                              color: isBooked
+                                                  ? AppColors.lightRed
+                                                  : isSelected
+                                                      ? AppColors
+                                                          .redesignBrandDark
+                                                      : AppColors.green
+                                                          .withValues(
+                                                              alpha: 0.08),
+                                            ),
+                                            child: Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    _formatSlotLabel(slot),
+                                                    style: AppFontStyle
+                                                        .fontStyleW700(
+                                                      fontSize: 12,
+                                                      fontColor: isBooked
+                                                          ? AppColors.red
+                                                          : isSelected
+                                                              ? AppColors.white
+                                                              : AppColors
+                                                                  .redesignBrandDark,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 3),
+                                                  Text(
+                                                    slotStatusLabel,
+                                                    style: AppFontStyle
+                                                        .fontStyleW600(
+                                                      fontSize: 10,
+                                                      fontColor: isBooked
+                                                          ? AppColors.red
+                                                          : isSelected
+                                                              ? AppColors.white
+                                                              : AppColors.green,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          );
+        },
       ),
     );
   }
