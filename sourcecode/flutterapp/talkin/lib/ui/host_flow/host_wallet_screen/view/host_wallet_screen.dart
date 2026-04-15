@@ -18,13 +18,6 @@ class _HostWalletScreenState extends State<HostWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    final maxContentWidth = width >= 1100
-        ? 980.0
-        : width >= 760
-            ? 760.0
-            : width;
-
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -45,32 +38,40 @@ class _HostWalletScreenState extends State<HostWalletScreen> {
       child: Scaffold(
         backgroundColor: AppColors.redesignScreenBackground,
         body: SafeArea(
-          child: Column(
-            children: [
-              const HostWalletScreenAppBar(),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.fromLTRB(16, 6, 16, 24),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: maxContentWidth),
-                      child: Column(
-                        children: [
-                          const HostWalletScreenTopView(),
-                          const SizedBox(height: 12),
-                          const WithdrawCoinView(),
-                          const SizedBox(height: 12),
-                          BottomView(
-                            controller: hostWalletScreenController,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final maxContentWidth =
+                  constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
+
+              return Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: maxContentWidth),
+                  child: Column(
+                    children: [
+                      const HostWalletScreenAppBar(),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.fromLTRB(16, 6, 16, 24),
+                          child: Column(
+                            children: [
+                              const HostWalletScreenTopView(),
+                              const SizedBox(height: 12),
+                              const WithdrawCoinView(),
+                              const SizedBox(height: 12),
+                              BottomView(
+                                controller: hostWalletScreenController,
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-              )
-            ],
+              );
+            },
           ),
         ),
       ),

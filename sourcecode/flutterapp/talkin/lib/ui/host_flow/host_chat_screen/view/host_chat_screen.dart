@@ -40,11 +40,12 @@ class HostChatScreen extends StatelessWidget {
         ),
         body: LayoutBuilder(
           builder: (context, viewportConstraints) {
-            final viewportWidth = viewportConstraints.maxWidth;
-            final maxContentWidth =
-                viewportWidth >= 1400 ? 1280.0 : double.infinity;
+            final maxContentWidth = viewportConstraints.maxWidth >= 760
+                ? 980.0
+                : viewportConstraints.maxWidth;
 
-            return Center(
+            return Align(
+              alignment: Alignment.topCenter,
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: maxContentWidth),
                 child: GetBuilder<HostChatScreenController>(
@@ -53,11 +54,7 @@ class HostChatScreen extends StatelessWidget {
                     return LayoutBuilder(
                       builder: (context, contentConstraints) {
                         final width = contentConstraints.maxWidth;
-                        final horizontalInset = width >= 1100
-                            ? 28.0
-                            : width >= 760
-                                ? 22.0
-                                : 16.0;
+                        final horizontalInset = width >= 760 ? 16.0 : 12.0;
 
                         if (controller.isLoading) {
                           return ChatListShimmer(

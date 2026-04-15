@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:talk_in/ui/host_flow/host_listeners_detail_screen/widget/host_listeners_detail_widget.dart';
-import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
 
 class HostListenersDetailScreen extends StatelessWidget {
@@ -10,55 +8,42 @@ class HostListenersDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backGroundColor,
-      bottomNavigationBar: HostListenersDetailBottomButton(),
+      backgroundColor: AppColors.redesignScreenBackground,
+      bottomNavigationBar: const HostListenersDetailBottomButton(),
       body: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
             currentFocus.focusedChild?.unfocus();
           }
         },
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  HostListenersDetailTopView(),
-                  HostListenersDetailView(),
-                ],
-              ),
-            ),
-            Positioned(
-              left: 17,
-              top: 8,
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(9),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: AppColors.black.withValues(alpha: 0.18),
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          AppAsset.backArrowIcon,
-                          height: 17,
-                          width: 17,
-                          color: AppColors.white,
-                        ),
-                      ),
+        child: SafeArea(
+          bottom: false,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final maxContentWidth =
+                  constraints.maxWidth >= 1100 ? 980.0 : constraints.maxWidth;
+
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  heightFactor: 1.0,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: maxContentWidth),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        HostListenersDetailTopView(),
+                        HostListenersDetailView(),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

@@ -8,6 +8,15 @@ import 'package:talk_in/utils/constant.dart';
 import 'package:talk_in/utils/utils.dart';
 
 class HostHelpCenterScreenController extends GetxController {
+  static const List<String> _faqCategoryFallbacks = [
+    'Listener',
+    'User',
+    'Expert',
+    'listener',
+    'user',
+    'expert',
+  ];
+
   FaqModel? faqModel;
   List<Datum> faqList = [];
   int expandedIndex = -1;
@@ -21,18 +30,41 @@ class HostHelpCenterScreenController extends GetxController {
   }
 
   /// get faq
-  getFaqData() async {
+  Future<void> getFaqData() async {
     try {
       isLoading = true;
-      update([Constant.idFAQListeners]); // notify UI
-      var data = await GetFaqApi.callApi(category: "Listener");
-      faqModel = data;
-      faqList = data?.data ?? [];
+      update([Constant.idFAQListeners]);
+
+      FaqModel? resolvedModel;
+      List<Datum> resolvedFaqs = [];
+
+      for (final category in _faqCategoryFallbacks) {
+        final data = await GetFaqApi.callApi(category: category);
+        if (data == null) {
+          continue;
+        }
+
+        resolvedModel = data;
+        final items = data.data ?? [];
+
+        if (items.isNotEmpty) {
+          resolvedFaqs = items;
+          break;
+        }
+      }
+
+      faqModel = resolvedModel;
+      faqList = resolvedFaqs;
+
+      if (expandedIndex >= faqList.length) {
+        expandedIndex = -1;
+      }
     } catch (e) {
       log('Error fetching FAQ: $e');
+      faqList = [];
     } finally {
       isLoading = false;
-      update([Constant.idFAQListeners]); // notify UI
+      update([Constant.idFAQListeners]);
     }
   }
 
@@ -48,6 +80,7 @@ class HostHelpCenterScreenController extends GetxController {
 
   @override
   void onClose() {
-    Utils.onChangeStatusBar(brightness: Brightness.light);    super.onClose();
+    Utils.onChangeStatusBar(brightness: Brightness.light);
+    super.onClose();
   }
 }

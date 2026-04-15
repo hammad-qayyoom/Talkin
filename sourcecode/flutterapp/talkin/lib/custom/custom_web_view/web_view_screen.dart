@@ -108,65 +108,84 @@ class WebViewScreenState extends State<WebViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final contentArea = Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+      child: Column(
+        children: [
+          if (_isPolicyLikeScreen) ...[
+            _PolicyHeroBanner(title: widget.screen),
+            const SizedBox(height: 10),
+          ],
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: AppColors.redesignSoftBorder),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.black.withValues(alpha: 0.03),
+                    blurRadius: 12,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: WebViewWidget(
+                        controller: controller,
+                      ),
+                    ),
+                    if (isLoading)
+                      Positioned.fill(
+                        child: Container(
+                          color: AppColors.white.withValues(alpha: 0.92),
+                          child: Center(
+                            child: LoadingAnimationWidget.threeArchedCircle(
+                              color: AppColors.redesignBrandDark,
+                              size: 42,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
     return Scaffold(
       backgroundColor: AppColors.redesignScreenBackground,
       appBar: WebViewAppBar(
         title: widget.screen,
         subtitle: _screenSubtitle,
+        useCenteredContentLane: _isPolicyLikeScreen,
       ),
       body: SafeArea(
         top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-          child: Column(
-            children: [
-              if (_isPolicyLikeScreen) ...[
-                _PolicyHeroBanner(title: widget.screen),
-                const SizedBox(height: 10),
-              ],
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: AppColors.redesignSoftBorder),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black.withValues(alpha: 0.03),
-                        blurRadius: 12,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(18),
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: WebViewWidget(
-                            controller: controller,
-                          ),
-                        ),
-                        if (isLoading)
-                          Positioned.fill(
-                            child: Container(
-                              color: AppColors.white.withValues(alpha: 0.92),
-                              child: Center(
-                                child: LoadingAnimationWidget.threeArchedCircle(
-                                  color: AppColors.redesignBrandDark,
-                                  size: 42,
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
+        child: _isPolicyLikeScreen
+            ? LayoutBuilder(
+                builder: (context, constraints) {
+                  final maxContentWidth = constraints.maxWidth >= 760
+                      ? 980.0
+                      : constraints.maxWidth;
+
+                  return Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxContentWidth),
+                      child: contentArea,
                     ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+                  );
+                },
+              )
+            : contentArea,
       ),
     );
   }
@@ -240,11 +259,13 @@ class _PolicyHeroBanner extends StatelessWidget {
 class WebViewAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final String subtitle;
+  final bool useCenteredContentLane;
 
   const WebViewAppBar({
     super.key,
     this.title,
     required this.subtitle,
+    this.useCenteredContentLane = false,
   });
 
   @override
@@ -252,6 +273,43 @@ class WebViewAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final headerContent = Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+      child: Row(
+        children: [
+          _HeaderIconButton(
+            icon: Icons.arrow_back_ios_new_rounded,
+            onTap: () {
+              Navigator.of(context).maybePop();
+            },
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title ?? '',
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: 22,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: 12,
+                    fontColor: AppColors.redesignMutedText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.redesignScreenBackground,
@@ -265,42 +323,23 @@ class WebViewAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       child: SafeArea(
         bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-          child: Row(
-            children: [
-              _HeaderIconButton(
-                icon: Icons.arrow_back_ios_new_rounded,
-                onTap: () {
-                  Navigator.of(context).maybePop();
+        child: useCenteredContentLane
+            ? LayoutBuilder(
+                builder: (context, constraints) {
+                  final maxContentWidth = constraints.maxWidth >= 760
+                      ? 980.0
+                      : constraints.maxWidth;
+
+                  return Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxContentWidth),
+                      child: headerContent,
+                    ),
+                  );
                 },
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title ?? '',
-                      style: AppFontStyle.fontStyleW700(
-                        fontSize: 22,
-                        fontColor: AppColors.redesignBrandDark,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: AppFontStyle.fontStyleW500(
-                        fontSize: 12,
-                        fontColor: AppColors.redesignMutedText,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+              )
+            : headerContent,
       ),
     );
   }

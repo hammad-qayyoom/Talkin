@@ -1001,41 +1001,59 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final appBarWidth = MediaQuery.sizeOf(context).width;
-    final isTabletAppBar = appBarWidth >= 760;
-
     return Scaffold(
       backgroundColor: _screenBackground,
-      appBar: AppBar(
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        backgroundColor: _screenBackground,
-        title: Text(
-          'My Sessions',
-          style: AppFontStyle.fontStyleW700(
-            fontSize: isTabletAppBar ? 22 : 16,
-            fontColor: _brandDark,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
+        child: Container(
+          color: _screenBackground,
+          child: SafeArea(
+            bottom: false,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isTablet = constraints.maxWidth >= 760;
+                final maxContentWidth =
+                    constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
+
+                return Align(
+                  alignment: Alignment.topCenter,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: maxContentWidth),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'My Sessions',
+                          style: AppFontStyle.fontStyleW700(
+                            fontSize: isTablet ? 22 : 16,
+                            fontColor: _brandDark,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
       body: LayoutBuilder(
         builder: (context, viewportConstraints) {
-          final viewportWidth = viewportConstraints.maxWidth;
-          final maxContentWidth =
-              viewportWidth >= 1400 ? 1280.0 : double.infinity;
+          final maxContentWidth = viewportConstraints.maxWidth >= 760
+              ? 980.0
+              : viewportConstraints.maxWidth;
 
-          return Center(
+          return Align(
+            alignment: Alignment.topCenter,
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: maxContentWidth),
               child: LayoutBuilder(
                 builder: (context, contentConstraints) {
                   final width = contentConstraints.maxWidth;
                   final isTablet = width >= 760;
-                  final horizontalInset = width >= 1100
-                      ? 28.0
-                      : isTablet
-                          ? 22.0
-                          : 16.0;
+                  final horizontalInset = isTablet ? 16.0 : 12.0;
 
                   return SafeArea(
                     child: Column(

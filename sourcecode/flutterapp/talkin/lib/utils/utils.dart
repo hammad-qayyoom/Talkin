@@ -132,6 +132,10 @@ class Utils {
     final messenger = ScaffoldMessenger.of(context);
     messenger.hideCurrentSnackBar();
 
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final laneWidth = screenWidth >= 760 ? 980.0 : screenWidth;
+    final sideInset =
+        ((screenWidth - laneWidth) / 2).clamp(0.0, double.infinity).toDouble();
     final bottomPadding = MediaQuery.of(context).padding.bottom + 12;
     final resolvedConfirmColor =
         confirmBackgroundColor ?? AppColors.redesignBrandDark;
@@ -145,7 +149,12 @@ class Utils {
         backgroundColor: Colors.transparent,
         elevation: 0,
         duration: duration,
-        margin: EdgeInsets.fromLTRB(14, 0, 14, bottomPadding),
+        margin: EdgeInsets.fromLTRB(
+          sideInset + 14,
+          0,
+          sideInset + 14,
+          bottomPadding,
+        ),
         content: Container(
           padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
           decoration: BoxDecoration(

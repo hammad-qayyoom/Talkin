@@ -37,39 +37,107 @@ class FeedScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: _screenBackground,
           appBar: controller.isStandalone
-              ? AppBar(
-                  backgroundColor: _screenBackground,
-                  elevation: 0,
-                  scrolledUnderElevation: 0,
-                  surfaceTintColor: _screenBackground,
-                  title: Text(
-                    controller.screenTitle,
-                    style: AppFontStyle.fontStyleW700(
-                      fontSize: 20,
-                      fontColor: _brandDark,
+              ? PreferredSize(
+                  preferredSize: const Size.fromHeight(56),
+                  child: Container(
+                    color: _screenBackground,
+                    child: SafeArea(
+                      bottom: false,
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          final isTablet = constraints.maxWidth >= 760;
+                          final maxContentWidth = constraints.maxWidth >= 760
+                              ? 980.0
+                              : constraints.maxWidth;
+
+                          return Align(
+                            alignment: Alignment.topCenter,
+                            child: ConstrainedBox(
+                              constraints:
+                                  BoxConstraints(maxWidth: maxContentWidth),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 6, 16, 10),
+                                child: Row(
+                                  children: [
+                                    Material(
+                                      color: AppColors.transparent,
+                                      child: InkWell(
+                                        onTap: () =>
+                                            Navigator.of(context).pop(),
+                                        borderRadius: BorderRadius.circular(14),
+                                        child: Container(
+                                          height: 40,
+                                          width: 40,
+                                          decoration: BoxDecoration(
+                                            color: AppColors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color:
+                                                  AppColors.redesignSoftBorder,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            Icons.arrow_back_ios_new_rounded,
+                                            size: 20,
+                                            color: _brandDark,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        controller.screenTitle,
+                                        textAlign: TextAlign.center,
+                                        style: AppFontStyle.fontStyleW700(
+                                          fontSize: isTablet ? 24 : 18,
+                                          fontColor: _brandDark,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.white,
+                                        borderRadius: BorderRadius.circular(14),
+                                        border: Border.all(
+                                          color: AppColors.redesignSoftBorder,
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.dynamic_feed_outlined,
+                                        size: 18,
+                                        color: _brandDark,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                  centerTitle: true,
                 )
               : null,
           body: SafeArea(
             child: LayoutBuilder(
               builder: (context, viewportConstraints) {
-                final viewportWidth = viewportConstraints.maxWidth;
-                final maxContentWidth =
-                    viewportWidth >= 1400 ? 1280.0 : double.infinity;
+                final maxContentWidth = viewportConstraints.maxWidth >= 760
+                    ? 980.0
+                    : viewportConstraints.maxWidth;
 
-                return Center(
+                return Align(
+                  alignment: Alignment.topCenter,
                   child: ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: maxContentWidth),
                     child: LayoutBuilder(
                       builder: (context, contentConstraints) {
                         final width = contentConstraints.maxWidth;
-                        final horizontalInset = width >= 1100
-                            ? 28.0
-                            : width >= 760
-                                ? 22.0
-                                : 12.0;
+                        final horizontalInset = width >= 760 ? 16.0 : 12.0;
 
                         return Column(
                           children: [
@@ -1285,8 +1353,9 @@ class _PostActionButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22),
-            color:
-                active ? brandRed.withValues(alpha: 0.1) : AppColors.transparent,
+            color: active
+                ? brandRed.withValues(alpha: 0.1)
+                : AppColors.transparent,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -1955,7 +2024,8 @@ class _FeedFullscreenVideoPlayerState
                                   ),
                                   overlayShape: SliderComponentShape.noOverlay,
                                   trackHeight: 3,
-                                  activeTrackColor: AppColors.redesignMediaSliderActive,
+                                  activeTrackColor:
+                                      AppColors.redesignMediaSliderActive,
                                   inactiveTrackColor:
                                       AppColors.white.withValues(alpha: 0.35),
                                   thumbColor: AppColors.white,
@@ -1981,8 +2051,8 @@ class _FeedFullscreenVideoPlayerState
                                   Text(
                                     '/ ${_formatDuration(duration)}',
                                     style: TextStyle(
-                                      color:
-                                          AppColors.white.withValues(alpha: 0.8),
+                                      color: AppColors.white
+                                          .withValues(alpha: 0.8),
                                       fontSize: 12,
                                     ),
                                   ),

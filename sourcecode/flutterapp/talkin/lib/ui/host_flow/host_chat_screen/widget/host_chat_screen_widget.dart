@@ -18,51 +18,60 @@ class HostChatScreenAppBarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final topInset = MediaQuery.of(context).padding.top;
-    final isTablet = MediaQuery.sizeOf(context).width >= 760;
+    final width = MediaQuery.sizeOf(context).width;
+    final isTablet = width >= 760;
+    final maxContentWidth = width >= 760 ? 980.0 : width;
 
     return Container(
       color: _screenBackground,
       padding: EdgeInsets.only(
         top: topInset + (isTablet ? 14 : 10),
-        left: isTablet ? 22 : 16,
-        right: isTablet ? 22 : 16,
         bottom: 12,
       ),
-      child: Row(
-        children: [
-          const SizedBox(width: 46),
-          Expanded(
-            child: Text(
-              EnumLocale.txtChats.name.tr,
-              textAlign: TextAlign.center,
-              style: AppFontStyle.fontStyleW700(
-                fontSize: isTablet ? 38 : 22,
-                fontColor: _brandDark,
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Get.toNamed(AppRoutes.hostChatListSearchView);
-            },
-            child: Container(
-              height: 46,
-              width: 46,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: _softBorder),
-              ),
-              child: Center(
-                child: Image.asset(
-                  AppAsset.searchIcon,
-                  height: 22,
-                  color: _brandDark,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: maxContentWidth),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                const SizedBox(width: 46),
+                Expanded(
+                  child: Text(
+                    EnumLocale.txtChats.name.tr,
+                    textAlign: TextAlign.center,
+                    style: AppFontStyle.fontStyleW700(
+                      fontSize: isTablet ? 38 : 22,
+                      fontColor: _brandDark,
+                    ),
+                  ),
                 ),
-              ),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(AppRoutes.hostChatListSearchView);
+                  },
+                  child: Container(
+                    height: 46,
+                    width: 46,
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: _softBorder),
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        AppAsset.searchIcon,
+                        height: 22,
+                        color: _brandDark,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

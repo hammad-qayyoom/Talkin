@@ -13,10 +13,15 @@ class HostBottomBarScreen extends StatelessWidget {
     return GetBuilder<HostBottomBarController>(
       id: Constant.idBottomBar,
       builder: (logic) {
+        final int safeIndex =
+            logic.selectIndex >= 0 && logic.selectIndex < logic.pages.length
+                ? logic.selectIndex
+                : 0;
+
         return Scaffold(
           backgroundColor: AppColors.white,
           bottomNavigationBar: const HostBottomBarView(),
-          body: logic.pages[logic.selectIndex],
+          body: logic.pages[safeIndex],
         );
       },
     );

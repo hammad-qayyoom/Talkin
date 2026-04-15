@@ -7,7 +7,6 @@ import 'package:shimmer/shimmer.dart' show Shimmer;
 import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
 import 'package:talk_in/custom/switch/switch.dart';
 import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/host_flow/host_bottom_bar/controller/host_bottom_bar_controller.dart';
 import 'package:talk_in/ui/host_flow/host_home_screen/controller/host_home_screen_controller.dart';
 import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
@@ -43,10 +42,7 @@ class HostTopHomeView extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   Utils.showLog(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
-                  Get.find<HostBottomBarController>().onClick(5);
-
-                  // Get.toNamed(AppRoutes.hostProfileScreen);
+                  Get.toNamed(AppRoutes.hostProfileScreen);
                 },
                 child: Container(
                   clipBehavior: Clip.hardEdge,

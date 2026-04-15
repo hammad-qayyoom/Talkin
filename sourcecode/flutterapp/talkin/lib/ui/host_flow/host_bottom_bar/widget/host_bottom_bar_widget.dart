@@ -17,6 +17,10 @@ class HostBottomBarView extends StatelessWidget {
     return GetBuilder<HostBottomBarController>(
       id: Constant.idBottomBar,
       builder: (logic) {
+        final int currentIndex = logic.selectIndex >= 0 && logic.selectIndex < 5
+            ? logic.selectIndex
+            : 0;
+
         return Container(
           height: Platform.isIOS ? 85 : 80,
           decoration: BoxDecoration(
@@ -37,7 +41,7 @@ class HostBottomBarView extends StatelessWidget {
             maxHeight: double.infinity,
             maxWidth: double.infinity,
             child: SalomonBottomBar(
-              currentIndex: logic.selectIndex,
+              currentIndex: currentIndex,
               onTap: (value) async {
                 logic.onClick(value);
               },
@@ -48,45 +52,33 @@ class HostBottomBarView extends StatelessWidget {
               items: [
                 bottomBarItemView(
                   index: 0,
-                  selectIndex: logic.selectIndex,
+                  selectIndex: currentIndex,
                   image: AppAsset.homeFilled,
                   label: EnumLocale.txtHome.name.tr,
                 ),
-                bottomBarIconItemView(
+                bottomBarItemView(
                   index: 1,
-                  selectIndex: logic.selectIndex,
+                  selectIndex: currentIndex,
+                  image: AppAsset.calendar,
+                  label: 'Sessions',
+                ),
+                bottomBarIconItemView(
+                  index: 2,
+                  selectIndex: currentIndex,
                   icon: Icons.dynamic_feed_rounded,
                   label: 'Feed',
                 ),
                 bottomBarItemView(
-                  index: 2,
-                  selectIndex: logic.selectIndex,
-                  image: AppAsset.calling,
-                  label: EnumLocale.txtCalling.name.tr,
-                ),
-                bottomBarItemView(
                   index: 3,
-                  selectIndex: logic.selectIndex,
+                  selectIndex: currentIndex,
                   image: AppAsset.chat,
                   label: EnumLocale.txtChat.name.tr,
                 ),
                 bottomBarItemView(
                   index: 4,
-                  selectIndex: logic.selectIndex,
+                  selectIndex: currentIndex,
                   image: AppAsset.walletIcon,
                   label: EnumLocale.txtWallet.name.tr,
-                ),
-                bottomBarItemView(
-                  index: 5,
-                  selectIndex: logic.selectIndex,
-                  image: AppAsset.calendar,
-                  label: 'Sessions',
-                ),
-                bottomBarItemView(
-                  index: 6,
-                  selectIndex: logic.selectIndex,
-                  image: AppAsset.profileIcon,
-                  label: EnumLocale.txtProfile.name.tr,
                 ),
               ],
             ),
