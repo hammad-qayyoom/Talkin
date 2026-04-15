@@ -25,6 +25,14 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
   String? _busySessionId;
   List<dynamic> _sessions = [];
 
+  static final Color _brandRed = AppColors.redesignBrandRed;
+  static final Color _brandRedDark = AppColors.redesignBrandRedDark;
+  static final Color _brandDark = AppColors.redesignBrandDark;
+  static final Color _screenBackground = AppColors.redesignScreenBackground;
+  static final Color _softBorder = AppColors.redesignSoftBorder;
+  static final Color _mutedText = AppColors.redesignMutedText;
+  static final Color _chipSurface = AppColors.redesignSurfaceSoft;
+
   String get _currentUserId {
     return (Database.fetchLoginUserProfileModel?.user?.id ?? '')
         .toString()
@@ -422,6 +430,52 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
     );
   }
 
+  String _toTitleCase(String value) {
+    final normalized = value.trim();
+    if (normalized.isEmpty) {
+      return 'Unknown';
+    }
+
+    return normalized
+        .split(RegExp(r'[_\s]+'))
+        .where((word) => word.isNotEmpty)
+        .map((word) =>
+            '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}')
+        .join(' ');
+  }
+
+  Color _statusBackground(String status) {
+    switch (status.trim().toLowerCase()) {
+      case 'completed':
+        return AppColors.redesignStatusSuccessBg;
+      case 'cancelled':
+      case 'canceled':
+        return AppColors.redesignStatusDangerBg;
+      case 'live':
+      case 'in-progress':
+        return AppColors.redesignStatusInfoBg;
+      case 'scheduled':
+      default:
+        return AppColors.redesignAccentSoftBg;
+    }
+  }
+
+  Color _statusTextColor(String status) {
+    switch (status.trim().toLowerCase()) {
+      case 'completed':
+        return AppColors.redesignStatusSuccessDark;
+      case 'cancelled':
+      case 'canceled':
+        return _brandRed;
+      case 'live':
+      case 'in-progress':
+        return AppColors.redesignStatusInfoText;
+      case 'scheduled':
+      default:
+        return _brandRedDark;
+    }
+  }
+
   Widget _buildSegment(String value, String label) {
     final selected = value == _view;
 
@@ -433,18 +487,23 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
             _view = value;
           });
         },
-        child: Container(
-          height: 40,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          height: 42,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: selected ? AppColors.appColor : AppColors.profileOptionColor,
+            borderRadius: BorderRadius.circular(12),
+            color: selected ? _brandDark : AppColors.transparent,
+            border: Border.all(
+              color: selected ? _brandDark : AppColors.transparent,
+            ),
           ),
           child: Center(
             child: Text(
               label,
               style: AppFontStyle.fontStyleW600(
-                fontSize: 12,
-                fontColor: selected ? AppColors.white : AppColors.black,
+                fontSize: 13,
+                fontColor: selected ? AppColors.white : _brandDark,
               ),
             ),
           ),
@@ -468,232 +527,671 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
 
         _fetchSessions();
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
         margin: const EdgeInsets.only(right: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: isSelected ? AppColors.appColor : AppColors.profileOptionColor,
+          borderRadius: BorderRadius.circular(999),
+          color: isSelected ? _brandDark : AppColors.redesignPanelBg,
+          border: Border.all(
+            color: isSelected ? _brandDark : _softBorder,
+          ),
         ),
         child: Text(
           label,
           style: AppFontStyle.fontStyleW600(
-            fontSize: 12,
-            fontColor: isSelected ? AppColors.white : AppColors.black,
+            fontSize: 11,
+            fontColor: isSelected ? AppColors.white : _brandDark,
           ),
         ),
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        title: Text(
-          'Group Sessions',
-          style: AppFontStyle.fontStyleW700(
-              fontSize: 18, fontColor: AppColors.black),
-        ),
-        actions: [
-          IconButton(
-            onPressed: _isCreating ? null : _createGroupSession,
-            icon: _isCreating
-                ? const SizedBox(
-                    height: 18,
-                    width: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.add_circle_outline),
-            tooltip: 'Create Group Session',
+  Widget _buildMetaChip({required IconData icon, required String text}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: _chipSurface,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: _softBorder),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: _mutedText),
+          const SizedBox(width: 4),
+          Text(
+            text,
+            style: AppFontStyle.fontStyleW500(
+              fontSize: 10,
+              fontColor: _mutedText,
+            ),
           ),
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                children: [
-                  _buildSegment('upcoming', 'Upcoming'),
-                  const SizedBox(width: 8),
-                  _buildSegment('completed', 'Completed'),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  _buildCallTypeFilterChip('all', 'All'),
-                  _buildCallTypeFilterChip('audio', 'Audio'),
-                  _buildCallTypeFilterChip('video', 'Video'),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _filteredSessions.isEmpty
-                      ? Center(
-                          child: Text(
-                            'No group sessions found.',
-                            style: AppFontStyle.fontStyleW500(
-                                fontSize: 13, fontColor: AppColors.grey),
-                          ),
-                        )
-                      : RefreshIndicator(
-                          onRefresh: _fetchSessions,
-                          child: ListView.builder(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            itemCount: _filteredSessions.length,
-                            itemBuilder: (context, index) {
-                              final session = _filteredSessions[index];
-                              final sessionId =
-                                  (session['_id'] ?? '').toString();
-                              final status = (session['sessionStatus'] ??
-                                      session['status'] ??
-                                      '')
-                                  .toString()
-                                  .toLowerCase();
-                              final busy = _busySessionId == sessionId;
-                              final canCancel =
-                                  ['scheduled', 'live'].contains(status);
+    );
+  }
 
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 10),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: AppColors.profileOptionColor,
+  Widget _buildSessionCard({
+    required Map<String, dynamic> session,
+    required double cardWidth,
+  }) {
+    final sessionId = (session['_id'] ?? '').toString();
+    final statusRaw =
+        (session['sessionStatus'] ?? session['status'] ?? '').toString();
+    final status = statusRaw.toLowerCase();
+    final statusLabel = _toTitleCase(statusRaw);
+    final busy = _busySessionId == sessionId;
+    final canCancel = ['scheduled', 'live'].contains(status);
+    final canGoLive = ['scheduled', 'live'].contains(status);
+    final canEndSettle = ['scheduled', 'live'].contains(status);
+    final priceLabel = _pricingLabel(session);
+    final isFree = priceLabel == 'FREE';
+    final callTypeRaw = (session['callType'] ?? 'audio').toString();
+    final callTypeLabel = callTypeRaw.toUpperCase();
+    final startAt = _formatDateTime((session['startAt'] ?? '').toString());
+    final availableSeats = _availableSeats(session);
+    final isNarrowActionLayout = cardWidth < 430;
+
+    Widget participantsButton({bool fullWidth = false}) {
+      final button = OutlinedButton.icon(
+        onPressed: busy ? null : () => _onViewParticipants(session),
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(color: _softBorder),
+          foregroundColor: _brandDark,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        icon: const Icon(Icons.groups_2_outlined, size: 16),
+        label: Text(
+          'Participants',
+          style: AppFontStyle.fontStyleW600(
+            fontSize: 12,
+            fontColor: _brandDark,
+          ),
+        ),
+      );
+
+      if (!fullWidth) return button;
+      return SizedBox(width: double.infinity, height: 42, child: button);
+    }
+
+    Widget goLiveButton({bool fullWidth = false}) {
+      final button = ElevatedButton.icon(
+        onPressed: busy ? null : () => _onGoLiveSession(session),
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          disabledBackgroundColor: AppColors.redesignSoftBorder,
+          disabledForegroundColor: _mutedText,
+          backgroundColor: _brandDark,
+          foregroundColor: AppColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        icon: Icon(
+          status == 'live'
+              ? Icons.podcasts_rounded
+              : Icons.wifi_tethering_rounded,
+          size: 16,
+        ),
+        label: Text(
+          status == 'live' ? 'Join Live Room' : 'Go Live',
+          style: AppFontStyle.fontStyleW600(
+            fontSize: 12,
+            fontColor: AppColors.white,
+          ),
+        ),
+      );
+
+      if (!fullWidth) return button;
+      return SizedBox(width: double.infinity, height: 42, child: button);
+    }
+
+    Widget endSettleButton({bool fullWidth = false}) {
+      final button = ElevatedButton.icon(
+        onPressed: busy
+            ? null
+            : () => _onMarkExpertPresence(
+                  session,
+                  action: 'end',
+                ),
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          disabledBackgroundColor: AppColors.redesignSoftBorder,
+          disabledForegroundColor: _mutedText,
+          backgroundColor: _brandRed,
+          foregroundColor: AppColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        icon: busy
+            ? const SizedBox(
+                height: 14,
+                width: 14,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.white,
+                ),
+              )
+            : const Icon(Icons.task_alt_rounded, size: 16),
+        label: Text(
+          'End & Settle',
+          style: AppFontStyle.fontStyleW600(
+            fontSize: 12,
+            fontColor: AppColors.white,
+          ),
+        ),
+      );
+
+      if (!fullWidth) return button;
+      return SizedBox(width: double.infinity, height: 42, child: button);
+    }
+
+    Widget cancelButton({bool fullWidth = false}) {
+      final button = OutlinedButton.icon(
+        onPressed: busy ? null : () => _onCancelSession(session),
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(color: _brandRed.withValues(alpha: 0.5)),
+          foregroundColor: _brandRedDark,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        icon: const Icon(Icons.close_rounded, size: 16),
+        label: Text(
+          'Cancel',
+          style: AppFontStyle.fontStyleW600(
+            fontSize: 12,
+            fontColor: _brandRedDark,
+          ),
+        ),
+      );
+
+      if (!fullWidth) return button;
+      return SizedBox(width: double.infinity, height: 42, child: button);
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(11),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: _softBorder),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  (session['title'] ?? 'Group Session').toString(),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: 13,
+                    fontColor: _brandDark,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: _statusBackground(statusRaw),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  statusLabel,
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 9,
+                    fontColor: _statusTextColor(statusRaw),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              _buildMetaChip(
+                icon: Icons.schedule_rounded,
+                text: startAt,
+              ),
+              _buildMetaChip(
+                icon: callTypeRaw.toLowerCase() == 'video'
+                    ? Icons.videocam_outlined
+                    : Icons.call_outlined,
+                text: callTypeLabel,
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Price: $priceLabel',
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 11,
+                    fontColor: isFree
+                        ? AppColors.redesignStatusSuccessDark
+                        : _brandDark,
+                  ),
+                ),
+              ),
+              Text(
+                'Seats: $availableSeats',
+                style: AppFontStyle.fontStyleW500(
+                  fontSize: 11,
+                  fontColor: _mutedText,
+                ),
+              ),
+            ],
+          ),
+          if (canGoLive || canEndSettle || canCancel) ...[
+            const SizedBox(height: 10),
+            if (isNarrowActionLayout)
+              Column(
+                children: [
+                  participantsButton(fullWidth: true),
+                  if (canGoLive) ...[
+                    const SizedBox(height: 6),
+                    goLiveButton(fullWidth: true),
+                  ],
+                  if (canEndSettle) ...[
+                    const SizedBox(height: 6),
+                    endSettleButton(fullWidth: true),
+                  ],
+                  if (canCancel) ...[
+                    const SizedBox(height: 6),
+                    cancelButton(fullWidth: true),
+                  ],
+                ],
+              )
+            else
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  SizedBox(height: 42, child: participantsButton()),
+                  if (canGoLive) SizedBox(height: 42, child: goLiveButton()),
+                  if (canEndSettle)
+                    SizedBox(height: 42, child: endSettleButton()),
+                  if (canCancel) SizedBox(height: 42, child: cancelButton()),
+                ],
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSessionsList({required double horizontalInset}) {
+    if (_isLoading) {
+      return Center(
+        child: CircularProgressIndicator(color: _brandRed),
+      );
+    }
+
+    if (_filteredSessions.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 68,
+                width: 68,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: _softBorder),
+                ),
+                child: Icon(
+                  Icons.groups_rounded,
+                  size: 32,
+                  color: _brandRed,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'No group sessions found',
+                style: AppFontStyle.fontStyleW700(
+                  fontSize: 14,
+                  fontColor: _brandDark,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                _view == 'upcoming'
+                    ? 'Create a group session to start hosting your audience.'
+                    : 'Completed group sessions will appear here.',
+                textAlign: TextAlign.center,
+                style: AppFontStyle.fontStyleW500(
+                  fontSize: 11,
+                  fontColor: _mutedText,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return RefreshIndicator(
+      color: _brandRed,
+      backgroundColor: AppColors.white,
+      onRefresh: _fetchSessions,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isTablet = constraints.maxWidth >= 760;
+          final columns = constraints.maxWidth >= 1200
+              ? 3
+              : isTablet
+                  ? 2
+                  : 1;
+          const spacing = 12.0;
+          final cardWidth = columns == 1
+              ? constraints.maxWidth
+              : ((constraints.maxWidth - (spacing * (columns - 1))) / columns)
+                  .toDouble();
+
+          return ListView(
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            padding:
+                EdgeInsets.fromLTRB(horizontalInset, 4, horizontalInset, 18),
+            children: [
+              if (columns == 1)
+                ..._filteredSessions.map((session) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: _buildSessionCard(
+                      session: session,
+                      cardWidth: cardWidth,
+                    ),
+                  );
+                })
+              else
+                Wrap(
+                  spacing: spacing,
+                  runSpacing: spacing,
+                  children: _filteredSessions.map((session) {
+                    return SizedBox(
+                      width: cardWidth,
+                      child: _buildSessionCard(
+                        session: session,
+                        cardWidth: cardWidth,
+                      ),
+                    );
+                  }).toList(),
+                ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final appBarWidth = MediaQuery.sizeOf(context).width;
+    final isTabletAppBar = appBarWidth >= 760;
+
+    return Scaffold(
+      backgroundColor: _screenBackground,
+      appBar: AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        backgroundColor: _screenBackground,
+        title: Text(
+          'Group Sessions',
+          style: AppFontStyle.fontStyleW700(
+            fontSize: isTabletAppBar ? 22 : 16,
+            fontColor: _brandDark,
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: TextButton.icon(
+              onPressed: _isCreating ? null : _createGroupSession,
+              style: TextButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                backgroundColor: _brandDark,
+              ),
+              icon: _isCreating
+                  ? const SizedBox(
+                      height: 14,
+                      width: 14,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.white,
+                      ),
+                    )
+                  : const Icon(
+                      Icons.add_rounded,
+                      color: AppColors.white,
+                      size: 16,
+                    ),
+              label: Text(
+                'Create',
+                style: AppFontStyle.fontStyleW600(
+                  fontSize: 12,
+                  fontColor: AppColors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: LayoutBuilder(
+        builder: (context, viewportConstraints) {
+          final viewportWidth = viewportConstraints.maxWidth;
+          final maxContentWidth =
+              viewportWidth >= 1400 ? 1280.0 : double.infinity;
+
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxContentWidth),
+              child: LayoutBuilder(
+                builder: (context, contentConstraints) {
+                  final width = contentConstraints.maxWidth;
+                  final isTablet = width >= 760;
+                  final horizontalInset = width >= 1100
+                      ? 28.0
+                      : isTablet
+                          ? 22.0
+                          : 16.0;
+                  final heroSubtitle = _view == 'upcoming'
+                      ? 'Track and control your upcoming group sessions'
+                      : 'Review completed group sessions';
+
+                  return SafeArea(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalInset,
+                            4,
+                            horizontalInset,
+                            8,
+                          ),
+                          child: Container(
+                            padding: EdgeInsets.all(isTablet ? 13 : 11),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18),
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [_brandRed, _brandRedDark],
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: _brandRed.withValues(alpha: 0.24),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 8),
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      (session['title'] ?? 'Group Session')
-                                          .toString(),
-                                      style: AppFontStyle.fontStyleW700(
-                                          fontSize: 14,
-                                          fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      'Start: ${_formatDateTime((session['startAt'] ?? '').toString())}',
-                                      style: AppFontStyle.fontStyleW500(
-                                          fontSize: 12,
-                                          fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Type: ${((session['callType'] ?? 'audio').toString()).toUpperCase()}',
-                                      style: AppFontStyle.fontStyleW500(
-                                          fontSize: 12,
-                                          fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Price: ${_pricingLabel(session)}',
-                                      style: AppFontStyle.fontStyleW600(
-                                        fontSize: 12,
-                                        fontColor:
-                                            _pricingLabel(session) == 'FREE'
-                                                ? Colors.green
-                                                : AppColors.appColor,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Available Seats: ${_availableSeats(session)}',
-                                      style: AppFontStyle.fontStyleW500(
-                                          fontSize: 12,
-                                          fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Status: $status',
-                                      style: AppFontStyle.fontStyleW500(
-                                          fontSize: 12,
-                                          fontColor: AppColors.black),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Wrap(
-                                      spacing: 8,
-                                      runSpacing: 8,
-                                      children: [
-                                        SizedBox(
-                                          height: 36,
-                                          child: OutlinedButton(
-                                            onPressed: busy
-                                                ? null
-                                                : () => _onViewParticipants(
-                                                    session),
-                                            child: const Text('Participants'),
-                                          ),
+                              ],
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: isTablet ? 38 : 34,
+                                  width: isTablet ? 38 : 34,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Icon(
+                                    Icons.groups_rounded,
+                                    color: _brandRed,
+                                    size: isTablet ? 21 : 19,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Group Session Desk',
+                                        style: AppFontStyle.fontStyleW700(
+                                          fontSize: isTablet ? 14 : 13,
+                                          fontColor: AppColors.white,
                                         ),
-                                        if (status == 'scheduled' ||
-                                            status == 'live')
-                                          SizedBox(
-                                            height: 36,
-                                            child: ElevatedButton(
-                                              onPressed: busy
-                                                  ? null
-                                                  : () =>
-                                                      _onGoLiveSession(session),
-                                              child: Text(
-                                                status == 'live'
-                                                    ? 'Join Live Room'
-                                                    : 'Go Live',
-                                              ),
-                                            ),
-                                          ),
-                                        if (status == 'live' ||
-                                            status == 'scheduled')
-                                          SizedBox(
-                                            height: 36,
-                                            child: ElevatedButton(
-                                              onPressed: busy
-                                                  ? null
-                                                  : () => _onMarkExpertPresence(
-                                                        session,
-                                                        action: 'end',
-                                                      ),
-                                              child: busy
-                                                  ? const SizedBox(
-                                                      height: 16,
-                                                      width: 16,
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                              strokeWidth: 2),
-                                                    )
-                                                  : const Text('End & Settle'),
-                                            ),
-                                          ),
-                                        if (canCancel)
-                                          SizedBox(
-                                            height: 36,
-                                            child: OutlinedButton(
-                                              onPressed: busy
-                                                  ? null
-                                                  : () =>
-                                                      _onCancelSession(session),
-                                              child: const Text('Cancel'),
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                  ],
+                                      ),
+                                      const SizedBox(height: 3),
+                                      Text(
+                                        heroSubtitle,
+                                        style: AppFontStyle.fontStyleW500(
+                                          fontSize: isTablet ? 11 : 10,
+                                          fontColor: AppColors.white
+                                              .withValues(alpha: 0.88),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              );
-                            },
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 9,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        AppColors.white.withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: AppColors.white
+                                          .withValues(alpha: 0.35),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        '${_filteredSessions.length}',
+                                        style: AppFontStyle.fontStyleW700(
+                                          fontSize: isTablet ? 15 : 13,
+                                          fontColor: AppColors.white,
+                                        ),
+                                      ),
+                                      Text(
+                                        _view == 'upcoming'
+                                            ? 'Upcoming'
+                                            : 'Done',
+                                        style: AppFontStyle.fontStyleW500(
+                                          fontSize: 8,
+                                          fontColor: AppColors.white
+                                              .withValues(alpha: 0.9),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalInset,
+                            0,
+                            horizontalInset,
+                            8,
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppColors.redesignPanelBg,
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(color: _softBorder),
+                            ),
+                            child: Row(
+                              children: [
+                                _buildSegment('upcoming', 'Upcoming'),
+                                const SizedBox(width: 6),
+                                _buildSegment('completed', 'Completed'),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalInset,
+                            0,
+                            horizontalInset,
+                            6,
+                          ),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                _buildCallTypeFilterChip('all', 'All'),
+                                _buildCallTypeFilterChip('audio', 'Audio'),
+                                _buildCallTypeFilterChip('video', 'Video'),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildSessionsList(
+                            horizontalInset: horizontalInset,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -818,80 +1316,270 @@ class _CreateGroupSessionDialogState extends State<_CreateGroupSessionDialog> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Create Group Session'),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: const InputDecoration(labelText: 'Title'),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
-              maxLines: 2,
-            ),
-            const SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              initialValue: _selectedCallType,
-              items: const [
-                DropdownMenuItem(
-                  value: 'audio',
-                  child: Text('Audio'),
-                ),
-                DropdownMenuItem(
-                  value: 'video',
-                  child: Text('Video'),
-                ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  _selectedCallType = value == 'video' ? 'video' : 'audio';
-                });
-              },
-              decoration: const InputDecoration(labelText: 'Session Type'),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _durationController,
-              keyboardType: TextInputType.number,
-              decoration:
-                  const InputDecoration(labelText: 'Duration (minutes)'),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _maxParticipantsController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Max Participants'),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: _pickDateTime,
-                child: Text(
-                  'Date & Time: ${_formatDateTime(_selectedDateTime)}',
-                ),
-              ),
-            ),
-          ],
+  InputDecoration _inputDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: AppFontStyle.fontStyleW500(
+        fontSize: 12,
+        fontColor: AppColors.redesignMutedText,
+      ),
+      filled: true,
+      fillColor: AppColors.redesignSurfaceInput,
+      isDense: true,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: AppColors.redesignSoftBorder),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: AppColors.redesignBrandRed),
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: AppColors.redesignSoftBorder),
+      ),
+    );
+  }
+
+  Widget _fieldLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Text(
+        label,
+        style: AppFontStyle.fontStyleW600(
+          fontSize: 12,
+          fontColor: AppColors.redesignMutedText,
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: AppColors.transparent,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 460),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.12),
+                blurRadius: 22,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      height: 36,
+                      width: 36,
+                      decoration: BoxDecoration(
+                        color: AppColors.redesignAccentSoftBg,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        Icons.add_box_outlined,
+                        size: 20,
+                        color: AppColors.redesignBrandRed,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Create Group Session',
+                            style: AppFontStyle.fontStyleW700(
+                              fontSize: 20,
+                              fontColor: AppColors.redesignBrandDark,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Set title, type, duration and start time',
+                            style: AppFontStyle.fontStyleW500(
+                              fontSize: 11,
+                              fontColor: AppColors.redesignMutedText,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      splashRadius: 18,
+                      icon: Icon(
+                        Icons.close_rounded,
+                        color: AppColors.redesignMutedText,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _fieldLabel('Title'),
+                TextField(
+                  controller: _titleController,
+                  decoration: _inputDecoration('Session title'),
+                ),
+                const SizedBox(height: 10),
+                _fieldLabel('Description'),
+                TextField(
+                  controller: _descriptionController,
+                  decoration: _inputDecoration('Write short description'),
+                  maxLines: 2,
+                ),
+                const SizedBox(height: 10),
+                _fieldLabel('Session Type'),
+                DropdownButtonFormField<String>(
+                  initialValue: _selectedCallType,
+                  isExpanded: true,
+                  decoration: _inputDecoration('Select type'),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'audio',
+                      child: Text('Audio'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'video',
+                      child: Text('Video'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedCallType = value == 'video' ? 'video' : 'audio';
+                    });
+                  },
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _fieldLabel('Duration (minutes)'),
+                          TextField(
+                            controller: _durationController,
+                            keyboardType: TextInputType.number,
+                            decoration: _inputDecoration('30'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _fieldLabel('Max Participants'),
+                          TextField(
+                            controller: _maxParticipantsController,
+                            keyboardType: TextInputType.number,
+                            decoration: _inputDecoration('10'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  height: 44,
+                  child: OutlinedButton.icon(
+                    onPressed: _pickDateTime,
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: AppColors.redesignSoftBorder),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    icon: Icon(
+                      Icons.event_rounded,
+                      size: 16,
+                      color: AppColors.redesignBrandDark,
+                    ),
+                    label: Text(
+                      _formatDateTime(_selectedDateTime),
+                      style: AppFontStyle.fontStyleW600(
+                        fontSize: 13,
+                        fontColor: AppColors.redesignBrandDark,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 44,
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: AppColors.redesignBrandRed
+                                  .withValues(alpha: 0.5),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            'Cancel',
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 14,
+                              fontColor: AppColors.redesignBrandRedDark,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: SizedBox(
+                        height: 44,
+                        child: ElevatedButton(
+                          onPressed: _submit,
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: AppColors.redesignBrandDark,
+                            foregroundColor: AppColors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            'Create',
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 14,
+                              fontColor: AppColors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
-        ElevatedButton(
-          onPressed: _submit,
-          child: const Text('Create'),
-        ),
-      ],
+      ),
     );
   }
 }
