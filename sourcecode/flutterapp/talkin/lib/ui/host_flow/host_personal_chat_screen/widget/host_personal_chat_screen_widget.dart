@@ -11,7 +11,6 @@ import 'package:talk_in/custom/bottom_sheet/talk_now_button_bottom_sheet.dart';
 import 'package:talk_in/custom/custom_audio_time/custom_format_audio_time.dart';
 import 'package:talk_in/custom/custom_chat_time/custom_format_chat_time.dart';
 import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
-import 'package:talk_in/custom/dialog/block_dialog.dart';
 import 'package:talk_in/routes/app_routes.dart';
 import 'package:talk_in/ui/host_flow/host_personal_chat_screen/controller/host_personal_chat_screen_controller.dart';
 import 'package:talk_in/ui/host_flow/host_personal_chat_screen/model/host_personal_chat_model.dart';
@@ -25,143 +24,175 @@ import 'package:talk_in/utils/font_style.dart';
 import 'package:talk_in/utils/utils.dart';
 import 'package:vibration/vibration.dart';
 
+final Color _chatBrandRed = AppColors.redesignBrandRed;
+final Color _chatBrandDark = AppColors.redesignBrandDark;
+final Color _chatSurface = AppColors.redesignChatSurface;
+final Color _chatBorder = AppColors.redesignSoftBorder;
+final Color _chatMutedText = AppColors.redesignMutedText;
+final Color _incomingBubble = AppColors.redesignIncomingBubble;
+final Color _outgoingBubble = AppColors.redesignOutgoingBubble;
+
 class HostChatScreenAppBar extends StatelessWidget {
   const HostChatScreenAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HostPersonalChatScreenController>(
-      // id: Constant.idChatList,
       builder: (controller) {
+        final topInset = MediaQuery.of(context).padding.top;
+        final isOnline = controller.receiverStatusLabel == "true" ||
+            controller.receiverStatusLabel == "Available";
+
+        Widget actionButton({
+          required Widget child,
+          required VoidCallback onTap,
+        }) {
+          return GestureDetector(
+            onTap: onTap,
+            child: Container(
+              height: 40,
+              width: 40,
+              margin: const EdgeInsets.only(left: 8),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: _chatBorder),
+              ),
+              child: Center(child: child),
+            ),
+          );
+        }
+
         return Container(
-          padding: EdgeInsets.only(top: Get.height * 0.033),
+          padding: EdgeInsets.only(
+            top: topInset + 8,
+            left: 12,
+            right: 12,
+            bottom: 10,
+          ),
           decoration: BoxDecoration(
-            color: AppColors.lightPurple1,
+            color: _chatSurface,
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.2),
-                spreadRadius: 0.08,
-                offset: const Offset(0.0, 0.0),
-                blurRadius: 2.0,
+                color: AppColors.black.withValues(alpha: 0.06),
+                offset: const Offset(0, 2),
+                blurRadius: 8,
               ),
             ],
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InkWell(
+              actionButton(
                 onTap: () {
                   Get.back();
                 },
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 22, top: 22, right: 15, left: 22),
-                  child: Image.asset(
-                    height: 16,
-                    AppAsset.backArrowIcon,
-                    color: AppColors.black,
-                  ),
+                child: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 18,
+                  color: _chatBrandDark,
                 ),
               ),
+              const SizedBox(width: 10),
               Expanded(
-                  child: GestureDetector(
-                onTap: () {
-                  Get.toNamed(AppRoutes.userProfileDetailScreen, arguments: controller.receiverId);
-                },
-                child: Container(
-                  color: AppColors.transparent,
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed(
+                      AppRoutes.userProfileDetailScreen,
+                      arguments: controller.receiverId,
+                    );
+                  },
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Container(
+                        clipBehavior: Clip.hardEdge,
+                        height: 52,
+                        width: 52,
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.grey.withValues(alpha: 0.5),
+                          borderRadius: BorderRadius.circular(14),
+                          color: AppColors.redesignSurfaceNeutral,
                         ),
-                        child: Container(
-                          // clipBehavior: Clip.hardEdge,
-                          height: Get.height * 0.058,
-                          width: Get.height * 0.058,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.white, width: 1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: ClipOval(child: CustomProfileImage(image: controller.receiverImage ?? '')),
-                        ).paddingAll(1),
-                      ).paddingOnly(right: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            controller.receiverName ?? '',
-                            style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.black),
-                          ).paddingOnly(bottom: 5),
-                          controller.receiverStatusLabel == "false"
-                              ? Container(
-                                  padding: EdgeInsets.only(right: 5, bottom: 3, top: 3, left: 5),
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColors.lightGrey1),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.onBoardingTxt.withValues(alpha: 0.3),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Container(
-                                          height: 7.5,
-                                          width: 7.5,
-                                          decoration: BoxDecoration(
-                                            color: AppColors.onBoardingTxt,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ).paddingAll(1.8),
-                                      ).paddingOnly(right: 4),
-                                      Text(
-                                        "Offline",
-                                        style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.appTextColor),
-                                      ).paddingOnly(right: 4),
-                                    ],
+                        child: CustomProfileImage(
+                          image: controller.receiverImage ?? '',
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              controller.receiverName ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: 16,
+                                fontColor: _chatBrandDark,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(999),
+                                color: isOnline
+                                    ? AppColors.redesignStatusSuccessBg
+                                    : AppColors.redesignSurfaceNeutral,
+                                border: Border.all(
+                                  color: isOnline
+                                      ? AppColors.redesignStatusSuccessBorder
+                                      : _chatBorder,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    height: 8,
+                                    width: 8,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: isOnline
+                                          ? AppColors.redesignStatusSuccess
+                                          : _chatMutedText,
+                                    ),
                                   ),
-                                )
-                              : Container(
-                                  padding: EdgeInsets.only(right: 5, bottom: 3, top: 3, left: 5),
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColors.green),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.white.withValues(alpha: 0.5),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Container(
-                                          height: 7.5,
-                                          width: 7.5,
-                                          decoration: BoxDecoration(
-                                            color: AppColors.white,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ).paddingAll(1.8),
-                                      ).paddingOnly(right: 4),
-                                      Text(
-                                        EnumLocale.txtOnline.name.tr,
-                                        style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.white),
-                                      ).paddingOnly(right: 4),
-                                    ],
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    isOnline
+                                        ? EnumLocale.txtOnline.name.tr
+                                        : 'Offline',
+                                    style: AppFontStyle.fontStyleW500(
+                                      fontSize: 11,
+                                      fontColor: isOnline
+                                          ? AppColors.redesignStatusSuccessDark
+                                          : _chatMutedText,
+                                    ),
                                   ),
-                                )
-                        ],
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              )),
+              ),
               if (controller.hasBookedSessionCallContext)
-                GestureDetector(
+                actionButton(
                   onTap: () {
                     if (controller.isBookedSessionWindowEnded) {
-                      Utils.showToast(context,
-                          'Session slot time is completed. Call is no longer allowed.');
+                      Utils.showInfoSnackBar(
+                        context,
+                        title: 'Session ended',
+                        message:
+                            'Session slot time is completed. Call is no longer allowed.',
+                        icon: Icons.schedule_rounded,
+                      );
                       return;
                     }
 
@@ -180,12 +211,17 @@ class HostChatScreenAppBar extends StatelessWidget {
                         fakeAudio: "",
                         videoCallRatePrivate: '',
                         audioCallRatePrivate: '',
-                        callerId: Database.fetchListenerProfileModel?.data?.id ?? '',
+                        callerId:
+                            Database.fetchListenerProfileModel?.data?.id ?? '',
                         receiverId: controller.receiverId ?? '',
                         receiverName: controller.receiverName ?? '',
                         receiverImage: controller.receiverImage ?? '',
-                        callerName: Database.fetchListenerProfileModel?.data?.name ?? '',
-                        callerImage: Database.fetchListenerProfileModel?.data?.image ?? '',
+                        callerName:
+                            Database.fetchListenerProfileModel?.data?.name ??
+                                '',
+                        callerImage:
+                            Database.fetchListenerProfileModel?.data?.image ??
+                                '',
                         callerRole: 'listener',
                         receiverRole: 'user',
                         sessionId: controller.sessionId,
@@ -195,55 +231,61 @@ class HostChatScreenAppBar extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                     );
                   },
-                  child: Center(
-                    child: Image.asset(
-                      AppAsset.callGradiant,
-                      height: 28,
-                      width: 28,
-                    ),
-                  ).paddingOnly(right: 18),
+                  child: Image.asset(
+                    AppAsset.callGradiant,
+                    height: 22,
+                    width: 22,
+                  ),
                 ),
-              InkWell(
+              actionButton(
                 onTap: () {
                   showMoreOptionsBottomSheet(
                     context: context,
                     isHost: Database.isListener,
                     userId: Database.loginUserId,
                     onBlock: () {
-                      Get.dialog(
-                        barrierColor: AppColors.black.withValues(alpha: 0.8),
-                        Dialog(
-                          backgroundColor: AppColors.transparent,
-                          shadowColor: Colors.transparent,
-                          surfaceTintColor: Colors.transparent,
-                          elevation: 0,
-                          child: BlockDialog(
-                            hostId: "",
-                            isHost: Database.isListener,
-                            userId: Database.loginUserId,
-                          ),
-                        ),
+                      Utils.showConfirmationSnackBar(
+                        context,
+                        title: EnumLocale.txtBlock.name.tr,
+                        message: EnumLocale.txtBlockDetailsUser.name.tr,
+                        confirmText: EnumLocale.txtBlock.name.tr,
+                        cancelText: EnumLocale.txtCancel.name.tr,
+                        icon: Icons.block_rounded,
+                        confirmBackgroundColor: AppColors.redesignBrandRedDeep,
+                        onConfirm: () {
+                          Get.back();
+                        },
                       );
                     },
                     onReport: () {
-                      ReportBottomSheetUi.show(
-                        context: context,
-                        reportType: 'user',
-                        targetId: controller.receiverId ?? '',
+                      Utils.showConfirmationSnackBar(
+                        context,
+                        title: EnumLocale.txtReport.name.tr,
+                        message: 'Are you sure you want to report this user?',
+                        confirmText: EnumLocale.txtReport.name.tr,
+                        cancelText: EnumLocale.txtCancel.name.tr,
+                        icon: Icons.report_gmailerrorred_rounded,
+                        confirmBackgroundColor: AppColors.redesignBrandRed,
+                        onConfirm: () {
+                          ReportBottomSheetUi.onSendReport(
+                            reportType: 'user',
+                            targetId: controller.receiverId ?? '',
+                            closeSheet: false,
+                            reasonIndex: 11,
+                          );
+                        },
                       );
                     },
                   );
                 },
-                child: Center(
-                  child: Image.asset(
-                    AppAsset.circleMoreBlack,
-                    height: 22,
-                    width: 22,
-                  ),
+                child: Image.asset(
+                  AppAsset.circleMoreBlack,
+                  height: 22,
+                  width: 22,
                 ),
-              ).paddingOnly(right: 18),
+              ),
             ],
-          ).paddingOnly(top: 6, bottom: 6),
+          ),
         );
       },
     );
@@ -264,11 +306,13 @@ class HostChatImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSender = Database.fetchLoginUserProfileModel?.user?.listenerId == msg.senderId;
+    final isSender =
+        Database.fetchLoginUserProfileModel?.user?.listenerId == msg.senderId;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment:
+          isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         if (!isSender) ...[
           Container(
@@ -282,7 +326,6 @@ class HostChatImageWidget extends StatelessWidget {
                   color: AppColors.grey.withValues(alpha: 0.5),
                 ),
                 child: Container(
-                  // clipBehavior: Clip.hardEdge,
                   height: 36,
                   width: 36,
                   decoration: BoxDecoration(
@@ -290,7 +333,9 @@ class HostChatImageWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
-                    child: CustomProfileImage(image: controller.receiverImage.toString()),
+                    child: CustomProfileImage(
+                      image: controller.receiverImage.toString(),
+                    ),
                   ),
                 ).paddingAll(1),
               )).paddingOnly(bottom: 17),
@@ -299,19 +344,25 @@ class HostChatImageWidget extends StatelessWidget {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 7),
           child: Column(
-            crossAxisAlignment: isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            crossAxisAlignment:
+                isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: [
               GestureDetector(
                 onTap: () {
-                  Get.to(() => FullScreenImageView(imageUrl: msg.image.toString()));
+                  Get.to(() =>
+                      FullScreenImageView(imageUrl: msg.image.toString()));
                 },
                 child: Container(
                   width: 150,
                   height: 200,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(16)),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: SendMessageImage(image: msg.image.toString(), fit: BoxFit.cover),
+                    child: SendMessageImage(
+                      image: msg.image.toString(),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -325,18 +376,21 @@ class HostChatImageWidget extends StatelessWidget {
                     const Spacer(),
                     Text(
                       controller.formatTimeFromDate(msg.date),
-                      style: AppFontStyle.fontStyleW500(fontSize: 8, fontColor: AppColors.darkPurple),
+                      style: AppFontStyle.fontStyleW500(
+                        fontSize: 8,
+                        fontColor: _chatMutedText,
+                      ),
                     ).paddingOnly(right: 2),
                     if (isSender)
                       Image.asset(
                         isRead ? AppAsset.read2Icon : AppAsset.unreadMsgIcon,
                         height: 18,
                         width: 16,
-                        color: AppColors.darkPurple,
-                      )
+                        color: _chatMutedText,
+                      ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -353,7 +407,6 @@ class HostChatImageWidget extends StatelessWidget {
                   color: AppColors.grey.withValues(alpha: 0.5),
                 ),
                 child: Container(
-                  // clipBehavior: Clip.hardEdge,
                   height: 36,
                   width: 36,
                   decoration: BoxDecoration(
@@ -361,7 +414,11 @@ class HostChatImageWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
-                    child: CustomProfileImage(image: Database.fetchLoginUserProfileModel?.user?.profilePic.toString() ?? ''),
+                    child: CustomProfileImage(
+                      image: Database.fetchListenerProfileModel?.data?.image
+                              .toString() ??
+                          '',
+                    ),
                   ),
                 ).paddingAll(1),
               )).paddingOnly(bottom: 11),
@@ -385,11 +442,13 @@ class HostChatTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSender = Database.fetchLoginUserProfileModel?.user?.listenerId == msg.senderId;
+    final isSender =
+        Database.fetchLoginUserProfileModel?.user?.listenerId == msg.senderId;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment:
+          isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         if (!isSender) ...[
           Container(
@@ -411,7 +470,8 @@ class HostChatTextWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
-                    child: CustomProfileImage(image: controller.receiverImage.toString()),
+                    child: CustomProfileImage(
+                        image: controller.receiverImage.toString()),
                   ),
                 ).paddingAll(1),
               )).paddingOnly(bottom: 4),
@@ -422,7 +482,8 @@ class HostChatTextWidget extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 7),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
-              color: isSender ? AppColors.chatPurple : AppColors.chatPink,
+              color: isSender ? _outgoingBubble : _incomingBubble,
+              border: isSender ? null : Border.all(color: _chatBorder),
               borderRadius: isSender
                   ? const BorderRadius.only(
                       bottomLeft: Radius.circular(12),
@@ -442,7 +503,10 @@ class HostChatTextWidget extends StatelessWidget {
                 Flexible(
                   child: Text(
                     msg.message.toString(),
-                    style: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
+                    style: AppFontStyle.fontStyleW600(
+                      fontSize: 16,
+                      fontColor: isSender ? AppColors.white : _chatBrandDark,
+                    ),
                   ).paddingOnly(right: 6, top: 7, bottom: 7),
                 ),
                 Row(
@@ -452,13 +516,17 @@ class HostChatTextWidget extends StatelessWidget {
                   children: [
                     Text(
                       controller.formatTimeFromDate(msg.date),
-                      style: AppFontStyle.fontStyleW500(fontSize: 8, fontColor: AppColors.white),
+                      style: AppFontStyle.fontStyleW500(
+                        fontSize: 8,
+                        fontColor: isSender ? AppColors.white : _chatMutedText,
+                      ),
                     ).paddingOnly(right: 2, bottom: 4),
                     if (isSender)
                       Image.asset(
                         isRead ? AppAsset.read2Icon : AppAsset.unreadMsgIcon,
                         height: 18,
                         width: 16,
+                        color: AppColors.white,
                       ),
                   ],
                 ).paddingOnly(bottom: 2)
@@ -487,7 +555,10 @@ class HostChatTextWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
-                    child: CustomProfileImage(image: Database.fetchListenerProfileModel?.data?.image.toString() ?? ''),
+                    child: CustomProfileImage(
+                        image: Database.fetchListenerProfileModel?.data?.image
+                                .toString() ??
+                            ''),
                   ),
                 ).paddingAll(1),
               )).paddingOnly(bottom: 4),
@@ -515,7 +586,8 @@ class HostChatVideoCallWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 7),
       padding: const EdgeInsets.only(bottom: 3, left: 12, right: 12),
       decoration: BoxDecoration(
-        color: AppColors.chatCallColor,
+        color: _incomingBubble,
+        border: Border.all(color: _chatBorder),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -529,7 +601,9 @@ class HostChatVideoCallWidget extends StatelessWidget {
             ),
             child: Image.asset(
               // AppAsset.videoCallIcon,
-              msg.callType == 1 || msg.callType == 2 ? AppAsset.chatVideoCallIcon : AppAsset.missedVideoCall,
+              msg.callType == 1 || msg.callType == 2
+                  ? AppAsset.chatVideoCallIcon
+                  : AppAsset.missedVideoCall,
 
               height: 26,
               width: 26,
@@ -541,19 +615,28 @@ class HostChatVideoCallWidget extends StatelessWidget {
             children: [
               Text(
                 EnumLocale.txtVideoCall.name.tr,
-                style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: AppColors.black),
+                style: AppFontStyle.fontStyleW700(
+                  fontSize: 15,
+                  fontColor: _chatBrandDark,
+                ),
               ).paddingOnly(bottom: 4),
               if (msg.callType == 1)
                 Text(
                   callDuration.toString(),
-                  style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.darkPurple),
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: 12,
+                    fontColor: _chatMutedText,
+                  ),
                 ),
             ],
           ).paddingOnly(right: 19),
           // if (msg.callType == 1)
           Text(
             controller.formatTimeFromDate(msg.date),
-            style: AppFontStyle.fontStyleW500(fontSize: 9, fontColor: AppColors.darkPurple),
+            style: AppFontStyle.fontStyleW500(
+              fontSize: 9,
+              fontColor: _chatMutedText,
+            ),
           ).paddingOnly(top: Get.height * 0.06),
         ],
       ),
@@ -580,7 +663,8 @@ class HostChatAudioCallWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 7),
       padding: const EdgeInsets.only(bottom: 3, left: 12, right: 12),
       decoration: BoxDecoration(
-        color: AppColors.chatCallColor,
+        color: _incomingBubble,
+        border: Border.all(color: _chatBorder),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -593,10 +677,12 @@ class HostChatAudioCallWidget extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: Image.asset(
-              msg.callType == 1 || msg.callType == 2 ? AppAsset.callIcon : AppAsset.missedAudioCall,
+              msg.callType == 1 || msg.callType == 2
+                  ? AppAsset.callIcon
+                  : AppAsset.missedAudioCall,
               height: 26,
               width: 26,
-              color: msg.callType == 3 ? AppColors.red : AppColors.darkPurple,
+              color: msg.callType == 3 ? _chatBrandRed : _chatMutedText,
             ),
           ).paddingOnly(right: 11),
           Column(
@@ -604,18 +690,27 @@ class HostChatAudioCallWidget extends StatelessWidget {
             children: [
               Text(
                 EnumLocale.txtAudioCall.name.tr,
-                style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: AppColors.black),
+                style: AppFontStyle.fontStyleW700(
+                  fontSize: 15,
+                  fontColor: _chatBrandDark,
+                ),
               ).paddingOnly(bottom: 4),
               if (msg.callType == 1)
                 Text(
                   audioCallDuration.toString(),
-                  style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.darkPurple),
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: 12,
+                    fontColor: _chatMutedText,
+                  ),
                 ),
             ],
           ).paddingOnly(right: 19),
           Text(
             controller.formatTimeFromDate(msg.date),
-            style: AppFontStyle.fontStyleW500(fontSize: 9, fontColor: AppColors.darkPurple),
+            style: AppFontStyle.fontStyleW500(
+              fontSize: 9,
+              fontColor: _chatMutedText,
+            ),
           ).paddingOnly(top: Get.height * 0.06),
         ],
       ),
@@ -632,22 +727,26 @@ class HostPersonalChatBottomView extends StatelessWidget {
       id: Constant.idChangeAudioRecordingEvent,
       builder: (controller) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10).copyWith(bottom: 18),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10)
+              .copyWith(bottom: 18),
           decoration: BoxDecoration(
+            color: AppColors.white,
+            border: Border(
+              top: BorderSide(color: _chatBorder),
+            ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                offset: const Offset(0, 0),
-                blurRadius: 6,
+                color: AppColors.black.withValues(alpha: 0.04),
+                offset: const Offset(0, -2),
+                blurRadius: 8,
               ),
             ],
-            color: Colors.white,
           ),
           child: Row(
             children: [
               Expanded(
                 child: TextFormField(
-                  cursorColor: AppColors.darkPurple,
+                  cursorColor: _chatBrandDark,
                   controller: controller.messageController,
                   maxLength: 1000,
                   buildCounter: (
@@ -656,9 +755,12 @@ class HostPersonalChatBottomView extends StatelessWidget {
                     required bool isFocused,
                     required int? maxLength,
                   }) {
-                    return null; // This hides the counter
+                    return null;
                   },
-                  style: AppFontStyle.fontStyleW500(fontSize: 15, fontColor: AppColors.darkPurple),
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: 15,
+                    fontColor: _chatBrandDark,
+                  ),
                   decoration: InputDecoration(
                     suffixIcon: SizedBox(
                       width: Get.width * 0.23,
@@ -667,18 +769,27 @@ class HostPersonalChatBottomView extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                // Vibration.vibrate(duration: 50, amplitude: 128);
-                                Utils.showToast(Get.context!, EnumLocale.txtLongPressToEnableAudioRecording.name.tr);
+                                Utils.showInfoSnackBar(
+                                  Get.context!,
+                                  title: 'Voice note',
+                                  message: EnumLocale
+                                      .txtLongPressToEnableAudioRecording
+                                      .name
+                                      .tr,
+                                  icon: Icons.mic_rounded,
+                                );
                               },
                               onLongPressStart: (details) {
                                 if (controller.isSendingAudioFile == false) {
-                                  Vibration.vibrate(duration: 50, amplitude: 128);
+                                  Vibration.vibrate(
+                                      duration: 50, amplitude: 128);
                                   controller.onLongPressStartMic();
                                 }
                               },
                               onLongPressEnd: (details) {
                                 if (controller.isSendingAudioFile == false) {
-                                  Vibration.vibrate(duration: 50, amplitude: 128);
+                                  Vibration.vibrate(
+                                      duration: 50, amplitude: 128);
                                   controller.onLongPressEndMic();
                                 }
                               },
@@ -686,7 +797,7 @@ class HostPersonalChatBottomView extends StatelessWidget {
                                 AppAsset.microPhoneIcon,
                                 height: 24,
                                 width: 24,
-                                color: AppColors.darkPurple,
+                                color: _chatMutedText,
                               ).paddingOnly(right: 12, left: 4),
                             ),
                             GestureDetector(
@@ -695,38 +806,57 @@ class HostPersonalChatBottomView extends StatelessWidget {
                                   backgroundColor: AppColors.white,
                                   title: EnumLocale.changeYourImage.name.tr,
                                   titlePadding: const EdgeInsets.only(top: 30),
-                                  titleStyle: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.appColor),
+                                  titleStyle: AppFontStyle.fontStyleW700(
+                                    fontSize: 16,
+                                    fontColor: _chatBrandDark,
+                                  ),
                                   content: Column(
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8),
                                         child: Divider(
                                           thickness: 1,
-                                          color: Colors.grey.shade100,
+                                          color:
+                                              AppColors.redesignSurfaceGrey100,
                                         ),
                                       ),
                                       GestureDetector(
                                           onTap: () async {
                                             Get.back();
-                                            bool didPick = await controller.pickImageFromCamera();
-                                            if (didPick) await controller.sendImageMessage();
+                                            bool didPick = await controller
+                                                .pickImageFromCamera();
+                                            if (didPick) {
+                                              await controller
+                                                  .sendImageMessage();
+                                            }
                                           },
                                           child: Container(
                                             height: 60,
-                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
                                             child: Row(
                                               children: [
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 20),
                                                   child: Image(
-                                                    color: AppColors.appColor,
-                                                    image: AssetImage(AppAsset.cameraFlipIcon),
+                                                    color: _chatBrandRed,
+                                                    image: AssetImage(AppAsset
+                                                        .cameraFlipIcon),
                                                     height: 20,
                                                   ),
                                                 ),
                                                 Text(
-                                                  EnumLocale.txtTakeAphoto.name.tr,
-                                                  style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: AppColors.appColor),
+                                                  EnumLocale
+                                                      .txtTakeAphoto.name.tr,
+                                                  style: AppFontStyle
+                                                      .fontStyleW700(
+                                                    fontSize: 15,
+                                                    fontColor: _chatBrandRed,
+                                                  ),
                                                 )
                                               ],
                                             ),
@@ -734,25 +864,41 @@ class HostPersonalChatBottomView extends StatelessWidget {
                                       GestureDetector(
                                           onTap: () async {
                                             Get.back();
-                                            bool didPick = await controller.pickImageFromGallery();
-                                            if (didPick) await controller.sendImageMessage();
+                                            bool didPick = await controller
+                                                .pickImageFromGallery();
+                                            if (didPick) {
+                                              await controller
+                                                  .sendImageMessage();
+                                            }
                                           },
                                           child: Container(
                                             height: 60,
-                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
                                             child: Row(
                                               children: [
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 20),
                                                   child: Image(
-                                                    color: AppColors.appColor,
-                                                    image: AssetImage(AppAsset.chatImageIcon),
+                                                    color: _chatBrandRed,
+                                                    image: AssetImage(
+                                                        AppAsset.chatImageIcon),
                                                     height: 20,
                                                   ),
                                                 ),
                                                 Text(
-                                                  EnumLocale.txtChooseFromYourFile.name.tr,
-                                                  style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: AppColors.appColor),
+                                                  EnumLocale
+                                                      .txtChooseFromYourFile
+                                                      .name
+                                                      .tr,
+                                                  style: AppFontStyle
+                                                      .fontStyleW700(
+                                                    fontSize: 15,
+                                                    fontColor: _chatBrandRed,
+                                                  ),
                                                 )
                                               ],
                                             ),
@@ -765,38 +911,45 @@ class HostPersonalChatBottomView extends StatelessWidget {
                                 AppAsset.chatImageIcon,
                                 height: 24,
                                 width: 24,
-                                color: AppColors.darkPurple,
+                                color: _chatMutedText,
                               ).paddingOnly(right: 16),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    hintText: "Type Something...",
-                    hintStyle: AppFontStyle.fontStyleW500(fontSize: 15, fontColor: AppColors.darkPurple),
+                    hintText: "Write a message...",
+                    hintStyle: AppFontStyle.fontStyleW500(
+                      fontSize: 15,
+                      fontColor: _chatMutedText,
+                    ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    fillColor: _chatSurface,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                       borderSide: BorderSide.none,
                     ),
                   ),
-                ).paddingOnly(right: 14),
+                ).paddingOnly(right: 12),
               ),
               GestureDetector(
-                  onTap: () {
-                    controller.sendMessage();
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.appColor),
-                    child: Image.asset(
-                      AppAsset.msgSendIcon,
-                      height: 26,
-                      width: 26,
-                    ),
-                  ))
+                onTap: () {
+                  controller.sendMessage();
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(9),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _chatBrandRed,
+                  ),
+                  child: Image.asset(
+                    AppAsset.msgSendIcon,
+                    height: 24,
+                    width: 24,
+                  ),
+                ),
+              ),
             ],
           ),
         );
@@ -1024,7 +1177,8 @@ class SenderAudioMessageWidget extends StatefulWidget {
   });
 
   @override
-  State<SenderAudioMessageWidget> createState() => _SenderAudioMessageWidgetState();
+  State<SenderAudioMessageWidget> createState() =>
+      _SenderAudioMessageWidgetState();
 }
 
 class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
@@ -1143,7 +1297,9 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                                         : GestureDetector(
                                             onTap: () => onPlayAudio(),
                                             child: Icon(
-                                              isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                                              isPlaying
+                                                  ? Icons.pause_rounded
+                                                  : Icons.play_arrow_rounded,
                                               size: 30,
                                               color: AppColors.chatPurple,
                                             )
@@ -1153,7 +1309,9 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                                     : GestureDetector(
                                         onTap: () => onPlayAudio(),
                                         child: Icon(
-                                          isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                                          isPlaying
+                                              ? Icons.pause_rounded
+                                              : Icons.play_arrow_rounded,
                                           size: 30,
                                           color: AppColors.chatPurple,
                                         )
@@ -1168,16 +1326,22 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                                   overlayShape: SliderComponentShape.noOverlay,
                                   activeTrackColor: AppColors.primary,
                                   thumbColor: AppColors.primary,
-                                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                                  thumbShape: const RoundSliderThumbShape(
+                                      enabledThumbRadius: 10),
                                   trackHeight: 5,
                                 ),
                                 child: Slider(
                                   activeColor: AppColors.chatPurple,
                                   min: 0,
-                                  max: duration.inSeconds.toDouble() > 0 ? duration.inSeconds.toDouble() : 1,
-                                  value: position.inSeconds.toDouble().clamp(0, duration.inSeconds.toDouble()),
+                                  max: duration.inSeconds.toDouble() > 0
+                                      ? duration.inSeconds.toDouble()
+                                      : 1,
+                                  value: position.inSeconds
+                                      .toDouble()
+                                      .clamp(0, duration.inSeconds.toDouble()),
                                   onChanged: (value) {
-                                    player.seek(Duration(seconds: value.toInt()));
+                                    player
+                                        .seek(Duration(seconds: value.toInt()));
                                   },
                                 ),
                               ),
@@ -1187,7 +1351,9 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                               height: 44,
                               width: 44,
                               alignment: Alignment.center,
-                              decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.chatPurple),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.chatPurple),
                               child: Image.asset(
                                 AppAsset.microPhoneIcon,
                                 width: 20,
@@ -1202,7 +1368,8 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                         right: 70,
                         child: Text(
                           formatTime(position),
-                          style: AppFontStyle.fontStyleW600(fontColor: AppColors.chatPurple, fontSize: 9),
+                          style: AppFontStyle.fontStyleW600(
+                              fontColor: AppColors.chatPurple, fontSize: 9),
                         ),
                       ),
                     ],
@@ -1212,7 +1379,8 @@ class _SenderAudioMessageWidgetState extends State<SenderAudioMessageWidget> {
                   builder: (logic) {
                     return Text(
                       logic.formatTimeFromDate(widget.chat.date),
-                      style: AppFontStyle.fontStyleW600(fontColor: AppColors.white, fontSize: 8),
+                      style: AppFontStyle.fontStyleW600(
+                          fontColor: AppColors.white, fontSize: 8),
                     );
                   },
                 ),
@@ -1293,7 +1461,8 @@ class UploadAudioUi extends StatelessWidget {
                           overlayShape: SliderComponentShape.noOverlay,
                           activeTrackColor: AppColors.appColor,
                           thumbColor: AppColors.appColor,
-                          thumbShape: RoundSliderThumbShape(enabledThumbRadius: 10),
+                          thumbShape:
+                              RoundSliderThumbShape(enabledThumbRadius: 10),
                           trackHeight: 5,
                         ),
                         child: Slider(
@@ -1327,7 +1496,8 @@ class UploadAudioUi extends StatelessWidget {
                 right: 70,
                 child: Text(
                   CustomFormatAudioTime.convert(0),
-                  style: AppFontStyle.fontStyleW500(fontColor: AppColors.primary, fontSize: 9),
+                  style: AppFontStyle.fontStyleW500(
+                      fontColor: AppColors.primary, fontSize: 9),
                 ),
               ),
               Positioned(
@@ -1335,7 +1505,8 @@ class UploadAudioUi extends StatelessWidget {
                 right: 8,
                 child: Text(
                   CustomFormatChatTime.convert(DateTime.now().toString()),
-                  style: AppFontStyle.fontStyleW500(fontColor: AppColors.white, fontSize: 8),
+                  style: AppFontStyle.fontStyleW500(
+                      fontColor: AppColors.white, fontSize: 8),
                 ),
               ),
             ],
@@ -1572,10 +1743,12 @@ class ReceiverAudioMessageWidget extends StatefulWidget {
   });
 
   @override
-  State<ReceiverAudioMessageWidget> createState() => _ReceiverAudioMessageWidgetState();
+  State<ReceiverAudioMessageWidget> createState() =>
+      _ReceiverAudioMessageWidgetState();
 }
 
-class _ReceiverAudioMessageWidgetState extends State<ReceiverAudioMessageWidget> {
+class _ReceiverAudioMessageWidgetState
+    extends State<ReceiverAudioMessageWidget> {
   final AudioPlayer player = AudioPlayer();
   bool isPlaying = false;
   Duration duration = Duration.zero;
@@ -1676,7 +1849,9 @@ class _ReceiverAudioMessageWidgetState extends State<ReceiverAudioMessageWidget>
                             GestureDetector(
                                 onTap: () => onPlayAudio(),
                                 child: Icon(
-                                  isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                                  isPlaying
+                                      ? Icons.pause_rounded
+                                      : Icons.play_arrow_rounded,
                                   size: 30,
                                   color: AppColors.chatPink,
                                 )
@@ -1690,16 +1865,22 @@ class _ReceiverAudioMessageWidgetState extends State<ReceiverAudioMessageWidget>
                                   overlayShape: SliderComponentShape.noOverlay,
                                   activeTrackColor: AppColors.primary,
                                   thumbColor: AppColors.primary,
-                                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                                  thumbShape: const RoundSliderThumbShape(
+                                      enabledThumbRadius: 10),
                                   trackHeight: 5,
                                 ),
                                 child: Slider(
                                   activeColor: AppColors.chatPink,
                                   min: 0,
-                                  max: duration.inSeconds.toDouble() > 0 ? duration.inSeconds.toDouble() : 1,
-                                  value: position.inSeconds.toDouble().clamp(0, duration.inSeconds.toDouble()),
+                                  max: duration.inSeconds.toDouble() > 0
+                                      ? duration.inSeconds.toDouble()
+                                      : 1,
+                                  value: position.inSeconds
+                                      .toDouble()
+                                      .clamp(0, duration.inSeconds.toDouble()),
                                   onChanged: (value) {
-                                    player.seek(Duration(seconds: value.toInt()));
+                                    player
+                                        .seek(Duration(seconds: value.toInt()));
                                   },
                                 ),
                               ),
@@ -1709,7 +1890,9 @@ class _ReceiverAudioMessageWidgetState extends State<ReceiverAudioMessageWidget>
                               height: 44,
                               width: 44,
                               alignment: Alignment.center,
-                              decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.chatPink),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.chatPink),
                               child: Image.asset(
                                 AppAsset.microPhoneIcon,
                                 width: 20,
@@ -1724,7 +1907,8 @@ class _ReceiverAudioMessageWidgetState extends State<ReceiverAudioMessageWidget>
                         right: 70,
                         child: Text(
                           formatTime(position),
-                          style: AppFontStyle.fontStyleW600(fontColor: AppColors.chatPink, fontSize: 9),
+                          style: AppFontStyle.fontStyleW600(
+                              fontColor: AppColors.chatPink, fontSize: 9),
                         ),
                       ),
                     ],
@@ -1734,7 +1918,8 @@ class _ReceiverAudioMessageWidgetState extends State<ReceiverAudioMessageWidget>
                   builder: (logic) {
                     return Text(
                       logic.formatTimeFromDate(widget.chat.date),
-                      style: AppFontStyle.fontStyleW600(fontColor: AppColors.white, fontSize: 8),
+                      style: AppFontStyle.fontStyleW600(
+                          fontColor: AppColors.white, fontSize: 8),
                     );
                   },
                 ),

@@ -50,17 +50,27 @@ class ReportBottomSheetUi {
   static Future<void> onSendReport({
     required String reportType,
     required String targetId,
+    bool closeSheet = true,
+    int? reasonIndex,
   }) async {
     if (targetId.trim().isEmpty) {
-      Get.back();
-      Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+      if (closeSheet) {
+        Get.back();
+      }
+      Utils.showInfoSnackBar(
+        Get.context!,
+        title: EnumLocale.txtReport.name.tr,
+        message: EnumLocale.txtSomeThingWentWrong.name.tr,
+        icon: Icons.error_outline_rounded,
+        accentColor: AppColors.redesignBrandRedDeep,
+      );
       return;
     }
 
     isLoading.value = true;
 
-    final selectedIndex =
-        selectedReportType.value.clamp(0, reportTypes.length - 1);
+    final rawIndex = reasonIndex ?? selectedReportType.value;
+    final selectedIndex = rawIndex.clamp(0, reportTypes.length - 1);
     final reasonCode = reportReasonCodes[selectedIndex];
     final reasonText = reportTypes[selectedIndex].toString();
 
@@ -72,16 +82,30 @@ class ReportBottomSheetUi {
     );
 
     isLoading.value = false;
-    Get.back();
+    if (closeSheet) {
+      Get.back();
+    }
 
     if ((response?['status'] ?? false) == true) {
-      Utils.showToast(Get.context!, EnumLocale.txtReportSendSuccess.name.tr);
+      Utils.showInfoSnackBar(
+        Get.context!,
+        title: EnumLocale.txtReport.name.tr,
+        message: EnumLocale.txtReportSendSuccess.name.tr,
+        icon: Icons.check_circle_outline_rounded,
+        accentColor: AppColors.redesignStatusSuccess,
+      );
       return;
     }
 
     final message = response?['message']?.toString() ??
         EnumLocale.txtSomeThingWentWrong.name.tr;
-    Utils.showToast(Get.context!, message);
+    Utils.showInfoSnackBar(
+      Get.context!,
+      title: EnumLocale.txtReport.name.tr,
+      message: message,
+      icon: Icons.error_outline_rounded,
+      accentColor: AppColors.redesignBrandRedDeep,
+    );
   }
 
   static void show({

@@ -15,6 +15,7 @@ import 'package:talk_in/ui/host_flow/host_personal_chat_screen/api/host_personal
 import 'package:talk_in/ui/host_flow/host_personal_chat_screen/api/host_send_image_audio_api.dart';
 import 'package:talk_in/ui/host_flow/host_personal_chat_screen/model/host_personal_chat_model.dart';
 import 'package:talk_in/ui/host_flow/host_personal_chat_screen/model/host_send_image_audio_model.dart';
+import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/constant.dart';
 import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/enums.dart';
@@ -61,7 +62,8 @@ class HostPersonalChatScreenController extends GetxController {
   }
 
   bool get isBookedSessionWindowEnded {
-    return bookedSessionEndAt != null && DateTime.now().isAfter(bookedSessionEndAt!);
+    return bookedSessionEndAt != null &&
+        DateTime.now().isAfter(bookedSessionEndAt!);
   }
 
   @override
@@ -145,7 +147,8 @@ class HostPersonalChatScreenController extends GetxController {
       if (oldChatListener.isNotEmpty) {
         SocketEmit.onMessageSeen({
           SocketParams.messageId: oldChatListener.last.id ?? '',
-          SocketParams.senderId: Database.fetchListenerProfileModel?.data?.id ?? '',
+          SocketParams.senderId:
+              Database.fetchListenerProfileModel?.data?.id ?? '',
         });
         onScrollDown();
       } else {
@@ -166,7 +169,8 @@ class HostPersonalChatScreenController extends GetxController {
 
   /// chat pagination
   Future<void> onPagination() async {
-    if (scrollController.position.pixels == scrollController.position.minScrollExtent) {
+    if (scrollController.position.pixels ==
+        scrollController.position.minScrollExtent) {
       isPaginationLoading = true;
       update([Constant.idPagination]);
       await getOldChats();
@@ -185,7 +189,13 @@ class HostPersonalChatScreenController extends GetxController {
     }
 
     if (containsDangerousScript(message)) {
-      Utils.showToast(Get.context!, "Script tags are not allowed in the message.");
+      Utils.showInfoSnackBar(
+        Get.context!,
+        title: 'Message blocked',
+        message: 'Script tags are not allowed in the message.',
+        icon: Icons.error_outline_rounded,
+        accentColor: AppColors.redesignBrandRedDeep,
+      );
       messageController.clear();
       return;
     }
@@ -193,7 +203,12 @@ class HostPersonalChatScreenController extends GetxController {
     message = sanitizeUserInput(message); // ✅ No error
 
     if (message.length > 1000) {
-      Utils.showToast(Get.context!, "Message too long. Max 1000 characters.");
+      Utils.showInfoSnackBar(
+        Get.context!,
+        title: 'Message too long',
+        message: 'Max 1000 characters are allowed.',
+        icon: Icons.notes_rounded,
+      );
       return;
     }
 
@@ -215,18 +230,28 @@ class HostPersonalChatScreenController extends GetxController {
     onScrollDown();
 
     final messageData = {
-      SocketParams.senderRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'user' : 'listener',
-      SocketParams.receiverRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'listener' : 'user',
+      SocketParams.senderRole:
+          Database.fetchLoginUserProfileModel?.user?.isListener == false
+              ? 'user'
+              : 'listener',
+      SocketParams.receiverRole:
+          Database.fetchLoginUserProfileModel?.user?.isListener == false
+              ? 'listener'
+              : 'user',
       SocketParams.chatTopicId: hostPersonalChatModel?.chatTopic ?? '',
-      SocketParams.senderId: Database.fetchLoginUserProfileModel?.user?.listenerId,
+      SocketParams.senderId:
+          Database.fetchLoginUserProfileModel?.user?.listenerId,
       SocketParams.receiverId: receiverId,
       SocketParams.message: message,
-      SocketParams.date: DateFormat('M/d/yyyy, h:mm:ss a').format(DateTime.now()),
+      SocketParams.date:
+          DateFormat('M/d/yyyy, h:mm:ss a').format(DateTime.now()),
       SocketParams.messageType: 1,
       SocketParams.name: Database.fetchListenerProfileModel?.data?.name,
       SocketParams.profilePic: Database.fetchListenerProfileModel?.data?.image,
-      SocketParams.ratePrivateVideoCall: Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall,
-      SocketParams.ratePrivateAudioCall: Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall,
+      SocketParams.ratePrivateVideoCall:
+          Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall,
+      SocketParams.ratePrivateAudioCall:
+          Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall,
     };
 
     Utils.showLog("Listener message  :: $messageData");
@@ -256,7 +281,12 @@ class HostPersonalChatScreenController extends GetxController {
   /// send image
   Future<void> sendImageMessage() async {
     if (pickedImage == null || receiverId == null) {
-      Utils.showToast(Get.context!, "No image selected or receiver ID is missing");
+      Utils.showInfoSnackBar(
+        Get.context!,
+        title: 'Image not ready',
+        message: 'No image selected or receiver is missing.',
+        icon: Icons.image_not_supported_outlined,
+      );
       return;
     }
 
@@ -271,21 +301,33 @@ class HostPersonalChatScreenController extends GetxController {
         imagePath: pickedImage!.path,
       );
       onScrollDown();
-      if (hostSendImageAudioModel != null && hostSendImageAudioModel?.chat != null) {
+      if (hostSendImageAudioModel != null &&
+          hostSendImageAudioModel?.chat != null) {
         final messageData = {
-          SocketParams.senderRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'user' : 'listener',
-          SocketParams.receiverRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'listener' : 'user',
+          SocketParams.senderRole:
+              Database.fetchLoginUserProfileModel?.user?.isListener == false
+                  ? 'user'
+                  : 'listener',
+          SocketParams.receiverRole:
+              Database.fetchLoginUserProfileModel?.user?.isListener == false
+                  ? 'listener'
+                  : 'user',
           SocketParams.chatTopicId: chatTopicId ?? '',
-          SocketParams.senderId: Database.fetchLoginUserProfileModel?.user?.listenerId,
+          SocketParams.senderId:
+              Database.fetchLoginUserProfileModel?.user?.listenerId,
           SocketParams.receiverId: receiverId,
           SocketParams.message: hostSendImageAudioModel?.chat?.message ?? '',
           SocketParams.messageType: 2,
-          SocketParams.date: DateFormat('M/d/yyyy, h:mm:ss a').format(DateTime.now()),
+          SocketParams.date:
+              DateFormat('M/d/yyyy, h:mm:ss a').format(DateTime.now()),
           SocketParams.image: hostSendImageAudioModel?.chat?.image ?? '',
           SocketParams.name: Database.fetchListenerProfileModel?.data?.name,
-          SocketParams.profilePic: Database.fetchListenerProfileModel?.data?.image,
-          SocketParams.ratePrivateVideoCall: Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall,
-          SocketParams.ratePrivateAudioCall: Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall,
+          SocketParams.profilePic:
+              Database.fetchListenerProfileModel?.data?.image,
+          SocketParams.ratePrivateVideoCall:
+              Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall,
+          SocketParams.ratePrivateAudioCall:
+              Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall,
         };
 
         Utils.showLog("Image message socket emit :: $messageData");
@@ -295,24 +337,38 @@ class HostPersonalChatScreenController extends GetxController {
         update();
         onScrollDown();
       } else {
-        Utils.showToast(Get.context!, "Failed to send image.");
+        Utils.showInfoSnackBar(
+          Get.context!,
+          title: 'Send failed',
+          message: 'Failed to send image.',
+          icon: Icons.error_outline_rounded,
+          accentColor: AppColors.redesignBrandRedDeep,
+        );
       }
     } catch (e) {
-      Utils.showToast(Get.context!, "Error sending image: $e");
+      Utils.showInfoSnackBar(
+        Get.context!,
+        title: 'Send failed',
+        message: 'Error sending image: $e',
+        icon: Icons.error_outline_rounded,
+        accentColor: AppColors.redesignBrandRedDeep,
+      );
       log("Error in sendImageMessage: $e");
     }
   }
 
   /// pick image camera
   Future<bool> pickImageFromCamera() async {
-    pickedImage = await imagePicker.pickImage(source: ImageSource.camera, imageQuality: 100);
+    pickedImage = await imagePicker.pickImage(
+        source: ImageSource.camera, imageQuality: 100);
     update();
     return pickedImage != null;
   }
 
   /// pick image gallery
   Future<bool> pickImageFromGallery() async {
-    pickedImage = await imagePicker.pickImage(source: ImageSource.gallery, imageQuality: 100);
+    pickedImage = await imagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 100);
     update();
     return pickedImage != null;
   }
@@ -321,7 +377,8 @@ class HostPersonalChatScreenController extends GetxController {
   Future<void> onStartAudioRecording() async {
     Utils.showLog("Audio Recording Start");
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    String filePath = "${appDocDir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.mp4";
+    String filePath =
+        "${appDocDir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.mp4";
 
     await audioRecorder.start(const RecordConfig(), path: filePath);
 
@@ -349,7 +406,13 @@ class HostPersonalChatScreenController extends GetxController {
       PermissionStatus request = await Permission.microphone.request();
 
       if (request == PermissionStatus.denied) {
-        Utils.showToast(Get.context!, EnumLocale.txtPleaseAllowPermission.name.tr);
+        Utils.showInfoSnackBar(
+          Get.context!,
+          title: 'Permission required',
+          message: EnumLocale.txtPleaseAllowPermission.name.tr,
+          icon: Icons.mic_off_outlined,
+          accentColor: AppColors.redesignBrandRedDeep,
+        );
       }
     } else {
       Utils.showLog("Audio Recording Started...");
@@ -412,20 +475,31 @@ class HostPersonalChatScreenController extends GetxController {
           update([Constant.idGetOldChat]);
 
           final messageData = {
-            SocketParams.senderRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'user' : 'listener',
-            SocketParams.receiverRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'listener' : 'user',
+            SocketParams.senderRole:
+                Database.fetchLoginUserProfileModel?.user?.isListener == false
+                    ? 'user'
+                    : 'listener',
+            SocketParams.receiverRole:
+                Database.fetchLoginUserProfileModel?.user?.isListener == false
+                    ? 'listener'
+                    : 'user',
             SocketParams.chatTopicId: chatTopicId ?? '',
-            SocketParams.senderId: Database.fetchLoginUserProfileModel?.user?.listenerId,
+            SocketParams.senderId:
+                Database.fetchLoginUserProfileModel?.user?.listenerId,
             SocketParams.receiverId: receiverId,
             SocketParams.message: hostSendImageAudioModel?.chat?.message ?? '',
             SocketParams.messageType: 3,
-            SocketParams.date: DateFormat('M/d/yyyy, h:mm:ss a').format(DateTime.now()),
+            SocketParams.date:
+                DateFormat('M/d/yyyy, h:mm:ss a').format(DateTime.now()),
             SocketParams.image: hostSendImageAudioModel?.chat?.image ?? '',
             SocketParams.audio: hostSendImageAudioModel?.chat?.audio ?? '',
             SocketParams.name: Database.fetchListenerProfileModel?.data?.name,
-            SocketParams.profilePic: Database.fetchListenerProfileModel?.data?.image,
-            SocketParams.ratePrivateVideoCall: Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall,
-            SocketParams.ratePrivateAudioCall: Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall,
+            SocketParams.profilePic:
+                Database.fetchListenerProfileModel?.data?.image,
+            SocketParams.ratePrivateVideoCall:
+                Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall,
+            SocketParams.ratePrivateAudioCall:
+                Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall,
           };
 
           Utils.showLog("Image message socket emit :: $messageData");

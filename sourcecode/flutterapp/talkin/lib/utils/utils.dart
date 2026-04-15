@@ -133,6 +133,11 @@ class Utils {
     messenger.hideCurrentSnackBar();
 
     final bottomPadding = MediaQuery.of(context).padding.bottom + 12;
+    final resolvedConfirmColor =
+        confirmBackgroundColor ?? AppColors.redesignBrandDark;
+    final resolvedAccent = resolvedConfirmColor == AppColors.redesignBrandDark
+        ? AppColors.redesignBrandRed
+        : resolvedConfirmColor;
 
     messenger.showSnackBar(
       SnackBar(
@@ -142,16 +147,16 @@ class Utils {
         duration: duration,
         margin: EdgeInsets.fromLTRB(14, 0, 14, bottomPadding),
         content: Container(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+          padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(30),
             border: Border.all(color: AppColors.redesignSoftBorder),
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.14),
-                blurRadius: 18,
-                offset: const Offset(0, 10),
+                color: AppColors.black.withValues(alpha: 0.11),
+                blurRadius: 22,
+                offset: const Offset(0, 12),
               ),
             ],
           ),
@@ -163,19 +168,19 @@ class Utils {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 28,
-                    width: 28,
+                    height: 50,
+                    width: 50,
                     decoration: BoxDecoration(
-                      color: AppColors.redesignAccentSoftBg,
-                      borderRadius: BorderRadius.circular(8),
+                      color: resolvedAccent.withValues(alpha: 0.13),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Icon(
                       icon,
-                      size: 16,
-                      color: AppColors.redesignBrandRed,
+                      size: 26,
+                      color: resolvedAccent,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,19 +188,21 @@ class Utils {
                         Text(
                           title,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.w700,
                             color: AppColors.redesignBrandDark,
                           ),
                         ),
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 4),
                         Text(
                           message,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 17,
                             fontWeight: FontWeight.w500,
                             color: AppColors.redesignMutedText,
-                            height: 1.35,
+                            height: 1.3,
                           ),
                         ),
                       ],
@@ -203,66 +210,182 @@ class Utils {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 14),
               Row(
                 children: [
                   Expanded(
-                    child: SizedBox(
-                      height: 40,
-                      child: OutlinedButton(
-                        onPressed: () {
-                          messenger.hideCurrentSnackBar();
-                        },
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: AppColors.redesignSoftBorder),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          foregroundColor: AppColors.redesignBrandDark,
-                          backgroundColor: AppColors.white,
-                          padding: EdgeInsets.zero,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        messenger.hideCurrentSnackBar();
+                      },
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(56),
+                        side: BorderSide(color: AppColors.redesignSoftBorder),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Text(
-                          cancelText,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.redesignBrandDark,
-                          ),
+                        foregroundColor: AppColors.redesignBrandDark,
+                        backgroundColor: AppColors.white,
+                        padding: EdgeInsets.zero,
+                      ),
+                      child: Text(
+                        cancelText,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.redesignBrandDark,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 10),
                   Expanded(
-                    child: SizedBox(
-                      height: 40,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          messenger.hideCurrentSnackBar();
-                          onConfirm();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          backgroundColor: confirmBackgroundColor ??
-                              AppColors.redesignBrandDark,
-                          foregroundColor: AppColors.white,
-                          padding: EdgeInsets.zero,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        messenger.hideCurrentSnackBar();
+                        onConfirm();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        minimumSize: const Size.fromHeight(56),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Text(
-                          confirmText,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                          ),
+                        backgroundColor: resolvedConfirmColor,
+                        foregroundColor: AppColors.white,
+                        padding: EdgeInsets.zero,
+                      ),
+                      child: Text(
+                        confirmText,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
                   ),
                 ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static void showInfoSnackBar(
+    BuildContext context, {
+    required String title,
+    required String message,
+    IconData icon = Icons.info_outline_rounded,
+    String actionText = 'OK',
+    VoidCallback? onAction,
+    Color? accentColor,
+    Duration duration = const Duration(seconds: 4),
+  }) {
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+
+    final bottomPadding = MediaQuery.of(context).padding.bottom + 12;
+    final resolvedAccent = accentColor ?? AppColors.redesignBrandRed;
+
+    messenger.showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        duration: duration,
+        margin: EdgeInsets.fromLTRB(14, 0, 14, bottomPadding),
+        content: Container(
+          padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.11),
+                blurRadius: 22,
+                offset: const Offset(0, 12),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: resolvedAccent.withValues(alpha: 0.14),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Icon(
+                      icon,
+                      size: 26,
+                      color: resolvedAccent,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.redesignBrandDark,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          message,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.redesignMutedText,
+                            height: 1.3,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    messenger.hideCurrentSnackBar();
+                    onAction?.call();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    minimumSize: const Size.fromHeight(56),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    backgroundColor: resolvedAccent,
+                    foregroundColor: AppColors.white,
+                    padding: EdgeInsets.zero,
+                  ),
+                  child: Text(
+                    actionText,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

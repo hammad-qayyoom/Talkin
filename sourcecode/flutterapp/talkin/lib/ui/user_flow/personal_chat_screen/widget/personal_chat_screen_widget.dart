@@ -11,7 +11,6 @@ import 'package:talk_in/custom/bottom_sheet/talk_now_button_bottom_sheet.dart';
 import 'package:talk_in/custom/custom_audio_time/custom_format_audio_time.dart';
 import 'package:talk_in/custom/custom_chat_time/custom_format_chat_time.dart';
 import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
-import 'package:talk_in/custom/dialog/block_dialog.dart';
 import 'package:talk_in/routes/app_routes.dart';
 import 'package:talk_in/ui/user_flow/personal_chat_screen/controller/personal_chat_screen_controller.dart';
 import 'package:talk_in/ui/user_flow/personal_chat_screen/model/personal_chat_model.dart';
@@ -214,9 +213,12 @@ class ChatScreenAppBar extends StatelessWidget {
                 actionButton(
                   onTap: () {
                     if (controller.isBookedSessionWindowEnded) {
-                      Utils.showToast(
+                      Utils.showInfoSnackBar(
                         context,
-                        'Session slot time is completed. Call is no longer allowed.',
+                        title: 'Session ended',
+                        message:
+                            'Session slot time is completed. Call is no longer allowed.',
+                        icon: Icons.schedule_rounded,
                       );
                       return;
                     }
@@ -272,26 +274,36 @@ class ChatScreenAppBar extends StatelessWidget {
                     isHost: Database.isListener,
                     userId: Database.loginUserId,
                     onBlock: () {
-                      Get.dialog(
-                        barrierColor: AppColors.black.withValues(alpha: 0.8),
-                        Dialog(
-                          backgroundColor: AppColors.transparent,
-                          shadowColor: AppColors.transparent,
-                          surfaceTintColor: AppColors.transparent,
-                          elevation: 0,
-                          child: BlockDialog(
-                            hostId: "",
-                            isHost: Database.isListener,
-                            userId: Database.loginUserId,
-                          ),
-                        ),
+                      Utils.showConfirmationSnackBar(
+                        context,
+                        title: EnumLocale.txtBlock.name.tr,
+                        message: EnumLocale.txtBlockDetailsListener.name.tr,
+                        confirmText: EnumLocale.txtBlock.name.tr,
+                        cancelText: EnumLocale.txtCancel.name.tr,
+                        icon: Icons.block_rounded,
+                        confirmBackgroundColor: AppColors.redesignBrandRedDeep,
+                        onConfirm: () {
+                          Get.back();
+                        },
                       );
                     },
                     onReport: () {
-                      ReportBottomSheetUi.show(
-                        context: context,
-                        reportType: 'user',
-                        targetId: controller.receiverId ?? '',
+                      Utils.showConfirmationSnackBar(
+                        context,
+                        title: EnumLocale.txtReport.name.tr,
+                        message: 'Are you sure you want to report this user?',
+                        confirmText: EnumLocale.txtReport.name.tr,
+                        cancelText: EnumLocale.txtCancel.name.tr,
+                        icon: Icons.report_gmailerrorred_rounded,
+                        confirmBackgroundColor: AppColors.redesignBrandRed,
+                        onConfirm: () {
+                          ReportBottomSheetUi.onSendReport(
+                            reportType: 'user',
+                            targetId: controller.receiverId ?? '',
+                            closeSheet: false,
+                            reasonIndex: 11,
+                          );
+                        },
                       );
                     },
                   );
@@ -360,10 +372,14 @@ class PersonalChatBottomView extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Utils.showToast(
+                                Utils.showInfoSnackBar(
                                   Get.context!,
-                                  EnumLocale.txtLongPressToEnableAudioRecording
-                                      .name.tr,
+                                  title: 'Voice note',
+                                  message: EnumLocale
+                                      .txtLongPressToEnableAudioRecording
+                                      .name
+                                      .tr,
+                                  icon: Icons.mic_rounded,
                                 );
                               },
                               onLongPressStart: (details) {
