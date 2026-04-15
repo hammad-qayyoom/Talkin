@@ -152,11 +152,6 @@ class HelpCenterScreenView extends GetView<HelpCenterScreenController> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isTablet = constraints.maxWidth >= 760;
-        final maxContentWidth = constraints.maxWidth >= 1100
-            ? 980.0
-            : constraints.maxWidth >= 760
-                ? 760.0
-                : constraints.maxWidth;
 
         return RefreshIndicator(
           color: AppColors.redesignBrandRed,
@@ -169,258 +164,251 @@ class HelpCenterScreenView extends GetView<HelpCenterScreenController> {
               parent: BouncingScrollPhysics(),
             ),
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: maxContentWidth),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(isTablet ? 20 : 16),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            AppColors.redesignBrandRed,
-                            AppColors.redesignBrandRedDeep,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(isTablet ? 20 : 16),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        AppColors.redesignBrandRed,
+                        AppColors.redesignBrandRedDeep,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color:
+                            AppColors.redesignBrandRed.withValues(alpha: 0.24),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.white.withValues(
+                                  alpha: 0.18,
+                                ),
+                                borderRadius: BorderRadius.circular(999),
+                              ),
+                              child: Text(
+                                'Support Desk',
+                                style: AppFontStyle.fontStyleW700(
+                                  fontSize: 11,
+                                  fontColor: AppColors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              EnumLocale.txtNeedAnyHelpFAQ.name.tr,
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: isTablet ? 30 : 24,
+                                fontColor: AppColors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              EnumLocale.txtHelpCenterDescription.name.tr,
+                              maxLines: isTablet ? 5 : 4,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW500(
+                                fontSize: isTablet ? 14 : 12,
+                                fontColor:
+                                    AppColors.white.withValues(alpha: 0.9),
+                                height: 1.6,
+                              ),
+                            ),
                           ],
                         ),
-                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      const SizedBox(width: 10),
+                      Container(
+                        height: isTablet ? 86 : 72,
+                        width: isTablet ? 86 : 72,
+                        decoration: BoxDecoration(
+                          color: AppColors.white.withValues(alpha: 0.16),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Image.asset(
+                            AppAsset.helpCenterBlur,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Material(
+                  color: AppColors.transparent,
+                  child: InkWell(
+                    onTap: _openIssueMail,
+                    borderRadius: BorderRadius.circular(18),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: AppColors.redesignSoftBorder),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.redesignBrandRed
-                                .withValues(alpha: 0.24),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
+                            color: AppColors.black.withValues(alpha: 0.03),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
                           ),
                         ],
                       ),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Container(
+                            height: 52,
+                            width: 52,
+                            decoration: BoxDecoration(
+                              color: AppColors.redesignSurfaceSoft,
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            child: Center(
+                              child: Image.asset(
+                                AppAsset.helpCenterGirl,
+                                height: 32,
+                                width: 32,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 5,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.white.withValues(
-                                      alpha: 0.18,
-                                    ),
-                                    borderRadius: BorderRadius.circular(999),
-                                  ),
-                                  child: Text(
-                                    'Support Desk',
-                                    style: AppFontStyle.fontStyleW700(
-                                      fontSize: 11,
-                                      fontColor: AppColors.white,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
                                 Text(
-                                  EnumLocale.txtNeedAnyHelpFAQ.name.tr,
+                                  EnumLocale.txtHaveAnIssue.name.tr,
                                   style: AppFontStyle.fontStyleW700(
-                                    fontSize: isTablet ? 30 : 24,
-                                    fontColor: AppColors.white,
+                                    fontSize: 17,
+                                    fontColor: AppColors.redesignBrandDark,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 3),
                                 Text(
-                                  EnumLocale.txtHelpCenterDescription.name.tr,
-                                  maxLines: isTablet ? 5 : 4,
-                                  overflow: TextOverflow.ellipsis,
+                                  'Send us a detailed support request by email.',
                                   style: AppFontStyle.fontStyleW500(
-                                    fontSize: isTablet ? 14 : 12,
-                                    fontColor:
-                                        AppColors.white.withValues(alpha: 0.9),
-                                    height: 1.6,
+                                    fontSize: 11,
+                                    fontColor: AppColors.redesignMutedText,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           Container(
-                            height: isTablet ? 86 : 72,
-                            width: isTablet ? 86 : 72,
+                            height: 34,
+                            width: 34,
                             decoration: BoxDecoration(
-                              color: AppColors.white.withValues(alpha: 0.16),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Image.asset(
-                                AppAsset.helpCenterBlur,
-                                fit: BoxFit.contain,
+                              color: AppColors.redesignSurfaceInput,
+                              borderRadius: BorderRadius.circular(11),
+                              border: Border.all(
+                                color: AppColors.redesignSoftBorder,
                               ),
+                            ),
+                            child: Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 14,
+                              color: AppColors.redesignMutedText,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 14),
-                    Material(
-                      color: AppColors.transparent,
-                      child: InkWell(
-                        onTap: _openIssueMail,
-                        borderRadius: BorderRadius.circular(18),
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppColors.white,
-                            borderRadius: BorderRadius.circular(18),
-                            border:
-                                Border.all(color: AppColors.redesignSoftBorder),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.black.withValues(alpha: 0.03),
-                                blurRadius: 10,
-                                offset: const Offset(0, 5),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 52,
-                                width: 52,
-                                decoration: BoxDecoration(
-                                  color: AppColors.redesignSurfaceSoft,
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                child: Center(
-                                  child: Image.asset(
-                                    AppAsset.helpCenterGirl,
-                                    height: 32,
-                                    width: 32,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      EnumLocale.txtHaveAnIssue.name.tr,
-                                      style: AppFontStyle.fontStyleW700(
-                                        fontSize: 17,
-                                        fontColor: AppColors.redesignBrandDark,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 3),
-                                    Text(
-                                      'Send us a detailed support request by email.',
-                                      style: AppFontStyle.fontStyleW500(
-                                        fontSize: 11,
-                                        fontColor: AppColors.redesignMutedText,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Container(
-                                height: 34,
-                                width: 34,
-                                decoration: BoxDecoration(
-                                  color: AppColors.redesignSurfaceInput,
-                                  borderRadius: BorderRadius.circular(11),
-                                  border: Border.all(
-                                    color: AppColors.redesignSoftBorder,
-                                  ),
-                                ),
-                                child: Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  size: 14,
-                                  color: AppColors.redesignMutedText,
-                                ),
-                              ),
-                            ],
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Text(
+                  EnumLocale.txtFrequentlyAskedQuestions.name.tr,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: isTablet ? 22 : 18,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  'Quick answers before you submit your request',
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: isTablet ? 13 : 11,
+                    fontColor: AppColors.redesignMutedText,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                GetBuilder<HelpCenterScreenController>(
+                  id: Constant.idFAQListeners,
+                  builder: (controller) {
+                    if (controller.isLoading) {
+                      return _buildFaqLoading();
+                    }
+
+                    if (controller.faqList.isEmpty) {
+                      return Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: AppColors.redesignSoftBorder,
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    Text(
-                      EnumLocale.txtFrequentlyAskedQuestions.name.tr,
-                      style: AppFontStyle.fontStyleW700(
-                        fontSize: isTablet ? 22 : 18,
-                        fontColor: AppColors.redesignBrandDark,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      'Quick answers before you submit your request',
-                      style: AppFontStyle.fontStyleW500(
-                        fontSize: isTablet ? 13 : 11,
-                        fontColor: AppColors.redesignMutedText,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    GetBuilder<HelpCenterScreenController>(
-                      id: Constant.idFAQListeners,
-                      builder: (controller) {
-                        if (controller.isLoading) {
-                          return _buildFaqLoading();
-                        }
+                        child: Text(
+                          'No FAQs available right now.',
+                          style: AppFontStyle.fontStyleW500(
+                            fontSize: 12,
+                            fontColor: AppColors.redesignMutedText,
+                          ),
+                        ),
+                      );
+                    }
 
-                        if (controller.faqList.isEmpty) {
-                          return Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(14),
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: AppColors.redesignSoftBorder,
-                              ),
+                    return Column(
+                      children: List.generate(
+                        controller.faqList.length,
+                        (index) {
+                          final faq = controller.faqList[index];
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: index == controller.faqList.length - 1
+                                  ? 0
+                                  : 10,
                             ),
-                            child: Text(
-                              'No FAQs available right now.',
-                              style: AppFontStyle.fontStyleW500(
-                                fontSize: 12,
-                                fontColor: AppColors.redesignMutedText,
-                              ),
+                            child: _FaqTile(
+                              title: (faq.question ?? '').trim(),
+                              answer: (faq.answer ?? '').trim(),
+                              isExpanded: controller.expandedIndex == index,
+                              onTap: () => controller.toggleExpansion(index),
                             ),
                           );
-                        }
-
-                        return Column(
-                          children: List.generate(
-                            controller.faqList.length,
-                            (index) {
-                              final faq = controller.faqList[index];
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                  bottom: index == controller.faqList.length - 1
-                                      ? 0
-                                      : 10,
-                                ),
-                                child: _FaqTile(
-                                  title: (faq.question ?? '').trim(),
-                                  answer: (faq.answer ?? '').trim(),
-                                  isExpanded: controller.expandedIndex == index,
-                                  onTap: () =>
-                                      controller.toggleExpansion(index),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                        },
+                      ),
+                    );
+                  },
                 ),
-              ),
+              ],
             ),
           ),
         );

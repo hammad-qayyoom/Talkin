@@ -13,13 +13,28 @@ class SettingScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.redesignScreenBackground,
       body: SafeArea(
-        child: Column(
-          children: const [
-            SettingScreenAppBar(),
-            Expanded(
-              child: SettingView(),
-            ),
-          ],
+        bottom: false,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final maxContentWidth =
+                constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
+
+            return Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SettingScreenAppBar(),
+                    Expanded(
+                      child: SettingView(),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

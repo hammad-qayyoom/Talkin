@@ -33,23 +33,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           }
         },
         child: SafeArea(
-          child: Column(
-            children: [
-              const EditProfileScreenAppBar(),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 18),
-                  child: const Column(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final maxContentWidth =
+                  constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
+
+              return Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: maxContentWidth),
+                  child: Column(
                     children: [
-                      EditProfileImageView(),
-                      SizedBox(height: 12),
-                      EditProfileEditInfoView(),
+                      const EditProfileScreenAppBar(),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 18),
+                          child: const Column(
+                            children: [
+                              EditProfileImageView(),
+                              SizedBox(height: 12),
+                              EditProfileEditInfoView(),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),

@@ -365,57 +365,67 @@ class PersonalChatBottomView extends StatelessWidget {
                     fontColor: _chatBrandDark,
                   ),
                   decoration: InputDecoration(
-                    suffixIcon: SizedBox(
-                      width: Get.width * 0.23,
-                      child: Center(
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Utils.showInfoSnackBar(
-                                  Get.context!,
-                                  title: 'Voice note',
-                                  message: EnumLocale
-                                      .txtLongPressToEnableAudioRecording
-                                      .name
-                                      .tr,
-                                  icon: Icons.mic_rounded,
-                                );
-                              },
-                              onLongPressStart: (details) {
-                                if (controller.isSendingAudioFile == false) {
-                                  Vibration.vibrate(
-                                      duration: 50, amplitude: 128);
-                                  controller.onLongPressStartMic();
-                                }
-                              },
-                              onLongPressEnd: (details) {
-                                if (controller.isSendingAudioFile == false) {
-                                  Vibration.vibrate(
-                                      duration: 50, amplitude: 128);
-                                  controller.onLongPressEndMic();
-                                }
-                              },
-                              child: Image.asset(
-                                AppAsset.microPhoneIcon,
-                                height: 24,
-                                width: 24,
-                                color: _chatMutedText,
-                              ).paddingOnly(right: 12, left: 4),
+                    suffixIconConstraints: const BoxConstraints(
+                      minWidth: 96,
+                      maxWidth: 108,
+                    ),
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Utils.showInfoSnackBar(
+                                Get.context!,
+                                title: 'Voice note',
+                                message: EnumLocale
+                                    .txtLongPressToEnableAudioRecording.name.tr,
+                                icon: Icons.mic_rounded,
+                              );
+                            },
+                            onLongPressStart: (details) {
+                              if (controller.isSendingAudioFile == false) {
+                                Vibration.vibrate(duration: 50, amplitude: 128);
+                                controller.onLongPressStartMic();
+                              }
+                            },
+                            onLongPressEnd: (details) {
+                              if (controller.isSendingAudioFile == false) {
+                                Vibration.vibrate(duration: 50, amplitude: 128);
+                                controller.onLongPressEndMic();
+                              }
+                            },
+                            child: const SizedBox(
+                              height: 34,
+                              width: 34,
+                              child: Center(
+                                child: Icon(
+                                  Icons.mic_rounded,
+                                  size: 22,
+                                  color: Color(0xFF6F7785),
+                                ),
+                              ),
                             ),
-                            GestureDetector(
-                              onTap: () async {
-                                controller.showImagePickerDialog();
-                              },
-                              child: Image.asset(
-                                AppAsset.chatImageIcon,
-                                height: 24,
-                                width: 24,
-                                color: _chatMutedText,
-                              ).paddingOnly(right: 16),
+                          ),
+                          const SizedBox(width: 4),
+                          GestureDetector(
+                            onTap: () async {
+                              controller.showImagePickerDialog();
+                            },
+                            child: const SizedBox(
+                              height: 34,
+                              width: 34,
+                              child: Center(
+                                child: Icon(
+                                  Icons.image_rounded,
+                                  size: 22,
+                                  color: Color(0xFF6F7785),
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     hintText: "Write a message...",
@@ -441,15 +451,16 @@ class PersonalChatBottomView extends StatelessWidget {
                       controller.sendMessage();
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(9),
+                      height: 46,
+                      width: 46,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: _chatBrandRed,
                       ),
-                      child: Image.asset(
-                        AppAsset.msgSendIcon,
-                        height: 24,
-                        width: 24,
+                      child: const Icon(
+                        Icons.send_rounded,
+                        size: 24,
+                        color: AppColors.white,
                       ),
                     ),
                   );

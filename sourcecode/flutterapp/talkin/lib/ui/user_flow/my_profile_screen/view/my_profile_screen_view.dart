@@ -12,13 +12,29 @@ class MyProfileScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.redesignScreenBackground,
-      body: Column(
-        children: const [
-          MyProfileTopView(),
-          Expanded(
-            child: ProfileOptionsView(),
-          ),
-        ],
+      body: SafeArea(
+        bottom: false,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final maxContentWidth =
+                constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
+
+            return Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                child: const Column(
+                  children: [
+                    MyProfileTopView(),
+                    Expanded(
+                      child: ProfileOptionsView(),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

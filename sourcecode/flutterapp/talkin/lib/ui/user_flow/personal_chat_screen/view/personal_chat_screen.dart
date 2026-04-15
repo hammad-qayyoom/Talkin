@@ -21,10 +21,10 @@ class PersonalChatScreen extends StatelessWidget {
       body: LayoutBuilder(
         builder: (context, viewportConstraints) {
           final viewportWidth = viewportConstraints.maxWidth;
-          final maxContentWidth =
-              viewportWidth >= 1400 ? 1280.0 : double.infinity;
+          final maxContentWidth = viewportWidth >= 760 ? 980.0 : viewportWidth;
 
-          return Center(
+          return Align(
+            alignment: Alignment.topCenter,
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: maxContentWidth),
               child: Stack(

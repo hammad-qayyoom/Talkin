@@ -14,145 +14,209 @@ class ChatListSearchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.redesignScreenBackground,
       body: SafeArea(
-        child: Column(
-          children: [
-            GetBuilder<ChatListSearchController>(
-              builder: (controller) {
-                return Row(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final maxContentWidth =
+                constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
+
+            return Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                width: maxContentWidth,
+                child: Column(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(22),
-                        child: Image.asset(
-                          height: 16,
-                          AppAsset.backArrowIcon,
-                          color: AppColors.black,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
+                    GetBuilder<ChatListSearchController>(
+                      builder: (controller) {
+                        return Row(
                           children: [
-                            Image.asset(
-                              AppAsset.searchIcon,
-                              height: 18,
-                              width: 18,
-                              color: controller.hasText ? AppColors.black : AppColors.otpScreenGrey,
-                            ),
-                            const SizedBox(width: 12),
-                            Container(
-                              height: 15,
-                              width: 1,
-                              color: AppColors.grey.withValues(alpha: 0.4),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: TextField(
-                                controller: controller.searchController,
-                                decoration: InputDecoration(
-                                  hintText: EnumLocale.txtSearchPeople.name.tr,
-                                  border: InputBorder.none,
+                            InkWell(
+                              onTap: () {
+                                Get.back();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(22),
+                                child: Image.asset(
+                                  height: 16,
+                                  AppAsset.backArrowIcon,
+                                  color: AppColors.black,
                                 ),
-                                textInputAction: TextInputAction.done,
-                                style: const TextStyle(fontSize: 16),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                if (controller.hasText) {
-                                  controller.clearText();
-                                }
-                              },
-                              child: controller.hasText
-                                  ? Image.asset(
-                                      AppAsset.closeFillIcon,
-                                      height: 22,
-                                      width: 22,
-                                      color: controller.hasText ? AppColors.profileLanguage.withValues(alpha: 0.5) : AppColors.otpScreenGrey,
-                                    )
-                                  : SizedBox.shrink(),
+                            Expanded(
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      AppAsset.searchIcon,
+                                      height: 18,
+                                      width: 18,
+                                      color: controller.hasText
+                                          ? AppColors.black
+                                          : AppColors.otpScreenGrey,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Container(
+                                      height: 15,
+                                      width: 1,
+                                      color:
+                                          AppColors.grey.withValues(alpha: 0.4),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: TextField(
+                                        controller: controller.searchController,
+                                        decoration: InputDecoration(
+                                          hintText: EnumLocale
+                                              .txtSearchPeople.name.tr,
+                                          border: InputBorder.none,
+                                        ),
+                                        textInputAction: TextInputAction.done,
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (controller.hasText) {
+                                          controller.clearText();
+                                        }
+                                      },
+                                      child: controller.hasText
+                                          ? Image.asset(
+                                              AppAsset.closeFillIcon,
+                                              height: 22,
+                                              width: 22,
+                                              color: controller.hasText
+                                                  ? AppColors.profileLanguage
+                                                      .withValues(alpha: 0.5)
+                                                  : AppColors.otpScreenGrey,
+                                            )
+                                          : const SizedBox.shrink(),
+                                    ),
+                                  ],
+                                ),
+                              ).paddingOnly(right: 16),
                             ),
                           ],
-                        ),
-                      ).paddingOnly(right: 16),
+                        );
+                      },
                     ),
-                  ],
-                );
-              },
-            ),
-            8.height,
-            Expanded(
-              child: Container(
-                color: AppColors.white,
-                child: GetBuilder<ChatListSearchController>(
-                  builder: (controller) {
-                    return controller.displayedListeners.isEmpty
-                        ? SizedBox(
-                            height: Get.height,
-                            child: Center(
-                              child: Image.asset(
-                                AppAsset.noChatFound,
-                                height: 250,
-                              ),
-                            ),
-                          )
-                        : ListView.builder(
-                            itemCount: controller.displayedListeners.length,
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  SearchChatViewItem(
-                                    onTap: () {
-                                      Get.toNamed(
-                                        AppRoutes.personalChatScreen,
-                                        arguments: [
-                                          controller.displayedListeners[index].chatUserId,
-                                          controller.displayedListeners[index].name,
-                                          controller.displayedListeners[index].isOnline,
-                                          controller.displayedListeners[index].image,
-                                          controller.displayedListeners[index].ratePrivateAudioCall,
-                                          controller.displayedListeners[index].ratePrivateVideoCall,
-                                          controller.displayedListeners[index].isFake,
-                                          controller.displayedListeners[index].video,
-                                          controller.displayedListeners[index].isAvailableForPrivateVideoCall,
-                                          controller.displayedListeners[index].isAvailableForPrivateAudioCall,
+                    14.height,
+                    Expanded(
+                      child: Container(
+                        color: AppColors.white,
+                        child: GetBuilder<ChatListSearchController>(
+                          builder: (controller) {
+                            return controller.displayedListeners.isEmpty
+                                ? SizedBox(
+                                    height: Get.height,
+                                    child: Center(
+                                      child: Image.asset(
+                                        AppAsset.noChatFound,
+                                        height: 250,
+                                      ),
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    itemCount:
+                                        controller.displayedListeners.length,
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    padding: const EdgeInsets.only(
+                                      top: 6,
+                                      bottom: 8,
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          SearchChatViewItem(
+                                            onTap: () {
+                                              Get.toNamed(
+                                                AppRoutes.personalChatScreen,
+                                                arguments: [
+                                                  controller
+                                                      .displayedListeners[index]
+                                                      .chatUserId,
+                                                  controller
+                                                      .displayedListeners[index]
+                                                      .name,
+                                                  controller
+                                                      .displayedListeners[index]
+                                                      .isOnline,
+                                                  controller
+                                                      .displayedListeners[index]
+                                                      .image,
+                                                  controller
+                                                      .displayedListeners[index]
+                                                      .ratePrivateAudioCall,
+                                                  controller
+                                                      .displayedListeners[index]
+                                                      .ratePrivateVideoCall,
+                                                  controller
+                                                      .displayedListeners[index]
+                                                      .isFake,
+                                                  controller
+                                                      .displayedListeners[index]
+                                                      .video,
+                                                  controller
+                                                      .displayedListeners[index]
+                                                      .isAvailableForPrivateVideoCall,
+                                                  controller
+                                                      .displayedListeners[index]
+                                                      .isAvailableForPrivateAudioCall,
+                                                ],
+                                              );
+                                            },
+                                            isOnline: controller
+                                                    .displayedListeners[index]
+                                                    .isOnline ??
+                                                false,
+                                            lastMsgTime: controller
+                                                .displayedListeners[index]
+                                                .messageTime
+                                                .toString(),
+                                            lastMsg: controller
+                                                    .displayedListeners[index]
+                                                    .lastMessage ??
+                                                '',
+                                            index: index,
+                                            name: controller
+                                                    .displayedListeners[index]
+                                                    .name ??
+                                                '',
+                                            image: controller
+                                                    .displayedListeners[index]
+                                                    .image ??
+                                                '',
+                                          ).paddingOnly(left: 14, right: 14),
+                                          controller.displayedListeners
+                                                      .length ==
+                                                  1
+                                              ? const SizedBox.shrink()
+                                              : Divider(
+                                                  color: AppColors.lightGrey,
+                                                  height: 0,
+                                                ),
                                         ],
                                       );
                                     },
-                                    isOnline: controller.displayedListeners[index].isOnline ?? false,
-                                    lastMsgTime: controller.displayedListeners[index].messageTime.toString(),
-                                    lastMsg: controller.displayedListeners[index].lastMessage ?? '',
-                                    index: index,
-                                    name: controller.displayedListeners[index].name ?? '',
-                                    image: controller.displayedListeners[index].image ?? '',
-                                  ).paddingOnly(left: 14, right: 14),
-                                  controller.displayedListeners.length == 1
-                                      ? SizedBox.shrink()
-                                      : Divider(
-                                          color: AppColors.lightGrey,
-                                          height: 0,
-                                        ),
-                                ],
-                              );
-                            },
-                          );
-                  },
+                                  );
+                          },
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-            )
-          ],
+            );
+          },
         ),
       ),
     );

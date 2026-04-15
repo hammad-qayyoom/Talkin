@@ -17,33 +17,30 @@ class MyWalletScreen extends GetView<MyWalletController> {
       backgroundColor: AppColors.redesignScreenBackground,
       body: GetBuilder<MyWalletController>(builder: (controller) {
         return SafeArea(
-          child: Column(
-            children: [
-              const MyWalletScreenAppBar(),
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final maxContentWidth = constraints.maxWidth >= 1100
-                        ? 980.0
-                        : constraints.maxWidth >= 760
-                            ? 760.0
-                            : constraints.maxWidth;
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final maxContentWidth =
+                  constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
 
-                    return RefreshIndicator(
-                      color: AppColors.redesignBrandRed,
-                      backgroundColor: AppColors.white,
-                      onRefresh: () async {
-                        await controller.onRefresh();
-                      },
-                      child: SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(
-                          parent: BouncingScrollPhysics(),
-                        ),
-                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                        child: Center(
-                          child: ConstrainedBox(
-                            constraints:
-                                BoxConstraints(maxWidth: maxContentWidth),
+              return Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: maxContentWidth),
+                  child: Column(
+                    children: [
+                      const MyWalletScreenAppBar(),
+                      Expanded(
+                        child: RefreshIndicator(
+                          color: AppColors.redesignBrandRed,
+                          backgroundColor: AppColors.white,
+                          onRefresh: () async {
+                            await controller.onRefresh();
+                          },
+                          child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics(),
+                            ),
+                            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                             child: const Column(
                               children: [
                                 MyWalletScreenTopView(),
@@ -56,11 +53,11 @@ class MyWalletScreen extends GetView<MyWalletController> {
                           ),
                         ),
                       ),
-                    );
-                  },
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              );
+            },
           ),
         );
       }),

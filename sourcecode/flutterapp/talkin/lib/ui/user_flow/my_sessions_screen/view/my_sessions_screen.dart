@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -703,6 +702,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     if (_isLoading) {
       return LayoutBuilder(
         builder: (context, constraints) {
+          final availableWidth = (constraints.maxWidth - (horizontalInset * 2))
+              .clamp(0.0, double.infinity)
+              .toDouble();
           final isTablet = constraints.maxWidth >= 760;
           final columns = constraints.maxWidth >= 1200
               ? 3
@@ -711,8 +713,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                   : 1;
           const spacing = 14.0;
           final cardWidth = columns == 1
-              ? constraints.maxWidth
-              : ((constraints.maxWidth - (spacing * (columns - 1))) / columns)
+              ? availableWidth
+              : ((availableWidth - (spacing * (columns - 1))) / columns)
                   .toDouble();
 
           return Shimmer.fromColors(
@@ -798,6 +800,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       onRefresh: _fetchSessions,
       child: LayoutBuilder(
         builder: (context, constraints) {
+          final availableWidth = (constraints.maxWidth - (horizontalInset * 2))
+              .clamp(0.0, double.infinity)
+              .toDouble();
           final isTablet = constraints.maxWidth >= 760;
           final columns = constraints.maxWidth >= 1200
               ? 3
@@ -806,8 +811,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                   : 1;
           const spacing = 14.0;
           final cardWidth = columns == 1
-              ? constraints.maxWidth
-              : ((constraints.maxWidth - (spacing * (columns - 1))) / columns)
+              ? availableWidth
+              : ((availableWidth - (spacing * (columns - 1))) / columns)
                   .toDouble();
 
           return ListView(
@@ -858,36 +863,22 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final appBarWidth = MediaQuery.sizeOf(context).width;
-    final isTabletAppBar = appBarWidth >= 760;
-
     return Scaffold(
       backgroundColor: _screenBackground,
-      appBar: AppBar(
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        backgroundColor: _screenBackground,
-        title: Text(
-          'My Sessions',
-          style: AppFontStyle.fontStyleW700(
-            fontSize: isTabletAppBar ? 22 : 16,
-            fontColor: _brandDark,
-          ),
-        ),
-      ),
       body: LayoutBuilder(
         builder: (context, viewportConstraints) {
           final viewportWidth = viewportConstraints.maxWidth;
-          final maxContentWidth =
-              viewportWidth >= 1400 ? 1280.0 : double.infinity;
+          final maxContentWidth = viewportWidth >= 760 ? 980.0 : viewportWidth;
 
-          return Center(
+          return Align(
+            alignment: Alignment.topCenter,
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: maxContentWidth),
               child: LayoutBuilder(
                 builder: (context, contentConstraints) {
                   final width = contentConstraints.maxWidth;
                   final isTablet = width >= 760;
+                  final canPop = Navigator.of(context).canPop();
                   final horizontalInset = width >= 1100
                       ? 28.0
                       : isTablet
@@ -898,8 +889,56 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                       : 'View your completed sessions in one place';
 
                   return SafeArea(
+                    bottom: false,
                     child: Column(
                       children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalInset,
+                            8,
+                            horizontalInset,
+                            6,
+                          ),
+                          child: Row(
+                            children: [
+                              if (canPop)
+                                Material(
+                                  color: AppColors.transparent,
+                                  child: InkWell(
+                                    onTap: () =>
+                                        Navigator.of(context).maybePop(),
+                                    borderRadius: BorderRadius.circular(14),
+                                    child: Container(
+                                      height: isTablet ? 42 : 38,
+                                      width: isTablet ? 42 : 38,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.white,
+                                        borderRadius: BorderRadius.circular(14),
+                                        border: Border.all(color: _softBorder),
+                                      ),
+                                      child: Icon(
+                                        Icons.arrow_back_ios_new_rounded,
+                                        size: isTablet ? 20 : 18,
+                                        color: _brandDark,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              if (canPop) const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  'My Sessions',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppFontStyle.fontStyleW700(
+                                    fontSize: isTablet ? 22 : 18,
+                                    fontColor: _brandDark,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(
                             horizontalInset,

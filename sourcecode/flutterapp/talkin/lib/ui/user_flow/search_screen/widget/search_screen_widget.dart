@@ -46,7 +46,9 @@ class SearchTopView extends StatelessWidget {
                       AppAsset.searchIcon,
                       height: 18,
                       width: 18,
-                      color: searchController.hasText ? AppColors.black : AppColors.otpScreenGrey,
+                      color: searchController.hasText
+                          ? AppColors.black
+                          : AppColors.otpScreenGrey,
                     ),
                     const SizedBox(width: 12),
                     Container(
@@ -78,7 +80,10 @@ class SearchTopView extends StatelessWidget {
                               ,
                               height: 22,
                               width: 22,
-                              color: searchController.hasText ? AppColors.profileLanguage.withValues(alpha: 0.5) : AppColors.otpScreenGrey,
+                              color: searchController.hasText
+                                  ? AppColors.profileLanguage
+                                      .withValues(alpha: 0.5)
+                                  : AppColors.otpScreenGrey,
                             )
                           : SizedBox.shrink(),
                     ),
@@ -101,7 +106,7 @@ class RecentListenersSearchView extends StatelessWidget {
     return GetBuilder<SearchScreenController>(
       builder: (controller) {
         return Container(
-          width: Get.width,
+          width: double.infinity,
           decoration: BoxDecoration(color: AppColors.white),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,15 +123,18 @@ class RecentListenersSearchView extends StatelessWidget {
                   : controller.recentSearchedListeners.isEmpty
                       ? Expanded(
                           child: Center(
-                            child: Image.asset(AppAsset.noListenerFound).paddingAll(80),
+                            child: Image.asset(AppAsset.noListenerFound)
+                                .paddingAll(80),
                           ),
                         )
                       : Expanded(
                           // Only wrap ListView.builder in Expanded
                           child: ListView.builder(
-                            itemCount: controller.recentSearchedListeners.length,
+                            itemCount:
+                                controller.recentSearchedListeners.length,
                             itemBuilder: (context, index) {
-                              final listener = controller.recentSearchedListeners[index];
+                              final listener =
+                                  controller.recentSearchedListeners[index];
                               return Column(
                                 children: [
                                   RecentListeners(
@@ -137,7 +145,8 @@ class RecentListenersSearchView extends StatelessWidget {
                                       );
                                     },
                                     callCount: listener.callCount.toString(),
-                                    language: listener.language?[0].toString() ?? '',
+                                    language:
+                                        listener.language?[0].toString() ?? '',
                                     name: listener.name ?? '',
                                     age: listener.age.toString(),
                                     image: listener.image ?? '',
@@ -145,10 +154,13 @@ class RecentListenersSearchView extends StatelessWidget {
                                     closIcon: true,
                                     onCloseTap: () async {
                                       final idToRemove = listener.id;
-                                      if (idToRemove != null && idToRemove.isNotEmpty) {
-                                        List<String> history = Database.searchData;
+                                      if (idToRemove != null &&
+                                          idToRemove.isNotEmpty) {
+                                        List<String> history =
+                                            Database.searchData;
                                         history.remove(idToRemove);
-                                        await Database.onSetSearchDataStore(history);
+                                        await Database.onSetSearchDataStore(
+                                            history);
                                         controller.update(); // Refresh UI
                                       }
                                     },

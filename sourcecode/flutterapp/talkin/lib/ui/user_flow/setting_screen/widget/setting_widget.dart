@@ -119,116 +119,104 @@ class SettingView extends StatelessWidget {
         return LayoutBuilder(
           builder: (context, constraints) {
             final isTablet = constraints.maxWidth >= 760;
-            final maxContentWidth = constraints.maxWidth >= 1100
-                ? 980.0
-                : constraints.maxWidth >= 760
-                    ? 760.0
-                    : constraints.maxWidth;
-
-            return Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: maxContentWidth),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _SettingsControlCard(
-                        title: EnumLocale.txtManageYourAccountSettings.name.tr,
-                        subtitle: EnumLocale
-                            .txtManageYourAccountSettingsSubText.name.tr,
-                        isTablet: isTablet,
-                      ),
-                      const SizedBox(height: 14),
-                      _SectionLabel(
-                        title: 'Preferences',
-                        isTablet: isTablet,
-                      ),
-                      const SizedBox(height: 8),
-                      _SettingsLane(
-                        iconAsset: AppAsset.notification,
-                        title: EnumLocale.txtNotification.name.tr,
-                        subtitle: 'Get alerts for calls and updates',
-                        isTablet: isTablet,
-                        onTap: () {
-                          controller.onSwitchNotification(
-                            !controller.isShowNotification,
-                          );
-                        },
-                        trailing: Transform.scale(
-                          scale: isTablet ? 0.9 : 0.84,
-                          child: CupertinoSwitch(
-                            value: controller.isShowNotification,
-                            onChanged: (bool val) {
-                              controller.onSwitchNotification(val);
-                            },
-                            activeTrackColor: AppColors.redesignBrandRed,
-                            inactiveTrackColor: AppColors.redesignSoftBorder,
-                            thumbColor: AppColors.white,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      _SettingsLane(
-                        iconAsset: AppAsset.settingAppLanguage,
-                        title: EnumLocale.txtAPPLanguage.name.tr,
-                        subtitle: 'Change your preferred app language',
-                        isTablet: isTablet,
-                        onTap: () {
-                          Get.toNamed(AppRoutes.appLanguageScreen);
-                        },
-                      ),
-                      const SizedBox(height: 14),
-                      _SectionLabel(
-                        title: 'Account',
-                        isTablet: isTablet,
-                      ),
-                      const SizedBox(height: 8),
-                      _SettingsLane(
-                        iconAsset: AppAsset.logOut,
-                        title: EnumLocale.txtLogoutApp.name.tr,
-                        subtitle: 'Sign out from this device',
-                        isTablet: isTablet,
-                        onTap: () {
-                          Utils.showConfirmationSnackBar(
-                            context,
-                            title: EnumLocale.txtLogout.name.tr,
-                            message: EnumLocale.txtDesLogout.name.tr,
-                            confirmText: EnumLocale.txtLogout.name.tr,
-                            cancelText: EnumLocale.txtCancel.name.tr,
-                            icon: Icons.logout_rounded,
-                            onConfirm: () {
-                              Database.onLogOut();
-                              Get.offAllNamed(AppRoutes.main);
-                            },
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      _SettingsLane(
-                        iconAsset: AppAsset.delete,
-                        title: EnumLocale.txtDeleteAccount.name.tr,
-                        subtitle: 'Permanently remove your account data',
-                        isTablet: isTablet,
-                        isDestructive: true,
-                        onTap: () {
-                          Utils.showConfirmationSnackBar(
-                            context,
-                            title: EnumLocale.txtDeleteAccount.name.tr,
-                            message: EnumLocale.desWantDeleteAccount.name.tr,
-                            confirmText: EnumLocale.txtDeleteAccount.name.tr,
-                            cancelText: EnumLocale.txtCancel.name.tr,
-                            icon: Icons.delete_forever_outlined,
-                            confirmBackgroundColor: AppColors.red,
-                            onConfirm: controller.onDeleteAccount,
-                          );
-                        },
-                      ),
-                    ],
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _SettingsControlCard(
+                    title: EnumLocale.txtManageYourAccountSettings.name.tr,
+                    subtitle:
+                        EnumLocale.txtManageYourAccountSettingsSubText.name.tr,
+                    isTablet: isTablet,
                   ),
-                ),
+                  const SizedBox(height: 14),
+                  _SectionLabel(
+                    title: 'Preferences',
+                    isTablet: isTablet,
+                  ),
+                  const SizedBox(height: 8),
+                  _SettingsLane(
+                    iconAsset: AppAsset.notification,
+                    title: EnumLocale.txtNotification.name.tr,
+                    subtitle: 'Get alerts for calls and updates',
+                    isTablet: isTablet,
+                    onTap: () {
+                      controller.onSwitchNotification(
+                        !controller.isShowNotification,
+                      );
+                    },
+                    trailing: Transform.scale(
+                      scale: isTablet ? 0.9 : 0.84,
+                      child: CupertinoSwitch(
+                        value: controller.isShowNotification,
+                        onChanged: (bool val) {
+                          controller.onSwitchNotification(val);
+                        },
+                        activeTrackColor: AppColors.redesignBrandRed,
+                        inactiveTrackColor: AppColors.redesignSoftBorder,
+                        thumbColor: AppColors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  _SettingsLane(
+                    iconAsset: AppAsset.settingAppLanguage,
+                    title: EnumLocale.txtAPPLanguage.name.tr,
+                    subtitle: 'Change your preferred app language',
+                    isTablet: isTablet,
+                    onTap: () {
+                      Get.toNamed(AppRoutes.appLanguageScreen);
+                    },
+                  ),
+                  const SizedBox(height: 14),
+                  _SectionLabel(
+                    title: 'Account',
+                    isTablet: isTablet,
+                  ),
+                  const SizedBox(height: 8),
+                  _SettingsLane(
+                    iconAsset: AppAsset.logOut,
+                    title: EnumLocale.txtLogoutApp.name.tr,
+                    subtitle: 'Sign out from this device',
+                    isTablet: isTablet,
+                    onTap: () {
+                      Utils.showConfirmationSnackBar(
+                        context,
+                        title: EnumLocale.txtLogout.name.tr,
+                        message: EnumLocale.txtDesLogout.name.tr,
+                        confirmText: EnumLocale.txtLogout.name.tr,
+                        cancelText: EnumLocale.txtCancel.name.tr,
+                        icon: Icons.logout_rounded,
+                        onConfirm: () {
+                          Database.onLogOut();
+                          Get.offAllNamed(AppRoutes.main);
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  _SettingsLane(
+                    iconAsset: AppAsset.delete,
+                    title: EnumLocale.txtDeleteAccount.name.tr,
+                    subtitle: 'Permanently remove your account data',
+                    isTablet: isTablet,
+                    isDestructive: true,
+                    onTap: () {
+                      Utils.showConfirmationSnackBar(
+                        context,
+                        title: EnumLocale.txtDeleteAccount.name.tr,
+                        message: EnumLocale.desWantDeleteAccount.name.tr,
+                        confirmText: EnumLocale.txtDeleteAccount.name.tr,
+                        cancelText: EnumLocale.txtCancel.name.tr,
+                        icon: Icons.delete_forever_outlined,
+                        confirmBackgroundColor: AppColors.red,
+                        onConfirm: controller.onDeleteAccount,
+                      );
+                    },
+                  ),
+                ],
               ),
             );
           },

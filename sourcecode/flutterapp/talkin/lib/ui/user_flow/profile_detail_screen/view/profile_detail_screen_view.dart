@@ -17,15 +17,28 @@ class ProfileDetailScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.redesignScreenBackground,
-      bottomNavigationBar: const ProfileBottomButtonView(),
+      bottomNavigationBar: LayoutBuilder(
+        builder: (context, constraints) {
+          final maxContentWidth =
+              constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
+
+          return Row(
+            children: [
+              const Spacer(),
+              SizedBox(
+                width: maxContentWidth,
+                child: const ProfileBottomButtonView(),
+              ),
+              const Spacer(),
+            ],
+          );
+        },
+      ),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final maxContentWidth = constraints.maxWidth >= 1400
-                ? 1180.0
-                : constraints.maxWidth >= 760
-                    ? 920.0
-                    : constraints.maxWidth;
+            final maxContentWidth =
+                constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
 
             return Stack(
               children: [

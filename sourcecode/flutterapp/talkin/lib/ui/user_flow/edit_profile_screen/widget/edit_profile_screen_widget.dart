@@ -744,10 +744,13 @@ class EditProfileSaveBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<EditProfileController>(
       builder: (controller) {
+        final width = MediaQuery.sizeOf(context).width;
+        final maxContentWidth = width >= 760 ? 980.0 : width;
+
         return SafeArea(
           top: false,
           child: Container(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+            padding: const EdgeInsets.only(top: 8, bottom: 10),
             decoration: BoxDecoration(
               color: AppColors.redesignScreenBackground,
               border: Border(
@@ -761,17 +764,27 @@ class EditProfileSaveBar extends StatelessWidget {
                 ),
               ],
             ),
-            child: PrimaryAppButton(
-              onTap: () {
-                controller.onSaveProfile();
-              },
-              color: AppColors.redesignBrandRed,
-              borderRadius: 14,
-              height: 50,
-              text: EnumLocale.txtSaveProfile.name.tr,
-              textStyle: AppFontStyle.fontStyleW600(
-                fontSize: 17,
-                fontColor: AppColors.white,
+            child: Align(
+              alignment: Alignment.topCenter,
+              heightFactor: 1.0,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: PrimaryAppButton(
+                    onTap: () {
+                      controller.onSaveProfile();
+                    },
+                    color: AppColors.redesignBrandRed,
+                    borderRadius: 14,
+                    height: 50,
+                    text: EnumLocale.txtSaveProfile.name.tr,
+                    textStyle: AppFontStyle.fontStyleW600(
+                      fontSize: 17,
+                      fontColor: AppColors.white,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

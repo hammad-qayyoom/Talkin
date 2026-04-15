@@ -43,9 +43,10 @@ class HomeScreen extends GetView<HomeScreenController> {
                 : width >= 760
                     ? 22.0
                     : 16.0;
-            final maxContentWidth = width >= 1400 ? 1280.0 : double.infinity;
+            final maxContentWidth = width >= 760 ? 980.0 : constraints.maxWidth;
 
-            return Center(
+            return Align(
+              alignment: Alignment.topCenter,
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: maxContentWidth),
                 child: GetBuilder<HomeScreenController>(

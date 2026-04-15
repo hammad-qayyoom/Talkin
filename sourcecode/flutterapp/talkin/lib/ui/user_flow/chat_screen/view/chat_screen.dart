@@ -127,15 +127,29 @@ class ChatScreen extends StatelessWidget {
         backgroundColor: AppColors.redesignScreenBackground,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(130),
-          child: const ChatScreenAppBarView(),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final maxContentWidth =
+                  constraints.maxWidth >= 760 ? 980.0 : constraints.maxWidth;
+
+              return Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  width: maxContentWidth,
+                  child: const ChatScreenAppBarView(),
+                ),
+              );
+            },
+          ),
         ),
         body: LayoutBuilder(
           builder: (context, viewportConstraints) {
             final viewportWidth = viewportConstraints.maxWidth;
             final maxContentWidth =
-                viewportWidth >= 1400 ? 1280.0 : double.infinity;
+                viewportWidth >= 760 ? 980.0 : viewportWidth;
 
-            return Center(
+            return Align(
+              alignment: Alignment.topCenter,
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: maxContentWidth),
                 child: GetBuilder<ChatScreenController>(
