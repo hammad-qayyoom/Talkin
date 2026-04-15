@@ -4,9 +4,30 @@
 
 import 'dart:convert';
 
-HostCoinHistoryModel hostCoinHistoryModelFromJson(String str) => HostCoinHistoryModel.fromJson(json.decode(str));
+int? _parseInt(dynamic value) {
+  if (value == null) return null;
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  return int.tryParse(value.toString());
+}
 
-String hostCoinHistoryModelToJson(HostCoinHistoryModel data) => json.encode(data.toJson());
+num? _parseNum(dynamic value) {
+  if (value == null) return null;
+  if (value is num) return value;
+  return num.tryParse(value.toString());
+}
+
+String? _parseString(dynamic value) {
+  if (value == null) return null;
+  final normalized = value.toString();
+  return normalized.isEmpty ? null : normalized;
+}
+
+HostCoinHistoryModel hostCoinHistoryModelFromJson(String str) =>
+    HostCoinHistoryModel.fromJson(json.decode(str));
+
+String hostCoinHistoryModelToJson(HostCoinHistoryModel data) =>
+    json.encode(data.toJson());
 
 class HostCoinHistoryModel {
   bool? status;
@@ -19,23 +40,32 @@ class HostCoinHistoryModel {
     this.data,
   });
 
-  factory HostCoinHistoryModel.fromJson(Map<String, dynamic> json) => HostCoinHistoryModel(
+  factory HostCoinHistoryModel.fromJson(Map<String, dynamic> json) =>
+      HostCoinHistoryModel(
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? [] : List<HostCoinHistory>.from(json["data"]!.map((x) => HostCoinHistory.fromJson(x))),
+        data: json["data"] is List
+            ? List<HostCoinHistory>.from(
+                (json["data"] as List)
+                    .whereType<Map<String, dynamic>>()
+                    .map(HostCoinHistory.fromJson),
+              )
+            : [],
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
 class HostCoinHistory {
   String? id;
   String? duration;
-  int? listenerCoin;
+  num? listenerCoin;
   int? payoutStatus;
   String? date;
   int? type;
@@ -55,16 +85,19 @@ class HostCoinHistory {
     this.profilePic,
   });
 
-  factory HostCoinHistory.fromJson(Map<String, dynamic> json) => HostCoinHistory(
-        id: json["_id"],
-        duration: json["duration"],
-        listenerCoin: json["listenerCoin"],
-        payoutStatus: json["payoutStatus"],
-        date: json["date"],
-        type: json["type"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-        fullName: json["fullName"],
-        profilePic: json["profilePic"],
+  factory HostCoinHistory.fromJson(Map<String, dynamic> json) =>
+      HostCoinHistory(
+        id: _parseString(json["_id"]),
+        duration: _parseString(json["duration"]),
+        listenerCoin: _parseNum(json["listenerCoin"]),
+        payoutStatus: _parseInt(json["payoutStatus"]),
+        date: _parseString(json["date"]),
+        type: _parseInt(json["type"]),
+        createdAt: _parseString(json["createdAt"]) == null
+            ? null
+            : DateTime.tryParse(json["createdAt"].toString()),
+        fullName: _parseString(json["fullName"]),
+        profilePic: _parseString(json["profilePic"]),
       );
 
   Map<String, dynamic> toJson() => {

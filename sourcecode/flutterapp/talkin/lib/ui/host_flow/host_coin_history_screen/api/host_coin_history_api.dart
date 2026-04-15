@@ -6,35 +6,70 @@ import 'package:talk_in/ui/host_flow/host_coin_history_screen/model/coin_history
 import 'package:talk_in/utils/api.dart';
 import 'package:talk_in/utils/api_params.dart';
 import 'package:talk_in/utils/database.dart';
+import 'package:talk_in/utils/firebse_access_token.dart';
 import 'package:talk_in/utils/utils.dart';
 
 class HostCoinHistoryApi {
   static int startPagination = 0;
   static int limitPagination = 20;
 
+  static String _resolveListenerId() {
+    final fromListenerProfile =
+        (Database.fetchListenerProfileModel?.data?.id ?? '').toString().trim();
+    if (fromListenerProfile.isNotEmpty) {
+      return fromListenerProfile;
+    }
+
+    final fromLoginProfile =
+        (Database.fetchLoginUserProfileModel?.user?.listenerId ?? '')
+            .toString()
+            .trim();
+    if (fromLoginProfile.isNotEmpty) {
+      return fromLoginProfile;
+    }
+
+    return Database.loginListenerId.trim();
+  }
+
   static Future<HostCoinHistoryModel?> callApi({
     String? startDate,
     String? endDate,
   }) async {
     Utils.showLog("Host history Api Calling...");
+
+    final listenerId = _resolveListenerId();
+    if (listenerId.isEmpty) {
+      Utils.showLog(
+          "Host Session Credit history skipped: missing listenerId context.");
+      return HostCoinHistoryModel(
+        status: false,
+        message: 'Unable to fetch history. Missing expert id.',
+        data: const [],
+      );
+    }
+
+    final token = await FirebaseAccessToken.onGet() ?? '';
+
     startPagination += 1;
 
-    final Map<String, dynamic> queryParameters = {
-      ApiParams.listenerId: Database.fetchListenerProfileModel?.data?.id,
-      ApiParams.startDate: startDate,
-      ApiParams.endDate: endDate,
+    final Map<String, String> queryParameters = {
+      ApiParams.listenerId: listenerId,
+      ApiParams.startDate: startDate ?? "All",
+      ApiParams.endDate: endDate ?? "All",
       ApiParams.start: startPagination.toString(),
       ApiParams.limit: limitPagination.toString(),
     };
 
     log("Host history queryParameters ::$queryParameters");
 
-    String query = Uri(queryParameters: queryParameters).query;
-
-    final uri = Uri.parse(Api.listenerCoinHistory + (query.isNotEmpty ? query : ''));
+    final uri = Uri.parse(Api.listenerCoinHistory +
+        (Uri(queryParameters: queryParameters).query));
 
     final headers = {
       ApiParams.key: Api.secretKey,
+      ApiParams.authToken: ApiParams.tokenStartPoint + token,
+      ApiParams.authUid: Database.loginUserFirebaseId,
+      ApiParams.contentType: 'application/json',
     };
     Utils.showLog("Host Session Credit history Api uri :: $uri");
     Utils.showLog("Host Session Credit history Api headers :: $headers");
@@ -48,7 +83,13 @@ class HostCoinHistoryApi {
         final jsonResponse = json.decode(response.body);
         return HostCoinHistoryModel.fromJson(jsonResponse);
       } else {
-        throw Exception('Status code is not 200');
+        Utils.showLog(
+            "Host Session Credit history non-200 response: ${response.statusCode}");
+        return HostCoinHistoryModel(
+          status: false,
+          message: 'Failed to fetch session credit history.',
+          data: const [],
+        );
       }
     } catch (e) {
       log("Host history :: $e");

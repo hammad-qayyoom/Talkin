@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_bar/custom_app_bar.dart';
 import 'package:talk_in/custom/app_button/primary_app_button.dart';
 import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
 import 'package:talk_in/ui/host_flow/host_withdraw_coin_screen/controller/host_withdraw_coin_controller.dart';
@@ -17,18 +16,86 @@ class HostWithdrawCoinAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(120),
-      child: CustomAppBar(
-        appBarColor: AppColors.lightPurple,
-        // action: [
-        //   Padding(
-        //     padding: const EdgeInsets.all(16),
-        //     child: Image.asset(AppAsset.withdrawTimeBookIcon),
-        //   ),
-        // ],
-        title: EnumLocale.txtWithdrawCoin.name.tr,
-        showLeadingIcon: true,
+    final width = MediaQuery.sizeOf(context).width;
+    final isTablet = width >= 760;
+
+    return Row(
+      children: [
+        _HeaderIconButton(
+          icon: Icons.arrow_back_ios_new_rounded,
+          onTap: Get.back,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                EnumLocale.txtWithdrawCoin.name.tr,
+                style: AppFontStyle.fontStyleW700(
+                  fontSize: isTablet ? 28 : 22,
+                  fontColor: AppColors.redesignBrandDark,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                'Transfer your session credits to cash',
+                style: AppFontStyle.fontStyleW500(
+                  fontSize: isTablet ? 12 : 11,
+                  fontColor: AppColors.redesignMutedText,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: 34,
+          width: 34,
+          decoration: BoxDecoration(
+            color: AppColors.redesignAccentSoftBg,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(
+            Icons.payments_outlined,
+            size: 18,
+            color: AppColors.redesignBrandRed,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _HeaderIconButton extends StatelessWidget {
+  const _HeaderIconButton({
+    required this.icon,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          height: 40,
+          width: 40,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+          ),
+          child: Icon(
+            icon,
+            size: 20,
+            color: AppColors.redesignBrandDark,
+          ),
+        ),
       ),
     );
   }
@@ -39,99 +106,148 @@ class HostWithdrawCoinTopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double coinArtSize = (Get.width * 0.30).clamp(100.0, 120.0);
+    final conversionCredit =
+        Database.settingApiModel?.data?.minimumCoinsForConversion?.toString() ??
+            '0';
+    final currencySymbol =
+        Database.settingApiModel?.data?.currency?.symbol ?? '';
 
-    return Container(
-      // height: 200,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage(AppAsset.withdrawBg), fit: BoxFit.cover),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: coinArtSize,
-            width: coinArtSize,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.white.withValues(alpha: 0.3),
-                  blurRadius: 12,
-                  spreadRadius: 6,
-                  offset: Offset(1, 1),
-                ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isTablet = constraints.maxWidth >= 760;
+
+        return Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(isTablet ? 20 : 16),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppColors.redesignBrandRed,
+                AppColors.redesignBrandRedDeep,
               ],
             ),
-            child: Center(
-                child: Image.asset(
-              AppAsset.starCoinBig,
-              height: coinArtSize - 6,
-              width: coinArtSize - 6,
-            )),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.redesignBrandRed.withValues(alpha: 0.24),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
           ),
-          10.width,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  EnumLocale.txtAvailableCoinBalance.name.tr,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppFontStyle.fontStyleW600(
-                    fontSize: 14,
-                    fontColor: AppColors.yellowDark800,
-                    decorationColor: AppColors.yellowDark800,
-                    textDecoration: TextDecoration.underline,
-                  ),
-                ).paddingOnly(bottom: 6, top: 15),
-                SizedBox(
-                  height: 52,
-                  width: double.infinity,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      Database.listenerCoin,
-                      maxLines: 1,
-                      style: AppFontStyle.fontStyleW900(
-                          fontSize: 44, fontColor: AppColors.yellowDark800),
-                    ),
-                  ),
-                ),
-                Container(
-                  constraints: BoxConstraints(maxWidth: Get.width * 0.56),
-                  padding: EdgeInsets.symmetric(horizontal: 7, vertical: 7),
-                  decoration: BoxDecoration(
-                    color: AppColors.black,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        AppAsset.starCoin,
-                        height: 26,
-                        width: 26,
-                      ).paddingOnly(right: 6),
-                      Flexible(
-                        child: Text(
-                          "${Database.settingApiModel?.data?.minimumCoinsForConversion} Session Credit = ${Database.settingApiModel?.data?.currency?.symbol} 1.00",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppFontStyle.fontStyleW700(
-                              fontSize: 16, fontColor: AppColors.orangeButton),
-                        ).paddingOnly(right: 4),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
                       ),
-                    ],
+                      decoration: BoxDecoration(
+                        color: AppColors.white.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        EnumLocale.txtAvailableCoinBalance.name.tr,
+                        style: AppFontStyle.fontStyleW700(
+                          fontSize: 11,
+                          fontColor: AppColors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Ready to Withdraw',
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: isTablet ? 27 : 21,
+                        fontColor: AppColors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    SizedBox(
+                      height: isTablet ? 56 : 44,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          Database.listenerCoin,
+                          maxLines: 1,
+                          style: AppFontStyle.fontStyleW900(
+                            fontSize: isTablet ? 54 : 42,
+                            fontColor: AppColors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 9,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.redesignBrandDark,
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 24,
+                            width: 24,
+                            decoration: BoxDecoration(
+                              color: AppColors.white.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Image.asset(
+                                AppAsset.starCoin,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              '$conversionCredit Session Credit = $currencySymbol 1.00',
+                              style: AppFontStyle.fontStyleW600(
+                                fontSize: 12,
+                                fontColor: AppColors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                height: isTablet ? 110 : 88,
+                width: isTablet ? 110 : 88,
+                decoration: BoxDecoration(
+                  color: AppColors.white.withValues(alpha: 0.16),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Image.asset(
+                    AppAsset.starCoinBig,
+                    fit: BoxFit.contain,
                   ),
-                ).paddingOnly(right: 14, bottom: 20, top: 4),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ).paddingOnly(bottom: 7, left: 12, right: 16, top: 7),
+        );
+      },
     );
   }
 }
@@ -142,280 +258,400 @@ class HostWithdrawCoinView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HostWithdrawCoinController>(builder: (controller) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Text(
-          //   EnumLocale.txtWalletGuide.name.tr,
-          //   style: AppFontStyle.fontStyleW800(fontSize: 17, fontColor: AppColors.black),
-          // ).paddingOnly(top: 22, left: 16, right: 16),
-          // Text(
-          //   EnumLocale.txtUserGuide.name.tr,
-          //   style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.profileText, height: 1.7),
-          // ).paddingOnly(top: 8, bottom: 24, left: 16, right: 16),
-          Container(
-            width: Get.width,
-            decoration: BoxDecoration(color: AppColors.white),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  EnumLocale.txtWithdrawalDetails.name.tr,
-                  style: AppFontStyle.fontStyleW700(
-                      fontSize: 17, fontColor: AppColors.black),
-                ).paddingOnly(top: 16, bottom: 16),
+      final hasSelectedMethod = controller.selectedPaymentMethod != null &&
+          controller.selectedPaymentMethod! >= 0 &&
+          controller.selectedPaymentMethod! < controller.withdrawMethods.length;
+      final selectedMethod = hasSelectedMethod
+          ? controller.withdrawMethods[controller.selectedPaymentMethod ?? 0]
+          : null;
+      final minimumPayout =
+          Database.settingApiModel?.data?.minimumCoinsForPayout ?? 0;
 
-                TextFormField(
-                  controller: controller.coinController,
-                  keyboardType: TextInputType.number,
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.redesignSoftBorder),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: 0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const _SectionChip(title: 'Withdrawal Details'),
+            const SizedBox(height: 8),
+            Text(
+              EnumLocale.txtListenerWithdrawDescription.name.tr,
+              style: AppFontStyle.fontStyleW500(
+                fontSize: 11,
+                fontColor: AppColors.redesignMutedText,
+                height: 1.7,
+              ),
+            ),
+            const SizedBox(height: 12),
+            _FieldLabel(title: EnumLocale.txtWithdrawAmount.name.tr),
+            TextFormField(
+              controller: controller.coinController,
+              keyboardType: TextInputType.number,
+              style: AppFontStyle.fontStyleW600(
+                fontSize: 13,
+                fontColor: AppColors.redesignBrandDark,
+              ),
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(
+                hintText: 'Enter Session Credit',
+                hintStyle: AppFontStyle.fontStyleW500(
+                  fontSize: 13,
+                  fontColor: AppColors.redesignMutedText,
+                ),
+                filled: true,
+                fillColor: AppColors.redesignSurfaceInput,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide(color: AppColors.redesignSoftBorder),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide(color: AppColors.redesignSoftBorder),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide(color: AppColors.redesignBrandRed),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 12),
+                child: Text(
+                  '${EnumLocale.txtMinimumWithdrawCoin.name.tr}$minimumPayout',
                   style: AppFontStyle.fontStyleW600(
-                    fontSize: 13,
-                    fontColor: AppColors.black,
-                  ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'[0-9]')), // Only digits allowed
-                  ],
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      Utils.showToast(
-                          Get.context!, "Please enter Session Credit amount");
-                      return '';
-                    } else if (value.contains(' ') || value.contains('.')) {
-                      Utils.showToast(Get.context!,
-                          "Invalid characters (space or .) not allowed");
-                      return '';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: AppColors.transparent),
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: AppColors.transparent),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                          color: AppColors.grey.withValues(alpha: 0.2)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                          color: AppColors.grey.withValues(alpha: 0.2)),
-                    ),
-                    fillColor: AppColors.white,
-                    hintText: "Enter Session Credit",
-                    hintStyle: AppFontStyle.fontStyleW500(
-                      fontSize: 13,
-                      fontColor: AppColors.black.withValues(alpha: 0.3),
-                    ),
+                    fontSize: 11,
+                    fontColor: AppColors.redesignBrandRed,
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    "${EnumLocale.txtMinimumWithdrawCoin.name.tr}${Database.settingApiModel?.data?.minimumCoinsForPayout}",
-                    style: AppFontStyle.fontStyleW500(
-                        fontSize: 11, fontColor: AppColors.red),
-                  ).paddingOnly(top: 8, bottom: 18),
-                ),
-                GetBuilder<HostWithdrawCoinController>(
-                  builder: (controller) => GestureDetector(
-                    onTap: controller.onSwitchWithdrawMethod,
-                    child: Container(
-                      height: 54,
-                      width: Get.width,
-                      padding: EdgeInsets.symmetric(horizontal: 15),
+              ),
+            ),
+            _FieldLabel(title: EnumLocale.txtPaymentMethod.name.tr),
+            _PaymentMethodTile(
+              title: hasSelectedMethod
+                  ? (selectedMethod?.name ?? '')
+                  : EnumLocale.txtSelectPaymentGateway.name.tr,
+              image: hasSelectedMethod ? selectedMethod?.image : null,
+              isPlaceholder: !hasSelectedMethod,
+              onTap: controller.onSwitchWithdrawMethod,
+            ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 220),
+              switchInCurve: Curves.easeOut,
+              switchOutCurve: Curves.easeIn,
+              child: controller.isShowPaymentMethod
+                  ? Container(
+                      key: const ValueKey('payment-method-list'),
+                      margin: const EdgeInsets.only(top: 8),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        // color: AppColors.grey.withValues(alpha: 0.2),
+                        color: AppColors.redesignSurfaceNeutralAlt,
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
-                            color: AppColors.grey.withValues(alpha: 0.2)),
+                          color: AppColors.redesignSoftBorder,
+                        ),
                       ),
-                      child: controller.selectedPaymentMethod == null
-                          ? Row(
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    EnumLocale.txtSelectPaymentGateway.name.tr,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AppFontStyle.fontStyleW500(
-                                        fontColor: AppColors.black
-                                            .withValues(alpha: 0.3),
-                                        fontSize: 14),
-                                  ),
-                                ),
-                                8.width,
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  size: 20,
-                                ),
-                              ],
-                            )
-                          : Row(
-                              children: [
-                                SizedBox(
-                                  width: 35,
-                                  child: Center(
-                                    child: CustomProfileImage(
-                                      image: controller
-                                              .withdrawMethods[controller
-                                                      .selectedPaymentMethod ??
-                                                  0]
-                                              .image ??
-                                          "",
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                                15.width,
-                                Expanded(
-                                  child: Text(
-                                    controller
-                                            .withdrawMethods[controller
-                                                    .selectedPaymentMethod ??
-                                                0]
-                                            .name ??
-                                        "",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AppFontStyle.fontStyleW700(
-                                        fontColor: AppColors.black,
-                                        fontSize: 15),
-                                  ),
-                                ),
-                                8.width,
-                                Icon(Icons.arrow_drop_down)
-                              ],
-                            ),
-                    ),
-                  ),
-                ),
-                GetBuilder<HostWithdrawCoinController>(
-                  builder: (controller) => AnimatedContainer(
-                    duration: Duration(milliseconds: 1000),
-                    height: controller.isShowPaymentMethod
-                        ? (controller.withdrawMethods.length * 70)
-                        : 0,
-                    color: AppColors.transparent,
-                    curve: Curves.linearToEaseOut,
-                    child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          15.height,
                           for (int index = 0;
                               index < controller.withdrawMethods.length;
                               index++)
-                            GestureDetector(
-                              onTap: () =>
-                                  controller.onChangePaymentMethod(index),
-                              child: Container(
-                                height: 54,
-                                width: Get.width,
-                                padding: EdgeInsets.symmetric(horizontal: 15),
-                                margin: EdgeInsets.only(bottom: 15),
-                                decoration: BoxDecoration(
-                                  // color: AppColors.grey.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(14),
-                                  border: Border.all(
-                                      color: AppColors.grey
-                                          .withValues(alpha: 0.2)),
-                                ),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 35,
-                                      child: Center(
-                                        child: CustomProfileImage(
-                                          image: controller
-                                                  .withdrawMethods[index]
-                                                  .image ??
-                                              "",
-                                        ),
-                                      ),
-                                    ),
-                                    15.width,
-                                    Expanded(
-                                      child: Text(
-                                        controller
-                                                .withdrawMethods[index].name ??
-                                            "",
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: AppFontStyle.fontStyleW700(
-                                            fontColor: AppColors.black,
-                                            fontSize: 15),
-                                      ),
-                                    ),
-                                    // RadioItem(isSelected: controller.selectedPaymentMethod == index),
-                                  ],
-                                ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                bottom: index ==
+                                        controller.withdrawMethods.length - 1
+                                    ? 0
+                                    : 8,
+                              ),
+                              child: _PaymentMethodOptionTile(
+                                title: controller.withdrawMethods[index].name ??
+                                    '',
+                                image:
+                                    controller.withdrawMethods[index].image ??
+                                        '',
+                                isSelected:
+                                    controller.selectedPaymentMethod == index,
+                                onTap: () {
+                                  controller.onChangePaymentMethod(index);
+                                },
                               ),
                             ),
                         ],
                       ),
-                    ),
-                  ),
+                    )
+                  : const SizedBox.shrink(
+                      key: ValueKey('payment-method-empty')),
+            ),
+            if ((selectedMethod?.details?.isNotEmpty ?? false))
+              Padding(
+                padding: const EdgeInsets.only(top: 14),
+                child: Column(
+                  children: [
+                    for (int i = 0;
+                        i < (selectedMethod?.details?.length ?? 0);
+                        i++)
+                      WithdrawDetailsItemUi(
+                        title: selectedMethod?.details?[i] ?? '',
+                        controller: controller.withdrawPaymentDetails[i],
+                      ),
+                  ],
                 ),
-                15.height,
-                GetBuilder<HostWithdrawCoinController>(
-                  builder: (controller) => controller.selectedPaymentMethod ==
-                          null
-                      ? Offstage()
-                      : Column(
-                          children: [
-                            for (int i = 0;
-                                i <
-                                    controller
-                                        .withdrawMethods[
-                                            controller.selectedPaymentMethod ??
-                                                0]
-                                        .details!
-                                        .length;
-                                i++)
-                              WithdrawDetailsItemUi(
-                                title: controller
-                                        .withdrawMethods[
-                                            controller.selectedPaymentMethod ??
-                                                0]
-                                        .details?[i] ??
-                                    "",
-                                controller:
-                                    controller.withdrawPaymentDetails[i],
-                              ),
-                          ],
-                        ),
-                ),
-                PrimaryAppButton(
-                  height: 47,
-                  onTap: () {
-                    if (Database.demoListener == true) {
-                      Utils.showToast(
-                          Get.context!, EnumLocale.txtDEmoListenerText.name.tr);
-                    } else {
-                      controller.onClickWithdraw();
-                    }
-                  },
-                  // borderRadius: 30,
-                  child: Center(
-                    child: Text(
-                      EnumLocale.txtWithdrawCoin.name.tr,
-                      style: AppFontStyle.fontStyleW600(
-                          fontSize: 16, fontColor: AppColors.white),
-                    ),
-                  ),
-                ).paddingOnly(bottom: 16, top: 18) // borderRadius: 30,
+              ),
+            const SizedBox(height: 6),
+            PrimaryAppButton(
+              height: 50,
+              borderRadius: 14,
+              gradientColor: [
+                AppColors.redesignBrandDark,
+                AppColors.redesignBrandDarkAlt,
               ],
-            ).paddingOnly(left: 16, right: 16),
-          ).paddingOnly(bottom: 10),
-        ],
+              onTap: () {
+                if (Database.demoListener == true) {
+                  Utils.showToast(
+                    Get.context!,
+                    EnumLocale.txtDEmoListenerText.name.tr,
+                  );
+                } else {
+                  controller.onClickWithdraw();
+                }
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    EnumLocale.txtWithdrawCoin.name.tr,
+                    style: AppFontStyle.fontStyleW700(
+                      fontSize: 15,
+                      fontColor: AppColors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Icon(
+                    Icons.arrow_forward_rounded,
+                    size: 18,
+                    color: AppColors.white,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       );
     });
+  }
+}
+
+class _SectionChip extends StatelessWidget {
+  const _SectionChip({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: AppColors.redesignSurfaceNeutralAlt,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        title,
+        style: AppFontStyle.fontStyleW600(
+          fontSize: 10,
+          fontColor: AppColors.redesignMutedText,
+        ),
+      ),
+    );
+  }
+}
+
+class _FieldLabel extends StatelessWidget {
+  const _FieldLabel({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Text(
+        title,
+        style: AppFontStyle.fontStyleW600(
+          fontSize: 12,
+          fontColor: AppColors.redesignMutedText,
+        ),
+      ),
+    );
+  }
+}
+
+class _PaymentMethodTile extends StatelessWidget {
+  const _PaymentMethodTile({
+    required this.title,
+    required this.image,
+    required this.isPlaceholder,
+    required this.onTap,
+  });
+
+  final String title;
+  final String? image;
+  final bool isPlaceholder;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          height: 54,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: AppColors.redesignSurfaceInput,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+          ),
+          child: Row(
+            children: [
+              if (!isPlaceholder)
+                SizedBox(
+                  width: 30,
+                  child: Center(
+                    child: CustomProfileImage(
+                      image: image ?? '',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              if (!isPlaceholder) const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 14,
+                    fontColor: isPlaceholder
+                        ? AppColors.redesignMutedText
+                        : AppColors.redesignBrandDark,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.keyboard_arrow_down_rounded,
+                size: 22,
+                color: AppColors.redesignMutedText,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PaymentMethodOptionTile extends StatelessWidget {
+  const _PaymentMethodOptionTile({
+    required this.title,
+    required this.image,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String title;
+  final String image;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          height: 52,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppColors.redesignAccentSoftBg
+                : AppColors.redesignSurfaceInput,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected
+                  ? AppColors.redesignBrandRed
+                  : AppColors.redesignSoftBorder,
+            ),
+          ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 28,
+                child: Center(
+                  child: CustomProfileImage(
+                    image: image,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 13,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                ),
+              ),
+              Container(
+                height: 18,
+                width: 18,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: isSelected
+                        ? AppColors.redesignBrandRed
+                        : AppColors.redesignMutedText,
+                  ),
+                  color: isSelected
+                      ? AppColors.redesignBrandRed
+                      : AppColors.transparent,
+                ),
+                child: isSelected
+                    ? Icon(
+                        Icons.check,
+                        size: 12,
+                        color: AppColors.white,
+                      )
+                    : null,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -431,47 +667,54 @@ class WithdrawDetailsItemUi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: AppFontStyle.fontStyleW500(
-              fontColor: AppColors.black.withValues(alpha: 0.3), fontSize: 13),
-        ),
-        5.height,
-        TextFormField(
-          maxLines: 1,
-          keyboardType: TextInputType.name,
-          controller: controller,
-          style: AppFontStyle.fontStyleW700(
-              fontColor: AppColors.black, fontSize: 14),
-          cursorColor: AppColors.grey,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColors.transparent),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: AppFontStyle.fontStyleW600(
+              fontColor: AppColors.redesignMutedText,
+              fontSize: 12,
             ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColors.transparent),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide:
-                  BorderSide(color: AppColors.grey.withValues(alpha: 0.2)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide:
-                  BorderSide(color: AppColors.grey.withValues(alpha: 0.2)),
-            ),
-            hintText: "Enter your ${title.toLowerCase()}...",
-            hintStyle: AppFontStyle.fontStyleW400(
-                fontColor: AppColors.grey, fontSize: 12),
           ),
-        ).paddingOnly(bottom: 14),
-      ],
+          const SizedBox(height: 6),
+          TextFormField(
+            maxLines: 1,
+            keyboardType: TextInputType.text,
+            controller: controller,
+            style: AppFontStyle.fontStyleW600(
+              fontColor: AppColors.redesignBrandDark,
+              fontSize: 13,
+            ),
+            cursorColor: AppColors.redesignBrandDark,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: AppColors.redesignSurfaceInput,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(color: AppColors.redesignSoftBorder),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(color: AppColors.redesignSoftBorder),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(color: AppColors.redesignBrandRed),
+              ),
+              hintText: "Enter your ${title.toLowerCase()}...",
+              hintStyle: AppFontStyle.fontStyleW500(
+                fontColor: AppColors.redesignMutedText,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -13,10 +13,18 @@ class HostWalletScreen extends StatefulWidget {
 }
 
 class _HostWalletScreenState extends State<HostWalletScreen> {
-  HostWalletScreenController hostWalletScreenController = Get.put(HostWalletScreenController());
+  final HostWalletScreenController hostWalletScreenController =
+      Get.put(HostWalletScreenController());
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final maxContentWidth = width >= 1100
+        ? 980.0
+        : width >= 760
+            ? 760.0
+            : width;
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -35,24 +43,35 @@ class _HostWalletScreenState extends State<HostWalletScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.white,
-        body: Column(
-          children: [
-            HostWalletScreenTopView(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // HostWalletGuideView(),
-                    WithdrawCoinView(),
-                    BottomView(
-                      controller: hostWalletScreenController,
+        backgroundColor: AppColors.redesignScreenBackground,
+        body: SafeArea(
+          child: Column(
+            children: [
+              const HostWalletScreenAppBar(),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 6, 16, 24),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxContentWidth),
+                      child: Column(
+                        children: [
+                          const HostWalletScreenTopView(),
+                          const SizedBox(height: 12),
+                          const WithdrawCoinView(),
+                          const SizedBox(height: 12),
+                          BottomView(
+                            controller: hostWalletScreenController,
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

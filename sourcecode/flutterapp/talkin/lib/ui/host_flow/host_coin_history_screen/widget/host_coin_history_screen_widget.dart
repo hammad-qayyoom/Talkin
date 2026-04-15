@@ -56,7 +56,9 @@ class HostCoinHistoryScreenTabBar extends StatelessWidget {
                       onTap: () => controller.changeTab(0),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: controller.tabIndex == 0 ? Colors.black : Colors.transparent,
+                          color: controller.tabIndex == 0
+                              ? Colors.black
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(24),
                         ),
                         alignment: Alignment.center,
@@ -80,7 +82,9 @@ class HostCoinHistoryScreenTabBar extends StatelessWidget {
                       onTap: () => controller.changeTab(1),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: controller.tabIndex == 1 ? Colors.black : Colors.transparent,
+                          color: controller.tabIndex == 1
+                              ? Colors.black
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(24),
                         ),
                         alignment: Alignment.center,
@@ -105,33 +109,42 @@ class HostCoinHistoryScreenTabBar extends StatelessWidget {
             10.height,
             Row(
               children: [
-                Text(EnumLocale.txtSelectDate.name.tr, style: AppFontStyle.fontStyleW500(fontSize: 14, fontColor: AppColors.black)),
+                Text(EnumLocale.txtSelectDate.name.tr,
+                    style: AppFontStyle.fontStyleW500(
+                        fontSize: 14, fontColor: AppColors.black)),
                 Spacer(),
                 GetBuilder<HostCoinHistoryScreenController>(
                   id: Constant.idTabChange,
                   builder: (controller) {
                     String displayText = EnumLocale.txtAll.name.tr;
 
-                    if (controller.tabIndex == 1 && controller.selectedWithdrawDateRange != null) {
+                    if (controller.tabIndex == 1 &&
+                        controller.selectedWithdrawDateRange != null) {
                       final range = controller.selectedWithdrawDateRange!;
-                      displayText = "${Utils.formatShortDate(range.start)} - ${Utils.formatShortDate(range.end)}";
-                    } else if (controller.tabIndex == 0 && controller.selectedCoinDateRange != null) {
+                      displayText =
+                          "${Utils.formatShortDate(range.start)} - ${Utils.formatShortDate(range.end)}";
+                    } else if (controller.tabIndex == 0 &&
+                        controller.selectedCoinDateRange != null) {
                       final range = controller.selectedCoinDateRange!;
-                      displayText = "${Utils.formatShortDate(range.start)} - ${Utils.formatShortDate(range.end)}";
+                      displayText =
+                          "${Utils.formatShortDate(range.start)} - ${Utils.formatShortDate(range.end)}";
                     }
 
                     return GestureDetector(
                       onTap: () async {
                         final picked = await CustomRangePicker.onShow(
                           context,
-                          controller.tabIndex == 1 ? controller.selectedWithdrawDateRange : controller.selectedCoinDateRange,
+                          controller.tabIndex == 1
+                              ? controller.selectedWithdrawDateRange
+                              : controller.selectedCoinDateRange,
                         );
                         if (picked != null) {
                           controller.applyDateFilter(picked.start, picked.end);
                         }
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColors.lightGrey),
                           borderRadius: BorderRadius.circular(8),
@@ -140,9 +153,11 @@ class HostCoinHistoryScreenTabBar extends StatelessWidget {
                           children: [
                             Text(
                               displayText,
-                              style: AppFontStyle.fontStyleW500(fontSize: 14, fontColor: AppColors.black),
+                              style: AppFontStyle.fontStyleW500(
+                                  fontSize: 14, fontColor: AppColors.black),
                             ),
-                            Icon(Icons.keyboard_arrow_down_rounded, size: 20, color: AppColors.black),
+                            Icon(Icons.keyboard_arrow_down_rounded,
+                                size: 20, color: AppColors.black),
                           ],
                         ),
                       ),
@@ -151,8 +166,10 @@ class HostCoinHistoryScreenTabBar extends StatelessWidget {
                 ),
                 12.width,
                 Visibility(
-                  visible: (controller.tabIndex == 1 && controller.selectedWithdrawDateRange != null) ||
-                      (controller.tabIndex == 0 && controller.selectedCoinDateRange != null),
+                  visible: (controller.tabIndex == 1 &&
+                          controller.selectedWithdrawDateRange != null) ||
+                      (controller.tabIndex == 0 &&
+                          controller.selectedCoinDateRange != null),
                   child: GestureDetector(
                     onTap: () {
                       controller.clearDateFilter();
@@ -191,14 +208,16 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
       builder: (controller) {
         return Expanded(
           child: controller.tabIndex == 0
-              ? controller.coinHistoryModel?.data?.isEmpty == true
+              ? (!controller.isLoading &&
+                      controller.hostCoinHistoryList.isEmpty)
                   ? SizedBox(
                       height: 100,
                       child: Image.asset(
                         AppAsset.noHistoryFound,
                       )).paddingAll(90)
                   : receiveCoinList(controller)
-              : controller.withdrawalRecordModel?.data?.isEmpty == true
+              : (!controller.isLoading &&
+                      controller.withdrawalRecordList.isEmpty)
                   ? SizedBox(
                       height: 100,
                       child: Image.asset(
@@ -238,28 +257,33 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                         children: [
                           Text(
                             EnumLocale.txtDetails.name.tr,
-                            style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.profileMail),
+                            style: AppFontStyle.fontStyleW500(
+                                fontSize: 12, fontColor: AppColors.profileMail),
                           ),
                           Text(
                             textAlign: TextAlign.center,
                             EnumLocale.txtCoin.name.tr,
-                            style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.profileMail),
+                            style: AppFontStyle.fontStyleW500(
+                                fontSize: 12, fontColor: AppColors.profileMail),
                           ),
                         ],
                       ).paddingSymmetric(horizontal: 14, vertical: 14),
                       Divider(color: AppColors.lightGrey, height: 0),
                       Expanded(
                         child: RefreshIndicator(
-                          onRefresh: () async => controller.refreshHostCoinHistory(),
+                          onRefresh: () async =>
+                              controller.refreshHostCoinHistory(),
                           child: Column(
                             children: [
                               Expanded(
                                 child: ListView.builder(
                                   physics: AlwaysScrollableScrollPhysics(),
                                   controller: controller.scrollController,
-                                  itemCount: controller.hostCoinHistoryList.length,
+                                  itemCount:
+                                      controller.hostCoinHistoryList.length,
                                   itemBuilder: (context, index) {
-                                    final item = controller.hostCoinHistoryList[index];
+                                    final item =
+                                        controller.hostCoinHistoryList[index];
                                     return Column(
                                       children: [
                                         Row(
@@ -272,63 +296,96 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                                     height: 40,
                                                     width: 40,
                                                     child: ClipOval(
-                                                        child: CustomProfileImage(
-                                                      image: item.profilePic ?? '',
+                                                        child:
+                                                            CustomProfileImage(
+                                                      image:
+                                                          item.profilePic ?? '',
                                                     )),
                                                   ).paddingOnly(right: 5),
                                                   Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
-                                                        item.type == 1 || item.type == 2 ? Database.loginUserName : item.fullName ?? '',
-                                                        style: AppFontStyle.fontStyleW700(
+                                                        item.type == 1 ||
+                                                                item.type == 2
+                                                            ? Database
+                                                                .loginUserName
+                                                            : item.fullName ??
+                                                                '',
+                                                        style: AppFontStyle
+                                                            .fontStyleW700(
                                                           fontSize: 13,
-                                                          fontColor: AppColors.black,
+                                                          fontColor:
+                                                              AppColors.black,
                                                         ),
                                                       ).paddingOnly(bottom: 3),
                                                       Row(
                                                         children: [
                                                           Image.asset(
                                                             item.type == 2
-                                                                ? AppAsset.coinPurchaseIcon
+                                                                ? AppAsset
+                                                                    .coinPurchaseIcon
                                                                 : item.type == 3
-                                                                    ? AppAsset.callIcon
-                                                                    : item.type == 4
-                                                                        ? AppAsset.videoCallIcon
-                                                                        : item.type == 5
+                                                                    ? AppAsset
+                                                                        .callIcon
+                                                                    : item.type ==
+                                                                            4
+                                                                        ? AppAsset
+                                                                            .videoCallIcon
+                                                                        : item.type ==
+                                                                                5
                                                                             ? AppAsset.callIcon
                                                                             : item.type == 6
                                                                                 ? AppAsset.videoCallIcon
                                                                                 : AppAsset.loginBonusIcon,
-                                                            color: AppColors.historyCallType,
+                                                            color: AppColors
+                                                                .historyCallType,
                                                             height: 12,
                                                             width: 12,
                                                             fit: BoxFit.fill,
-                                                          ).paddingOnly(right: 4),
+                                                          ).paddingOnly(
+                                                              right: 4),
                                                           Text(
                                                             item.type == 2
                                                                 ? "Subscription Purchase"
                                                                 : item.type == 3
                                                                     ? "Private audio call"
-                                                                    : item.type == 4
+                                                                    : item.type ==
+                                                                            4
                                                                         ? "private video call"
-                                                                        : item.type == 5
-                                                                    ? "Audio call"
+                                                                        : item.type ==
+                                                                                5
+                                                                            ? "Audio call"
                                                                             : item.type == 6
-                                                                      ? "Video call"
+                                                                                ? "Video call"
                                                                                 : "Log In Bonus",
-                                                            style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.historyCallType),
-                                                          ).paddingOnly(right: 6),
+                                                            style: AppFontStyle
+                                                                .fontStyleW500(
+                                                                    fontSize:
+                                                                        11,
+                                                                    fontColor:
+                                                                        AppColors
+                                                                            .historyCallType),
+                                                          ).paddingOnly(
+                                                              right: 6),
                                                           Text(
-                                                            textAlign: TextAlign.center,
-                                                            item.type == 1 || item.type == 2
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            item.type == 1 ||
+                                                                    item.type ==
+                                                                        2
                                                                 ? ""
-                                                                : item.duration == null
+                                                                : item.duration ==
+                                                                        null
                                                                     ? ''
                                                                     : "${item.duration}",
-                                                            style: AppFontStyle.fontStyleW600(
+                                                            style: AppFontStyle
+                                                                .fontStyleW600(
                                                               fontSize: 11,
-                                                              fontColor: AppColors.darkOrange,
+                                                              fontColor: AppColors
+                                                                  .darkOrange,
                                                             ),
                                                           ),
                                                         ],
@@ -339,25 +396,37 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                               ),
                                             ),
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
                                               children: [
                                                 Text(
                                                   textAlign: TextAlign.center,
                                                   "+ ${item.listenerCoin}",
-                                                  style: AppFontStyle.fontStyleW700(
+                                                  style: AppFontStyle
+                                                      .fontStyleW700(
                                                     fontSize: 13,
                                                     fontColor: AppColors.green,
                                                   ),
                                                 ).paddingOnly(bottom: 4),
                                                 Text(
                                                   item.date.toString(),
-                                                  style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.profileMail),
+                                                  style: AppFontStyle
+                                                      .fontStyleW500(
+                                                          fontSize: 10,
+                                                          fontColor: AppColors
+                                                              .profileMail),
                                                 ),
                                               ],
                                             ),
                                           ],
-                                        ).paddingOnly(right: 14, bottom: 14, top: 14, left: 10),
-                                        Divider(color: AppColors.historyDivider, height: 0),
+                                        ).paddingOnly(
+                                            right: 14,
+                                            bottom: 14,
+                                            top: 14,
+                                            left: 10),
+                                        Divider(
+                                            color: AppColors.historyDivider,
+                                            height: 0),
                                       ],
                                     );
                                   },
@@ -367,7 +436,8 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                 id: Constant.idPaginationListener,
                                 builder: (controller) => Visibility(
                                   visible: controller.isPaginationLoading,
-                                  child: CircularProgressIndicator(color: AppColors.primary),
+                                  child: CircularProgressIndicator(
+                                      color: AppColors.primary),
                                 ),
                               ),
                             ],
@@ -384,13 +454,16 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
     return GetBuilder<HostCoinHistoryScreenController>(
       id: Constant.idTabChange,
       builder: (controller) {
-        final itemCount = controller.withdrawalRecordList.isNotEmpty == true ? controller.withdrawalRecordList.length : 0;
+        final itemCount = controller.withdrawalRecordList.isNotEmpty == true
+            ? controller.withdrawalRecordList.length
+            : 0;
 
         if (controller.isExpandedList.length != itemCount) {
           controller.initializeExpansionState(itemCount);
         }
 
-        if (controller.withdrawalRecordModel?.data == null || controller.isExpandedList.length != itemCount) {
+        if (controller.withdrawalRecordModel?.data == null ||
+            controller.isExpandedList.length != itemCount) {
           return CoinHistoryShimmer();
         }
 
@@ -416,24 +489,30 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                         child: ListView.builder(
                           physics: AlwaysScrollableScrollPhysics(),
                           controller: controller.scrollController1,
-                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                           itemCount: itemCount,
                           itemBuilder: (context, index) {
                             final item = controller.withdrawalRecordList[index];
-                            final isItemExpanded = (index < controller.isExpandedList.length) ? controller.isExpandedList[index] : false;
+                            final isItemExpanded =
+                                (index < controller.isExpandedList.length)
+                                    ? controller.isExpandedList[index]
+                                    : false;
 
                             return Container(
                               padding: EdgeInsets.all(10),
                               margin: EdgeInsets.only(bottom: 10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: AppColors.historyBorder),
+                                border:
+                                    Border.all(color: AppColors.historyBorder),
                               ),
                               child: Column(
                                 children: [
                                   // Top row: title + amount
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         EnumLocale.txtCoin.name.tr,
@@ -454,7 +533,8 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
 
                                   // Session Credit count
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         EnumLocale.txtAmount.name.tr,
@@ -475,7 +555,8 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
 
                                   // Withdrawal ID
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         EnumLocale.txtWithdrawalID.name.tr,
@@ -496,7 +577,8 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
 
                                   // Payment method
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         EnumLocale.txtPaymentMethod.name.tr,
@@ -518,8 +600,10 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                   // Expanded details
                                   if (isItemExpanded) ...[
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           EnumLocale.txtPaymentDetails.name.tr,
@@ -529,11 +613,15 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                           ),
                                         ),
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: item.paymentDetails?.details?.entries.map((entry) {
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: item.paymentDetails?.details
+                                                  ?.entries
+                                                  .map((entry) {
                                                 return Text(
                                                   entry.value.toString(),
-                                                  style: AppFontStyle.fontStyleW700(
+                                                  style: AppFontStyle
+                                                      .fontStyleW700(
                                                     fontSize: 12,
                                                     fontColor: AppColors.black,
                                                   ),
@@ -544,7 +632,8 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                       ],
                                     ).paddingOnly(bottom: 16),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           EnumLocale.txtRequestDate.name.tr,
@@ -564,10 +653,12 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                     ).paddingOnly(bottom: 16),
                                     if (item.status != 1)
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            EnumLocale.txtAcceptDeclineDate.name.tr,
+                                            EnumLocale
+                                                .txtAcceptDeclineDate.name.tr,
                                             style: AppFontStyle.fontStyleW600(
                                               fontSize: 12,
                                               fontColor: AppColors.profileText,
@@ -583,7 +674,8 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                         ],
                                       ).paddingOnly(bottom: 16),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           "${EnumLocale.txtStatus.name.tr} :",
@@ -593,14 +685,19 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                           ),
                                         ),
                                         Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 3),
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(4),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
                                             color: item.status == 1
-                                                ? AppColors.getCoinText.withValues(alpha: 0.2)
+                                                ? AppColors.getCoinText
+                                                    .withValues(alpha: 0.2)
                                                 : item.status == 2
-                                                    ? AppColors.green.withValues(alpha: 0.1)
-                                                    : AppColors.red.withValues(alpha: 0.1),
+                                                    ? AppColors.green
+                                                        .withValues(alpha: 0.1)
+                                                    : AppColors.red
+                                                        .withValues(alpha: 0.1),
                                           ),
                                           child: Text(
                                             item.status == 1
@@ -611,7 +708,8 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                             style: AppFontStyle.fontStyleW700(
                                               fontSize: 12,
                                               fontColor: item.status == 1
-                                                  ? AppColors.getCoinText.withValues(alpha: 0.7)
+                                                  ? AppColors.getCoinText
+                                                      .withValues(alpha: 0.7)
                                                   : item.status == 2
                                                       ? AppColors.green
                                                       : AppColors.red,
@@ -623,16 +721,19 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                     if (item.reason?.isNotEmpty == true)
                                       Container(
                                         width: Get.width,
-                                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 8),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                           color: AppColors.historyViewMore,
                                         ),
                                         child: Text(
                                           item.reason ?? '',
                                           style: AppFontStyle.fontStyleW500(
                                             fontSize: 10,
-                                            fontColor: AppColors.historyReasonTxt,
+                                            fontColor:
+                                                AppColors.historyReasonTxt,
                                           ),
                                         ),
                                       ).paddingOnly(bottom: 16),
@@ -640,23 +741,31 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
 
                                   // View More / Less button
                                   PrimaryAppButton(
-                                    onTap: () => controller.toggleExpanded(index),
+                                    onTap: () =>
+                                        controller.toggleExpanded(index),
                                     height: 47,
                                     borderRadius: 8,
                                     color: AppColors.historyViewMore,
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          isItemExpanded ? EnumLocale.txtViewLess.name.tr : EnumLocale.txtViewMore.name.tr,
+                                          isItemExpanded
+                                              ? EnumLocale.txtViewLess.name.tr
+                                              : EnumLocale.txtViewMore.name.tr,
                                           style: AppFontStyle.fontStyleW700(
                                             fontSize: 12,
-                                            fontColor: AppColors.historyViewMoreTxt,
+                                            fontColor:
+                                                AppColors.historyViewMoreTxt,
                                           ),
                                         ),
                                         SizedBox(width: 2),
                                         Icon(
-                                          isItemExpanded ? Icons.keyboard_arrow_down_rounded : Icons.keyboard_arrow_up_rounded,
+                                          isItemExpanded
+                                              ? Icons
+                                                  .keyboard_arrow_down_rounded
+                                              : Icons.keyboard_arrow_up_rounded,
                                           size: 18,
                                           color: AppColors.historyViewMoreTxt,
                                         ),
@@ -673,7 +782,8 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                         id: Constant.idPaginationListener,
                         builder: (controller) => Visibility(
                           visible: controller.isPaginationLoading,
-                          child: CircularProgressIndicator(color: AppColors.primary),
+                          child: CircularProgressIndicator(
+                              color: AppColors.primary),
                         ),
                       ),
                     ],
