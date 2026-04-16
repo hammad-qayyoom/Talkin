@@ -1,346 +1,240 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_background/app_background.dart';
-import 'package:talk_in/custom/app_button/primary_app_button.dart';
-import 'package:talk_in/custom/text_field/custom_text_field.dart';
 import 'package:talk_in/routes/app_routes.dart';
 import 'package:talk_in/ui/user_flow/main_screen/controller/main_screen_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
 import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
 import 'package:talk_in/utils/enums.dart';
 import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
 
 class MainScreenView extends StatelessWidget {
   const MainScreenView({super.key});
+
+  static final Color _screenBg = AppColors.redesignScreenBackground;
+  static final Color _surfaceColor = AppColors.white;
+  static final Color _softSurface = AppColors.redesignSurfaceInput;
+  static final Color _brandRed = AppColors.redesignBrandRed;
+  static final Color _brandDark = AppColors.redesignBrandDark;
+  static final Color _mutedText = AppColors.redesignMutedText;
+  static final Color _softBorder = AppColors.redesignSoftBorder;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MainScreenController>(
       builder: (controller) {
-        return AppBackground(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        final double bottomInset = MediaQuery.of(context).padding.bottom;
+
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Container(
+            color: _screenBg,
+            child: SafeArea(
+              bottom: false,
+              child: Stack(
                 children: [
-                  Center(
-                    child: Text("Talkin", style: AppFontStyle.fontStyleKaushanW400(fontSize: 62, fontColor: AppColors.black)),
-                  ).paddingOnly(bottom: Get.height * 0.035, top: Get.height * 0.06),
-                  Text(
-                    EnumLocale.txtEnterYourMail.name.tr,
-                    style: AppFontStyle.fontStyleW600(fontSize: 13, fontColor: AppColors.black),
-                  ).paddingOnly(bottom: 5),
-                  CustomTextField(
-                    controller: controller.emailController,
-                    filled: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return EnumLocale.desEnterEmail.name.tr;
-                      } else if (!controller.isEmailValid(value)) {
-                        return EnumLocale.desEnterValidEmailAddress.name.tr;
-                      }
-
-                      return null;
-                    },
-                    hintText: 'Email address',
-                  ).paddingOnly(bottom: Get.height * 0.025),
-                  Text(
-                    EnumLocale.txtEnterPassword.name.tr,
-                    style: AppFontStyle.fontStyleW600(fontSize: 13, fontColor: AppColors.black),
-                  ).paddingOnly(bottom: 5),
-                  CustomTextField(
-                    controller: controller.passwordController,
-                    maxLines: 1,
-                    obscureText: controller.isObscure,
-                    suffixIcon: controller.isObscure
-                        ? InkWell(
-                            onTap: () {
-                              controller.onClickObscure();
-                            },
-                            child: Image.asset(AppAsset.icEyeCancel, height: 10, width: 10).paddingAll(12),
-                          )
-                        : InkWell(
-                            onTap: () {
-                              controller.onClickObscure();
-                            },
-                            child: Image.asset(AppAsset.icEye, height: 10, width: 10).paddingAll(12),
-                          ),
-                    filled: true,
-                    hintText: 'Password',
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return EnumLocale.desEnterPassword.name.tr;
-                      } else if (value.length < 8) {
-                        return 'Password must be at least 8 characters long';
-                      } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                        return 'Include at least one uppercase letter';
-                      } else if (!RegExp(r'[a-z]').hasMatch(value)) {
-                        return 'Include at least one lowercase letter';
-                      } else if (!RegExp(r'\d').hasMatch(value)) {
-                        return 'Include at least one number';
-                      } else if (!RegExp(r'[!@#\$&*~%^()-_+=<>?]').hasMatch(value)) {
-                        return 'Include at least one special character';
-                      }
-                      return null;
-                    },
-                  ),
-
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.forgotPasswordScreen, arguments: {'email': controller.emailController.text.trim()});
-                      },
-                      child: Container(
-                        color: AppColors.transparent,
-                        child: Text(
-                          EnumLocale.forgotPassword.name.tr,
-                          style: AppFontStyle.fontStyleW500(
-                            textDecoration: TextDecoration.underline,
-                            decorationColor: AppColors.black,
-                            fontSize: 13,
-                            fontColor: AppColors.black,
-                          ),
-                        ).paddingOnly(top: 8, bottom: 24),
+                  Positioned(
+                    top: -120,
+                    right: -80,
+                    child: Container(
+                      height: 260,
+                      width: 260,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _brandRed.withValues(alpha: 0.09),
                       ),
                     ),
                   ),
-
-                  Center(
-                    child: PrimaryAppButton(
-                      onTap: () {
-                        if (controller.validateLogin()) {
-                          controller.onClickSignIn();
-                          // Get.offAllNamed(AppRoutes.bottomBar);
-                        }
-                      },
-                      color: AppColors.purple,
-                      height: Get.height * 0.056,
-                      width: Get.width * 0.75,
-                      text: EnumLocale.txtContinue.name.tr,
-                      widget: Image.asset(AppAsset.arrowUp, height: 15, width: 15),
-                      textStyle: AppFontStyle.fontStyleW500(fontSize: 16, fontColor: AppColors.white),
+                  Positioned(
+                    top: 100,
+                    left: -100,
+                    child: Container(
+                      height: 220,
+                      width: 220,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _brandDark.withValues(alpha: 0.05),
+                      ),
                     ),
-                  ).paddingOnly(bottom: Get.height * 0.031),
-                  Row(
-                    children: [
-                      Text(
-                        EnumLocale.txtYouHaveNewUser.name.tr,
-                        style: AppFontStyle.fontStyleW500(fontSize: 13, fontColor: AppColors.onBoardingTxt),
-                      ).paddingOnly(right: 2),
-                      InkWell(
-                        onTap: () {
-                          Get.toNamed(AppRoutes.register);
-                        },
-                        child: Text(
-                          EnumLocale.txtGetRegister.name.tr,
-                          style: AppFontStyle.fontStyleW700(
-                            textDecoration: TextDecoration.underline,
-                            decorationColor: AppColors.black,
-                            fontSize: 13,
-                            fontColor: AppColors.black,
+                  ),
+                  SingleChildScrollView(
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 24 + bottomInset),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Text(
+                            "Talkin",
+                            style: AppFontStyle.fontStyleKaushanW400(
+                              fontSize: 58,
+                              fontColor: _brandDark,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ).paddingOnly(bottom: Get.height * 0.017),
-                  Divider(
-                    // height: 45,
-                    color: AppColors.grey,
-                    thickness: 0.7,
-                  ).paddingOnly(bottom: Get.height * 0.014),
-                  PrimaryAppButton(
-                    onTap: () {
-                      controller.onQuickLogin1();
-                      // Get.offAllNamed(AppRoutes.bottomBar);
-                    },
-                    borderRadius: 60,
-                    color: AppColors.purple,
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(9),
-                          decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.white),
-                          child: Center(child: Image.asset(AppAsset.quickLoginIcon, color: AppColors.purple, height: 22)),
-                        ).paddingAll(4),
-                        Spacer(),
+                        const SizedBox(height: 10),
                         Text(
-                          EnumLocale.txtQuickLogin.name.tr,
-                          style: AppFontStyle.fontStyleW600(decorationColor: AppColors.black, fontSize: 16, fontColor: AppColors.white),
-                        ).paddingOnly(right: 50),
-                        Spacer(),
-                      ],
-                    ),
-                  ).paddingOnly(bottom: 10),
-
-                  ///===================== APPLE LOGIN =====================///
-                  Platform.isIOS
-                      ? PrimaryAppButton(
-                          onTap: () {
-                            controller.onAppleLogin();
-                            // Get.offAllNamed(AppRoutes.bottomBar);
-                          },
-                          borderRadius: 60,
-                          color: AppColors.appDarkColor,
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(9),
-                                decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.white),
-                                child: Center(child: Image.asset(AppAsset.appleIcon, height: 22)),
-                              ).paddingAll(4),
-                              Spacer(),
-                              Text(
-                                'Apple Log In',
-                                style: AppFontStyle.fontStyleW600(decorationColor: AppColors.black, fontSize: 16, fontColor: AppColors.white),
-                              ).paddingOnly(right: 50),
-                              Spacer(),
+                          "Welcome back",
+                          style: AppFontStyle.fontStyleW700(
+                            fontSize: 30,
+                            fontColor: _brandDark,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          "Login to continue with secure and fast access.",
+                          style: AppFontStyle.fontStyleW500(
+                            fontSize: 14,
+                            fontColor: _mutedText,
+                          ),
+                        ),
+                        const SizedBox(height: 22),
+                        Container(
+                          padding: const EdgeInsets.all(18),
+                          decoration: BoxDecoration(
+                            color: _surfaceColor,
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(color: _softBorder),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.black.withValues(alpha: 0.05),
+                                blurRadius: 30,
+                                offset: const Offset(0, 12),
+                              ),
                             ],
                           ),
-                        ).paddingOnly(bottom: 10)
-                      : SizedBox.shrink(),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            if (controller.selectedValue != 1) {
-                              Utils.showToast(Get.context!, "Please agree to the Privacy Policy to proceed.");
-                              return;
-                            }
-                            Get.toNamed(AppRoutes.mobileLogIn);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(60),
-                              border: Border.all(color: AppColors.black),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(7),
-                                  decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.lightGrey),
-                                  child: Center(child: Image.asset(AppAsset.mobile, height: 25)),
-                                ).paddingAll(4),
-                                Text(
-                                  EnumLocale.txtMobileLogin.name.tr,
-                                  style: AppFontStyle.fontStyleW600(decorationColor: AppColors.black, fontSize: 15, fontColor: AppColors.black),
-                                ).paddingOnly(left: 2),
-                              ],
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildLabel(EnumLocale.txtEnterYourMail.name.tr),
+                              const SizedBox(height: 8),
+                              _buildTextField(
+                                controller: controller.emailController,
+                                hintText: 'Email address',
+                                keyboardType: TextInputType.emailAddress,
+                                textInputAction: TextInputAction.next,
+                                prefixIcon: Icon(
+                                  Icons.mail_outline_rounded,
+                                  color: _mutedText,
+                                  size: 20,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              _buildLabel(EnumLocale.txtEnterPassword.name.tr),
+                              const SizedBox(height: 8),
+                              _buildTextField(
+                                controller: controller.passwordController,
+                                hintText: 'Password',
+                                textInputAction: TextInputAction.done,
+                                obscureText: controller.isObscure,
+                                prefixIcon: Icon(
+                                  Icons.lock_outline_rounded,
+                                  color: _mutedText,
+                                  size: 20,
+                                ),
+                                suffixIcon: IconButton(
+                                  onPressed: controller.onClickObscure,
+                                  icon: Icon(
+                                    controller.isObscure
+                                        ? Icons.visibility_off_rounded
+                                        : Icons.visibility_rounded,
+                                    color: _mutedText,
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () {
+                                    Get.toNamed(
+                                      AppRoutes.forgotPasswordScreen,
+                                      arguments: {
+                                        'email': controller.emailController.text.trim(),
+                                      },
+                                    );
+                                  },
+                                  style: TextButton.styleFrom(
+                                    minimumSize: Size.zero,
+                                    padding: const EdgeInsets.only(top: 8, bottom: 6),
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  child: Text(
+                                    EnumLocale.forgotPassword.name.tr,
+                                    style: AppFontStyle.fontStyleW600(
+                                      fontSize: 13,
+                                      fontColor: _brandDark,
+                                      textDecoration: TextDecoration.underline,
+                                      decorationColor: _brandDark,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              _buildPrimaryButton(
+                                text: EnumLocale.txtContinue.name.tr,
+                                backgroundColor: _brandDark,
+                                icon: Icons.north_east_rounded,
+                                onTap: () {
+                                  if (controller.validateLogin()) {
+                                    controller.onClickSignIn();
+                                  }
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      SizedBox(width: 15),
-                      Expanded(
-                        child: GetBuilder<MainScreenController>(
-                          builder: (controller) {
-                            return GestureDetector(
-                              onTap: () async {
-                                await controller.onGoogleLogin();
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(60),
-                                  color: AppColors.white,
-                                  border: Border.all(color: AppColors.black),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(7),
-                                      decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.lightGrey),
-                                      child: Center(child: Image.asset(AppAsset.googleIcon, height: 25)),
-                                    ).paddingAll(4),
-                                    Text(
-                                      EnumLocale.txtGoogleLogin.name.tr,
-                                      style: AppFontStyle.fontStyleW600(decorationColor: AppColors.black, fontSize: 15, fontColor: AppColors.black),
-                                    ).paddingOnly(left: 2),
-                                  ],
+                        const SizedBox(height: 14),
+                        Center(
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 4,
+                            children: [
+                              Text(
+                                EnumLocale.txtYouHaveNewUser.name.tr,
+                                style: AppFontStyle.fontStyleW500(
+                                  fontSize: 13,
+                                  fontColor: _mutedText,
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ).paddingOnly(top: Get.height * 0.025),
-                  GetBuilder<MainScreenController>(
-                    id: Constant.radioButton,
-                    builder: (controller) {
-                      final isSelected = controller.selectedValue == 1;
-                      return Container(
-                        color: AppColors.transparent,
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                controller.toggleValue(1);
-                              },
-                              child: Container(
-                                color: AppColors.transparent,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 18,
-                                      height: 18,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(color: isSelected ? AppColors.appColor : AppColors.darkGrey, width: 1),
-                                        color: isSelected ? AppColors.appColor : Colors.transparent,
-                                      ),
-                                      child: isSelected
-                                          ? Container(
-                                              decoration: BoxDecoration(color: AppColors.appColor, shape: BoxShape.circle),
-                                              child: Container(
-                                                height: 18,
-                                                width: 18,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  border: Border.all(color: AppColors.white),
-                                                  color: AppColors.appColor,
-                                                ),
-                                              ).paddingAll(0.5),
-                                            )
-                                          : null,
-                                    ).paddingOnly(right: 10, left: 5),
-                                    Text(
-                                      EnumLocale.txtAgreePrivacyPolicy.name.tr,
-                                      style:
-                                          AppFontStyle.fontStyleW500(decorationColor: AppColors.darkGrey, fontSize: 13, fontColor: AppColors.black),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                controller.onClickPrivacyPolicy();
-                              },
-                              child: Container(
-                                color: AppColors.transparent,
+                              InkWell(
+                                onTap: () => Get.toNamed(AppRoutes.register),
                                 child: Text(
-                                  EnumLocale.txtPrivacyPolicy.name.tr,
-                                  style: AppFontStyle.fontStyleW500(
-                                    decorationColor: AppColors.appColor,
+                                  EnumLocale.txtGetRegister.name.tr,
+                                  style: AppFontStyle.fontStyleW700(
                                     fontSize: 13,
+                                    fontColor: _brandDark,
                                     textDecoration: TextDecoration.underline,
-                                    fontColor: AppColors.black,
+                                    decorationColor: _brandDark,
                                   ),
-                                ).paddingOnly(top: 4, bottom: 4),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 18),
+                        Row(
+                          children: [
+                            Expanded(child: Divider(color: _softBorder, thickness: 1)),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                "or continue with",
+                                style: AppFontStyle.fontStyleW500(
+                                  fontSize: 12,
+                                  fontColor: _mutedText,
+                                ),
                               ),
                             ),
+                            Expanded(child: Divider(color: _softBorder, thickness: 1)),
                           ],
-                        ).paddingOnly(top: 10, bottom: 6),
-                      );
-                    },
+                        ),
+                        const SizedBox(height: 14),
+                        _buildPrimaryButton(
+                          text: EnumLocale.txtQuickLogin.name.tr,
+                          backgroundColor: _brandRed,
+                          icon: Icons.rocket_launch_rounded,
+                          onTap: controller.onQuickLogin1,
+                        ),
+                        const SizedBox(height: 4),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -350,4 +244,85 @@ class MainScreenView extends StatelessWidget {
       },
     );
   }
+
+  Widget _buildLabel(String text) {
+    return Text(
+      text,
+      style: AppFontStyle.fontStyleW600(
+        fontSize: 13,
+        fontColor: _brandDark,
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hintText,
+    TextInputType? keyboardType,
+    TextInputAction? textInputAction,
+    bool obscureText = false,
+    Widget? prefixIcon,
+    Widget? suffixIcon,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      textInputAction: textInputAction,
+      obscureText: obscureText,
+      style: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: _brandDark),
+      decoration: InputDecoration(
+        hintText: hintText,
+        prefixIcon: prefixIcon,
+        suffixIcon: suffixIcon,
+        hintStyle: AppFontStyle.fontStyleW500(
+          fontSize: 14,
+          fontColor: _mutedText,
+        ),
+        filled: true,
+        fillColor: _softSurface,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: _softBorder),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: _brandRed, width: 1.2),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: _softBorder),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPrimaryButton({
+    required String text,
+    required Color backgroundColor,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 54,
+      child: ElevatedButton.icon(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          backgroundColor: backgroundColor,
+          foregroundColor: AppColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        icon: Icon(icon, size: 20),
+        label: Text(
+          text,
+          style: AppFontStyle.fontStyleW600(fontSize: 17, fontColor: AppColors.white),
+        ),
+      ),
+    );
+  }
+
 }

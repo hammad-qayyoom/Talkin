@@ -11,31 +11,44 @@ class HostVerificationScreen extends StatelessWidget {
       bottomNavigationBar: HostVerificationBottomButton(),
       backgroundColor: AppColors.redesignScreenBackground,
       appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(96),
+        preferredSize: Size.fromHeight(76),
         child: HostVerificationAppBar(),
       ),
-      body: GestureDetector(
-        onTap: () {
-          final FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus &&
-              currentFocus.focusedChild != null) {
-            currentFocus.focusedChild?.unfocus();
-          }
-        },
-        child: SafeArea(
-          top: false,
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
-            child: const Column(
-              children: [
-                HostVerificationUploadImageView(),
-                SizedBox(height: 12),
-                HostVerificationFillFormView(),
-              ],
+      body: Builder(
+        builder: (context) {
+          final screenWidth = MediaQuery.sizeOf(context).width;
+          final maxContentWidth = screenWidth >= 760 ? 980.0 : double.infinity;
+
+          return Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxContentWidth),
+              child: GestureDetector(
+                onTap: () {
+                  final FocusScopeNode currentFocus = FocusScope.of(context);
+                  if (!currentFocus.hasPrimaryFocus &&
+                      currentFocus.focusedChild != null) {
+                    currentFocus.focusedChild?.unfocus();
+                  }
+                },
+                child: SafeArea(
+                  top: false,
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
+                    child: const Column(
+                      children: [
+                        HostVerificationUploadImageView(),
+                        SizedBox(height: 12),
+                        HostVerificationFillFormView(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

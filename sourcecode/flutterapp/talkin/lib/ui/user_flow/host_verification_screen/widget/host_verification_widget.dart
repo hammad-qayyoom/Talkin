@@ -19,51 +19,40 @@ class HostVerificationAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final maxContentWidth = screenWidth >= 760 ? 980.0 : double.infinity;
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.redesignScreenBackground,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: SafeArea(
         bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-          child: Row(
-            children: [
-              _HeaderIconButton(
-                icon: Icons.arrow_back_ios_new_rounded,
-                onTap: Get.back,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: maxContentWidth),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+              child: Row(
+                children: [
+                  _HeaderIconButton(
+                    icon: Icons.arrow_back_ios_new_rounded,
+                    onTap: Get.back,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
                       EnumLocale.txtListenerVerification.name.tr,
                       style: AppFontStyle.fontStyleW700(
-                        fontSize: 22,
+                        fontSize: (screenWidth >= 760) ? 28 : 20,
                         fontColor: AppColors.redesignBrandDark,
                       ),
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      'Secure profile and identity setup',
-                      style: AppFontStyle.fontStyleW500(
-                        fontSize: 12,
-                        fontColor: AppColors.redesignMutedText,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -682,37 +671,49 @@ class HostVerificationBottomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final maxContentWidth = screenWidth >= 760 ? 980.0 : double.infinity;
+
     return SafeArea(
       top: false,
       child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
         decoration: BoxDecoration(
-          color: AppColors.redesignScreenBackground,
+          color: AppColors.white,
           border: Border(
             top: BorderSide(color: AppColors.redesignSoftBorder),
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.04),
-              blurRadius: 12,
-              offset: const Offset(0, -2),
+              color: AppColors.black.withValues(alpha: 0.06),
+              blurRadius: 16,
+              offset: const Offset(0, -4),
             ),
           ],
         ),
-        child: GetBuilder<HostVerificationController>(
-          builder: (controller) {
-            return PrimaryAppButton(
-              onTap: controller.validateAndNext,
-              color: AppColors.redesignBrandDark,
-              borderRadius: 14,
-              height: 50,
-              text: EnumLocale.txtNext.name.tr,
-              textStyle: AppFontStyle.fontStyleW700(
-                fontSize: 17,
-                fontColor: AppColors.white,
+        child: Align(
+          alignment: Alignment.topCenter,
+          heightFactor: 1.0,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: maxContentWidth),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
+              child: GetBuilder<HostVerificationController>(
+                builder: (controller) {
+                  return PrimaryAppButton(
+                    onTap: controller.validateAndNext,
+                    color: AppColors.redesignBrandDark,
+                    borderRadius: 18,
+                    height: 54,
+                    text: EnumLocale.txtNext.name.tr,
+                    textStyle: AppFontStyle.fontStyleW600(
+                      fontSize: 15,
+                      fontColor: AppColors.white,
+                    ),
+                  );
+                },
               ),
-            );
-          },
+            ),
+          ),
         ),
       ),
     );

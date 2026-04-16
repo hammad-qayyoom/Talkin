@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_device_identifier/mobile_device_identifier.dart';
+import 'package:talk_in/custom/custom_web_view/web_view_screen.dart';
 import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
 import 'package:talk_in/routes/app_routes.dart';
 import 'package:talk_in/ui/user_flow/main_screen/api/login_api.dart';
@@ -56,6 +57,16 @@ class RegistrationController extends GetxController {
     log("isCheck:: $isCheck");
     isCheck = !isCheck;
     update([Constant.idAcceptTerms]);
+  }
+
+  Future<void> onClickPrivacyPolicy() async {
+    final String privacyPolicyUrl = Database.appConfigurationModel?.data?.userPrivacyPolicyUrl ?? '';
+
+    if (privacyPolicyUrl.isNotEmpty) {
+      Get.to(() => WebViewScreen(url: privacyPolicyUrl, screen: "Privacy Policy"));
+    } else {
+      log('Invalid privacy policy URL');
+    }
   }
 
   Future<void> onTapBirthDate(BuildContext context) async {
@@ -145,6 +156,11 @@ class RegistrationController extends GetxController {
     final int age = _calculateAge(selectedBirthDate!);
     if (age < 18) {
       Utils.showToast(Get.context!, "You must be at least 18 years old to continue");
+      return false;
+    }
+
+    if (!isCheck) {
+      Utils.showToast(Get.context!, "Please agree to the Privacy Policy to proceed.");
       return false;
     }
 

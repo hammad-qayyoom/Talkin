@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:talk_in/services/permission_handler/permission_handler.dart';
 import 'package:talk_in/socket/socket_emit.dart';
 import 'package:talk_in/ui/common/session_booking/session_booking_service.dart';
+import 'package:talk_in/ui/user_flow/call_cut_screen/api/submit_call_rate_api.dart';
 import 'package:talk_in/utils/app_color.dart';
 import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/font_style.dart';
@@ -23,6 +25,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
   List<dynamic> _sessions = [];
   Timer? _autoRefreshTimer;
   String? _cancellingBookingId;
+  final Set<String> _reviewSubmittedKeys = <String>{};
+  final GetStorage _storage = GetStorage();
+  static const String _storageKeyReviews = 'submitted_reviews_keys';
 
   static final Color _brandRed = AppColors.redesignBrandRed;
   static final Color _brandRedDark = AppColors.redesignBrandRedDark;
@@ -35,12 +40,41 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
   @override
   void initState() {
     super.initState();
+    _loadReviewsFromStorage();
     _fetchSessions();
     _autoRefreshTimer = Timer.periodic(const Duration(seconds: 20), (_) {
       if (mounted) {
         _fetchSessions();
       }
     });
+  }
+
+  Future<void> _loadReviewsFromStorage() async {
+    try {
+      final List<dynamic>? storedKeys =
+          _storage.read(_storageKeyReviews) as List<dynamic>?;
+      if (storedKeys != null) {
+        _reviewSubmittedKeys.addAll(
+          storedKeys.whereType<String>(),
+        );
+        Utils.showLog(
+            'Loaded ${_reviewSubmittedKeys.length} submitted reviews from storage');
+      }
+    } catch (e) {
+      Utils.showLog('Error loading reviews from storage: $e');
+    }
+  }
+
+  Future<void> _saveReviewsToStorage() async {
+    try {
+      await _storage.write(
+        _storageKeyReviews,
+        _reviewSubmittedKeys.toList(),
+      );
+      Utils.showLog('Saved ${_reviewSubmittedKeys.length} reviews to storage');
+    } catch (e) {
+      Utils.showLog('Error saving reviews to storage: $e');
+    }
   }
 
   @override
@@ -73,6 +107,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     setState(() {
       _isLoading = false;
       _sessions = (response['data'] as List<dynamic>? ?? []);
+      // _reviewSubmittedKeys is NOT cleared - it persists across refreshes
     });
 
     if (response['status'] != true) {
@@ -304,6 +339,430 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     }
   }
 
+  String _extractListenerId(Map<String, dynamic> expert) {
+    final candidates = [
+      (expert['legacyListenerId'] ?? '').toString().trim(),
+      (expert['listenerId'] ?? '').toString().trim(),
+      (expert['_id'] ?? '').toString().trim(),
+      (expert['id'] ?? '').toString().trim(),
+    ];
+
+    for (final value in candidates) {
+      if (value.isNotEmpty) {
+        return value;
+      }
+    }
+
+    return '';
+  }
+
+  bool _containsDangerousScript(String input) {
+    final scriptTagRegex = RegExp(r'<\s*script[^>]*>', caseSensitive: false);
+    return scriptTagRegex.hasMatch(input);
+  }
+
+  bool _isReviewAlreadyPresent(
+    Map<String, dynamic> booking,
+    Map<String, dynamic> session,
+  ) {
+    final reviewFlags = [
+      booking['isReviewed'],
+      booking['reviewSubmitted'],
+      booking['hasReview'],
+      session['isReviewed'],
+      session['reviewSubmitted'],
+      session['hasReview'],
+    ];
+
+    for (final flag in reviewFlags) {
+      if (flag == true) {
+        return true;
+      }
+      if (flag is String && flag.trim().toLowerCase() == 'true') {
+        return true;
+      }
+      if (flag is num && flag == 1) {
+        return true;
+      }
+    }
+
+    final ratingCandidates = [
+      booking['rating'],
+      booking['reviewRating'],
+    ];
+
+    for (final rating in ratingCandidates) {
+      if (rating is num && rating > 0) {
+        return true;
+      }
+      final text = (rating ?? '').toString().trim();
+      if (text.isNotEmpty && text != '0' && text != '0.0') {
+        return true;
+      }
+    }
+
+    final reviewCandidates = [
+      booking['review'],
+      booking['reviewText'],
+    ];
+
+    for (final review in reviewCandidates) {
+      if ((review ?? '').toString().trim().isNotEmpty) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  Future<Map<String, dynamic>> _submitSessionReview({
+    required String reviewKey,
+    required String listenerId,
+    required int rating,
+    required String review,
+  }) async {
+    final normalizedListenerId = listenerId.trim();
+    if (normalizedListenerId.isEmpty) {
+      return {
+        'success': false,
+        'message': 'Unable to submit review. Expert id missing.',
+      };
+    }
+
+    final response = await SubmitCallRateApi.callApi(
+      listenerId: normalizedListenerId,
+      review: review,
+      rating: rating.toString(),
+    );
+
+    if (!mounted) {
+      return {
+        'success': false,
+        'message': 'Screen is not active.',
+      };
+    }
+
+    final rawMessage =
+        (response?.message ?? 'Failed to submit review.').toString();
+    final normalizedMessage = rawMessage.toLowerCase();
+    final alreadyReviewed = normalizedMessage.contains('already') &&
+        (normalizedMessage.contains('review') ||
+            normalizedMessage.contains('rated') ||
+            normalizedMessage.contains('rating'));
+    final isSuccess = response?.status == true || alreadyReviewed;
+    final message = rawMessage.trim().isEmpty
+        ? (isSuccess
+            ? 'Review submitted successfully.'
+            : 'Failed to submit review.')
+        : rawMessage;
+
+    return {
+      'success': isSuccess,
+      'message': message,
+      'reviewKey': reviewKey,
+    };
+  }
+
+  Future<void> _showReviewBottomSheet({
+    required String reviewKey,
+    required Map<String, dynamic> expert,
+  }) async {
+    final listenerId = _extractListenerId(expert);
+    if (listenerId.isEmpty) {
+      Utils.showToast(context, 'Unable to submit review for this expert.');
+      return;
+    }
+
+    final expertName =
+        (expert['displayName'] ?? expert['name'] ?? 'Expert').toString();
+    final reviewController = TextEditingController();
+    int selectedRating = 5;
+    bool isSubmitting = false;
+
+    final result = await showDialog<Map<String, dynamic>>(
+      context: context,
+      barrierDismissible: false,
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (modalContext, setModalState) {
+            return WillPopScope(
+              onWillPop: () async => !isSubmitting,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  bottom: MediaQuery.of(modalContext).viewInsets.bottom,
+                ),
+                child: Dialog(
+                  insetPadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  backgroundColor: AppColors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 520),
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Review $expertName',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppFontStyle.fontStyleW700(
+                                    fontSize: 17,
+                                    fontColor: _brandDark,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: isSubmitting
+                                    ? null
+                                    : () {
+                                        FocusScope.of(modalContext).unfocus();
+                                        Navigator.of(modalContext).pop();
+                                      },
+                                icon: const Icon(Icons.close_rounded),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'How was your session experience?',
+                            style: AppFontStyle.fontStyleW500(
+                              fontSize: 12,
+                              fontColor: _mutedText,
+                            ),
+                          ),
+                          const SizedBox(height: 14),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(5, (index) {
+                              final active = index < selectedRating;
+                              return IconButton(
+                                onPressed: isSubmitting
+                                    ? null
+                                    : () {
+                                        setModalState(() {
+                                          selectedRating = index + 1;
+                                        });
+                                      },
+                                icon: Icon(
+                                  Icons.star_rounded,
+                                  size: 34,
+                                  color: active
+                                      ? AppColors.rateStarColor
+                                      : AppColors.lightGrey,
+                                ),
+                              );
+                            }),
+                          ),
+                          const SizedBox(height: 10),
+                          TextField(
+                            controller: reviewController,
+                            enabled: !isSubmitting,
+                            minLines: 3,
+                            maxLines: 5,
+                            textInputAction: TextInputAction.done,
+                            decoration: InputDecoration(
+                              hintText: 'Write your review here...',
+                              hintStyle: AppFontStyle.fontStyleW500(
+                                fontSize: 12,
+                                fontColor: _mutedText,
+                              ),
+                              filled: true,
+                              fillColor: AppColors.redesignSurfaceSoft,
+                              contentPadding: const EdgeInsets.all(12),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide:
+                                    BorderSide(color: _softBorder, width: 1),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide:
+                                    BorderSide(color: _softBorder, width: 1),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: _brandRed.withValues(alpha: 0.6),
+                                  width: 1.2,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 14),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 44,
+                            child: ElevatedButton.icon(
+                              onPressed: isSubmitting
+                                  ? null
+                                  : () async {
+                                      final review =
+                                          reviewController.text.trim();
+                                      if (review.isEmpty) {
+                                        Utils.showToast(
+                                          context,
+                                          'Please enter a review.',
+                                        );
+                                        return;
+                                      }
+
+                                      if (_containsDangerousScript(review)) {
+                                        Utils.showToast(
+                                          context,
+                                          'Script tags are not allowed in the review.',
+                                        );
+                                        reviewController.clear();
+                                        return;
+                                      }
+
+                                      if (!mounted) return;
+
+                                      setModalState(() {
+                                        isSubmitting = true;
+                                      });
+                                      FocusScope.of(modalContext).unfocus();
+
+                                      final submitResult =
+                                          await _submitSessionReview(
+                                        reviewKey: reviewKey,
+                                        listenerId: listenerId,
+                                        rating: selectedRating,
+                                        review: review,
+                                      );
+
+                                      if (!mounted || !modalContext.mounted) {
+                                        return;
+                                      }
+
+                                      final isSuccess =
+                                          submitResult['success'] == true;
+                                      final message =
+                                          (submitResult['message'] ?? '')
+                                              .toString();
+
+                                      if (isSuccess) {
+                                        Navigator.of(modalContext)
+                                            .pop(submitResult);
+                                        return;
+                                      }
+
+                                      if (message.isNotEmpty) {
+                                        Utils.showToast(context, message);
+                                      }
+
+                                      setModalState(() {
+                                        isSubmitting = false;
+                                      });
+                                    },
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor: _brandRed,
+                                foregroundColor: AppColors.white,
+                                disabledBackgroundColor: _softBorder,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              icon: isSubmitting
+                                  ? const SizedBox(
+                                      height: 16,
+                                      width: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: AppColors.white,
+                                      ),
+                                    )
+                                  : const Icon(
+                                      Icons.send_rounded,
+                                      size: 16,
+                                    ),
+                              label: Text(
+                                isSubmitting
+                                    ? 'Submitting...'
+                                    : 'Submit Review',
+                                style: AppFontStyle.fontStyleW600(
+                                  fontSize: 14,
+                                  fontColor: AppColors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    reviewController.dispose();
+
+    if (!mounted || result == null) {
+      return;
+    }
+
+    final submitted = result['success'] == true;
+    if (!submitted) {
+      return;
+    }
+
+    setState(() {
+      _reviewSubmittedKeys.add(reviewKey);
+    });
+    await _saveReviewsToStorage();
+    await _fetchSessions();
+
+    if (!mounted) {
+      return;
+    }
+
+    final message = (result['message'] ?? '').toString().trim();
+    final dialogMessage = message.isEmpty
+        ? 'Your review has been successfully recorded.'
+        : message;
+
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text(
+            'Review Submitted',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Text(dialogMessage),
+          actions: [
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _brandRed,
+                  foregroundColor: AppColors.white,
+                ),
+                child: const Text('Close'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _buildSegment(String value, String label) {
     final selected = value == _view;
 
@@ -460,10 +919,17 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
         callTypeRaw.isEmpty ? 'Unknown' : callTypeRaw.toUpperCase();
     final status =
         (session['sessionStatus'] ?? session['status'] ?? '').toString();
+    final statusLower = status.trim().toLowerCase();
     final statusLabel = _toTitleCase(status);
+    final isCompletedSession = statusLower == 'completed';
     final canStart = item['canStartSession'] == true;
     final showStartSession = _view == 'upcoming';
+    final showReviewAction = _view == 'completed' && isCompletedSession;
     final bookingId = (item['_id'] ?? '').toString();
+    final sessionId = (session['_id'] ?? '').toString();
+    final reviewKey = bookingId.isNotEmpty ? bookingId : sessionId;
+    final hasSubmittedReview = _reviewSubmittedKeys.contains(reviewKey) ||
+        _isReviewAlreadyPresent(item, session);
     final isCancellingThis = _cancellingBookingId == bookingId;
     final title = (session['title'] ?? 'Session').toString();
     final expertName = (expert['displayName'] ?? 'Unknown').toString();
@@ -690,6 +1156,62 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                   ),
                 ],
               ),
+          ],
+          if (showReviewAction) ...[
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              height: 42,
+              child: hasSubmittedReview
+                  ? OutlinedButton.icon(
+                      onPressed: null,
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                          color: AppColors.redesignStatusSuccessDark
+                              .withValues(alpha: 0.4),
+                        ),
+                        foregroundColor: AppColors.redesignStatusSuccessDark,
+                        disabledForegroundColor:
+                            AppColors.redesignStatusSuccessDark,
+                      ),
+                      icon: const Icon(Icons.check_circle_outline_rounded,
+                          size: 16),
+                      label: Text(
+                        'Review Submitted',
+                        style: AppFontStyle.fontStyleW600(
+                          fontSize: 13,
+                          fontColor: AppColors.redesignStatusSuccessDark,
+                        ),
+                      ),
+                    )
+                  : ElevatedButton.icon(
+                      onPressed: () => _showReviewBottomSheet(
+                        reviewKey: reviewKey,
+                        expert: expert,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        disabledBackgroundColor: AppColors.redesignSoftBorder,
+                        disabledForegroundColor: _mutedText,
+                        backgroundColor: _brandRed,
+                        foregroundColor: AppColors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.rate_review_outlined,
+                        size: 16,
+                      ),
+                      label: Text(
+                        'Give Review',
+                        style: AppFontStyle.fontStyleW600(
+                          fontSize: 13,
+                          fontColor: AppColors.white,
+                        ),
+                      ),
+                    ),
+            ),
           ],
         ],
       ),

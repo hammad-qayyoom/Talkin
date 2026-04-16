@@ -31,7 +31,7 @@ class MainScreen extends StatelessWidget {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: AppColors.lightPurple,
+        backgroundColor: AppColors.redesignScreenBackground,
         // floatingActionButton: FloatingActionButton(onPressed: () {
         //   log("Database.fcmToken ${Database.fcmToken}");
         //   FirebaseAccessToken.onGet();

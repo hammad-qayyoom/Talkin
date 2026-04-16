@@ -10,46 +10,149 @@ import 'package:talk_in/utils/utils.dart';
 class SplashScreenView extends GetView<SplashScreenController> {
   const SplashScreenView({super.key});
 
+  static final Color _screenBg = AppColors.redesignScreenBackground;
+  static final Color _brandRed = AppColors.redesignBrandRed;
+  static final Color _brandDark = AppColors.redesignBrandDark;
+  static final Color _mutedText = AppColors.redesignMutedText;
+  static final Color _softBorder = AppColors.redesignSoftBorder;
+
   @override
   Widget build(BuildContext context) {
     Utils.onChangeStatusBar(brightness: Brightness.dark);
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: _screenBg,
       body: GetBuilder<SplashScreenController>(
         builder: (controller) {
-          return Container(
-            height: Get.height,
-            width: Get.width,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(
-                      AppAsset.splashBg,
-                    ),
-                    fit: BoxFit.cover)),
-            child: Column(
-              children: [
-                Spacer(),
-                Center(
-                  child: Image.asset(
-                    width: 170,
-                    height: 170,
-                    AppAsset.splashLogo,
+          final insets = MediaQuery.of(context).padding;
+
+          return Stack(
+            children: [
+              Positioned(
+                top: -120,
+                right: -90,
+                child: Container(
+                  height: 300,
+                  width: 300,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _brandRed.withValues(alpha: 0.09),
                   ),
                 ),
-                Spacer(),
-                Text(
-                  "Talkin",
-                  style: AppFontStyle.fontStyleW600(fontSize: 29, fontColor: AppColors.black),
+              ),
+              Positioned(
+                top: 170,
+                left: -130,
+                child: Container(
+                  height: 280,
+                  width: 280,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _brandDark.withValues(alpha: 0.05),
+                  ),
                 ),
-                Text(
-                  "Connect & establish meaningful connections",
-                  style: AppFontStyle.fontStyleW400(fontSize: 14, fontColor: AppColors.historyCallType),
-                ).paddingOnly(bottom: 20),
-                LoadingAnimationWidget.staggeredDotsWave(color: AppColors.black, size: 40),
-                20.height,
-              ],
-            ),
+              ),
+              Positioned(
+                bottom: -140,
+                right: -80,
+                child: Container(
+                  height: 260,
+                  width: 260,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _brandRed.withValues(alpha: 0.06),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(24, insets.top + 20, 24, insets.bottom + 10),
+                child: Column(
+                  children: [
+                    const Spacer(flex: 5),
+                    Container(
+                      height: 238,
+                      width: 238,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: _softBorder),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.black.withValues(alpha: 0.08),
+                            blurRadius: 30,
+                            offset: const Offset(0, 12),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Container(
+                          height: 174,
+                          width: 174,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                _brandDark,
+                                _brandDark.withValues(alpha: 0.88),
+                              ],
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(26),
+                            child: Image.asset(AppAsset.splashLogo),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Text(
+                      "Talkin",
+                      style: AppFontStyle.fontStyleKaushanW400(
+                        fontSize: 52,
+                        fontColor: _brandDark,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      "Fast, private conversations with experts you trust.",
+                      textAlign: TextAlign.center,
+                      style: AppFontStyle.fontStyleW500(
+                        fontSize: 15,
+                        fontColor: _mutedText,
+                      ),
+                    ),
+                    const Spacer(flex: 4),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: _softBorder),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          LoadingAnimationWidget.staggeredDotsWave(
+                            color: _brandRed,
+                            size: 30,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            "Setting things up...",
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 14,
+                              fontColor: _brandDark,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           );
         },
       ),

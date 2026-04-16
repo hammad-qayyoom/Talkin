@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:talk_in/ui/common/session_booking/session_booking_service.dart';
 import 'package:talk_in/ui/host_flow/host_home_screen/api/host_coin_api.dart';
 import 'package:talk_in/ui/host_flow/host_home_screen/api/update_expert_call_status_api.dart';
 import 'package:talk_in/ui/host_flow/host_home_screen/model/listener_coin_model.dart';
@@ -17,8 +18,12 @@ import 'package:talk_in/utils/utils.dart';
 
 class HostHomeScreenController extends GetxController {
   // bool isChatPermission = Database.fetchListenerProfileModel?.data?.isAvailableForChat ?? false;
-  bool isAvailableForPrivateAudioCall = Database.fetchListenerProfileModel?.data?.isAvailableForPrivateAudioCall ?? false;
-  bool isAvailableForPrivateVideoCall = Database.fetchListenerProfileModel?.data?.isAvailableForPrivateVideoCall ?? false;
+  bool isAvailableForPrivateAudioCall = Database
+          .fetchListenerProfileModel?.data?.isAvailableForPrivateAudioCall ??
+      false;
+  bool isAvailableForPrivateVideoCall = Database
+          .fetchListenerProfileModel?.data?.isAvailableForPrivateVideoCall ??
+      false;
   bool isToastVisible = false;
   UpdateExpertCallStatusModel? updateExpertCallStatusModel;
   final List<String> imageList = [
@@ -28,13 +33,60 @@ class HostHomeScreenController extends GetxController {
   ];
   bool isCoinLoading = false;
   int currentIndex = 0;
+  int totalCompletedSessions = 0;
   FetchListenerProfileModel? fetchListenerProfileModel;
   ListenerCoinModel? listenerCoinModel;
+
+  String get _listenerId {
+    final fromLogin =
+        (Database.fetchLoginUserProfileModel?.user?.listenerId ?? '')
+            .toString()
+            .trim();
+    if (fromLogin.isNotEmpty) {
+      return fromLogin;
+    }
+
+    final fromListenerProfile =
+        (Database.fetchListenerProfileModel?.data?.id ?? '').toString().trim();
+    if (fromListenerProfile.isNotEmpty) {
+      return fromListenerProfile;
+    }
+
+    return Database.loginListenerId.trim();
+  }
+
   @override
   void onInit() {
     hostCoin();
+    fetchRealStats();
     // init();
     super.onInit();
+  }
+
+  fetchRealStats() async {
+    try {
+      fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(
+          loginListenerId:
+              Database.fetchLoginUserProfileModel?.user?.listenerId ?? '');
+      Database.fetchListenerProfileModel = fetchListenerProfileModel;
+
+      final response = await SessionBookingService.getExpertSessions(
+        listenerId: _listenerId.isEmpty ? null : _listenerId,
+        view: 'completed',
+      );
+
+      if (response['status'] == true) {
+        final sessions = response['data'] as List<dynamic>? ?? [];
+        totalCompletedSessions = sessions.length;
+      } else {
+        totalCompletedSessions = 0;
+      }
+    } catch (e) {
+      log('Error fetching stats: $e');
+      totalCompletedSessions = 0;
+    }
+
+    update([Constant.idCoinUpdate]);
   }
 
   init() async {
@@ -49,14 +101,15 @@ class HostHomeScreenController extends GetxController {
 
   /// refresh
   onRefresh() async {
-    fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(loginListenerId: Database.fetchLoginUserProfileModel?.user?.listenerId ?? '');
-    Database.fetchListenerProfileModel = fetchListenerProfileModel;
-
     isCoinLoading = true;
     update([Constant.idCoinUpdate]);
+
+    await fetchRealStats();
+
     listenerCoinModel = await HostCoinApi.callApi();
     Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
     isCoinLoading = false;
+
     update([Constant.idCoinUpdate]);
     log("Listener Session Credit => ${listenerCoinModel?.coin}");
 
@@ -97,17 +150,25 @@ class HostHomeScreenController extends GetxController {
       if (status == "isAvailableForPrivateVideoCall") {
         isAvailableForPrivateVideoCall = currentValue;
         if (currentValue == true) {
-          Utils.showToast(Get.context!, EnumLocale.txtListenerAvailableForPrivateVideoCall.name.tr, toastLength: Toast.LENGTH_SHORT);
+          Utils.showToast(Get.context!,
+              EnumLocale.txtListenerAvailableForPrivateVideoCall.name.tr,
+              toastLength: Toast.LENGTH_SHORT);
         } else {
-          Utils.showToast(Get.context!, EnumLocale.txtListenerDisableForPrivateVideoCall.name.tr, toastLength: Toast.LENGTH_SHORT);
+          Utils.showToast(Get.context!,
+              EnumLocale.txtListenerDisableForPrivateVideoCall.name.tr,
+              toastLength: Toast.LENGTH_SHORT);
         }
       } else if (status == "isAvailableForPrivateAudioCall") {
         isAvailableForPrivateAudioCall = currentValue;
 
         if (currentValue == true) {
-          Utils.showToast(Get.context!, EnumLocale.txtListenerAvailableForPrivateAudioCall.name.tr, toastLength: Toast.LENGTH_SHORT);
+          Utils.showToast(Get.context!,
+              EnumLocale.txtListenerAvailableForPrivateAudioCall.name.tr,
+              toastLength: Toast.LENGTH_SHORT);
         } else {
-          Utils.showToast(Get.context!, EnumLocale.txtListenerDisableForPrivateAudioCall.name.tr, toastLength: Toast.LENGTH_SHORT);
+          Utils.showToast(Get.context!,
+              EnumLocale.txtListenerDisableForPrivateAudioCall.name.tr,
+              toastLength: Toast.LENGTH_SHORT);
         }
       }
     } else {
@@ -119,13 +180,17 @@ class HostHomeScreenController extends GetxController {
         isAvailableForPrivateAudioCall = !currentValue;
       }
     }
-    fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(loginListenerId: Database.fetchLoginUserProfileModel?.user?.listenerId ?? '');
+    fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(
+        loginListenerId:
+            Database.fetchLoginUserProfileModel?.user?.listenerId ?? '');
     Database.fetchListenerProfileModel = fetchListenerProfileModel;
     if (fetchListenerProfileModel?.status == false) {
       Utils.showLog(fetchListenerProfileModel?.message ?? "");
     }
-    fetchListenerProfileModel?.data?.isAvailableForPrivateVideoCall = isAvailableForPrivateVideoCall;
-    fetchListenerProfileModel?.data?.isAvailableForPrivateAudioCall = isAvailableForPrivateAudioCall;
+    fetchListenerProfileModel?.data?.isAvailableForPrivateVideoCall =
+        isAvailableForPrivateVideoCall;
+    fetchListenerProfileModel?.data?.isAvailableForPrivateAudioCall =
+        isAvailableForPrivateAudioCall;
 
     update();
   }

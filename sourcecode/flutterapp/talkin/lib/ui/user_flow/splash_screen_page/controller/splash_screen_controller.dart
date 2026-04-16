@@ -183,53 +183,36 @@ Future<void> splashScreen() async {
         ),
       );
     } else {
+      // Onboarding screens are disabled: mark as seen and always continue with main/login flow.
+      if (!Database.isSeenOnBoarding) {
+        await Database.onSetSeenOnboarding(true);
+      }
+
       if (Database.fetchLoginUserProfileModel?.status == false ||
           Database.fetchLoginUserProfileModel?.message ==
               "User not found in the database." ||
           token == null) {
-        Utils.showLog("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-        // if (Database.isSeenOnBoarding == true) {
-        //   if (Database.isFillProfile == true) {
-        //     if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
-        //       Get.toNamed(AppRoutes.hostBottomBar);
-        //     } else {
-        //       Get.toNamed(AppRoutes.bottomBar);
-        //     }
-        //   }
-        // } else {
-        //   Get.offAllNamed(AppRoutes.onBoarding);
-        // }
-
-        if (Database.isSeenOnBoarding == true) {
-          Get.offAllNamed(AppRoutes.main);
-        } else {
-          Get.offAllNamed(AppRoutes.onBoarding);
-        }
-
-        ////
+        Utils.showLog("No valid login profile. Redirecting to main.");
+        Get.offAllNamed(AppRoutes.main);
+        return;
       } else {
         Utils.showLog("lllllllllllllllllllllllllllllllllllllll");
-        if (Database.isSeenOnBoarding == true) {
-          if (Database.isLogin == true) {
-            if (Database.isFillProfile == true) {
-              if (Database.fetchLoginUserProfileModel?.user?.isListener ==
-                  true) {
-                Get.toNamed(AppRoutes.hostBottomBar);
-              } else {
-                Get.toNamed(AppRoutes.bottomBar);
-              }
+        if (Database.isLogin == true) {
+          if (Database.isFillProfile == true) {
+            if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
+              Get.toNamed(AppRoutes.hostBottomBar);
             } else {
-              Get.offAllNamed(AppRoutes.fillProfileScreen, arguments: [
-                Database.loginUserName,
-                Database.loginUserProfilePic,
-                Database.loginUserEmail,
-              ]);
+              Get.toNamed(AppRoutes.bottomBar);
             }
           } else {
-            Get.offAllNamed(AppRoutes.main);
+            Get.offAllNamed(AppRoutes.fillProfileScreen, arguments: [
+              Database.loginUserName,
+              Database.loginUserProfilePic,
+              Database.loginUserEmail,
+            ]);
           }
         } else {
-          Get.offAllNamed(AppRoutes.onBoarding);
+          Get.offAllNamed(AppRoutes.main);
         }
       }
     }

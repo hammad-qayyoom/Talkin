@@ -14,7 +14,7 @@ class OnBoardingController extends GetxController {
     // TODO: implement onInit
     // Database.onSetFillProfile(false);
 
-    Database.onSetSeenOnboarding(false);
+    Database.onSetSeenOnboarding(true);
     log("init isSeenOnBoarding ::  ${Database.isSeenOnBoarding}");
 
     super.onInit();

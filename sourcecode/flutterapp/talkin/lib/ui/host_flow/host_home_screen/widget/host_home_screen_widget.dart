@@ -1,4 +1,4 @@
-rimport 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -971,6 +971,162 @@ class CustomSwitchView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class HostStatisticsCard extends StatelessWidget {
+  const HostStatisticsCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<HostHomeScreenController>(
+      id: Constant.idCoinUpdate,
+      builder: (controller) {
+        final profileData = Database.fetchListenerProfileModel?.data;
+        final rating = profileData?.rating?.toStringAsFixed(1) ?? '0.0';
+        final callCount = controller.totalCompletedSessions.toString();
+        final coins = Database.listenerCoin.toString();
+        final experience = profileData?.experience != null
+            ? '${profileData!.experience}+'
+            : '0+';
+
+        return Container(
+          margin: const EdgeInsets.only(top: 18),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.04),
+                blurRadius: 14,
+                offset: const Offset(0, 7),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.bar_chart_rounded,
+                    color: AppColors.redesignBrandRed,
+                    size: 22,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Your Statistics',
+                    style: AppFontStyle.fontStyleW700(
+                      fontSize: 16,
+                      fontColor: AppColors.redesignBrandDark,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildStatItem(
+                      icon: Icons.wallet_rounded,
+                      iconColor: AppColors.redesignCoinText,
+                      title: 'Earnings',
+                      value: coins,
+                      showCoinIcon: true,
+                    ),
+                  ),
+                  Container(
+                      width: 1,
+                      height: 40,
+                      color: AppColors.redesignSoftBorder),
+                  Expanded(
+                    child: _buildStatItem(
+                      icon: Icons.star_rounded,
+                      iconColor: Colors.amber,
+                      title: 'Rating',
+                      value: rating,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Divider(color: AppColors.redesignSoftBorder, height: 1),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildStatItem(
+                      icon: Icons.call_rounded,
+                      iconColor: AppColors.redesignBrandRed,
+                      title: 'Sessions',
+                      value: callCount,
+                    ),
+                  ),
+                  Container(
+                      width: 1,
+                      height: 40,
+                      color: AppColors.redesignSoftBorder),
+                  Expanded(
+                    child: _buildStatItem(
+                      icon: Icons.access_time_rounded,
+                      iconColor: Colors.blue,
+                      title: 'Experience (Yrs)',
+                      value: experience,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildStatItem({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String value,
+    bool showCoinIcon = false,
+  }) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 16, color: iconColor),
+            const SizedBox(width: 6),
+            Text(
+              title,
+              style: AppFontStyle.fontStyleW500(
+                fontSize: 12,
+                fontColor: AppColors.redesignMutedText,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (showCoinIcon) ...[
+              Image.asset(AppAsset.starCoin, height: 16, width: 16),
+              const SizedBox(width: 4),
+            ],
+            Text(
+              value,
+              style: AppFontStyle.fontStyleW700(
+                fontSize: 18,
+                fontColor: AppColors.redesignBrandDark,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

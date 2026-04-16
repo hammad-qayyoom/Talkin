@@ -23,14 +23,12 @@ import 'package:talk_in/ui/user_flow/splash_screen_page/api/fetch_listener_profi
 import 'package:talk_in/ui/user_flow/splash_screen_page/api/fetch_login_user_profile_api.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/model/fetch_listener_profile_model.dart';
 import 'package:talk_in/ui/user_flow/splash_screen_page/model/fetch_login_user_profile_model.dart';
-import 'package:talk_in/utils/constant.dart';
 import 'package:talk_in/utils/database.dart';
 import 'package:talk_in/utils/enums.dart';
 import 'package:talk_in/utils/firebse_access_token.dart';
 import 'package:talk_in/utils/utils.dart';
 
 class MainScreenController extends GetxController {
-  int? selectedValue;
   final formKey = GlobalKey<FormState>();
   bool isObscure = true;
   bool isLoading = false;
@@ -66,15 +64,6 @@ class MainScreenController extends GetxController {
     return emailRegex.hasMatch(email);
   }
 
-  void toggleValue(int value) {
-    if (selectedValue == value) {
-      selectedValue = null;
-    } else {
-      selectedValue = value;
-    }
-    update([Constant.radioButton]);
-  }
-
   bool validateLogin() {
     final email = emailController.text.trim();
     final password = passwordController.text;
@@ -104,12 +93,6 @@ class MainScreenController extends GetxController {
 
   //apple login
   Future<void> onAppleLogin() async {
-    if (selectedValue != 1) {
-      Utils.showToast(
-          Get.context!, "Please agree to the Privacy Policy to proceed.");
-      return;
-    }
-
     Get.dialog(const LoadingWidget(),
         barrierDismissible: false); // Start Loading...
 
@@ -186,12 +169,6 @@ class MainScreenController extends GetxController {
   /// google log in api
   Future<void> onGoogleLogin() async {
     try {
-      if (selectedValue != 1) {
-        Utils.showToast(
-            Get.context!, "Please agree to the Privacy Policy to proceed.");
-        return;
-      }
-
       final identity = (await MobileDeviceIdentifier().getDeviceId())!;
       final fcmToken = await FirebaseMessaging.instance.getToken();
       Database.onSetFcmToken(fcmToken ?? "");
@@ -468,12 +445,6 @@ class MainScreenController extends GetxController {
   void onQuickLogin1() async {
     Database.onSetDemoListener(false);
 
-    if (selectedValue != 1) {
-      Utils.showToast(
-          Get.context!, "Please agree to the Privacy Policy to proceed.");
-      return;
-    }
-
     Get.dialog(const LoadingWidget(), barrierDismissible: false);
 
     Utils.showLog("Database.identity>>>>>>>>>>>>>>>>>>${Database.identity}");
@@ -605,12 +576,6 @@ class MainScreenController extends GetxController {
 
   Future<void> onClickSignIn() async {
     Database.onSetDemoListener(false);
-
-    if (selectedValue != 1) {
-      Utils.showToast(
-          Get.context!, "Please agree to the Privacy Policy to proceed.");
-      return;
-    }
     FocusManager.instance.primaryFocus?.unfocus();
     Utils.showLog("Email => ${emailController.text}");
     Utils.showLog("Password => ${passwordController.text}");
