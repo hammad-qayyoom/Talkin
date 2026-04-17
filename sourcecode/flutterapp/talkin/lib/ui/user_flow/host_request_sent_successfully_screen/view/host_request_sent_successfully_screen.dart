@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/user_flow/become_host_screen/controller/become_host_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/host_request_sent_successfully_screen/controller/host_request_sent_successfully_controller.dart';
-import 'package:talk_in/ui/user_flow/host_request_sent_successfully_screen/widget/host_request_successfully_widget.dart';
-import 'package:talk_in/utils/database.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/become_host_screen/controller/become_host_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/host_request_sent_successfully_screen/controller/host_request_sent_successfully_controller.dart';
+import 'package:notisboard/ui/user_flow/host_request_sent_successfully_screen/widget/host_request_successfully_widget.dart';
+import 'package:notisboard/utils/database.dart';
 
 class HostRequestSentSuccessfullyScreen extends GetView<HostRequestSentSuccessfullyController> {
   const HostRequestSentSuccessfullyScreen({super.key});

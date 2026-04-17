@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_background/app_background.dart';
-import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
-import 'package:talk_in/ui/user_flow/verify_otp_screen/controller/verify_otp_controller.dart';
-import 'package:talk_in/ui/user_flow/verify_otp_screen/widget/verify_otp_widget.dart';
-import 'package:talk_in/utils/constant.dart';
+import 'package:notisboard/custom/app_background/app_background.dart';
+import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+import 'package:notisboard/ui/user_flow/verify_otp_screen/controller/verify_otp_controller.dart';
+import 'package:notisboard/ui/user_flow/verify_otp_screen/widget/verify_otp_widget.dart';
+import 'package:notisboard/utils/constant.dart';
 
 class VerifyOtpScreen extends StatelessWidget {
   const VerifyOtpScreen({super.key});

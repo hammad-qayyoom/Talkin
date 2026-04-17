@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:talk_in/custom/app_button/primary_app_button.dart';
-import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
-import 'package:talk_in/custom/custom_select_gender_bottom_sheet/custom_select_gender_bottom_sheet.dart';
-import 'package:talk_in/custom/text_field/custom_text_field.dart';
-import 'package:talk_in/ui/user_flow/edit_profile_screen/controller/edit_profile_screen_controller.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/app_button/primary_app_button.dart';
+import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/custom_select_gender_bottom_sheet/custom_select_gender_bottom_sheet.dart';
+import 'package:notisboard/custom/text_field/custom_text_field.dart';
+import 'package:notisboard/ui/user_flow/edit_profile_screen/controller/edit_profile_screen_controller.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class EditProfileScreenAppBar extends StatelessWidget {
   const EditProfileScreenAppBar({super.key});

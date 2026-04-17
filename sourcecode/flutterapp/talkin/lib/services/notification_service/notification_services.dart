@@ -9,12 +9,12 @@ library;
 // import 'package:flutter/material.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // import 'package:get/get.dart';
-// import 'package:talk_in/custom/dialog/app_restart_dialog.dart';
-// import 'package:talk_in/routes/app_routes.dart';
-// import 'package:talk_in/utils/api_params.dart';
-// import 'package:talk_in/utils/app_color.dart';
-// import 'package:talk_in/utils/database.dart';
-// import 'package:talk_in/utils/utils.dart';
+// import 'package:notisboard/custom/dialog/app_restart_dialog.dart';
+// import 'package:notisboard/routes/app_routes.dart';
+// import 'package:notisboard/utils/api_params.dart';
+// import 'package:notisboard/utils/app_color.dart';
+// import 'package:notisboard/utils/database.dart';
+// import 'package:notisboard/utils/utils.dart';
 //
 // class NotificationServices {
 //   static FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -289,7 +289,7 @@ library;
 //
 //     var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
 //       "0",
-//       "talkin",
+//       "Notisboard",
 //       channelDescription: "your channel description",
 //       importance: Importance.max,
 //       priority: Priority.high,
@@ -328,13 +328,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/dialog/app_restart_dialog.dart';
-import 'package:talk_in/main.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/socket/socket_emit.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/dialog/app_restart_dialog.dart';
+import 'package:notisboard/main.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/socket/socket_emit.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class NotificationServices {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -788,7 +788,7 @@ Future<void> backgroundNotification(RemoteMessage message) async {
 
     var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
       "0",
-      "talkin",
+      "Notisboard",
       channelDescription: "your channel description",
       importance: Importance.max,
       priority: Priority.high,
@@ -826,14 +826,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/dialog/app_restart_dialog.dart';
-import 'package:talk_in/main.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/services/permission_handler/permission_handler.dart';
-import 'package:talk_in/socket/socket_emit.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/dialog/app_restart_dialog.dart';
+import 'package:notisboard/main.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/services/permission_handler/permission_handler.dart';
+import 'package:notisboard/socket/socket_emit.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class NotificationServices {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -1073,14 +1073,14 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/dialog/app_restart_dialog.dart';
-import 'package:talk_in/main.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/services/permission_handler/permission_handler.dart';
-import 'package:talk_in/socket/socket_emit.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/dialog/app_restart_dialog.dart';
+import 'package:notisboard/main.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/services/permission_handler/permission_handler.dart';
+import 'package:notisboard/socket/socket_emit.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class NotificationServices {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -1132,8 +1132,10 @@ class NotificationServices {
     );
   }
 
-  static Future<void> onAwesomeNotificationActionReceived(ReceivedAction receivedAction) async {
-    Utils.showLog("Awesome notification action received: ${receivedAction.buttonKeyPressed}");
+  static Future<void> onAwesomeNotificationActionReceived(
+      ReceivedAction receivedAction) async {
+    Utils.showLog(
+        "Awesome notification action received: ${receivedAction.buttonKeyPressed}");
 
     if (receivedAction.payload != null && receivedAction.payload!.isNotEmpty) {
       final data = receivedAction.payload!;
@@ -1224,7 +1226,8 @@ class NotificationServices {
         );
       }
     } else if (data["type"] == "missed_call") {
-      Get.toNamed(AppRoutes.profileDetailScreenView, arguments: data['callerId']);
+      Get.toNamed(AppRoutes.profileDetailScreenView,
+          arguments: data['callerId']);
     } else {
       Utils.showLog("Enter in else****************************");
     }
@@ -1244,8 +1247,10 @@ class NotificationServices {
         channelKey = 'call_channel';
         category = NotificationCategory.Call;
         actions = [
-          NotificationActionButton(key: 'ACCEPT', label: 'Accept', color: Colors.green),
-          NotificationActionButton(key: 'DECLINE', label: 'Decline', color: Colors.red),
+          NotificationActionButton(
+              key: 'ACCEPT', label: 'Accept', color: Colors.green),
+          NotificationActionButton(
+              key: 'DECLINE', label: 'Decline', color: Colors.red),
         ];
       }
     } else {
@@ -1270,7 +1275,8 @@ class NotificationServices {
         body: message.data['body'] ?? 'You have a new message',
         category: category,
         icon: 'resource://mipmap/ic_notification',
-        payload: message.data.map((k, v) => MapEntry(k.toString(), v.toString())),
+        payload:
+            message.data.map((k, v) => MapEntry(k.toString(), v.toString())),
         notificationLayout: NotificationLayout.Default,
         displayOnForeground: true,
         displayOnBackground: true,
@@ -1278,7 +1284,8 @@ class NotificationServices {
         fullScreenIntent: (channelKey == 'call_channel'),
         criticalAlert: (channelKey == 'call_channel'),
         autoDismissible: (channelKey != 'call_channel'),
-        timeoutAfter: (channelKey == 'call_channel') ? const Duration(seconds: 10) : null,
+        timeoutAfter:
+            (channelKey == 'call_channel') ? const Duration(seconds: 10) : null,
       ),
       actionButtons: actions,
     );
@@ -1290,7 +1297,8 @@ class NotificationServices {
     // Handle foreground messages
 
     FirebaseMessaging.onMessage.listen((message) {
-      Utils.showLog("Notification service firebase init => $currentAppLifecycleState");
+      Utils.showLog(
+          "Notification service firebase init => $currentAppLifecycleState");
       Utils.showLog("Notification AAA => ${message.data}");
       // Utils.showLog("Notification data AAA => $jsonEncode($message)");
       Utils.showLog("Notification => ${message.data["type"]}");
@@ -1298,16 +1306,21 @@ class NotificationServices {
       // Log both data and notification content for debugging
       Utils.showLog("Data Title => ${message.data['title']}");
       Utils.showLog("Data Body => ${message.data['body']}");
-      Utils.showLog("Notification Title => ${message.notification?.title.toString()}");
-      Utils.showLog("Notification Body => ${message.notification?.body.toString()}");
+      Utils.showLog(
+          "Notification Title => ${message.notification?.title.toString()}");
+      Utils.showLog(
+          "Notification Body => ${message.notification?.body.toString()}");
 
       // if (message.data["type"] == null) return;
 
       // Always show custom notification regardless of app state
       if (currentAppLifecycleState == AppLifecycleState.resumed) {
         Utils.showLog("app is in the foreground.");
-        if ((Get.currentRoute == AppRoutes.personalChatScreen || Get.currentRoute == AppRoutes.hostPersonalChatScreen) && message.data["type"] == "CHAT") {
-          Utils.showLog("User is already on a chat screen. Suppressing notification.");
+        if ((Get.currentRoute == AppRoutes.personalChatScreen ||
+                Get.currentRoute == AppRoutes.hostPersonalChatScreen) &&
+            message.data["type"] == "CHAT") {
+          Utils.showLog(
+              "User is already on a chat screen. Suppressing notification.");
         } else if (message.data['type'] == 'expert_verified') {
           Get.dialog(
             barrierDismissible: false,
@@ -1321,22 +1334,21 @@ class NotificationServices {
             ),
           );
         } else {
-
-          if(message.data['type'] == "callIncoming"){
+          if (message.data['type'] == "callIncoming") {
             Utils.showLog("call notification not show");
-          }else{
-          showAwesomeNotification(message);
+          } else {
+            showAwesomeNotification(message);
           }
         }
       } else if ((currentAppLifecycleState == AppLifecycleState.paused)) {
-
         Utils.showLog("app is in background/paused.");
 
-        if(message.data['type'] == "callIncoming"){
+        if (message.data['type'] == "callIncoming") {
           Utils.showLog("call notification not show");
-        }else{
+        } else {
           showAwesomeNotification(message);
-        }      }
+        }
+      }
     });
 
     // Handle background/terminated app notifications
@@ -1350,12 +1362,11 @@ class NotificationServices {
     });
   }
 
-
-
   static Future<void> dismissCallNotification() async {
     try {
       // Cancel all notifications from the call_channel
-      await AwesomeNotifications().cancelNotificationsByChannelKey('call_channel');
+      await AwesomeNotifications()
+          .cancelNotificationsByChannelKey('call_channel');
       Utils.showLog("✅ Call notifications dismissed successfully");
     } catch (e) {
       Utils.showLog("❌ Error dismissing call notifications: $e");

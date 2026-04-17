@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/host_flow/host_setting_screen/widget/host_setting_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/host_flow/host_setting_screen/widget/host_setting_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HostSettingScreen extends StatelessWidget {
   const HostSettingScreen({super.key});

@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:get/get.dart';
 import 'package:proximity_screen_lock/proximity_screen_lock.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/utils.dart'; // Importing Random class
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/utils.dart'; // Importing Random class
 
 class FakeOutgoingCallController extends GetxController {
   late List<dynamic> args;

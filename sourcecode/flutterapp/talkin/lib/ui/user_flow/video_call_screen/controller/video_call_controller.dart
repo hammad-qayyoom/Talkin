@@ -5,12 +5,12 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/services/permission_handler/permission_handler.dart';
-import 'package:talk_in/socket/socket_emit.dart';
-import 'package:talk_in/ui/user_flow/my_wallet_screen/model/fetch_coin_plan.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/services/permission_handler/permission_handler.dart';
+import 'package:notisboard/socket/socket_emit.dart';
+import 'package:notisboard/ui/user_flow/my_wallet_screen/model/fetch_coin_plan.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 

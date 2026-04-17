@@ -3,16 +3,16 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
-import 'package:talk_in/ui/user_flow/setting_screen/api/delete_user_api.dart';
-import 'package:talk_in/ui/user_flow/setting_screen/api/user_notification_update_api.dart';
-import 'package:talk_in/ui/user_flow/setting_screen/model/delete_user_account_model.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/api/fetch_login_user_profile_api.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/model/fetch_login_user_profile_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/firebse_access_token.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+import 'package:notisboard/ui/user_flow/setting_screen/api/delete_user_api.dart';
+import 'package:notisboard/ui/user_flow/setting_screen/api/user_notification_update_api.dart';
+import 'package:notisboard/ui/user_flow/setting_screen/model/delete_user_account_model.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_login_user_profile_api.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/model/fetch_login_user_profile_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class SettingController extends GetxController {
   // final GoogleSignIn _googleSignIn = GoogleSignIn();

@@ -3,17 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart' show Shimmer;
-import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
-import 'package:talk_in/custom/switch/switch.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/host_flow/host_home_screen/controller/host_home_screen_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/switch/switch.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/host_flow/host_home_screen/controller/host_home_screen_controller.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HostTopHomeView extends StatelessWidget {
   const HostTopHomeView({super.key});

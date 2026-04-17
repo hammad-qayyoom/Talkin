@@ -1,17 +1,17 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_button/primary_app_button.dart';
-import 'package:talk_in/custom/bottom_sheet/talk_now_button_bottom_sheet.dart';
-import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
-import 'package:talk_in/ui/host_flow/user_detail_profile_screen/controller/user_profile_deatil_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/app_button/primary_app_button.dart';
+import 'package:notisboard/custom/bottom_sheet/talk_now_button_bottom_sheet.dart';
+import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/ui/host_flow/user_detail_profile_screen/controller/user_profile_deatil_controller.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class UserProfileTopImageView extends StatelessWidget {
   const UserProfileTopImageView({super.key});

@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/all_listeners_screen/api/all_listeners_api.dart';
-import 'package:talk_in/ui/user_flow/home_screen/model/top_listeners_model.dart';
-import 'package:talk_in/utils/constant.dart';
+import 'package:notisboard/ui/user_flow/all_listeners_screen/api/all_listeners_api.dart';
+import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
+import 'package:notisboard/utils/constant.dart';
 
 class AllListenersController extends GetxController {
   bool isLoading = false;

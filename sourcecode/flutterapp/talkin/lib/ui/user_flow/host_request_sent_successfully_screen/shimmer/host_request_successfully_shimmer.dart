@@ -2,8 +2,8 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HostRequestSuccessfullyShimmer extends StatelessWidget {
   const HostRequestSuccessfullyShimmer({super.key});

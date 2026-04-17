@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_background/app_background.dart';
-import 'package:talk_in/ui/user_flow/forgot_password_screen/widget/forgot_password_widget.dart';
+import 'package:notisboard/custom/app_background/app_background.dart';
+import 'package:notisboard/ui/user_flow/forgot_password_screen/widget/forgot_password_widget.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});

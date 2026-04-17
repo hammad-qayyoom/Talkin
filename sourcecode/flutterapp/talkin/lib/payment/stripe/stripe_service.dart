@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:http/http.dart' as http;
-import 'package:talk_in/payment/stripe/stripe_pay_model.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/payment/stripe/stripe_pay_model.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class StripeService {
   bool isTest = false;

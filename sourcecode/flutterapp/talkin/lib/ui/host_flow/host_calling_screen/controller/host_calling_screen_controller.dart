@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/host_flow/host_calling_screen/api/host_calling_history_api.dart';
-import 'package:talk_in/ui/host_flow/host_calling_screen/model/host_calling_history_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
+import 'package:notisboard/ui/host_flow/host_calling_screen/api/host_calling_history_api.dart';
+import 'package:notisboard/ui/host_flow/host_calling_screen/model/host_calling_history_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
 
 class HostCallingScreenController extends GetxController {
   bool isLoading = false;

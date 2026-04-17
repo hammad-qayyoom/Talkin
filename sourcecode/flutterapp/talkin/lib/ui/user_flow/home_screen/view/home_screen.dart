@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/dialog/exit_app_dialog.dart';
-import 'package:talk_in/ui/user_flow/home_screen/controller/home_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/home_screen/widget/find_more_widget.dart';
-import 'package:talk_in/ui/user_flow/home_screen/widget/home_app_bar_widget.dart';
-import 'package:talk_in/ui/user_flow/home_screen/widget/top_listener_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/dialog/exit_app_dialog.dart';
+import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/home_screen/widget/find_more_widget.dart';
+import 'package:notisboard/ui/user_flow/home_screen/widget/home_app_bar_widget.dart';
+import 'package:notisboard/ui/user_flow/home_screen/widget/top_listener_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HomeScreen extends GetView<HomeScreenController> {
   const HomeScreen({super.key});

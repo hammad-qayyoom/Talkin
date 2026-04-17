@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
-import 'package:talk_in/ui/host_flow/host_listeners_detail_screen/api/host_listener_profile_update_api.dart';
-import 'package:talk_in/ui/host_flow/host_listeners_detail_screen/model/host_listener_profile_update_model.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/api/talk_topic_api.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/model/fetch_listener_profile_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+import 'package:notisboard/ui/host_flow/host_listeners_detail_screen/api/host_listener_profile_update_api.dart';
+import 'package:notisboard/ui/host_flow/host_listeners_detail_screen/model/host_listener_profile_update_model.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/api/talk_topic_api.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/model/fetch_listener_profile_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HostListenersDetailController extends GetxController {
   TextEditingController nameCnt = TextEditingController();

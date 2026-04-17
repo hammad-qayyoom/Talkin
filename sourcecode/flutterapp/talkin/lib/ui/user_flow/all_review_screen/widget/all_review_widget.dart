@@ -1,14 +1,14 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_bar/custom_app_bar.dart';
-import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
-import 'package:talk_in/ui/user_flow/all_review_screen/controller/all_review_controller.dart';
-import 'package:talk_in/ui/user_flow/all_review_screen/shimmer/all_review_shimmer.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/enums.dart' show EnumLocale;
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/custom/app_bar/custom_app_bar.dart';
+import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/ui/user_flow/all_review_screen/controller/all_review_controller.dart';
+import 'package:notisboard/ui/user_flow/all_review_screen/shimmer/all_review_shimmer.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/enums.dart' show EnumLocale;
+import 'package:notisboard/utils/font_style.dart';
 
 class AllReviewAppBar extends StatelessWidget {
   const AllReviewAppBar({super.key});

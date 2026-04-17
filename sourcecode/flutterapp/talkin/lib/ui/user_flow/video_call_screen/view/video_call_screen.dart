@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'package:get/get.dart';
 
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/user_flow/video_call_screen/controller/video_call_controller.dart';
-import 'package:talk_in/ui/user_flow/video_call_screen/widget/video_call_widget.dart';
+import 'package:notisboard/ui/user_flow/video_call_screen/controller/video_call_controller.dart';
+import 'package:notisboard/ui/user_flow/video_call_screen/widget/video_call_widget.dart';
 
 class VideoCallScreen extends StatefulWidget {
   const VideoCallScreen({super.key});
@@ -60,8 +60,8 @@ class _VideoCallScreenState extends State<VideoCallScreen>
 import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
- import 'package:talk_in/ui/user_flow/video_call_screen/controller/video_call_controller.dart';
-import 'package:talk_in/ui/user_flow/video_call_screen/widget/video_call_widget.dart';
+ import 'package:notisboard/ui/user_flow/video_call_screen/controller/video_call_controller.dart';
+import 'package:notisboard/ui/user_flow/video_call_screen/widget/video_call_widget.dart';
 
 class VideoCallScreen extends StatefulWidget {
   const VideoCallScreen({super.key});

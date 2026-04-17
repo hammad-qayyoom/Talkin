@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 
-import 'package:talk_in/utils/app_asset.dart';
+import 'package:notisboard/utils/app_asset.dart';
 
 class RingtoneService {
   static AudioPlayer? _ringtonePlayer;

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "902570169924",
-    "project_id": "talkin-all-98363",
-    "storage_bucket": "talkin-all-98363.firebasestorage.app"
+    "project_number": "787587737004",
+    "project_id": "notisboard",
+    "storage_bucket": "notisboard.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:902570169924:android:bab6af73adc0e410f54e11",
+        "mobilesdk_app_id": "1:787587737004:android:c8a5cb355ba83bfc7b8609",
         "android_client_info": {
-          "package_name": "com.incodes.talkin"
+          "package_name": "com.notisboard.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyABrvhP7FD_i1aTEo-lmgmV1E6O9_BScqs"
+          "current_key": "AIzaSyDoj1P6kzFrQsPpPYy8X2pUUQ636x8q6LI"
         }
       ],
       "services": {

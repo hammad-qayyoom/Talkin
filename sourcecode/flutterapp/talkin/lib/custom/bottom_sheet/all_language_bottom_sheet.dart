@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/controller/host_verification_controller.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/controller/host_verification_controller.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
 
 class AllLanguageBottomSheet extends StatefulWidget {
   const AllLanguageBottomSheet({super.key});
@@ -13,7 +14,16 @@ class AllLanguageBottomSheet extends StatefulWidget {
 }
 
 class _AllLanguageBottomSheetState extends State<AllLanguageBottomSheet> {
-  HostVerificationController controller = Get.put(HostVerificationController());
+  late final HostVerificationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.isRegistered<HostVerificationController>()
+        ? Get.find<HostVerificationController>()
+        : Get.put(HostVerificationController());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,6 +34,7 @@ class _AllLanguageBottomSheetState extends State<AllLanguageBottomSheet> {
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: GetBuilder<HostVerificationController>(
+          id: Constant.idIdentityProof,
           builder: (controller) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,14 +54,16 @@ class _AllLanguageBottomSheetState extends State<AllLanguageBottomSheet> {
                         Get.back();
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                         decoration: BoxDecoration(
                           color: AppColors.lightGrey,
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
                           "Done",
-                          style: AppFontStyle.fontStyleW500(fontSize: 14, fontColor: AppColors.onBoardingTxt),
+                          style: AppFontStyle.fontStyleW500(
+                              fontSize: 14, fontColor: AppColors.onBoardingTxt),
                         ),
                       ),
                     )
@@ -66,15 +79,22 @@ class _AllLanguageBottomSheetState extends State<AllLanguageBottomSheet> {
                         return GestureDetector(
                           onTap: () => controller.toggleLanguage(lang),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 6),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: isSelected ? AppColors.appColor : AppColors.grey.withValues(alpha: 0.2),
+                                color: isSelected
+                                    ? AppColors.appColor
+                                    : AppColors.grey.withValues(alpha: 0.2),
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(lang,
-                                style: AppFontStyle.fontStyleW500(fontSize: 13, fontColor: isSelected ? AppColors.appColor : AppColors.appTextColor)),
+                                style: AppFontStyle.fontStyleW500(
+                                    fontSize: 13,
+                                    fontColor: isSelected
+                                        ? AppColors.appColor
+                                        : AppColors.appTextColor)),
                           ),
                         );
                       }).toList(),

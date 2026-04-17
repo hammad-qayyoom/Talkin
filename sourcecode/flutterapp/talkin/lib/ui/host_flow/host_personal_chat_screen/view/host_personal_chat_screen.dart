@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/custom_audio_time/custom_format_audio_time.dart';
-import 'package:talk_in/ui/host_flow/host_personal_chat_screen/controller/host_personal_chat_screen_controller.dart';
-import 'package:talk_in/ui/host_flow/host_personal_chat_screen/widget/host_personal_chat_screen_widget.dart';
-import 'package:talk_in/ui/user_flow/personal_chat_screen/shimmer/personal_chat_screen_shimmer.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/custom_audio_time/custom_format_audio_time.dart';
+import 'package:notisboard/ui/host_flow/host_personal_chat_screen/controller/host_personal_chat_screen_controller.dart';
+import 'package:notisboard/ui/host_flow/host_personal_chat_screen/widget/host_personal_chat_screen_widget.dart';
+import 'package:notisboard/ui/user_flow/personal_chat_screen/shimmer/personal_chat_screen_shimmer.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HostPersonalChatScreen extends StatelessWidget {
   const HostPersonalChatScreen({super.key});
@@ -216,18 +216,18 @@ class HostPersonalChatScreen extends StatelessWidget {
 
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
-// import 'package:talk_in/custom/custom_format_audio_time.dart';
-// import 'package:talk_in/custom/custom_format_chat_time.dart';
-// import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
-// import 'package:talk_in/ui/host_flow/host_personal_chat_screen/controller/host_personal_chat_screen_controller.dart';
-// import 'package:talk_in/ui/host_flow/host_personal_chat_screen/widget/host_personal_chat_screen_widget.dart';
-// import 'package:talk_in/utils/api.dart';
-// import 'package:talk_in/utils/app_asset.dart';
-// import 'package:talk_in/utils/app_color.dart';
-// import 'package:talk_in/utils/constant.dart';
-// import 'package:talk_in/utils/database.dart';
-// import 'package:talk_in/utils/font_style.dart';
-// import 'package:talk_in/utils/utils.dart';
+// import 'package:notisboard/custom/custom_format_audio_time.dart';
+// import 'package:notisboard/custom/custom_format_chat_time.dart';
+// import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+// import 'package:notisboard/ui/host_flow/host_personal_chat_screen/controller/host_personal_chat_screen_controller.dart';
+// import 'package:notisboard/ui/host_flow/host_personal_chat_screen/widget/host_personal_chat_screen_widget.dart';
+// import 'package:notisboard/utils/api.dart';
+// import 'package:notisboard/utils/app_asset.dart';
+// import 'package:notisboard/utils/app_color.dart';
+// import 'package:notisboard/utils/constant.dart';
+// import 'package:notisboard/utils/database.dart';
+// import 'package:notisboard/utils/font_style.dart';
+// import 'package:notisboard/utils/utils.dart';
 //
 // class HostPersonalChatScreen extends StatelessWidget {
 //   const HostPersonalChatScreen({super.key});

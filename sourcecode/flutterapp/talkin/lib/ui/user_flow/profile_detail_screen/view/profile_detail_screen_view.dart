@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/bottom_sheet/report_block_ui_bottom_sheet.dart';
-import 'package:talk_in/custom/bottom_sheet/report_bottom_sheet.dart';
-import 'package:talk_in/custom/dialog/block_dialog.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/controller/profile_detail_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/shimmer/profile_detail_shimmer.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/widget/profile_detail_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
+import 'package:notisboard/custom/bottom_sheet/report_block_ui_bottom_sheet.dart';
+import 'package:notisboard/custom/bottom_sheet/report_bottom_sheet.dart';
+import 'package:notisboard/custom/dialog/block_dialog.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/controller/profile_detail_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/shimmer/profile_detail_shimmer.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/widget/profile_detail_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
 
 class ProfileDetailScreenView extends StatelessWidget {
   const ProfileDetailScreenView({super.key});

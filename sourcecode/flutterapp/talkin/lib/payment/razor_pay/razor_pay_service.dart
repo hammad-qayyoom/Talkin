@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class RazorPayService {
   static late Razorpay razorPay;

@@ -1,14 +1,14 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:talk_in/ui/common/session_booking/session_booking_service.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/api/listener_profile_api.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/api/listener_review_api.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/model/listener_profile_response_model.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/model/listener_review_model.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/enums.dart';
+import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/api/listener_profile_api.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/api/listener_review_api.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/model/listener_profile_response_model.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/model/listener_review_model.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/enums.dart';
 
 class ProfileDetailScreenController extends GetxController {
   String? listenerId;

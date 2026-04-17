@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/my_wallet_screen/controller/my_wallet_controller.dart';
-import 'package:talk_in/ui/user_flow/my_wallet_screen/widget/coin_plan_widget.dart';
-import 'package:talk_in/ui/user_flow/my_wallet_screen/widget/my_wallet_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/my_wallet_screen/controller/my_wallet_controller.dart';
+import 'package:notisboard/ui/user_flow/my_wallet_screen/widget/coin_plan_widget.dart';
+import 'package:notisboard/ui/user_flow/my_wallet_screen/widget/my_wallet_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class MyWalletScreen extends GetView<MyWalletController> {
   const MyWalletScreen({super.key});

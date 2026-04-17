@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:talk_in/ui/host_flow/user_detail_profile_screen/api/user_profile_api.dart';
-import 'package:talk_in/ui/host_flow/user_detail_profile_screen/model/user_profile_model.dart';
-import 'package:talk_in/utils/constant.dart';
+import 'package:notisboard/ui/host_flow/user_detail_profile_screen/api/user_profile_api.dart';
+import 'package:notisboard/ui/host_flow/user_detail_profile_screen/model/user_profile_model.dart';
+import 'package:notisboard/utils/constant.dart';
 
 class UserProfileDetailController extends GetxController {
   bool isLoading = false;

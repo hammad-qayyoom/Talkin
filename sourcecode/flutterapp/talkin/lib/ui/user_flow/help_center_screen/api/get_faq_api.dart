@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
-import 'package:talk_in/ui/user_flow/help_center_screen/model/faq_response_model.dart';
-import 'package:talk_in/utils/api.dart';
-import 'package:talk_in/utils/api_params.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/help_center_screen/model/faq_response_model.dart';
+import 'package:notisboard/utils/api.dart';
+import 'package:notisboard/utils/api_params.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class GetFaqApi {
   static Future<FaqModel?> callApi({required String category}) async {

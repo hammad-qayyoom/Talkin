@@ -6,17 +6,17 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_device_identifier/mobile_device_identifier.dart';
-import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/user_flow/main_screen/api/login_api.dart';
-import 'package:talk_in/ui/user_flow/main_screen/controller/main_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/main_screen/model/check_user_exist_model.dart';
-import 'package:talk_in/ui/user_flow/main_screen/model/login_model.dart';
-import 'package:talk_in/ui/user_flow/mobile_number_screen/controller/mobile_number_controller.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/main_screen/api/login_api.dart';
+import 'package:notisboard/ui/user_flow/main_screen/controller/main_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/main_screen/model/check_user_exist_model.dart';
+import 'package:notisboard/ui/user_flow/main_screen/model/login_model.dart';
+import 'package:notisboard/ui/user_flow/mobile_number_screen/controller/mobile_number_controller.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class VerifyOtpController extends GetxController {
   final formKey = GlobalKey<FormState>();

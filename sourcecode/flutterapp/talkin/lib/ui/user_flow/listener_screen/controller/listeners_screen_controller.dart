@@ -4,11 +4,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/all_listeners_screen/api/all_listeners_api.dart';
-import 'package:talk_in/ui/user_flow/home_screen/model/top_listeners_model.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/api/talk_topic_api.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
-import 'package:talk_in/utils/constant.dart';
+import 'package:notisboard/ui/user_flow/all_listeners_screen/api/all_listeners_api.dart';
+import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/api/talk_topic_api.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
+import 'package:notisboard/utils/constant.dart';
 
 class ListenersScreenController extends GetxController {
   int selectedIndex = 0;

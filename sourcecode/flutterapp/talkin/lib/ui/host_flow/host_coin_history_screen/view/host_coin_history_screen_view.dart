@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/host_flow/host_coin_history_screen/widget/host_coin_history_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/ui/host_flow/host_coin_history_screen/widget/host_coin_history_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
 
 class HostCoinHistoryScreen extends StatelessWidget {
   const HostCoinHistoryScreen({super.key});

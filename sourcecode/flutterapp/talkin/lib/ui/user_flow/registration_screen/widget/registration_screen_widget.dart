@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/upper_case_formatter/upper_case_formatter_class.dart';
-import 'package:talk_in/ui/user_flow/registration_screen/controller/registration_controller.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/custom/upper_case_formatter/upper_case_formatter_class.dart';
+import 'package:notisboard/ui/user_flow/registration_screen/controller/registration_controller.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
 
 /// =================== App Bar =================== ///
 class RegistrationAppBarView extends StatelessWidget {

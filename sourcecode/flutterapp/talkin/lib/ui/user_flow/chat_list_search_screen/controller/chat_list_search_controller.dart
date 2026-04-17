@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/chat_screen/api/chat_list_search_api.dart';
-import 'package:talk_in/ui/user_flow/chat_screen/model/chat_list_search_model.dart';
+import 'package:notisboard/ui/user_flow/chat_screen/api/chat_list_search_api.dart';
+import 'package:notisboard/ui/user_flow/chat_screen/model/chat_list_search_model.dart';
 
 class ChatListSearchController extends GetxController {
   final TextEditingController searchController = TextEditingController();

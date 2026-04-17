@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:talk_in/services/permission_handler/permission_handler.dart';
-import 'package:talk_in/socket/socket_emit.dart';
-import 'package:talk_in/ui/common/session_booking/session_booking_service.dart';
-import 'package:talk_in/ui/user_flow/call_cut_screen/api/submit_call_rate_api.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/services/permission_handler/permission_handler.dart';
+import 'package:notisboard/socket/socket_emit.dart';
+import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
+import 'package:notisboard/ui/user_flow/call_cut_screen/api/submit_call_rate_api.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class UserMySessionsScreen extends StatefulWidget {
   const UserMySessionsScreen({super.key});

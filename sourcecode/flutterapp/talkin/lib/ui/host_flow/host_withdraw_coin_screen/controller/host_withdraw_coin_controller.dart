@@ -2,16 +2,16 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
-import 'package:talk_in/ui/host_flow/host_home_screen/api/host_coin_api.dart';
-import 'package:talk_in/ui/host_flow/host_withdraw_coin_screen/api/payment_option_api.dart';
-import 'package:talk_in/ui/host_flow/host_withdraw_coin_screen/api/withdraw_coin_submit_api.dart';
-import 'package:talk_in/ui/host_flow/host_withdraw_coin_screen/model/payment_option_model.dart';
-import 'package:talk_in/ui/host_flow/host_withdraw_coin_screen/model/withdraw_coin_submit_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+import 'package:notisboard/ui/host_flow/host_home_screen/api/host_coin_api.dart';
+import 'package:notisboard/ui/host_flow/host_withdraw_coin_screen/api/payment_option_api.dart';
+import 'package:notisboard/ui/host_flow/host_withdraw_coin_screen/api/withdraw_coin_submit_api.dart';
+import 'package:notisboard/ui/host_flow/host_withdraw_coin_screen/model/payment_option_model.dart';
+import 'package:notisboard/ui/host_flow/host_withdraw_coin_screen/model/withdraw_coin_submit_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HostWithdrawCoinController extends GetxController {
   bool isLoading = false;

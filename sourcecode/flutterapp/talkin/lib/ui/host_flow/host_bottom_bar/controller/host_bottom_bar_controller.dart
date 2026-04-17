@@ -2,18 +2,18 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/socket/socket_listen.dart';
-import 'package:talk_in/socket/socket_service.dart';
-import 'package:talk_in/ui/host_flow/host_chat_screen/view/host_chat_screen.dart';
-import 'package:talk_in/ui/host_flow/expert_sessions_screen/view/expert_sessions_screen.dart';
-import 'package:talk_in/ui/host_flow/host_home_screen/view/host_home_screen.dart';
-import 'package:talk_in/ui/host_flow/host_wallet_screen/view/host_wallet_screen.dart';
-import 'package:talk_in/ui/user_flow/feed_screen/view/feed_screen.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/api/setting_api.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/model/setting_api_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/socket/socket_listen.dart';
+import 'package:notisboard/socket/socket_service.dart';
+import 'package:notisboard/ui/host_flow/host_chat_screen/view/host_chat_screen.dart';
+import 'package:notisboard/ui/host_flow/expert_sessions_screen/view/expert_sessions_screen.dart';
+import 'package:notisboard/ui/host_flow/host_home_screen/view/host_home_screen.dart';
+import 'package:notisboard/ui/host_flow/host_wallet_screen/view/host_wallet_screen.dart';
+import 'package:notisboard/ui/user_flow/feed_screen/view/feed_screen.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/setting_api.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/model/setting_api_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 
 class HostBottomBarController extends GetxController {

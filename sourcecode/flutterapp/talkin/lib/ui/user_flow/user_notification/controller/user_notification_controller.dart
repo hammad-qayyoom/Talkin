@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart' hide Notification;
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/user_notification/api/notification_clear_api.dart';
-import 'package:talk_in/ui/user_flow/user_notification/api/user_notification_api.dart';
-import 'package:talk_in/ui/user_flow/user_notification/model/user_notification_clear_model.dart';
-import 'package:talk_in/ui/user_flow/user_notification/model/user_notification_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/user_notification/api/notification_clear_api.dart';
+import 'package:notisboard/ui/user_flow/user_notification/api/user_notification_api.dart';
+import 'package:notisboard/ui/user_flow/user_notification/model/user_notification_clear_model.dart';
+import 'package:notisboard/ui/user_flow/user_notification/model/user_notification_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class UserNotificationController extends GetxController {
   bool isLoading = false;

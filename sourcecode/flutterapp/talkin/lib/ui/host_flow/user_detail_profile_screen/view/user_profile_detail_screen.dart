@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/host_flow/user_detail_profile_screen/controller/user_profile_deatil_controller.dart';
-import 'package:talk_in/ui/host_flow/user_detail_profile_screen/shimmer/user_profile_shimmer.dart';
-import 'package:talk_in/ui/host_flow/user_detail_profile_screen/widget/user_profile_detail_widget.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
+import 'package:notisboard/ui/host_flow/user_detail_profile_screen/controller/user_profile_deatil_controller.dart';
+import 'package:notisboard/ui/host_flow/user_detail_profile_screen/shimmer/user_profile_shimmer.dart';
+import 'package:notisboard/ui/host_flow/user_detail_profile_screen/widget/user_profile_detail_widget.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
 
 class UserProfileDetailScreen extends StatefulWidget {
   const UserProfileDetailScreen({super.key});

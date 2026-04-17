@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/user_flow/help_center_screen/widget/help_center_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/help_center_screen/widget/help_center_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HelpCenterScreen extends StatelessWidget {
   const HelpCenterScreen({super.key});

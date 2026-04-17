@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/utils/app_color.dart';
 
 class CoinShimmer extends StatelessWidget {
   const CoinShimmer({super.key});

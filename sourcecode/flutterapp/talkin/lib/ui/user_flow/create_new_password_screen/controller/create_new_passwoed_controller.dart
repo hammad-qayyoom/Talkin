@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
-import 'package:talk_in/ui/user_flow/forgot_password_screen/api/forgot_password_api.dart';
-import 'package:talk_in/ui/user_flow/forgot_password_screen/model/forgot_password_response_model.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+import 'package:notisboard/ui/user_flow/forgot_password_screen/api/forgot_password_api.dart';
+import 'package:notisboard/ui/user_flow/forgot_password_screen/model/forgot_password_response_model.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class CreateNewPasswordController extends GetxController {
   final formKey = GlobalKey<FormState>();

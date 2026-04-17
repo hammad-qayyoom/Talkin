@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/all_listeners_screen/controller/all_listeners_controller.dart';
-import 'package:talk_in/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
-import 'package:talk_in/ui/user_flow/calling_screen/controller/calling_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/chat_screen/controller/chat_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/edit_profile_screen/controller/edit_profile_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/feed_screen/controller/feed_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/home_screen/controller/home_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/listener_screen/controller/listeners_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/all_listeners_screen/controller/all_listeners_controller.dart';
+import 'package:notisboard/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
+import 'package:notisboard/ui/user_flow/calling_screen/controller/calling_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/chat_screen/controller/chat_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/edit_profile_screen/controller/edit_profile_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/feed_screen/controller/feed_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/listener_screen/controller/listeners_screen_controller.dart';
 
 class BottomBarBinding extends Bindings {
   @override

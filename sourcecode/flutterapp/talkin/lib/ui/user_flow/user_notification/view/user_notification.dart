@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/user_flow/user_notification/widget/user_notification_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/ui/user_flow/user_notification/widget/user_notification_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
 
 class UserNotificationScreen extends StatelessWidget {
   const UserNotificationScreen({super.key});

@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:talk_in/custom/app_bar/custom_app_bar.dart';
-import 'package:talk_in/custom/app_button/primary_app_button.dart';
-import 'package:talk_in/custom/title/custom_title.dart';
-import 'package:talk_in/ui/user_flow/mobile_number_screen/controller/mobile_number_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/custom/app_bar/custom_app_bar.dart';
+import 'package:notisboard/custom/app_button/primary_app_button.dart';
+import 'package:notisboard/custom/title/custom_title.dart';
+import 'package:notisboard/ui/user_flow/mobile_number_screen/controller/mobile_number_controller.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
 
 /// =================== Complete Registration App Bar =================== ///
 class MobileNumberAppBarView extends StatelessWidget {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/coin_history_screen/api/coin_history_api.dart';
-import 'package:talk_in/ui/user_flow/coin_history_screen/api/purchase_coin_plan_api.dart';
-import 'package:talk_in/ui/user_flow/coin_history_screen/model/coin_history_model.dart';
-import 'package:talk_in/ui/user_flow/coin_history_screen/model/purchase_cpin_plan_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/coin_history_screen/api/coin_history_api.dart';
+import 'package:notisboard/ui/user_flow/coin_history_screen/api/purchase_coin_plan_api.dart';
+import 'package:notisboard/ui/user_flow/coin_history_screen/model/coin_history_model.dart';
+import 'package:notisboard/ui/user_flow/coin_history_screen/model/purchase_cpin_plan_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class CoinHistoryScreenController extends GetxController {
   int tabIndex = 0;

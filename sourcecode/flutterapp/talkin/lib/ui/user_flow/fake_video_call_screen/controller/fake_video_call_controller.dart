@@ -6,10 +6,10 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
-import 'package:talk_in/utils/api.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+import 'package:notisboard/utils/api.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/utils.dart';
 import 'package:video_player/video_player.dart';
 
 class FakeVideoCallController extends GetxController {

@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
-import 'package:talk_in/ui/host_flow/user_detail_profile_screen/model/user_profile_model.dart';
-import 'package:talk_in/utils/api.dart';
-import 'package:talk_in/utils/api_params.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/firebse_access_token.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/host_flow/user_detail_profile_screen/model/user_profile_model.dart';
+import 'package:notisboard/utils/api.dart';
+import 'package:notisboard/utils/api_params.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class UserProfileApi {
   static Future<UserProfileModel?> callApi({

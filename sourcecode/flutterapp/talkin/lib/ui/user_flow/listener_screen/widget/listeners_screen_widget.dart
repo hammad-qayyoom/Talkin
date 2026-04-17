@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/user_flow/listener_screen/controller/listeners_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/listener_screen/widget/app_language_bottom_sheet.dart';
-import 'package:talk_in/ui/user_flow/listener_screen/widget/talk_about_bottom_sheet.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/listener_screen/controller/listeners_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/listener_screen/widget/app_language_bottom_sheet.dart';
+import 'package:notisboard/ui/user_flow/listener_screen/widget/talk_about_bottom_sheet.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
 
 class ListenersAppBarView extends StatelessWidget {
   const ListenersAppBarView({super.key});

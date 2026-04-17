@@ -2,10 +2,10 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/help_center_screen/api/get_faq_api.dart';
-import 'package:talk_in/ui/user_flow/help_center_screen/model/faq_response_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/help_center_screen/api/get_faq_api.dart';
+import 'package:notisboard/ui/user_flow/help_center_screen/model/faq_response_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HostHelpCenterScreenController extends GetxController {
   static const List<String> _faqCategoryFallbacks = [

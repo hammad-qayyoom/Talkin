@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:proximity_screen_lock/proximity_screen_lock.dart';
-import 'package:talk_in/utils/api.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/utils/api.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class FakeAudioCallController extends GetxController {
   Timer? timer;

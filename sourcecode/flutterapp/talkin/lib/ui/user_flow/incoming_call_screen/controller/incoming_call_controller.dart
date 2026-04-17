@@ -5,11 +5,11 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/ringtone/ringtone_method.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/socket/socket_emit.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/ringtone/ringtone_method.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/socket/socket_emit.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/utils.dart';
 import 'package:vibration/vibration.dart';
 
 // class IncomingCallController extends GetxController with WidgetsBindingObserver {

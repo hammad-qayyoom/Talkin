@@ -1,11 +1,11 @@
-//package com.incodes.talkin
+//package com.notisboard.app
 //
 //import io.flutter.embedding.android.FlutterFragmentActivity
 //
 //class MainActivity: FlutterFragmentActivity()
 
 
-package com.incodes.talkin
+package com.notisboard.app
 
 import android.media.Ringtone
 import android.media.RingtoneManager

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/listeners/listeners.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/user_flow/all_listeners_screen/controller/all_listeners_controller.dart';
-import 'package:talk_in/ui/user_flow/all_listeners_screen/widget/all_listeners_widget.dart';
-import 'package:talk_in/ui/user_flow/home_screen/shimmer/top_listener_shimmer.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
+import 'package:notisboard/custom/listeners/listeners.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/all_listeners_screen/controller/all_listeners_controller.dart';
+import 'package:notisboard/ui/user_flow/all_listeners_screen/widget/all_listeners_widget.dart';
+import 'package:notisboard/ui/user_flow/home_screen/shimmer/top_listener_shimmer.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
 
 class AllListenersScreen extends StatelessWidget {
   const AllListenersScreen({super.key});

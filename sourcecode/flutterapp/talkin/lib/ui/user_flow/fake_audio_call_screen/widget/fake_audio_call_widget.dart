@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
-import 'package:talk_in/ui/user_flow/fake_audio_call_screen/controller/fake_audio_call_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart' show AppFontStyle;
+import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/ui/user_flow/fake_audio_call_screen/controller/fake_audio_call_controller.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart' show AppFontStyle;
 
 class FakeVoiceCallView extends StatelessWidget {
   const FakeVoiceCallView({super.key});
@@ -17,7 +17,7 @@ class FakeVoiceCallView extends StatelessWidget {
       children: [
         Center(
             child: Text(
-          "Talkin",
+          "Notisboard",
           style: AppFontStyle.fontStyleKaushanW400(
             font: FontWeight.w600,
             fontSize: 32,
@@ -80,7 +80,8 @@ class FakeVoiceCallView extends StatelessWidget {
           id: Constant.idVideoCall,
           builder: (controller) {
             return Container(
-              padding: EdgeInsets.only(top: 20, bottom: 20, left: 22, right: 22),
+              padding:
+                  EdgeInsets.only(top: 20, bottom: 20, left: 22, right: 22),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 color: AppColors.black.withValues(alpha: 0.80),
@@ -93,10 +94,13 @@ class FakeVoiceCallView extends StatelessWidget {
                       builder: (logic) {
                         return buildControlButton(
                           // text: "Mute \n${logic.isMicMute ? 'on' : 'off'}",
-                          text: "${EnumLocale.txtMute.name.tr} \n${logic.isMicMute ? EnumLocale.txtOn.name.tr : EnumLocale.txtOff.name.tr}",
+                          text:
+                              "${EnumLocale.txtMute.name.tr} \n${logic.isMicMute ? EnumLocale.txtOn.name.tr : EnumLocale.txtOff.name.tr}",
 
                           iconColor: AppColors.appColor,
-                          icon: controller.isMicMute == true ? AppAsset.micMute : AppAsset.microPhoneIcon,
+                          icon: controller.isMicMute == true
+                              ? AppAsset.micMute
+                              : AppAsset.microPhoneIcon,
                           onTap: () {
                             controller.toggleMicMute();
                           },
@@ -108,10 +112,13 @@ class FakeVoiceCallView extends StatelessWidget {
                         return buildControlButton(
                           // text: "Speaker \n${logic.isSpeakerOn ? 'on' : 'off'}",
                           // text: "${EnumLocale.txtEarpiece.name.tr} \n${logic.isSpeakerOn ? EnumLocale.txtOff.name.tr : EnumLocale.txtOn.name.tr}",
-                          text: '${logic.isSpeakerOn ? EnumLocale.txtSpeaker.name.tr : EnumLocale.txtEarpiece.name.tr}\n${EnumLocale.txtOn.name.tr}',
+                          text:
+                              '${logic.isSpeakerOn ? EnumLocale.txtSpeaker.name.tr : EnumLocale.txtEarpiece.name.tr}\n${EnumLocale.txtOn.name.tr}',
 
                           iconColor: AppColors.appColor,
-                          icon: controller.isSpeakerOn == false ? AppAsset.speakerOff : AppAsset.speakerOn,
+                          icon: controller.isSpeakerOn == false
+                              ? AppAsset.speakerOff
+                              : AppAsset.speakerOn,
                           onTap: () {
                             controller.toggleSpeaker();
                           },
@@ -136,7 +143,12 @@ class FakeVoiceCallView extends StatelessWidget {
     );
   }
 
-  Widget buildControlButton({String? icon, Color bgColor = Colors.white, Color iconColor = Colors.white, VoidCallback? onTap, String text = ''}) {
+  Widget buildControlButton(
+      {String? icon,
+      Color bgColor = Colors.white,
+      Color iconColor = Colors.white,
+      VoidCallback? onTap,
+      String text = ''}) {
     return InkWell(
       onTap: onTap,
       child: Column(
@@ -144,7 +156,8 @@ class FakeVoiceCallView extends StatelessWidget {
         children: [
           Container(
             padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: bgColor),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12), color: bgColor),
             child: Image.asset(
               icon ?? '',
               color: iconColor,
@@ -155,7 +168,8 @@ class FakeVoiceCallView extends StatelessWidget {
           Text(
             text,
             textAlign: TextAlign.center,
-            style: AppFontStyle.fontStyleW500(fontSize: 13, fontColor: AppColors.white),
+            style: AppFontStyle.fontStyleW500(
+                fontSize: 13, fontColor: AppColors.white),
           )
         ],
       ),

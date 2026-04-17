@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/controller/splash_screen_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/controller/splash_screen_controller.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class SplashScreenView extends GetView<SplashScreenController> {
   const SplashScreenView({super.key});
@@ -65,7 +65,8 @@ class SplashScreenView extends GetView<SplashScreenController> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(24, insets.top + 20, 24, insets.bottom + 10),
+                padding: EdgeInsets.fromLTRB(
+                    24, insets.top + 20, 24, insets.bottom + 10),
                 child: Column(
                   children: [
                     const Spacer(flex: 5),
@@ -108,7 +109,7 @@ class SplashScreenView extends GetView<SplashScreenController> {
                     ),
                     const SizedBox(height: 30),
                     Text(
-                      "Talkin",
+                      "Notisboard",
                       style: AppFontStyle.fontStyleKaushanW400(
                         fontSize: 52,
                         fontColor: _brandDark,
@@ -125,7 +126,8 @@ class SplashScreenView extends GetView<SplashScreenController> {
                     ),
                     const Spacer(flex: 4),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
                       decoration: BoxDecoration(
                         color: AppColors.white,
                         borderRadius: BorderRadius.circular(14),

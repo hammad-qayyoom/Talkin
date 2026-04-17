@@ -6,11 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:proximity_screen_lock/proximity_screen_lock.dart';
-import 'package:talk_in/services/permission_handler/permission_handler.dart';
-import 'package:talk_in/socket/socket_emit.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/services/permission_handler/permission_handler.dart';
+import 'package:notisboard/socket/socket_emit.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 

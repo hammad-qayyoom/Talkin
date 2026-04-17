@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:get/get.dart';
 import 'package:proximity_screen_lock/proximity_screen_lock.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/socket/socket_emit.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/socket/socket_emit.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class OutgoingCallController extends GetxController with WidgetsBindingObserver {
   late Map<String, dynamic> args;

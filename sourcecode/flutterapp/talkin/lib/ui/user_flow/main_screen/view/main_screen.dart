@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/dialog/exit_app_dialog.dart';
-import 'package:talk_in/ui/user_flow/main_screen/widget/main_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/dialog/exit_app_dialog.dart';
+import 'package:notisboard/ui/user_flow/main_screen/widget/main_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});

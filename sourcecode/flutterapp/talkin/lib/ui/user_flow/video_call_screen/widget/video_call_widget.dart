@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:talk_in/custom/bottom_sheet/report_block_ui_bottom_sheet.dart';
-import 'package:talk_in/custom/bottom_sheet/report_bottom_sheet.dart';
-import 'package:talk_in/custom/dialog/block_dialog.dart';
-import 'package:talk_in/ui/user_flow/video_call_screen/controller/video_call_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/custom/bottom_sheet/report_block_ui_bottom_sheet.dart';
+import 'package:notisboard/custom/bottom_sheet/report_bottom_sheet.dart';
+import 'package:notisboard/custom/dialog/block_dialog.dart';
+import 'package:notisboard/ui/user_flow/video_call_screen/controller/video_call_controller.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/font_style.dart';
 
 /// =================== Video Call View =================== ///
 class VideoCallView1 extends StatelessWidget {

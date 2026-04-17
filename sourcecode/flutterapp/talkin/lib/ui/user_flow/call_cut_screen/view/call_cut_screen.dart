@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/call_cut_screen/controller/call_cut_controller.dart';
-import 'package:talk_in/ui/user_flow/call_cut_screen/widget/call_cut_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/call_cut_screen/controller/call_cut_controller.dart';
+import 'package:notisboard/ui/user_flow/call_cut_screen/widget/call_cut_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class CallCutScreen extends StatelessWidget {
   const CallCutScreen({super.key});

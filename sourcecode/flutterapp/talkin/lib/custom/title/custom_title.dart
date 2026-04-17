@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/font_style.dart';
 
 class CustomTitle extends StatelessWidget {
   final String title;

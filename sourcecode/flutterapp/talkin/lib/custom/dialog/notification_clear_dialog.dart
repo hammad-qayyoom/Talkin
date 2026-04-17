@@ -1,12 +1,12 @@
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_button/primary_app_button.dart';
-import 'package:talk_in/ui/host_flow/host_notification/controller/host_notification_controller.dart';
-import 'package:talk_in/ui/user_flow/user_notification/controller/user_notification_controller.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/custom/app_button/primary_app_button.dart';
+import 'package:notisboard/ui/host_flow/host_notification/controller/host_notification_controller.dart';
+import 'package:notisboard/ui/user_flow/user_notification/controller/user_notification_controller.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
 
 class NotificationClearDialog extends StatelessWidget {
   final VoidCallback onConfirm;

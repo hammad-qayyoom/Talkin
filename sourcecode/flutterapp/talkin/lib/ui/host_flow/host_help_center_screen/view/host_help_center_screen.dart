@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/host_flow/host_help_center_screen/widget/host_help_center_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/ui/host_flow/host_help_center_screen/widget/host_help_center_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
 
 class HostHelpCenterScreen extends StatelessWidget {
   const HostHelpCenterScreen({super.key});

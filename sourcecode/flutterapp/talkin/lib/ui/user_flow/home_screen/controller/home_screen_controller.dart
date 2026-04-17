@@ -2,15 +2,15 @@ import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/home_screen/api/top_listeners_api.dart';
-import 'package:talk_in/ui/user_flow/home_screen/api/user_coin_api.dart';
-import 'package:talk_in/ui/user_flow/home_screen/model/top_listeners_model.dart';
-import 'package:talk_in/ui/user_flow/home_screen/model/user_coin_model.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/api/talk_topic_api.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/firebse_access_token.dart';
+import 'package:notisboard/ui/user_flow/home_screen/api/top_listeners_api.dart';
+import 'package:notisboard/ui/user_flow/home_screen/api/user_coin_api.dart';
+import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
+import 'package:notisboard/ui/user_flow/home_screen/model/user_coin_model.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/api/talk_topic_api.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/firebse_access_token.dart';
 
 class HomeScreenController extends GetxController {
   bool isLoading = false;

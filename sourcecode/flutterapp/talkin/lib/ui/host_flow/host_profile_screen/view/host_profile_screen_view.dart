@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/host_flow/host_profile_screen/widget/host_profile_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/host_flow/host_profile_screen/widget/host_profile_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HostProfileScreen extends StatelessWidget {
   const HostProfileScreen({super.key});

@@ -8,13 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:talk_in/custom/ringtone/ringtone_method.dart';
-import 'package:talk_in/localization/locale_constant.dart';
-import 'package:talk_in/routes/app_pages.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/services/notification_service/notification_services.dart';
+import 'package:notisboard/custom/ringtone/ringtone_method.dart';
+import 'package:notisboard/localization/locale_constant.dart';
+import 'package:notisboard/routes/app_pages.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/services/notification_service/notification_services.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'localization/localizations_delegate.dart';
 import 'utils/utils.dart';
@@ -68,7 +68,8 @@ void main() async {
 
   // Set up Awesome Notifications listeners
   AwesomeNotifications().setListeners(
-    onActionReceivedMethod: NotificationServices.onAwesomeNotificationActionReceived,
+    onActionReceivedMethod:
+        NotificationServices.onAwesomeNotificationActionReceived,
   );
 
   NotificationServices.firebaseInit();
@@ -79,7 +80,8 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-  static final StreamController purchaseStreamController = StreamController<PurchaseDetails>.broadcast();
+  static final StreamController purchaseStreamController =
+      StreamController<PurchaseDetails>.broadcast();
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -122,12 +124,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     Utils.showLog("MY Current Routes => ${Get.currentRoute}");
     return GetMaterialApp(
-      title: 'TalkIn App',
+      title: 'Notisboard',
       debugShowCheckedModeBanner: false,
       locale: const Locale("en"),
       builder: (context, child) {
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1.0)),
           child: Container(
             color: AppColors.white,
             child: SafeArea(

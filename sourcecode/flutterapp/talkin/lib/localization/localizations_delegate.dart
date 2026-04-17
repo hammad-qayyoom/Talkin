@@ -1,22 +1,22 @@
 import 'package:get/get.dart';
-import 'package:talk_in/language/arabic_language.dart';
-import 'package:talk_in/language/bangali_language.dart';
-import 'package:talk_in/language/chinese_language.dart';
-import 'package:talk_in/language/english_language.dart';
-import 'package:talk_in/language/french_language.dart';
-import 'package:talk_in/language/german_language.dart';
-import 'package:talk_in/language/hindi_language.dart';
-import 'package:talk_in/language/indonasian_language.dart';
-import 'package:talk_in/language/italian_language.dart';
-import 'package:talk_in/language/korean_language.dart';
-import 'package:talk_in/language/portuguese_language.dart';
-import 'package:talk_in/language/russian_language.dart';
-import 'package:talk_in/language/spanish_language.dart';
-import 'package:talk_in/language/swahilli_language.dart';
-import 'package:talk_in/language/tamil_language.dart';
-import 'package:talk_in/language/telugu_language.dart';
-import 'package:talk_in/language/turkish_language.dart';
-import 'package:talk_in/language/urdu_language.dart';
+import 'package:notisboard/language/arabic_language.dart';
+import 'package:notisboard/language/bangali_language.dart';
+import 'package:notisboard/language/chinese_language.dart';
+import 'package:notisboard/language/english_language.dart';
+import 'package:notisboard/language/french_language.dart';
+import 'package:notisboard/language/german_language.dart';
+import 'package:notisboard/language/hindi_language.dart';
+import 'package:notisboard/language/indonasian_language.dart';
+import 'package:notisboard/language/italian_language.dart';
+import 'package:notisboard/language/korean_language.dart';
+import 'package:notisboard/language/portuguese_language.dart';
+import 'package:notisboard/language/russian_language.dart';
+import 'package:notisboard/language/spanish_language.dart';
+import 'package:notisboard/language/swahilli_language.dart';
+import 'package:notisboard/language/tamil_language.dart';
+import 'package:notisboard/language/telugu_language.dart';
+import 'package:notisboard/language/turkish_language.dart';
+import 'package:notisboard/language/urdu_language.dart';
 
 class AppLanguages extends Translations {
   @override

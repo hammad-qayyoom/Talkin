@@ -2,10 +2,10 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/utils/api.dart';
-import 'package:talk_in/utils/app_asset.dart';
+import 'package:notisboard/utils/api.dart';
+import 'package:notisboard/utils/app_asset.dart';
 import 'package:flutter/material.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/utils/app_color.dart';
 
 class CustomProfileImage extends StatelessWidget {
   final String image;

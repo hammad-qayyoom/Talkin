@@ -1,9 +1,9 @@
  import 'package:get/get.dart';
 import 'package:incodes_payment/incodes_payment_services.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/utils.dart';
 
 import '../custom/progress_indicator/progress_dialog.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/user_flow/host_verification_listeners_detail_screen/widget/host_verification_listeners_detail_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/ui/user_flow/host_verification_listeners_detail_screen/widget/host_verification_listeners_detail_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
 
 class HostVerificationListenersDetailScreen extends StatelessWidget {
   const HostVerificationListenersDetailScreen({super.key});

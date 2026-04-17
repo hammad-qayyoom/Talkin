@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/host_flow/host_chat_screen/api/listener_chat_list_api.dart';
-import 'package:talk_in/ui/host_flow/host_chat_screen/model/listener_chat_list_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
+import 'package:notisboard/ui/host_flow/host_chat_screen/api/listener_chat_list_api.dart';
+import 'package:notisboard/ui/host_flow/host_chat_screen/model/listener_chat_list_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
 
 class HostChatScreenController extends GetxController {
   ListenerChatListModel? listenerChatListModel;

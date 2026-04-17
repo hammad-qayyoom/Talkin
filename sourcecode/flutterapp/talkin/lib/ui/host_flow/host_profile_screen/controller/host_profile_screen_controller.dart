@@ -2,9 +2,9 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:talk_in/custom/custom_web_view/web_view_screen.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/custom_web_view/web_view_screen.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HostProfileScreenController extends GetxController {
@@ -32,7 +32,7 @@ class HostProfileScreenController extends GetxController {
   }
 
   // Future<void> onClickShare() async {
-  //   var url = Uri.parse("https://play.google.com/store/apps/details?id=com.incodes.talkin");
+  //   var url = Uri.parse("https://play.google.com/store/apps/details?id=com.notisboard.app");
   //   if (await canLaunchUrl(url)) {
   //     launchUrl(url, mode: LaunchMode.externalApplication);
   //     throw "Cannot load the page";

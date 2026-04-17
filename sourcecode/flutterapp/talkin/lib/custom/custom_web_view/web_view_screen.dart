@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewScreen extends StatefulWidget {
@@ -41,10 +41,10 @@ class WebViewScreenState extends State<WebViewScreen> {
 
     const script = '''
       (function() {
-        if (window.__talkinStyled) {
+        if (window.__notisboardStyled) {
           return;
         }
-        window.__talkinStyled = true;
+        window.__notisboardStyled = true;
         var style = document.createElement('style');
         style.textContent = ""
           + "html,body{background:#F4F5F7 !important;color:#171A22 !important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;line-height:1.62 !important;margin:0 !important;padding:0 !important;}"

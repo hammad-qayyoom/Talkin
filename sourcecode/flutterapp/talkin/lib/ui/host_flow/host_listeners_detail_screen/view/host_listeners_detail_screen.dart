@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/host_flow/host_listeners_detail_screen/widget/host_listeners_detail_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/ui/host_flow/host_listeners_detail_screen/widget/host_listeners_detail_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
 
 class HostListenersDetailScreen extends StatelessWidget {
   const HostListenersDetailScreen({super.key});

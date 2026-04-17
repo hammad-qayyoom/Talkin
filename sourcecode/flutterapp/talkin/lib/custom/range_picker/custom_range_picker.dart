@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/font_style.dart';
 
 class CustomRangePicker {
   static Future<DateTimeRange?> onShow(

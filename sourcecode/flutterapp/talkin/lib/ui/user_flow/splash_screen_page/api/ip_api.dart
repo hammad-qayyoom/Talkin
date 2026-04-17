@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:talk_in/ui/user_flow/splash_screen_page/model/ip_api_response_model.dart';
-import 'package:talk_in/utils/api.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/model/ip_api_response_model.dart';
+import 'package:notisboard/utils/api.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class IpApi {
   static Future<IpApiResponseModel?> callApi() async {

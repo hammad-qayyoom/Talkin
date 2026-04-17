@@ -3,15 +3,15 @@ import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:talk_in/ui/user_flow/become_host_screen/api/listeners_request_check_api.dart';
-import 'package:talk_in/ui/user_flow/become_host_screen/model/listeners_request_check_model.dart';
-import 'package:talk_in/ui/user_flow/help_center_screen/api/get_faq_api.dart';
-import 'package:talk_in/ui/user_flow/help_center_screen/model/faq_response_model.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/api/setting_api.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/model/setting_api_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/become_host_screen/api/listeners_request_check_api.dart';
+import 'package:notisboard/ui/user_flow/become_host_screen/model/listeners_request_check_model.dart';
+import 'package:notisboard/ui/user_flow/help_center_screen/api/get_faq_api.dart';
+import 'package:notisboard/ui/user_flow/help_center_screen/model/faq_response_model.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/setting_api.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/model/setting_api_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class BecomeHostScreenController extends GetxController {
   static const List<String> _faqCategoryFallbacks = [

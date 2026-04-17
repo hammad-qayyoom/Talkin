@@ -1,6 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class InternetConnection {
   static RxBool isConnect = false.obs;

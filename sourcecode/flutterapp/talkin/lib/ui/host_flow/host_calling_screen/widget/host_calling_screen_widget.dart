@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_bar/custom_app_bar.dart';
-import 'package:talk_in/custom/bottom_sheet/talk_now_button_bottom_sheet.dart';
-import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/host_flow/host_calling_screen/controller/host_calling_screen_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/custom/app_bar/custom_app_bar.dart';
+import 'package:notisboard/custom/bottom_sheet/talk_now_button_bottom_sheet.dart';
+import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/host_flow/host_calling_screen/controller/host_calling_screen_controller.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
 
 class HostCallingScreenAppBar extends StatelessWidget {
   const HostCallingScreenAppBar({super.key});

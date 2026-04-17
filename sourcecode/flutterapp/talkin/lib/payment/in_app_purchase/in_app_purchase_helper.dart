@@ -12,7 +12,7 @@ import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
 /// ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
-import 'package:talk_in/main.dart';
+import 'package:notisboard/main.dart';
 
 import 'iap_callback.dart';
 import 'iap_receipt_data.dart';

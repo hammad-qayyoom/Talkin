@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/bottom_bar/salomon_bottom_bar.dart';
-import 'package:talk_in/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/enums.dart';
+import 'package:notisboard/custom/bottom_bar/salomon_bottom_bar.dart';
+import 'package:notisboard/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/enums.dart';
 
 class BottomBarView extends StatelessWidget {
   const BottomBarView({super.key});

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/host_flow/host_chat_list_search_screen/controller/host_chat_list_search_controller.dart';
-import 'package:talk_in/ui/user_flow/chat_screen/widget/chat_screen_widget.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/host_flow/host_chat_list_search_screen/controller/host_chat_list_search_controller.dart';
+import 'package:notisboard/ui/user_flow/chat_screen/widget/chat_screen_widget.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HostChatListSearchWidget extends StatelessWidget {
   const HostChatListSearchWidget({super.key});

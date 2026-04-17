@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/chat_screen/api/chat_list_api.dart';
-import 'package:talk_in/ui/user_flow/chat_screen/model/chat_list_response_model.dart';
-import 'package:talk_in/utils/constant.dart';
+import 'package:notisboard/ui/user_flow/chat_screen/api/chat_list_api.dart';
+import 'package:notisboard/ui/user_flow/chat_screen/model/chat_list_response_model.dart';
+import 'package:notisboard/utils/constant.dart';
 
 class ChatScreenController extends GetxController {
   ChatListResponseModel? chatListResponseModel;

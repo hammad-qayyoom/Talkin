@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/controller/profile_detail_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/model/listener_profile_response_model.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/model/listener_review_model.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/shimmer/profile_detail_shimmer.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/controller/profile_detail_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/model/listener_profile_response_model.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/model/listener_review_model.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/shimmer/profile_detail_shimmer.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class TopImageView extends StatelessWidget {
   const TopImageView({super.key});

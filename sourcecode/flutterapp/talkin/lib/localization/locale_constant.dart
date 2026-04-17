@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'dart:ui';
 
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
 
 Future<Locale> getLocale() async {
   log("Database.selectedLanguage********************** ${Database.selectedLanguage}");

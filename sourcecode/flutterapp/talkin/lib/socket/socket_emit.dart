@@ -1,15 +1,15 @@
 import 'package:get/get.dart';
-import 'package:talk_in/socket/socket_service.dart';
-import 'package:talk_in/ui/host_flow/host_home_screen/api/host_coin_api.dart';
-import 'package:talk_in/ui/host_flow/host_home_screen/model/listener_coin_model.dart';
-import 'package:talk_in/ui/user_flow/home_screen/api/user_coin_api.dart';
-import 'package:talk_in/ui/user_flow/home_screen/controller/home_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/home_screen/model/user_coin_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/socket_events.dart';
-import 'package:talk_in/utils/socket_params.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/socket/socket_service.dart';
+import 'package:notisboard/ui/host_flow/host_home_screen/api/host_coin_api.dart';
+import 'package:notisboard/ui/host_flow/host_home_screen/model/listener_coin_model.dart';
+import 'package:notisboard/ui/user_flow/home_screen/api/user_coin_api.dart';
+import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/home_screen/model/user_coin_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/socket_events.dart';
+import 'package:notisboard/utils/socket_params.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class SocketEmit {
   static void sendMessage(Map<String, dynamic> message) {

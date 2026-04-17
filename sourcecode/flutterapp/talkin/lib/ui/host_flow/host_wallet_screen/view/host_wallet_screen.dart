@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/dialog/exit_app_dialog.dart';
-import 'package:talk_in/ui/host_flow/host_wallet_screen/controller/host_wallet_screen_controller.dart';
-import 'package:talk_in/ui/host_flow/host_wallet_screen/widget/host_wallet_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/custom/dialog/exit_app_dialog.dart';
+import 'package:notisboard/ui/host_flow/host_wallet_screen/controller/host_wallet_screen_controller.dart';
+import 'package:notisboard/ui/host_flow/host_wallet_screen/widget/host_wallet_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
 
 class HostWalletScreen extends StatefulWidget {
   const HostWalletScreen({super.key});

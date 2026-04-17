@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:talk_in/ui/user_flow/home_screen/model/top_listeners_model.dart';
-import 'package:talk_in/utils/api.dart';
-import 'package:talk_in/utils/api_params.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
+import 'package:notisboard/utils/api.dart';
+import 'package:notisboard/utils/api_params.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class TopListenersApi {
   static int startPagination = 0;

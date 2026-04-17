@@ -3,12 +3,12 @@ import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:talk_in/ui/user_flow/coin_history_screen/model/purchase_cpin_plan_model.dart';
-import 'package:talk_in/utils/api.dart';
-import 'package:talk_in/utils/api_params.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/firebse_access_token.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/coin_history_screen/model/purchase_cpin_plan_model.dart';
+import 'package:notisboard/utils/api.dart';
+import 'package:notisboard/utils/api_params.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class PurchaseCoinGetPlanApi {
   static int startPagination = 0;

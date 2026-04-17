@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/utils/app_color.dart';
 
 class ProgressDialog extends StatelessWidget {
   Widget? child;

@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/user_flow/voice_call_screen/controller/voice_call_controller.dart';
-import 'package:talk_in/ui/user_flow/voice_call_screen/widget/voice_call_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/ui/user_flow/voice_call_screen/controller/voice_call_controller.dart';
+import 'package:notisboard/ui/user_flow/voice_call_screen/widget/voice_call_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
 import 'package:get/get.dart';
 
 class VoiceCallScreen extends StatefulWidget {

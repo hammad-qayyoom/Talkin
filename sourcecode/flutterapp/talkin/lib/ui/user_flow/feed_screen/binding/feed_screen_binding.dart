@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/feed_screen/controller/feed_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/feed_screen/controller/feed_screen_controller.dart';
 
 class FeedScreenBinding extends Bindings {
   @override

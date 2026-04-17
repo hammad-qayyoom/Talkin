@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/user_flow/home_screen/model/top_listeners_model.dart';
-import 'package:talk_in/ui/user_flow/home_screen/shimmer/top_listener_shimmer.dart';
-import 'package:talk_in/ui/user_flow/top_listeners_view_all/controller/top_listeners_view_all_controller.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
+import 'package:notisboard/ui/user_flow/home_screen/shimmer/top_listener_shimmer.dart';
+import 'package:notisboard/ui/user_flow/top_listeners_view_all/controller/top_listeners_view_all_controller.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
 
 class TopListenersViewAllAppBar extends StatelessWidget {
   const TopListenersViewAllAppBar({super.key});

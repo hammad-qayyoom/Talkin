@@ -6,13 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:proximity_screen_lock/proximity_screen_lock.dart';
-import 'package:talk_in/socket/socket_listen.dart';
-import 'package:talk_in/ui/user_flow/call_cut_screen/api/submit_call_rate_api.dart';
-import 'package:talk_in/ui/user_flow/call_cut_screen/model/submit_call_rate_model.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/api/listener_review_api.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/socket/socket_listen.dart';
+import 'package:notisboard/ui/user_flow/call_cut_screen/api/submit_call_rate_api.dart';
+import 'package:notisboard/ui/user_flow/call_cut_screen/model/submit_call_rate_model.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/api/listener_review_api.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CallCutController extends GetxController {
@@ -149,7 +149,7 @@ class CallCutController extends GetxController {
   }
 
   // Future<void> onClickShare() async {
-  //   var url = Uri.parse("https://play.google.com/store/apps/details?id=com.incodes.talkin");
+  //   var url = Uri.parse("https://play.google.com/store/apps/details?id=com.notisboard.app");
   //   if (await canLaunchUrl(url)) {
   //     launchUrl(url, mode: LaunchMode.externalApplication);
   //     throw "Cannot load the page";

@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
-import 'package:talk_in/ui/user_flow/bottom_bar/widget/bottom_bar_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
+import 'package:notisboard/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
+import 'package:notisboard/ui/user_flow/bottom_bar/widget/bottom_bar_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
 
 class BottomBarScreen extends StatelessWidget {
   const BottomBarScreen({super.key});

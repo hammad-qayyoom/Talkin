@@ -5,21 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:talk_in/custom/dialog/request_sent_dialog.dart';
-import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/user_flow/become_host_screen/api/listeners_request_check_api.dart';
-import 'package:talk_in/ui/user_flow/become_host_screen/model/listeners_request_check_model.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/api/become_host_api.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/api/identity_proof_api.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/api/talk_topic_api.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/model/become_host_model.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/model/identity_proof_model.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/dialog/request_sent_dialog.dart';
+import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/become_host_screen/api/listeners_request_check_api.dart';
+import 'package:notisboard/ui/user_flow/become_host_screen/model/listeners_request_check_model.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/api/become_host_api.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/api/identity_proof_api.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/api/talk_topic_api.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/model/become_host_model.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/model/identity_proof_model.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HostVerificationController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -59,9 +59,12 @@ class HostVerificationController extends GetxController {
     loadAllLanguages();
     getIdentityProofApi();
     getTalkTopic();
-    emailController.text = Database.fetchLoginUserProfileModel?.user?.email ?? '';
-    nickNameController.text = Database.fetchLoginUserProfileModel?.user?.nickName ?? '';
-    nameController.text = Database.fetchLoginUserProfileModel?.user?.fullName ?? '';
+    emailController.text =
+        Database.fetchLoginUserProfileModel?.user?.email ?? '';
+    nickNameController.text =
+        Database.fetchLoginUserProfileModel?.user?.nickName ?? '';
+    nameController.text =
+        Database.fetchLoginUserProfileModel?.user?.fullName ?? '';
     genderCnt.text = Database.fetchLoginUserProfileModel?.user?.gender ?? '';
     countryCnt.text = Database.fetchLoginUserProfileModel?.user?.country ?? '';
     super.onInit();
@@ -148,7 +151,9 @@ class HostVerificationController extends GetxController {
       return;
     }
 
-    if (talkTopic.isEmpty || selectedTopic < 0 || selectedTopic >= talkTopic.length) {
+    if (talkTopic.isEmpty ||
+        selectedTopic < 0 ||
+        selectedTopic >= talkTopic.length) {
       Utils.showToast(Get.context!, "Please select a Category");
       return;
     }
@@ -157,7 +162,8 @@ class HostVerificationController extends GetxController {
       return;
     }
     logControllerState(); // Log all values
-    Get.dialog(const LoadingWidget(), barrierDismissible: false); // Start Loading...
+    Get.dialog(const LoadingWidget(),
+        barrierDismissible: false); // Start Loading...
 
     becomeHost();
   }
@@ -168,7 +174,7 @@ class HostVerificationController extends GetxController {
     } else {
       selectedTopics.add(index);
     }
-    update();
+    update([Constant.idIdentityProof]);
   }
 
   /// select language
@@ -178,7 +184,7 @@ class HostVerificationController extends GetxController {
     } else {
       selectedLanguages.add(language);
     }
-    update();
+    update([Constant.idIdentityProof]);
   }
 
   bool isSelected(String language) {
@@ -188,12 +194,13 @@ class HostVerificationController extends GetxController {
   /// get all language
   Future<void> loadAllLanguages() async {
     try {
-      final String response = await rootBundle.loadString('assets/all_language.json');
+      final String response =
+          await rootBundle.loadString('assets/all_language.json');
       final Map<String, dynamic> data = json.decode(response);
 
       allLanguages = data.values.map<String>((e) => e.toString()).toList();
 
-      update(); // if using GetX
+      update([Constant.idIdentityProof]);
     } catch (e, st) {
       log('Error loading languages: $e\n$st');
     }
@@ -237,10 +244,12 @@ class HostVerificationController extends GetxController {
   }
 
   Future<void> pickImage({required bool isPersonalPhoto}) async {
-    final XFile? pickedFile = await imagePicker.pickImage(source: ImageSource.gallery, imageQuality: 100);
+    final XFile? pickedFile = await imagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 100);
     if (pickedFile != null) {
       if (isPersonalPhoto) {
-        personalPhoto = pickedFile.path; // Store the selected personal photo path
+        personalPhoto =
+            pickedFile.path; // Store the selected personal photo path
         log("Selected personal photo path: $personalPhoto");
       } else if (idProofPhoto1 == null) {
         idProofPhoto1 = pickedFile.path; // Store first ID proof photo path
@@ -286,7 +295,9 @@ class HostVerificationController extends GetxController {
 
     log("Selected Languages (${selectedLanguages.length}): ${selectedLanguages.join(', ')}");
 
-    if (talkTopic.isNotEmpty && selectedTopic >= 0 && selectedTopic < talkTopic.length) {
+    if (talkTopic.isNotEmpty &&
+        selectedTopic >= 0 &&
+        selectedTopic < talkTopic.length) {
       log("Selected Category: ${talkTopic[selectedTopic].name}");
     } else {
       log("Selected Category: None");
@@ -298,10 +309,12 @@ class HostVerificationController extends GetxController {
   Future<void> becomeHost({String? image}) async {
     List<String> identityProofList = [];
     if (idProofPhoto1 != null && idProofPhoto1!.isNotEmpty) {
-      identityProofList.add(idProofPhoto1.toString()); // Add first ID proof photo to the list
+      identityProofList.add(
+          idProofPhoto1.toString()); // Add first ID proof photo to the list
     }
     if (idProofPhoto2 != null && idProofPhoto2!.isNotEmpty) {
-      identityProofList.add(idProofPhoto2.toString()); // Add second ID proof photo to the list
+      identityProofList.add(
+          idProofPhoto2.toString()); // Add second ID proof photo to the list
     }
     log("Experience: ${experienceCnt.text}");
     log("Address: ${addressController.text}");
@@ -315,16 +328,16 @@ class HostVerificationController extends GetxController {
     log("Nick Name: ${nickNameController.text}");
     log("Self Introduction: ${introCnt.text}");
     final selectedTopicNames = selectedTopics
-      .where((index) => index >= 0 && index < talkTopic.length)
-      .map((index) => (talkTopic[index].name ?? '').trim())
-      .where((name) => name.isNotEmpty)
-      .toList();
+        .where((index) => index >= 0 && index < talkTopic.length)
+        .map((index) => (talkTopic[index].name ?? '').trim())
+        .where((name) => name.isNotEmpty)
+        .toList();
 
     final selectedCategoryIds = selectedTopics
-      .where((index) => index >= 0 && index < talkTopic.length)
-      .map((index) => (talkTopic[index].id ?? '').trim())
-      .where((id) => id.isNotEmpty)
-      .toList();
+        .where((index) => index >= 0 && index < talkTopic.length)
+        .map((index) => (talkTopic[index].id ?? '').trim())
+        .where((id) => id.isNotEmpty)
+        .toList();
 
     log("Categories: ${selectedTopicNames.join(', ')}");
     log("Category IDs: ${selectedCategoryIds.join(', ')}");

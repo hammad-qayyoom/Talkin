@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/enums.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/enums.dart';
 
 class HostWalletScreenController extends GetxController {
   List<Map<String, dynamic>> item = [

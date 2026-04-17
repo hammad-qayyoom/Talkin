@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/app_language_screen/widget/app_language_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/ui/user_flow/app_language_screen/widget/app_language_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
 
 class AppLanguageScreen extends StatelessWidget {
   const AppLanguageScreen({super.key});

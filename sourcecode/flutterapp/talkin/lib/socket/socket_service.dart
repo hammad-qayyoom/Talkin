@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'package:talk_in/utils/api.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/utils/api.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 
 io.Socket? socket;
 

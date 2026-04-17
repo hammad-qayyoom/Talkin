@@ -10,17 +10,17 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
-import 'package:talk_in/socket/socket_emit.dart';
-import 'package:talk_in/ui/host_flow/host_personal_chat_screen/api/host_personal_chat_api.dart';
-import 'package:talk_in/ui/host_flow/host_personal_chat_screen/api/host_send_image_audio_api.dart';
-import 'package:talk_in/ui/host_flow/host_personal_chat_screen/model/host_personal_chat_model.dart';
-import 'package:talk_in/ui/host_flow/host_personal_chat_screen/model/host_send_image_audio_model.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/socket_params.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/socket/socket_emit.dart';
+import 'package:notisboard/ui/host_flow/host_personal_chat_screen/api/host_personal_chat_api.dart';
+import 'package:notisboard/ui/host_flow/host_personal_chat_screen/api/host_send_image_audio_api.dart';
+import 'package:notisboard/ui/host_flow/host_personal_chat_screen/model/host_personal_chat_model.dart';
+import 'package:notisboard/ui/host_flow/host_personal_chat_screen/model/host_send_image_audio_model.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/socket_params.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HostPersonalChatScreenController extends GetxController {
   String? chatTopicId;

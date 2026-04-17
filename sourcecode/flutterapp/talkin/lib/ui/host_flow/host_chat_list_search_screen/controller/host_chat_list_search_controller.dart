@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/host_flow/host_chat_screen/api/host_chat_list_search_api.dart';
-import 'package:talk_in/ui/host_flow/host_chat_screen/model/host_chat_list_search_model.dart';
+import 'package:notisboard/ui/host_flow/host_chat_screen/api/host_chat_list_search_api.dart';
+import 'package:notisboard/ui/host_flow/host_chat_screen/model/host_chat_list_search_model.dart';
 
 class HostChatListSearchController extends GetxController {
   final TextEditingController searchController = TextEditingController();

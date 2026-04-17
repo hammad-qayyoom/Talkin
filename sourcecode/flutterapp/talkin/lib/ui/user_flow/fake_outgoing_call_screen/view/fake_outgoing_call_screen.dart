@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/fake_outgoing_call_screen/controller/fake_outgoing_call_controller.dart';
-import 'package:talk_in/ui/user_flow/fake_outgoing_call_screen/widget/fake_outgoing_call_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/fake_outgoing_call_screen/controller/fake_outgoing_call_controller.dart';
+import 'package:notisboard/ui/user_flow/fake_outgoing_call_screen/widget/fake_outgoing_call_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class FakeOutgoingCallScreen extends StatelessWidget {
   const FakeOutgoingCallScreen({super.key});

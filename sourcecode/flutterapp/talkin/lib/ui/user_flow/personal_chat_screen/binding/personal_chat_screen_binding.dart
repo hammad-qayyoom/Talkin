@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/personal_chat_screen/controller/personal_chat_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/personal_chat_screen/controller/personal_chat_screen_controller.dart';
 
 class PersonalChatScreenBinding extends Bindings {
   @override

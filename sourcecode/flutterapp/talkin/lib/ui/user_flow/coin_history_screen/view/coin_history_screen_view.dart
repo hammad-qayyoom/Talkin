@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/user_flow/coin_history_screen/widget/coin_history_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/coin_history_screen/widget/coin_history_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class CoinHistoryScreen extends StatelessWidget {
   const CoinHistoryScreen({super.key});

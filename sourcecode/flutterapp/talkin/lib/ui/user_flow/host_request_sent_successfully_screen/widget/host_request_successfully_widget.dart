@@ -1,17 +1,17 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_button/primary_app_button.dart';
-import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
-import 'package:talk_in/ui/user_flow/become_host_screen/controller/become_host_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/host_request_sent_successfully_screen/controller/host_request_sent_successfully_controller.dart';
-import 'package:talk_in/ui/user_flow/host_request_sent_successfully_screen/shimmer/host_request_successfully_shimmer.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/app_button/primary_app_button.dart';
+import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/ui/user_flow/become_host_screen/controller/become_host_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/host_request_sent_successfully_screen/controller/host_request_sent_successfully_controller.dart';
+import 'package:notisboard/ui/user_flow/host_request_sent_successfully_screen/shimmer/host_request_successfully_shimmer.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class InfoTile extends StatelessWidget {
   final String title;

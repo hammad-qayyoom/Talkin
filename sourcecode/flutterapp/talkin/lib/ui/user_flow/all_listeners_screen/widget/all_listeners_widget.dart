@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/app_bar/custom_app_bar.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/enums.dart';
+import 'package:notisboard/custom/app_bar/custom_app_bar.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/enums.dart';
 
 class AllListenersAppBar extends StatelessWidget {
   const AllListenersAppBar({super.key});

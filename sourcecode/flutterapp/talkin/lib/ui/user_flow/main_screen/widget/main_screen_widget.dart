@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/user_flow/main_screen/controller/main_screen_controller.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/main_screen/controller/main_screen_controller.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
 
 class MainScreenView extends StatelessWidget {
   const MainScreenView({super.key});
@@ -62,7 +62,7 @@ class MainScreenView extends StatelessWidget {
                       children: [
                         Center(
                           child: Text(
-                            "Talkin",
+                            "Notisboard",
                             style: AppFontStyle.fontStyleKaushanW400(
                               fontSize: 58,
                               fontColor: _brandDark,
@@ -146,14 +146,17 @@ class MainScreenView extends StatelessWidget {
                                     Get.toNamed(
                                       AppRoutes.forgotPasswordScreen,
                                       arguments: {
-                                        'email': controller.emailController.text.trim(),
+                                        'email': controller.emailController.text
+                                            .trim(),
                                       },
                                     );
                                   },
                                   style: TextButton.styleFrom(
                                     minimumSize: Size.zero,
-                                    padding: const EdgeInsets.only(top: 8, bottom: 6),
-                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    padding: const EdgeInsets.only(
+                                        top: 8, bottom: 6),
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
                                   ),
                                   child: Text(
                                     EnumLocale.forgotPassword.name.tr,
@@ -211,9 +214,12 @@ class MainScreenView extends StatelessWidget {
                         const SizedBox(height: 18),
                         Row(
                           children: [
-                            Expanded(child: Divider(color: _softBorder, thickness: 1)),
+                            Expanded(
+                                child:
+                                    Divider(color: _softBorder, thickness: 1)),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               child: Text(
                                 "or continue with",
                                 style: AppFontStyle.fontStyleW500(
@@ -222,7 +228,9 @@ class MainScreenView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Expanded(child: Divider(color: _softBorder, thickness: 1)),
+                            Expanded(
+                                child:
+                                    Divider(color: _softBorder, thickness: 1)),
                           ],
                         ),
                         const SizedBox(height: 14),
@@ -280,7 +288,8 @@ class MainScreenView extends StatelessWidget {
         ),
         filled: true,
         fillColor: _softSurface,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(color: _softBorder),
@@ -319,10 +328,10 @@ class MainScreenView extends StatelessWidget {
         icon: Icon(icon, size: 20),
         label: Text(
           text,
-          style: AppFontStyle.fontStyleW600(fontSize: 17, fontColor: AppColors.white),
+          style: AppFontStyle.fontStyleW600(
+              fontSize: 17, fontColor: AppColors.white),
         ),
       ),
     );
   }
-
 }

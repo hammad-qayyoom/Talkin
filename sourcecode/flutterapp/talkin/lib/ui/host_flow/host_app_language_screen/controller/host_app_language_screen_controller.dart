@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:get/get.dart';
-import 'package:talk_in/localization/localizations_delegate.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/preference.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/localization/localizations_delegate.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/preference.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class HostAppLanguageScreenController extends GetxController {
   int checkedValue = Database.languageIndex;

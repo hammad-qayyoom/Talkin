@@ -1,4 +1,4 @@
-import 'package:talk_in/utils/enums.dart';
+import 'package:notisboard/utils/enums.dart';
 
 final Map<String, String> bnIN = <String, String>{
   EnumLocale.txtAppName.name: "কথা বলছি",

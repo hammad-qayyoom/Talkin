@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class FirebaseAccessToken {
   static Future<String?> onGet() async {

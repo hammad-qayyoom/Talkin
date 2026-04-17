@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/progress_indicator/progress_dialog.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class MobileNumberController extends GetxController {
   final FirebaseAuth auth = FirebaseAuth.instance;

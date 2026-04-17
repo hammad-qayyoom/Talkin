@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:talk_in/routes/app_routes.dart';
+import 'package:notisboard/routes/app_routes.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:talk_in/ui/user_flow/feed_screen/api/feed_api.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/feed_screen/api/feed_api.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class FeedScreenController extends GetxController {
   bool isStandalone = false;
@@ -400,7 +400,7 @@ class FeedScreenController extends GetxController {
     }
 
     final shareText = textParts.isEmpty
-        ? 'Check this post on Talkin.'
+        ? 'Check this post on Notisboard.'
         : textParts.join('\n\n');
     await SharePlus.instance.share(
       ShareParams(text: shareText),

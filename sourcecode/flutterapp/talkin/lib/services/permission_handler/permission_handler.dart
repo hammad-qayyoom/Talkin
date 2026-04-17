@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class PermissionHandler {
   static Future<void> notificationPermissions() async {

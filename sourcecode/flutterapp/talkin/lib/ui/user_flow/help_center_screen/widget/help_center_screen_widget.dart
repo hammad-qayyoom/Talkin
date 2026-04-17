@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/help_center_screen/controller/help_center_screen_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/help_center_screen/controller/help_center_screen_controller.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HelpCenterAppBar extends StatelessWidget {
@@ -111,8 +111,8 @@ class HelpCenterScreenView extends GetView<HelpCenterScreenController> {
 
   Future<void> _openIssueMail() async {
     final helpdeskEmail = Database.settingApiModel?.data?.helpdeskEmail ?? '';
-    final userEmail =
-        Database.fetchLoginUserProfileModel?.user?.email ?? 'no-reply@talkin';
+    final userEmail = Database.fetchLoginUserProfileModel?.user?.email ??
+        'no-reply@notisboard';
 
     if (helpdeskEmail.trim().isEmpty) {
       Get.snackbar('Error', 'Helpdesk email not available');

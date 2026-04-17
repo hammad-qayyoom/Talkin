@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/socket/socket_service.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/api/fetch_login_user_profile_api.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/model/aap_configuration_model.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/model/fetch_listener_profile_model.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/model/fetch_login_user_profile_model.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/model/setting_api_model.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/firebse_access_token.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/socket/socket_service.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_login_user_profile_api.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/model/aap_configuration_model.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/model/fetch_listener_profile_model.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/model/fetch_login_user_profile_model.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/model/setting_api_model.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class Database {
   static final localStorage = GetStorage();

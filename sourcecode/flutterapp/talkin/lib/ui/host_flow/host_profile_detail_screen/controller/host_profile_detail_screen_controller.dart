@@ -1,12 +1,12 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
-import 'package:talk_in/ui/user_flow/splash_screen_page/model/fetch_listener_profile_model.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/model/fetch_listener_profile_model.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
 
 class HostProfileDetailScreenController extends GetxController {
   bool isLoading = false;

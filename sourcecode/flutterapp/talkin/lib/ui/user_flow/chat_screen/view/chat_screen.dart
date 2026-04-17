@@ -1,13 +1,13 @@
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
-// import 'package:talk_in/custom/dialog/exit_app_dialog.dart';
-// import 'package:talk_in/routes/app_routes.dart';
-// import 'package:talk_in/ui/user_flow/chat_screen/controller/chat_screen_controller.dart';
-// import 'package:talk_in/ui/user_flow/chat_screen/shimmer/chat_list_shimmer.dart';
-// import 'package:talk_in/ui/user_flow/chat_screen/widget/chat_screen_widget.dart';
-// import 'package:talk_in/utils/app_asset.dart';
-// import 'package:talk_in/utils/app_color.dart';
-// import 'package:talk_in/utils/constant.dart';
+// import 'package:notisboard/custom/dialog/exit_app_dialog.dart';
+// import 'package:notisboard/routes/app_routes.dart';
+// import 'package:notisboard/ui/user_flow/chat_screen/controller/chat_screen_controller.dart';
+// import 'package:notisboard/ui/user_flow/chat_screen/shimmer/chat_list_shimmer.dart';
+// import 'package:notisboard/ui/user_flow/chat_screen/widget/chat_screen_widget.dart';
+// import 'package:notisboard/utils/app_asset.dart';
+// import 'package:notisboard/utils/app_color.dart';
+// import 'package:notisboard/utils/constant.dart';
 //
 // class ChatScreen extends StatelessWidget {
 //   const ChatScreen({super.key});
@@ -92,16 +92,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/dialog/exit_app_dialog.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/user_flow/chat_screen/api/chat_list_api.dart';
-import 'package:talk_in/ui/user_flow/chat_screen/controller/chat_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/chat_screen/shimmer/chat_list_shimmer.dart';
-import 'package:talk_in/ui/user_flow/chat_screen/widget/chat_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/dialog/exit_app_dialog.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/chat_screen/api/chat_list_api.dart';
+import 'package:notisboard/ui/user_flow/chat_screen/controller/chat_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/chat_screen/shimmer/chat_list_shimmer.dart';
+import 'package:notisboard/ui/user_flow/chat_screen/widget/chat_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});

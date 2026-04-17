@@ -1,14 +1,14 @@
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/custom_profile/custom_profile_image.dart';
-import 'package:talk_in/ui/user_flow/voice_call_screen/controller/voice_call_controller.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/ui/user_flow/voice_call_screen/controller/voice_call_controller.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 
 /// =================== Video Call View =================== ///
@@ -198,7 +198,7 @@ class VoiceCallView1 extends StatelessWidget {
       children: [
         Center(
             child: Text(
-          "Talkin",
+          "Notisboard",
           style: AppFontStyle.fontStyleKaushanW400(
             font: FontWeight.w600,
             fontSize: 32,

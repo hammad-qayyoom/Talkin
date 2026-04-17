@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class FlutterWaveService {
   static Future<void> init({

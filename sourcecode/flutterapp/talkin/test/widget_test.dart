@@ -12,9 +12,9 @@ void main() {
   testWidgets('basic smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(const Directionality(
       textDirection: TextDirection.ltr,
-      child: Text('Talkin Smoke Test'),
+      child: Text('Notisboard Smoke Test'),
     ));
 
-    expect(find.text('Talkin Smoke Test'), findsOneWidget);
+    expect(find.text('Notisboard Smoke Test'), findsOneWidget);
   });
 }

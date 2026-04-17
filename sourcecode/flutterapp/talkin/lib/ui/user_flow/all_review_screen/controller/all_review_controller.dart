@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/api/listener_review_api.dart';
-import 'package:talk_in/ui/user_flow/profile_detail_screen/model/listener_review_model.dart';
-import 'package:talk_in/utils/constant.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/api/listener_review_api.dart';
+import 'package:notisboard/ui/user_flow/profile_detail_screen/model/listener_review_model.dart';
+import 'package:notisboard/utils/constant.dart';
 
 class AllReviewController extends GetxController {
   bool isLoading = false;

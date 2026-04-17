@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/user_flow/select_gender_screen/widget/select_gender_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/ui/user_flow/select_gender_screen/widget/select_gender_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
 
 class SelectGenderScreen extends StatelessWidget {
   const SelectGenderScreen({super.key});

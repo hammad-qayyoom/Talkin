@@ -2,12 +2,12 @@
 // import 'dart:developer';
 //
 // import 'package:http/http.dart' as http;
-// import 'package:talk_in/ui/user_flow/personal_chat_screen/model/send_image_audio_model.dart';
-// import 'package:talk_in/utils/api.dart';
-// import 'package:talk_in/utils/api_params.dart';
-// import 'package:talk_in/utils/database.dart';
-// import 'package:talk_in/utils/firebse_access_token.dart';
-// import 'package:talk_in/utils/utils.dart';
+// import 'package:notisboard/ui/user_flow/personal_chat_screen/model/send_image_audio_model.dart';
+// import 'package:notisboard/utils/api.dart';
+// import 'package:notisboard/utils/api_params.dart';
+// import 'package:notisboard/utils/database.dart';
+// import 'package:notisboard/utils/firebse_access_token.dart';
+// import 'package:notisboard/utils/utils.dart';
 //
 // class SendImageAudioApi {
 //   static Future<SendImageAudioModel?> callApi({
@@ -73,12 +73,12 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
-import 'package:talk_in/ui/user_flow/personal_chat_screen/model/send_image_audio_model.dart';
-import 'package:talk_in/utils/api.dart';
-import 'package:talk_in/utils/api_params.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/firebse_access_token.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/personal_chat_screen/model/send_image_audio_model.dart';
+import 'package:notisboard/utils/api.dart';
+import 'package:notisboard/utils/api_params.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class SendImageAudioApi {
   static const int maxFileSize = 10 * 1024 * 1024; // 10 MB

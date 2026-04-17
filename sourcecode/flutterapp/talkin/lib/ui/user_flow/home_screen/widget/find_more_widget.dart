@@ -1,16 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
-import 'package:talk_in/ui/user_flow/home_screen/controller/home_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
-import 'package:talk_in/utils/api.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/constant.dart';
-import 'package:talk_in/utils/enums.dart';
-import 'package:talk_in/utils/font_style.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
+import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
+import 'package:notisboard/utils/api.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/font_style.dart';
 
 class FindMoreWidget extends StatelessWidget {
   const FindMoreWidget({super.key});
@@ -269,7 +269,7 @@ class FindMoreWidget extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        'Talkin Premium',
+                        'Notisboard Premium',
                         style: AppFontStyle.fontStyleW700(
                           fontSize: isTablet ? 18 : 14,
                           fontColor: AppColors.white,

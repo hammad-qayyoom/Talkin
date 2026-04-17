@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/fake_video_call_screen/controller/fake_video_call_controller.dart';
-import 'package:talk_in/ui/user_flow/fake_video_call_screen/fake_video_call_widget/fake_video_call_widget.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/user_flow/fake_video_call_screen/controller/fake_video_call_controller.dart';
+import 'package:notisboard/ui/user_flow/fake_video_call_screen/fake_video_call_widget/fake_video_call_widget.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class FakeVideoCallScreen extends StatefulWidget {
   const FakeVideoCallScreen({super.key});

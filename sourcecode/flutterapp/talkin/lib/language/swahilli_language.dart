@@ -1,7 +1,7 @@
-import 'package:talk_in/utils/enums.dart';
+import 'package:notisboard/utils/enums.dart';
 
 final Map<String, String> swKE = <String, String>{
-  EnumLocale.txtAppName.name: "Talkin",
+  EnumLocale.txtAppName.name: "Notisboard",
   EnumLocale.txtRegisterTitle1.name: "TAFUTA",
   EnumLocale.txtRegisterTitle2.name: "CHAT",
   EnumLocale.txtRegisterTitle3.name: "WITO WA VIDEO",

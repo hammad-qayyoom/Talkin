@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:talk_in/ui/user_flow/become_host_screen/api/listeners_request_check_api.dart';
-import 'package:talk_in/ui/user_flow/become_host_screen/model/listeners_request_check_model.dart';
+import 'package:notisboard/ui/user_flow/become_host_screen/api/listeners_request_check_api.dart';
+import 'package:notisboard/ui/user_flow/become_host_screen/model/listeners_request_check_model.dart';
 
 class HostRequestSentSuccessfullyController extends GetxController {
   bool isLoading = false;

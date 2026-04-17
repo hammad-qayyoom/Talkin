@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/common/session_booking/session_booking_service.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/font_style.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class ExpertAvailabilityScreen extends StatefulWidget {
   const ExpertAvailabilityScreen({super.key});

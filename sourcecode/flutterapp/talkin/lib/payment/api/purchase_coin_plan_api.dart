@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:talk_in/ui/user_flow/my_wallet_screen/model/purchase_coin_plan.dart';
-import 'package:talk_in/utils/api.dart';
-import 'package:talk_in/utils/api_params.dart';
+import 'package:notisboard/ui/user_flow/my_wallet_screen/model/purchase_coin_plan.dart';
+import 'package:notisboard/utils/api.dart';
+import 'package:notisboard/utils/api_params.dart';
 
 import '../../utils/utils.dart';
 

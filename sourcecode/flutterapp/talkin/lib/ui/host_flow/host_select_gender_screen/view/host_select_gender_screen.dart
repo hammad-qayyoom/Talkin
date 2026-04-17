@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:talk_in/ui/host_flow/host_select_gender_screen/widget/host_select_gender_screen_widget.dart';
-import 'package:talk_in/utils/app_color.dart';
+import 'package:notisboard/ui/host_flow/host_select_gender_screen/widget/host_select_gender_screen_widget.dart';
+import 'package:notisboard/utils/app_color.dart';
 
 class HostSelectGenderScreen extends StatelessWidget {
   const HostSelectGenderScreen({super.key});

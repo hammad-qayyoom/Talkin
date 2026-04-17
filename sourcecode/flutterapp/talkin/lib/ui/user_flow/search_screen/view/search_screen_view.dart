@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talk_in/custom/listeners/recent_listeners.dart';
-import 'package:talk_in/routes/app_routes.dart';
-import 'package:talk_in/ui/user_flow/search_screen/controller/search_screen_controller.dart';
-import 'package:talk_in/ui/user_flow/search_screen/widget/search_screen_widget.dart';
-import 'package:talk_in/utils/app_asset.dart';
-import 'package:talk_in/utils/app_color.dart';
-import 'package:talk_in/utils/database.dart';
-import 'package:talk_in/utils/utils.dart';
+import 'package:notisboard/custom/listeners/recent_listeners.dart';
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/search_screen/controller/search_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/search_screen/widget/search_screen_widget.dart';
+import 'package:notisboard/utils/app_asset.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/utils.dart';
 
 class SearchScreenView extends StatelessWidget {
   const SearchScreenView({super.key});
