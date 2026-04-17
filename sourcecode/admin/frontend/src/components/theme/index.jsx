@@ -94,7 +94,7 @@ const CustomThemeProvider = props => {
     >
       <ThemeProvider
         theme={theme}
-        defaultMode={systemMode}
+        defaultMode={themeConfig.mode}
         modeStorageKey={`${projectName.toLowerCase().split(' ').join('-')}-mui-template-mode`}
       >
         <>

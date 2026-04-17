@@ -8,7 +8,9 @@ import themeConfig from '@configs/themeConfig'
 import { commonLayoutClasses } from '@layouts/utils/layoutClasses'
 
 const StyledMain = styled.main`
+  position: relative;
   padding: ${themeConfig.layoutPadding}px;
+  min-block-size: calc(100dvh - var(--header-height));
   ${({ isContentCompact }) =>
     isContentCompact &&
     `

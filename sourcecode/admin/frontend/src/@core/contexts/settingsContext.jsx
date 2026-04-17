@@ -30,15 +30,24 @@ export const SettingsProvider = props => {
     mode: props.mode || themeConfig.mode
   }
 
+  const normalizedSettingsCookie =
+    JSON.stringify(props.settingsCookie) !== '{}'
+      ? {
+          ...props.settingsCookie,
+          mode: themeConfig.mode,
+          semiDark: themeConfig.semiDark
+        }
+      : updatedInitialSettings
+
   // Cookies
   const [settingsCookie, updateSettingsCookie] = useObjectCookie(
     themeConfig.settingsCookieName,
-    JSON.stringify(props.settingsCookie) !== '{}' ? props.settingsCookie : updatedInitialSettings
+    normalizedSettingsCookie
   )
 
   // State
   const [_settingsState, _updateSettingsState] = useState(
-    JSON.stringify(settingsCookie) !== '{}' ? settingsCookie : updatedInitialSettings
+    JSON.stringify(settingsCookie) !== '{}' ? settingsCookie : normalizedSettingsCookie
   )
 
   const updateSettings = (settings, options) => {

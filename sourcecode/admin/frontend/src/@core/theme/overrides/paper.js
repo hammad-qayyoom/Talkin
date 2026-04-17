@@ -2,7 +2,8 @@ const paper = {
   MuiPaper: {
     styleOverrides: {
       root: {
-        backgroundImage: 'none'
+        backgroundImage: 'none',
+        borderRadius: 'var(--mui-shape-customBorderRadius-md)'
       }
     }
   }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
@@ -8,6 +8,7 @@ import DialogActions from '@mui/material/DialogActions'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
+import Box from '@mui/material/Box'
 
 // Icons
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
@@ -28,9 +29,6 @@ const ConfirmationDialog = ({
 }) => {
   const [dialogState, setDialogState] = useState('confirmation') // 'confirmation', 'success', 'error', 'cancelled'
   const [isProcessing, setIsProcessing] = useState(false)
-
-  // Use Fragment or div based on type
-  const Wrapper = type === 'suspend-account' ? 'div' : Fragment
 
   // Reset state when dialog opens/closes
   useEffect(() => {
@@ -97,7 +95,7 @@ const ConfirmationDialog = ({
       'delete-reaction': 'Reaction deleted successfully.',
       'approve-payout': 'Payout request approved successfully.',
       'reject-payout': 'Payout request rejected successfully.',
-      'approve-request': 'Requset approve successfully.',
+      'approve-request': 'Request approved successfully.',
       default: 'Success!'
     }
 
@@ -177,6 +175,31 @@ const ConfirmationDialog = ({
   const isConfirmationDialog = dialogState === 'confirmation'
   const isResultDialog = ['success', 'error', 'cancelled'].includes(dialogState)
 
+  const resultMeta =
+    dialogState === 'success'
+      ? {
+          title: 'Success',
+          color: 'var(--mui-palette-success-main)',
+          icon: <CheckCircleOutlineIcon sx={{ fontSize: 34 }} />,
+          message: getSuccessMessage(),
+          buttonColor: 'success'
+        }
+      : dialogState === 'error'
+        ? {
+            title: 'Action Failed',
+            color: 'var(--mui-palette-error-main)',
+            icon: <CancelOutlinedIcon sx={{ fontSize: 34 }} />,
+            message: error,
+            buttonColor: 'error'
+          }
+        : {
+            title: 'Cancelled',
+            color: 'var(--mui-palette-warning-main)',
+            icon: <CancelOutlinedIcon sx={{ fontSize: 34 }} />,
+            message: getCancelMessage(),
+            buttonColor: 'secondary'
+          }
+
   return (
     <>
       {/* Confirmation Dialog */}
@@ -186,47 +209,91 @@ const ConfirmationDialog = ({
         open={open && isConfirmationDialog}
         onClose={() => !loading && handleCancel()}
         closeAfterTransition={false}
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            border: '1px solid var(--mui-palette-divider)',
+            boxShadow: 'var(--mui-customShadows-lg)'
+          }
+        }}
       >
-        <DialogContent className='flex items-center flex-col text-center sm:pbs-16 sm:pbe-6 sm:pli-16'>
-          <ErrorOutlineIcon color='warning' sx={{ fontSize: 80, mb: 2 }} />
-          <Typography variant='h5' sx={{ mb: 1 }}>
+        <DialogContent sx={{ px: 4, pt: 4.5, pb: 2, textAlign: 'center' }}>
+          <Box
+            sx={{
+              mx: 'auto',
+              mb: 2,
+              width: 68,
+              height: 68,
+              borderRadius: 2.5,
+              display: 'grid',
+              placeItems: 'center',
+              color: 'var(--mui-palette-primary-main)',
+              backgroundColor: 'var(--mui-palette-primary-lightOpacity)'
+            }}
+          >
+            <ErrorOutlineIcon sx={{ fontSize: 34 }} />
+          </Box>
+          <Typography variant='h5' sx={{ mb: 1, fontWeight: 800, color: 'var(--mui-palette-secondary-dark)' }}>
             {getConfirmationTitle()}
           </Typography>
-          <Typography color='text.secondary'>{getConfirmationContent()}</Typography>
+          <Typography color='text.secondary' sx={{ lineHeight: 1.55 }}>
+            {getConfirmationContent()}
+          </Typography>
         </DialogContent>
-        <DialogActions className='justify-center pbs-0 sm:pbe-16 sm:pli-16'>
-          <Button variant='contained' onClick={handleConfirmation} disabled={loading}>
-            {loading ? <CircularProgress size={20} sx={{ color: 'white' }} /> : confirmButtonText}
-          </Button>
-          <Button variant='tonal' color='secondary' onClick={handleCancel} disabled={loading}>
+        <DialogActions sx={{ px: 4, pb: 4, pt: 2, justifyContent: 'center', gap: 1.5 }}>
+          <Button variant='outlined' color='secondary' onClick={handleCancel} disabled={loading} sx={{ minWidth: 120 }}>
             {cancelButtonText}
+          </Button>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={handleConfirmation}
+            disabled={loading}
+            sx={{ minWidth: 140 }}
+          >
+            {loading ? <CircularProgress size={20} sx={{ color: 'white' }} /> : confirmButtonText}
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* Result Dialog */}
-      <Dialog open={open && isResultDialog} onClose={handleFinalClose} closeAfterTransition={false}>
-        <DialogContent className='flex items-center flex-col text-center sm:pbs-16 sm:pbe-6 sm:pli-16'>
-          {dialogState === 'success' ? (
-            <CheckCircleOutlineIcon color='success' sx={{ fontSize: 80, mb: 2 }} />
-          ) : dialogState === 'error' ? (
-            <CancelOutlinedIcon color='error' sx={{ fontSize: 80, mb: 2 }} />
-          ) : (
-            <CancelOutlinedIcon color='warning' sx={{ fontSize: 80, mb: 2 }} />
-          )}
-          <Typography variant='h5' className='mbe-2'>
-            {dialogState === 'error' ? 'Action Failed' : dialogState === 'success' ? 'Success' : 'Cancelled'}
+      <Dialog
+        open={open && isResultDialog}
+        onClose={handleFinalClose}
+        closeAfterTransition={false}
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            border: '1px solid var(--mui-palette-divider)',
+            boxShadow: 'var(--mui-customShadows-lg)'
+          }
+        }}
+      >
+        <DialogContent sx={{ px: 4, pt: 4.5, pb: 2, textAlign: 'center' }}>
+          <Box
+            sx={{
+              mx: 'auto',
+              mb: 2,
+              width: 68,
+              height: 68,
+              borderRadius: 2.5,
+              display: 'grid',
+              placeItems: 'center',
+              color: resultMeta.color,
+              backgroundColor: `${resultMeta.color}1F`
+            }}
+          >
+            {resultMeta.icon}
+          </Box>
+          <Typography variant='h5' sx={{ mb: 1, fontWeight: 800, color: 'var(--mui-palette-secondary-dark)' }}>
+            {resultMeta.title}
           </Typography>
-          <Typography color='text.secondary'>
-            {dialogState === 'error' ? error : dialogState === 'success' ? getSuccessMessage() : getCancelMessage()}
+          <Typography color='text.secondary' sx={{ lineHeight: 1.55 }}>
+            {resultMeta.message}
           </Typography>
         </DialogContent>
-        <DialogActions className='justify-center pbs-0 sm:pbe-16 sm:pli-16'>
-          <Button
-            variant='contained'
-            color={dialogState === 'error' ? 'error' : dialogState === 'success' ? 'success' : 'secondary'}
-            onClick={handleFinalClose}
-          >
+        <DialogActions sx={{ px: 4, pb: 4, pt: 2, justifyContent: 'center' }}>
+          <Button variant='contained' color={resultMeta.buttonColor} onClick={handleFinalClose} sx={{ minWidth: 120 }}>
             Ok
           </Button>
         </DialogActions>

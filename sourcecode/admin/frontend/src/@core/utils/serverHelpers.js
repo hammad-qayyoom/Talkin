@@ -15,6 +15,10 @@ export const getSettingsFromCookie = async () => {
 }
 
 export const getMode = async () => {
+  if (themeConfig.mode !== 'system') {
+    return themeConfig.mode
+  }
+
   const settingsCookie = await getSettingsFromCookie()
 
   // Get mode from cookie or fallback to theme config

@@ -18,7 +18,6 @@ import ScrollToTop from '@core/components/scroll-to-top'
 // Util Imports
 import { getMode, getSystemMode } from '@core/utils/serverHelpers'
 import ClientAuthGuard from '@/@core/components/ClientAuthGuard'
-import Customizer from '@/@core/components/customizer'
 
 const Layout = async props => {
   const { children } = props
@@ -48,7 +47,6 @@ const Layout = async props => {
           <i className='tabler-arrow-up' />
         </Button>
       </ScrollToTop>
-      <Customizer />
     </Providers>
   )
 }

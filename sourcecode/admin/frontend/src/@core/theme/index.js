@@ -1,5 +1,5 @@
 // Next Imports
-import { Public_Sans } from 'next/font/google'
+import { Manrope } from 'next/font/google'
 
 // Theme Options Imports
 import overrides from './overrides'
@@ -9,7 +9,7 @@ import shadows from './shadows'
 import customShadows from './customShadows'
 import typography from './typography'
 
-const public_sans = Public_Sans({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700', '800', '900'] })
+const manrope = Manrope({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'] })
 
 const theme = (settings, mode, direction) => {
   return {
@@ -18,23 +18,23 @@ const theme = (settings, mode, direction) => {
     colorSchemes: colorSchemes(settings.skin),
     ...spacing,
     shape: {
-      borderRadius: 6,
+      borderRadius: 12,
       customBorderRadius: {
-        xs: 2,
-        sm: 4,
-        md: 6,
-        lg: 8,
-        xl: 10
+        xs: 6,
+        sm: 8,
+        md: 12,
+        lg: 16,
+        xl: 20
       }
     },
     shadows: shadows(mode),
-    typography: typography(public_sans.style.fontFamily),
+    typography: typography(manrope.style.fontFamily),
     customShadows: customShadows(mode),
     mainColorChannels: {
-      light: '47 43 61',
-      dark: '225 222 245',
-      lightShadow: '47 43 61',
-      darkShadow: '19 17 32'
+      light: '17 24 39',
+      dark: '241 245 249',
+      lightShadow: '15 23 42',
+      darkShadow: '2 6 23'
     }
   }
 }

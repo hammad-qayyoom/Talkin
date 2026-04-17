@@ -1,4 +1,5 @@
 // MUI Imports
+import Box from '@mui/material/Box'
 import Pagination from '@mui/material/Pagination'
 import Typography from '@mui/material/Typography'
 
@@ -13,7 +14,7 @@ import Typography from '@mui/material/Typography'
  * @param {Function} props.onPageChange - Callback when page changes, receives the new page number (1-indexed)
  * @param {string} [props.customText] - Optional custom text to display instead of default pagination info
  */
-const TablePaginationComponent = ({ table, page, pageSize, total, onPageChange, customText }) => {
+const TablePaginationComponent = ({ table: _table, page, pageSize, total, onPageChange, customText }) => {
   // Handle page change
   const handlePageChange = (_, newPage) => {
     if (onPageChange) {
@@ -21,24 +22,43 @@ const TablePaginationComponent = ({ table, page, pageSize, total, onPageChange, 
     }
   }
 
+  const startEntry = total === 0 ? 0 : (page - 1) * pageSize + 1
+  const endEntry = Math.min(page * pageSize, total)
+  const totalPages = Math.max(1, Math.ceil(total / pageSize))
+
   return (
-    <div className='flex justify-between items-center flex-wrap pli-6 border-bs bs-auto plb-[12.5px] gap-2'>
-      <Typography color='text.disabled'>
-        {customText ||
-          `Showing ${total === 0 ? 0 : (page - 1) * pageSize + 1} to
-           ${Math.min(page * pageSize, total)} of ${total} entries`}
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: 2,
+        px: 4,
+        py: 1.5,
+        borderTop: '1px solid var(--mui-palette-divider)',
+        backgroundColor: 'rgb(var(--mui-palette-background-paperChannel) / 0.72)'
+      }}
+    >
+      <Typography variant='body2' color='text.secondary' sx={{ fontWeight: 600 }}>
+        {customText || `Showing ${startEntry} to ${endEntry} of ${total} entries`}
       </Typography>
       <Pagination
         shape='rounded'
         color='primary'
         variant='tonal'
-        count={Math.ceil(total / pageSize)}
+        count={totalPages}
         page={page}
         onChange={handlePageChange}
         showFirstButton
         showLastButton
+        sx={{
+          '& .MuiPaginationItem-root': {
+            fontWeight: 700
+          }
+        }}
       />
-    </div>
+    </Box>
   )
 }
 

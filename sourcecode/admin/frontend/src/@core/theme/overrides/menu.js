@@ -12,6 +12,8 @@ const menu = skin => ({
     styleOverrides: {
       paper: ({ theme }) => ({
         marginBlockStart: theme.spacing(0.5),
+        borderRadius: 'var(--mui-shape-customBorderRadius-md)',
+        border: '1px solid var(--mui-palette-divider)',
         ...(skin !== 'bordered' && {
           boxShadow: 'var(--mui-customShadows-lg)'
         })
@@ -25,9 +27,9 @@ const menu = skin => ({
         gap: theme.spacing(2),
         color: 'var(--mui-palette-text-primary)',
         marginInline: theme.spacing(2),
-        borderRadius: 'var(--mui-shape-borderRadius)',
+        borderRadius: 10,
         '& i, & svg': {
-          fontSize: '1.375rem'
+          fontSize: '1.2rem'
         },
         '& .MuiListItemIcon-root': {
           minInlineSize: 0

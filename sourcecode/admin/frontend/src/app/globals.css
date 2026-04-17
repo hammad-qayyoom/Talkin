@@ -8,7 +8,7 @@
   --primary-color: var(--mui-palette-primary-main);
   --background-color: var(--mui-palette-background-default);
   --background-color-rgb: var(--mui-palette-background-paperChannel);
-  --header-height: 54px;
+  --header-height: 72px;
   --header-z-index: var(--mui-zIndex-appBar);
   --footer-z-index: 10;
   --customizer-z-index: var(--mui-zIndex-drawer);
@@ -38,6 +38,16 @@ html {
   display: flex;
   inline-size: 100%;
   min-block-size: 100%;
+}
+
+body {
+  min-block-size: 100%;
+  background: radial-gradient(circle at 100% 0%, rgb(var(--mui-palette-primary-mainChannel) / 0.08), transparent 38%),
+    radial-gradient(circle at 0% 100%, rgb(var(--mui-palette-secondary-mainChannel) / 0.06), transparent 36%),
+    var(--background-color);
+  color: var(--mui-palette-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -91,6 +101,7 @@ ul:not([class]) {
 }
 
 .ts-vertical-nav-root {
+  border-radius: 18px;
   .ps__thumb-y {
     inline-size: 4px;
     &:hover,

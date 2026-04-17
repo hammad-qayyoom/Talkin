@@ -51,9 +51,12 @@ const UserDropdown = () => {
   const { settings } = useSettings()
   const dispatch = useDispatch()
 
-  const { profileData, loading, passwordChangeStatus, profileUpdateStatus, error } = useSelector(
-    state => state.adminSlice
-  )
+  const { profileData } = useSelector(state => state.adminSlice)
+
+  const profileUser = profileData?.data || profileData
+  const displayName = profileUser?.name || user?.name || 'User'
+  const displayEmail = profileUser?.email || user?.email || ''
+  const displayImage = getFullImageUrl(profileUser?.image || user?.image) || '/images/avatars/1.png'
 
   useEffect(() => {
     const loadUser = async () => {
@@ -94,7 +97,7 @@ const UserDropdown = () => {
 
       // Redirect to login
       router.push('/')
-      
+
       // router.push('/login')
     } catch (error) {
       console.error('Logout error:', error)
@@ -111,8 +114,8 @@ const UserDropdown = () => {
         className='mis-2'
       >
         <Avatar
-          alt={user?.name || 'User'}
-          src={getFullImageUrl(user?.image) || '/images/avatars/1.png'}
+          alt={displayName}
+          src={displayImage}
           onClick={handleDropdownOpen}
           className='cursor-pointer bs-[38px] is-[38px]'
         />
@@ -124,20 +127,26 @@ const UserDropdown = () => {
         disablePortal
         placement='bottom-end'
         anchorEl={anchorRef.current}
-        className='min-is-[240px] !mbs-3 z-[1]'
+        className='min-is-[260px] !mbs-3 z-[20]'
       >
         {({ TransitionProps, placement }) => (
           <Fade {...TransitionProps} style={{ transformOrigin: placement === 'bottom-end' ? 'right top' : 'left top' }}>
-            <Paper className={settings.skin === 'bordered' ? 'border shadow-none' : 'shadow-lg'}>
+            <Paper
+              sx={{
+                borderRadius: 3,
+                border: '1px solid var(--mui-palette-divider)',
+                boxShadow: settings.skin === 'bordered' ? 'none' : 'var(--mui-customShadows-lg)'
+              }}
+            >
               <ClickAwayListener onClickAway={handleDropdownClose}>
                 <MenuList>
                   <div className='flex items-center plb-2 pli-6 gap-2' tabIndex={-1}>
-                    <Avatar alt={user?.name} src={getFullImageUrl(user?.image) || '/images/avatars/1.png'} />
+                    <Avatar alt={displayName} src={displayImage} />
                     <div className='flex items-start flex-col'>
                       <Typography className='font-medium' color='text.primary'>
-                        {user?.name || 'User'}
+                        {displayName}
                       </Typography>
-                      <Typography variant='caption'>{user?.email}</Typography>
+                      <Typography variant='caption'>{displayEmail}</Typography>
                     </div>
                   </div>
 
@@ -168,7 +177,7 @@ const UserDropdown = () => {
                     <Button
                       fullWidth
                       variant='contained'
-                      color='error'
+                      color='secondary'
                       size='small'
                       endIcon={<i className='tabler-logout' />}
                       onClick={handleUserLogout}

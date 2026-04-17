@@ -28,6 +28,9 @@ const button = {
   MuiButton: {
     styleOverrides: {
       root: ({ theme, ownerState }) => ({
+        borderRadius: 12,
+        fontWeight: 700,
+        letterSpacing: '0.2px',
         '&.Mui-disabled': {
           opacity: 0.45
         },

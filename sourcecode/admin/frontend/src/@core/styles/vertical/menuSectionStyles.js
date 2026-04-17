@@ -10,15 +10,15 @@ const menuSectionStyles = (verticalNavOptions, theme) => {
     root: {
       marginBlockStart: theme.spacing(0),
       [`& .${menuClasses.menuSectionContent}`]: {
-        color: 'var(--mui-palette-text-disabled)',
+        color: 'var(--mui-palette-text-secondary)',
         paddingInline: '12px !important',
-        paddingBlock: `${theme.spacing(collapsedNotHovered ? 3.625 : 1.5)} !important`,
-        marginBlockStart: theme.spacing(3.5),
+        paddingBlock: `${theme.spacing(collapsedNotHovered ? 3.625 : 1.25)} !important`,
+        marginBlockStart: theme.spacing(2.5),
         '&:before': {
           content: '""',
           blockSize: 1,
           inlineSize: '1.375rem',
-          backgroundColor: 'var(--mui-palette-text-disabled)'
+          backgroundColor: 'var(--mui-palette-divider)'
         },
         ...(!collapsedNotHovered && {
           '&:before': {
@@ -28,9 +28,10 @@ const menuSectionStyles = (verticalNavOptions, theme) => {
         [`& .${menuClasses.menuSectionLabel}`]: {
           flexGrow: 0,
           textTransform: 'uppercase',
-          fontSize: '13px',
-          lineHeight: 1.38462,
-          letterSpacing: '0.4px',
+          fontSize: '11px',
+          fontWeight: 700,
+          lineHeight: 1.4,
+          letterSpacing: '0.8px',
           ...(collapsedNotHovered && {
             display: 'none'
           })

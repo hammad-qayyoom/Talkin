@@ -3,7 +3,10 @@ const chip = {
     styleOverrides: {
       root: ({ ownerState, theme }) => ({
         ...theme.typography.body2,
-        fontWeight: theme.typography.fontWeightMedium,
+        fontWeight: 700,
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: 'transparent',
         '&.MuiChip-outlined:not(.MuiChip-colorDefault)': {
           borderColor: `var(--mui-palette-${ownerState.color}-main)`
         },
@@ -53,6 +56,11 @@ const chip = {
         },
         '&.Mui-disabled': {
           opacity: 0.45
+        },
+        '&.MuiChip-filled.MuiChip-colorDefault': {
+          color: 'var(--mui-palette-text-secondary)',
+          backgroundColor: 'var(--mui-palette-action-hover)',
+          borderColor: 'var(--mui-palette-divider)'
         },
         variants: [
           {

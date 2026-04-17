@@ -24,7 +24,7 @@ class RequestSentDialog extends StatelessWidget {
             blurRadius: 26,
             offset: const Offset(0, 16),
           ),
-        ),
+        ],
       ),
       padding: const EdgeInsets.fromLTRB(22, 22, 22, 18),
       child: Column(

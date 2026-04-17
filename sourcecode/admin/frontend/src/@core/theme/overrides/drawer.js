@@ -9,6 +9,8 @@ const drawer = skin => ({
     },
     styleOverrides: {
       paper: {
+        border: '1px solid var(--mui-palette-divider)',
+        borderRadius: 18,
         ...(skin !== 'bordered' && {
           boxShadow: 'var(--mui-customShadows-lg)'
         })

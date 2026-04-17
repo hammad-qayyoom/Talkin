@@ -2,7 +2,8 @@ const dialog = skin => ({
   MuiDialog: {
     styleOverrides: {
       paper: ({ theme }) => ({
-        borderRadius: 'var(--mui-shape-customBorderRadius-lg)',
+        borderRadius: 'var(--mui-shape-customBorderRadius-xl)',
+        border: '1px solid var(--mui-palette-divider)',
         ...(skin !== 'bordered'
           ? {
               boxShadow: 'var(--mui-customShadows-lg)'
@@ -27,7 +28,7 @@ const dialog = skin => ({
     },
     styleOverrides: {
       root: ({ theme }) => ({
-        padding: theme.spacing(6),
+        padding: theme.spacing(5),
         '& + .MuiDialogActions-root': {
           paddingTop: 0
         }
@@ -37,7 +38,7 @@ const dialog = skin => ({
   MuiDialogContent: {
     styleOverrides: {
       root: ({ theme }) => ({
-        padding: theme.spacing(6),
+        padding: theme.spacing(5),
         '& + .MuiDialogContent-root, & + .MuiDialogActions-root': {
           paddingTop: 0
         }
@@ -47,7 +48,7 @@ const dialog = skin => ({
   MuiDialogActions: {
     styleOverrides: {
       root: ({ theme }) => ({
-        padding: theme.spacing(6),
+        padding: theme.spacing(4, 5, 5),
         '& .MuiButtonBase-root:not(:first-of-type)': {
           marginInlineStart: theme.spacing(4)
         },

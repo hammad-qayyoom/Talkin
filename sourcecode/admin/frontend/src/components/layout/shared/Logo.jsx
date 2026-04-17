@@ -9,20 +9,35 @@ import styled from '@emotion/styled'
 // Component Imports
 import BrandLogo from '@core/svg/Logo'
 
-// Config Imports
-import themeConfig from '@configs/themeConfig'
-
 // Hook Imports
 import useVerticalNav from '@menu/hooks/useVerticalNav'
 import { useSettings } from '@core/hooks/useSettings'
 import { projectName } from '@/config'
 
+const LogoMarkWrap = styled.div`
+  inline-size: 42px;
+  block-size: 42px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: var(--mui-palette-background-paper);
+  border: 1px solid var(--mui-palette-divider);
+  box-shadow: 0 8px 18px rgb(var(--mui-mainColorChannels-lightShadow) / 0.08);
+`
+
 const LogoText = styled.span`
   color: ${({ color }) => color ?? 'var(--mui-palette-text-primary)'};
-  font-size: 1.375rem;
-  line-height: 1.09091;
-  font-weight: 700;
-  letter-spacing: 0.25px;
+  font-size: clamp(1.4rem, 2.4vw, 1.75rem);
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: 0.1px;
+  display: inline-block;
+  min-inline-size: 0;
+  max-inline-size: calc(100% - 54px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   transition: ${({ transitionDuration }) =>
     `margin-inline-start ${transitionDuration}ms ease-in-out, opacity ${transitionDuration}ms ease-in-out`};
 
@@ -59,8 +74,10 @@ const Logo = ({ color }) => {
   }, [isHovered, layout, isBreakpointReached])
 
   return (
-    <div className='flex items-center'>
-      <BrandLogo className='text-2xl text-primary' />
+    <div className='flex items-center min-is-0 max-is-full'>
+      <LogoMarkWrap>
+        <BrandLogo className='text-2xl text-primary' />
+      </LogoMarkWrap>
       <LogoText
         color={color}
         ref={logoTextRef}
@@ -68,8 +85,9 @@ const Logo = ({ color }) => {
         isCollapsed={layout === 'collapsed'}
         transitionDuration={transitionDuration}
         isBreakpointReached={isBreakpointReached}
+        title={projectName?.trim() || '-'}
       >
-        {projectName || "-"}
+        {projectName?.trim() || '-'}
       </LogoText>
     </div>
   )

@@ -30,8 +30,8 @@ const input = {
   MuiFilledInput: {
     styleOverrides: {
       root: {
-        borderStartStartRadius: 4,
-        borderStartEndRadius: 4,
+        borderStartStartRadius: 12,
+        borderStartEndRadius: 12,
         '&:before': {
           borderBottom: '1px solid var(--mui-palette-text-secondary)'
         },
@@ -63,6 +63,9 @@ const input = {
   MuiOutlinedInput: {
     styleOverrides: {
       root: {
+        borderRadius: 12,
+        backgroundColor: 'rgb(var(--mui-palette-background-paperChannel) / 0.7)',
+        transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease',
         '&:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled):hover .MuiOutlinedInput-notchedOutline': {
           borderColor: 'var(--mui-palette-action-active)'
         },
@@ -76,7 +79,7 @@ const input = {
       input: ({ theme, ownerState }) => ({
         ...(ownerState?.size === 'medium' && {
           '&:not(.MuiInputBase-inputMultiline, .MuiInputBase-inputAdornedStart)': {
-            padding: theme.spacing(4)
+            padding: theme.spacing(3.5, 4)
           },
           height: '1.5em'
         }),

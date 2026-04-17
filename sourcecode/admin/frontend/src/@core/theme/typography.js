@@ -2,7 +2,7 @@ const typography = fontFamily => ({
   fontFamily:
     typeof fontFamily === 'undefined' || fontFamily === ''
       ? [
-          '"Public Sans"',
+          '"Manrope"',
           'sans-serif',
           '-apple-system',
           'BlinkMacSystemFont',
@@ -16,62 +16,64 @@ const typography = fontFamily => ({
           '"Segoe UI Symbol"'
         ].join(',')
       : fontFamily,
-  fontSize: 13.125,
+  fontSize: 14,
   h1: {
-    fontSize: '2.875rem',
-    fontWeight: 500,
-    lineHeight: 1.47826
+    fontSize: '3rem',
+    fontWeight: 700,
+    lineHeight: 1.2
   },
   h2: {
-    fontSize: '2.375rem',
-    fontWeight: 500,
-    lineHeight: 1.47368421
+    fontSize: '2.5rem',
+    fontWeight: 700,
+    lineHeight: 1.22
   },
   h3: {
-    fontSize: '1.75rem',
-    fontWeight: 500,
-    lineHeight: 1.5
+    fontSize: '2rem',
+    fontWeight: 700,
+    lineHeight: 1.25
   },
   h4: {
     fontSize: '1.5rem',
-    fontWeight: 500,
-    lineHeight: 1.58334
+    fontWeight: 700,
+    lineHeight: 1.3
   },
   h5: {
     fontSize: '1.125rem',
-    fontWeight: 500,
-    lineHeight: 1.5556
+    fontWeight: 700,
+    lineHeight: 1.35
   },
   h6: {
-    fontSize: '0.9375rem',
-    fontWeight: 500,
-    lineHeight: 1.46667
+    fontSize: '1rem',
+    fontWeight: 700,
+    lineHeight: 1.35
   },
   subtitle1: {
-    fontSize: '0.9375rem',
-    lineHeight: 1.46667
+    fontSize: '1rem',
+    fontWeight: 600,
+    lineHeight: 1.4
   },
   subtitle2: {
-    fontSize: '0.8125rem',
-    fontWeight: 400,
-    lineHeight: 1.53846154
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    lineHeight: 1.4
   },
   body1: {
     fontSize: '0.9375rem',
-    lineHeight: 1.46667
+    lineHeight: 1.55
   },
   body2: {
-    fontSize: '0.8125rem',
-    lineHeight: 1.53846154
+    fontSize: '0.875rem',
+    lineHeight: 1.5
   },
   button: {
     fontSize: '0.9375rem',
-    lineHeight: 1.46667,
+    fontWeight: 700,
+    lineHeight: 1.2,
     textTransform: 'none'
   },
   caption: {
     fontSize: '0.8125rem',
-    lineHeight: 1.38462,
+    lineHeight: 1.4,
     letterSpacing: '0.4px'
   },
   overline: {

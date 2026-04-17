@@ -16,6 +16,8 @@ const alerts = {
         padding: theme.spacing(3, 4),
         gap: theme.spacing(4),
         ...theme.typography.body1,
+        borderRadius: 'var(--mui-shape-customBorderRadius-md)',
+        border: '1px solid var(--mui-palette-divider)',
         '&:not(:has(.MuiAlertTitle-root))': {
           '& .MuiAlert-icon + .MuiAlert-message': {
             alignSelf: 'center'

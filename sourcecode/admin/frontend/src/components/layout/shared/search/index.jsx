@@ -185,11 +185,13 @@ const NavSearch = () => {
           <i className='tabler-search text-2xl' />
         </IconButton>
       ) : (
-        <div className='flex items-center gap-2 cursor-pointer' onClick={() => setOpen(true)}>
-          <IconButton className='text-textPrimary' onClick={() => setOpen(true)}>
-            <i className='tabler-search text-2xl' />
-          </IconButton>
-          <div className='whitespace-nowrap select-none text-textDisabled'>Search ⌘K</div>
+        <div
+          className='flex items-center gap-2 cursor-pointer rounded-full border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] px-3 py-2 shadow-sm'
+          onClick={() => setOpen(true)}
+        >
+          <i className='tabler-search text-[1.1rem] text-textSecondary' />
+          <div className='whitespace-nowrap select-none text-sm font-medium text-textSecondary'>Search</div>
+          <kbd className='!h-6 !min-is-0 !px-2 text-[11px]'>⌘K</kbd>
         </div>
       )}
       <CommandDialog open={open} onOpenChange={setOpen}>

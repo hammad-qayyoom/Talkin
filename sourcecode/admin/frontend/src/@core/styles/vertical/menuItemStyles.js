@@ -12,14 +12,14 @@ const menuItemStyles = (verticalNavOptions, theme) => {
     root: ({ level }) => ({
       ...(!isPopoutWhenCollapsed || popoutExpanded || (popoutCollapsed && level === 0)
         ? {
-            marginBlockStart: theme.spacing(1.5)
+            marginBlockStart: theme.spacing(1)
           }
         : {
             marginBlockStart: 0
           }),
       [`&.${menuClasses.subMenuRoot}.${menuClasses.open} > .${menuClasses.button}, &.${menuClasses.subMenuRoot} > .${menuClasses.button}.${menuClasses.active}`]:
         {
-          backgroundColor: 'var(--mui-palette-action-selected) !important'
+          backgroundColor: 'var(--mui-palette-primary-lightOpacity) !important'
         },
       [`&.${menuClasses.disabled} > .${menuClasses.button}`]: {
         color: 'var(--mui-palette-text-disabled)',
@@ -38,14 +38,7 @@ const menuItemStyles = (verticalNavOptions, theme) => {
             }
           : {
               color: 'var(--mui-palette-primary-contrastText)',
-              background:
-                theme.direction === 'ltr'
-                  ? `linear-gradient(270deg,
-                    rgb(var(--mui-palette-primary-mainChannel) / 0.7) 0%,
-                    var(--mui-palette-primary-main) 100%) !important`
-                  : `linear-gradient(270deg,
-                     var(--mui-palette-primary-main) 100%,
-                     rgb(var(--mui-palette-primary-mainChannel) / 0.7) 100%) !important`,
+              background: 'var(--mui-palette-primary-main) !important',
               boxShadow: 'var(--mui-customShadows-primary-sm)',
               [`& .${menuClasses.icon}`]: {
                 color: 'inherit'
@@ -54,8 +47,8 @@ const menuItemStyles = (verticalNavOptions, theme) => {
       }
     }),
     button: ({ level, active }) => ({
-      paddingBlock: '8px',
-      paddingInline: '12px',
+      paddingBlock: '10px',
+      paddingInline: '14px',
       borderRadius: 'var(--border-radius)',
       ...(!(isCollapsed && !isHovered) && {
         '&:has(.MuiChip-root)': {
@@ -68,20 +61,22 @@ const menuItemStyles = (verticalNavOptions, theme) => {
       }),
       ...(!active && {
         '&:hover, &:focus-visible': {
-          backgroundColor: 'var(--mui-palette-action-hover)'
+          backgroundColor: 'var(--mui-palette-action-hover)',
+          color: 'var(--mui-palette-secondary-dark)'
         },
         '&[aria-expanded="true"]': {
-          backgroundColor: 'var(--mui-palette-action-selected)'
+          backgroundColor: 'var(--mui-palette-primary-lightOpacity)',
+          color: 'var(--mui-palette-primary-main)'
         }
       })
     }),
     icon: ({ level }) => ({
       transition: `margin-inline-end ${transitionDuration}ms ease-in-out`,
       ...(level === 0 && {
-        fontSize: '1.375rem'
+        fontSize: '1.2rem'
       }),
       ...(level > 0 && {
-        fontSize: '0.75rem',
+        fontSize: '0.8rem',
         color: 'var(--mui-palette-text-secondary)'
       }),
       ...(level === 0 && {
@@ -140,7 +135,7 @@ const menuItemStyles = (verticalNavOptions, theme) => {
           }
         },
         ...(level === 0 && {
-          boxShadow: 'var(--mui-customShadows-sm)',
+          boxShadow: 'var(--mui-customShadows-md)',
           '[data-skin="bordered"] ~ [data-floating-ui-portal] &': {
             boxShadow: 'none',
             border: '1px solid var(--mui-palette-divider)'

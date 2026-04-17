@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import { signOut as firebaseSignOut } from 'firebase/auth'
 
@@ -11,10 +11,10 @@ import { useTheme } from '@mui/material/styles'
 // Third-party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 // Component Imports
-import { Menu, MenuItem } from '@menu/vertical-menu'
+import { Menu, MenuItem, MenuSection } from '@menu/vertical-menu'
 
 // Hook Imports
 import useVerticalNav from '@menu/hooks/useVerticalNav'
@@ -38,18 +38,13 @@ const RenderExpandIcon = ({ open, transitionDuration }) => (
 const VerticalMenu = ({ scrollMenu }) => {
   // Hooks
   const theme = useTheme()
-  const pathname = usePathname()
   const verticalNavOptions = useVerticalNav()
   const dispatch = useDispatch()
   const router = useRouter()
-  const { settings } = useSelector(state => state.settings)
 
   // Vars
   const { isBreakpointReached, transitionDuration } = verticalNavOptions
   const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
-
-  // Check if current path is user/view or starts with /apps/user
-  const isUserPath = pathname === '/user/view' || pathname?.startsWith('/apps/user')
 
   const [confirmOpen, setConfirmOpen] = useState(false)
 
@@ -67,10 +62,7 @@ const VerticalMenu = ({ scrollMenu }) => {
       dispatch(logoutAdmin())
 
       setConfirmOpen(false)
-      
-      // Redirect to login
-
-      // router.push('/login')
+      router.push('/')
     } catch (error) {
       console.error('Logout error:', error)
     }
@@ -103,84 +95,88 @@ const VerticalMenu = ({ scrollMenu }) => {
           <MenuItem href='/dashboard' icon={<i className='tabler-smart-home' />}>
             Dashboard
           </MenuItem>
-          {/* User Management */}
-          <MenuItem disabled>USER MANAGEMENT</MenuItem>
-          <MenuItem href='/apps/user' icon={<i className='tabler-user' />} exactMatch={false} activeUrl='/apps/user'>
-            User
-          </MenuItem>
-          <MenuItem
-            href='/apps/listener'
-            icon={<i className='tabler-user-star' />}
-            exactMatch={false}
-            activeUrl='/apps/listener'
-          >
-            Expert
-          </MenuItem>
-          <MenuItem href='/listener/request' icon={<i className='tabler-user-scan' />}>
-            Expert Request
-          </MenuItem>
-          <MenuItem href='/sessions' icon={<i className='tabler-calendar-time' />}>
-            Sessions
-          </MenuItem>
 
-          <MenuItem disabled>CONTENT</MenuItem>
-          <MenuItem href='/faq' icon={<i className='tabler-device-ipad-question' />}>
-            FAQ
-          </MenuItem>
-        
-          <MenuItem href='/talk-topics' icon={<i className='tabler-message-circle' />}>
-            Category
-          </MenuItem>
-          <MenuItem href='/identity-proofs' icon={<i className='tabler-id' />}>
-            Identity Proof
-          </MenuItem>
-          <MenuItem href='/feed/posts' icon={<i className='tabler-news' />}>
-            Feed Posts
-          </MenuItem>
-          <MenuItem href='/feed/reported' icon={<i className='tabler-flag-3' />}>
-            Reported Feed Posts
-          </MenuItem>
-         
-          {/* CoinTrader */}
-          <MenuItem disabled>SUBSCRIPTION</MenuItem>
-          <MenuItem href='/coin-plans' icon={<i className='tabler-coins' />}>
-            Subscription Plan
-          </MenuItem>
-          <MenuItem href='/coin-plan-history'  exactMatch={false}
-            activeUrl='/coin-plan-history' icon={<i className='tabler-history' />}>
-            Subscription History
-          </MenuItem>
-         
-          {/* Finance */}
-          <MenuItem disabled>FINANCIAL</MenuItem>
-         
-          <MenuItem href='/payment-options' icon={<i className='tabler-cash' />}>
-            Payment Option
-          </MenuItem>
-          <MenuItem href='/payout-requests' icon={<i className='tabler-cash-banknote' />}>
-            Payout Request
-          </MenuItem>
-          {/* General Admin Settings */}
-          <MenuItem disabled>SETTINGS</MenuItem>
-          <MenuItem href='/settings' icon={<i className='tabler-settings' />}>
-            Setting
-          </MenuItem>
-          <MenuItem href='/profile' icon={<i className='tabler-user-circle' />}>
-            Profile
-          </MenuItem>
-          <MenuItem onClick={() => setConfirmOpen(true)} icon={<i className='tabler-logout' />}>
-            Logout
-          </MenuItem>
+          <MenuSection label='USER MANAGEMENT'>
+            <MenuItem href='/apps/user' icon={<i className='tabler-user' />} exactMatch={false} activeUrl='/apps/user'>
+              User
+            </MenuItem>
+            <MenuItem
+              href='/apps/listener'
+              icon={<i className='tabler-user-star' />}
+              exactMatch={false}
+              activeUrl='/apps/listener'
+            >
+              Expert
+            </MenuItem>
+            <MenuItem href='/listener/request' icon={<i className='tabler-user-scan' />}>
+              Expert Request
+            </MenuItem>
+            <MenuItem href='/sessions' icon={<i className='tabler-calendar-time' />}>
+              Sessions
+            </MenuItem>
+          </MenuSection>
+
+          <MenuSection label='CONTENT'>
+            <MenuItem href='/faq' icon={<i className='tabler-device-ipad-question' />}>
+              FAQ
+            </MenuItem>
+            <MenuItem href='/talk-topics' icon={<i className='tabler-message-circle' />}>
+              Category
+            </MenuItem>
+            <MenuItem href='/identity-proofs' icon={<i className='tabler-id' />}>
+              Identity Proof
+            </MenuItem>
+            <MenuItem href='/feed/posts' icon={<i className='tabler-news' />}>
+              Feed Posts
+            </MenuItem>
+            <MenuItem href='/feed/reported' icon={<i className='tabler-flag-3' />}>
+              Reported Feed Posts
+            </MenuItem>
+          </MenuSection>
+
+          <MenuSection label='SUBSCRIPTION'>
+            <MenuItem href='/coin-plans' icon={<i className='tabler-coins' />}>
+              Subscription Plans
+            </MenuItem>
+            <MenuItem
+              href='/coin-plan-history'
+              exactMatch={false}
+              activeUrl='/coin-plan-history'
+              icon={<i className='tabler-history' />}
+            >
+              Subscription History
+            </MenuItem>
+          </MenuSection>
+
+          <MenuSection label='FINANCIAL'>
+            <MenuItem href='/payment-options' icon={<i className='tabler-cash' />}>
+              Payment Options
+            </MenuItem>
+            <MenuItem href='/payout-requests' icon={<i className='tabler-cash-banknote' />}>
+              Payout Request
+            </MenuItem>
+          </MenuSection>
+
+          <MenuSection label='SETTINGS'>
+            <MenuItem href='/settings' icon={<i className='tabler-settings' />}>
+              Settings
+            </MenuItem>
+            <MenuItem href='/profile' icon={<i className='tabler-user-circle' />}>
+              Profile
+            </MenuItem>
+            <MenuItem onClick={() => setConfirmOpen(true)} icon={<i className='tabler-logout' />}>
+              Logout
+            </MenuItem>
+          </MenuSection>
         </Menu>
       </ScrollWrapper>
 
       <ConfirmationDialog
         open={confirmOpen}
-        setOpen={setConfirmOpen}
         title='Are you sure you want to logout?'
         content='You will be logged out of the system.'
         onConfirm={handleUserLogout}
-        onClose={()=>{
+        onClose={() => {
           setConfirmOpen(false)
         }}
       />

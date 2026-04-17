@@ -30,12 +30,12 @@ const ToastifyWrapper = styled(Box)(({ theme }) => {
       }
     }),
     '& .Toastify__toast': {
-      minBlockSize: 46,
-      borderRadius: 'var(--mui-shape-borderRadius)',
-      padding: theme.spacing(1.5, 2.5),
+      minBlockSize: 54,
+      borderRadius: 'var(--mui-shape-customBorderRadius-md)',
+      padding: theme.spacing(1.75, 2.5),
       backgroundColor: 'var(--mui-palette-background-paper)',
+      border: '1px solid var(--mui-palette-divider)',
       boxShadow: settings.skin === 'bordered' ? 'none' : 'var(--mui-customShadows-md)',
-      border: settings.skin === 'bordered' && '1px solid var(--mui-palette-divider)',
       ...(isSmallScreen && {
         marginBlockEnd: theme.spacing(4)
       }),
@@ -44,21 +44,25 @@ const ToastifyWrapper = styled(Box)(({ theme }) => {
           color: 'var(--mui-palette-text-primary)'
         },
         '&.Toastify__toast--success': {
+          borderInlineStart: '4px solid var(--mui-palette-success-main)',
           '& .Toastify__toast-icon svg': {
             fill: 'var(--mui-palette-success-main)'
           }
         },
         '&.Toastify__toast--error': {
+          borderInlineStart: '4px solid var(--mui-palette-error-main)',
           '& .Toastify__toast-icon svg': {
             fill: 'var(--mui-palette-error-main)'
           }
         },
         '&.Toastify__toast--warning': {
+          borderInlineStart: '4px solid var(--mui-palette-warning-main)',
           '& .Toastify__toast-icon svg': {
             fill: 'var(--mui-palette-warning-main)'
           }
         },
         '&.Toastify__toast--info': {
+          borderInlineStart: '4px solid var(--mui-palette-primary-main)',
           '& .Toastify__toast-icon svg': {
             fill: 'var(--mui-palette-info-main)'
           }
@@ -71,7 +75,7 @@ const ToastifyWrapper = styled(Box)(({ theme }) => {
     },
     '& .Toastify__toast-body': {
       margin: 0,
-      lineHeight: 1.46667,
+      lineHeight: 1.5,
       fontSize: theme.typography.body1.fontSize
     },
     '& .Toastify__toast-icon': {
@@ -92,7 +96,6 @@ const ToastifyWrapper = styled(Box)(({ theme }) => {
 
 const AppReactToastify = props => {
   const { boxProps, direction = 'ltr', ...rest } = props
-
 
   const positionMap = {
     'top-right': 'top-left',

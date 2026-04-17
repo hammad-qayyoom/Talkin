@@ -11,8 +11,9 @@ const navigationCustomStyles = (verticalNavOptions, theme) => {
     color: 'var(--mui-palette-text-primary)',
     zIndex: 'var(--drawer-z-index) !important',
     [`& .${verticalNavClasses.header}`]: {
-      paddingBlock: theme.spacing(5),
-      paddingInline: theme.spacing(5.5, 4),
+      paddingBlock: theme.spacing(4.5),
+      paddingInline: theme.spacing(4, 3.5),
+      borderBlockEnd: '1px solid var(--mui-palette-divider)',
       ...(collapsedNotHovered && {
         paddingInline: theme.spacing((collapsedWidth - 35) / 8),
         '& a': {
@@ -28,19 +29,22 @@ const navigationCustomStyles = (verticalNavOptions, theme) => {
         duration: transitionDuration,
         easing: 'ease-in-out'
       }),
-      borderColor: 'transparent',
-      boxShadow: 'var(--mui-customShadows-sm)',
+      borderRadius: 20,
+      overflow: 'hidden',
+      border: '1px solid var(--mui-palette-divider)',
+      backgroundColor: 'var(--mui-palette-background-paper)',
+      boxShadow: 'var(--mui-customShadows-md)',
       '[data-skin="bordered"] &': {
         boxShadow: 'none',
         ...(collapsedHovered && {
-          boxShadow: 'var(--mui-customShadows-sm)'
+          boxShadow: 'var(--mui-customShadows-md)'
         }),
         borderColor: 'var(--mui-palette-divider)'
       }
     },
     [`& .${menuClasses.root}`]: {
-      paddingBlock: theme.spacing(1),
-      paddingInline: theme.spacing(3)
+      paddingBlock: theme.spacing(2.25),
+      paddingInline: theme.spacing(2.5)
     },
     [`& .${verticalNavClasses.backdrop}`]: {
       backgroundColor: 'var(--backdrop-color)'
