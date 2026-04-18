@@ -77,7 +77,8 @@ class CustomListeners extends StatelessWidget {
                   clipBehavior: Clip.hardEdge,
                   height: Get.height * 0.11,
                   width: Get.height * 0.11,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(8)),
                   child: CustomListenerProfileImage(
                     image: image,
                     fit: BoxFit.cover,
@@ -96,14 +97,17 @@ class CustomListeners extends StatelessWidget {
                               "$name $age",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: AppColors.appDarkColor),
+                              style: AppFontStyle.fontStyleW600(
+                                  fontSize: 14,
+                                  fontColor: AppColors.appDarkColor),
                             ),
                           ),
                           // SizedBox(width: 4),
 
                           // Spacer(),
                           Container(
-                            padding: EdgeInsets.only(right: 8, bottom: 3, top: 3, left: 7),
+                            padding: EdgeInsets.only(
+                                right: 8, bottom: 3, top: 3, left: 7),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: statusColor,
@@ -116,7 +120,8 @@ class CustomListeners extends StatelessWidget {
                                   ).paddingOnly(right: 3),
                                 Text(
                                   status ?? '',
-                                  style: AppFontStyle.fontStyleW500(fontSize: 9, fontColor: statusTxtColor),
+                                  style: AppFontStyle.fontStyleW500(
+                                      fontSize: 9, fontColor: statusTxtColor),
                                 ),
                               ],
                             ),
@@ -132,8 +137,11 @@ class CustomListeners extends StatelessWidget {
                           Flexible(
                             child: Text(
                               language,
-                              overflow: TextOverflow.ellipsis, // prevent long text from breaking layout
-                              style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.appTextColor),
+                              overflow: TextOverflow
+                                  .ellipsis, // prevent long text from breaking layout
+                              style: AppFontStyle.fontStyleW500(
+                                  fontSize: 11,
+                                  fontColor: AppColors.appTextColor),
                             ).paddingOnly(right: 12),
                           ),
                           Image.asset(
@@ -142,7 +150,9 @@ class CustomListeners extends StatelessWidget {
                           ).paddingOnly(right: 2),
                           Text(
                             callCount.toString(),
-                            style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.appTextColor),
+                            style: AppFontStyle.fontStyleW500(
+                                fontSize: 11,
+                                fontColor: AppColors.appTextColor),
                           ).paddingOnly(right: 16),
                           Image.asset(
                             AppAsset.uniqueIdIcon,
@@ -150,7 +160,9 @@ class CustomListeners extends StatelessWidget {
                           ).paddingOnly(right: 2),
                           Text(
                             uniqueId.toString(),
-                            style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.appTextColor),
+                            style: AppFontStyle.fontStyleW500(
+                                fontSize: 11,
+                                fontColor: AppColors.appTextColor),
                           ).paddingOnly(right: 16),
                         ],
                       ).paddingOnly(bottom: 2),
@@ -165,7 +177,8 @@ class CustomListeners extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             return Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               decoration: BoxDecoration(
                                 color: AppColors.lightGrey,
                                 borderRadius: BorderRadius.circular(30),
@@ -198,7 +211,8 @@ class CustomListeners extends StatelessWidget {
                   color: AppColors.white,
                   borderColor: AppColors.appColor,
                   text: EnumLocale.txtViewProfile.name.tr,
-                  textStyle: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: AppColors.appColor),
+                  textStyle: AppFontStyle.fontStyleW600(
+                      fontSize: 14, fontColor: AppColors.appColor),
                 ),
               ),
               const SizedBox(width: 14),
@@ -219,7 +233,8 @@ class CustomListeners extends StatelessWidget {
                       ).paddingOnly(right: 8),
                       Text(
                         'Book Session',
-                        style: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: AppColors.white),
+                        style: AppFontStyle.fontStyleW600(
+                            fontSize: 14, fontColor: AppColors.white),
                       ),
                     ],
                   ),

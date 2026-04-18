@@ -3,7 +3,8 @@ import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppFontStyle {
-  static fontStyleW400({required double fontSize, required Color fontColor, double? height}) {
+  static fontStyleW400(
+      {required double fontSize, required Color fontColor, double? height}) {
     return GoogleFonts.poppins(
       fontSize: fontSize,
       color: fontColor,
@@ -12,7 +13,8 @@ class AppFontStyle {
     );
   }
 
-  static fontStyleKaushanW400({required double fontSize, required Color fontColor, FontWeight? font}) {
+  static fontStyleKaushanW400(
+      {required double fontSize, required Color fontColor, FontWeight? font}) {
     return GoogleFonts.kaushanScript(
       fontSize: fontSize,
       color: fontColor,
@@ -20,7 +22,8 @@ class AppFontStyle {
     );
   }
 
-  static fontStyleLato700({required double fontSize, required Color fontColor}) {
+  static fontStyleLato700(
+      {required double fontSize, required Color fontColor}) {
     return GoogleFonts.lato(
       fontSize: fontSize,
       color: fontColor,
@@ -29,7 +32,12 @@ class AppFontStyle {
     );
   }
 
-  static fontStyleW500({required double fontSize, required Color fontColor, TextDecoration? textDecoration, double? height, Color? decorationColor}) {
+  static fontStyleW500(
+      {required double fontSize,
+      required Color fontColor,
+      TextDecoration? textDecoration,
+      double? height,
+      Color? decorationColor}) {
     return GoogleFonts.poppins(
         fontSize: fontSize,
         color: fontColor,

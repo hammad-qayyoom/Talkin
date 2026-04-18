@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notisboard/custom/notisboard_wordmark.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/main_screen/controller/main_screen_controller.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -61,8 +62,8 @@ class MainScreenView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
-                          child: Text(
-                            "Notisboard",
+                          child: NotisboardWordmark(
+                            textAlign: TextAlign.center,
                             style: AppFontStyle.fontStyleKaushanW400(
                               fontSize: 58,
                               fontColor: _brandDark,

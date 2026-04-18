@@ -49,7 +49,8 @@ class HostCoinHistoryScreenController extends GetxController {
     isLoading = true;
     update([Constant.idTabChange]);
 
-    coinHistoryModel = await HostCoinHistoryApi.callApi(endDate: "All", startDate: "All");
+    coinHistoryModel =
+        await HostCoinHistoryApi.callApi(endDate: "All", startDate: "All");
     hostCoinHistoryList.clear();
     hostCoinHistoryList.addAll((coinHistoryModel?.data ?? []));
 
@@ -61,7 +62,8 @@ class HostCoinHistoryScreenController extends GetxController {
   withdrawalRecord() async {
     isLoading = true;
     update([Constant.idTabChange]);
-    withdrawalRecordModel = await WithdrawalRecordApi.callApi(endDate: "All", startDate: "All");
+    withdrawalRecordModel =
+        await WithdrawalRecordApi.callApi(endDate: "All", startDate: "All");
     withdrawalRecordList.clear();
     withdrawalRecordList.addAll((withdrawalRecordModel?.data ?? []));
 
@@ -98,13 +100,18 @@ class HostCoinHistoryScreenController extends GetxController {
 
   /// coin history pagination
   Future<void> onCoinHistoryPagination() async {
-    if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
       isPaginationLoading = true;
       update([Constant.idPaginationListener]);
 
       final result = await HostCoinHistoryApi.callApi(
-        endDate: selectedCoinDateRange != null ? Utils.formatDateToApi(selectedCoinDateRange!.end) : "All",
-        startDate: selectedCoinDateRange != null ? Utils.formatDateToApi(selectedCoinDateRange!.start) : "All",
+        endDate: selectedCoinDateRange != null
+            ? Utils.formatDateToApi(selectedCoinDateRange!.end)
+            : "All",
+        startDate: selectedCoinDateRange != null
+            ? Utils.formatDateToApi(selectedCoinDateRange!.start)
+            : "All",
       );
 
       final newItems = result?.data ?? [];
@@ -119,13 +126,18 @@ class HostCoinHistoryScreenController extends GetxController {
 
   /// withdrawal history pagination
   Future<void> onWithdrawalHistoryPagination() async {
-    if (scrollController1.position.pixels == scrollController1.position.maxScrollExtent) {
+    if (scrollController1.position.pixels ==
+        scrollController1.position.maxScrollExtent) {
       isPaginationLoading = true;
       update([Constant.idPaginationListener]);
 
       final result = await WithdrawalRecordApi.callApi(
-        endDate: selectedWithdrawDateRange != null ? Utils.formatDateToApi(selectedWithdrawDateRange!.end) : "All",
-        startDate: selectedWithdrawDateRange != null ? Utils.formatDateToApi(selectedWithdrawDateRange!.start) : "All",
+        endDate: selectedWithdrawDateRange != null
+            ? Utils.formatDateToApi(selectedWithdrawDateRange!.end)
+            : "All",
+        startDate: selectedWithdrawDateRange != null
+            ? Utils.formatDateToApi(selectedWithdrawDateRange!.start)
+            : "All",
       );
       final newItems = result?.data ?? [];
       if (newItems.isNotEmpty) {
@@ -208,7 +220,9 @@ class HostCoinHistoryScreenController extends GetxController {
     Future.delayed(Duration.zero, () {
       if (isExpandedList.length != itemCount) {
         isExpandedList = List.generate(itemCount, (index) => false);
-        update([Constant.idTabChange]); // Ensure this is called after the current build phase
+        update([
+          Constant.idTabChange
+        ]); // Ensure this is called after the current build phase
       }
     });
   }

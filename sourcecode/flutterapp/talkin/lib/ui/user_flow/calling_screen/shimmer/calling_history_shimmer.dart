@@ -37,7 +37,9 @@ class CallingHistoryShimmer extends StatelessWidget {
                     Container(
                       height: Get.height * 0.08,
                       width: Get.height * 0.078,
-                      decoration: BoxDecoration(color: AppColors.black, borderRadius: BorderRadius.circular(12)),
+                      decoration: BoxDecoration(
+                          color: AppColors.black,
+                          borderRadius: BorderRadius.circular(12)),
                     ),
                     10.width,
                     Row(

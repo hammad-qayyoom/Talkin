@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-PurchaseCoinPlan purchaseCoinPlanFromJson(String str) => PurchaseCoinPlan.fromJson(json.decode(str));
+PurchaseCoinPlan purchaseCoinPlanFromJson(String str) =>
+    PurchaseCoinPlan.fromJson(json.decode(str));
 
-String purchaseCoinPlanToJson(PurchaseCoinPlan data) => json.encode(data.toJson());
+String purchaseCoinPlanToJson(PurchaseCoinPlan data) =>
+    json.encode(data.toJson());
 
 class PurchaseCoinPlan {
   bool? status;
@@ -21,11 +23,14 @@ class PurchaseCoinPlan {
     this.historyRecord,
   });
 
-  factory PurchaseCoinPlan.fromJson(Map<String, dynamic> json) => PurchaseCoinPlan(
+  factory PurchaseCoinPlan.fromJson(Map<String, dynamic> json) =>
+      PurchaseCoinPlan(
         status: json["status"],
         message: json["message"],
         totalCoins: json["totalCoins"],
-        historyRecord: json["historyRecord"] == null ? null : HistoryRecord.fromJson(json["historyRecord"]),
+        historyRecord: json["historyRecord"] == null
+            ? null
+            : HistoryRecord.fromJson(json["historyRecord"]),
       );
 
   Map<String, dynamic> toJson() => {

@@ -4,6 +4,7 @@ import 'package:notisboard/ui/user_flow/top_listeners_view_all/controller/top_li
 class TopListenersViewAllBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<TopListenersViewAllController>(() => TopListenersViewAllController());
+    Get.lazyPut<TopListenersViewAllController>(
+        () => TopListenersViewAllController());
   }
 }

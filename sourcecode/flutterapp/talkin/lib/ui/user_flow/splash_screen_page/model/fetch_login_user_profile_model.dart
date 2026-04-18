@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-FetchLoginUserProfileModel fetchLoginUserProfileModelFromJson(String str) => FetchLoginUserProfileModel.fromJson(json.decode(str));
+FetchLoginUserProfileModel fetchLoginUserProfileModelFromJson(String str) =>
+    FetchLoginUserProfileModel.fromJson(json.decode(str));
 
-String fetchLoginUserProfileModelToJson(FetchLoginUserProfileModel data) => json.encode(data.toJson());
+String fetchLoginUserProfileModelToJson(FetchLoginUserProfileModel data) =>
+    json.encode(data.toJson());
 
 class FetchLoginUserProfileModel {
   final bool? status;
@@ -19,7 +21,8 @@ class FetchLoginUserProfileModel {
     this.user,
   });
 
-  factory FetchLoginUserProfileModel.fromJson(Map<String, dynamic> json) => FetchLoginUserProfileModel(
+  factory FetchLoginUserProfileModel.fromJson(Map<String, dynamic> json) =>
+      FetchLoginUserProfileModel(
         status: json["status"],
         message: json["message"],
         user: json["user"] == null ? null : User.fromJson(json["user"]),
@@ -138,8 +141,12 @@ class User {
         listenerId: json["listenerId"],
         lastlogin: json["lastlogin"],
         date: json["date"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {

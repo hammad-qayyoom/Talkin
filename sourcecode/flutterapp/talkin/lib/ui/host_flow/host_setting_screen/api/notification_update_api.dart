@@ -15,7 +15,8 @@ class HostNotificationUpdateApi {
   }) async {
     Utils.showLog("Notification switch Status...");
 
-    final uri = Uri.parse("${Api.updateNotifyPermission}${ApiParams.listenerId}=$listenerId");
+    final uri = Uri.parse(
+        "${Api.updateNotifyPermission}${ApiParams.listenerId}=$listenerId");
     Utils.showLog("Notification switch Status Api URL :: $uri");
 
     var headers = {

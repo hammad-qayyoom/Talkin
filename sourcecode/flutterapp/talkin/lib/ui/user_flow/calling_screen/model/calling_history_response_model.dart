@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-CallingHistoryModel hostCallingHistoryModelFromJson(String str) => CallingHistoryModel.fromJson(json.decode(str));
+CallingHistoryModel hostCallingHistoryModelFromJson(String str) =>
+    CallingHistoryModel.fromJson(json.decode(str));
 
-String hostCallingHistoryModelToJson(CallingHistoryModel data) => json.encode(data.toJson());
+String hostCallingHistoryModelToJson(CallingHistoryModel data) =>
+    json.encode(data.toJson());
 
 class CallingHistoryModel {
   bool? status;
@@ -15,16 +17,22 @@ class CallingHistoryModel {
     this.data,
   });
 
-  factory CallingHistoryModel.fromJson(Map<String, dynamic> json) => CallingHistoryModel(
+  factory CallingHistoryModel.fromJson(Map<String, dynamic> json) =>
+      CallingHistoryModel(
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? [] : List<CallHistory>.from(json["data"]!.map((x) => CallHistory.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<CallHistory>.from(
+                json["data"]!.map((x) => CallHistory.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
@@ -74,12 +82,16 @@ class CallHistory {
         listenerId: json["listenerId"],
         duration: json["duration"],
         date: json["date"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
         callStatusText: json["callStatusText"], // No enum lookup
         name: json["name"], // No enum lookup
         image: json["image"],
         coin: json["coin"],
-        video: json["video"] == null ? [] : List<String>.from(json["video"]!.map((x) => x)),
+        video: json["video"] == null
+            ? []
+            : List<String>.from(json["video"]!.map((x) => x)),
         isFake: json["isFake"],
 
         ratePrivateVideoCall: json["ratePrivateVideoCall"],

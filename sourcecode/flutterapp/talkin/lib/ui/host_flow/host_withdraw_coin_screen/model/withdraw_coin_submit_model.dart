@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-WithdrawCoinSubmitModel withdrawCoinSubmitModelFromJson(String str) => WithdrawCoinSubmitModel.fromJson(json.decode(str));
+WithdrawCoinSubmitModel withdrawCoinSubmitModelFromJson(String str) =>
+    WithdrawCoinSubmitModel.fromJson(json.decode(str));
 
-String withdrawCoinSubmitModelToJson(WithdrawCoinSubmitModel data) => json.encode(data.toJson());
+String withdrawCoinSubmitModelToJson(WithdrawCoinSubmitModel data) =>
+    json.encode(data.toJson());
 
 class WithdrawCoinSubmitModel {
   bool? status;
@@ -17,7 +19,8 @@ class WithdrawCoinSubmitModel {
     this.message,
   });
 
-  factory WithdrawCoinSubmitModel.fromJson(Map<String, dynamic> json) => WithdrawCoinSubmitModel(
+  factory WithdrawCoinSubmitModel.fromJson(Map<String, dynamic> json) =>
+      WithdrawCoinSubmitModel(
         status: json["status"],
         message: json["message"],
       );

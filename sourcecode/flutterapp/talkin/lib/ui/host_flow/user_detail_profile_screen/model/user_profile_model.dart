@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-UserProfileModel userProfileModelFromJson(String str) => UserProfileModel.fromJson(json.decode(str));
+UserProfileModel userProfileModelFromJson(String str) =>
+    UserProfileModel.fromJson(json.decode(str));
 
-String userProfileModelToJson(UserProfileModel data) => json.encode(data.toJson());
+String userProfileModelToJson(UserProfileModel data) =>
+    json.encode(data.toJson());
 
 class UserProfileModel {
   bool? status;
@@ -19,7 +21,8 @@ class UserProfileModel {
     this.user,
   });
 
-  factory UserProfileModel.fromJson(Map<String, dynamic> json) => UserProfileModel(
+  factory UserProfileModel.fromJson(Map<String, dynamic> json) =>
+      UserProfileModel(
         status: json["status"],
         message: json["message"],
         user: json["user"] == null ? null : User.fromJson(json["user"]),

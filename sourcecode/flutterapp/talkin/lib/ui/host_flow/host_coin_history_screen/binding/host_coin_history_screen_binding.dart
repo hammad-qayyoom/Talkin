@@ -4,6 +4,7 @@ import 'package:notisboard/ui/host_flow/host_coin_history_screen/controller/host
 class HostCoinHistoryScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HostCoinHistoryScreenController>(() => HostCoinHistoryScreenController());
+    Get.lazyPut<HostCoinHistoryScreenController>(
+        () => HostCoinHistoryScreenController());
   }
 }

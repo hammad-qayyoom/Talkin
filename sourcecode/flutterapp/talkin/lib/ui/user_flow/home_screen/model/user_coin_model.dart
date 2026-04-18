@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-UserCoinModel userCoinModelFromJson(String str) => UserCoinModel.fromJson(json.decode(str));
+UserCoinModel userCoinModelFromJson(String str) =>
+    UserCoinModel.fromJson(json.decode(str));
 
 String userCoinModelToJson(UserCoinModel data) => json.encode(data.toJson());
 

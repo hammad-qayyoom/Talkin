@@ -48,15 +48,21 @@ class BlockDialog extends StatelessWidget {
           ),
           10.height,
           Text(
-            isHost ? EnumLocale.txtBlockListener.name.tr : EnumLocale.txtBlockUser.name.tr,
+            isHost
+                ? EnumLocale.txtBlockListener.name.tr
+                : EnumLocale.txtBlockUser.name.tr,
             textAlign: TextAlign.center,
-            style: AppFontStyle.fontStyleW800(fontColor: AppColors.black, fontSize: 30),
+            style: AppFontStyle.fontStyleW800(
+                fontColor: AppColors.black, fontSize: 30),
           ),
           4.height,
           Text(
-            isHost ? EnumLocale.txtBlockDetailsListener.name.tr : EnumLocale.txtBlockDetailsUser.name.tr,
+            isHost
+                ? EnumLocale.txtBlockDetailsListener.name.tr
+                : EnumLocale.txtBlockDetailsUser.name.tr,
             textAlign: TextAlign.center,
-            style: AppFontStyle.fontStyleW600(fontColor: AppColors.grey, fontSize: 18),
+            style: AppFontStyle.fontStyleW600(
+                fontColor: AppColors.grey, fontSize: 18),
           ).paddingOnly(left: 7, right: 7),
           20.height,
           GestureDetector(
@@ -74,7 +80,8 @@ class BlockDialog extends StatelessWidget {
               ),
               child: Text(
                 EnumLocale.txtBlock.name.tr,
-                style: AppFontStyle.fontStyleW600(fontColor: AppColors.white, fontSize: 17),
+                style: AppFontStyle.fontStyleW600(
+                    fontColor: AppColors.white, fontSize: 17),
               ),
             ),
           ),

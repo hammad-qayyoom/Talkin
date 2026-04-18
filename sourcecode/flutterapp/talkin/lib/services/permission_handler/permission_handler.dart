@@ -35,7 +35,8 @@ class PermissionHandler {
         Utils.showToast(Get.context!, "Please allow camera permission.");
         onDenied?.call();
       } else if (status == PermissionStatus.permanentlyDenied) {
-        Utils.showToast(Get.context!, "Please allow camera permission in settings.");
+        Utils.showToast(
+            Get.context!, "Please allow camera permission in settings.");
         await openAppSettings();
         onDenied?.call();
       } else {
@@ -59,7 +60,8 @@ class PermissionHandler {
         Utils.showToast(Get.context!, "Please allow microphone permission.");
         onDenied?.call();
       } else if (status == PermissionStatus.permanentlyDenied) {
-        Utils.showToast(Get.context!, "Please allow microphone permission in settings.");
+        Utils.showToast(
+            Get.context!, "Please allow microphone permission in settings.");
         await openAppSettings();
         onDenied?.call();
       } else {

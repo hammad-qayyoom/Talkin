@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-FetchCoinPlan fetchCoinPlanFromJson(String str) => FetchCoinPlan.fromJson(json.decode(str));
+FetchCoinPlan fetchCoinPlanFromJson(String str) =>
+    FetchCoinPlan.fromJson(json.decode(str));
 
 String fetchCoinPlanToJson(FetchCoinPlan data) => json.encode(data.toJson());
 
@@ -33,7 +34,10 @@ class FetchCoinPlan {
             : num.tryParse(json["userCoin"]?.toString() ?? "0") ?? 0,
         hasActiveSubscription: json["hasActiveSubscription"],
         activeSubscription: json["activeSubscription"],
-        data: json["data"] == null ? [] : List<CoinPlan>.from(json["data"]!.map((x) => CoinPlan.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<CoinPlan>.from(
+                json["data"]!.map((x) => CoinPlan.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -42,7 +46,9 @@ class FetchCoinPlan {
         "userCoin": userCoin,
         "hasActiveSubscription": hasActiveSubscription,
         "activeSubscription": activeSubscription,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
@@ -80,17 +86,21 @@ class CoinPlan {
   factory CoinPlan.fromJson(Map<String, dynamic> json) => CoinPlan(
         id: json["_id"],
         coins: json["coins"],
-      sessionCredits: json["sessionCredits"] ?? json["coins"],
-      name: json["name"],
-      description: json["description"],
+        sessionCredits: json["sessionCredits"] ?? json["coins"],
+        name: json["name"],
+        description: json["description"],
         price: json["price"]?.toDouble(),
-      currency: json["currency"],
-      billingCycle: json["billingCycle"],
-      productId: json["productId"] ?? json["slug"],
+        currency: json["currency"],
+        billingCycle: json["billingCycle"],
+        productId: json["productId"] ?? json["slug"],
         isPopular: json["isPopular"],
         isActive: json["isActive"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {

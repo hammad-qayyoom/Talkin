@@ -71,9 +71,9 @@ class SplashScreenController extends GetxController {
     Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
 
     if (Database.loginUserFirebaseId.isEmpty &&
-      (fetchLoginUserProfileModel?.user?.firebaseId ?? '').isNotEmpty) {
+        (fetchLoginUserProfileModel?.user?.firebaseId ?? '').isNotEmpty) {
       Database.onSetLoginUserFirebaseId(
-        fetchLoginUserProfileModel?.user?.firebaseId ?? '');
+          fetchLoginUserProfileModel?.user?.firebaseId ?? '');
     }
 
     ///version update dialog show in splash screen not go main screen

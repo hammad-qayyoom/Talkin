@@ -13,7 +13,8 @@ class CoinShimmer extends StatelessWidget {
       child: Container(
         height: 28,
         width: 50,
-        decoration: BoxDecoration(color: AppColors.black, borderRadius: BorderRadius.circular(12)),
+        decoration: BoxDecoration(
+            color: AppColors.black, borderRadius: BorderRadius.circular(12)),
       ),
     );
   }

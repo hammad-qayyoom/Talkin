@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-UpdateExpertCallStatusModel updateExpertCallStatusModelFromJson(String str) => UpdateExpertCallStatusModel.fromJson(json.decode(str));
+UpdateExpertCallStatusModel updateExpertCallStatusModelFromJson(String str) =>
+    UpdateExpertCallStatusModel.fromJson(json.decode(str));
 
-String updateExpertCallStatusModelToJson(UpdateExpertCallStatusModel data) => json.encode(data.toJson());
+String updateExpertCallStatusModelToJson(UpdateExpertCallStatusModel data) =>
+    json.encode(data.toJson());
 
 class UpdateExpertCallStatusModel {
   bool? status;
@@ -13,7 +15,8 @@ class UpdateExpertCallStatusModel {
     this.message,
   });
 
-  factory UpdateExpertCallStatusModel.fromJson(Map<String, dynamic> json) => UpdateExpertCallStatusModel(
+  factory UpdateExpertCallStatusModel.fromJson(Map<String, dynamic> json) =>
+      UpdateExpertCallStatusModel(
         status: json["status"],
         message: json["message"],
       );

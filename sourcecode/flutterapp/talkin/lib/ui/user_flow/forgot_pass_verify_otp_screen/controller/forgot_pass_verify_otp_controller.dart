@@ -96,7 +96,8 @@ class ForgotPassVerifyOtpController extends GetxController {
         smsCode: smsCode,
       );
 
-      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
 
       // Success
       log("User logged in: ${userCredential.user?.uid}");
@@ -155,7 +156,8 @@ class ForgotPassVerifyOtpController extends GetxController {
             }
           }
         } else {
-          Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+          Utils.showToast(
+              Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
           Utils.showLog("mobile number Login Api Calling Failed !!");
         }
 

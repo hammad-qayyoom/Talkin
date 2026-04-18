@@ -67,8 +67,10 @@ final Map<String, String> zhCN = <String, String>{
   EnumLocale.txtTalkNow.name: '立即交谈',
   EnumLocale.txtChatNow.name: '立即聊天',
   EnumLocale.txtAllListeners.name: '所有听众',
-  EnumLocale.txtMobileLoginDescription.name: '只需输入手机号码即可开启您的旅程。我们会向您发送一次性密码 (OTP)，用于验证您的身份并帮助您开启旅程。',
-  EnumLocale.txtVerifyOtpDescription.name: "为了保障您的账户安全，我们已通过短信向您发送了一段唯一的5位数验证码。请在下方输入该验证码，验证您的身份后即可继续登录。",
+  EnumLocale.txtMobileLoginDescription.name:
+      '只需输入手机号码即可开启您的旅程。我们会向您发送一次性密码 (OTP)，用于验证您的身份并帮助您开启旅程。',
+  EnumLocale.txtVerifyOtpDescription.name:
+      "为了保障您的账户安全，我们已通过短信向您发送了一段唯一的5位数验证码。请在下方输入该验证码，验证您的身份后即可继续登录。",
   EnumLocale.txtVideoCall.name: "视频电话",
   EnumLocale.txtSelectCallType.name: "选择通话类型",
   EnumLocale.txtAudioCall.name: "音频通话",
@@ -83,7 +85,8 @@ final Map<String, String> zhCN = <String, String>{
   EnumLocale.txtSelectLanguageForApp.name: "选择一种语言来查看匹配的听众。",
   EnumLocale.txtSelectTalkAboutForApp.name: "选择谈论应用内的内容",
   EnumLocale.txtRecommendedProfile.name: "推荐的个人资料",
-  EnumLocale.txtSelectCallTypeNote.name: "请勿轻信陌生人提供的转账、彩票等诈骗信息。请勿泄露任何个人信息，例如密码、手机号码、一次性密码等。请勿发布裸露、色情或任何淫秽内容。",
+  EnumLocale.txtSelectCallTypeNote.name:
+      "请勿轻信陌生人提供的转账、彩票等诈骗信息。请勿泄露任何个人信息，例如密码、手机号码、一次性密码等。请勿发布裸露、色情或任何淫秽内容。",
   EnumLocale.txtTotalCall.name: "总通话次数",
   EnumLocale.txtRating.name: "等级",
   EnumLocale.txtExperience.name: "经验",
@@ -199,16 +202,19 @@ final Map<String, String> zhCN = <String, String>{
   EnumLocale.txtEnterMailMobileNumber.name: "输入邮箱/手机号码",
   EnumLocale.txtVerify.name: "核实",
   EnumLocale.txtCreatePassword.name: "创建密码",
-  EnumLocale.txtForgotPassDescription.name: "请在下方输入您的电子邮件地址或手机号码，重置密码。我们将向您发送验证码，帮助您恢复帐户。",
+  EnumLocale.txtForgotPassDescription.name:
+      "请在下方输入您的电子邮件地址或手机号码，重置密码。我们将向您发送验证码，帮助您恢复帐户。",
   EnumLocale.txtLongPressToEnableAudioRecording.name: "长按启用录音",
   EnumLocale.txtAudioRecording.name: "录音...",
   EnumLocale.txtPleaseAllowPermission.name: "请允许许可！！",
-  EnumLocale.txtHostCenterDescription.name: "现在您可以成为活动主办人，组织您自己的活动。创建新活动并与他人分享您的服务。",
+  EnumLocale.txtHostCenterDescription.name:
+      "现在您可以成为活动主办人，组织您自己的活动。创建新活动并与他人分享您的服务。",
   EnumLocale.txtDataPrivacy.name: "我们重视您的数据隐私。了解您的个人信息是如何被收集、使用和保护的。",
   EnumLocale.txtShareAppDes.name: "与您的朋友和家人分享此应用程序，以便他们也可以享受其独特的功能。",
   EnumLocale.txtAboutUsDes.name: "我们致力于为您提供最佳服务。了解更多关于我们的团队和使命。",
   EnumLocale.txtPaymentMethod.name: "付款方式",
-  EnumLocale.txtListenerWithdrawDescription.name: "1. 达到平台设定的最低提现额度后，即可将您赚取的代币以真实货币形式提现。请确保您的个人资料和付款信息已完全验证，以免提现请求处理出现延误。",
+  EnumLocale.txtListenerWithdrawDescription.name:
+      "1. 达到平台设定的最低提现额度后，即可将您赚取的代币以真实货币形式提现。请确保您的个人资料和付款信息已完全验证，以免提现请求处理出现延误。",
   EnumLocale.txtListenerGuide.name:
       "1. 您的钱包余额显示了您作为听众从致电您的用户那里获得的总金币。这些金币是为了表彰您在通话过程中投入的时间和参与度而奖励给您的。\n\n2. 用户可以通过致电像您一样的听众来购买金币并使用它们。致电您的用户越多，您在钱包中赚取的金币就越多。\n\n3. 赚取的金币可以累积，之后可以根据平台的提现规则提现。请持续积极参与，以增加您的钱包余额。",
   EnumLocale.txtUserGuide.name:
@@ -218,7 +224,8 @@ final Map<String, String> zhCN = <String, String>{
   EnumLocale.txtRecentCalling.name: "最近通话",
   EnumLocale.txtEarnMoney.name: "赚钱",
   EnumLocale.txtPermissionAllow.name: "权限允许",
-  EnumLocale.txtHostHomeNote.name: "请勿轻信陌生人提供的转账、彩票等诈骗信息。请勿泄露任何个人信息，例如密码、手机号码、一次性密码等。请勿发布裸露、色情或任何淫秽内容。",
+  EnumLocale.txtHostHomeNote.name:
+      "请勿轻信陌生人提供的转账、彩票等诈骗信息。请勿泄露任何个人信息，例如密码、手机号码、一次性密码等。请勿发布裸露、色情或任何淫秽内容。",
   EnumLocale.txtWithdrawCoin.name: "提现",
   EnumLocale.txtSecurePayment.name: "安全支付",
   EnumLocale.txtGuarantedChat.name: "保证聊天",
@@ -270,11 +277,15 @@ final Map<String, String> zhCN = <String, String>{
   EnumLocale.txtPrivateAudioCallRate.name: "私人音频通话费率",
   EnumLocale.txtPaymentDetails.name: "付款详情：",
   EnumLocale.txtAppRestart.name: "您的听众请求已被接受",
-  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name: "用户没有足够的资金进行提款",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name: "提现请求的币种必须大于管理员指定的币种",
+  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
+      "用户没有足够的资金进行提款",
+  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin
+      .name: "提现请求的币种必须大于管理员指定的币种",
   EnumLocale.txtSkip.name: "跳过",
-  EnumLocale.txtHostHomeDescription.name: "帮助他人，即可获得奖励！作为聆听者，您在随机通话期间每分钟可赚取  枚金币。帮助有需要的人，同时还能赚取收益。",
-  EnumLocale.txtManageYourAccountSettingsSubText.name: "通过更改语言、退出或永久删除您的帐户来定制您的应用体验。请务必在进行更改前仔细检查每个选项。",
+  EnumLocale.txtHostHomeDescription.name:
+      "帮助他人，即可获得奖励！作为聆听者，您在随机通话期间每分钟可赚取  枚金币。帮助有需要的人，同时还能赚取收益。",
+  EnumLocale.txtManageYourAccountSettingsSubText.name:
+      "通过更改语言、退出或永久删除您的帐户来定制您的应用体验。请务必在进行更改前仔细检查每个选项。",
   EnumLocale.txtSelectLanguage.name: "选择语言",
   EnumLocale.txtSelectLanguages.name: "选择您熟悉的语言。这有助于我们将您与需要相应语言支持的人员联系起来。",
   EnumLocale.txtSelectTopic.name: "选择你觉得有信心谈论的话题。这将有助于你匹配在这些特定领域寻求支持的用户。",
@@ -284,16 +295,20 @@ final Map<String, String> zhCN = <String, String>{
   EnumLocale.txtTryAgain.name: "再试一次",
   EnumLocale.txtSelectDate.name: "选择日期 :",
   EnumLocale.txtAll.name: "全部",
-  EnumLocale.txtHelpCenterDescription.name: "如果您有任何疑问或遇到任何问题，我们随时为您提供帮助！查看下方常见问题解答，或联系我们的支持团队，获取个性化帮助。",
-  EnumLocale.txtBecomeHostDescription.name: "倾听者扮演着至关重要的角色，他们可以为需要倾诉的用户提供支持、指导，或者仅仅是倾听他们的心声。如果你富有同理心、耐心且乐于助人，那么成为一名倾听者是产生积极影响的最佳方式。",
+  EnumLocale.txtHelpCenterDescription.name:
+      "如果您有任何疑问或遇到任何问题，我们随时为您提供帮助！查看下方常见问题解答，或联系我们的支持团队，获取个性化帮助。",
+  EnumLocale.txtBecomeHostDescription.name:
+      "倾听者扮演着至关重要的角色，他们可以为需要倾诉的用户提供支持、指导，或者仅仅是倾听他们的心声。如果你富有同理心、耐心且乐于助人，那么成为一名倾听者是产生积极影响的最佳方式。",
   EnumLocale.txtListenerReqSentSuccessfully.name: "监听器请求已成功发送....",
   EnumLocale.txtSearchLanguage.name: "搜索语言...",
   EnumLocale.txtSelectTalkaboutTxt.name: "选择谈论应用程序中的内容。",
   EnumLocale.txtSelectAppLanguageTxt.name: "选择您喜欢的应用语言。",
-  EnumLocale.txtHostVerificationFillForm.name: "请准确填写表格。请输入您的有效邮箱地址，以便接收重要更新和验证结果。请确保所有字段均已正确填写，然后再继续操作。",
+  EnumLocale.txtHostVerificationFillForm.name:
+      "请准确填写表格。请输入您的有效邮箱地址，以便接收重要更新和验证结果。请确保所有字段均已正确填写，然后再继续操作。",
   EnumLocale.txtUserName.name: "选择谈论应用程序中的内容。",
   EnumLocale.txtUserDetails.name: "选择您喜欢的应用语言。",
-  EnumLocale.txtUserNickName.name: "请准确填写表格。请输入您的有效邮箱地址，以便接收重要更新和验证结果。请确保所有字段均已正确填写，然后再继续操作。",
+  EnumLocale.txtUserNickName.name:
+      "请准确填写表格。请输入您的有效邮箱地址，以便接收重要更新和验证结果。请确保所有字段均已正确填写，然后再继续操作。",
   EnumLocale.txtGender.name: "用户名",
   EnumLocale.txtCountry.name: "用户详细信息",
   EnumLocale.txtPersonalDetails.name: "用户昵称：",
@@ -337,7 +352,8 @@ final Map<String, String> zhCN = <String, String>{
   EnumLocale.txtEarpiece.name: '听筒',
   EnumLocale.txtEnterProperValue.name: '输入正确的值',
   EnumLocale.txtYourHostRequestSentSuccessfully.name: '您的主机请求已成功发送',
-  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name: '您的请求已提交。请等待我们审核并批准。',
+  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
+      '您的请求已提交。请等待我们审核并批准。',
   EnumLocale.txtViewRequest.name: '查看请求',
   EnumLocale.txtDEmoListenerText.name: "哎呀！您没有权限。这是演示登录",
   EnumLocale.txtVideoCalling.name: "视频通话",
@@ -346,5 +362,6 @@ final Map<String, String> zhCN = <String, String>{
   EnumLocale.txtIncomingAudioCalling.name: '音频来电',
   EnumLocale.txtNoAccountFoundForThisEmail.name: "未找到此电子邮件的帐户",
   EnumLocale.txtResetLinkSentToYourEmail.name: "重置链接已发送至您的邮箱",
-  EnumLocale.txtForgetPasswordDescription.name: "您的 Gmail 账户中肯定收到了忘记密码的链接，请检查一下。如果没有，请检查垃圾邮件部分。",
+  EnumLocale.txtForgetPasswordDescription.name:
+      "您的 Gmail 账户中肯定收到了忘记密码的链接，请检查一下。如果没有，请检查垃圾邮件部分。",
 };

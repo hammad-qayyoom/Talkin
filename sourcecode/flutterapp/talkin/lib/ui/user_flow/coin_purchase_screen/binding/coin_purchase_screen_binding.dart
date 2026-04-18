@@ -4,6 +4,7 @@ import 'package:notisboard/ui/user_flow/coin_purchase_screen/controller/coin_pur
 class CoinPurchaseScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<CoinPurchaseScreenController>(() => CoinPurchaseScreenController());
+    Get.lazyPut<CoinPurchaseScreenController>(
+        () => CoinPurchaseScreenController());
   }
 }

@@ -1,10 +1,8 @@
-import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/app_button/primary_app_button.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/setting_screen/controller/setting_controller.dart';
-import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -21,55 +19,106 @@ class _AppRestartDialogState extends State<AppRestartDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      // height: 365,
-      child: Material(
-        shape: const SquircleBorder(
-          radius: BorderRadius.all(
-            Radius.circular(100),
-          ),
-        ),
-        color: AppColors.white,
+    return Material(
+      color: AppColors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      elevation: 10,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(
-              AppAsset.listenersVerification,
-              height: 50,
-            ).paddingOnly(bottom: 20),
+            // top handle (subtle)
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.redesignSheetHandle,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Hero icon
+            Container(
+              width: 78,
+              height: 78,
+              decoration: BoxDecoration(
+                color: AppColors.redesignAvatarSurface,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 12,
+                      offset: Offset(0, 6)),
+                ],
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.verified,
+                  color: AppColors.redesignBrandRed,
+                  size: 38,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 18),
+
+            // Title
             Text(
               EnumLocale.txtAppRestart.name.tr,
               textAlign: TextAlign.center,
               style: AppFontStyle.fontStyleW700(
-                fontSize: 25,
-                fontColor: AppColors.appColor,
+                fontSize: 20,
+                fontColor: AppColors.redesignTextStrong,
               ),
-            ).paddingOnly(top: 8, bottom: 9),
-            Text(
-              EnumLocale.txtAppRestart.name.tr,
-              textAlign: TextAlign.center,
-              style: AppFontStyle.fontStyleW500(
-                fontSize: 15,
-                fontColor: AppColors.onBoardingTxt,
-              ),
-            ).paddingOnly(top: 8, bottom: 13),
-            // const Spacer(),
+            ),
+
+            const SizedBox(height: 20),
+
+            // Primary CTA
             PrimaryAppButton(
-              color: AppColors.red,
+              color: AppColors.redesignBrandRed,
+              gradientColor: [
+                AppColors.redesignBrandRed,
+                AppColors.redesignBrandRedDark
+              ],
               onTap: () {
                 Get.offAllNamed(AppRoutes.splashScreenPage);
-                // exit(0);
               },
-              height: 47,
-              borderRadius: 8,
-              text: "Re-Start APP",
+              height: 52,
+              borderRadius: 12,
+              text: 'Restart App',
               textStyle: AppFontStyle.fontStyleW600(
-                fontSize: 17,
+                fontSize: 16,
                 fontColor: AppColors.white,
               ),
-            ).paddingOnly(top: 20, bottom: 10, left: 5, right: 5),
+            ),
+
+            const SizedBox(height: 12),
+
+            // Secondary action
+            GestureDetector(
+              onTap: () => Get.back(),
+              child: Container(
+                height: 48,
+                width: double.infinity,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                      color: AppColors.redesignSoftBorder, width: 1.0),
+                ),
+                child: Text(
+                  EnumLocale.txtClose.name.tr,
+                  style: AppFontStyle.fontStyleW600(
+                      fontSize: 15, fontColor: AppColors.redesignBrandDark),
+                ),
+              ),
+            ),
           ],
-        ).paddingAll(20),
+        ),
       ),
     );
   }

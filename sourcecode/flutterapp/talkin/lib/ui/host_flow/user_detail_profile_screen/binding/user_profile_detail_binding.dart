@@ -4,6 +4,7 @@ import 'package:notisboard/ui/host_flow/user_detail_profile_screen/controller/us
 class UserProfileDetailBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<UserProfileDetailController>(() => UserProfileDetailController());
+    Get.lazyPut<UserProfileDetailController>(
+        () => UserProfileDetailController());
   }
 }

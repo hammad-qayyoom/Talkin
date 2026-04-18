@@ -32,7 +32,8 @@ class CallingScreenController extends GetxController {
     isLoading = true;
     update([Constant.idCallingHistory]);
 
-    callingHistoryResponseModel = await CallingHistoryApi.callApi(endDate: "All", startDate: "All");
+    callingHistoryResponseModel =
+        await CallingHistoryApi.callApi(endDate: "All", startDate: "All");
     callingHistory.addAll(callingHistoryResponseModel?.data ?? []);
 
     log(" ::::: $callingHistory");
@@ -49,11 +50,13 @@ class CallingScreenController extends GetxController {
   }
 
   Future<void> onTopListenersPagination() async {
-    if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
       isPaginationLoading = true;
       update([Constant.idPaginationListener]);
 
-      callingHistoryResponseModel = await CallingHistoryApi.callApi(endDate: "All", startDate: "All");
+      callingHistoryResponseModel =
+          await CallingHistoryApi.callApi(endDate: "All", startDate: "All");
       callingHistory.addAll(callingHistoryResponseModel?.data ?? []);
 
       log("callingHistory.addAll :: ${callingHistory.length}");

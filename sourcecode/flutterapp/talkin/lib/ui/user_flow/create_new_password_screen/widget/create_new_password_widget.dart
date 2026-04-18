@@ -44,7 +44,8 @@ class CreateNewPasswordDescriptionView extends StatelessWidget {
               ),
             ).paddingOnly(bottom: 6),
             Text(
-              EnumLocale.txtMobileLoginDescription.name.tr, // textAlign: TextAlign.center,
+              EnumLocale.txtMobileLoginDescription.name
+                  .tr, // textAlign: TextAlign.center,
               style: AppFontStyle.fontStyleW400(
                 height: 1.9,
                 fontSize: 12,
@@ -152,7 +153,8 @@ class CreateNewPasswordButtonView extends StatelessWidget {
                 width: 15,
               ),
               text: EnumLocale.txtSubmit.name.tr,
-              textStyle: AppFontStyle.fontStyleW500(fontSize: 16, fontColor: AppColors.white),
+              textStyle: AppFontStyle.fontStyleW500(
+                  fontSize: 16, fontColor: AppColors.white),
             ).paddingOnly(bottom: 15, left: 20, right: 20),
           ),
         );

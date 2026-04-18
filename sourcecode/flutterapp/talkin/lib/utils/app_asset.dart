@@ -70,7 +70,8 @@ class AppAsset {
   static const payments = "${getIconsPath}payments.png";
   static const securePayments = "${getIconsPath}secure_payment.png";
   static const guarantedChat = "${getIconsPath}guaranted_chat.png";
-  static const withdrawTimeBookIcon = "${getIconsPath}withdraw_time_book_icon.png";
+  static const withdrawTimeBookIcon =
+      "${getIconsPath}withdraw_time_book_icon.png";
   static const unreadMsgIcon = "${getIconsPath}unread_msg_icon.png";
   static const loginBonusIcon = "${getIconsPath}login_bonus_icon.png";
   static const coinPurchaseIcon = "${getIconsPath}coin_purchase_icon.png";
@@ -116,7 +117,8 @@ class AppAsset {
   static const helpCenterGirl = "${getImagesPath}help_center_girl.png";
   static const rateStar = "${getImagesPath}rate_star.png";
   static const shareAppGradiant = "${getImagesPath}share_app_gradiant.png";
-  static const listenersVerification = "${getImagesPath}listeners_verification.png";
+  static const listenersVerification =
+      "${getImagesPath}listeners_verification.png";
   static const becomeHostBlur = "${getImagesPath}become_host_blur.png";
   static const notification = "${getImagesPath}notification.png";
   static const microphoneImage = "${getImagesPath}microphone_image.png";
@@ -130,10 +132,13 @@ class AppAsset {
   static const noHistoryFound = "${getImagesPath}no_history_found.png";
   static const noListenerFound = "${getImagesPath}no_listener_found.png";
   static const noChatFound = "${getImagesPath}no_chat_list.png";
-  static const noNotificationFound = "${getImagesPath}no_notification_found.png";
-  static const listenerPlaceHolder = "${getImagesPath}listener_place_holder.png";
+  static const noNotificationFound =
+      "${getImagesPath}no_notification_found.png";
+  static const listenerPlaceHolder =
+      "${getImagesPath}listener_place_holder.png";
   static const paymentMode = "${getImagesPath}payment_mode_icon.png";
-  static const underMaintenanceImage = "${getImagesPath}under_maintenance_image.png";
+  static const underMaintenanceImage =
+      "${getImagesPath}under_maintenance_image.png";
   static const demoListener = "${getImagesPath}demo_listener.png";
 
   static const listeners = "${getImagesPath}listeners.png";

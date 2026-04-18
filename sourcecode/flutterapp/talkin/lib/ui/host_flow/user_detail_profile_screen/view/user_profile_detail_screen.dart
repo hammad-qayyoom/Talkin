@@ -11,11 +11,13 @@ class UserProfileDetailScreen extends StatefulWidget {
   const UserProfileDetailScreen({super.key});
 
   @override
-  State<UserProfileDetailScreen> createState() => _UserProfileDetailScreenState();
+  State<UserProfileDetailScreen> createState() =>
+      _UserProfileDetailScreenState();
 }
 
 class _UserProfileDetailScreenState extends State<UserProfileDetailScreen> {
-  UserProfileDetailController controller = Get.put(UserProfileDetailController());
+  UserProfileDetailController controller =
+      Get.put(UserProfileDetailController());
 
   @override
   Widget build(BuildContext context) {

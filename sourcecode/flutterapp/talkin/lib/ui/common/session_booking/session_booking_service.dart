@@ -24,7 +24,7 @@ class SessionBookingService {
 
     final isExpertNotJoinedTechnicalError =
         normalized.contains('joinwindowstate') &&
-        normalized.contains('before initialization');
+            normalized.contains('before initialization');
 
     if (isExpertNotJoinedTechnicalError) {
       return 'You can join this session only after the expert has joined.';
@@ -157,9 +157,11 @@ class SessionBookingService {
   }) async {
     try {
       final headers = await _headers();
-      final normalizedDurationMinutes = durationMinutes <= 0 ? 30 : durationMinutes;
+      final normalizedDurationMinutes =
+          durationMinutes <= 0 ? 30 : durationMinutes;
       final resolvedStartAt = startAt.toUtc();
-      final resolvedEndAt = resolvedStartAt.add(Duration(minutes: normalizedDurationMinutes));
+      final resolvedEndAt =
+          resolvedStartAt.add(Duration(minutes: normalizedDurationMinutes));
 
       final response = await http.post(
         Uri.parse(Api.groupSessionCreate),
@@ -169,7 +171,8 @@ class SessionBookingService {
           'description': description.trim(),
           'startAt': resolvedStartAt.toIso8601String(),
           'endAt': resolvedEndAt.toIso8601String(),
-          'callType': callType.trim().toLowerCase() == 'video' ? 'video' : 'audio',
+          'callType':
+              callType.trim().toLowerCase() == 'video' ? 'video' : 'audio',
           'maxParticipants': maxParticipants < 2 ? 2 : maxParticipants,
           'timezone': startAt.timeZoneName,
           'joinDeadline': resolvedStartAt.toIso8601String(),

@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-ListenerCoinModel listenerCoinModelFromJson(String str) => ListenerCoinModel.fromJson(json.decode(str));
+ListenerCoinModel listenerCoinModelFromJson(String str) =>
+    ListenerCoinModel.fromJson(json.decode(str));
 
-String listenerCoinModelToJson(ListenerCoinModel data) => json.encode(data.toJson());
+String listenerCoinModelToJson(ListenerCoinModel data) =>
+    json.encode(data.toJson());
 
 class ListenerCoinModel {
   bool? status;
@@ -19,7 +21,8 @@ class ListenerCoinModel {
     this.coin,
   });
 
-  factory ListenerCoinModel.fromJson(Map<String, dynamic> json) => ListenerCoinModel(
+  factory ListenerCoinModel.fromJson(Map<String, dynamic> json) =>
+      ListenerCoinModel(
         status: json["status"],
         message: json["message"],
         coin: json["coin"] is num

@@ -9,17 +9,20 @@ import 'package:url_launcher/url_launcher.dart';
 
 class HostProfileScreenController extends GetxController {
   Future<void> onClickPrivacyPolicy() async {
-    final String privacyPolicyUrl = Database.settingApiModel?.data?.expertPrivacyPolicyUrl.toString() ?? "";
+    final String privacyPolicyUrl =
+        Database.settingApiModel?.data?.expertPrivacyPolicyUrl.toString() ?? "";
 
     if (privacyPolicyUrl.isNotEmpty) {
-      Get.to(() => WebViewScreen(url: privacyPolicyUrl, screen: "Privacy Policy"));
+      Get.to(
+          () => WebViewScreen(url: privacyPolicyUrl, screen: "Privacy Policy"));
     } else {
       log('Invalid privacy policy URL');
     }
   }
 
   Future<void> onClickAboutUs() async {
-    final String aboutUsUrl = Database.settingApiModel?.data?.aboutUsUrl.toString() ?? "";
+    final String aboutUsUrl =
+        Database.settingApiModel?.data?.aboutUsUrl.toString() ?? "";
 
     if (aboutUsUrl.isNotEmpty) {
       Get.to(() => WebViewScreen(

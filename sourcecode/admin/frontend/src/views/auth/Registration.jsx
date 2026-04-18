@@ -32,6 +32,7 @@ import { auth } from '@/libs/firebase'
 
 // Component Imports
 import CustomTextField from '@core/components/mui/TextField'
+import BrandName from '@/components/common/BrandName'
 
 // Config Imports
 import themeConfig from '@configs/themeConfig'
@@ -347,7 +348,8 @@ const Registration = ({ mode }) => {
           </Typography>
 
           <Typography variant='body1' className='text-left'>
-            Let&apos;s connect, chat, and spark real connections. Enter your credentials to continue your journey on {projectName}.
+            Let&apos;s connect, chat, and spark real connections. Enter your credentials to continue your journey on{' '}
+            <BrandName text={projectName || 'Notisboard'} />.
           </Typography>
 
           {/* Show Errors */}

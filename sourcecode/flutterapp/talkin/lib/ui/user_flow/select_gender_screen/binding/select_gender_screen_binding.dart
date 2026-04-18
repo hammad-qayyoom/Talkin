@@ -4,6 +4,7 @@ import 'package:notisboard/ui/user_flow/select_gender_screen/controller/select_g
 class SelectGenderScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<SelectGenderScreenController>(() => SelectGenderScreenController());
+    Get.lazyPut<SelectGenderScreenController>(
+        () => SelectGenderScreenController());
   }
 }

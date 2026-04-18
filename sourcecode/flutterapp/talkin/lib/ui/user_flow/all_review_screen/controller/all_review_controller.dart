@@ -25,7 +25,8 @@ class AllReviewController extends GetxController {
     isLoading = true;
     update([Constant.idGetListenerReview]);
 
-    listenerReviewModel = await ListenerReviewApi.callApi(listenerId: listenerId ?? '');
+    listenerReviewModel =
+        await ListenerReviewApi.callApi(listenerId: listenerId ?? '');
     reviews?.addAll(listenerReviewModel?.reviews ?? []);
 
     isLoading = false;

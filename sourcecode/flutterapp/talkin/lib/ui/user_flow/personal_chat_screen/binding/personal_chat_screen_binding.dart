@@ -4,6 +4,7 @@ import 'package:notisboard/ui/user_flow/personal_chat_screen/controller/personal
 class PersonalChatScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<PersonalChatScreenController>(() => PersonalChatScreenController());
+    Get.lazyPut<PersonalChatScreenController>(
+        () => PersonalChatScreenController());
   }
 }

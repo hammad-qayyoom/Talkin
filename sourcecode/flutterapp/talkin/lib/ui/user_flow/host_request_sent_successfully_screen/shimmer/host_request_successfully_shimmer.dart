@@ -15,7 +15,9 @@ class HostRequestSuccessfullyShimmer extends StatelessWidget {
       highlightColor: AppColors.grey.withValues(alpha: 0.2),
       child: Container(
         padding: EdgeInsets.all(14),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), border: Border.all(color: AppColors.grey)),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: AppColors.grey)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -44,13 +46,17 @@ class HostRequestSuccessfullyShimmer extends StatelessWidget {
                       Container(
                         height: 22,
                         width: 100,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: AppColors.grey),
                       ),
                       4.height,
                       Container(
                         height: 20,
                         width: 100,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: AppColors.grey),
                       ),
                     ],
                   ),
@@ -59,7 +65,9 @@ class HostRequestSuccessfullyShimmer extends StatelessWidget {
                 Container(
                   height: 30,
                   width: 90,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.lightGrey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.lightGrey),
                 )
               ],
             ),
@@ -83,12 +91,16 @@ class HostRequestSuccessfullyShimmer extends StatelessWidget {
                 Container(
                   height: 22,
                   width: 120,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.grey),
                 ),
                 Container(
                   height: 25,
                   width: Get.width * 0.43,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.grey),
                 ),
               ],
             ).paddingOnly(bottom: 32),
@@ -98,12 +110,16 @@ class HostRequestSuccessfullyShimmer extends StatelessWidget {
                 Container(
                   height: 22,
                   width: 120,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.grey),
                 ),
                 Container(
                   height: 25,
                   width: Get.width * 0.43,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.grey),
                 ),
               ],
             ).paddingOnly(bottom: 32),
@@ -113,12 +129,16 @@ class HostRequestSuccessfullyShimmer extends StatelessWidget {
                 Container(
                   height: 22,
                   width: 120,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.grey),
                 ),
                 Container(
                   height: 25,
                   width: Get.width * 0.43,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.grey),
                 ),
               ],
             ).paddingOnly(bottom: 32),
@@ -128,12 +148,16 @@ class HostRequestSuccessfullyShimmer extends StatelessWidget {
                 Container(
                   height: 22,
                   width: 120,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.grey),
                 ),
                 Container(
                   height: 25,
                   width: Get.width * 0.43,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.grey),
                 ),
               ],
             ).paddingOnly(bottom: 32),
@@ -143,12 +167,16 @@ class HostRequestSuccessfullyShimmer extends StatelessWidget {
                 Container(
                   height: 22,
                   width: 120,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.grey),
                 ),
                 Container(
                   height: 25,
                   width: Get.width * 0.43,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.grey),
                 ),
               ],
             ).paddingOnly(bottom: 32),
@@ -158,12 +186,16 @@ class HostRequestSuccessfullyShimmer extends StatelessWidget {
                 Container(
                   height: 22,
                   width: 120,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.grey),
                 ),
                 Container(
                   height: 25,
                   width: Get.width * 0.43,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.grey),
                 ),
               ],
             ),
@@ -171,7 +203,9 @@ class HostRequestSuccessfullyShimmer extends StatelessWidget {
             Container(
               height: 22,
               width: 120,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: AppColors.grey),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: AppColors.grey),
             ),
             16.height,
             Container(

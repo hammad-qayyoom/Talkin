@@ -71,7 +71,9 @@ class CallCutView extends StatelessWidget {
                           color: AppColors.lightGrey,
                           shape: BoxShape.circle,
                         ),
-                        child: CustomProfileImage(image: controller.receiverImage ?? '', fit: BoxFit.cover),
+                        child: CustomProfileImage(
+                            image: controller.receiverImage ?? '',
+                            fit: BoxFit.cover),
                       ),
                     ).paddingOnly(right: 12),
                     Column(
@@ -79,11 +81,15 @@ class CallCutView extends StatelessWidget {
                       children: [
                         Text(
                           "Expert",
-                          style: AppFontStyle.fontStyleW500(fontSize: 15, fontColor: AppColors.darkGrey.withValues(alpha: 0.8)),
+                          style: AppFontStyle.fontStyleW500(
+                              fontSize: 15,
+                              fontColor:
+                                  AppColors.darkGrey.withValues(alpha: 0.8)),
                         ).paddingOnly(bottom: 4),
                         Text(
                           controller.receiverName ?? '',
-                          style: AppFontStyle.fontStyleW700(fontSize: 17, fontColor: AppColors.black),
+                          style: AppFontStyle.fontStyleW700(
+                              fontSize: 17, fontColor: AppColors.black),
                         )
                       ],
                     ),
@@ -140,7 +146,8 @@ class CallCutView extends StatelessWidget {
               children: [
                 Text(
                   EnumLocale.txtDidYouLikeService.name.tr,
-                  style: AppFontStyle.fontStyleW500(fontSize: 15, fontColor: AppColors.black),
+                  style: AppFontStyle.fontStyleW500(
+                      fontSize: 15, fontColor: AppColors.black),
                 ).paddingOnly(bottom: 18),
                 GetBuilder<CallCutController>(
                   builder: (controller) {
@@ -150,11 +157,15 @@ class CallCutView extends StatelessWidget {
                           width: Get.width * 0.2,
                           height: Get.height * 0.045,
                           color: AppColors.transparent,
-                          borderColor: controller.listenerService == 'yes' ? AppColors.black : AppColors.lightGrey,
+                          borderColor: controller.listenerService == 'yes'
+                              ? AppColors.black
+                              : AppColors.lightGrey,
                           text: EnumLocale.txtYes.name.tr,
                           textStyle: AppFontStyle.fontStyleW500(
                             fontSize: 14,
-                            fontColor: controller.favListener == 'yes' ? AppColors.black : AppColors.profileMail,
+                            fontColor: controller.favListener == 'yes'
+                                ? AppColors.black
+                                : AppColors.profileMail,
                           ),
                           onTap: () => controller.listenerServiceSelect('yes'),
                         ).paddingOnly(right: 16),
@@ -162,11 +173,15 @@ class CallCutView extends StatelessWidget {
                           width: Get.width * 0.2,
                           height: Get.height * 0.045,
                           color: AppColors.transparent,
-                          borderColor: controller.listenerService == 'no' ? AppColors.black : AppColors.lightGrey,
+                          borderColor: controller.listenerService == 'no'
+                              ? AppColors.black
+                              : AppColors.lightGrey,
                           text: EnumLocale.txtNo.name.tr,
                           textStyle: AppFontStyle.fontStyleW500(
                             fontSize: 14,
-                            fontColor: controller.favListener == 'no' ? AppColors.black : AppColors.profileMail,
+                            fontColor: controller.favListener == 'no'
+                                ? AppColors.black
+                                : AppColors.profileMail,
                           ),
                           onTap: () => controller.listenerServiceSelect('no'),
                         ),
@@ -185,7 +200,8 @@ class CallCutView extends StatelessWidget {
               children: [
                 Text(
                   "Add ${controller.receiverName} to your Favourite Experts?",
-                  style: AppFontStyle.fontStyleW500(fontSize: 15, fontColor: AppColors.black),
+                  style: AppFontStyle.fontStyleW500(
+                      fontSize: 15, fontColor: AppColors.black),
                 ).paddingOnly(bottom: 18),
                 GetBuilder<CallCutController>(
                   builder: (controller) {
@@ -195,11 +211,15 @@ class CallCutView extends StatelessWidget {
                           width: Get.width * 0.2,
                           height: Get.height * 0.045,
                           color: AppColors.transparent,
-                          borderColor: controller.favListener == 'yes' ? AppColors.black : AppColors.lightGrey,
+                          borderColor: controller.favListener == 'yes'
+                              ? AppColors.black
+                              : AppColors.lightGrey,
                           text: EnumLocale.txtYes.name.tr,
                           textStyle: AppFontStyle.fontStyleW500(
                             fontSize: 14,
-                            fontColor: controller.favListener == 'yes' ? AppColors.black : AppColors.profileMail,
+                            fontColor: controller.favListener == 'yes'
+                                ? AppColors.black
+                                : AppColors.profileMail,
                           ),
                           onTap: () => controller.favListenerSelect('yes'),
                         ).paddingOnly(right: 16),
@@ -207,11 +227,15 @@ class CallCutView extends StatelessWidget {
                           width: Get.width * 0.2,
                           height: Get.height * 0.045,
                           color: AppColors.transparent,
-                          borderColor: controller.favListener == 'no' ? AppColors.black : AppColors.lightGrey,
+                          borderColor: controller.favListener == 'no'
+                              ? AppColors.black
+                              : AppColors.lightGrey,
                           text: EnumLocale.txtNo.name.tr,
                           textStyle: AppFontStyle.fontStyleW500(
                             fontSize: 14,
-                            fontColor: controller.favListener == 'no' ? AppColors.black : AppColors.profileMail,
+                            fontColor: controller.favListener == 'no'
+                                ? AppColors.black
+                                : AppColors.profileMail,
                           ),
                           onTap: () => controller.favListenerSelect('no'),
                         ),
@@ -235,11 +259,15 @@ class CallCutView extends StatelessWidget {
                     children: [
                       Text(
                         EnumLocale.txtShareListenersApp.name.tr,
-                        style: AppFontStyle.fontStyleW700(fontSize: 18, fontColor: AppColors.black),
+                        style: AppFontStyle.fontStyleW700(
+                            fontSize: 18, fontColor: AppColors.black),
                       ).paddingOnly(bottom: 4),
                       Text(
                         EnumLocale.txtShareListenersAppDescription.name.tr,
-                        style: AppFontStyle.fontStyleW500(fontSize: 14, fontColor: AppColors.darkGrey.withValues(alpha: 0.8)),
+                        style: AppFontStyle.fontStyleW500(
+                            fontSize: 14,
+                            fontColor:
+                                AppColors.darkGrey.withValues(alpha: 0.8)),
                       ).paddingOnly(bottom: 14),
                       PrimaryAppButton(
                         onTap: () {
@@ -250,7 +278,8 @@ class CallCutView extends StatelessWidget {
                         color: AppColors.orange200,
                         borderColor: AppColors.transparent,
                         text: EnumLocale.txtShareAppNow.name.tr,
-                        textStyle: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: AppColors.white),
+                        textStyle: AppFontStyle.fontStyleW600(
+                            fontSize: 14, fontColor: AppColors.white),
                       ).paddingOnly(bottom: 6),
                     ],
                   ),
@@ -302,7 +331,8 @@ class BottomView extends StatelessWidget {
                   borderColor: AppColors.appColor,
                   // borderRadius: 30,
                   text: EnumLocale.txtSkip.name.tr,
-                  textStyle: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.appColor),
+                  textStyle: AppFontStyle.fontStyleW600(
+                      fontSize: 16, fontColor: AppColors.appColor),
                 ),
               ),
               8.width,
@@ -321,7 +351,8 @@ class BottomView extends StatelessWidget {
                   height: 50,
                   // borderRadius: 30,
                   text: EnumLocale.txtFeedBack.name.tr,
-                  textStyle: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
+                  textStyle: AppFontStyle.fontStyleW600(
+                      fontSize: 16, fontColor: AppColors.white),
                 ),
               ),
             ],

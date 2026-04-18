@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-ChatListResponseModel chatListResponseModelFromJson(String str) => ChatListResponseModel.fromJson(json.decode(str));
+ChatListResponseModel chatListResponseModelFromJson(String str) =>
+    ChatListResponseModel.fromJson(json.decode(str));
 
-String chatListResponseModelToJson(ChatListResponseModel data) => json.encode(data.toJson());
+String chatListResponseModelToJson(ChatListResponseModel data) =>
+    json.encode(data.toJson());
 
 class ChatListResponseModel {
   bool? status;
@@ -19,16 +21,22 @@ class ChatListResponseModel {
     this.chatList,
   });
 
-  factory ChatListResponseModel.fromJson(Map<String, dynamic> json) => ChatListResponseModel(
+  factory ChatListResponseModel.fromJson(Map<String, dynamic> json) =>
+      ChatListResponseModel(
         status: json["status"],
         message: json["message"],
-        chatList: json["chatList"] == null ? [] : List<ChatList>.from(json["chatList"]!.map((x) => ChatList.fromJson(x))),
+        chatList: json["chatList"] == null
+            ? []
+            : List<ChatList>.from(
+                json["chatList"]!.map((x) => ChatList.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "chatList": chatList == null ? [] : List<dynamic>.from(chatList!.map((x) => x.toJson())),
+        "chatList": chatList == null
+            ? []
+            : List<dynamic>.from(chatList!.map((x) => x.toJson())),
       };
 }
 
@@ -89,7 +97,9 @@ class ChatList {
         senderId: json["senderId"],
         messageType: json["messageType"],
         message: json["message"],
-        lastChatMessageTime: json["lastChatMessageTime"] == null ? null : DateTime.parse(json["lastChatMessageTime"]),
+        lastChatMessageTime: json["lastChatMessageTime"] == null
+            ? null
+            : DateTime.parse(json["lastChatMessageTime"]),
         unreadCount: json["unreadCount"],
         time: json["time"],
         isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],

@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-HostNotificationModel hostNotificationModelFromJson(String str) => HostNotificationModel.fromJson(json.decode(str));
+HostNotificationModel hostNotificationModelFromJson(String str) =>
+    HostNotificationModel.fromJson(json.decode(str));
 
-String hostNotificationModelToJson(HostNotificationModel data) => json.encode(data.toJson());
+String hostNotificationModelToJson(HostNotificationModel data) =>
+    json.encode(data.toJson());
 
 class HostNotificationModel {
   bool? status;
@@ -19,16 +21,22 @@ class HostNotificationModel {
     this.notification,
   });
 
-  factory HostNotificationModel.fromJson(Map<String, dynamic> json) => HostNotificationModel(
+  factory HostNotificationModel.fromJson(Map<String, dynamic> json) =>
+      HostNotificationModel(
         status: json["status"],
         message: json["message"],
-        notification: json["notification"] == null ? [] : List<Notification>.from(json["notification"]!.map((x) => Notification.fromJson(x))),
+        notification: json["notification"] == null
+            ? []
+            : List<Notification>.from(
+                json["notification"]!.map((x) => Notification.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "notification": notification == null ? [] : List<dynamic>.from(notification!.map((x) => x.toJson())),
+        "notification": notification == null
+            ? []
+            : List<dynamic>.from(notification!.map((x) => x.toJson())),
       };
 }
 
@@ -60,8 +68,12 @@ class Notification {
         title: json["title"],
         message: json["message"],
         date: json["date"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {

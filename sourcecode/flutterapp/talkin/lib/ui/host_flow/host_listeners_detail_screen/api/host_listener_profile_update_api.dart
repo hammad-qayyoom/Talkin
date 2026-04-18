@@ -25,7 +25,8 @@ class HostListenerProfileUpdateApi {
     try {
       var request = http.MultipartRequest(
         'PATCH',
-        Uri.parse("${Api.listenerEditProfile}${ApiParams.listenerId}=$listenerId"),
+        Uri.parse(
+            "${Api.listenerEditProfile}${ApiParams.listenerId}=$listenerId"),
       );
       Utils.showLog("Listener Edit Profile Api URL => ${request.url}");
 
@@ -50,7 +51,8 @@ class HostListenerProfileUpdateApi {
       });
 
       if (image != null) {
-        request.files.add(await http.MultipartFile.fromPath(ApiParams.image, image));
+        request.files
+            .add(await http.MultipartFile.fromPath(ApiParams.image, image));
       }
 
       request.headers.addAll(headers);

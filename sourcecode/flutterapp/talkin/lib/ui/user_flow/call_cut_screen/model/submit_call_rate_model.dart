@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-SubmitCallRateModel submitCallRateModelFromJson(String str) => SubmitCallRateModel.fromJson(json.decode(str));
+SubmitCallRateModel submitCallRateModelFromJson(String str) =>
+    SubmitCallRateModel.fromJson(json.decode(str));
 
-String submitCallRateModelToJson(SubmitCallRateModel data) => json.encode(data.toJson());
+String submitCallRateModelToJson(SubmitCallRateModel data) =>
+    json.encode(data.toJson());
 
 class SubmitCallRateModel {
   bool? status;
@@ -17,7 +19,8 @@ class SubmitCallRateModel {
     this.message,
   });
 
-  factory SubmitCallRateModel.fromJson(Map<String, dynamic> json) => SubmitCallRateModel(
+  factory SubmitCallRateModel.fromJson(Map<String, dynamic> json) =>
+      SubmitCallRateModel(
         status: json["status"],
         message: json["message"],
       );

@@ -79,8 +79,12 @@ class SelectGenderView extends StatelessWidget {
                               width: 20,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                border: Border.all(color: selected ? AppColors.transparent : AppColors.grey),
-                                color: selected ? Colors.black : AppColors.white,
+                                border: Border.all(
+                                    color: selected
+                                        ? AppColors.transparent
+                                        : AppColors.grey),
+                                color:
+                                    selected ? Colors.black : AppColors.white,
                               ),
                               child: selected
                                   ? Container(
@@ -93,7 +97,8 @@ class SelectGenderView extends StatelessWidget {
                                         width: 22,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
-                                          border: Border.all(color: AppColors.white),
+                                          border: Border.all(
+                                              color: AppColors.white),
                                           color: AppColors.appColor,
                                         ),
                                       ).paddingAll(0.5),
@@ -156,7 +161,8 @@ GetBuilder<GetxController> saveGenderButton() {
               color: AppColors.appColor,
               height: Get.height * 0.056,
               text: EnumLocale.txtSaveGender.name.tr,
-              textStyle: AppFontStyle.fontStyleW500(fontSize: 16, fontColor: AppColors.white),
+              textStyle: AppFontStyle.fontStyleW500(
+                  fontSize: 16, fontColor: AppColors.white),
             ).paddingSymmetric(horizontal: 24),
           ],
         ).paddingOnly(top: 10, bottom: 10),

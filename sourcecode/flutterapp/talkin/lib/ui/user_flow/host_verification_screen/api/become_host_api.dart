@@ -70,7 +70,8 @@ class BecomeHostApi {
 
       for (String proof in identityProof) {
         if (proof.isNotEmpty) {
-          request.files.add(await http.MultipartFile.fromPath('identityProof', proof));
+          request.files
+              .add(await http.MultipartFile.fromPath('identityProof', proof));
         }
       }
 

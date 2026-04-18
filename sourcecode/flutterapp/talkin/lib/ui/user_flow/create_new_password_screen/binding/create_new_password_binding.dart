@@ -4,6 +4,7 @@ import 'package:notisboard/ui/user_flow/create_new_password_screen/controller/cr
 class CreateNewPasswordBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<CreateNewPasswordController>(() => CreateNewPasswordController());
+    Get.lazyPut<CreateNewPasswordController>(
+        () => CreateNewPasswordController());
   }
 }

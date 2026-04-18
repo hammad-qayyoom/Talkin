@@ -4,6 +4,7 @@ import 'package:notisboard/ui/user_flow/fill_profile_screen/controller/fill_prof
 class FillProfileScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<FillProfileScreenController>(() => FillProfileScreenController());
+    Get.lazyPut<FillProfileScreenController>(
+        () => FillProfileScreenController());
   }
 }

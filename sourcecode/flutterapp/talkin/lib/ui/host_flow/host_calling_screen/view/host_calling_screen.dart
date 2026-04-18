@@ -40,7 +40,8 @@ class HostCallingScreen extends StatelessWidget {
           id: Constant.idCallingHistory,
           builder: (controller) {
             return controller.isLoading
-                ? CallingHistoryShimmer().paddingSymmetric(horizontal: 14, vertical: 12)
+                ? CallingHistoryShimmer()
+                    .paddingSymmetric(horizontal: 14, vertical: 12)
                 : controller.callingHistory.isEmpty
                     ? Center(
                         child: Image.asset(
@@ -48,8 +49,6 @@ class HostCallingScreen extends StatelessWidget {
                           height: 300,
                         ).paddingAll(90),
                       )
-
-
                     : RefreshIndicator(
                         onRefresh: () async => controller.onRefresh(),
                         child: SingleChildScrollView(
@@ -58,29 +57,46 @@ class HostCallingScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               controller.isLoading
-                                  ? CallingHistoryShimmer().paddingSymmetric(horizontal: 14, vertical: 10)
+                                  ? CallingHistoryShimmer().paddingSymmetric(
+                                      horizontal: 14, vertical: 10)
                                   : ListView.builder(
                                       shrinkWrap: true,
-                                      itemCount: controller.callingHistory.length,
+                                      itemCount:
+                                          controller.callingHistory.length,
                                       // padding: const EdgeInsets.only(top: 12),
-                                      physics: const NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
                                         return HostCallingScreenItem(
                                           controller: controller,
-                                          time: controller.callingHistory[index].date.toString(),
-                                          callStatusText: controller.callingHistory[index].callStatusText.toString(),
-                                          coin: controller.callingHistory[index].coin ?? 0,
-                                          name: controller.callingHistory[index].fullName.toString(),
-                                          image: controller.callingHistory[index].profilePic.toString(),
+                                          time: controller
+                                              .callingHistory[index].date
+                                              .toString(),
+                                          callStatusText: controller
+                                              .callingHistory[index]
+                                              .callStatusText
+                                              .toString(),
+                                          coin: controller
+                                                  .callingHistory[index].coin ??
+                                              0,
+                                          name: controller
+                                              .callingHistory[index].fullName
+                                              .toString(),
+                                          image: controller
+                                              .callingHistory[index].profilePic
+                                              .toString(),
                                           index: index,
-                                        ).paddingOnly(bottom: 12, top: index == 0 ? 12 : 0);
+                                        ).paddingOnly(
+                                            bottom: 12,
+                                            top: index == 0 ? 12 : 0);
                                       },
                                     ),
                               GetBuilder<HostCallingScreenController>(
                                 id: Constant.idPaginationListener,
                                 builder: (controller) => Visibility(
                                   visible: controller.isPaginationLoading,
-                                  child: CircularProgressIndicator(color: AppColors.primary),
+                                  child: CircularProgressIndicator(
+                                      color: AppColors.primary),
                                 ),
                               ),
                             ],

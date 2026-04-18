@@ -6,7 +6,8 @@ import 'package:notisboard/ui/user_flow/host_verification_screen/controller/host
 class HostRequestSentSuccessfullyBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HostRequestSentSuccessfullyController>(() => HostRequestSentSuccessfullyController());
+    Get.lazyPut<HostRequestSentSuccessfullyController>(
+        () => HostRequestSentSuccessfullyController());
     Get.lazyPut<BecomeHostScreenController>(() => BecomeHostScreenController());
     Get.lazyPut<HostVerificationController>(() => HostVerificationController());
   }

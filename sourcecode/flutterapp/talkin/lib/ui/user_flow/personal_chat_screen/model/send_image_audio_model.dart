@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-SendImageAudioModel sendImageAudioModelFromJson(String str) => SendImageAudioModel.fromJson(json.decode(str));
+SendImageAudioModel sendImageAudioModelFromJson(String str) =>
+    SendImageAudioModel.fromJson(json.decode(str));
 
-String sendImageAudioModelToJson(SendImageAudioModel data) => json.encode(data.toJson());
+String sendImageAudioModelToJson(SendImageAudioModel data) =>
+    json.encode(data.toJson());
 
 class SendImageAudioModel {
   bool? status;
@@ -19,7 +21,8 @@ class SendImageAudioModel {
     this.chat,
   });
 
-  factory SendImageAudioModel.fromJson(Map<String, dynamic> json) => SendImageAudioModel(
+  factory SendImageAudioModel.fromJson(Map<String, dynamic> json) =>
+      SendImageAudioModel(
         status: json["status"],
         message: json["message"],
         chat: json["chat"] == null ? null : Chat.fromJson(json["chat"]),
@@ -75,8 +78,12 @@ class Chat {
         date: json["date"],
         id: json["_id"],
         messageType: json["messageType"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {

@@ -30,7 +30,8 @@ class VerifyOtpController extends GetxController {
   bool isLoading = false;
 
   TextEditingController otpController = TextEditingController();
-  MobileNumberController mobileNumberController = Get.find<MobileNumberController>();
+  MobileNumberController mobileNumberController =
+      Get.find<MobileNumberController>();
   MainScreenController mainScreenController = Get.find<MainScreenController>();
 
   // ProfileScreenController profileScreenController = Get.find<ProfileScreenController>();
@@ -102,7 +103,8 @@ class VerifyOtpController extends GetxController {
         smsCode: smsCode,
       );
 
-      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
 
       // Success
       log("User logged in: ${userCredential.user?.uid}");
@@ -164,7 +166,8 @@ class VerifyOtpController extends GetxController {
             // Utils.showToast(Get.context!, "Login successful");
           }
         } else {
-          Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+          Utils.showToast(
+              Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
           Utils.showLog("mobile number Login Api Calling Failed !!");
         }
 

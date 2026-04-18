@@ -26,13 +26,18 @@ class PurchaseCoinPlanApi {
 
     Utils.showLog("Create Subscription Plan Api Url $uri");
 
-    final headers = {ApiParams.key: Api.secretKey, ApiParams.authToken: ApiParams.tokenStartPoint + token, ApiParams.authUid: uid};
+    final headers = {
+      ApiParams.key: Api.secretKey,
+      ApiParams.authToken: ApiParams.tokenStartPoint + token,
+      ApiParams.authUid: uid
+    };
 
     try {
       final response = await http.post(uri, headers: headers);
 
       if (response.statusCode == 200) {
-        Utils.showLog("Create Subscription Plan Api Response => ${response.body}");
+        Utils.showLog(
+            "Create Subscription Plan Api Response => ${response.body}");
 
         final jsonResponse = jsonDecode(response.body);
 

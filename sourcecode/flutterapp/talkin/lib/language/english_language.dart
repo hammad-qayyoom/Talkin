@@ -304,6 +304,8 @@ final Map<String, String> enUS = {
   EnumLocale.txtPrivateAudioCallRate.name: "Private Audio Call Rate",
   EnumLocale.txtPaymentDetails.name: "Payment Details :",
   EnumLocale.txtAppRestart.name: "Your Expert Request Are Accepted",
+  EnumLocale.txtAppRestartDesc.name:
+      "Your expert request has been accepted. Please restart the app to continue.",
   EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
       "The User Does Not Have Sufficient Funds To Make The Withdrawal",
   EnumLocale

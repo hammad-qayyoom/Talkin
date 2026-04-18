@@ -1,4 +1,4 @@
- import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:incodes_payment/incodes_payment_services.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/database.dart';
@@ -6,8 +6,6 @@ import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/utils.dart';
 
 import '../custom/progress_indicator/progress_dialog.dart';
-
-
 
 /// razor pay payment
 Future<void> razorPay({
@@ -18,18 +16,14 @@ Future<void> razorPay({
   Utils.showLog("Razorpay Payment (Incodes) starting...$amount");
 
   try {
-    final razorKey =
-        Database.settingApiModel?.data?.razorpayKeySecret ?? '';
-    final email = Database.fetchLoginUserProfileModel?.user?.email ;
+    final razorKey = Database.settingApiModel?.data?.razorpayKeySecret ?? '';
+    final email = Database.fetchLoginUserProfileModel?.user?.email;
 
     final currency =
-        Database.settingApiModel?.data?.currency?.currencyCode ??
-
-            "INR";
+        Database.settingApiModel?.data?.currency?.currencyCode ?? "INR";
     // Utils.showLog("customerName>>>>>>>>>>>>>>>>>>>>>>$customerName");
     Utils.showLog("email>>>>>>>>>>>>>>>>>>>>>>$email");
     Utils.showLog("Database.email>>>>>>>>>>>>>>>>>>>>>>$email");
-
 
     // final contact = (Database.getUserProfileResponseModel?.user?.phoneNumber ??
     //     Database.getUserProfileResponseModel?.user?.phoneNumber ??
@@ -39,7 +33,6 @@ Future<void> razorPay({
       final hex8 = argb.toRadixString(16).padLeft(8, '0');
       return '#${hex8.substring(2)}';
     }
-
 
     Utils.showLog("amount.toDouble()$amount");
     final appName = EnumLocale.txtAppName.name.tr;
@@ -55,7 +48,8 @@ Future<void> razorPay({
       colorCode: hexColor,
       onPaymentSuccess: onPaymentSuccess,
       onPaymentFailure: () {
-        Utils.showToast( Get.context!,EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
+        Utils.showToast(
+            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
       },
       onExternalWallet: () {
         Utils.showLog("RazorPay External Wallet selected");
@@ -78,13 +72,10 @@ Future<void> stripe({
     final publishableKey =
         Database.settingApiModel?.data?.stripePublicKey ?? "";
 
-    final secretKey =
-        Database.settingApiModel?.data?.stripeSecretKey ?? "";
+    final secretKey = Database.settingApiModel?.data?.stripeSecretKey ?? "";
 
     final currency =
-        Database.settingApiModel?.data?.currency?.currencyCode ??
-
-            "INR";
+        Database.settingApiModel?.data?.currency?.currencyCode ?? "INR";
 
     final merchantDisplayName = EnumLocale.txtAppName.name.tr;
 
@@ -101,7 +92,8 @@ Future<void> stripe({
       secretKey: secretKey,
       onPaymentSuccess: onPaymentSuccess,
       onPaymentFailure: () {
-        Utils.showToast( Get.context!,EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
+        Utils.showToast(
+            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
       },
     );
 
@@ -123,15 +115,17 @@ Future<void> flutterWave({
     await 400.milliseconds.delay();
     if (Get.isDialogOpen == true) Get.back();
 
-    final settingsKey =
-        Database.settingApiModel?.data?.flutterwavePublicKey;
+    final settingsKey = Database.settingApiModel?.data?.flutterwavePublicKey;
     final publicKey =
         (settingsKey != null && settingsKey.isNotEmpty) ? settingsKey : "";
 
     // final currency =  "NGN";
-    final currency = Database.settingApiModel?.data?.currency?.currencyCode ?? "NGN";
-    final customerName = Database.fetchLoginUserProfileModel?.user?.fullName ?? "User";
-    final customerEmail = Database.fetchLoginUserProfileModel?.user?.email ?? "email";
+    final currency =
+        Database.settingApiModel?.data?.currency?.currencyCode ?? "NGN";
+    final customerName =
+        Database.fetchLoginUserProfileModel?.user?.fullName ?? "User";
+    final customerEmail =
+        Database.fetchLoginUserProfileModel?.user?.email ?? "email";
 
     Utils.showLog("customerName>>>>>>>>>>>>>>>>>>>>>>$customerName");
     Utils.showLog("customerEmail>>>>>>>>>>>>>>>>>>>>>>$customerEmail");
@@ -147,7 +141,8 @@ Future<void> flutterWave({
       customerEmail: customerEmail.toString(),
       onPaymentSuccess: onPaymentSuccess,
       onPaymentFailure: () {
-        Utils.showToast( Get.context!,EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
+        Utils.showToast(
+            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
       },
     );
 
@@ -174,10 +169,10 @@ Future<void> payStack({
     // final secretKey = (settingsSecret != null && settingsSecret.isNotEmpty)
     //     ? settingsSecret
     //     : "";
-    final settingsSecret =
-        Database.settingApiModel?.data?.paystackSecretKey;
+    final settingsSecret = Database.settingApiModel?.data?.paystackSecretKey;
 
-    final customerEmail = Database.fetchLoginUserProfileModel?.user?.email ?? "test@gmail.com";
+    final customerEmail =
+        Database.fetchLoginUserProfileModel?.user?.email ?? "test@gmail.com";
 
     final currency =
         Database.settingApiModel?.data?.currency?.currencyCode ?? "NGN";
@@ -195,8 +190,8 @@ Future<void> payStack({
       currency: currency,
       onPaymentSuccess: onPaymentSuccess,
       onPaymentFailure: () {
-        Utils.showToast( Get.context!,EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
-
+        Utils.showToast(
+            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
       },
     );
 
@@ -210,7 +205,6 @@ Future<void> payStack({
 ///pay pal payment
 Future<void> payPal({
   required num amount,
-
   required Function()? onPaymentSuccess,
 }) async {
   Utils.showLog("PayPal Payment (Incodes) starting...");
@@ -219,13 +213,12 @@ Future<void> payPal({
     await 400.milliseconds.delay();
     if (Get.isDialogOpen == true) Get.back();
 
-    final currency = Database.settingApiModel?.data?.currency?.currencyCode ??"USD";
+    final currency =
+        Database.settingApiModel?.data?.currency?.currencyCode ?? "USD";
     // final currency = "USD";
-
 
     final paypalClientId = Database.settingApiModel?.data?.paypalClientId;
     final secretKey = Database.settingApiModel?.data?.paypalSecretKey;
-
 
     await IncodesPaymentServices.paypalPayment(
       context: Get.context!,
@@ -257,8 +250,8 @@ Future<void> payPal({
       ],
       onPaymentSuccess: onPaymentSuccess,
       onPaymentFailure: () {
-        Utils.showToast( Get.context!,EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
-
+        Utils.showToast(
+            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
       },
     );
 
@@ -290,8 +283,8 @@ Future<void> inAppPurchase({
       amount: amount.toDouble(),
       onPaymentSuccess: onPaymentSuccess,
       onPaymentFailure: () {
-        Utils.showToast( Get.context!,EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
-
+        Utils.showToast(
+            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
       },
     );
 
@@ -316,17 +309,20 @@ Future<void> cashFree({
     final customerName =
         Database.fetchLoginUserProfileModel?.user?.fullName ?? "John";
     final customerEmail =
-    Database.fetchLoginUserProfileModel?.user?.email ?? "test@gmail.com" ;
+        Database.fetchLoginUserProfileModel?.user?.email ?? "test@gmail.com";
     // final customerPhone =
     //     Database.fetchLoginUserProfileModel?.user?.phoneNumber ?? "9876543210";
 
-    Utils.showLog("Database.getUserProfileResponseModel?.user?.phoneNumber${9876543210}");
+    Utils.showLog(
+        "Database.getUserProfileResponseModel?.user?.phoneNumber${9876543210}");
 
-    final cashfreeClientId =Database.settingApiModel?.data?.cashfreeClientId;
-    final cashfreeSecretKey = Database.settingApiModel?.data?.cashfreeClientSecret;
+    final cashfreeClientId = Database.settingApiModel?.data?.cashfreeClientId;
+    final cashfreeSecretKey =
+        Database.settingApiModel?.data?.cashfreeClientSecret;
 
 // final currency ="INR";
-final currency =Database.settingApiModel?.data?.currency?.currencyCode ??"INR";
+    final currency =
+        Database.settingApiModel?.data?.currency?.currencyCode ?? "INR";
 
     await IncodesPaymentServices.cashFreePayment(
       context: Get.context!,
@@ -340,8 +336,8 @@ final currency =Database.settingApiModel?.data?.currency?.currencyCode ??"INR";
       paymentGatewayName: "Cashfree",
       onPaymentSuccess: onPaymentSuccess,
       onPaymentFailure: () {
-        Utils.showToast( Get.context!,EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
-
+        Utils.showToast(
+            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
       },
     );
 

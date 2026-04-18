@@ -36,6 +36,7 @@ import { auth } from '@/libs/firebase'
 import Link from '@components/Link'
 import Logo from '@components/layout/shared/Logo'
 import CustomTextField from '@core/components/mui/TextField'
+import BrandName from '@/components/common/BrandName'
 
 // Config Imports
 import themeConfig from '@configs/themeConfig'
@@ -49,7 +50,7 @@ import { loginAdmin } from '@/redux-store/slices/admin'
 
 
 // Auth Utils
-import { setRememberMe } from '@/utils/firebase-auth'
+import { isRememberMeEnabled, setRememberMe } from '@/utils/firebase-auth'
 import { baseURL, projectName } from '@/config'
 
 
@@ -98,6 +99,9 @@ const firebaseErrorMessages = {
   'auth/invalid-credential': 'Invalid credentials. Please check your email and password.'
 }
 
+const SAVED_EMAIL_KEY = 'admin_login_saved_email'
+const SAVED_PASSWORD_KEY = 'admin_login_saved_password'
+
 const LoginV2 = ({ mode }) => {
   // States
   const [isPasswordShown, setIsPasswordShown] = useState(false)
@@ -139,6 +143,7 @@ const LoginV2 = ({ mode }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(schema),
@@ -196,12 +201,35 @@ const LoginV2 = ({ mode }) => {
     return () => unsubscribe() // Cleanup subscription on unmount
   }, [router, searchParams])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const rememberEnabled = isRememberMeEnabled()
+
+    setRememberMeState(rememberEnabled)
+
+    if (!rememberEnabled) return
+
+    const savedEmail = localStorage.getItem(SAVED_EMAIL_KEY) || ''
+    const savedPassword = localStorage.getItem(SAVED_PASSWORD_KEY) || ''
+
+    if (savedEmail) setValue('email', savedEmail)
+    if (savedPassword) setValue('password', savedPassword)
+  }, [setValue])
+
   // Toggle Password Visibility
   const handleClickShowPassword = () => setIsPasswordShown(prev => !prev)
 
   // Handle Remember Me change
   const handleRememberMeChange = event => {
-    setRememberMeState(event.target.checked)
+    const checked = event.target.checked
+
+    setRememberMeState(checked)
+
+    if (!checked && typeof window !== 'undefined') {
+      localStorage.removeItem(SAVED_EMAIL_KEY)
+      localStorage.removeItem(SAVED_PASSWORD_KEY)
+    }
   }
 
   // Handle login (shared function for both login types)
@@ -214,6 +242,8 @@ const LoginV2 = ({ mode }) => {
     sessionStorage.setItem('manual_login_in_progress', 'true')
 
     try {
+      await setRememberMe(rememberMe)
+
       // Firebase authentication
       const userCredential = await signInWithEmailAndPassword(auth, credentials.email, credentials.password)
       const firebaseUser = userCredential.user
@@ -248,8 +278,13 @@ const LoginV2 = ({ mode }) => {
         // document.cookie = `admin_token=${token}; path=/; max-age=86400; SameSite=Strict; Secure`;
         // document.cookie = `uid=${uid}; path=/; max-age=86400; SameSite=Strict; Secure`;
 
-        // Store remember me preference
-        setRememberMe(rememberMe)
+        if (rememberMe) {
+          localStorage.setItem(SAVED_EMAIL_KEY, credentials.email)
+          localStorage.setItem(SAVED_PASSWORD_KEY, credentials.password)
+        } else {
+          localStorage.removeItem(SAVED_EMAIL_KEY)
+          localStorage.removeItem(SAVED_PASSWORD_KEY)
+        }
 
         // Clear manual login flag
         sessionStorage.removeItem('manual_login_in_progress')
@@ -280,6 +315,7 @@ const LoginV2 = ({ mode }) => {
 
       setError(errorMessage)
     } finally {
+        sessionStorage.removeItem('manual_login_in_progress')
         setLoadingActualLogin(false)
     }
   }
@@ -340,13 +376,14 @@ const LoginV2 = ({ mode }) => {
           </Typography>
 
           <Typography variant='body1' className='text-left'>
-            Let&apos;s connect, chat, and spark real connections. Enter your credentials to continue your journey on {projectName}.
+            Let&apos;s connect, chat, and spark real connections. Enter your credentials to continue your journey on{' '}
+            <BrandName text={projectName || 'Notisboard'} />.
           </Typography>
 
           {/* Show Errors */}
           {error && <Alert severity='error'>{error}</Alert>}
 
-          <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-5'>
+          <form noValidate autoComplete='on' onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-5'>
             {/* Email Input */}
             <div>
               <Typography variant='body2' className='mb-2 text-left'>
@@ -356,6 +393,7 @@ const LoginV2 = ({ mode }) => {
               <CustomTextField
                 fullWidth
                 placeholder='Type your email here'
+                autoComplete='email'
                 {...register('email')}
                 error={!!errors.email}
                 helperText={errors.email?.message}
@@ -390,6 +428,7 @@ const LoginV2 = ({ mode }) => {
                 fullWidth
                 placeholder='Type your password here'
                 type={isPasswordShown ? 'text' : 'password'}
+                autoComplete='current-password'
                 {...register('password')}
                 error={!!errors.password}
                 helperText={errors.password?.message}

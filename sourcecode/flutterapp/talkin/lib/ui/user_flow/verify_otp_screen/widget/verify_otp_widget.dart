@@ -41,7 +41,8 @@ class VerifyOtpDescriptionView extends StatelessWidget {
           ),
         ).paddingOnly(bottom: 6),
         Text(
-          EnumLocale.txtVerifyOtpDescription.name.tr, // textAlign: TextAlign.center,
+          EnumLocale
+              .txtVerifyOtpDescription.name.tr, // textAlign: TextAlign.center,
           style: AppFontStyle.fontStyleW400(
             height: 1.9,
             fontSize: 12,
@@ -67,7 +68,8 @@ class VerifyOtpView extends StatelessWidget {
           children: [
             Text(
               EnumLocale.txtEnterOtp.name.tr,
-              style: AppFontStyle.fontStyleW500(fontSize: 13, fontColor: AppColors.black),
+              style: AppFontStyle.fontStyleW500(
+                  fontSize: 13, fontColor: AppColors.black),
             ).paddingOnly(top: 36),
             Pinput(
               cursor: Container(
@@ -150,7 +152,8 @@ class VerifyOtpResendOTPView extends StatelessWidget {
                       onTap: () {
                         logic.onResendOtpClick(context);
                       },
-                      overlayColor: WidgetStatePropertyAll(AppColors.transparent),
+                      overlayColor:
+                          WidgetStatePropertyAll(AppColors.transparent),
                       child: Text(
                         EnumLocale.txtResendOtp.name.tr,
                         textAlign: TextAlign.center,
@@ -165,7 +168,8 @@ class VerifyOtpResendOTPView extends StatelessWidget {
                   if (isCountdownActive)
                     InkWell(
                       onTap: () {},
-                      overlayColor: WidgetStatePropertyAll(AppColors.transparent),
+                      overlayColor:
+                          WidgetStatePropertyAll(AppColors.transparent),
                       child: Text(
                         EnumLocale.txtResendOtp.name.tr,
                         textAlign: TextAlign.center,
@@ -206,7 +210,8 @@ class VerifyOtpButtonView extends StatelessWidget {
               width: 15,
             ),
             text: EnumLocale.txtSubmit.name.tr,
-            textStyle: AppFontStyle.fontStyleW500(fontSize: 16, fontColor: AppColors.white),
+            textStyle: AppFontStyle.fontStyleW500(
+                fontSize: 16, fontColor: AppColors.white),
           ).paddingOnly(bottom: 15, left: 20, right: 20),
         );
       },

@@ -1165,7 +1165,8 @@ class _FeedAuthorFullscreenVideoPlayerState
                                   ),
                                   overlayShape: SliderComponentShape.noOverlay,
                                   trackHeight: 3,
-                                  activeTrackColor: AppColors.redesignMediaSliderActive,
+                                  activeTrackColor:
+                                      AppColors.redesignMediaSliderActive,
                                   inactiveTrackColor:
                                       AppColors.white.withValues(alpha: 0.35),
                                   thumbColor: AppColors.white,
@@ -1191,8 +1192,8 @@ class _FeedAuthorFullscreenVideoPlayerState
                                   Text(
                                     '/ ${_formatDuration(duration)}',
                                     style: TextStyle(
-                                      color:
-                                          AppColors.white.withValues(alpha: 0.8),
+                                      color: AppColors.white
+                                          .withValues(alpha: 0.8),
                                       fontSize: 12,
                                     ),
                                   ),

@@ -4,6 +4,7 @@ import 'package:notisboard/ui/host_flow/host_app_language_screen/controller/host
 class HostAppLanguageScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HostAppLanguageScreenController>(() => HostAppLanguageScreenController());
+    Get.lazyPut<HostAppLanguageScreenController>(
+        () => HostAppLanguageScreenController());
   }
 }

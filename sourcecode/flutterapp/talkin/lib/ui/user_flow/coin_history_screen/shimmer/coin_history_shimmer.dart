@@ -75,10 +75,12 @@ class CoinHistoryShimmer extends StatelessWidget {
                                       Container(
                                         height: 20,
                                         width: 120,
-                                        margin: const EdgeInsets.only(bottom: 5),
+                                        margin:
+                                            const EdgeInsets.only(bottom: 5),
                                         decoration: BoxDecoration(
                                           color: AppColors.black,
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
                                       )
                                     ],

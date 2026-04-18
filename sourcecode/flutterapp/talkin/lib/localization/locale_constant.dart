@@ -19,5 +19,7 @@ Future<Locale> getLocale() async {
 }
 
 Locale _locale(String languageCode, String countryCode) {
-  return languageCode.isNotEmpty ? Locale(languageCode, countryCode) : const Locale(Constant.languageEn, Constant.countryCodeEn);
+  return languageCode.isNotEmpty
+      ? Locale(languageCode, countryCode)
+      : const Locale(Constant.languageEn, Constant.countryCodeEn);
 }

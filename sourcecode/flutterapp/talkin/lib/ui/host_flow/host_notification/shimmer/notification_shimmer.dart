@@ -25,7 +25,9 @@ class NotificationShimmer extends StatelessWidget {
               Container(
                 height: 22,
                 width: 150,
-                decoration: BoxDecoration(color: AppColors.black, borderRadius: BorderRadius.circular(20)),
+                decoration: BoxDecoration(
+                    color: AppColors.black,
+                    borderRadius: BorderRadius.circular(20)),
               ).paddingOnly(bottom: 5),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -34,14 +36,18 @@ class NotificationShimmer extends StatelessWidget {
                     child: Container(
                       height: 35,
                       width: 120,
-                      decoration: BoxDecoration(color: AppColors.black, borderRadius: BorderRadius.circular(20)),
+                      decoration: BoxDecoration(
+                          color: AppColors.black,
+                          borderRadius: BorderRadius.circular(20)),
                     ),
                   ),
                   12.width,
                   Container(
                     height: 20,
                     width: 50,
-                    decoration: BoxDecoration(color: AppColors.black, borderRadius: BorderRadius.circular(20)),
+                    decoration: BoxDecoration(
+                        color: AppColors.black,
+                        borderRadius: BorderRadius.circular(20)),
                   ),
                 ],
               ),

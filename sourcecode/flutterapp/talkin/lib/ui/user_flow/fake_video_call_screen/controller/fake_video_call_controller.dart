@@ -111,11 +111,17 @@ class FakeVideoCallController extends GetxController {
   }
 
   Future<void> onSwitchCamera() async {
-    Get.dialog(barrierDismissible: false, const PopScope(canPop: false, child: LoadingWidget())); // Start Loading...
+    Get.dialog(
+        barrierDismissible: false,
+        const PopScope(
+            canPop: false, child: LoadingWidget())); // Start Loading...
 
-    cameraLensDirection = cameraLensDirection == CameraLensDirection.back ? CameraLensDirection.front : CameraLensDirection.back;
+    cameraLensDirection = cameraLensDirection == CameraLensDirection.back
+        ? CameraLensDirection.front
+        : CameraLensDirection.back;
     final cameras = await availableCameras();
-    final camera = cameras.firstWhere((camera) => camera.lensDirection == cameraLensDirection);
+    final camera = cameras
+        .firstWhere((camera) => camera.lensDirection == cameraLensDirection);
     cameraController = CameraController(camera, ResolutionPreset.high);
     await cameraController!.initialize();
 
@@ -129,7 +135,8 @@ class FakeVideoCallController extends GetxController {
       final duration = DateTime.now().difference(startTime ?? DateTime.now());
       final minutes = duration.inMinutes.remainder(60);
       final seconds = duration.inSeconds.remainder(60);
-      formattedTime = '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+      formattedTime =
+          '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
 
       if (seconds == 0) {
         Utils.showLog('Start timer :: $formattedTime');
@@ -149,7 +156,8 @@ class FakeVideoCallController extends GetxController {
     duration = endTime?.difference(startTime!);
     minutes = duration?.inMinutes.remainder(60);
     seconds = duration?.inSeconds.remainder(60);
-    finalDuration = '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    finalDuration =
+        '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
 
     Utils.showLog('Call Duration :: $duration');
     Utils.showLog('Final Duration :: $finalDuration');
@@ -163,7 +171,9 @@ class FakeVideoCallController extends GetxController {
   Future<void> toggleCamera() async {
     isRotedCamera = !isRotedCamera;
 
-    cameraLensDirection = cameraLensDirection == CameraLensDirection.front ? CameraLensDirection.back : CameraLensDirection.front;
+    cameraLensDirection = cameraLensDirection == CameraLensDirection.front
+        ? CameraLensDirection.back
+        : CameraLensDirection.front;
 
     try {
       final cameras = await availableCameras();
@@ -180,7 +190,11 @@ class FakeVideoCallController extends GetxController {
 
       await cameraController!.initialize();
 
-      update([Constant.onInitializeCamera, Constant.idToggleCamera, Constant.idOnVideoCall]);
+      update([
+        Constant.onInitializeCamera,
+        Constant.idToggleCamera,
+        Constant.idOnVideoCall
+      ]);
     } catch (e) {
       Utils.showLog("Camera switch error: $e");
     }
@@ -188,17 +202,23 @@ class FakeVideoCallController extends GetxController {
 
   void toggleVideo() {
     isVideoOn = !isVideoOn;
-    update([Constant.onInitializeCamera, Constant.idToggleVideo, Constant.idOnVideoCall]);
+    update([
+      Constant.onInitializeCamera,
+      Constant.idToggleVideo,
+      Constant.idOnVideoCall
+    ]);
   }
 
   Future<void> initializeVideoPlayer() async {
     try {
       Utils.showLog("Video Url =>'${Api.baseUrl + videoUrl}'");
-      videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(Api.baseUrl + videoUrl));
+      videoPlayerController =
+          VideoPlayerController.networkUrl(Uri.parse(Api.baseUrl + videoUrl));
 
       await videoPlayerController?.initialize();
 
-      if (videoPlayerController != null && (videoPlayerController?.value.isInitialized ?? false)) {
+      if (videoPlayerController != null &&
+          (videoPlayerController?.value.isInitialized ?? false)) {
         chewieController = ChewieController(
           videoPlayerController: videoPlayerController!,
           looping: true,

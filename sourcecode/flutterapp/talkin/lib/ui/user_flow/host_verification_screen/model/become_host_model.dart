@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-BecomeHostModel becomeHostModelFromJson(String str) => BecomeHostModel.fromJson(json.decode(str));
+BecomeHostModel becomeHostModelFromJson(String str) =>
+    BecomeHostModel.fromJson(json.decode(str));
 
-String becomeHostModelToJson(BecomeHostModel data) => json.encode(data.toJson());
+String becomeHostModelToJson(BecomeHostModel data) =>
+    json.encode(data.toJson());
 
 class BecomeHostModel {
   final bool? status;
@@ -17,7 +19,8 @@ class BecomeHostModel {
     this.message,
   });
 
-  factory BecomeHostModel.fromJson(Map<String, dynamic> json) => BecomeHostModel(
+  factory BecomeHostModel.fromJson(Map<String, dynamic> json) =>
+      BecomeHostModel(
         status: json["status"],
         message: json["message"],
       );

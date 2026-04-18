@@ -37,7 +37,16 @@ class HostCallingScreenItem extends StatelessWidget {
   final num coin;
   final VoidCallback? onTalkNowTap;
 
-  const HostCallingScreenItem({super.key, required this.index, required this.image, required this.name, required this.coin, required this.callStatusText, required this.time, required this.controller, this.onTalkNowTap});
+  const HostCallingScreenItem(
+      {super.key,
+      required this.index,
+      required this.image,
+      required this.name,
+      required this.coin,
+      required this.callStatusText,
+      required this.time,
+      required this.controller,
+      this.onTalkNowTap});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +80,8 @@ class HostCallingScreenItem extends StatelessWidget {
                       child: Text(
                         overflow: TextOverflow.ellipsis,
                         name,
-                        style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: AppColors.black),
+                        style: AppFontStyle.fontStyleW700(
+                            fontSize: 15, fontColor: AppColors.black),
                       ).paddingOnly(right: 8),
                     ),
                     // coin == 0
@@ -123,7 +133,8 @@ class HostCallingScreenItem extends StatelessWidget {
                 ).paddingOnly(bottom: 4, top: 2),
                 Text(
                   time.toString(),
-                  style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.profileText),
+                  style: AppFontStyle.fontStyleW500(
+                      fontSize: 11, fontColor: AppColors.profileText),
                 ),
               ],
             ).paddingOnly(left: 3),
@@ -155,14 +166,30 @@ class HostCallingScreenItem extends StatelessWidget {
                     fakeAudio: controller.callingHistory[index].audio ?? "",
                     audioCallRatePrivate: '',
                     videoCallRatePrivate: '',
-                    callerId: Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
+                    callerId:
+                        Database.fetchLoginUserProfileModel?.user?.listenerId ??
+                            '',
                     receiverId: controller.callingHistory[index].userId ?? '',
-                    receiverName: controller.callingHistory[index].fullName ?? '',
-                    receiverImage: controller.callingHistory[index].profilePic ?? '',
-                    callerName: Database.fetchLoginUserProfileModel?.user?.fullName ?? '',
-                    callerImage: Database.fetchLoginUserProfileModel?.user?.profilePic ?? '',
-                    callerRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'user' : 'listener',
-                    receiverRole: Database.fetchLoginUserProfileModel?.user?.isListener == false ? 'listener' : 'user',
+                    receiverName:
+                        controller.callingHistory[index].fullName ?? '',
+                    receiverImage:
+                        controller.callingHistory[index].profilePic ?? '',
+                    callerName:
+                        Database.fetchLoginUserProfileModel?.user?.fullName ??
+                            '',
+                    callerImage:
+                        Database.fetchLoginUserProfileModel?.user?.profilePic ??
+                            '',
+                    callerRole:
+                        Database.fetchLoginUserProfileModel?.user?.isListener ==
+                                false
+                            ? 'user'
+                            : 'listener',
+                    receiverRole:
+                        Database.fetchLoginUserProfileModel?.user?.isListener ==
+                                false
+                            ? 'listener'
+                            : 'user',
                   ),
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
@@ -191,7 +218,8 @@ class HostCallingScreenItem extends StatelessWidget {
                   ),
                   Text(
                     EnumLocale.txtTalkNow.name.tr,
-                    style: AppFontStyle.fontStyleW600(fontSize: 11, fontColor: AppColors.white),
+                    style: AppFontStyle.fontStyleW600(
+                        fontSize: 11, fontColor: AppColors.white),
                   ).paddingOnly(left: 6)
                 ],
               ),

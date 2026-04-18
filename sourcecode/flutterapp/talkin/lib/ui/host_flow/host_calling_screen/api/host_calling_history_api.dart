@@ -35,7 +35,8 @@ class HostCallingHistoryApi {
 
     String query = Uri(queryParameters: queryParameters).query;
 
-    final uri = Uri.parse(Api.listenerCallingHistory + (query.isNotEmpty ? query : ''));
+    final uri =
+        Uri.parse(Api.listenerCallingHistory + (query.isNotEmpty ? query : ''));
 
     final headers = {
       ApiParams.key: Api.secretKey,

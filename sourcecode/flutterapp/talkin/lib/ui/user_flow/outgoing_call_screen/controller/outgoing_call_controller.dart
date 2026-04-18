@@ -11,7 +11,8 @@ import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/utils.dart';
 
-class OutgoingCallController extends GetxController with WidgetsBindingObserver {
+class OutgoingCallController extends GetxController
+    with WidgetsBindingObserver {
   late Map<String, dynamic> args;
   bool micMute = false;
   bool isSpeakerOn = true;
@@ -54,14 +55,16 @@ class OutgoingCallController extends GetxController with WidgetsBindingObserver 
 
     await getDataFromArgs();
     update([Constant.idVideoCall]);
-    if (Get.currentRoute == AppRoutes.outgoingCallScreen || Get.currentRoute == AppRoutes.outgoingAudioCallScreen) {
+    if (Get.currentRoute == AppRoutes.outgoingCallScreen ||
+        Get.currentRoute == AppRoutes.outgoingAudioCallScreen) {
       startCallTimer();
     }
 
     isProximitySupported = await ProximityScreenLock.isProximityLockSupported();
     if (isProximitySupported) {
       await ProximityScreenLock.setActive(true);
-      subsProximity = ProximityScreenLock.proximityStates.listen((objectDetected) {
+      subsProximity =
+          ProximityScreenLock.proximityStates.listen((objectDetected) {
         isObjectNear = objectDetected;
         log("Proximity object detected audio outgoing call controller: $isObjectNear");
       });
@@ -122,7 +125,11 @@ class OutgoingCallController extends GetxController with WidgetsBindingObserver 
   }
 
   void emitCallTerminated() {
-    if (callerId != null && receiverId != null && callId != null && callType != null && callMode != null) {
+    if (callerId != null &&
+        receiverId != null &&
+        callId != null &&
+        callType != null &&
+        callMode != null) {
       SocketEmit.emitCallerCallCut(
         callerId: callerId!,
         receiverId: receiverId!,

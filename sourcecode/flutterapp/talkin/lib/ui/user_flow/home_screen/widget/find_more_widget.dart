@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notisboard/custom/notisboard_wordmark.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
 import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
@@ -264,15 +265,26 @@ class FindMoreWidget extends StatelessWidget {
                           child: Image.asset(
                             AppAsset.appLogo,
                             fit: BoxFit.contain,
+                            filterQuality: FilterQuality.none,
                           ),
                         ),
                       ),
                       const SizedBox(width: 10),
-                      Text(
-                        'Notisboard Premium',
-                        style: AppFontStyle.fontStyleW700(
-                          fontSize: isTablet ? 18 : 14,
-                          fontColor: AppColors.white,
+                      Text.rich(
+                        TextSpan(
+                          style: AppFontStyle.fontStyleW700(
+                            fontSize: isTablet ? 18 : 14,
+                            fontColor: AppColors.white,
+                          ),
+                          children: [
+                            NotisboardWordmark.span(
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: isTablet ? 18 : 14,
+                                fontColor: AppColors.white,
+                              ),
+                            ),
+                            const TextSpan(text: ' Premium'),
+                          ],
                         ),
                       ),
                     ],

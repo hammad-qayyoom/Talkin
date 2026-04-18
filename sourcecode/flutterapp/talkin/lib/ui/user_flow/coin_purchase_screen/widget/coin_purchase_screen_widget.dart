@@ -66,11 +66,13 @@ class CoinPurchaseView extends StatelessWidget {
                   children: [
                     Text(
                       "Subscription Amount",
-                      style: AppFontStyle.fontStyleW500(fontSize: 16, fontColor: Colors.black),
+                      style: AppFontStyle.fontStyleW500(
+                          fontSize: 16, fontColor: Colors.black),
                     ),
                     Text(
                       "${Database.settingApiModel?.data?.currency?.symbol}${controller.amountPaid ?? 0}",
-                      style: AppFontStyle.fontStyleW800(fontSize: 20, fontColor: Colors.black),
+                      style: AppFontStyle.fontStyleW800(
+                          fontSize: 20, fontColor: Colors.black),
                     ),
                   ],
                 ),
@@ -106,7 +108,8 @@ class CoinPurchaseView extends StatelessWidget {
                         image: AppAsset.amountIcon,
                         height: 30,
                         width: 30,
-                        subTitle: "${Database.settingApiModel?.data?.currency?.symbol}${controller.amountPaid ?? 0}",
+                        subTitle:
+                            "${Database.settingApiModel?.data?.currency?.symbol}${controller.amountPaid ?? 0}",
                       ),
                     ),
                   ],
@@ -148,7 +151,14 @@ class CoinPurchaseDetailContainer extends StatelessWidget {
   final String subTitle;
   final double? height;
   final double? width;
-  const CoinPurchaseDetailContainer({super.key, this.icon, required this.title, required this.subTitle, this.image, this.height, this.width});
+  const CoinPurchaseDetailContainer(
+      {super.key,
+      this.icon,
+      required this.title,
+      required this.subTitle,
+      this.image,
+      this.height,
+      this.width});
 
   @override
   Widget build(BuildContext context) {

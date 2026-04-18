@@ -4,9 +4,13 @@
 
 import 'dart:convert';
 
-GetFirebaseUidByDeviceUUidModel getFirebaseUidByDeviceUUidModelFromJson(String str) => GetFirebaseUidByDeviceUUidModel.fromJson(json.decode(str));
+GetFirebaseUidByDeviceUUidModel getFirebaseUidByDeviceUUidModelFromJson(
+        String str) =>
+    GetFirebaseUidByDeviceUUidModel.fromJson(json.decode(str));
 
-String getFirebaseUidByDeviceUUidModelToJson(GetFirebaseUidByDeviceUUidModel data) => json.encode(data.toJson());
+String getFirebaseUidByDeviceUUidModelToJson(
+        GetFirebaseUidByDeviceUUidModel data) =>
+    json.encode(data.toJson());
 
 class GetFirebaseUidByDeviceUUidModel {
   bool? status;
@@ -19,7 +23,8 @@ class GetFirebaseUidByDeviceUUidModel {
     this.firebaseId,
   });
 
-  factory GetFirebaseUidByDeviceUUidModel.fromJson(Map<String, dynamic> json) => GetFirebaseUidByDeviceUUidModel(
+  factory GetFirebaseUidByDeviceUUidModel.fromJson(Map<String, dynamic> json) =>
+      GetFirebaseUidByDeviceUUidModel(
         status: json["status"],
         message: json["message"],
         firebaseId: json["firebaseId"],

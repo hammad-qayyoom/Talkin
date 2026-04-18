@@ -44,7 +44,8 @@ class RecentListeners extends StatelessWidget {
                   clipBehavior: Clip.hardEdge,
                   height: Get.height * 0.07,
                   width: Get.height * 0.07,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(15)),
                   child: CustomProfileImage(
                     image: image,
                     fit: BoxFit.cover,
@@ -56,7 +57,8 @@ class RecentListeners extends StatelessWidget {
                     children: [
                       Text(
                         "$name ,$age",
-                        style: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: AppColors.appDarkColor),
+                        style: AppFontStyle.fontStyleW600(
+                            fontSize: 14, fontColor: AppColors.appDarkColor),
                       ).paddingOnly(bottom: 6),
                       Row(
                         children: [
@@ -67,7 +69,9 @@ class RecentListeners extends StatelessWidget {
                           Text(
                             language,
                             // overflow: TextOverflow.ellipsis,
-                            style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.appTextColor),
+                            style: AppFontStyle.fontStyleW500(
+                                fontSize: 11,
+                                fontColor: AppColors.appTextColor),
                           ).paddingOnly(right: 16),
                           Image.asset(
                             AppAsset.callIcon,
@@ -75,7 +79,9 @@ class RecentListeners extends StatelessWidget {
                           ).paddingOnly(right: 5),
                           Text(
                             callCount.toString(),
-                            style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.appTextColor),
+                            style: AppFontStyle.fontStyleW500(
+                                fontSize: 11,
+                                fontColor: AppColors.appTextColor),
                           ).paddingOnly(right: 16),
                         ],
                       ),

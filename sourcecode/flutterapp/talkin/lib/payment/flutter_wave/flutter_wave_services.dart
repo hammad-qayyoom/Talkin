@@ -33,7 +33,8 @@ class FlutterWaveService {
 
     final ChargeResponse response = await flutterWave.charge(context);
 
-    Utils.showLog("Flutter Wave Payment Status => ${response.status.toString()}");
+    Utils.showLog(
+        "Flutter Wave Payment Status => ${response.status.toString()}");
 
     if (response.success == true) {
       onPaymentComplete.call();

@@ -4,6 +4,7 @@ import 'package:notisboard/ui/host_flow/host_chat_list_search_screen/controller/
 class HostChatListSearchBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HostChatListSearchController>(() => HostChatListSearchController());
+    Get.lazyPut<HostChatListSearchController>(
+        () => HostChatListSearchController());
   }
 }

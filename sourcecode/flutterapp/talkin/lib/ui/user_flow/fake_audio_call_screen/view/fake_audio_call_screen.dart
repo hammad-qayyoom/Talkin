@@ -11,7 +11,8 @@ class FakeAudioCallScreen extends StatefulWidget {
   State<FakeAudioCallScreen> createState() => _FakeAudioCallScreenState();
 }
 
-class _FakeAudioCallScreenState extends State<FakeAudioCallScreen> with WidgetsBindingObserver {
+class _FakeAudioCallScreenState extends State<FakeAudioCallScreen>
+    with WidgetsBindingObserver {
   // final controller = Get.put<FakeAudioCallController>(FakeAudioCallController());
   @override
   void initState() {
@@ -27,7 +28,8 @@ class _FakeAudioCallScreenState extends State<FakeAudioCallScreen> with WidgetsB
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       Utils.showLog("App went to background");
       // App went to background
       // controller.endCallDueToBackground();

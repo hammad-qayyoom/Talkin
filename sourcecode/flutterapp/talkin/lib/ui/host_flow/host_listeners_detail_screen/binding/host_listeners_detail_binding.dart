@@ -4,6 +4,7 @@ import 'package:notisboard/ui/host_flow/host_listeners_detail_screen/controller/
 class HostListenersDetailBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HostListenersDetailController>(() => HostListenersDetailController());
+    Get.lazyPut<HostListenersDetailController>(
+        () => HostListenersDetailController());
   }
 }

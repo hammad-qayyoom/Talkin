@@ -46,8 +46,14 @@ class HostListenersDetailController extends GetxController {
     nameCnt.text = Database.fetchListenerProfileModel?.data?.name ?? '';
     nickNameCnt.text = Database.fetchListenerProfileModel?.data?.nickName ?? '';
     introCnt.text = Database.fetchListenerProfileModel?.data?.selfIntro ?? '';
-    ratePrivateAudioCallCnt.text = Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall.toString() ?? '';
-    ratePrivateVideoCallCnt.text = Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall.toString() ?? '';
+    ratePrivateAudioCallCnt.text = Database
+            .fetchListenerProfileModel?.data?.ratePrivateAudioCall
+            .toString() ??
+        '';
+    ratePrivateVideoCallCnt.text = Database
+            .fetchListenerProfileModel?.data?.ratePrivateVideoCall
+            .toString() ??
+        '';
     profilePic = Database.fetchListenerProfileModel?.data?.image;
 
     final savedLanguages = Database.fetchListenerProfileModel?.data?.language;
@@ -91,7 +97,8 @@ class HostListenersDetailController extends GetxController {
   /// all language
   Future<void> loadAllLanguages() async {
     try {
-      final String response = await rootBundle.loadString('assets/all_language.json');
+      final String response =
+          await rootBundle.loadString('assets/all_language.json');
       final Map<String, dynamic> data = json.decode(response);
 
       allLanguages = data.values.map<String>((e) => e.toString()).toList();
@@ -104,7 +111,8 @@ class HostListenersDetailController extends GetxController {
 
   /// click photo
   takePhoto() async {
-    xFiles = await imagePicker.pickImage(source: ImageSource.camera, imageQuality: 100);
+    xFiles = await imagePicker.pickImage(
+        source: ImageSource.camera, imageQuality: 100);
     if (xFiles != null) {
       pickImage = xFiles!.path;
       log("Camera Image Path ::: $pickImage");
@@ -114,7 +122,8 @@ class HostListenersDetailController extends GetxController {
 
   /// pick image from gallery
   getImageFromGallery() async {
-    xFiles = await imagePicker.pickImage(source: ImageSource.gallery, imageQuality: 100);
+    xFiles = await imagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 100);
     if (xFiles != null) {
       pickImage = xFiles!.path;
       log("Gallery Image Path ::: $pickImage");
@@ -132,20 +141,24 @@ class HostListenersDetailController extends GetxController {
       talkTopicsModel = data;
       talkTopic = data?.talkTopics ?? [];
 
-      final savedCategoryIds = Database.fetchListenerProfileModel?.data?.categoryIds ?? [];
-      final savedTopics = Database.fetchListenerProfileModel?.data?.talkTopics ?? [];
+      final savedCategoryIds =
+          Database.fetchListenerProfileModel?.data?.categoryIds ?? [];
+      final savedTopics =
+          Database.fetchListenerProfileModel?.data?.talkTopics ?? [];
       selectedTopics.clear(); // Reset selection
 
       if (savedCategoryIds.isNotEmpty) {
         for (final savedCategoryId in savedCategoryIds) {
-          final matchIndex = talkTopic.indexWhere((element) => element.id == savedCategoryId);
+          final matchIndex =
+              talkTopic.indexWhere((element) => element.id == savedCategoryId);
           if (matchIndex != -1) {
             selectedTopics.add(matchIndex);
           }
         }
       } else {
         for (var saved in savedTopics) {
-          final matchIndex = talkTopic.indexWhere((element) => element.name == saved);
+          final matchIndex =
+              talkTopic.indexWhere((element) => element.name == saved);
           if (matchIndex != -1) {
             selectedTopics.add(matchIndex);
           }
@@ -174,17 +187,20 @@ class HostListenersDetailController extends GetxController {
 
   /// save button on tap
   Future<void> onSaveProfile() async {
-    Utils.showLog("Click On Save Profile => ${Database.fetchListenerProfileModel?.data?.id}");
+    Utils.showLog(
+        "Click On Save Profile => ${Database.fetchListenerProfileModel?.data?.id}");
 
-    Get.dialog(const LoadingWidget(), barrierDismissible: false); // Start Loading...
+    Get.dialog(const LoadingWidget(),
+        barrierDismissible: false); // Start Loading...
 
     await callEditApi();
   }
 
   /// listener profile edit
   Future<void> callEditApi() async {
-    final languageString =
-        selectedLanguages.isNotEmpty ? selectedLanguages.join(',') : (Database.fetchListenerProfileModel?.data?.language?.join(',') ?? '');
+    final languageString = selectedLanguages.isNotEmpty
+        ? selectedLanguages.join(',')
+        : (Database.fetchListenerProfileModel?.data?.language?.join(',') ?? '');
     final selectedTopicNames = selectedTopics
         .where((index) => index >= 0 && index < talkTopic.length)
         .map((index) => (talkTopic[index].name ?? '').trim())
@@ -199,7 +215,8 @@ class HostListenersDetailController extends GetxController {
 
     String talkTopics = selectedTopicNames.isNotEmpty
         ? selectedTopicNames.join(',')
-        : (Database.fetchListenerProfileModel?.data?.talkTopics?.join(',') ?? '');
+        : (Database.fetchListenerProfileModel?.data?.talkTopics?.join(',') ??
+            '');
 
     if (selectedTopicName != null && selectedTopicName!.isNotEmpty) {
       talkTopics = selectedTopicName!;
@@ -207,7 +224,8 @@ class HostListenersDetailController extends GetxController {
 
     String categoryIds = selectedCategoryIds.isNotEmpty
         ? selectedCategoryIds.join(',')
-        : (Database.fetchListenerProfileModel?.data?.categoryIds?.join(',') ?? '');
+        : (Database.fetchListenerProfileModel?.data?.categoryIds?.join(',') ??
+            '');
 
     hostListenerProfileUpdateModel = await HostListenerProfileUpdateApi.callApi(
       name: nameCnt.text,

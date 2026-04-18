@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-GetFirebaseCustomTokenModel getFirebaseCustomTokenModelFromJson(String str) => GetFirebaseCustomTokenModel.fromJson(json.decode(str));
+GetFirebaseCustomTokenModel getFirebaseCustomTokenModelFromJson(String str) =>
+    GetFirebaseCustomTokenModel.fromJson(json.decode(str));
 
-String getFirebaseCustomTokenModelToJson(GetFirebaseCustomTokenModel data) => json.encode(data.toJson());
+String getFirebaseCustomTokenModelToJson(GetFirebaseCustomTokenModel data) =>
+    json.encode(data.toJson());
 
 class GetFirebaseCustomTokenModel {
   final bool? status;
@@ -19,15 +21,16 @@ class GetFirebaseCustomTokenModel {
     this.customToken,
   });
 
-  factory GetFirebaseCustomTokenModel.fromJson(Map<String, dynamic> json) => GetFirebaseCustomTokenModel(
-    status: json["status"],
-    message: json["message"],
-    customToken: json["customToken"],
-  );
+  factory GetFirebaseCustomTokenModel.fromJson(Map<String, dynamic> json) =>
+      GetFirebaseCustomTokenModel(
+        status: json["status"],
+        message: json["message"],
+        customToken: json["customToken"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "message": message,
-    "customToken": customToken,
-  };
+        "status": status,
+        "message": message,
+        "customToken": customToken,
+      };
 }

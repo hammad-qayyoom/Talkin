@@ -23,7 +23,8 @@ class DeleteListenerApi {
 
     // String query = Uri(queryParameters: queryParameters).query;
 
-    final uri = Uri.parse("${Api.deleteListenerAccount}${ApiParams.listenerId}=${Database.fetchListenerProfileModel?.data?.id}");
+    final uri = Uri.parse(
+        "${Api.deleteListenerAccount}${ApiParams.listenerId}=${Database.fetchListenerProfileModel?.data?.id}");
     final headers = {
       ApiParams.key: Api.secretKey,
       ApiParams.authToken: "Bearer $token",

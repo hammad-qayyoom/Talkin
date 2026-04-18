@@ -4,6 +4,7 @@ import 'package:notisboard/ui/host_flow/host_help_center_screen/controller/host_
 class HostHelpCenterScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HostHelpCenterScreenController>(() => HostHelpCenterScreenController());
+    Get.lazyPut<HostHelpCenterScreenController>(
+        () => HostHelpCenterScreenController());
   }
 }

@@ -47,7 +47,9 @@ class HostChatListSearchWidget extends StatelessWidget {
                               AppAsset.searchIcon,
                               height: 18,
                               width: 18,
-                              color: controller.hasText ? AppColors.black : AppColors.otpScreenGrey,
+                              color: controller.hasText
+                                  ? AppColors.black
+                                  : AppColors.otpScreenGrey,
                             ),
                             const SizedBox(width: 12),
                             Container(
@@ -78,7 +80,10 @@ class HostChatListSearchWidget extends StatelessWidget {
                                       AppAsset.closeFillIcon,
                                       height: 22,
                                       width: 22,
-                                      color: controller.hasText ? AppColors.profileLanguage.withValues(alpha: 0.5) : AppColors.otpScreenGrey,
+                                      color: controller.hasText
+                                          ? AppColors.profileLanguage
+                                              .withValues(alpha: 0.5)
+                                          : AppColors.otpScreenGrey,
                                     )
                                   : SizedBox.shrink(),
                             ),
@@ -118,21 +123,37 @@ class HostChatListSearchWidget extends StatelessWidget {
                                       Get.toNamed(
                                         AppRoutes.hostPersonalChatScreen,
                                         arguments: [
-                                          controller.displayedListeners[index].chatUserId,
-                                          controller.displayedListeners[index].fullName,
-                                          controller.displayedListeners[index].isOnline,
-                                          controller.displayedListeners[index].profilePic,
+                                          controller.displayedListeners[index]
+                                              .chatUserId,
+                                          controller.displayedListeners[index]
+                                              .fullName,
+                                          controller.displayedListeners[index]
+                                              .isOnline,
+                                          controller.displayedListeners[index]
+                                              .profilePic,
                                           // controller.displayedListeners[index].ratePrivateAudioCall,
                                           // controller.displayedListeners[index].ratePrivateVideoCall,
                                         ],
                                       );
                                     },
-                                    isOnline: controller.displayedListeners[index].isOnline ?? false,
-                                    lastMsgTime: controller.displayedListeners[index].messageTime.toString(),
-                                    lastMsg: controller.displayedListeners[index].lastMessage ?? '',
+                                    isOnline: controller
+                                            .displayedListeners[index]
+                                            .isOnline ??
+                                        false,
+                                    lastMsgTime: controller
+                                        .displayedListeners[index].messageTime
+                                        .toString(),
+                                    lastMsg: controller
+                                            .displayedListeners[index]
+                                            .lastMessage ??
+                                        '',
                                     index: index,
-                                    name: controller.displayedListeners[index].fullName ?? '',
-                                    image: controller.displayedListeners[index].profilePic ?? '',
+                                    name: controller.displayedListeners[index]
+                                            .fullName ??
+                                        '',
+                                    image: controller.displayedListeners[index]
+                                            .profilePic ??
+                                        '',
                                   ).paddingOnly(left: 14, right: 14),
                                   controller.displayedListeners.length == 1
                                       ? SizedBox.shrink()

@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-DeleteUserResponseModel deleteUserResponseModelFromJson(String str) => DeleteUserResponseModel.fromJson(json.decode(str));
+DeleteUserResponseModel deleteUserResponseModelFromJson(String str) =>
+    DeleteUserResponseModel.fromJson(json.decode(str));
 
-String deleteUserResponseModelToJson(DeleteUserResponseModel data) => json.encode(data.toJson());
+String deleteUserResponseModelToJson(DeleteUserResponseModel data) =>
+    json.encode(data.toJson());
 
 class DeleteUserResponseModel {
   bool? status;
@@ -17,7 +19,8 @@ class DeleteUserResponseModel {
     this.message,
   });
 
-  factory DeleteUserResponseModel.fromJson(Map<String, dynamic> json) => DeleteUserResponseModel(
+  factory DeleteUserResponseModel.fromJson(Map<String, dynamic> json) =>
+      DeleteUserResponseModel(
         status: json["status"],
         message: json["message"],
       );

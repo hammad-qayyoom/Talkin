@@ -42,14 +42,24 @@ class OnBoardingView extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(logic.title.length, (index) {
-                        bool isSelected = index == logic.currentPage; // Check if this is the current page
+                        bool isSelected = index ==
+                            logic
+                                .currentPage; // Check if this is the current page
                         return AnimatedContainer(
                           margin: EdgeInsets.only(right: 4),
-                          width: isSelected ? 22 : 14, // Make the selected dot a bit bigger
-                          height: isSelected ? 4 : 4, // Same as width for circle shape
+                          width: isSelected
+                              ? 22
+                              : 14, // Make the selected dot a bit bigger
+                          height: isSelected
+                              ? 4
+                              : 4, // Same as width for circle shape
                           decoration: BoxDecoration(
-                            color: isSelected ? AppColors.appColor : AppColors.unSelected, // Change color based on selection
-                            borderRadius: BorderRadius.circular(10), // Make it round
+                            color: isSelected
+                                ? AppColors.appColor
+                                : AppColors
+                                    .unSelected, // Change color based on selection
+                            borderRadius:
+                                BorderRadius.circular(10), // Make it round
                           ),
                           duration: Duration(milliseconds: 300),
                         );
@@ -102,7 +112,8 @@ class OnboardingItemView extends StatelessWidget {
     return Column(
       children: [
         const Spacer(),
-        Image.asset(image, height: 360).paddingOnly(bottom: Get.height * 0.02, left: 34, right: 34),
+        Image.asset(image, height: 360)
+            .paddingOnly(bottom: Get.height * 0.02, left: 34, right: 34),
         Text(
           title,
           style: AppFontStyle.fontStyleW800(

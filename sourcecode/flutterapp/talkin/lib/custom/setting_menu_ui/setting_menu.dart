@@ -10,7 +10,12 @@ class SettingMenu extends StatelessWidget {
   final VoidCallback onTap;
   final Widget? widget;
 
-  const SettingMenu({super.key, required this.icon, required this.title, required this.onTap, this.widget});
+  const SettingMenu(
+      {super.key,
+      required this.icon,
+      required this.title,
+      required this.onTap,
+      this.widget});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,9 @@ class SettingMenu extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(12)),
+              decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(12)),
               child: Image.asset(
                 icon,
                 height: 33,
@@ -78,7 +85,8 @@ class SettingMainMenu extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(color: AppColors.setting.withValues(alpha: 0.5)),
+          decoration:
+              BoxDecoration(color: AppColors.setting.withValues(alpha: 0.5)),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -90,14 +98,18 @@ class SettingMainMenu extends StatelessWidget {
                       width: Get.width * 0.76,
                       child: Text(
                         text,
-                        style: AppFontStyle.fontStyleW800(fontSize: 20, fontColor: AppColors.black),
+                        style: AppFontStyle.fontStyleW800(
+                            fontSize: 20, fontColor: AppColors.black),
                       ).paddingOnly(bottom: 4),
                     ),
                     SizedBox(
                       width: Get.width * 0.7,
                       child: Text(
                         subText,
-                        style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.profileText, height: 2),
+                        style: AppFontStyle.fontStyleW500(
+                            fontSize: 11,
+                            fontColor: AppColors.profileText,
+                            height: 2),
                       ),
                     ),
                   ],

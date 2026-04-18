@@ -58,7 +58,8 @@ class HostNotificationController extends GetxController {
   Future<void> _paginationListener() async {
     if (!hasMoreData || isPaginationLoading || isLoading) return;
 
-    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 100) {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 100) {
       isPaginationLoading = true;
       update([Constant.idPaginationListener]);
 
@@ -109,12 +110,14 @@ class HostNotificationController extends GetxController {
 
         Utils.showToast(
           Get.context!,
-          hostNotificationClearModel?.message ?? "Notification history cleared.",
+          hostNotificationClearModel?.message ??
+              "Notification history cleared.",
         );
       } else {
         Utils.showToast(
           Get.context!,
-          hostNotificationClearModel?.message ?? "Notification history not found.",
+          hostNotificationClearModel?.message ??
+              "Notification history not found.",
         );
       }
     } catch (e) {

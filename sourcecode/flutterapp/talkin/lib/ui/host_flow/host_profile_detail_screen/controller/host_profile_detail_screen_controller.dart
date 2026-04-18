@@ -44,9 +44,14 @@ class HostProfileDetailScreenController extends GetxController {
         loginListenerId: Database.fetchLoginUserProfileModel?.user?.listenerId,
       );
 
-      statsList[0]['count'] = fetchListenerProfileModel?.data?.callCount?.toString() ?? '0';
-      statsList[1]['count'] = fetchListenerProfileModel?.data?.rating?.toStringAsFixed(1) ?? '0.0';
-      statsList[2]['count'] = fetchListenerProfileModel?.data?.experience == null ? '0+' : '${fetchListenerProfileModel?.data?.experience}+';
+      statsList[0]['count'] =
+          fetchListenerProfileModel?.data?.callCount?.toString() ?? '0';
+      statsList[1]['count'] =
+          fetchListenerProfileModel?.data?.rating?.toStringAsFixed(1) ?? '0.0';
+      statsList[2]['count'] =
+          fetchListenerProfileModel?.data?.experience == null
+              ? '0+'
+              : '${fetchListenerProfileModel?.data?.experience}+';
     } catch (e) {
       log('Error fetching Listener profile api: $e');
     } finally {

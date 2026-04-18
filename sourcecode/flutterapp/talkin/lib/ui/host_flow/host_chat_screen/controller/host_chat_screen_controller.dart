@@ -49,7 +49,8 @@ class HostChatScreenController extends GetxController {
 
   /// pagination
   Future<void> onTopListenersPagination() async {
-    if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
       isPaginationLoading = true;
       update([Constant.idPaginationListener]);
 

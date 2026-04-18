@@ -4,6 +4,7 @@ import 'package:notisboard/ui/host_flow/host_profile_screen/controller/host_prof
 class HostProfileScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HostProfileScreenController>(() => HostProfileScreenController());
+    Get.lazyPut<HostProfileScreenController>(
+        () => HostProfileScreenController());
   }
 }

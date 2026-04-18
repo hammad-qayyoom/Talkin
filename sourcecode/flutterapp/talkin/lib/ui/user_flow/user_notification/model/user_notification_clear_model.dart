@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-NotificationClearModel notificationClearModelFromJson(String str) => NotificationClearModel.fromJson(json.decode(str));
+NotificationClearModel notificationClearModelFromJson(String str) =>
+    NotificationClearModel.fromJson(json.decode(str));
 
-String notificationClearModelToJson(NotificationClearModel data) => json.encode(data.toJson());
+String notificationClearModelToJson(NotificationClearModel data) =>
+    json.encode(data.toJson());
 
 class NotificationClearModel {
   bool? status;
@@ -17,7 +19,8 @@ class NotificationClearModel {
     this.message,
   });
 
-  factory NotificationClearModel.fromJson(Map<String, dynamic> json) => NotificationClearModel(
+  factory NotificationClearModel.fromJson(Map<String, dynamic> json) =>
+      NotificationClearModel(
         status: json["status"],
         message: json["message"],
       );

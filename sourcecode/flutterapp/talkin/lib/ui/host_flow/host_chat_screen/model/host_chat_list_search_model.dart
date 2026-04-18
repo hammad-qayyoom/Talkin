@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-HostChatListSearchModel hostChatListSearchModelFromJson(String str) => HostChatListSearchModel.fromJson(json.decode(str));
+HostChatListSearchModel hostChatListSearchModelFromJson(String str) =>
+    HostChatListSearchModel.fromJson(json.decode(str));
 
-String hostChatListSearchModelToJson(HostChatListSearchModel data) => json.encode(data.toJson());
+String hostChatListSearchModelToJson(HostChatListSearchModel data) =>
+    json.encode(data.toJson());
 
 class HostChatListSearchModel {
   bool? status;
@@ -19,16 +21,22 @@ class HostChatListSearchModel {
     this.data,
   });
 
-  factory HostChatListSearchModel.fromJson(Map<String, dynamic> json) => HostChatListSearchModel(
+  factory HostChatListSearchModel.fromJson(Map<String, dynamic> json) =>
+      HostChatListSearchModel(
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? [] : List<HostSearchChatList>.from(json["data"]!.map((x) => HostSearchChatList.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<HostSearchChatList>.from(
+                json["data"]!.map((x) => HostSearchChatList.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
@@ -51,14 +59,17 @@ class HostSearchChatList {
     this.messageTime,
   });
 
-  factory HostSearchChatList.fromJson(Map<String, dynamic> json) => HostSearchChatList(
+  factory HostSearchChatList.fromJson(Map<String, dynamic> json) =>
+      HostSearchChatList(
         chatUserId: json["chatUserId"],
         nickName: json["nickName"],
         fullName: json["fullName"],
         profilePic: json["profilePic"],
         isOnline: json["isOnline"],
         lastMessage: json["lastMessage"],
-        messageTime: json["messageTime"] == null ? null : DateTime.parse(json["messageTime"]),
+        messageTime: json["messageTime"] == null
+            ? null
+            : DateTime.parse(json["messageTime"]),
       );
 
   Map<String, dynamic> toJson() => {

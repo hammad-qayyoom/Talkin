@@ -59,7 +59,8 @@ class UserNotificationController extends GetxController {
   Future<void> _paginationListener() async {
     if (!hasMoreData || isPaginationLoading || isLoading) return;
 
-    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 100) {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 100) {
       isPaginationLoading = true;
       update([Constant.idPaginationListener]);
 

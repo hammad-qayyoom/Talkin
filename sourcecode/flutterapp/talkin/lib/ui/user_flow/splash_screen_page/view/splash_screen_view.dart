@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:notisboard/custom/notisboard_wordmark.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/controller/splash_screen_controller.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -91,25 +92,25 @@ class SplashScreenView extends GetView<SplashScreenController> {
                           width: 174,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                _brandDark,
-                                _brandDark.withValues(alpha: 0.88),
-                              ],
+                            color: AppColors.white,
+                            border: Border.all(
+                              color: _softBorder.withValues(alpha: 0.9),
                             ),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(26),
-                            child: Image.asset(AppAsset.splashLogo),
+                            padding: const EdgeInsets.all(22),
+                            child: Image.asset(
+                              AppAsset.splashLogo,
+                              fit: BoxFit.contain,
+                              filterQuality: FilterQuality.none,
+                            ),
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 30),
-                    Text(
-                      "Notisboard",
+                    NotisboardWordmark(
+                      textAlign: TextAlign.center,
                       style: AppFontStyle.fontStyleKaushanW400(
                         fontSize: 52,
                         fontColor: _brandDark,

@@ -262,6 +262,7 @@ enum EnumLocale {
   txtTypeSomething,
   txtSelectCountry,
   txtAppRestart,
+  txtAppRestartDesc,
   txtFrontSide,
   txtBackSide,
   txtUploadImag,
@@ -374,5 +375,7 @@ enum EnumLocale {
   txtBlockDetailsListener,
   txtBlockDetailsUser,
   txtListenerRequestRejected,
-  txtReMatch, txtPaymentFailedPleaseTryAgain, txtSelfIntro
+  txtReMatch,
+  txtPaymentFailedPleaseTryAgain,
+  txtSelfIntro
 }

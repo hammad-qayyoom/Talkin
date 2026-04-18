@@ -31,7 +31,8 @@ class RegistrationAppBarView extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
               border: Border.all(color: _softBorder),
             ),
-            child: Icon(Icons.arrow_back_ios_new_rounded, color: _brandDark, size: 18),
+            child: Icon(Icons.arrow_back_ios_new_rounded,
+                color: _brandDark, size: 18),
           ),
         ),
         Expanded(
@@ -87,12 +88,14 @@ class RegistrationAddInfoView extends StatelessWidget {
               children: [
                 Text(
                   'Create your account',
-                  style: AppFontStyle.fontStyleW700(fontSize: 22, fontColor: _brandDark),
+                  style: AppFontStyle.fontStyleW700(
+                      fontSize: 22, fontColor: _brandDark),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   'Simple details now, profile setup right after signup.',
-                  style: AppFontStyle.fontStyleW500(fontSize: 13, fontColor: _mutedText),
+                  style: AppFontStyle.fontStyleW500(
+                      fontSize: 13, fontColor: _mutedText),
                 ),
                 const SizedBox(height: 22),
                 _buildLabel(EnumLocale.txtEnterName.name.tr),
@@ -158,7 +161,9 @@ class RegistrationAddInfoView extends StatelessWidget {
                   suffixIcon: IconButton(
                     onPressed: logic.onClickObscure,
                     icon: Icon(
-                      logic.isObscure ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                      logic.isObscure
+                          ? Icons.visibility_off_rounded
+                          : Icons.visibility_rounded,
                       color: _mutedText,
                     ),
                   ),
@@ -173,7 +178,9 @@ class RegistrationAddInfoView extends StatelessWidget {
                       return 'Include at least one lowercase letter';
                     } else if (!RegExp(r'\d').hasMatch(value)) {
                       return 'Include at least one number';
-                    } else if (!RegExp(r'[!@#\$&*~%^()_+\-=\[\]{};:"\\|,.<>\/?]').hasMatch(value)) {
+                    } else if (!RegExp(
+                            r'[!@#\$&*~%^()_+\-=\[\]{};:"\\|,.<>\/?]')
+                        .hasMatch(value)) {
                       return 'Include at least one special character';
                     }
                     return null;
@@ -190,7 +197,9 @@ class RegistrationAddInfoView extends StatelessWidget {
                   suffixIcon: IconButton(
                     onPressed: logic.onClickObscure1,
                     icon: Icon(
-                      logic.isObscure1 ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                      logic.isObscure1
+                          ? Icons.visibility_off_rounded
+                          : Icons.visibility_rounded,
                       color: _mutedText,
                     ),
                   ),
@@ -224,7 +233,9 @@ class RegistrationAddInfoView extends StatelessWidget {
                                 color: isSelected ? _brandRed : _mutedText,
                                 width: 1.4,
                               ),
-                              color: isSelected ? _brandRed : AppColors.transparent,
+                              color: isSelected
+                                  ? _brandRed
+                                  : AppColors.transparent,
                             ),
                             child: isSelected
                                 ? const Icon(
@@ -296,7 +307,8 @@ class RegistrationAddInfoView extends StatelessWidget {
             icon: const Icon(Icons.north_east_rounded, size: 20),
             label: Text(
               EnumLocale.txtSubmit.name.tr,
-              style: AppFontStyle.fontStyleW600(fontSize: 17, fontColor: AppColors.white),
+              style: AppFontStyle.fontStyleW600(
+                  fontSize: 17, fontColor: AppColors.white),
             ),
             style: ElevatedButton.styleFrom(
               elevation: 0,
@@ -344,10 +356,12 @@ class RegistrationAddInfoView extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         suffixIcon: suffixIcon,
-        hintStyle: AppFontStyle.fontStyleW500(fontSize: 14, fontColor: _mutedText),
+        hintStyle:
+            AppFontStyle.fontStyleW500(fontSize: 14, fontColor: _mutedText),
         filled: true,
         fillColor: _softSurface,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(color: _softBorder),

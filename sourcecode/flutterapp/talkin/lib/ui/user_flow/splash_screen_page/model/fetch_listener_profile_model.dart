@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-FetchListenerProfileModel fetchListenerProfileModelFromJson(String str) => FetchListenerProfileModel.fromJson(json.decode(str));
+FetchListenerProfileModel fetchListenerProfileModelFromJson(String str) =>
+    FetchListenerProfileModel.fromJson(json.decode(str));
 
-String fetchListenerProfileModelToJson(FetchListenerProfileModel data) => json.encode(data.toJson());
+String fetchListenerProfileModelToJson(FetchListenerProfileModel data) =>
+    json.encode(data.toJson());
 
 class FetchListenerProfileModel {
   bool? status;
@@ -19,7 +21,8 @@ class FetchListenerProfileModel {
     this.data,
   });
 
-  factory FetchListenerProfileModel.fromJson(Map<String, dynamic> json) => FetchListenerProfileModel(
+  factory FetchListenerProfileModel.fromJson(Map<String, dynamic> json) =>
+      FetchListenerProfileModel(
         status: json["status"],
         message: json["message"],
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
@@ -82,17 +85,39 @@ class Data {
     this.isFake,
   });
 
+  static String? _pickString(Map<String, dynamic> json, List<String> keys) {
+    for (final key in keys) {
+      final value = json[key];
+      if (value == null) continue;
+
+      final normalized = value.toString().trim();
+      if (normalized.isNotEmpty && normalized.toLowerCase() != 'null') {
+        return normalized;
+      }
+    }
+    return null;
+  }
+
+  static List<String> _toStringList(dynamic value) {
+    if (value is! List) return [];
+
+    return value
+        .map((item) => item.toString().trim())
+        .where((item) => item.isNotEmpty)
+        .toList();
+  }
+
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        id: json["_id"],
-        name: json["name"],
-        nickName: json["nickName"],
-        uniqueId: json["uniqueId"],
-        email: json["email"],
-        selfIntro: json["selfIntro"],
-        talkTopics: json["talkTopics"] == null ? [] : List<String>.from(json["talkTopics"]!.map((x) => x)),
-        categoryIds: json["categoryIds"] == null ? [] : List<String>.from(json["categoryIds"]!.map((x) => x.toString())),
-        language: json["language"] == null ? [] : List<String>.from(json["language"]!.map((x) => x)),
-        image: json["image"],
+        id: _pickString(json, ["_id", "id", "listenerId", "expertId"]),
+        name: _pickString(json, ["name", "fullName", "nickName"]),
+        nickName: _pickString(json, ["nickName", "nickname", "name"]),
+        uniqueId: _pickString(json, ["uniqueId", "expertUniqueId"]),
+        email: _pickString(json, ["email"]),
+        selfIntro: _pickString(json, ["selfIntro", "bio"]),
+        talkTopics: _toStringList(json["talkTopics"]),
+        categoryIds: _toStringList(json["categoryIds"]),
+        language: _toStringList(json["language"]),
+        image: _pickString(json, ["image", "profilePic", "avatar"]),
         ratePrivateVideoCall: json["ratePrivateVideoCall"],
         ratePrivateAudioCall: json["ratePrivateAudioCall"],
         rating: json["rating"],
@@ -103,7 +128,7 @@ class Data {
         isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],
         isAvailableForChat: json["isAvailableForChat"],
         isNotificationEnabled: json["isNotificationEnabled"],
-        video: json["video"] == null ? [] : List<String>.from(json["video"]!.map((x) => x)),
+        video: _toStringList(json["video"]),
         isFake: json["isFake"],
       );
 
@@ -114,9 +139,14 @@ class Data {
         "uniqueId": uniqueId,
         "email": email,
         "selfIntro": selfIntro,
-        "talkTopics": talkTopics == null ? [] : List<dynamic>.from(talkTopics!.map((x) => x)),
-        "categoryIds": categoryIds == null ? [] : List<dynamic>.from(categoryIds!.map((x) => x)),
-        "language": language == null ? [] : List<dynamic>.from(language!.map((x) => x)),
+        "talkTopics": talkTopics == null
+            ? []
+            : List<dynamic>.from(talkTopics!.map((x) => x)),
+        "categoryIds": categoryIds == null
+            ? []
+            : List<dynamic>.from(categoryIds!.map((x) => x)),
+        "language":
+            language == null ? [] : List<dynamic>.from(language!.map((x) => x)),
         "image": image,
         "ratePrivateVideoCall": ratePrivateVideoCall,
         "ratePrivateAudioCall": ratePrivateAudioCall,

@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-ChatListSearchModel chatListSearchModelFromJson(String str) => ChatListSearchModel.fromJson(json.decode(str));
+ChatListSearchModel chatListSearchModelFromJson(String str) =>
+    ChatListSearchModel.fromJson(json.decode(str));
 
-String chatListSearchModelToJson(ChatListSearchModel data) => json.encode(data.toJson());
+String chatListSearchModelToJson(ChatListSearchModel data) =>
+    json.encode(data.toJson());
 
 class ChatListSearchModel {
   bool? status;
@@ -19,16 +21,22 @@ class ChatListSearchModel {
     this.data,
   });
 
-  factory ChatListSearchModel.fromJson(Map<String, dynamic> json) => ChatListSearchModel(
+  factory ChatListSearchModel.fromJson(Map<String, dynamic> json) =>
+      ChatListSearchModel(
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? [] : List<ChatListSearch>.from(json["data"]!.map((x) => ChatListSearch.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<ChatListSearch>.from(
+                json["data"]!.map((x) => ChatListSearch.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
@@ -74,8 +82,12 @@ class ChatListSearch {
         ratePrivateVideoCall: json["ratePrivateVideoCall"],
         ratePrivateAudioCall: json["ratePrivateAudioCall"],
         lastMessage: json["lastMessage"],
-        messageTime: json["messageTime"] == null ? null : DateTime.parse(json["messageTime"]),
-        video: json["video"] == null ? [] : List<String>.from(json["video"]!.map((x) => x)),
+        messageTime: json["messageTime"] == null
+            ? null
+            : DateTime.parse(json["messageTime"]),
+        video: json["video"] == null
+            ? []
+            : List<String>.from(json["video"]!.map((x) => x)),
         isFake: json["isFake"],
         isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],
         isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],

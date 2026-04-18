@@ -15,7 +15,8 @@ class UpdateExpertCallStatusApi {
   }) async {
     Utils.showLog("Updating Expert Availability...");
 
-    final uri = Uri.parse("${Api.updateExpertCallStatus}${ApiParams.expertId}=$expertId&${ApiParams.field}=$status");
+    final uri = Uri.parse(
+        "${Api.updateExpertCallStatus}${ApiParams.expertId}=$expertId&${ApiParams.field}=$status");
     Utils.showLog("Update Expert Availability Api URL :: $uri");
 
     var headers = {
@@ -27,8 +28,10 @@ class UpdateExpertCallStatusApi {
     try {
       final response = await http.patch(uri, headers: headers);
 
-      Utils.showLog("Update Expert Availability Api StatusCode :: ${response.statusCode}");
-      Utils.showLog("Update Expert Availability Api Response :: ${response.body}");
+      Utils.showLog(
+          "Update Expert Availability Api StatusCode :: ${response.statusCode}");
+      Utils.showLog(
+          "Update Expert Availability Api Response :: ${response.body}");
 
       final jsonResponse = json.decode(response.body);
       return UpdateExpertCallStatusModel.fromJson(jsonResponse);

@@ -73,7 +73,9 @@ class AllReview extends StatelessWidget {
                                       shape: BoxShape.circle,
                                     ),
                                     child: CustomListenerProfileImage(
-                                      image: controller.reviews?[index].profilePic ?? '',
+                                      image: controller
+                                              .reviews?[index].profilePic ??
+                                          '',
                                     ),
                                   ),
                                 ),
@@ -83,21 +85,30 @@ class AllReview extends StatelessWidget {
                                 children: [
                                   Text(
                                     controller.reviews?[index].fullName ?? '',
-                                    style: AppFontStyle.fontStyleW600(fontSize: 15, fontColor: AppColors.black),
+                                    style: AppFontStyle.fontStyleW600(
+                                        fontSize: 15,
+                                        fontColor: AppColors.black),
                                   ),
                                   StarRating(
-                                    rating: controller.reviews?[index].rating?.toDouble() ?? 0.0,
+                                    rating: controller.reviews?[index].rating
+                                            ?.toDouble() ??
+                                        0.0,
                                     size: 22,
                                   ),
                                 ],
                               ),
                               Spacer(),
                               Container(
-                                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(color: Color(0xffE7EBF7), borderRadius: BorderRadius.circular(34)),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                    color: Color(0xffE7EBF7),
+                                    borderRadius: BorderRadius.circular(34)),
                                 child: Text(
                                   controller.reviews?[index].time ?? '',
-                                  style: AppFontStyle.fontStyleW600(fontSize: 10, fontColor: AppColors.profileLanguage),
+                                  style: AppFontStyle.fontStyleW600(
+                                      fontSize: 10,
+                                      fontColor: AppColors.profileLanguage),
                                 ),
                               )
                             ],
@@ -115,7 +126,9 @@ class AllReview extends StatelessWidget {
                       ),
                     ).paddingOnly(bottom: 14);
                   },
-                ).paddingOnly(bottom: 16).paddingOnly(left: 16, right: 16, top: 16);
+                )
+                  .paddingOnly(bottom: 16)
+                  .paddingOnly(left: 16, right: 16, top: 16);
         });
   }
 }
@@ -140,7 +153,8 @@ class StarRating extends StatelessWidget {
         return Icon(
           Icons.star_rounded,
           size: size,
-          color: index < rating ? AppColors.rateStarColor : Colors.grey.shade300,
+          color:
+              index < rating ? AppColors.rateStarColor : Colors.grey.shade300,
         );
       }),
     );

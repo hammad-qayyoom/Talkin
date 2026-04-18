@@ -4,6 +4,7 @@ import 'package:notisboard/ui/user_flow/app_language_screen/controller/app_langu
 class AppLanguageScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<AppLanguageScreenController>(() => AppLanguageScreenController());
+    Get.lazyPut<AppLanguageScreenController>(
+        () => AppLanguageScreenController());
   }
 }

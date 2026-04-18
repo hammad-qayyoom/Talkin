@@ -12,12 +12,18 @@ class BottomBarBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<BottomBarController>(() => BottomBarController());
-    Get.lazyPut<HomeScreenController>(() => HomeScreenController(), fenix: true);
-    Get.lazyPut<FeedScreenController>(() => FeedScreenController(), tag: 'bottomFeed', fenix: true);
-    Get.lazyPut<EditProfileController>(() => EditProfileController(), fenix: true);
-    Get.lazyPut<ListenersScreenController>(() => ListenersScreenController(), fenix: true);
+    Get.lazyPut<HomeScreenController>(() => HomeScreenController(),
+        fenix: true);
+    Get.lazyPut<FeedScreenController>(() => FeedScreenController(),
+        tag: 'bottomFeed', fenix: true);
+    Get.lazyPut<EditProfileController>(() => EditProfileController(),
+        fenix: true);
+    Get.lazyPut<ListenersScreenController>(() => ListenersScreenController(),
+        fenix: true);
     Get.lazyPut<AllListenersController>(() => AllListenersController());
-    Get.lazyPut<ChatScreenController>(() => ChatScreenController(), fenix: true);
-    Get.lazyPut<CallingScreenController>(() => CallingScreenController(), fenix: true);
+    Get.lazyPut<ChatScreenController>(() => ChatScreenController(),
+        fenix: true);
+    Get.lazyPut<CallingScreenController>(() => CallingScreenController(),
+        fenix: true);
   }
 }

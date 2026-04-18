@@ -11,11 +11,26 @@ import 'package:notisboard/utils/utils.dart';
 class HostCoinApi {
   static Future<ListenerCoinModel?> callApi() async {
     final token = await FirebaseAccessToken.onGet() ?? "";
+    final listenerId = (Database.fetchListenerProfileModel?.data?.id ??
+            Database.fetchLoginUserProfileModel?.user?.listenerId ??
+            Database.loginListenerId)
+        .toString()
+        .trim();
 
     Utils.showLog("Listener Session Credit Api Calling...");
 
+    if (listenerId.isEmpty) {
+      Utils.showLog(
+          "Listener Session Credit Api skipped: missing listenerId context.");
+      return ListenerCoinModel(
+        status: false,
+        message: "Missing listenerId context",
+        coin: 0,
+      );
+    }
+
     final queryParameters = {
-      ApiParams.listenerId: Database.fetchListenerProfileModel?.data?.id,
+      ApiParams.listenerId: listenerId,
     };
     String query = Uri(queryParameters: queryParameters).query;
 
@@ -23,7 +38,11 @@ class HostCoinApi {
 
     Utils.showLog("Listener Session Credit Api url => $uri");
 
-    final headers = {ApiParams.key: Api.secretKey, ApiParams.authToken: ApiParams.tokenStartPoint + token, ApiParams.authUid: Database.loginUserFirebaseId};
+    final headers = {
+      ApiParams.key: Api.secretKey,
+      ApiParams.authToken: ApiParams.tokenStartPoint + token,
+      ApiParams.authUid: Database.loginUserFirebaseId
+    };
 
     try {
       final response = await http.get(uri, headers: headers);

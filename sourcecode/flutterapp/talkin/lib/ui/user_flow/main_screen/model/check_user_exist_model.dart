@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-CheckUserExistModel checkUserExistModelFromJson(String str) => CheckUserExistModel.fromJson(json.decode(str));
+CheckUserExistModel checkUserExistModelFromJson(String str) =>
+    CheckUserExistModel.fromJson(json.decode(str));
 
-String checkUserExistModelToJson(CheckUserExistModel data) => json.encode(data.toJson());
+String checkUserExistModelToJson(CheckUserExistModel data) =>
+    json.encode(data.toJson());
 
 class CheckUserExistModel {
   final bool? status;
@@ -19,7 +21,8 @@ class CheckUserExistModel {
     this.isLogin,
   });
 
-  factory CheckUserExistModel.fromJson(Map<String, dynamic> json) => CheckUserExistModel(
+  factory CheckUserExistModel.fromJson(Map<String, dynamic> json) =>
+      CheckUserExistModel(
         status: json["status"],
         message: json["message"],
         isLogin: json["isLogin"],

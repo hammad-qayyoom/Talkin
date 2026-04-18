@@ -18,8 +18,11 @@ class FakeOutgoingCallScreen extends StatelessWidget {
         body: GetBuilder<FakeOutgoingCallController>(
             id: Constant.idVideoCall,
             builder: (controller) {
-              Utils.showLog('controller.callType  ////////////${controller.callType}');
-              return controller.callType == 'audio' ? const FakeAudioOutgoingCallView() : const FakeOutgoingCallView();
+              Utils.showLog(
+                  'controller.callType  ////////////${controller.callType}');
+              return controller.callType == 'audio'
+                  ? const FakeAudioOutgoingCallView()
+                  : const FakeOutgoingCallView();
               // return controller.callType == 'audio' ? const FakeAudioOutgoingCallView() : const FakeOutgoingCallView();
             }),
       ),

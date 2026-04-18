@@ -21,7 +21,9 @@ class FirebaseAccessToken {
 
       Utils.showLog("Firebase Token Is Expire => $isExpired");
 
-      final token = isExpired == true ? await user?.getIdToken(true) : await user?.getIdToken();
+      final token = isExpired == true
+          ? await user?.getIdToken(true)
+          : await user?.getIdToken();
 
       Utils.showLog("Firebase Token => $token");
       return token;

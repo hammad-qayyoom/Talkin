@@ -60,10 +60,12 @@ class RegistrationController extends GetxController {
   }
 
   Future<void> onClickPrivacyPolicy() async {
-    final String privacyPolicyUrl = Database.appConfigurationModel?.data?.userPrivacyPolicyUrl ?? '';
+    final String privacyPolicyUrl =
+        Database.appConfigurationModel?.data?.userPrivacyPolicyUrl ?? '';
 
     if (privacyPolicyUrl.isNotEmpty) {
-      Get.to(() => WebViewScreen(url: privacyPolicyUrl, screen: "Privacy Policy"));
+      Get.to(
+          () => WebViewScreen(url: privacyPolicyUrl, screen: "Privacy Policy"));
     } else {
       log('Invalid privacy policy URL');
     }
@@ -71,7 +73,8 @@ class RegistrationController extends GetxController {
 
   Future<void> onTapBirthDate(BuildContext context) async {
     final DateTime now = DateTime.now();
-    final DateTime initialDate = selectedBirthDate ?? DateTime(now.year - 18, now.month, now.day);
+    final DateTime initialDate =
+        selectedBirthDate ?? DateTime(now.year - 18, now.month, now.day);
 
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -91,8 +94,8 @@ class RegistrationController extends GetxController {
     final DateTime now = DateTime.now();
     int age = now.year - birthDate.year;
 
-    final bool hasNotHadBirthdayThisYear =
-        now.month < birthDate.month || (now.month == birthDate.month && now.day < birthDate.day);
+    final bool hasNotHadBirthdayThisYear = now.month < birthDate.month ||
+        (now.month == birthDate.month && now.day < birthDate.day);
 
     if (hasNotHadBirthdayThisYear) {
       age -= 1;
@@ -155,12 +158,14 @@ class RegistrationController extends GetxController {
 
     final int age = _calculateAge(selectedBirthDate!);
     if (age < 18) {
-      Utils.showToast(Get.context!, "You must be at least 18 years old to continue");
+      Utils.showToast(
+          Get.context!, "You must be at least 18 years old to continue");
       return false;
     }
 
     if (!isCheck) {
-      Utils.showToast(Get.context!, "Please agree to the Privacy Policy to proceed.");
+      Utils.showToast(
+          Get.context!, "Please agree to the Privacy Policy to proceed.");
       return false;
     }
 
@@ -263,7 +268,8 @@ class RegistrationController extends GetxController {
     Database.onSetFcmToken(fcmToken ?? "");
   }
 
-  Future<void> _cleanupCreatedFirebaseUser(UserCredential? userCredential) async {
+  Future<void> _cleanupCreatedFirebaseUser(
+      UserCredential? userCredential) async {
     try {
       await userCredential?.user?.delete();
     } catch (error) {
@@ -352,11 +358,13 @@ class RegistrationController extends GetxController {
         password: passwordController.text.trim(),
       );
 
-      final bool synced = await _syncEmailUserWithBackend(createdUserCredential);
+      final bool synced =
+          await _syncEmailUserWithBackend(createdUserCredential);
 
       if (!synced) {
         await _cleanupCreatedFirebaseUser(createdUserCredential);
-        Utils.showToast(Get.context!, loginModel?.message ?? "Registration failed. Please try again.");
+        Utils.showToast(Get.context!,
+            loginModel?.message ?? "Registration failed. Please try again.");
       }
     } on FirebaseAuthException catch (e) {
       Utils.showLog('>>>>>>>>>>>>>>>>>>>>>$e');
@@ -365,24 +373,33 @@ class RegistrationController extends GetxController {
         try {
           await _prepareDeviceContext();
 
-          final UserCredential existingUserCredential = await _auth.signInWithEmailAndPassword(
+          final UserCredential existingUserCredential =
+              await _auth.signInWithEmailAndPassword(
             email: emailController.text.trim(),
             password: passwordController.text.trim(),
           );
 
-          final bool synced = await _syncEmailUserWithBackend(existingUserCredential);
+          final bool synced =
+              await _syncEmailUserWithBackend(existingUserCredential);
           if (!synced) {
-            Utils.showToast(Get.context!, loginModel?.message ?? "Registration sync failed. Please try again.");
+            Utils.showToast(
+                Get.context!,
+                loginModel?.message ??
+                    "Registration sync failed. Please try again.");
           }
         } on FirebaseAuthException catch (signInError) {
-          if (signInError.code == 'wrong-password' || signInError.code == 'invalid-credential') {
-            Utils.showToast(Get.context!, "This email is already registered. Please login with the correct password.");
+          if (signInError.code == 'wrong-password' ||
+              signInError.code == 'invalid-credential') {
+            Utils.showToast(Get.context!,
+                "This email is already registered. Please login with the correct password.");
           } else {
-            Utils.showToast(Get.context!, "Registration failed: ${signInError.message}");
+            Utils.showToast(
+                Get.context!, "Registration failed: ${signInError.message}");
           }
         } catch (error) {
           Utils.showLog("Email in use recovery failed => $error");
-          Utils.showToast(Get.context!, "Registration failed. Please login or reset password.");
+          Utils.showToast(Get.context!,
+              "Registration failed. Please login or reset password.");
         }
       } else if (e.code == 'weak-password') {
         Utils.showToast(Get.context!, "Password is too weak.");
@@ -398,11 +415,13 @@ class RegistrationController extends GetxController {
     }
   }
 
-  Future<void> onGetProfile({required String loginUserId, required int loginType}) async {
+  Future<void> onGetProfile(
+      {required String loginUserId, required int loginType}) async {
     final token = await FirebaseAccessToken.onGet();
 
     // Get.dialog(const LoadingUi(), barrierDismissible: false); // Start Loading...
-    fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(loginUserId: loginUserId, token: token ?? '');
+    fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(
+        loginUserId: loginUserId, token: token ?? '');
 
     log("fetchLoginUserProfileModel?.user?.id  :: ${fetchLoginUserProfileModel?.user?.id}");
 
@@ -412,17 +431,26 @@ class RegistrationController extends GetxController {
         log("fetchLoginUserProfileModel?.user?.Email  :: ${fetchLoginUserProfileModel?.user?.email}");
 
         Database.onSetLoginUserId(fetchLoginUserProfileModel!.user!.id!);
-        Database.onSetLoginUserFirebaseId(fetchLoginUserProfileModel!.user!.firebaseId!);
-        Database.onSetLoginUserProfilePic(fetchLoginUserProfileModel?.user?.profilePic ?? "");
-        Database.onSetLoginUserName(fetchLoginUserProfileModel!.user!.fullName!);
-        Database.onSetLoginUserNickName(fetchLoginUserProfileModel?.user?.nickName ?? "");
+        Database.onSetLoginUserFirebaseId(
+            fetchLoginUserProfileModel!.user!.firebaseId!);
+        Database.onSetLoginUserProfilePic(
+            fetchLoginUserProfileModel?.user?.profilePic ?? "");
+        Database.onSetLoginUserName(
+            fetchLoginUserProfileModel!.user!.fullName!);
+        Database.onSetLoginUserNickName(
+            fetchLoginUserProfileModel?.user?.nickName ?? "");
         Database.onSetLoginUserEmail(fetchLoginUserProfileModel!.user!.email!);
-        Database.onSetLoginUserCountry(fetchLoginUserProfileModel!.user!.country!);
-        Database.onSetLoginUserCountryFlag(fetchLoginUserProfileModel!.user!.countryFlag!);
+        Database.onSetLoginUserCountry(
+            fetchLoginUserProfileModel!.user!.country!);
+        Database.onSetLoginUserCountryFlag(
+            fetchLoginUserProfileModel!.user!.countryFlag!);
 
-        Database.onSetLoginUserBirthDate(fetchLoginUserProfileModel?.user?.birthDate ?? "");
-        Database.onSetLoginUserGender(fetchLoginUserProfileModel?.user?.gender ?? "Male");
-        Database.onSetLoginUserPhoneNumber(fetchLoginUserProfileModel?.user?.phoneNumber ?? "");
+        Database.onSetLoginUserBirthDate(
+            fetchLoginUserProfileModel?.user?.birthDate ?? "");
+        Database.onSetLoginUserGender(
+            fetchLoginUserProfileModel?.user?.gender ?? "Male");
+        Database.onSetLoginUserPhoneNumber(
+            fetchLoginUserProfileModel?.user?.phoneNumber ?? "");
         Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
         log("Database.loginUserEmail  ${Database.loginUserEmail}");
         log("Database.loginUserFirebaseId  ${Database.loginUserFirebaseId}");

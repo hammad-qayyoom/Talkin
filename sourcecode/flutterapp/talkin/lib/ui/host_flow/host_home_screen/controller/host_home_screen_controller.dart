@@ -57,21 +57,35 @@ class HostHomeScreenController extends GetxController {
 
   @override
   void onInit() {
-    hostCoin();
-    fetchRealStats();
-    // init();
     super.onInit();
+    _initializeHome();
+  }
+
+  Future<void> _initializeHome() async {
+    await fetchRealStats();
+    await hostCoin();
   }
 
   fetchRealStats() async {
+    final listenerId = _listenerId;
+
     try {
-      fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(
-          loginListenerId:
-              Database.fetchLoginUserProfileModel?.user?.listenerId ?? '');
-      Database.fetchListenerProfileModel = fetchListenerProfileModel;
+      if (listenerId.isNotEmpty) {
+        fetchListenerProfileModel =
+            await FetchListenerProfileAPi.callApi(loginListenerId: listenerId);
+        if (fetchListenerProfileModel != null) {
+          Database.fetchListenerProfileModel = fetchListenerProfileModel;
+          isAvailableForPrivateAudioCall =
+              fetchListenerProfileModel?.data?.isAvailableForPrivateAudioCall ??
+                  isAvailableForPrivateAudioCall;
+          isAvailableForPrivateVideoCall =
+              fetchListenerProfileModel?.data?.isAvailableForPrivateVideoCall ??
+                  isAvailableForPrivateVideoCall;
+        }
+      }
 
       final response = await SessionBookingService.getExpertSessions(
-        listenerId: _listenerId.isEmpty ? null : _listenerId,
+        listenerId: listenerId.isEmpty ? null : listenerId,
         view: 'completed',
       );
 
@@ -86,6 +100,7 @@ class HostHomeScreenController extends GetxController {
       totalCompletedSessions = 0;
     }
 
+    update();
     update([Constant.idCoinUpdate]);
   }
 
@@ -93,7 +108,7 @@ class HostHomeScreenController extends GetxController {
     isCoinLoading = true;
     update([Constant.idCoinUpdate]);
     listenerCoinModel = await HostCoinApi.callApi();
-    Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
+    Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
     isCoinLoading = false;
     update([Constant.idCoinUpdate]);
     log("Listener Session Credit => ${listenerCoinModel?.coin}");
@@ -107,7 +122,7 @@ class HostHomeScreenController extends GetxController {
     await fetchRealStats();
 
     listenerCoinModel = await HostCoinApi.callApi();
-    Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
+    Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
     isCoinLoading = false;
 
     update([Constant.idCoinUpdate]);
@@ -119,7 +134,7 @@ class HostHomeScreenController extends GetxController {
   /// get host coin
   hostCoin() async {
     listenerCoinModel = await HostCoinApi.callApi();
-    Database.onSetListenerCoin(listenerCoinModel!.coin.toString());
+    Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
 
     update([Constant.idGetCoinPlan]);
   }
@@ -141,7 +156,7 @@ class HostHomeScreenController extends GetxController {
     /// API call to update permission
     final response = await UpdateExpertCallStatusApi.callApi(
       status: status.toString(),
-      expertId: Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
+      expertId: _listenerId,
     );
     updateExpertCallStatusModel = response;
 
@@ -180,9 +195,8 @@ class HostHomeScreenController extends GetxController {
         isAvailableForPrivateAudioCall = !currentValue;
       }
     }
-    fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(
-        loginListenerId:
-            Database.fetchLoginUserProfileModel?.user?.listenerId ?? '');
+    fetchListenerProfileModel =
+        await FetchListenerProfileAPi.callApi(loginListenerId: _listenerId);
     Database.fetchListenerProfileModel = fetchListenerProfileModel;
     if (fetchListenerProfileModel?.status == false) {
       Utils.showLog(fetchListenerProfileModel?.message ?? "");

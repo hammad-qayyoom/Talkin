@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/notisboard_wordmark.dart';
 import 'package:notisboard/ui/user_flow/fake_outgoing_call_screen/controller/fake_outgoing_call_controller.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -155,8 +156,8 @@ class FakeAudioOutgoingCallView extends StatelessWidget {
           return Column(
             children: [
               Center(
-                  child: Text(
-                "Notisboard",
+                  child: NotisboardWordmark(
+                textAlign: TextAlign.center,
                 style: AppFontStyle.fontStyleKaushanW400(
                   font: FontWeight.w600,
                   fontSize: 32,

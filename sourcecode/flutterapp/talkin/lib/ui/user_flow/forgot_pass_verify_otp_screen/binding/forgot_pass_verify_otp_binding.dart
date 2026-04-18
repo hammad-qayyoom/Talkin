@@ -4,6 +4,7 @@ import 'package:notisboard/ui/user_flow/forgot_pass_verify_otp_screen/controller
 class ForgotPassVerifyOtpBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<ForgotPassVerifyOtpController>(() => ForgotPassVerifyOtpController());
+    Get.lazyPut<ForgotPassVerifyOtpController>(
+        () => ForgotPassVerifyOtpController());
   }
 }

@@ -46,7 +46,9 @@ class HostAppLanguageScreenView extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: logic.checkedValue == index ? AppColors.appColor : AppColors.grey.withValues(alpha: 0.2),
+                    color: logic.checkedValue == index
+                        ? AppColors.appColor
+                        : AppColors.grey.withValues(alpha: 0.2),
                   ),
                 ),
                 child: Row(
@@ -72,7 +74,9 @@ class HostAppLanguageScreenView extends StatelessWidget {
                       Constant.countryList[index]["country"],
                       style: AppFontStyle.fontStyleW600(
                         fontSize: 15,
-                        fontColor: logic.checkedValue == index ? AppColors.appColor : AppColors.darkGrey.withValues(alpha: 0.6),
+                        fontColor: logic.checkedValue == index
+                            ? AppColors.appColor
+                            : AppColors.darkGrey.withValues(alpha: 0.6),
                       ),
                     ),
                     Spacer(),
@@ -81,8 +85,13 @@ class HostAppLanguageScreenView extends StatelessWidget {
                       width: 18,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: logic.checkedValue == index ? AppColors.transparent : AppColors.grey),
-                        color: logic.checkedValue == index ? Colors.black : AppColors.white,
+                        border: Border.all(
+                            color: logic.checkedValue == index
+                                ? AppColors.transparent
+                                : AppColors.grey),
+                        color: logic.checkedValue == index
+                            ? Colors.black
+                            : AppColors.white,
                       ),
                       child: logic.checkedValue == index
                           ? Container(

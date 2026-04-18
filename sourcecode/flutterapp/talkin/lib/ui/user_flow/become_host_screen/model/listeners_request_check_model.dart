@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-ListenersRequestCheckModel listenersRequestCheckModelFromJson(String str) => ListenersRequestCheckModel.fromJson(json.decode(str));
+ListenersRequestCheckModel listenersRequestCheckModelFromJson(String str) =>
+    ListenersRequestCheckModel.fromJson(json.decode(str));
 
-String listenersRequestCheckModelToJson(ListenersRequestCheckModel data) => json.encode(data.toJson());
+String listenersRequestCheckModelToJson(ListenersRequestCheckModel data) =>
+    json.encode(data.toJson());
 
 class ListenersRequestCheckModel {
   final bool? status;
@@ -19,7 +21,8 @@ class ListenersRequestCheckModel {
     this.data,
   });
 
-  factory ListenersRequestCheckModel.fromJson(Map<String, dynamic> json) => ListenersRequestCheckModel(
+  factory ListenersRequestCheckModel.fromJson(Map<String, dynamic> json) =>
+      ListenersRequestCheckModel(
         status: json["status"],
         message: json["message"],
         data: json["data"] == null ? null : Data.fromJson(json["data"]),

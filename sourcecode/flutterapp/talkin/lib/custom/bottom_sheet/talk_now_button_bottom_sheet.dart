@@ -94,14 +94,18 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if ((availableForPrivateAudioCall == true && availableForPrivateVideoCall == true) || isFake == true) ...[
+              if ((availableForPrivateAudioCall == true &&
+                      availableForPrivateVideoCall == true) ||
+                  isFake == true) ...[
                 Expanded(child: _buildAudioButton()),
                 SizedBox(width: 12),
                 Expanded(child: _buildVideoButton()),
               ] else if (availableForPrivateAudioCall == true) ...[
-                Expanded(child: _buildAudioButton()), // full width when only audio
+                Expanded(
+                    child: _buildAudioButton()), // full width when only audio
               ] else if (availableForPrivateVideoCall == true) ...[
-                Expanded(child: _buildVideoButton()), // full width when only video
+                Expanded(
+                    child: _buildVideoButton()), // full width when only video
               ]
             ],
           ).paddingOnly(bottom: 16),
@@ -115,9 +119,12 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
                     children: [
                       Container(
                         padding: EdgeInsets.all(13),
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.black.withAlpha(51)),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.black.withAlpha(51)),
                         child: Center(
-                          child: Image.asset(AppAsset.chat, height: 29, color: AppColors.white),
+                          child: Image.asset(AppAsset.chat,
+                              height: 29, color: AppColors.white),
                         ),
                       ),
                       Spacer(),
@@ -127,7 +134,8 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
                         children: [
                           Text(
                             EnumLocale.txtMessages.name.tr,
-                            style: AppFontStyle.fontStyleW700(fontSize: 14, fontColor: AppColors.white),
+                            style: AppFontStyle.fontStyleW700(
+                                fontSize: 14, fontColor: AppColors.white),
                           ).paddingOnly(bottom: 6, top: 4),
                           // Row(
                           //   children: [
@@ -167,7 +175,8 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
   Widget _buildAudioButton() {
     return PrimaryAppButton(
       onTap: () {
-        Utils.showLog("audio call rate $audioCallRatePrivate video call rate $videoCallRatePrivate");
+        Utils.showLog(
+            "audio call rate $audioCallRatePrivate video call rate $videoCallRatePrivate");
 
         if (isFake == true) {
           Get.back();
@@ -212,9 +221,11 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
         children: [
           Container(
             padding: EdgeInsets.all(11),
-            decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.black.withAlpha(51)),
+            decoration: BoxDecoration(
+                shape: BoxShape.circle, color: AppColors.black.withAlpha(51)),
             child: Center(
-              child: Image.asset(AppAsset.callIcon, height: 29, color: AppColors.white),
+              child: Image.asset(AppAsset.callIcon,
+                  height: 29, color: AppColors.white),
             ),
           ).paddingOnly(right: 5),
           Spacer(),
@@ -223,15 +234,19 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
             children: [
               Text(
                 EnumLocale.txtAudioCall.name.tr,
-                style: AppFontStyle.fontStyleW700(fontSize: 14, fontColor: AppColors.white),
+                style: AppFontStyle.fontStyleW700(
+                    fontSize: 14, fontColor: AppColors.white),
               ).paddingOnly(bottom: 6, top: 4),
-              if (Database.fetchLoginUserProfileModel?.user?.isListener == false)
+              if (Database.fetchLoginUserProfileModel?.user?.isListener ==
+                  false)
                 Row(
                   children: [
-                    Image.asset(AppAsset.dimondCoin, height: 14).paddingOnly(right: 4),
+                    Image.asset(AppAsset.dimondCoin, height: 14)
+                        .paddingOnly(right: 4),
                     Text(
                       "$audioCallRatePrivate / Session",
-                      style: AppFontStyle.fontStyleW600(fontSize: 12, fontColor: AppColors.white),
+                      style: AppFontStyle.fontStyleW600(
+                          fontSize: 12, fontColor: AppColors.white),
                     ),
                   ],
                 ).paddingOnly(bottom: 4),
@@ -248,7 +263,8 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
       onTap: () {
         // SocketEmit.emitCallOutgoingRinging(
         //     callerId: callerId, receiverId: receiverId, callType: callType, callerRole: callerRole, receiverRole: receiverRole);
-        Utils.showLog("audio call rate $audioCallRatePrivate video call rate $videoCallRatePrivate");
+        Utils.showLog(
+            "audio call rate $audioCallRatePrivate video call rate $videoCallRatePrivate");
         if (isFake == true) {
           Get.back();
           Utils.showLog("this is fake Listener>>>>>>>>>");
@@ -303,9 +319,11 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
         children: [
           Container(
             padding: EdgeInsets.all(11),
-            decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.black.withAlpha(51)),
+            decoration: BoxDecoration(
+                shape: BoxShape.circle, color: AppColors.black.withAlpha(51)),
             child: Center(
-              child: Image.asset(AppAsset.videoCallIcon, height: 29, color: AppColors.white),
+              child: Image.asset(AppAsset.videoCallIcon,
+                  height: 29, color: AppColors.white),
             ),
           ).paddingOnly(right: 5),
           Spacer(),
@@ -314,15 +332,19 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
             children: [
               Text(
                 EnumLocale.txtVideoCall.name.tr,
-                style: AppFontStyle.fontStyleW700(fontSize: 14, fontColor: AppColors.white),
+                style: AppFontStyle.fontStyleW700(
+                    fontSize: 14, fontColor: AppColors.white),
               ).paddingOnly(bottom: 6, top: 4),
-              if (Database.fetchLoginUserProfileModel?.user?.isListener == false)
+              if (Database.fetchLoginUserProfileModel?.user?.isListener ==
+                  false)
                 Row(
                   children: [
-                    Image.asset(AppAsset.dimondCoin, height: 14).paddingOnly(right: 4),
+                    Image.asset(AppAsset.dimondCoin, height: 14)
+                        .paddingOnly(right: 4),
                     Text(
                       "$videoCallRatePrivate / Session",
-                      style: AppFontStyle.fontStyleW600(fontSize: 12, fontColor: AppColors.white),
+                      style: AppFontStyle.fontStyleW600(
+                          fontSize: 12, fontColor: AppColors.white),
                     ),
                   ],
                 ).paddingOnly(bottom: 4),

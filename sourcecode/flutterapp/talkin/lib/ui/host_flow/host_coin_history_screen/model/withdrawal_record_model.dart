@@ -118,9 +118,11 @@
 
 import 'dart:convert';
 
-WithdrawalRecordModel withdrawalRecordModelFromJson(String str) => WithdrawalRecordModel.fromJson(json.decode(str));
+WithdrawalRecordModel withdrawalRecordModelFromJson(String str) =>
+    WithdrawalRecordModel.fromJson(json.decode(str));
 
-String withdrawalRecordModelToJson(WithdrawalRecordModel data) => json.encode(data.toJson());
+String withdrawalRecordModelToJson(WithdrawalRecordModel data) =>
+    json.encode(data.toJson());
 
 class WithdrawalRecordModel {
   bool? status;
@@ -133,16 +135,21 @@ class WithdrawalRecordModel {
     this.data,
   });
 
-  factory WithdrawalRecordModel.fromJson(Map<String, dynamic> json) => WithdrawalRecordModel(
+  factory WithdrawalRecordModel.fromJson(Map<String, dynamic> json) =>
+      WithdrawalRecordModel(
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
@@ -185,12 +192,18 @@ class Datum {
         coin: json["coin"],
         amount: json["amount"],
         paymentGateway: json["paymentGateway"],
-        paymentDetails: json["paymentDetails"] == null ? null : PaymentDetails.fromJson(json["paymentDetails"]),
+        paymentDetails: json["paymentDetails"] == null
+            ? null
+            : PaymentDetails.fromJson(json["paymentDetails"]),
         reason: json["reason"],
         requestDate: json["requestDate"],
         acceptOrDeclineDate: json["acceptOrDeclineDate"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -215,7 +228,8 @@ class PaymentDetails {
 
   PaymentDetails({this.details});
 
-  factory PaymentDetails.fromJson(Map<String, dynamic> json) => PaymentDetails(details: json);
+  factory PaymentDetails.fromJson(Map<String, dynamic> json) =>
+      PaymentDetails(details: json);
 
   Map<String, dynamic> toJson() => details ?? {};
 }

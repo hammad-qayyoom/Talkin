@@ -19,8 +19,10 @@ class CustomCountryPicker {
       countryListTheme: CountryListThemeData(
         flagSize: 25,
         backgroundColor: AppColors.white,
-        textStyle: AppFontStyle.fontStyleW500(fontColor: AppColors.black, fontSize: 15),
-        searchTextStyle: AppFontStyle.fontStyleW500(fontColor: AppColors.black, fontSize: 15),
+        textStyle: AppFontStyle.fontStyleW500(
+            fontColor: AppColors.black, fontSize: 15),
+        searchTextStyle: AppFontStyle.fontStyleW500(
+            fontColor: AppColors.black, fontSize: 15),
         bottomSheetHeight: Get.height / 1.5,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30.0),
@@ -29,9 +31,11 @@ class CustomCountryPicker {
         inputDecoration: InputDecoration(
           contentPadding: EdgeInsets.zero,
           labelText: EnumLocale.txtSearch.name.tr,
-          labelStyle: AppFontStyle.fontStyleW400(fontColor: AppColors.black, fontSize: 14),
+          labelStyle: AppFontStyle.fontStyleW400(
+              fontColor: AppColors.black, fontSize: 14),
           hintText: EnumLocale.txtTypeSomething.name.tr,
-          hintStyle: AppFontStyle.fontStyleW400(fontColor: AppColors.black, fontSize: 14),
+          hintStyle: AppFontStyle.fontStyleW400(
+              fontColor: AppColors.black, fontSize: 14),
           prefixIcon: Icon(
             Icons.search,
             color: AppColors.black,

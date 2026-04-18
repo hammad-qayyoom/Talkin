@@ -6,7 +6,8 @@ import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class FetchLoginUserProfileApi {
-  static Future<FetchLoginUserProfileModel?> callApi({required String loginUserId, required String token}) async {
+  static Future<FetchLoginUserProfileModel?> callApi(
+      {required String loginUserId, required String token}) async {
     Utils.showLog("Get Login User Profile Api Calling...");
 
     final uri = Uri.parse(Api.loginUserProfile);
@@ -23,13 +24,15 @@ class FetchLoginUserProfileApi {
     log("Get Login User Profile headers  $headers");
     try {
       final response = await http.get(uri, headers: headers);
-      Utils.showLog("Get Login User Profile Response.status code => ${response.statusCode}");
+      Utils.showLog(
+          "Get Login User Profile Response.status code => ${response.statusCode}");
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
 
         Utils.showLog("Get Login User Profile Response => ${response.body}");
-        Utils.showLog("Get Login User Profile Response.status code => ${response.statusCode}");
+        Utils.showLog(
+            "Get Login User Profile Response.status code => ${response.statusCode}");
 
         return FetchLoginUserProfileModel.fromJson(jsonResponse);
       } else {

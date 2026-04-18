@@ -5,9 +5,12 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtRegisterTitle1.name: "يجد",
   EnumLocale.txtRegisterTitle2.name: "محادثة",
   EnumLocale.txtRegisterTitle3.name: "مكالمة فيديو",
-  EnumLocale.txtRegisterSubTitle1.name: "يمكنك التواصل مع الأشخاص حول العالم لإجراء الدردشة والرسائل وإقامة علاقات معهم.",
-  EnumLocale.txtRegisterSubTitle2.name: 'تحدث مع الغرباء للتعرف على بعضكم البعض بشكل أفضل والحصول على توافق لطيف.',
-  EnumLocale.txtRegisterSubTitle3.name: "يمكنك مشاركة مقاطع الفيديو والصور الخاصة بك مع أصدقائك ومعارفك.",
+  EnumLocale.txtRegisterSubTitle1.name:
+      "يمكنك التواصل مع الأشخاص حول العالم لإجراء الدردشة والرسائل وإقامة علاقات معهم.",
+  EnumLocale.txtRegisterSubTitle2.name:
+      'تحدث مع الغرباء للتعرف على بعضكم البعض بشكل أفضل والحصول على توافق لطيف.',
+  EnumLocale.txtRegisterSubTitle3.name:
+      "يمكنك مشاركة مقاطع الفيديو والصور الخاصة بك مع أصدقائك ومعارفك.",
   EnumLocale.txtEnterYourMail.name: "أدخل معرف البريد الإلكتروني الخاص بك",
   EnumLocale.txtEnterPassword.name: "أدخل كلمة المرور الخاصة بك",
   EnumLocale.txtCoinRechargeSuccess.name: "نجاح إعادة شحن العملة المعدنية",
@@ -30,10 +33,12 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtPay.name: "يدفع",
   EnumLocale.txtRegister.name: "يسجل",
   EnumLocale.desEnterEmail.name: "الرجاء إدخال البريد الإلكتروني",
-  EnumLocale.desEnterValidEmailAddress.name: "يرجى إدخال عنوان بريد إلكتروني صالح",
+  EnumLocale.desEnterValidEmailAddress.name:
+      "يرجى إدخال عنوان بريد إلكتروني صالح",
   EnumLocale.desEnterPassword.name: "الرجاء إدخال كلمة المرور",
   EnumLocale.desReEnterPassword.name: "الرجاء إعادة إدخال كلمة المرور",
-  EnumLocale.desPasswordCharacters.name: "يجب أن تكون كلمة المرور مكونة من 6 أحرف على الأقل",
+  EnumLocale.desPasswordCharacters.name:
+      "يجب أن تكون كلمة المرور مكونة من 6 أحرف على الأقل",
   EnumLocale.desPasswordNotMatch.name: "كلمة المرور غير متطابقة",
   EnumLocale.txtEnterName.name: "أدخل اسمك",
   EnumLocale.desEnterFullName.name: "الرجاء إدخال الاسم الكامل",
@@ -57,7 +62,8 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtFreeTalk.name: 'محادثة مجانية',
   EnumLocale.txtCalling.name: 'نداء',
   EnumLocale.txtHomeFastLalk.name: 'الآن سريعًا، اشعر بتحسن',
-  EnumLocale.txtHomeDescription.name: 'تحدث إلى مستمعك المفضل واشعر بالخفة والإشراق!',
+  EnumLocale.txtHomeDescription.name:
+      'تحدث إلى مستمعك المفضل واشعر بالخفة والإشراق!',
   EnumLocale.txtFindMoreListener.name: 'ابحث عن المزيد من المستمعين',
   EnumLocale.txtTopListener.name: 'أفضل المستمعين',
   EnumLocale.txtViewAll.name: 'عرض الكل',
@@ -82,7 +88,8 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtTalkAbout.name: "تحدث عن",
   EnumLocale.txtSelectPaymentMethod.name: "اختر طريقة الدفع",
   EnumLocale.txtAPPLanguage.name: "لغة التطبيق",
-  EnumLocale.txtSelectLanguageForApp.name: "حدد اللغة لرؤية المستمعين المتطابقين.",
+  EnumLocale.txtSelectLanguageForApp.name:
+      "حدد اللغة لرؤية المستمعين المتطابقين.",
   EnumLocale.txtSelectTalkAboutForApp.name: "حدد الحديث عن المحتوى في التطبيق",
   EnumLocale.txtRecommendedProfile.name: "الملف الشخصي الموصى به",
   EnumLocale.txtSelectCallTypeNote.name:
@@ -103,13 +110,16 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtMyBalance.name: "رصيدي",
   EnumLocale.txtMyProfile.name: "ملفي الشخصي",
   EnumLocale.txtShareListenersApp.name: "تطبيق Share Expert",
-  EnumLocale.txtRatingDescription.name: "ستساعد تعليقاتك الأعضاء الآخرين في اختيار المستمع الخاص بهم بشكل أفضل ومساعدتنا في تحسين خدمتنا!",
-  EnumLocale.txtShareListenersAppDescription.name: "شارك التطبيق مع الأصدقاء والعائلة ونشر الفرح ...!",
+  EnumLocale.txtRatingDescription.name:
+      "ستساعد تعليقاتك الأعضاء الآخرين في اختيار المستمع الخاص بهم بشكل أفضل ومساعدتنا في تحسين خدمتنا!",
+  EnumLocale.txtShareListenersAppDescription.name:
+      "شارك التطبيق مع الأصدقاء والعائلة ونشر الفرح ...!",
   EnumLocale.txtShareAppNow.name: "شارك التطبيق الآن",
   EnumLocale.txtCompleteTrailCall.name: "شكرا لاتصالك",
   EnumLocale.txtCompleteTrailCall1.name: "- أخبرنا ما رأيك!",
   EnumLocale.txtDidYouLikeService.name: "هل أعجبتك خدمة المستمع؟",
-  EnumLocale.txtAddFilderToYourFavListeners.name: "أضف أندرو فيلدر إلى قائمة المستمعين المفضلين لديك؟",
+  EnumLocale.txtAddFilderToYourFavListeners.name:
+      "أضف أندرو فيلدر إلى قائمة المستمعين المفضلين لديك؟",
   EnumLocale.txtEditProfile.name: "تعديل الملف الشخصي",
   EnumLocale.txtMyWallet.name: "محفظتي",
   EnumLocale.txtHelpCenter.name: "مركز المساعدة",
@@ -130,7 +140,8 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtSaveGender.name: "حفظ الجنس",
   EnumLocale.txtChooseYourGender.name: "اختر جنسك",
   EnumLocale.txtSelectYourGender.name: "اختر جنسك",
-  EnumLocale.txtIfSelectWrongGenderLifeBan.name: "إذا قمت باختيار الجنس الخاطئ = حظر مدى الحياة️🚫",
+  EnumLocale.txtIfSelectWrongGenderLifeBan.name:
+      "إذا قمت باختيار الجنس الخاطئ = حظر مدى الحياة️🚫",
   EnumLocale.txtMale.name: "ذكر",
   EnumLocale.txtFemale.name: "أنثى",
   EnumLocale.txtBecomeListener.name: "كن مستمعًا",
@@ -158,13 +169,15 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtNeedAnyHelpFAQ.name: "هل تحتاج إلى أي مساعدة أو أسئلة شائعة؟",
   EnumLocale.txtHaveAnIssue.name: "هل لديك مشكلة؟",
   EnumLocale.txtFrequentlyAskedQuestions.name: "الأسئلة الشائعة",
-  EnumLocale.txtLetEngageMoreUserThrowShareApp.name: "دعونا نشجع المزيد من المستخدمين على مشاركة التطبيق...",
+  EnumLocale.txtLetEngageMoreUserThrowShareApp.name:
+      "دعونا نشجع المزيد من المستخدمين على مشاركة التطبيق...",
   EnumLocale.txtRateUs.name: "قيمنا",
   EnumLocale.txtRateYourExperienceWithUs.name: "قيم تجربتك معنا!",
   EnumLocale.txtYouWantToBecomeListener.name: "تريد أن تصبح مستمعًا...",
   EnumLocale.txtListenerVerification.name: "التحقق من المستمع",
   EnumLocale.txtExploreListener.name: "استكشاف المستمع",
-  EnumLocale.txtTakeControlOfYourPrivacyData.name: "تحكم في بياناتك الخاصة بالخصوصية...",
+  EnumLocale.txtTakeControlOfYourPrivacyData.name:
+      "تحكم في بياناتك الخاصة بالخصوصية...",
   EnumLocale.txtLocation.name: "موقع",
   EnumLocale.txtBluetooth.name: "بلوتوث",
   EnumLocale.txtMicrophone.name: "ميكروفون",
@@ -191,26 +204,34 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtTakeAphoto.name: "التقط صورة",
   EnumLocale.txtChooseFromYourFile.name: "اختر من ملفك",
   EnumLocale.txtNext.name: "التالي",
-  EnumLocale.txtPleaseSelectProfileImage.name: "الرجاء اختيار صورة الملف الشخصي !!",
+  EnumLocale.txtPleaseSelectProfileImage.name:
+      "الرجاء اختيار صورة الملف الشخصي !!",
   EnumLocale.txtPleaseEnterNickName.name: "من فضلك أدخل اسمك المستعار !!",
   EnumLocale.txtEnterNickName.name: "أدخل اسمك المستعار",
-  EnumLocale.txtPleaseEnterMobileNumber.name: "الرجاء إدخال رقم الهاتف المحمول !!",
+  EnumLocale.txtPleaseEnterMobileNumber.name:
+      "الرجاء إدخال رقم الهاتف المحمول !!",
   EnumLocale.txtPleaseSelectBirthDate.name: "الرجاء تحديد تاريخ الميلاد !!",
   EnumLocale.txtProfileUpdateSuccessfully.name: "تم تحديث الملف الشخصي بنجاح",
   EnumLocale.txtForgotPassword.name: "هل نسيت كلمة السر",
   EnumLocale.txtForgotYourPassword.name: "هل نسيت كلمة المرور الخاصة بك...",
-  EnumLocale.txtEnterMailMobileNumber.name: "أدخل البريد الإلكتروني/رقم الهاتف المحمول",
+  EnumLocale.txtEnterMailMobileNumber.name:
+      "أدخل البريد الإلكتروني/رقم الهاتف المحمول",
   EnumLocale.txtVerify.name: "يؤكد",
   EnumLocale.txtCreatePassword.name: "إنشاء كلمة مرور",
   EnumLocale.txtForgotPassDescription.name:
       "أدخل بريدك الإلكتروني أو رقم هاتفك المحمول أدناه لإعادة تعيين كلمة مرورك. سنرسل إليك رمز تحقق لمساعدتك في استعادة حسابك.",
-  EnumLocale.txtLongPressToEnableAudioRecording.name: "اضغط لفترة طويلة لتمكين التسجيل الصوتي",
+  EnumLocale.txtLongPressToEnableAudioRecording.name:
+      "اضغط لفترة طويلة لتمكين التسجيل الصوتي",
   EnumLocale.txtAudioRecording.name: "تسجيل صوتي...",
   EnumLocale.txtPleaseAllowPermission.name: "من فضلك اسمح لي !!",
-  EnumLocale.txtHostCenterDescription.name: "الآن يمكنك استضافة فعالياتك الخاصة وتنظيمها. أنشئ فعاليات جديدة وشارك خدماتك مع الآخرين.",
-  EnumLocale.txtDataPrivacy.name: "نحن نحرص على خصوصية بياناتك. تعرّف على كيفية جمع معلوماتك الشخصية واستخدامها وحمايتها.",
-  EnumLocale.txtShareAppDes.name: "شارك هذا التطبيق مع أصدقائك وعائلتك حتى يتمكنوا أيضًا من الاستمتاع بمميزاته الفريدة.",
-  EnumLocale.txtAboutUsDes.name: "نحن ملتزمون بتقديم أفضل خدمة لكم. تعرّفوا أكثر على فريقنا ومهمتنا.",
+  EnumLocale.txtHostCenterDescription.name:
+      "الآن يمكنك استضافة فعالياتك الخاصة وتنظيمها. أنشئ فعاليات جديدة وشارك خدماتك مع الآخرين.",
+  EnumLocale.txtDataPrivacy.name:
+      "نحن نحرص على خصوصية بياناتك. تعرّف على كيفية جمع معلوماتك الشخصية واستخدامها وحمايتها.",
+  EnumLocale.txtShareAppDes.name:
+      "شارك هذا التطبيق مع أصدقائك وعائلتك حتى يتمكنوا أيضًا من الاستمتاع بمميزاته الفريدة.",
+  EnumLocale.txtAboutUsDes.name:
+      "نحن ملتزمون بتقديم أفضل خدمة لكم. تعرّفوا أكثر على فريقنا ومهمتنا.",
   EnumLocale.txtPaymentMethod.name: "طريقة الدفع",
   EnumLocale.txtListenerWithdrawDescription.name:
       "١. يمكنك سحب عملاتك المكتسبة كأموال حقيقية بمجرد استيفاء الحد الأدنى للسحب الذي حددته المنصة. تأكد من التحقق الكامل من ملفك الشخصي وتفاصيل الدفع لتجنب أي تأخير في معالجة طلب السحب.",
@@ -239,7 +260,8 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtEnterCoinAmount.name: "أدخل مبلغ العملة",
   EnumLocale.txtMinimumWithdrawCoin.name: "*الحد الأدنى لسحب العملة:",
   EnumLocale.txtMyAmountBalance.name: "رصيدي المبلغ :",
-  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name: "احصل على مبلغ العملة القابلة للسحب هنا...",
+  EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
+      "احصل على مبلغ العملة القابلة للسحب هنا...",
   EnumLocale.txtListenerDetails.name: "تفاصيل المستمع :-",
   EnumLocale.txtEnterIntroduction.name: "أدخل المقدمة",
   EnumLocale.txtTalkLanguages.name: "لغات التحدث :-",
@@ -261,7 +283,8 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtPleaseFillProfile.name: "الرجاء ملء الملف الشخصي",
   EnumLocale.txtPleaseEnterWithdrawCoin.name: "الرجاء إدخال سحب العملة",
   EnumLocale.txtPleaseSelectWithdrawMethod.name: "الرجاء تحديد طريقة السحب",
-  EnumLocale.txtPleaseEnterAllPaymentDetails.name: "الرجاء إدخال كافة تفاصيل الدفع",
+  EnumLocale.txtPleaseEnterAllPaymentDetails.name:
+      "الرجاء إدخال كافة تفاصيل الدفع",
   EnumLocale.txtSelectPaymentGateway.name: "اختر بوابة الدفع",
   EnumLocale.txtNumberOfCoin.name: "عدد العملات :",
   EnumLocale.txtWithdrawalID.name: "معرف السحب :",
@@ -276,8 +299,10 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtPrivateAudioCallRate.name: "سعر المكالمة الصوتية الخاصة",
   EnumLocale.txtPaymentDetails.name: "تفاصيل الدفع :",
   EnumLocale.txtAppRestart.name: "تم قبول طلب الاستماع الخاص بك",
-  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name: "المستخدم ليس لديه أموال كافية لإجراء عملية السحب",
-  EnumLocale.txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
+  EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
+      "المستخدم ليس لديه أموال كافية لإجراء عملية السحب",
+  EnumLocale
+          .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
       "يجب أن تكون العملة المطلوبة للسحب أكبر من المبلغ الذي حدده المسؤول",
   EnumLocale.txtSkip.name: "يتخطى",
   EnumLocale.txtHostHomeDescription.name:
@@ -289,7 +314,8 @@ final Map<String, String> ardz = <String, String>{
       "اختر اللغات التي تُريحك في التحدث مع المستمعين. هذا يُساعدنا على ربطك بالأشخاص المناسبين الذين يحتاجون إلى الدعم بهذه اللغات.",
   EnumLocale.txtSelectTopic.name:
       "اختر المواضيع التي تشعر بالثقة في التحدث عنها. سيساعدك هذا في العثور على مستخدمين يبحثون عن الدعم في تلك المجالات تحديدًا.",
-  EnumLocale.txtSureClearNotification.name: "هل أنت متأكد أنك تريد مسح كافة الإشعارات؟",
+  EnumLocale.txtSureClearNotification.name:
+      "هل أنت متأكد أنك تريد مسح كافة الإشعارات؟",
   EnumLocale.txtSure.name: "بالتأكيد",
   EnumLocale.txtIntroduction.name: "مقدمة",
   EnumLocale.txtTryAgain.name: "حاول ثانية",
@@ -299,10 +325,13 @@ final Map<String, String> ardz = <String, String>{
       "إذا كانت لديك أي أسئلة أو واجهت أي مشكلة، فنحن هنا لمساعدتك! اطلع على الأسئلة الأكثر شيوعًا أدناه أو تواصل مع فريق الدعم لدينا للحصول على مساعدة شخصية.",
   EnumLocale.txtBecomeHostDescription.name:
       "يلعب المستمعون دورًا حيويًا بتقديم الدعم والتوجيه، أو حتى الإصغاء التام للمستخدمين الذين يحتاجون إلى من يتحدثون إليه. إذا كنت متعاطفًا وصبورًا ومستعدًا لمساعدة الآخرين، فإن الاستماع هو الطريقة الأمثل لإحداث تأثير إيجابي.",
-  EnumLocale.txtListenerReqSentSuccessfully.name: "تم إرسال طلب المستمع بنجاح....",
+  EnumLocale.txtListenerReqSentSuccessfully.name:
+      "تم إرسال طلب المستمع بنجاح....",
   EnumLocale.txtSearchLanguage.name: "بحث اللغة...",
-  EnumLocale.txtSelectTalkaboutTxt.name: "Select talk about for the content In app.",
-  EnumLocale.txtSelectAppLanguageTxt.name: "Choose your preferred app language.",
+  EnumLocale.txtSelectTalkaboutTxt.name:
+      "Select talk about for the content In app.",
+  EnumLocale.txtSelectAppLanguageTxt.name:
+      "Choose your preferred app language.",
   EnumLocale.txtHostVerificationFillForm.name:
       "Please complete the form with accurate details. Enter your valid email ID to receive important updates and verification results. Ensure all fields are filled correctly before proceeding.",
   EnumLocale.txtSelectTalkaboutTxt.name: "حدد الحديث عن المحتوى في التطبيق.",
@@ -351,20 +380,27 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtPrivacyPolicy.name: 'تعليق',
   EnumLocale.txtListenerAvailableForPrivateVideoCall.name: 'إنها مباراة!',
   EnumLocale.txtListenerAvailableForPrivateAudioCall.name: 'انا أوافق على',
-  EnumLocale.txtListenerDisableForPrivateVideoCall.name: 'مستمع متاح لمكالمة صوتية خاصة.',
-  EnumLocale.txtListenerDisableForPrivateAudioCall.name: 'مستمع متاح لمكالمة فيديو عشوائية.',
+  EnumLocale.txtListenerDisableForPrivateVideoCall.name:
+      'مستمع متاح لمكالمة صوتية خاصة.',
+  EnumLocale.txtListenerDisableForPrivateAudioCall.name:
+      'مستمع متاح لمكالمة فيديو عشوائية.',
   EnumLocale.txtEarpiece.name: 'سماعة الأذن',
   EnumLocale.txtEnterProperValue.name: 'أدخل القيمة الصحيحة',
-  EnumLocale.txtYourHostRequestSentSuccessfully.name: 'تم إرسال طلب الاستضافة الخاص بك بنجاح',
-  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name: 'تم تقديم طلبك. يُرجى الانتظار ريثما نراجعه ونوافق عليه.',
+  EnumLocale.txtYourHostRequestSentSuccessfully.name:
+      'تم إرسال طلب الاستضافة الخاص بك بنجاح',
+  EnumLocale.txtYourHostRequestSentSuccessfullyDescription.name:
+      'تم تقديم طلبك. يُرجى الانتظار ريثما نراجعه ونوافق عليه.',
   EnumLocale.txtViewRequest.name: 'عرض الطلب',
-  EnumLocale.txtDEmoListenerText.name: "عفواً! ليس لديك إذن. هذا تسجيل دخول تجريبي.",
+  EnumLocale.txtDEmoListenerText.name:
+      "عفواً! ليس لديك إذن. هذا تسجيل دخول تجريبي.",
   EnumLocale.txtVideoCalling.name: "مكالمات الفيديو",
   EnumLocale.txtAudioCalling.name: "مكالمات صوتية",
   EnumLocale.txtIncomingVoiceCalling.name: 'مكالمات الفيديو الواردة',
   EnumLocale.txtIncomingAudioCalling.name: 'مكالمات صوتية واردة',
-  EnumLocale.txtNoAccountFoundForThisEmail.name: "لم يتم العثور على حساب لهذا البريد الإلكتروني",
-  EnumLocale.txtResetLinkSentToYourEmail.name: "تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني",
+  EnumLocale.txtNoAccountFoundForThisEmail.name:
+      "لم يتم العثور على حساب لهذا البريد الإلكتروني",
+  EnumLocale.txtResetLinkSentToYourEmail.name:
+      "تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني",
   EnumLocale.txtForgetPasswordDescription.name:
       "يجب أن يكون رابط نسيان كلمة المرور قد وصلك على حساب Gmail الخاص بك، فتأكد من ذلك. إذا لم يصلك، فتحقق من قسم البريد العشوائي.",
 };

@@ -46,7 +46,8 @@ class PrimaryAppButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 12),
           gradient: LinearGradient(
-            colors: gradientColor ?? [color ?? AppColors.appColor, color ?? AppColors.appColor],
+            colors: gradientColor ??
+                [color ?? AppColors.appColor, color ?? AppColors.appColor],
           ),
           border: Border.all(
             color: borderColor ?? AppColors.transparent,

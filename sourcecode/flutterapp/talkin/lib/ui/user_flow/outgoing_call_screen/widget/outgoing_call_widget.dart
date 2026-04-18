@@ -72,7 +72,8 @@ class OutgoingCallView extends StatelessWidget {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(4), // White border thickness
+                          padding:
+                              const EdgeInsets.all(4), // White border thickness
                           child: Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
@@ -101,8 +102,12 @@ class OutgoingCallView extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(logic.callType == "audio" ? EnumLocale.txtAudioCalling.name.tr : EnumLocale.txtVideoCalling.name.tr,
-                            style: AppFontStyle.fontStyleW600(fontSize: 20, fontColor: AppColors.white)),
+                        Text(
+                            logic.callType == "audio"
+                                ? EnumLocale.txtAudioCalling.name.tr
+                                : EnumLocale.txtVideoCalling.name.tr,
+                            style: AppFontStyle.fontStyleW600(
+                                fontSize: 20, fontColor: AppColors.white)),
                         Lottie.asset(
                           AppAsset.callDotLoadingWhite,
                           height: 30,
@@ -137,7 +142,8 @@ class OutgoingCallView extends StatelessWidget {
                   child: Container(
                       height: 65,
                       width: 65,
-                      decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.red),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: AppColors.red),
                       child: Image.asset(AppAsset.callCut).paddingAll(15)),
                 );
               },

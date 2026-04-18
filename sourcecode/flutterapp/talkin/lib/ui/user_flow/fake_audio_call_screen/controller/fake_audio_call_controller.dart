@@ -40,7 +40,8 @@ class FakeAudioCallController extends GetxController {
     if (isProximitySupported) {
       await ProximityScreenLock.setActive(true);
 
-      subsProximity = ProximityScreenLock.proximityStates.listen((objectDetected) {
+      subsProximity =
+          ProximityScreenLock.proximityStates.listen((objectDetected) {
         isObjectNear = objectDetected;
         log("Proximity object detected: $isObjectNear");
 
@@ -75,7 +76,8 @@ class FakeAudioCallController extends GetxController {
   Future<void> playAudio() async {
     try {
       // Replace with test URL if needed
-      final fallbackTestAudio = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+      final fallbackTestAudio =
+          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
 
       String? rawUrl;
       if (audio != null && audio!.isNotEmpty) {
@@ -141,7 +143,8 @@ class FakeAudioCallController extends GetxController {
       final minutes = elapsedSeconds ~/ 60;
       final seconds = elapsedSeconds % 60;
 
-      formattedTime = '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+      formattedTime =
+          '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
       update([Constant.idVideoCall]);
     });
   }
@@ -154,7 +157,8 @@ class FakeAudioCallController extends GetxController {
     duration = endTime?.difference(startTime!);
     minutes = duration?.inMinutes.remainder(60);
     seconds = duration?.inSeconds.remainder(60);
-    finalDuration = '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    finalDuration =
+        '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
   Future<void> setSpeaker(bool enable) async {

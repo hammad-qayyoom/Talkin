@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-CoinHistoryModel coinHistoryModelFromJson(String str) => CoinHistoryModel.fromJson(json.decode(str));
+CoinHistoryModel coinHistoryModelFromJson(String str) =>
+    CoinHistoryModel.fromJson(json.decode(str));
 
-String coinHistoryModelToJson(CoinHistoryModel data) => json.encode(data.toJson());
+String coinHistoryModelToJson(CoinHistoryModel data) =>
+    json.encode(data.toJson());
 
 class CoinHistoryModel {
   bool? status;
@@ -19,16 +21,22 @@ class CoinHistoryModel {
     this.data,
   });
 
-  factory CoinHistoryModel.fromJson(Map<String, dynamic> json) => CoinHistoryModel(
+  factory CoinHistoryModel.fromJson(Map<String, dynamic> json) =>
+      CoinHistoryModel(
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? [] : List<CoinHistory>.from(json["data"]!.map((x) => CoinHistory.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<CoinHistory>.from(
+                json["data"]!.map((x) => CoinHistory.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
@@ -62,7 +70,9 @@ class CoinHistory {
         userCoin: json["userCoin"],
         date: json["date"],
         type: json["type"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
         receiverName: json["receiverName"],
         receiverImage: json["receiverImage"],
         isIncome: json["isIncome"],

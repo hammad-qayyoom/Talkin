@@ -4,9 +4,13 @@
 
 import 'dart:convert';
 
-HostListenerProfileUpdateModel hostListenerProfileUpdateModelFromJson(String str) => HostListenerProfileUpdateModel.fromJson(json.decode(str));
+HostListenerProfileUpdateModel hostListenerProfileUpdateModelFromJson(
+        String str) =>
+    HostListenerProfileUpdateModel.fromJson(json.decode(str));
 
-String hostListenerProfileUpdateModelToJson(HostListenerProfileUpdateModel data) => json.encode(data.toJson());
+String hostListenerProfileUpdateModelToJson(
+        HostListenerProfileUpdateModel data) =>
+    json.encode(data.toJson());
 
 class HostListenerProfileUpdateModel {
   bool? status;
@@ -17,7 +21,8 @@ class HostListenerProfileUpdateModel {
     this.message,
   });
 
-  factory HostListenerProfileUpdateModel.fromJson(Map<String, dynamic> json) => HostListenerProfileUpdateModel(
+  factory HostListenerProfileUpdateModel.fromJson(Map<String, dynamic> json) =>
+      HostListenerProfileUpdateModel(
         status: json["status"],
         message: json["message"],
       );

@@ -44,7 +44,8 @@ class ForgotPasswordDescriptionView extends StatelessWidget {
           ),
         ).paddingOnly(bottom: 6),
         Text(
-          EnumLocale.txtForgetPasswordDescription.name.tr, // textAlign: TextAlign.center,
+          EnumLocale.txtForgetPasswordDescription.name
+              .tr, // textAlign: TextAlign.center,
           style: AppFontStyle.fontStyleW400(
             height: 1.9,
             fontSize: 12,
@@ -205,7 +206,8 @@ class ForgotPasswordButtonView extends StatelessWidget {
               width: 15,
             ),
             text: EnumLocale.txtVerify.name.tr,
-            textStyle: AppFontStyle.fontStyleW500(fontSize: 16, fontColor: AppColors.white),
+            textStyle: AppFontStyle.fontStyleW500(
+                fontSize: 16, fontColor: AppColors.white),
           ).paddingOnly(bottom: 15, left: 20, right: 20),
         );
       },

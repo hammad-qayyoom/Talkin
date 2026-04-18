@@ -58,6 +58,7 @@ class RequestSentDialog extends StatelessWidget {
                     child: Image.asset(
                       AppAsset.appLogo,
                       fit: BoxFit.contain,
+                      filterQuality: FilterQuality.none,
                     ),
                   ),
                 ),

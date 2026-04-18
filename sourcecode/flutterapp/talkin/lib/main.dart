@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:notisboard/custom/ringtone/ringtone_method.dart';
 import 'package:notisboard/localization/locale_constant.dart';
@@ -21,6 +22,22 @@ import 'utils/utils.dart';
 import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 
 AppLifecycleState? currentAppLifecycleState;
+
+Future<void> _preloadSplashFonts() async {
+  // Ensure splash wordmark/text renders once with final styling (no font swap flicker).
+  try {
+    GoogleFonts.kaushanScript();
+    GoogleFonts.poppins();
+    await GoogleFonts.pendingFonts([
+      GoogleFonts.kaushanScript(),
+      GoogleFonts.poppins(),
+      GoogleFonts.poppins(fontWeight: FontWeight.w500),
+      GoogleFonts.poppins(fontWeight: FontWeight.w600),
+    ]);
+  } catch (e, stackTrace) {
+    log('Splash font preload failed', error: e, stackTrace: stackTrace);
+  }
+}
 
 Future<String?> _getSafeFcmToken() async {
   try {
@@ -51,7 +68,7 @@ Future<String?> _getSafeFcmToken() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await 500.milliseconds.delay();
+  await _preloadSplashFonts();
 
   await Firebase.initializeApp();
   await GetStorage.init();

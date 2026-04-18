@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/notisboard_wordmark.dart';
 import 'package:notisboard/socket/socket_emit.dart';
 import 'package:notisboard/ui/user_flow/outgoing_call_screen/controller/outgoing_call_controller.dart';
 import 'package:notisboard/utils/app_asset.dart';
@@ -21,8 +22,8 @@ class OutgoingAudioCallView extends StatelessWidget {
           return Column(
             children: [
               Center(
-                  child: Text(
-                "Notisboard",
+                  child: NotisboardWordmark(
+                textAlign: TextAlign.center,
                 style: AppFontStyle.fontStyleKaushanW400(
                   font: FontWeight.w600,
                   fontSize: 32,

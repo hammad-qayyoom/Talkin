@@ -48,7 +48,8 @@ class MobileNumberDescriptionView extends StatelessWidget {
           ),
         ).paddingOnly(bottom: 6),
         Text(
-          EnumLocale.txtMobileLoginDescription.name.tr, // textAlign: TextAlign.center,
+          EnumLocale.txtMobileLoginDescription.name
+              .tr, // textAlign: TextAlign.center,
           style: AppFontStyle.fontStyleW400(
             height: 1.9,
             fontSize: 12,
@@ -164,7 +165,8 @@ class MobileNumberOTPView extends StatelessWidget {
                 },
                 onChanged: (phone) {
                   logic.dialCode = phone.countryCode; // example: +91
-                  logic.numberController.text = phone.number; // only number part
+                  logic.numberController.text =
+                      phone.number; // only number part
                 }),
           );
         },
@@ -194,7 +196,8 @@ class MobileNumberButtonView extends StatelessWidget {
               width: 15,
             ),
             text: EnumLocale.txtGetOtp.name.tr,
-            textStyle: AppFontStyle.fontStyleW500(fontSize: 16, fontColor: AppColors.white),
+            textStyle: AppFontStyle.fontStyleW500(
+                fontSize: 16, fontColor: AppColors.white),
           ).paddingOnly(bottom: 15, left: 20, right: 20),
         );
       },

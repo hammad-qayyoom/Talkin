@@ -72,8 +72,13 @@ class CustomSelectGenderBottomSheet extends StatelessWidget {
                                     width: 20,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      border: Border.all(color: selected ? AppColors.transparent : AppColors.grey),
-                                      color: selected ? Colors.black : AppColors.white,
+                                      border: Border.all(
+                                          color: selected
+                                              ? AppColors.transparent
+                                              : AppColors.grey),
+                                      color: selected
+                                          ? Colors.black
+                                          : AppColors.white,
                                     ),
                                     child: selected
                                         ? Container(
@@ -86,7 +91,8 @@ class CustomSelectGenderBottomSheet extends StatelessWidget {
                                               width: 22,
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                border: Border.all(color: AppColors.white),
+                                                border: Border.all(
+                                                    color: AppColors.white),
                                                 color: AppColors.appColor,
                                               ),
                                             ).paddingAll(0.5),
@@ -228,8 +234,13 @@ class CustomEditeProfileSelectGenderBottomSheet extends StatelessWidget {
                                     width: 20,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      border: Border.all(color: selected ? AppColors.transparent : AppColors.grey),
-                                      color: selected ? Colors.black : AppColors.white,
+                                      border: Border.all(
+                                          color: selected
+                                              ? AppColors.transparent
+                                              : AppColors.grey),
+                                      color: selected
+                                          ? Colors.black
+                                          : AppColors.white,
                                     ),
                                     child: selected
                                         ? Container(
@@ -242,7 +253,8 @@ class CustomEditeProfileSelectGenderBottomSheet extends StatelessWidget {
                                               width: 22,
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                border: Border.all(color: AppColors.white),
+                                                border: Border.all(
+                                                    color: AppColors.white),
                                                 color: AppColors.appColor,
                                               ),
                                             ).paddingAll(0.5),

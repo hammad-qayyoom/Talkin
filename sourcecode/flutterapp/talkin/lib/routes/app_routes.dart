@@ -34,8 +34,10 @@ class AppRoutes {
   static const String becomeHostScreen = '/becomeHostScreen';
   static const String appLanguageScreen = '/appLanguageScreen';
   static const String hostVerificationScreen = '/hostVerificationScreen';
-  static const String hostVerificationListenersDetailScreen = '/hostVerificationListenersDetailScreen';
-  static const String hostRequestSentSuccessfullyScreen = '/hostRequestSentSuccessfullyScreen';
+  static const String hostVerificationListenersDetailScreen =
+      '/hostVerificationListenersDetailScreen';
+  static const String hostRequestSentSuccessfullyScreen =
+      '/hostRequestSentSuccessfullyScreen';
   static const String forgotPasswordScreen = '/forgotPasswordScreen';
   static const String createNewPassScreen = '/createNewPassScreen';
   static const String chatListSearchView = '/chatListSearchView';

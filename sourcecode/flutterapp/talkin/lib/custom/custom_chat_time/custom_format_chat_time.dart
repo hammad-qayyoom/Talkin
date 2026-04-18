@@ -27,10 +27,13 @@ class CustomFormatChatTime {
     }
 
     try {
-      DateTime dateTime = DateTime.parse(dateTimeString).toLocal(); // Parse the date string
+      DateTime dateTime =
+          DateTime.parse(dateTimeString).toLocal(); // Parse the date string
 
       DateTime today = DateTime.now();
-      bool isToday = dateTime.year == today.year && dateTime.month == today.month && dateTime.day == today.day;
+      bool isToday = dateTime.year == today.year &&
+          dateTime.month == today.month &&
+          dateTime.day == today.day;
 
       if (isToday) {
         DateFormat timeFormatter = DateFormat('hh:mm a');

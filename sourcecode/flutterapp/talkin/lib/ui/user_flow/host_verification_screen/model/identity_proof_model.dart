@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-IdentityProofModel identityProofModelFromJson(String str) => IdentityProofModel.fromJson(json.decode(str));
+IdentityProofModel identityProofModelFromJson(String str) =>
+    IdentityProofModel.fromJson(json.decode(str));
 
-String identityProofModelToJson(IdentityProofModel data) => json.encode(data.toJson());
+String identityProofModelToJson(IdentityProofModel data) =>
+    json.encode(data.toJson());
 
 class IdentityProofModel {
   final bool? status;
@@ -19,16 +21,22 @@ class IdentityProofModel {
     this.data,
   });
 
-  factory IdentityProofModel.fromJson(Map<String, dynamic> json) => IdentityProofModel(
+  factory IdentityProofModel.fromJson(Map<String, dynamic> json) =>
+      IdentityProofModel(
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? [] : List<IdentityProof>.from(json["data"]!.map((x) => IdentityProof.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<IdentityProof>.from(
+                json["data"]!.map((x) => IdentityProof.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
@@ -46,7 +54,9 @@ class IdentityProof {
   factory IdentityProof.fromJson(Map<String, dynamic> json) => IdentityProof(
         id: json["_id"],
         title: json["title"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
       );
 
   Map<String, dynamic> toJson() => {

@@ -2,8 +2,10 @@ import 'package:flutter/services.dart';
 
 class UpperCaseTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    if (newValue.text.isNotEmpty && newValue.text[0] == newValue.text[0].toLowerCase()) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.text.isNotEmpty &&
+        newValue.text[0] == newValue.text[0].toLowerCase()) {
       return TextEditingValue(
         text: capitalize(newValue.text),
         selection: newValue.selection,

@@ -42,9 +42,11 @@ class HostChatListSearchController extends GetxController {
     isLoading = true;
     update();
 
-    hostChatListSearchModel = await HostChatListSearchApi.callApi(searchString: query);
+    hostChatListSearchModel =
+        await HostChatListSearchApi.callApi(searchString: query);
 
-    if (hostChatListSearchModel != null && hostChatListSearchModel?.data != null) {
+    if (hostChatListSearchModel != null &&
+        hostChatListSearchModel?.data != null) {
       displayedListeners = hostChatListSearchModel?.data ?? [];
     } else {
       displayedListeners.clear();

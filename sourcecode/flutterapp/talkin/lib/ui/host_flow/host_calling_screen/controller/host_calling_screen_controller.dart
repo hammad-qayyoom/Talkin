@@ -32,8 +32,10 @@ class HostCallingScreenController extends GetxController {
     isLoading = true;
     update([Constant.idCallingHistory]);
 
-    hostCallingHistoryModel =
-        await HostCallingHistoryApi.callApi(endDate: "All", startDate: "All", listenerId: Database.fetchListenerProfileModel?.data?.id ?? '');
+    hostCallingHistoryModel = await HostCallingHistoryApi.callApi(
+        endDate: "All",
+        startDate: "All",
+        listenerId: Database.fetchListenerProfileModel?.data?.id ?? '');
     callingHistory.addAll(hostCallingHistoryModel?.data ?? []);
 
     log("callingHistory.length ::::::  ${callingHistory.length}");
@@ -54,12 +56,15 @@ class HostCallingScreenController extends GetxController {
 
   /// pagination
   Future<void> onTopListenersPagination() async {
-    if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
       isPaginationLoading = true;
       update([Constant.idPaginationListener]);
 
-      hostCallingHistoryModel =
-          await HostCallingHistoryApi.callApi(endDate: "All", startDate: "All", listenerId: Database.fetchListenerProfileModel?.data?.id ?? '');
+      hostCallingHistoryModel = await HostCallingHistoryApi.callApi(
+          endDate: "All",
+          startDate: "All",
+          listenerId: Database.fetchListenerProfileModel?.data?.id ?? '');
       callingHistory.addAll(hostCallingHistoryModel?.data ?? []);
 
       log("callingHistory.addAll :: ${callingHistory.length}");

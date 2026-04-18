@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-GetPurchaseCoinPlanModel getPurchaseCoinPlanModelFromJson(String str) => GetPurchaseCoinPlanModel.fromJson(json.decode(str));
+GetPurchaseCoinPlanModel getPurchaseCoinPlanModelFromJson(String str) =>
+    GetPurchaseCoinPlanModel.fromJson(json.decode(str));
 
-String getPurchaseCoinPlanModelToJson(GetPurchaseCoinPlanModel data) => json.encode(data.toJson());
+String getPurchaseCoinPlanModelToJson(GetPurchaseCoinPlanModel data) =>
+    json.encode(data.toJson());
 
 class GetPurchaseCoinPlanModel {
   bool? status;
@@ -19,16 +21,21 @@ class GetPurchaseCoinPlanModel {
     this.data,
   });
 
-  factory GetPurchaseCoinPlanModel.fromJson(Map<String, dynamic> json) => GetPurchaseCoinPlanModel(
+  factory GetPurchaseCoinPlanModel.fromJson(Map<String, dynamic> json) =>
+      GetPurchaseCoinPlanModel(
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
@@ -58,7 +65,9 @@ class Datum {
         price: json["price"]?.toDouble(),
         paymentGateway: json["paymentGateway"],
         date: json["date"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
       );
 
   Map<String, dynamic> toJson() => {

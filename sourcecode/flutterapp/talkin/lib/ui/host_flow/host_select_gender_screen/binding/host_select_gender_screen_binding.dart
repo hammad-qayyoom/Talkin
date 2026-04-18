@@ -4,6 +4,7 @@ import 'package:notisboard/ui/host_flow/host_select_gender_screen/controller/hos
 class HostSelectGenderScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HostSelectGenderScreenController>(() => HostSelectGenderScreenController());
+    Get.lazyPut<HostSelectGenderScreenController>(
+        () => HostSelectGenderScreenController());
   }
 }

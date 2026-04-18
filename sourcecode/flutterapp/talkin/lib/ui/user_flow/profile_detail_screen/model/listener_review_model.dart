@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-ListenerReviewModel listenerReviewModelFromJson(String str) => ListenerReviewModel.fromJson(json.decode(str));
+ListenerReviewModel listenerReviewModelFromJson(String str) =>
+    ListenerReviewModel.fromJson(json.decode(str));
 
-String listenerReviewModelToJson(ListenerReviewModel data) => json.encode(data.toJson());
+String listenerReviewModelToJson(ListenerReviewModel data) =>
+    json.encode(data.toJson());
 
 class ListenerReviewModel {
   bool? status;
@@ -19,16 +21,22 @@ class ListenerReviewModel {
     this.reviews,
   });
 
-  factory ListenerReviewModel.fromJson(Map<String, dynamic> json) => ListenerReviewModel(
+  factory ListenerReviewModel.fromJson(Map<String, dynamic> json) =>
+      ListenerReviewModel(
         status: json["status"],
         message: json["message"],
-        reviews: json["reviews"] == null ? [] : List<Review>.from(json["reviews"]!.map((x) => Review.fromJson(x))),
+        reviews: json["reviews"] == null
+            ? []
+            : List<Review>.from(
+                json["reviews"]!.map((x) => Review.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "reviews": reviews == null ? [] : List<dynamic>.from(reviews!.map((x) => x.toJson())),
+        "reviews": reviews == null
+            ? []
+            : List<dynamic>.from(reviews!.map((x) => x.toJson())),
       };
 }
 
@@ -54,7 +62,9 @@ class Review {
   factory Review.fromJson(Map<String, dynamic> json) => Review(
         id: json["_id"]?.toString(),
         review: json["review"]?.toString(),
-        rating: (json["rating"] is num) ? (json["rating"] as num).toInt() : int.tryParse(json["rating"]?.toString() ?? ''),
+        rating: (json["rating"] is num)
+            ? (json["rating"] as num).toInt()
+            : int.tryParse(json["rating"]?.toString() ?? ''),
         nickName: json["nickName"]?.toString(),
         fullName: json["fullName"]?.toString(),
         profilePic: json["profilePic"]?.toString(),

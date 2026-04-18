@@ -8,6 +8,7 @@ import styled from '@emotion/styled'
 
 // Component Imports
 import BrandLogo from '@core/svg/Logo'
+import BrandName from '@/components/common/BrandName'
 
 // Hook Imports
 import useVerticalNav from '@menu/hooks/useVerticalNav'
@@ -87,7 +88,7 @@ const Logo = ({ color }) => {
         isBreakpointReached={isBreakpointReached}
         title={projectName?.trim() || '-'}
       >
-        {projectName?.trim() || '-'}
+        <BrandName text={projectName?.trim() || '-'} />
       </LogoText>
     </div>
   )

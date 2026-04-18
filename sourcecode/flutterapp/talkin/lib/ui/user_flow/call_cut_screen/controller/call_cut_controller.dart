@@ -71,7 +71,8 @@ class CallCutController extends GetxController {
     if (isProximitySupported == true) {
       await ProximityScreenLock.setActive(false);
       // Subscribe to proximity states
-      subsProximity = ProximityScreenLock.proximityStates.listen((objectDetected) {
+      subsProximity =
+          ProximityScreenLock.proximityStates.listen((objectDetected) {
         log("call cut screen controller Proximity event (even though disabled): $objectDetected");
       });
     }
@@ -115,7 +116,8 @@ class CallCutController extends GetxController {
 
     // Check for script injection
     if (containsDangerousScript(review)) {
-      Utils.showToast(Get.context!, "Script tags are not allowed in the review.");
+      Utils.showToast(
+          Get.context!, "Script tags are not allowed in the review.");
       reviewCnt.clear();
       return;
     }
@@ -128,9 +130,11 @@ class CallCutController extends GetxController {
 
     // Check API response status and show appropriate toast
     if (submitCallRateModel?.status == true) {
-      Utils.showToast(Get.context!, submitCallRateModel?.message ?? 'Rating submitted successfully');
+      Utils.showToast(Get.context!,
+          submitCallRateModel?.message ?? 'Rating submitted successfully');
       log("API response: ${submitCallRateModel?.message}");
-      Utils.showLog("Rating submitted successfully: ${submitCallRateModel?.message}");
+      Utils.showLog(
+          "Rating submitted successfully: ${submitCallRateModel?.message}");
 
       ListenerReviewApi.callApi(listenerId: receiverId ?? '');
 
@@ -174,7 +178,6 @@ class CallCutController extends GetxController {
   //     throw 'Could not launch $url';
   //   }
   // }
-
 
   Future<void> onClickShare() async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();

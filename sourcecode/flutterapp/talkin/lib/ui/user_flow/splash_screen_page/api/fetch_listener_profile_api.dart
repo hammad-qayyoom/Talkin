@@ -9,7 +9,8 @@ import 'package:notisboard/utils/firebse_access_token.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class FetchListenerProfileAPi {
-  static Future<FetchListenerProfileModel?> callApi({required String loginListenerId}) async {
+  static Future<FetchListenerProfileModel?> callApi(
+      {required String loginListenerId}) async {
     final token = await FirebaseAccessToken.onGet();
     Utils.showLog("Get Login Listener Profile Api Calling...");
 
@@ -21,7 +22,8 @@ class FetchListenerProfileAPi {
 
     String query = Uri(queryParameters: queryParameters).query;
 
-    final uri = Uri.parse(Api.loginListenerProfile + (query.isNotEmpty ? query : ''));
+    final uri =
+        Uri.parse(Api.loginListenerProfile + (query.isNotEmpty ? query : ''));
 
     final headers = {
       "key": Api.secretKey,
@@ -35,8 +37,10 @@ class FetchListenerProfileAPi {
       final response = await http.get(uri, headers: headers);
 
       if (response.statusCode == 200) {
-        Utils.showLog("Get Login Listener Profile Response => ${response.body}");
-        Utils.showLog("Get Login Listener Profile Response.status code => ${response.statusCode}");
+        Utils.showLog(
+            "Get Login Listener Profile Response => ${response.body}");
+        Utils.showLog(
+            "Get Login Listener Profile Response.status code => ${response.statusCode}");
 
         return FetchListenerProfileModel.fromJson(json.decode(response.body));
       } else {

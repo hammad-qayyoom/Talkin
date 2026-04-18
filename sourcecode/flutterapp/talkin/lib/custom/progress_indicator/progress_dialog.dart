@@ -14,7 +14,14 @@ class ProgressDialog extends StatelessWidget {
   final Animation<Color>? valueColor;
   bool? isCupertinoCircular = false;
 
-  ProgressDialog({super.key, this.child, this.inAsyncCall, this.opacity = 0.5, this.color = Colors.black, this.valueColor, this.isCupertinoCircular});
+  ProgressDialog(
+      {super.key,
+      this.child,
+      this.inAsyncCall,
+      this.opacity = 0.5,
+      this.color = Colors.black,
+      this.valueColor,
+      this.isCupertinoCircular});
 
   @override
   Widget build(BuildContext context) {

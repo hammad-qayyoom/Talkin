@@ -4,6 +4,7 @@ import 'package:notisboard/ui/user_flow/coin_history_screen/controller/coin_hist
 class CoinHistoryScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<CoinHistoryScreenController>(() => CoinHistoryScreenController());
+    Get.lazyPut<CoinHistoryScreenController>(
+        () => CoinHistoryScreenController());
   }
 }

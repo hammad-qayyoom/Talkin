@@ -31,7 +31,8 @@ class HostChatListSearchApi {
 
     String query = Uri(queryParameters: queryParameters).query;
 
-    final uri = Uri.parse(Api.searchChatListener + (query.isNotEmpty ? query : ''));
+    final uri =
+        Uri.parse(Api.searchChatListener + (query.isNotEmpty ? query : ''));
 
     final headers = {
       ApiParams.key: Api.secretKey,

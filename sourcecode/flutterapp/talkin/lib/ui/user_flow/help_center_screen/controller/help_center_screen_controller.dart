@@ -45,9 +45,9 @@ class HelpCenterScreenController extends GetxController {
       update([Constant.idFAQListeners]);
     }
   }
+
   @override
   void onClose() {
-
     Utils.onChangeStatusBar(brightness: Brightness.light);
 
     super.onClose();

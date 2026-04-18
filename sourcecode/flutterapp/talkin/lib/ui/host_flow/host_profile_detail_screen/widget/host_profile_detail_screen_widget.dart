@@ -76,7 +76,9 @@ class HostUserProfileInfoView extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: CustomProfileImage(
-                        image: controller.fetchListenerProfileModel?.data?.image ?? '',
+                        image:
+                            controller.fetchListenerProfileModel?.data?.image ??
+                                '',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -87,8 +89,10 @@ class HostUserProfileInfoView extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            controller.fetchListenerProfileModel?.data?.name ?? '',
-                            style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.black),
+                            controller.fetchListenerProfileModel?.data?.name ??
+                                '',
+                            style: AppFontStyle.fontStyleW700(
+                                fontSize: 16, fontColor: AppColors.black),
                           ).paddingOnly(bottom: 8),
                           // controller.fetchListenerProfileModel?.data?.id == null
                           //     ? SizedBox()
@@ -98,10 +102,14 @@ class HostUserProfileInfoView extends StatelessWidget {
                           //       ).paddingOnly(bottom: 8),
                         ],
                       ),
-                      controller.fetchListenerProfileModel?.data?.id == "Offline"
+                      controller.fetchListenerProfileModel?.data?.id ==
+                              "Offline"
                           ? Container(
-                              padding: EdgeInsets.only(right: 6, bottom: 5, top: 5, left: 6),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColors.red),
+                              padding: EdgeInsets.only(
+                                  right: 6, bottom: 5, top: 5, left: 6),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: AppColors.red),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -114,7 +122,8 @@ class HostUserProfileInfoView extends StatelessWidget {
                                     // height: 12,
                                     // width: 12,
                                     decoration: BoxDecoration(
-                                      color: AppColors.white.withValues(alpha: 0.5),
+                                      color: AppColors.white
+                                          .withValues(alpha: 0.5),
                                       shape: BoxShape.circle,
                                     ),
                                     child: Container(
@@ -128,14 +137,19 @@ class HostUserProfileInfoView extends StatelessWidget {
                                   ).paddingOnly(right: 4),
                                   Text(
                                     EnumLocale.txtOnCall.name.tr,
-                                    style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.white),
+                                    style: AppFontStyle.fontStyleW500(
+                                        fontSize: 10,
+                                        fontColor: AppColors.white),
                                   ).paddingOnly(right: 4),
                                 ],
                               ),
                             )
                           : Container(
-                              padding: EdgeInsets.only(right: 6, bottom: 5, top: 5, left: 6),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColors.green),
+                              padding: EdgeInsets.only(
+                                  right: 6, bottom: 5, top: 5, left: 6),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: AppColors.green),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -148,7 +162,8 @@ class HostUserProfileInfoView extends StatelessWidget {
                                     // height: 12,
                                     // width: 12,
                                     decoration: BoxDecoration(
-                                      color: AppColors.white.withValues(alpha: 0.5),
+                                      color: AppColors.white
+                                          .withValues(alpha: 0.5),
                                       shape: BoxShape.circle,
                                     ),
                                     child: Container(
@@ -162,7 +177,9 @@ class HostUserProfileInfoView extends StatelessWidget {
                                   ).paddingOnly(right: 4),
                                   Text(
                                     EnumLocale.txtOnline.name.tr,
-                                    style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.white),
+                                    style: AppFontStyle.fontStyleW500(
+                                        fontSize: 10,
+                                        fontColor: AppColors.white),
                                   ).paddingOnly(right: 4),
                                 ],
                               ),
@@ -179,7 +196,8 @@ class HostUserProfileInfoView extends StatelessWidget {
                     ),
                     child: Text(
                       '10₹ per min',
-                      style: AppFontStyle.fontStyleW700(fontSize: 12, fontColor: AppColors.purple400),
+                      style: AppFontStyle.fontStyleW700(
+                          fontSize: 12, fontColor: AppColors.purple400),
                     ),
                   ),
                 ],
@@ -210,7 +228,9 @@ class HostUserProfileInfoView extends StatelessWidget {
                 ).paddingOnly(left: 8),
                 Expanded(
                   child: Text(
-                    controller.fetchListenerProfileModel?.data?.language?.join(', ') ?? '',
+                    controller.fetchListenerProfileModel?.data?.language
+                            ?.join(', ') ??
+                        '',
                     style: AppFontStyle.fontStyleW600(
                       fontSize: 14,
                       fontColor: AppColors.black,
@@ -222,7 +242,8 @@ class HostUserProfileInfoView extends StatelessWidget {
             SizedBox(
               height: Get.height * 0.035,
               child: ListView.builder(
-                itemCount: controller.fetchListenerProfileModel?.data?.talkTopics?.length,
+                itemCount: controller
+                    .fetchListenerProfileModel?.data?.talkTopics?.length,
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
@@ -234,8 +255,11 @@ class HostUserProfileInfoView extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        controller.fetchListenerProfileModel?.data?.talkTopics?.join(', ') ?? '',
-                        style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.profileLanguage),
+                        controller.fetchListenerProfileModel?.data?.talkTopics
+                                ?.join(', ') ??
+                            '',
+                        style: AppFontStyle.fontStyleW500(
+                            fontSize: 12, fontColor: AppColors.profileLanguage),
                       ),
                     ),
                   ).paddingOnly(right: 5);
@@ -280,11 +304,13 @@ class HostStatusView extends StatelessWidget {
                       ).paddingOnly(bottom: 10),
                       Text(
                         item['title'].toString(),
-                        style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.profileLanguage),
+                        style: AppFontStyle.fontStyleW500(
+                            fontSize: 11, fontColor: AppColors.profileLanguage),
                       ).paddingOnly(bottom: 5),
                       Text(
                         item['count'].toString(),
-                        style: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.black),
+                        style: AppFontStyle.fontStyleW600(
+                            fontSize: 16, fontColor: AppColors.black),
                       ),
                     ],
                   ),
@@ -329,7 +355,8 @@ class HostProfileBottomButtonView extends StatelessWidget {
             ).paddingOnly(right: 8),
             Text(
               EnumLocale.txtTalkNow.name.tr,
-              style: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
+              style: AppFontStyle.fontStyleW600(
+                  fontSize: 16, fontColor: AppColors.white),
             )
           ],
         ),

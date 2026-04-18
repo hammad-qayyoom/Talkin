@@ -18,39 +18,42 @@ class CustomProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (image.trim().isEmpty) ? Image.asset(AppAsset.profilePlaceHolder, fit: fit ?? BoxFit.cover) : (image.startsWith("http"))
-        ? CachedNetworkImage(
-            imageUrl: image,
-            fit: fit ?? BoxFit.cover,
-            placeholder: (context, url) {
-              return Image.asset(
-                AppAsset.profilePlaceHolder,
-                fit: BoxFit.cover,
+    return (image.trim().isEmpty)
+        ? Image.asset(AppAsset.profilePlaceHolder, fit: fit ?? BoxFit.cover)
+        : (image.startsWith("http"))
+            ? CachedNetworkImage(
+                imageUrl: image,
+                fit: fit ?? BoxFit.cover,
+                placeholder: (context, url) {
+                  return Image.asset(
+                    AppAsset.profilePlaceHolder,
+                    fit: BoxFit.cover,
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Image.asset(
+                    AppAsset.profilePlaceHolder,
+                    fit: BoxFit.cover,
+                  );
+                },
+              )
+            : CachedNetworkImage(
+                imageUrl:
+                    "${Api.baseUrl}${image.startsWith('/') ? image.substring(1) : image}",
+                fit: fit ?? BoxFit.cover,
+                placeholder: (context, url) {
+                  return Image.asset(
+                    AppAsset.profilePlaceHolder,
+                    fit: BoxFit.cover,
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Image.asset(
+                    AppAsset.profilePlaceHolder,
+                    fit: BoxFit.cover,
+                  );
+                },
               );
-            },
-            errorWidget: (context, url, error) {
-              return Image.asset(
-                AppAsset.profilePlaceHolder,
-                fit: BoxFit.cover,
-              );
-            },
-          )
-        : CachedNetworkImage(
-            imageUrl: "${Api.baseUrl}${image.startsWith('/') ? image.substring(1) : image}",
-            fit: fit ?? BoxFit.cover,
-            placeholder: (context, url) {
-              return Image.asset(
-                AppAsset.profilePlaceHolder,
-                fit: BoxFit.cover,
-              );
-            },
-            errorWidget: (context, url, error) {
-              return Image.asset(
-                AppAsset.profilePlaceHolder,
-                fit: BoxFit.cover,
-              );
-            },
-          );
   }
 }
 
@@ -65,39 +68,42 @@ class CustomListenerProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (image.trim().isEmpty) ? Image.asset(AppAsset.profilePlaceHolder, fit: fit ?? BoxFit.cover) : (image.startsWith("http"))
-        ? CachedNetworkImage(
-            imageUrl: image,
-            fit: fit ?? BoxFit.cover,
-            placeholder: (context, url) {
-              return Image.asset(
-                AppAsset.listenerPlaceHolder,
-                fit: BoxFit.cover,
+    return (image.trim().isEmpty)
+        ? Image.asset(AppAsset.profilePlaceHolder, fit: fit ?? BoxFit.cover)
+        : (image.startsWith("http"))
+            ? CachedNetworkImage(
+                imageUrl: image,
+                fit: fit ?? BoxFit.cover,
+                placeholder: (context, url) {
+                  return Image.asset(
+                    AppAsset.listenerPlaceHolder,
+                    fit: BoxFit.cover,
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Image.asset(
+                    AppAsset.listenerPlaceHolder,
+                    fit: BoxFit.cover,
+                  );
+                },
+              )
+            : CachedNetworkImage(
+                imageUrl:
+                    "${Api.baseUrl}${image.startsWith('/') ? image.substring(1) : image}",
+                fit: fit ?? BoxFit.cover,
+                placeholder: (context, url) {
+                  return Image.asset(
+                    AppAsset.listenerPlaceHolder,
+                    fit: BoxFit.cover,
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Image.asset(
+                    AppAsset.listenerPlaceHolder,
+                    fit: BoxFit.cover,
+                  );
+                },
               );
-            },
-            errorWidget: (context, url, error) {
-              return Image.asset(
-                AppAsset.listenerPlaceHolder,
-                fit: BoxFit.cover,
-              );
-            },
-          )
-        : CachedNetworkImage(
-            imageUrl: "${Api.baseUrl}${image.startsWith('/') ? image.substring(1) : image}",
-            fit: fit ?? BoxFit.cover,
-            placeholder: (context, url) {
-              return Image.asset(
-                AppAsset.listenerPlaceHolder,
-                fit: BoxFit.cover,
-              );
-            },
-            errorWidget: (context, url, error) {
-              return Image.asset(
-                AppAsset.listenerPlaceHolder,
-                fit: BoxFit.cover,
-              );
-            },
-          );
   }
 }
 
@@ -112,74 +118,77 @@ class SendMessageImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (image.trim().isEmpty) ? Image.asset(AppAsset.profilePlaceHolder, fit: fit ?? BoxFit.cover) : (image.startsWith("http"))
-        ? CachedNetworkImage(
-            imageUrl: image,
-            fit: fit ?? BoxFit.cover,
-            placeholder: (context, url) {
-              return Container(
-                width: 200,
-                height: 200,
-                color: AppColors.lightGrey.withValues(alpha: 0.6),
-                // padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Center(
-                    child: Image.asset(
-                  AppAsset.imagePlaceHolder,
-                  height: 50,
-                  color: AppColors.onBoardingTxt.withValues(alpha: 0.6),
-                )),
-              );
-            },
-            errorWidget: (context, url, error) {
-              return Container(
-                width: 200,
-                height: 200,
-                color: AppColors.lightGrey.withValues(alpha: 0.6),
+    return (image.trim().isEmpty)
+        ? Image.asset(AppAsset.profilePlaceHolder, fit: fit ?? BoxFit.cover)
+        : (image.startsWith("http"))
+            ? CachedNetworkImage(
+                imageUrl: image,
+                fit: fit ?? BoxFit.cover,
+                placeholder: (context, url) {
+                  return Container(
+                    width: 200,
+                    height: 200,
+                    color: AppColors.lightGrey.withValues(alpha: 0.6),
+                    // padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Center(
+                        child: Image.asset(
+                      AppAsset.imagePlaceHolder,
+                      height: 50,
+                      color: AppColors.onBoardingTxt.withValues(alpha: 0.6),
+                    )),
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Container(
+                    width: 200,
+                    height: 200,
+                    color: AppColors.lightGrey.withValues(alpha: 0.6),
 
-                // padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Center(
-                    child: Image.asset(
-                  AppAsset.imagePlaceHolder,
-                  height: 50,
-                  color: AppColors.onBoardingTxt.withValues(alpha: 0.6),
-                )),
-              );
-            },
-          )
-        : CachedNetworkImage(
-            imageUrl: "${Api.baseUrl}${image.startsWith('/') ? image.substring(1) : image}",
-            fit: fit ?? BoxFit.cover,
-            placeholder: (context, url) {
-              return Container(
-                width: 200,
-                height: 200,
-                color: AppColors.lightGrey.withValues(alpha: 0.6),
+                    // padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Center(
+                        child: Image.asset(
+                      AppAsset.imagePlaceHolder,
+                      height: 50,
+                      color: AppColors.onBoardingTxt.withValues(alpha: 0.6),
+                    )),
+                  );
+                },
+              )
+            : CachedNetworkImage(
+                imageUrl:
+                    "${Api.baseUrl}${image.startsWith('/') ? image.substring(1) : image}",
+                fit: fit ?? BoxFit.cover,
+                placeholder: (context, url) {
+                  return Container(
+                    width: 200,
+                    height: 200,
+                    color: AppColors.lightGrey.withValues(alpha: 0.6),
 
-                // padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Center(
-                    child: Image.asset(
-                  AppAsset.imagePlaceHolder,
-                  height: 50,
-                  color: AppColors.onBoardingTxt.withValues(alpha: 0.6),
-                )),
-              );
-            },
-            errorWidget: (context, url, error) {
-              return Container(
-                width: 200,
-                height: 200,
-                color: AppColors.lightGrey.withValues(alpha: 0.6),
+                    // padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Center(
+                        child: Image.asset(
+                      AppAsset.imagePlaceHolder,
+                      height: 50,
+                      color: AppColors.onBoardingTxt.withValues(alpha: 0.6),
+                    )),
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Container(
+                    width: 200,
+                    height: 200,
+                    color: AppColors.lightGrey.withValues(alpha: 0.6),
 
-                // padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Center(
-                    child: Image.asset(
-                  AppAsset.imagePlaceHolder,
-                  height: 50,
-                  color: AppColors.onBoardingTxt.withValues(alpha: 0.6),
-                )),
+                    // padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Center(
+                        child: Image.asset(
+                      AppAsset.imagePlaceHolder,
+                      height: 50,
+                      color: AppColors.onBoardingTxt.withValues(alpha: 0.6),
+                    )),
+                  );
+                },
               );
-            },
-          );
   }
 }
 
@@ -194,48 +203,51 @@ class SendMessageImageFullScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (image.trim().isEmpty) ? Image.asset(AppAsset.profilePlaceHolder, fit: fit ?? BoxFit.cover) : (image.startsWith("http"))
-        ? CachedNetworkImage(
-            imageUrl: image,
-            fit: fit ?? BoxFit.cover,
-            placeholder: (context, url) {
-              return SizedBox(
-                width: Get.height,
-                height: Get.width,
-                // color: AppColors.lightGrey.withValues(alpha: 0.6),
-                // padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Center(
-                    child: Image.asset(
-                  AppAsset.imagePlaceHolder,
-                  height: 160,
-                )),
+    return (image.trim().isEmpty)
+        ? Image.asset(AppAsset.profilePlaceHolder, fit: fit ?? BoxFit.cover)
+        : (image.startsWith("http"))
+            ? CachedNetworkImage(
+                imageUrl: image,
+                fit: fit ?? BoxFit.cover,
+                placeholder: (context, url) {
+                  return SizedBox(
+                    width: Get.height,
+                    height: Get.width,
+                    // color: AppColors.lightGrey.withValues(alpha: 0.6),
+                    // padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Center(
+                        child: Image.asset(
+                      AppAsset.imagePlaceHolder,
+                      height: 160,
+                    )),
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Center(
+                      child: Image.asset(
+                    AppAsset.imagePlaceHolder,
+                    height: 160,
+                  ));
+                },
+              )
+            : CachedNetworkImage(
+                imageUrl:
+                    "${Api.baseUrl}${image.startsWith('/') ? image.substring(1) : image}",
+                fit: fit ?? BoxFit.cover,
+                placeholder: (context, url) {
+                  return Center(
+                      child: Image.asset(
+                    AppAsset.imagePlaceHolder,
+                    height: 160,
+                  ));
+                },
+                errorWidget: (context, url, error) {
+                  return Center(
+                      child: Image.asset(
+                    AppAsset.imagePlaceHolder,
+                    height: 160,
+                  ));
+                },
               );
-            },
-            errorWidget: (context, url, error) {
-              return Center(
-                  child: Image.asset(
-                AppAsset.imagePlaceHolder,
-                height: 160,
-              ));
-            },
-          )
-        : CachedNetworkImage(
-            imageUrl: "${Api.baseUrl}${image.startsWith('/') ? image.substring(1) : image}",
-            fit: fit ?? BoxFit.cover,
-            placeholder: (context, url) {
-              return Center(
-                  child: Image.asset(
-                AppAsset.imagePlaceHolder,
-                height: 160,
-              ));
-            },
-            errorWidget: (context, url, error) {
-              return Center(
-                  child: Image.asset(
-                AppAsset.imagePlaceHolder,
-                height: 160,
-              ));
-            },
-          );
   }
 }

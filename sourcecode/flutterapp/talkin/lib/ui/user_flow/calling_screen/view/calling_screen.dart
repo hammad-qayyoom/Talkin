@@ -40,7 +40,8 @@ class CallingScreen extends StatelessWidget {
           id: Constant.idCallingHistory,
           builder: (controller) {
             return controller.isLoading
-                ? CallingHistoryShimmer().paddingSymmetric(horizontal: 14, vertical: 12)
+                ? CallingHistoryShimmer()
+                    .paddingSymmetric(horizontal: 14, vertical: 12)
                 : controller.callingHistory.isEmpty
                     ? Center(
                         child: Image.asset(
@@ -59,26 +60,41 @@ class CallingScreen extends StatelessWidget {
                                 itemCount: controller.callingHistory.length,
                                 // padding: const EdgeInsets.only(top: 12),
                                 shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(), // Important!
+                                physics:
+                                    NeverScrollableScrollPhysics(), // Important!
                                 itemBuilder: (context, index) {
                                   return CallingScreenItem(
-                                    audioCall: controller.callingHistory[index].isAvailableForPrivateAudioCall ?? false,
-                                    videoCall: controller.callingHistory[index].isAvailableForPrivateVideoCall ?? false,
+                                    audioCall: controller.callingHistory[index]
+                                            .isAvailableForPrivateAudioCall ??
+                                        false,
+                                    videoCall: controller.callingHistory[index]
+                                            .isAvailableForPrivateVideoCall ??
+                                        false,
                                     controller: controller,
-                                    time: controller.callingHistory[index].date.toString(),
-                                    callStatusText: controller.callingHistory[index].callStatusText.toString(),
-                                    coin: controller.callingHistory[index].coin ?? 0,
-                                    name: controller.callingHistory[index].name.toString(),
-                                    image: controller.callingHistory[index].image.toString(),
+                                    time: controller.callingHistory[index].date
+                                        .toString(),
+                                    callStatusText: controller
+                                        .callingHistory[index].callStatusText
+                                        .toString(),
+                                    coin:
+                                        controller.callingHistory[index].coin ??
+                                            0,
+                                    name: controller.callingHistory[index].name
+                                        .toString(),
+                                    image: controller
+                                        .callingHistory[index].image
+                                        .toString(),
                                     index: index,
-                                  ).paddingOnly(bottom: 12, top: index == 0 ? 12 : 0);
+                                  ).paddingOnly(
+                                      bottom: 12, top: index == 0 ? 12 : 0);
                                 },
                               ),
                               GetBuilder<CallingScreenController>(
                                 id: Constant.idPaginationListener,
                                 builder: (controller) => Visibility(
                                   visible: controller.isPaginationLoading,
-                                  child: CircularProgressIndicator(color: AppColors.primary),
+                                  child: CircularProgressIndicator(
+                                      color: AppColors.primary),
                                 ),
                               ),
                             ],

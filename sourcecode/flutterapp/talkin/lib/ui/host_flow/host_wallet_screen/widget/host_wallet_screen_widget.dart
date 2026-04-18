@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/app_button/primary_app_button.dart';
+import 'package:notisboard/custom/notisboard_wordmark.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/host_flow/host_wallet_screen/controller/host_wallet_screen_controller.dart';
 import 'package:notisboard/utils/app_asset.dart';
@@ -383,11 +384,21 @@ class BottomView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Why Experts Trust Notisboard',
-                style: AppFontStyle.fontStyleW700(
-                  fontSize: 17,
-                  fontColor: AppColors.redesignBrandDark,
+              Text.rich(
+                TextSpan(
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: 17,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                  children: [
+                    const TextSpan(text: 'Why Experts Trust '),
+                    NotisboardWordmark.span(
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: 17,
+                        fontColor: AppColors.redesignBrandDark,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 4),

@@ -146,7 +146,8 @@ class MyWalletController extends GetxController implements IAPCallback {
             await fetchCoinPlanList();
             await syncSessionCredits();
 
-            Utils.showToast(Get.context!, "Subscription activated successfully");
+            Utils.showToast(
+                Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
           } else {
             Utils.showToast(
@@ -191,7 +192,8 @@ class MyWalletController extends GetxController implements IAPCallback {
           if (purchaseCoinPlan?.status == true) {
             await fetchCoinPlanList();
 
-            Utils.showToast(Get.context!, "Subscription activated successfully");
+            Utils.showToast(
+                Get.context!, "Subscription activated successfully");
             await syncSessionCredits();
             Get.back(); // Close Bottom Sheet...
           } else {
@@ -243,7 +245,8 @@ class MyWalletController extends GetxController implements IAPCallback {
             await fetchCoinPlanList();
             await syncSessionCredits();
 
-            Utils.showToast(Get.context!, "Subscription activated successfully");
+            Utils.showToast(
+                Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
             Get.toNamed(AppRoutes.coinPurchaseScreen, arguments: {
               "date": purchaseCoinPlan?.historyRecord?.date,
@@ -339,7 +342,8 @@ class MyWalletController extends GetxController implements IAPCallback {
             await fetchCoinPlanList();
             await syncSessionCredits();
 
-            Utils.showToast(Get.context!, "Subscription activated successfully");
+            Utils.showToast(
+                Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
           } else {
             Utils.showToast(
@@ -385,7 +389,8 @@ class MyWalletController extends GetxController implements IAPCallback {
             await fetchCoinPlanList();
             await syncSessionCredits();
 
-            Utils.showToast(Get.context!, "Subscription activated successfully");
+            Utils.showToast(
+                Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
           } else {
             Utils.showToast(
@@ -431,7 +436,8 @@ class MyWalletController extends GetxController implements IAPCallback {
             await fetchCoinPlanList();
             await syncSessionCredits();
 
-            Utils.showToast(Get.context!, "Subscription activated successfully");
+            Utils.showToast(
+                Get.context!, "Subscription activated successfully");
             Get.back(); // Close Bottom Sheet...
           } else {
             Utils.showToast(

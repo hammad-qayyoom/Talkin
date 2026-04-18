@@ -34,12 +34,19 @@ class FakeVideoCallView extends StatelessWidget {
                         child: FittedBox(
                           fit: BoxFit.cover,
                           child: SizedBox(
-                              width: controller.videoPlayerController?.value.size.width ?? 0,
-                              height: controller.videoPlayerController?.value.size.height ?? 0,
+                              width: controller.videoPlayerController?.value
+                                      .size.width ??
+                                  0,
+                              height: controller.videoPlayerController?.value
+                                      .size.height ??
+                                  0,
                               child: (controller.chewieController != null &&
-                                      controller.videoPlayerController != null &&
-                                      controller.videoPlayerController!.value.isInitialized)
-                                  ? Chewie(controller: controller.chewieController!)
+                                      controller.videoPlayerController !=
+                                          null &&
+                                      controller.videoPlayerController!.value
+                                          .isInitialized)
+                                  ? Chewie(
+                                      controller: controller.chewieController!)
                                   : Container() // <-- fallback if controller is disposed,
                               ),
                         ),
@@ -58,9 +65,13 @@ class FakeVideoCallView extends StatelessWidget {
           GetBuilder<FakeVideoCallController>(
             id: Constant.onInitializeCamera,
             builder: (controller) {
-              if (controller.cameraController != null && (controller.cameraController?.value.isInitialized ?? false) && controller.isVideoOn) {
+              if (controller.cameraController != null &&
+                  (controller.cameraController?.value.isInitialized ?? false) &&
+                  controller.isVideoOn) {
                 final mediaSize = MediaQuery.of(context).size;
-                final scale = 1 / (controller.cameraController!.value.aspectRatio * mediaSize.aspectRatio);
+                final scale = 1 /
+                    (controller.cameraController!.value.aspectRatio *
+                        mediaSize.aspectRatio);
 
                 return Positioned(
                   top: 50,
@@ -126,7 +137,9 @@ class FakeVideoCallView extends StatelessWidget {
                       id: Constant.idMuteMic,
                       builder: (logic) {
                         return ControlButton(
-                          icon: logic.isMute == true ? AppAsset.micMute : AppAsset.microPhoneIcon,
+                          icon: logic.isMute == true
+                              ? AppAsset.micMute
+                              : AppAsset.microPhoneIcon,
                           bgColor: Colors.white,
                           onTap: () {
                             logic.muteMic();
@@ -137,7 +150,9 @@ class FakeVideoCallView extends StatelessWidget {
                       id: Constant.idToggleVideo,
                       builder: (logic) {
                         return ControlButton(
-                          icon: logic.isVideoOn ? AppAsset.videoCallIcon : AppAsset.videoMute,
+                          icon: logic.isVideoOn
+                              ? AppAsset.videoCallIcon
+                              : AppAsset.videoMute,
                           bgColor: Colors.white,
                           onTap: () {
                             logic.toggleVideo();
@@ -181,7 +196,8 @@ class FakeVideoCallView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4).copyWith(right: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4)
+                      .copyWith(right: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     color: AppColors.black.withValues(alpha: 0.40),
@@ -199,7 +215,10 @@ class FakeVideoCallView extends StatelessWidget {
                         builder: (controller) {
                           return Text(
                             "${controller.meterValue.value}",
-                            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: Colors.yellow),
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.yellow),
                           );
                         },
                       ),
@@ -220,7 +239,8 @@ class FakeVideoCallView extends StatelessWidget {
                           builder: (controller) => Text(
                             overflow: TextOverflow.ellipsis,
                             controller.formattedTime.toString(),
-                            style: AppFontStyle.fontStyleW400(fontColor: AppColors.white, fontSize: 12),
+                            style: AppFontStyle.fontStyleW400(
+                                fontColor: AppColors.white, fontSize: 12),
                           ),
                         ),
                       ),

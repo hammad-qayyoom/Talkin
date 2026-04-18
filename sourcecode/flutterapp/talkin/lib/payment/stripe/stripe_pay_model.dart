@@ -84,7 +84,8 @@ class StripePayModel {
       canceledAt: json['canceled_at'],
       cancellationReason: json['cancellation_reason'],
       captureMethod: json['capture_method'],
-      charges: json['charges'] != null ? Charges.fromJson(json['charges']) : null,
+      charges:
+          json['charges'] != null ? Charges.fromJson(json['charges']) : null,
       clientSecret: json['client_secret'],
       confirmationMethod: json['confirmation_method'],
       created: json['created'],
@@ -98,8 +99,12 @@ class StripePayModel {
       nextAction: json['next_action'],
       onBehalfOf: json['on_behalf_of'],
       paymentMethod: json['payment_method'],
-      paymentMethodOptions: json['payment_method_options'] != null ? PaymentMethodOptions.fromJson(json['payment_method_options']) : null,
-      paymentMethodTypes: json['payment_method_types'] != null ? List<String>.from(json['payment_method_types']) : null,
+      paymentMethodOptions: json['payment_method_options'] != null
+          ? PaymentMethodOptions.fromJson(json['payment_method_options'])
+          : null,
+      paymentMethodTypes: json['payment_method_types'] != null
+          ? List<String>.from(json['payment_method_types'])
+          : null,
       receiptEmail: json['receipt_email'],
       review: json['review'],
       setupFutureUsage: json['setup_future_usage'],

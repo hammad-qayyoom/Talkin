@@ -46,10 +46,12 @@ class SubmitCallRateApi {
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
 
-        Utils.showLog("submit call rate Request Api Response => ${response.body}");
+        Utils.showLog(
+            "submit call rate Request Api Response => ${response.body}");
         return SubmitCallRateModel.fromJson(jsonResponse);
       } else {
-        Utils.showLog("submit call rate Request Api Response => ${response.body}");
+        Utils.showLog(
+            "submit call rate Request Api Response => ${response.body}");
         Utils.showLog("submit call rate Request Api StateCode Error");
       }
     } catch (error) {

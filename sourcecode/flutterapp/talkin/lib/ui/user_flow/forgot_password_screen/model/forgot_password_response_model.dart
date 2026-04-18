@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-ForgotPasswordResponseModel forgotPasswordResponseModelFromJson(String str) => ForgotPasswordResponseModel.fromJson(json.decode(str));
+ForgotPasswordResponseModel forgotPasswordResponseModelFromJson(String str) =>
+    ForgotPasswordResponseModel.fromJson(json.decode(str));
 
-String forgotPasswordResponseModelToJson(ForgotPasswordResponseModel data) => json.encode(data.toJson());
+String forgotPasswordResponseModelToJson(ForgotPasswordResponseModel data) =>
+    json.encode(data.toJson());
 
 class ForgotPasswordResponseModel {
   final bool? status;
@@ -17,7 +19,8 @@ class ForgotPasswordResponseModel {
     this.message,
   });
 
-  factory ForgotPasswordResponseModel.fromJson(Map<String, dynamic> json) => ForgotPasswordResponseModel(
+  factory ForgotPasswordResponseModel.fromJson(Map<String, dynamic> json) =>
+      ForgotPasswordResponseModel(
         status: json["status"],
         message: json["message"],
       );

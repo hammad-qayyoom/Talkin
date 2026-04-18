@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-IpApiResponseModel ipApiResponseModelFromJson(String str) => IpApiResponseModel.fromJson(json.decode(str));
+IpApiResponseModel ipApiResponseModelFromJson(String str) =>
+    IpApiResponseModel.fromJson(json.decode(str));
 
-String ipApiResponseModelToJson(IpApiResponseModel data) => json.encode(data.toJson());
+String ipApiResponseModelToJson(IpApiResponseModel data) =>
+    json.encode(data.toJson());
 
 class IpApiResponseModel {
   final String? status;
@@ -41,7 +43,8 @@ class IpApiResponseModel {
     this.query,
   });
 
-  factory IpApiResponseModel.fromJson(Map<String, dynamic> json) => IpApiResponseModel(
+  factory IpApiResponseModel.fromJson(Map<String, dynamic> json) =>
+      IpApiResponseModel(
         status: json["status"],
         country: json["country"],
         countryCode: json["countryCode"],

@@ -4,6 +4,8 @@ import { setPersistence, browserLocalPersistence, browserSessionPersistence } fr
 
 import { auth } from '@/libs/firebase'
 
+const REMEMBER_ME_STORAGE_KEY = 'remember_me'
+
 /**
  * Refreshes the Firebase token
  * @returns {Promise<string>} The new token
@@ -58,7 +60,7 @@ export const getTokenExpirationTime = async () => {
  */
 export const isRememberMeEnabled = () => {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('remember_me') === 'true'
+    return localStorage.getItem(REMEMBER_ME_STORAGE_KEY) === 'true'
   }
 
   return false
@@ -74,6 +76,10 @@ export const setRememberMe = async remember => {
     const persistenceType = remember ? browserLocalPersistence : browserSessionPersistence
 
     await setPersistence(auth, persistenceType)
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(REMEMBER_ME_STORAGE_KEY, remember ? 'true' : 'false')
+    }
 
     return true
   } catch (error) {
@@ -132,6 +138,7 @@ export const cleanupAuthentication = async () => {
     // Clear localStorage
     localStorage.removeItem('uid')
     localStorage.removeItem('admin_token')
+    localStorage.removeItem(REMEMBER_ME_STORAGE_KEY)
     localStorage.removeItem('user')
     sessionStorage.removeItem('manual_login_in_progress')
 

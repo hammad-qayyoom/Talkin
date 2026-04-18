@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-AppConfigurationModel appConfigurationModelFromJson(String str) => AppConfigurationModel.fromJson(json.decode(str));
+AppConfigurationModel appConfigurationModelFromJson(String str) =>
+    AppConfigurationModel.fromJson(json.decode(str));
 
-String appConfigurationModelToJson(AppConfigurationModel data) => json.encode(data.toJson());
+String appConfigurationModelToJson(AppConfigurationModel data) =>
+    json.encode(data.toJson());
 
 class AppConfigurationModel {
   bool? status;
@@ -19,7 +21,8 @@ class AppConfigurationModel {
     this.data,
   });
 
-  factory AppConfigurationModel.fromJson(Map<String, dynamic> json) => AppConfigurationModel(
+  factory AppConfigurationModel.fromJson(Map<String, dynamic> json) =>
+      AppConfigurationModel(
         status: json["status"],
         message: json["message"],
         data: json["data"] == null ? null : Data.fromJson(json["data"]),

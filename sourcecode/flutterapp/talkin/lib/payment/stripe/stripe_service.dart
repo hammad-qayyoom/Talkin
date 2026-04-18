@@ -14,7 +14,8 @@ class StripeService {
   init({
     required bool isTest,
   }) async {
-    Stripe.publishableKey = Database.settingApiModel?.data?.stripePublicKey ?? '';
+    Stripe.publishableKey =
+        Database.settingApiModel?.data?.stripePublicKey ?? '';
     Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
 
     await Stripe.instance.applySettings().catchError((e) {
@@ -25,38 +26,52 @@ class StripeService {
     this.isTest = isTest;
   }
 
-  Future<dynamic> stripePay({required int amount, required Callback callback}) async {
+  Future<dynamic> stripePay(
+      {required int amount, required Callback callback}) async {
     try {
       Map<String, dynamic> body = {
         'amount': amount.toString(),
         'currency': 'usd',
-        'description': 'Name: ${Database.loginUserName} - Email: "${Database.loginUserEmail}"',
+        'description':
+            'Name: ${Database.loginUserName} - Email: "${Database.loginUserEmail}"',
       };
 
       log("Start Payment Intent Http Request.....");
 
-      var response = await http.post(Uri.parse(Database.stripeUrl), body: body, headers: {
-        "Authorization": "Bearer ${Database.settingApiModel?.data?.stripeSecretKey ?? ''}",
+      var response =
+          await http.post(Uri.parse(Database.stripeUrl), body: body, headers: {
+        "Authorization":
+            "Bearer ${Database.settingApiModel?.data?.stripeSecretKey ?? ''}",
         "Content-Type": 'application/x-www-form-urlencoded'
       });
 
       log("Payment Intent Http Response => ${response.body}");
 
       if (response.statusCode == 200) {
-        StripePayModel result = StripePayModel.fromJson(jsonDecode(response.body));
+        StripePayModel result =
+            StripePayModel.fromJson(jsonDecode(response.body));
 
         log("Stripe Payment Response => $result");
 
-        SetupPaymentSheetParameters setupPaymentSheetParameters = SetupPaymentSheetParameters(
+        SetupPaymentSheetParameters setupPaymentSheetParameters =
+            SetupPaymentSheetParameters(
           paymentIntentClientSecret: result.clientSecret,
-          appearance: PaymentSheetAppearance(colors: PaymentSheetAppearanceColors(primary: AppColors.primary)),
-          googlePay: PaymentSheetGooglePay(merchantCountryCode: Database.settingApiModel?.data?.currency?.countryCode ?? '', testEnv: isTest),
+          appearance: PaymentSheetAppearance(
+              colors: PaymentSheetAppearanceColors(primary: AppColors.primary)),
+          googlePay: PaymentSheetGooglePay(
+              merchantCountryCode:
+                  Database.settingApiModel?.data?.currency?.countryCode ?? '',
+              testEnv: isTest),
           merchantDisplayName: Database.loginUserName,
           customerId: Database.loginUserId,
-          billingDetails: const BillingDetails(name: "Hello", email: "hello@gmail.com"),
+          billingDetails:
+              const BillingDetails(name: "Hello", email: "hello@gmail.com"),
         );
 
-        await Stripe.instance.initPaymentSheet(paymentSheetParameters: setupPaymentSheetParameters).then((value) async {
+        await Stripe.instance
+            .initPaymentSheet(
+                paymentSheetParameters: setupPaymentSheetParameters)
+            .then((value) async {
           await Stripe.instance.presentPaymentSheet().then((value) async {
             log("***** Payment Done *****");
             callback.call();

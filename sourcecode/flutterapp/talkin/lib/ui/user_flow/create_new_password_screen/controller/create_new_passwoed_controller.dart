@@ -81,15 +81,18 @@ class CreateNewPasswordController extends GetxController {
       Get.close(3);
 
       if (response != null && response.status == true) {
-        Utils.showToast(Get.context!, forgotPasswordResponseModel?.message ?? '');
+        Utils.showToast(
+            Get.context!, forgotPasswordResponseModel?.message ?? '');
       } else {
-        Utils.showToast(Get.context!, forgotPasswordResponseModel?.message ?? "Something went wrong");
+        Utils.showToast(Get.context!,
+            forgotPasswordResponseModel?.message ?? "Something went wrong");
       }
     } catch (e) {
       Get.back();
       update();
       Utils.showLog("Error in handleForgotPassword: $e");
-      Utils.showToast(Get.context!, "An unexpected error occurred. Please try again.");
+      Utils.showToast(
+          Get.context!, "An unexpected error occurred. Please try again.");
     }
   }
 }

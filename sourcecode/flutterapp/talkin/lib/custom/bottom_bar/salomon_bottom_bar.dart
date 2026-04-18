@@ -79,8 +79,12 @@ class SalomonBottomBar extends StatelessWidget {
                   curve: curve,
                   duration: duration,
                   builder: (context, t, _) {
-                    final selectedColor = item.selectedColor ?? selectedItemColor ?? theme.primaryColor;
-                    final unselectedColor = item.unselectedColor ?? unselectedItemColor ?? theme.iconTheme.color;
+                    final selectedColor = item.selectedColor ??
+                        selectedItemColor ??
+                        theme.primaryColor;
+                    final unselectedColor = item.unselectedColor ??
+                        unselectedItemColor ??
+                        theme.iconTheme.color;
 
                     return Column(
                       mainAxisSize: MainAxisSize.min,
@@ -88,28 +92,35 @@ class SalomonBottomBar extends StatelessWidget {
                         Material(
                           color: Color.lerp(
                             selectedColor.withValues(alpha: 0.0),
-                            selectedColor.withValues(alpha: selectedColorOpacity ?? 0.1),
+                            selectedColor.withValues(
+                                alpha: selectedColorOpacity ?? 0.1),
                             t,
                           ),
                           shape: const CircleBorder(), // 👈 Set shape to Circle
                           child: InkWell(
                             onTap: () => onTap?.call(items.indexOf(item)),
-                            customBorder: const CircleBorder(), // 👈 Match shape here too
+                            customBorder:
+                                const CircleBorder(), // 👈 Match shape here too
                             child: Padding(
-                              padding: const EdgeInsets.all(10), // 👈 Adjust for circle spacing
+                              padding: const EdgeInsets.all(
+                                  10), // 👈 Adjust for circle spacing
                               child: IconTheme(
                                 data: IconThemeData(
-                                  color: Color.lerp(unselectedColor, selectedColor, t),
+                                  color: Color.lerp(
+                                      unselectedColor, selectedColor, t),
                                   size: 24,
                                 ),
-                                child: items.indexOf(item) == currentIndex ? item.activeIcon ?? item.icon : item.icon,
+                                child: items.indexOf(item) == currentIndex
+                                    ? item.activeIcon ?? item.icon
+                                    : item.icon,
                               ),
                             ),
                           ),
                         ),
                         const SizedBox(height: 4),
                         DefaultTextStyle(
-                          style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: AppColors.unSelected),
+                          style: AppFontStyle.fontStyleW500(
+                              fontSize: 11, fontColor: AppColors.unSelected),
                           child: item.title,
                         ),
                         const SizedBox(height: 4),

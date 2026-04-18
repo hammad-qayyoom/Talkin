@@ -17,14 +17,21 @@ class FetchCoinPlanApi {
 
     Utils.showLog("Fetch Session Credit plan Api url => $uri");
 
-    final authUid = uid.isNotEmpty ? uid : (Database.fetchLoginUserProfileModel?.user?.firebaseId ?? "");
+    final authUid = uid.isNotEmpty
+        ? uid
+        : (Database.fetchLoginUserProfileModel?.user?.firebaseId ?? "");
 
-    final headers = {ApiParams.key: Api.secretKey, ApiParams.authToken: ApiParams.tokenStartPoint + token, ApiParams.authUid: authUid};
+    final headers = {
+      ApiParams.key: Api.secretKey,
+      ApiParams.authToken: ApiParams.tokenStartPoint + token,
+      ApiParams.authUid: authUid
+    };
 
     try {
       final response = await http.get(uri, headers: headers);
 
-      Utils.showLog("Fetch Session Credit plan Api Response => ${response.body}");
+      Utils.showLog(
+          "Fetch Session Credit plan Api Response => ${response.body}");
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);

@@ -56,7 +56,8 @@ class ShareAppBottomSheet extends StatelessWidget {
                   color: AppColors.lightGrey,
                   shape: BoxShape.circle,
                 ),
-                child: CustomProfileImage(image: controller.receiverImage ?? ''),
+                child:
+                    CustomProfileImage(image: controller.receiverImage ?? ''),
               ),
             ),
             Text(
@@ -93,13 +94,18 @@ class ShareAppBottomSheet extends StatelessWidget {
                   color: AppColors.white),
               child: TextFormField(
                 controller: controller.reviewCnt,
-                style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.black),
+                style: AppFontStyle.fontStyleW500(
+                    fontSize: 12, fontColor: AppColors.black),
                 maxLines: 3,
                 decoration: InputDecoration(
                   hintText: "Write your review here...",
-                  hintStyle: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.darkGrey.withValues(alpha: 0.3)),
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                  enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                  hintStyle: AppFontStyle.fontStyleW500(
+                      fontSize: 12,
+                      fontColor: AppColors.darkGrey.withValues(alpha: 0.3)),
+                  focusedBorder:
+                      OutlineInputBorder(borderSide: BorderSide.none),
+                  enabledBorder:
+                      OutlineInputBorder(borderSide: BorderSide.none),
                 ),
               ),
             ).paddingOnly(top: 16, bottom: 22),
@@ -115,7 +121,8 @@ class ShareAppBottomSheet extends StatelessWidget {
               height: 47,
               // borderRadius: 30,
               text: EnumLocale.txtSubmit.name.tr,
-              textStyle: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
+              textStyle: AppFontStyle.fontStyleW600(
+                  fontSize: 16, fontColor: AppColors.white),
             ).paddingOnly(bottom: 10),
           ],
         ),
@@ -150,12 +157,15 @@ class StarRating extends StatelessWidget {
                   // Pass the new rating to the callback
                   onRatingChanged(controller.initialRating);
                   // Update rating in controller
-                  Get.find<CallCutController>().updateRating(controller.initialRating);
+                  Get.find<CallCutController>()
+                      .updateRating(controller.initialRating);
                 },
                 child: Icon(
                   Icons.star_rounded,
                   size: size,
-                  color: index < controller.initialRating ? AppColors.rateStarColor : Colors.grey.shade300,
+                  color: index < controller.initialRating
+                      ? AppColors.rateStarColor
+                      : Colors.grey.shade300,
                 ),
               );
             });

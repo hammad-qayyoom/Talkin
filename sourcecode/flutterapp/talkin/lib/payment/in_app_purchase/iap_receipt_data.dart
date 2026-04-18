@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-IapReceiptData iapReceiptDataFromJson(String str) => IapReceiptData.fromJson(json.decode(str));
+IapReceiptData iapReceiptDataFromJson(String str) =>
+    IapReceiptData.fromJson(json.decode(str));
 
 String iapReceiptDataToJson(IapReceiptData data) => json.encode(data.toJson());
 
@@ -23,13 +24,17 @@ class IapReceiptData {
 
   factory IapReceiptData.fromJson(Map<String, dynamic> json) => IapReceiptData(
         environment: json["environment"],
-        receipt: (json["receipt"] != null) ? Receipt.fromJson(json["receipt"]) : null,
+        receipt: (json["receipt"] != null)
+            ? Receipt.fromJson(json["receipt"])
+            : null,
         latestReceiptInfo: (json["latest_receipt_info"] != null)
-            ? List<LatestReceiptInfo>.from(json["latest_receipt_info"].map((x) => LatestReceiptInfo.fromJson(x)))
+            ? List<LatestReceiptInfo>.from(json["latest_receipt_info"]
+                .map((x) => LatestReceiptInfo.fromJson(x)))
             : null,
         latestReceipt: json["latest_receipt"],
         pendingRenewalInfo: (json["pending_renewal_info"] != null)
-            ? List<PendingRenewalInfo>.from(json["pending_renewal_info"].map((x) => PendingRenewalInfo.fromJson(x)))
+            ? List<PendingRenewalInfo>.from(json["pending_renewal_info"]
+                .map((x) => PendingRenewalInfo.fromJson(x)))
             : null,
         status: json["status"],
       );
@@ -37,11 +42,13 @@ class IapReceiptData {
   Map<String, dynamic> toJson() => {
         "environment": environment,
         "receipt": receipt?.toJson(),
-        "latest_receipt_info":
-            latestReceiptInfo != null ? List<dynamic>.from(latestReceiptInfo!.map((x) => x.toJson())) : null,
+        "latest_receipt_info": latestReceiptInfo != null
+            ? List<dynamic>.from(latestReceiptInfo!.map((x) => x.toJson()))
+            : null,
         "latest_receipt": latestReceipt,
-        "pending_renewal_info":
-            pendingRenewalInfo != null ? List<dynamic>.from(pendingRenewalInfo!.map((x) => x.toJson())) : null,
+        "pending_renewal_info": pendingRenewalInfo != null
+            ? List<dynamic>.from(pendingRenewalInfo!.map((x) => x.toJson()))
+            : null,
         "status": status,
       };
 }
@@ -85,7 +92,8 @@ class LatestReceiptInfo {
   String? isInIntroOfferPeriod;
   String? subscriptionGroupIdentifier;
 
-  factory LatestReceiptInfo.fromJson(Map<String, dynamic> json) => LatestReceiptInfo(
+  factory LatestReceiptInfo.fromJson(Map<String, dynamic> json) =>
+      LatestReceiptInfo(
         quantity: json["quantity"],
         productId: json["product_id"],
         transactionId: json["transaction_id"],
@@ -143,7 +151,8 @@ class PendingRenewalInfo {
   String? originalTransactionId;
   String? autoRenewStatus;
 
-  factory PendingRenewalInfo.fromJson(Map<String, dynamic> json) => PendingRenewalInfo(
+  factory PendingRenewalInfo.fromJson(Map<String, dynamic> json) =>
+      PendingRenewalInfo(
         expirationIntent: json["expiration_intent"],
         autoRenewProductId: json["auto_renew_product_id"],
         isInBillingRetryPeriod: json["is_in_billing_retry_period"],
@@ -221,7 +230,8 @@ class Receipt {
         originalPurchaseDateMs: json["original_purchase_date_ms"],
         originalPurchaseDatePst: json["original_purchase_date_pst"],
         originalApplicationVersion: json["original_application_version"],
-        inApp: List<LatestReceiptInfo>.from(json["in_app"].map((x) => LatestReceiptInfo.fromJson(x))),
+        inApp: List<LatestReceiptInfo>.from(
+            json["in_app"].map((x) => LatestReceiptInfo.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -242,7 +252,9 @@ class Receipt {
         "original_purchase_date_ms": originalPurchaseDateMs,
         "original_purchase_date_pst": originalPurchaseDatePst,
         "original_application_version": originalApplicationVersion,
-        "in_app": inApp != null ? List<dynamic>.from(inApp!.map((x) => x.toJson())) : null,
+        "in_app": inApp != null
+            ? List<dynamic>.from(inApp!.map((x) => x.toJson()))
+            : null,
       };
 }
 

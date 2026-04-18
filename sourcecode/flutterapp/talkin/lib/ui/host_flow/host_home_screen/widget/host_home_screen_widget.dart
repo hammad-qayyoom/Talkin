@@ -69,6 +69,26 @@ class HostTopHomeView extends StatelessWidget {
     final idFontSize = isTablet ? 11.0 : 10.0;
 
     Widget profileSection() {
+      final listenerProfile = Database.fetchListenerProfileModel?.data;
+      final fallbackName =
+          (Database.fetchLoginUserProfileModel?.user?.fullName ??
+                  Database.loginUserName)
+              .toString()
+              .trim();
+      final listenerName =
+          (listenerProfile?.name ?? fallbackName).toString().trim();
+      final displayName = listenerName.isEmpty ? 'Expert' : listenerName;
+      final profileImage = (listenerProfile?.image ??
+              Database.fetchLoginUserProfileModel?.user?.profilePic ??
+              Database.loginUserProfilePic)
+          .toString()
+          .trim();
+      final uniqueId = (listenerProfile?.uniqueId ??
+              Database.fetchLoginUserProfileModel?.user?.uniqueId ??
+              '')
+          .toString()
+          .trim();
+
       return GestureDetector(
         onTap: () {
           Get.toNamed(AppRoutes.hostProfileScreen);
@@ -95,7 +115,7 @@ class HostTopHomeView extends StatelessWidget {
                 ],
               ),
               child: CustomProfileImage(
-                image: Database.fetchListenerProfileModel?.data?.image ?? '',
+                image: profileImage,
               ),
             ),
             SizedBox(width: isCompact ? 8 : 10),
@@ -105,7 +125,7 @@ class HostTopHomeView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    Database.fetchListenerProfileModel?.data?.name ?? 'Expert',
+                    displayName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppFontStyle.fontStyleW700(
@@ -118,12 +138,9 @@ class HostTopHomeView extends StatelessWidget {
                     builder: (controller) {
                       return GestureDetector(
                         onTap: () {
+                          if (uniqueId.isEmpty) return;
                           if (!controller.isToastVisible) {
-                            Utils.copyText(
-                              Database.fetchLoginUserProfileModel?.user
-                                      ?.uniqueId ??
-                                  '',
-                            );
+                            Utils.copyText(uniqueId);
                             Utils.showToast(context, 'Copied');
 
                             controller.isToastVisible = true;
@@ -155,7 +172,7 @@ class HostTopHomeView extends StatelessWidget {
                             children: [
                               Flexible(
                                 child: Text(
-                                  'ID ${Database.fetchListenerProfileModel?.data?.uniqueId ?? ''}',
+                                  'ID $uniqueId',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppFontStyle.fontStyleW600(

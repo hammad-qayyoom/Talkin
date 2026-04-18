@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-ListenerChatListModel listenerChatListModelFromJson(String str) => ListenerChatListModel.fromJson(json.decode(str));
+ListenerChatListModel listenerChatListModelFromJson(String str) =>
+    ListenerChatListModel.fromJson(json.decode(str));
 
-String listenerChatListModelToJson(ListenerChatListModel data) => json.encode(data.toJson());
+String listenerChatListModelToJson(ListenerChatListModel data) =>
+    json.encode(data.toJson());
 
 class ListenerChatListModel {
   bool? status;
@@ -19,16 +21,22 @@ class ListenerChatListModel {
     this.chatList,
   });
 
-  factory ListenerChatListModel.fromJson(Map<String, dynamic> json) => ListenerChatListModel(
+  factory ListenerChatListModel.fromJson(Map<String, dynamic> json) =>
+      ListenerChatListModel(
         status: json["status"],
         message: json["message"],
-        chatList: json["chatList"] == null ? [] : List<ListenerChatList>.from(json["chatList"]!.map((x) => ListenerChatList.fromJson(x))),
+        chatList: json["chatList"] == null
+            ? []
+            : List<ListenerChatList>.from(
+                json["chatList"]!.map((x) => ListenerChatList.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "chatList": chatList == null ? [] : List<dynamic>.from(chatList!.map((x) => x.toJson())),
+        "chatList": chatList == null
+            ? []
+            : List<dynamic>.from(chatList!.map((x) => x.toJson())),
       };
 }
 
@@ -63,7 +71,8 @@ class ListenerChatList {
     this.time,
   });
 
-  factory ListenerChatList.fromJson(Map<String, dynamic> json) => ListenerChatList(
+  factory ListenerChatList.fromJson(Map<String, dynamic> json) =>
+      ListenerChatList(
         id: json["_id"],
         userId: json["userId"],
         nickName: json["nickName"],
@@ -74,7 +83,9 @@ class ListenerChatList {
         senderId: json["senderId"],
         message: json["message"],
         messageType: json["messageType"],
-        lastChatMessageTime: json["lastChatMessageTime"] == null ? null : DateTime.parse(json["lastChatMessageTime"]),
+        lastChatMessageTime: json["lastChatMessageTime"] == null
+            ? null
+            : DateTime.parse(json["lastChatMessageTime"]),
         unreadCount: json["unreadCount"],
         time: json["time"],
       );

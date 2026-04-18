@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-SettingApiModel settingApiModelFromJson(String str) => SettingApiModel.fromJson(json.decode(str));
+SettingApiModel settingApiModelFromJson(String str) =>
+    SettingApiModel.fromJson(json.decode(str));
 
-String settingApiModelToJson(SettingApiModel data) => json.encode(data.toJson());
+String settingApiModelToJson(SettingApiModel data) =>
+    json.encode(data.toJson());
 
 class SettingApiModel {
   final bool? status;
@@ -19,17 +21,18 @@ class SettingApiModel {
     this.data,
   });
 
-  factory SettingApiModel.fromJson(Map<String, dynamic> json) => SettingApiModel(
-    status: json["status"],
-    message: json["message"],
-    data: json["data"] == null ? null : Data.fromJson(json["data"]),
-  );
+  factory SettingApiModel.fromJson(Map<String, dynamic> json) =>
+      SettingApiModel(
+        status: json["status"],
+        message: json["message"],
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "message": message,
-    "data": data?.toJson(),
-  };
+        "status": status,
+        "message": message,
+        "data": data?.toJson(),
+      };
 }
 
 class Data {
@@ -148,120 +151,128 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    currency: json["currency"] == null ? null : Currency.fromJson(json["currency"]),
-    id: json["_id"],
-    privacyPolicyUrl: json["privacyPolicyUrl"],
-    termsOfUseUrl: json["termsOfUseUrl"],
-    isGooglePlayEnabled: json["isGooglePlayEnabled"],
-    isStripeEnabled: json["isStripeEnabled"],
-    stripePublicKey: json["stripePublicKey"],
-    stripeSecretKey: json["stripeSecretKey"],
-    isRazorpayEnabled: json["isRazorpayEnabled"],
-    razorpayKeyId: json["razorpayKeyId"],
-    razorpayKeySecret: json["razorpayKeySecret"],
-    isFlutterwaveEnabled: json["isFlutterwaveEnabled"],
-    flutterwavePublicKey: json["flutterwavePublicKey"],
-    agoraAppId: json["agoraAppId"],
-    agoraAppCertificate: json["agoraAppCertificate"],
-    dailyLoginBonusCoins: json["dailyLoginBonusCoins"],
-    isDemoContentEnabled: json["isDemoContentEnabled"],
-    isApplicationLive: json["isApplicationLive"],
-    allowBecomeHostOption: json["allowBecomeHostOption"],
-    adminCommissionPercent: json["adminCommissionPercent"],
-    minimumCoinsForConversion: json["minimumCoinsForConversion"],
-    minimumCoinsForPayout: json["minimumCoinsForPayout"],
-    videoCallRatePrivate: json["videoCallRatePrivate"],
-    audioCallRatePrivate: json["audioCallRatePrivate"],
-    privateKey: json["privateKey"] == null ? null : PrivateKey.fromJson(json["privateKey"]),
-    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-    zegoAppId: json["zegoAppId"],
-    zegoAppSignIn: json["zegoAppSignIn"],
-    aboutUsUrl: json["aboutUsUrl"],
-    expertPrivacyPolicyUrl: json["expertPrivacyPolicyUrl"],
-    userPrivacyPolicyUrl: json["userPrivacyPolicyUrl"],
-    helpdeskEmail: json["helpdeskEmail"],
-    cashfreeClientId: json["cashfreeClientId"],
-    cashfreeClientSecret: json["cashfreeClientSecret"],
-    isCashfreeAndroidEnabled: json["isCashfreeAndroidEnabled"],
-    isCashfreeIosEnabled: json["isCashfreeIosEnabled"],
-    isFlutterwaveIosEnabled: json["isFlutterwaveIosEnabled"],
-    isGooglePlayIosEnabled: json["isGooglePlayIosEnabled"],
-    isPaypalAndroidEnabled: json["isPaypalAndroidEnabled"],
-    isPaypalIosEnabled: json["isPaypalIosEnabled"],
-    isPaystackAndroidEnabled: json["isPaystackAndroidEnabled"],
-    isPaystackIosEnabled: json["isPaystackIosEnabled"],
-    isRazorpayIosEnabled: json["isRazorpayIosEnabled"],
-    isStripeIosEnabled: json["isStripeIosEnabled"],
-    paypalClientId: json["paypalClientId"],
-    paypalSecretKey: json["paypalSecretKey"],
-    paystackPublicKey: json["paystackPublicKey"],
-    paystackSecretKey: json["paystackSecretKey"],
-    androidAppLink:json["androidAppLink"],
-    androidAppVersion:json["androidAppVersion"],
-    iosAppLink:json["iosAppLink"],
-    iosAppVersion:json["iosAppVersion"],
-    sessionSlotDurationMinutes: json["sessionSlotDurationMinutes"],
-    sessionBookingTimezone: json["sessionBookingTimezone"],
-  );
+        currency: json["currency"] == null
+            ? null
+            : Currency.fromJson(json["currency"]),
+        id: json["_id"],
+        privacyPolicyUrl: json["privacyPolicyUrl"],
+        termsOfUseUrl: json["termsOfUseUrl"],
+        isGooglePlayEnabled: json["isGooglePlayEnabled"],
+        isStripeEnabled: json["isStripeEnabled"],
+        stripePublicKey: json["stripePublicKey"],
+        stripeSecretKey: json["stripeSecretKey"],
+        isRazorpayEnabled: json["isRazorpayEnabled"],
+        razorpayKeyId: json["razorpayKeyId"],
+        razorpayKeySecret: json["razorpayKeySecret"],
+        isFlutterwaveEnabled: json["isFlutterwaveEnabled"],
+        flutterwavePublicKey: json["flutterwavePublicKey"],
+        agoraAppId: json["agoraAppId"],
+        agoraAppCertificate: json["agoraAppCertificate"],
+        dailyLoginBonusCoins: json["dailyLoginBonusCoins"],
+        isDemoContentEnabled: json["isDemoContentEnabled"],
+        isApplicationLive: json["isApplicationLive"],
+        allowBecomeHostOption: json["allowBecomeHostOption"],
+        adminCommissionPercent: json["adminCommissionPercent"],
+        minimumCoinsForConversion: json["minimumCoinsForConversion"],
+        minimumCoinsForPayout: json["minimumCoinsForPayout"],
+        videoCallRatePrivate: json["videoCallRatePrivate"],
+        audioCallRatePrivate: json["audioCallRatePrivate"],
+        privateKey: json["privateKey"] == null
+            ? null
+            : PrivateKey.fromJson(json["privateKey"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
+        zegoAppId: json["zegoAppId"],
+        zegoAppSignIn: json["zegoAppSignIn"],
+        aboutUsUrl: json["aboutUsUrl"],
+        expertPrivacyPolicyUrl: json["expertPrivacyPolicyUrl"],
+        userPrivacyPolicyUrl: json["userPrivacyPolicyUrl"],
+        helpdeskEmail: json["helpdeskEmail"],
+        cashfreeClientId: json["cashfreeClientId"],
+        cashfreeClientSecret: json["cashfreeClientSecret"],
+        isCashfreeAndroidEnabled: json["isCashfreeAndroidEnabled"],
+        isCashfreeIosEnabled: json["isCashfreeIosEnabled"],
+        isFlutterwaveIosEnabled: json["isFlutterwaveIosEnabled"],
+        isGooglePlayIosEnabled: json["isGooglePlayIosEnabled"],
+        isPaypalAndroidEnabled: json["isPaypalAndroidEnabled"],
+        isPaypalIosEnabled: json["isPaypalIosEnabled"],
+        isPaystackAndroidEnabled: json["isPaystackAndroidEnabled"],
+        isPaystackIosEnabled: json["isPaystackIosEnabled"],
+        isRazorpayIosEnabled: json["isRazorpayIosEnabled"],
+        isStripeIosEnabled: json["isStripeIosEnabled"],
+        paypalClientId: json["paypalClientId"],
+        paypalSecretKey: json["paypalSecretKey"],
+        paystackPublicKey: json["paystackPublicKey"],
+        paystackSecretKey: json["paystackSecretKey"],
+        androidAppLink: json["androidAppLink"],
+        androidAppVersion: json["androidAppVersion"],
+        iosAppLink: json["iosAppLink"],
+        iosAppVersion: json["iosAppVersion"],
+        sessionSlotDurationMinutes: json["sessionSlotDurationMinutes"],
+        sessionBookingTimezone: json["sessionBookingTimezone"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "currency": currency?.toJson(),
-    "_id": id,
-    "privacyPolicyUrl": privacyPolicyUrl,
-    "termsOfUseUrl": termsOfUseUrl,
-    "isGooglePlayEnabled": isGooglePlayEnabled,
-    "isStripeEnabled": isStripeEnabled,
-    "stripePublicKey": stripePublicKey,
-    "stripeSecretKey": stripeSecretKey,
-    "isRazorpayEnabled": isRazorpayEnabled,
-    "razorpayKeyId": razorpayKeyId,
-    "razorpayKeySecret": razorpayKeySecret,
-    "isFlutterwaveEnabled": isFlutterwaveEnabled,
-    "flutterwavePublicKey": flutterwavePublicKey,
-    "agoraAppId": agoraAppId,
-    "agoraAppCertificate": agoraAppCertificate,
-    "dailyLoginBonusCoins": dailyLoginBonusCoins,
-    "isDemoContentEnabled": isDemoContentEnabled,
-    "isApplicationLive": isApplicationLive,
-    "allowBecomeHostOption": allowBecomeHostOption,
-    "adminCommissionPercent": adminCommissionPercent,
-    "minimumCoinsForConversion": minimumCoinsForConversion,
-    "minimumCoinsForPayout": minimumCoinsForPayout,
-    "videoCallRatePrivate": videoCallRatePrivate,
-    "audioCallRatePrivate": audioCallRatePrivate,
-    "privateKey": privateKey?.toJson(),
-    "createdAt": createdAt?.toIso8601String(),
-    "updatedAt": updatedAt?.toIso8601String(),
-    "zegoAppId": zegoAppId,
-    "zegoAppSignIn": zegoAppSignIn,
-    "aboutUsUrl": aboutUsUrl,
-    "expertPrivacyPolicyUrl": expertPrivacyPolicyUrl,
-    "userPrivacyPolicyUrl": userPrivacyPolicyUrl,
-    "helpdeskEmail": helpdeskEmail,
-    "cashfreeClientId": cashfreeClientId,
-    "cashfreeClientSecret": cashfreeClientSecret,
-    "isCashfreeAndroidEnabled": isCashfreeAndroidEnabled,
-    "isCashfreeIosEnabled": isCashfreeIosEnabled,
-    "isFlutterwaveIosEnabled": isFlutterwaveIosEnabled,
-    "isGooglePlayIosEnabled": isGooglePlayIosEnabled,
-    "isPaypalAndroidEnabled": isPaypalAndroidEnabled,
-    "isPaypalIosEnabled": isPaypalIosEnabled,
-    "isPaystackAndroidEnabled": isPaystackAndroidEnabled,
-    "isPaystackIosEnabled": isPaystackIosEnabled,
-    "isRazorpayIosEnabled": isRazorpayIosEnabled,
-    "isStripeIosEnabled": isStripeIosEnabled,
-    "paypalClientId": paypalClientId,
-    "paypalSecretKey": paypalSecretKey,
-    "paystackPublicKey": paystackPublicKey,
-    "paystackSecretKey": paystackSecretKey,
-    "androidAppLink":androidAppLink,
-    "androidAppVersion":androidAppVersion,
-    "iosAppLink":iosAppLink,
-    "iosAppVersion":iosAppVersion,
-    "sessionSlotDurationMinutes": sessionSlotDurationMinutes,
-    "sessionBookingTimezone": sessionBookingTimezone,
-  };
+        "currency": currency?.toJson(),
+        "_id": id,
+        "privacyPolicyUrl": privacyPolicyUrl,
+        "termsOfUseUrl": termsOfUseUrl,
+        "isGooglePlayEnabled": isGooglePlayEnabled,
+        "isStripeEnabled": isStripeEnabled,
+        "stripePublicKey": stripePublicKey,
+        "stripeSecretKey": stripeSecretKey,
+        "isRazorpayEnabled": isRazorpayEnabled,
+        "razorpayKeyId": razorpayKeyId,
+        "razorpayKeySecret": razorpayKeySecret,
+        "isFlutterwaveEnabled": isFlutterwaveEnabled,
+        "flutterwavePublicKey": flutterwavePublicKey,
+        "agoraAppId": agoraAppId,
+        "agoraAppCertificate": agoraAppCertificate,
+        "dailyLoginBonusCoins": dailyLoginBonusCoins,
+        "isDemoContentEnabled": isDemoContentEnabled,
+        "isApplicationLive": isApplicationLive,
+        "allowBecomeHostOption": allowBecomeHostOption,
+        "adminCommissionPercent": adminCommissionPercent,
+        "minimumCoinsForConversion": minimumCoinsForConversion,
+        "minimumCoinsForPayout": minimumCoinsForPayout,
+        "videoCallRatePrivate": videoCallRatePrivate,
+        "audioCallRatePrivate": audioCallRatePrivate,
+        "privateKey": privateKey?.toJson(),
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "zegoAppId": zegoAppId,
+        "zegoAppSignIn": zegoAppSignIn,
+        "aboutUsUrl": aboutUsUrl,
+        "expertPrivacyPolicyUrl": expertPrivacyPolicyUrl,
+        "userPrivacyPolicyUrl": userPrivacyPolicyUrl,
+        "helpdeskEmail": helpdeskEmail,
+        "cashfreeClientId": cashfreeClientId,
+        "cashfreeClientSecret": cashfreeClientSecret,
+        "isCashfreeAndroidEnabled": isCashfreeAndroidEnabled,
+        "isCashfreeIosEnabled": isCashfreeIosEnabled,
+        "isFlutterwaveIosEnabled": isFlutterwaveIosEnabled,
+        "isGooglePlayIosEnabled": isGooglePlayIosEnabled,
+        "isPaypalAndroidEnabled": isPaypalAndroidEnabled,
+        "isPaypalIosEnabled": isPaypalIosEnabled,
+        "isPaystackAndroidEnabled": isPaystackAndroidEnabled,
+        "isPaystackIosEnabled": isPaystackIosEnabled,
+        "isRazorpayIosEnabled": isRazorpayIosEnabled,
+        "isStripeIosEnabled": isStripeIosEnabled,
+        "paypalClientId": paypalClientId,
+        "paypalSecretKey": paypalSecretKey,
+        "paystackPublicKey": paystackPublicKey,
+        "paystackSecretKey": paystackSecretKey,
+        "androidAppLink": androidAppLink,
+        "androidAppVersion": androidAppVersion,
+        "iosAppLink": iosAppLink,
+        "iosAppVersion": iosAppVersion,
+        "sessionSlotDurationMinutes": sessionSlotDurationMinutes,
+        "sessionBookingTimezone": sessionBookingTimezone,
+      };
 }
 
 class Currency {
@@ -280,20 +291,20 @@ class Currency {
   });
 
   factory Currency.fromJson(Map<String, dynamic> json) => Currency(
-    name: json["name"],
-    symbol: json["symbol"],
-    countryCode: json["countryCode"],
-    currencyCode: json["currencyCode"],
-    isDefault: json["isDefault"],
-  );
+        name: json["name"],
+        symbol: json["symbol"],
+        countryCode: json["countryCode"],
+        currencyCode: json["currencyCode"],
+        isDefault: json["isDefault"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "name": name,
-    "symbol": symbol,
-    "countryCode": countryCode,
-    "currencyCode": currencyCode,
-    "isDefault": isDefault,
-  };
+        "name": name,
+        "symbol": symbol,
+        "countryCode": countryCode,
+        "currencyCode": currencyCode,
+        "isDefault": isDefault,
+      };
 }
 
 class PrivateKey {
@@ -324,30 +335,30 @@ class PrivateKey {
   });
 
   factory PrivateKey.fromJson(Map<String, dynamic> json) => PrivateKey(
-    type: json["type"],
-    projectId: json["project_id"],
-    privateKeyId: json["private_key_id"],
-    privateKey: json["private_key"],
-    clientEmail: json["client_email"],
-    clientId: json["client_id"],
-    authUri: json["auth_uri"],
-    tokenUri: json["token_uri"],
-    authProviderX509CertUrl: json["auth_provider_x509_cert_url"],
-    clientX509CertUrl: json["client_x509_cert_url"],
-    universeDomain: json["universe_domain"],
-  );
+        type: json["type"],
+        projectId: json["project_id"],
+        privateKeyId: json["private_key_id"],
+        privateKey: json["private_key"],
+        clientEmail: json["client_email"],
+        clientId: json["client_id"],
+        authUri: json["auth_uri"],
+        tokenUri: json["token_uri"],
+        authProviderX509CertUrl: json["auth_provider_x509_cert_url"],
+        clientX509CertUrl: json["client_x509_cert_url"],
+        universeDomain: json["universe_domain"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "type": type,
-    "project_id": projectId,
-    "private_key_id": privateKeyId,
-    "private_key": privateKey,
-    "client_email": clientEmail,
-    "client_id": clientId,
-    "auth_uri": authUri,
-    "token_uri": tokenUri,
-    "auth_provider_x509_cert_url": authProviderX509CertUrl,
-    "client_x509_cert_url": clientX509CertUrl,
-    "universe_domain": universeDomain,
-  };
+        "type": type,
+        "project_id": projectId,
+        "private_key_id": privateKeyId,
+        "private_key": privateKey,
+        "client_email": clientEmail,
+        "client_id": clientId,
+        "auth_uri": authUri,
+        "token_uri": tokenUri,
+        "auth_provider_x509_cert_url": authProviderX509CertUrl,
+        "client_x509_cert_url": clientX509CertUrl,
+        "universe_domain": universeDomain,
+      };
 }

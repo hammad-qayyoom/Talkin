@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-PersonalChatModel personalChatModelFromJson(String str) => PersonalChatModel.fromJson(json.decode(str));
+PersonalChatModel personalChatModelFromJson(String str) =>
+    PersonalChatModel.fromJson(json.decode(str));
 
-String personalChatModelToJson(PersonalChatModel data) => json.encode(data.toJson());
+String personalChatModelToJson(PersonalChatModel data) =>
+    json.encode(data.toJson());
 
 class PersonalChatModel {
   bool? status;
@@ -21,18 +23,24 @@ class PersonalChatModel {
     this.chat,
   });
 
-  factory PersonalChatModel.fromJson(Map<String, dynamic> json) => PersonalChatModel(
+  factory PersonalChatModel.fromJson(Map<String, dynamic> json) =>
+      PersonalChatModel(
         status: json["status"],
         message: json["message"],
         chatTopicId: json["chatTopicId"],
-        chat: json["chat"] == null ? [] : List<PersonalChat>.from(json["chat"]!.map((x) => PersonalChat.fromJson(x))),
+        chat: json["chat"] == null
+            ? []
+            : List<PersonalChat>.from(
+                json["chat"]!.map((x) => PersonalChat.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
         "chatTopicId": chatTopicId,
-        "chat": chat == null ? [] : List<dynamic>.from(chat!.map((x) => x.toJson())),
+        "chat": chat == null
+            ? []
+            : List<dynamic>.from(chat!.map((x) => x.toJson())),
       };
 }
 
@@ -82,8 +90,12 @@ class PersonalChat {
         date: json["date"],
         messageType: json["messageType"],
         callType: json["callType"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {

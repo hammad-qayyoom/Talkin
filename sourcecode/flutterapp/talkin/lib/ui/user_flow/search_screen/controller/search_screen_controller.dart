@@ -22,7 +22,8 @@ class SearchScreenController extends GetxController {
     searchController.addListener(() {
       hasText = searchController.text.isNotEmpty;
       if (hasText) {
-        filterListeners(searchController.text); // Trigger filtering on text change
+        filterListeners(
+            searchController.text); // Trigger filtering on text change
       } else {
         displayedListeners.clear(); // Clear listeners if search is empty
       }
@@ -49,7 +50,8 @@ class SearchScreenController extends GetxController {
       allListener = data?.data ?? [];
       log('All listeners fetched: ${allListener?.length}');
 
-      filterListeners(searchController.text); // Apply filter immediately after loading data
+      filterListeners(
+          searchController.text); // Apply filter immediately after loading data
     } catch (e) {
       log('Error fetching All Listeners api: $e');
     } finally {
@@ -62,8 +64,11 @@ class SearchScreenController extends GetxController {
     if (allListener == null) return;
 
     log('Filtering for: $query'); // 🔍 Debug log
-    displayedListeners =
-        allListener!.where((listener) => listener.name != null && listener.name!.toLowerCase().contains(query.toLowerCase())).toList();
+    displayedListeners = allListener!
+        .where((listener) =>
+            listener.name != null &&
+            listener.name!.toLowerCase().contains(query.toLowerCase()))
+        .toList();
 
     log('Found ${displayedListeners.length} result(s)');
     update(); // 🟢 UI refresh
@@ -78,7 +83,8 @@ class SearchScreenController extends GetxController {
         .map((id) {
           return allListener!.firstWhere(
             (listener) => listener.id == id,
-            orElse: () => TopListeners(), // Make sure TopListeners has a default constructor
+            orElse: () =>
+                TopListeners(), // Make sure TopListeners has a default constructor
           );
         })
         .where((listener) => listener.id != null && listener.id!.isNotEmpty)

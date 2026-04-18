@@ -54,7 +54,8 @@ class FakeOutgoingCallController extends GetxController {
     isProximitySupported = await ProximityScreenLock.isProximityLockSupported();
     if (isProximitySupported) {
       await ProximityScreenLock.setActive(true);
-      subsProximity = ProximityScreenLock.proximityStates.listen((objectDetected) {
+      subsProximity =
+          ProximityScreenLock.proximityStates.listen((objectDetected) {
         isObjectNear = objectDetected;
         // Optionally, log or update UI
         Utils.showLog("Proximity object detected: $isObjectNear");
@@ -75,7 +76,8 @@ class FakeOutgoingCallController extends GetxController {
   void selectRandomVideo() {
     if (videoList != null && videoList!.isNotEmpty) {
       Random random = Random();
-      selectedVideo = videoList![random.nextInt(videoList!.length)]; // Select a random video
+      selectedVideo = videoList![
+          random.nextInt(videoList!.length)]; // Select a random video
       Utils.showLog("Selected random video: $selectedVideo");
     }
   }
@@ -128,10 +130,12 @@ class FakeOutgoingCallController extends GetxController {
 
         if (callType == 'audio') {
           Utils.showLog("fake call type >>>>>>>>>>> $callType");
-          Get.toNamed(AppRoutes.fakeAudioCall, arguments: [receiverName, receiverImage, audio]);
+          Get.toNamed(AppRoutes.fakeAudioCall,
+              arguments: [receiverName, receiverImage, audio]);
         } else {
           Utils.showLog("fake call type :::::::::: $callType");
-          Get.toNamed(AppRoutes.fakeVideoCall, arguments: [selectedVideo, isBackProfile]);
+          Get.toNamed(AppRoutes.fakeVideoCall,
+              arguments: [selectedVideo, isBackProfile]);
         }
       }
     });

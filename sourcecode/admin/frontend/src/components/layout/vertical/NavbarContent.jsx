@@ -13,6 +13,7 @@ import classnames from 'classnames'
 // Component Imports
 import NavToggle from './NavToggle'
 import UserDropdown from '@components/layout/shared/UserDropdown'
+import BrandName from '@/components/common/BrandName'
 
 // Util Imports
 import { verticalLayoutClasses } from '@layouts/utils/layoutClasses'
@@ -84,7 +85,7 @@ const NavbarContent = () => {
             {pageTitle}
           </Typography>
           <Typography variant='caption' sx={{ color: 'var(--mui-palette-text-secondary)', letterSpacing: 0.3 }}>
-            Notisboard Admin Console
+            <BrandName /> Admin Console
           </Typography>
         </Box>
       </div>

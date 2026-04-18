@@ -24,7 +24,8 @@ class ForgotPasswordController extends GetxController {
   }
 
   bool isValidEmail(String email) {
-    final emailRegex = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    final emailRegex = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
     return emailRegex.hasMatch(email);
   }
 
@@ -32,7 +33,8 @@ class ForgotPasswordController extends GetxController {
     if (emailController.text.trim().isEmpty) {
       Utils.showToast(Get.context!, EnumLocale.txtEnterYourMail.name.tr);
     } else if (isValidEmail(emailController.text) == false) {
-      Utils.showToast(Get.context!, EnumLocale.desEnterValidEmailAddress.name.tr);
+      Utils.showToast(
+          Get.context!, EnumLocale.desEnterValidEmailAddress.name.tr);
     } else {
       Get.dialog(
           PopScope(
@@ -51,7 +53,8 @@ class ForgotPasswordController extends GetxController {
       ); // Check Email Is Exist...
 
       if (checkUserExistModel?.isLogin != true) {
-        Utils.showToast(Get.context!, EnumLocale.txtNoAccountFoundForThisEmail.name.tr);
+        Utils.showToast(
+            Get.context!, EnumLocale.txtNoAccountFoundForThisEmail.name.tr);
         Utils.showLog("Validate User Email => ${checkUserExistModel?.status}");
         Get.back(); // Stop Loading...
         return;
@@ -79,7 +82,9 @@ class ForgotPasswordController extends GetxController {
 
   Future<UserCredential?> resetPassword(email) async {
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email).catchError(
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: email)
+          .catchError(
         (e) {
           Utils.showLog("Validate User Email => Error: ${e.toString()}");
           Utils.showToast(Get.context!, "Error: ${e.toString()}");
@@ -87,7 +92,8 @@ class ForgotPasswordController extends GetxController {
       );
 
       // Utils.showLog("Email Authentication Response resetPassword user => $emailsend");
-      Utils.showToast(Get.context!, EnumLocale.txtResetLinkSentToYourEmail.name.tr);
+      Utils.showToast(
+          Get.context!, EnumLocale.txtResetLinkSentToYourEmail.name.tr);
     } catch (e) {
       Utils.showToast(Get.context!, "Error: ${e.toString()}");
       Utils.showLog("Validate User Email => Error: ${e.toString()}");

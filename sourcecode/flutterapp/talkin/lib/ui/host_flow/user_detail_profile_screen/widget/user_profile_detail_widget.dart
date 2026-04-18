@@ -78,7 +78,9 @@ class UserProfileInfoView extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                         child: CustomProfileImage(
-                          image: controller.userProfileModel?.user?.profilePic ?? '',
+                          image:
+                              controller.userProfileModel?.user?.profilePic ??
+                                  '',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -88,16 +90,21 @@ class UserProfileInfoView extends StatelessWidget {
                       children: [
                         Text(
                           "${controller.userProfileModel?.user?.fullName} ,${controller.userProfileModel?.user?.age}",
-                          style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.black),
+                          style: AppFontStyle.fontStyleW700(
+                              fontSize: 16, fontColor: AppColors.black),
                         ).paddingOnly(bottom: 8),
                         Row(
                           children: [
                             controller.userProfileModel?.user?.isOnline == false
                                 ? Container(
-                                    padding: EdgeInsets.only(right: 6, bottom: 4, top: 4, left: 6),
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColors.lightGrey1),
+                                    padding: EdgeInsets.only(
+                                        right: 6, bottom: 4, top: 4, left: 6),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: AppColors.lightGrey1),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         // Image.asset(
                                         //   AppAsset.availableIcon,
@@ -108,7 +115,8 @@ class UserProfileInfoView extends StatelessWidget {
                                           // height: 12,
                                           // width: 12,
                                           decoration: BoxDecoration(
-                                            color: AppColors.onBoardingTxt.withValues(alpha: 0.3),
+                                            color: AppColors.onBoardingTxt
+                                                .withValues(alpha: 0.3),
                                             shape: BoxShape.circle,
                                           ),
                                           child: Container(
@@ -122,16 +130,23 @@ class UserProfileInfoView extends StatelessWidget {
                                         ).paddingOnly(right: 4),
                                         Text(
                                           "offline",
-                                          style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.appTextColor),
+                                          style: AppFontStyle.fontStyleW500(
+                                              fontSize: 10,
+                                              fontColor:
+                                                  AppColors.appTextColor),
                                         ).paddingOnly(right: 4),
                                       ],
                                     ),
                                   )
                                 : Container(
-                                    padding: EdgeInsets.only(right: 6, bottom: 4, top: 4, left: 6),
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColors.green),
+                                    padding: EdgeInsets.only(
+                                        right: 6, bottom: 4, top: 4, left: 6),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: AppColors.green),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         // Image.asset(
                                         //   AppAsset.availableIcon,
@@ -142,7 +157,8 @@ class UserProfileInfoView extends StatelessWidget {
                                           // height: 12,
                                           // width: 12,
                                           decoration: BoxDecoration(
-                                            color: AppColors.white.withValues(alpha: 0.5),
+                                            color: AppColors.white
+                                                .withValues(alpha: 0.5),
                                             shape: BoxShape.circle,
                                           ),
                                           child: Container(
@@ -156,24 +172,39 @@ class UserProfileInfoView extends StatelessWidget {
                                         ).paddingOnly(right: 4),
                                         Text(
                                           "online",
-                                          style: AppFontStyle.fontStyleW500(fontSize: 10, fontColor: AppColors.white),
+                                          style: AppFontStyle.fontStyleW500(
+                                              fontSize: 10,
+                                              fontColor: AppColors.white),
                                         ).paddingOnly(right: 4),
                                       ],
                                     ),
                                   ),
                             GestureDetector(
                               onTap: () {
-                                Utils.copyText(controller.userProfileModel?.user?.uniqueId ?? '');
-                                Utils.showToast(context, "ID copied to clipboard");
+                                Utils.copyText(controller
+                                        .userProfileModel?.user?.uniqueId ??
+                                    '');
+                                Utils.showToast(
+                                    context, "ID copied to clipboard");
                               },
                               child: Container(
-                                padding: EdgeInsets.only(bottom: 4, left: 6, right: 6, top: 4),
-                                decoration: BoxDecoration(color: AppColors.idContainerColor2, borderRadius: BorderRadius.circular(60)),
+                                padding: EdgeInsets.only(
+                                    bottom: 4, left: 6, right: 6, top: 4),
+                                decoration: BoxDecoration(
+                                    color: AppColors.idContainerColor2,
+                                    borderRadius: BorderRadius.circular(60)),
                                 child: Row(
                                   children: [
                                     SizedBox(
                                       // width: Get.width * 0.15,
-                                      child: Text("ID: ${controller.userProfileModel?.user?.uniqueId}", overflow: TextOverflow.ellipsis, style: AppFontStyle.fontStyleW600(fontSize: 10, fontColor: AppColors.idTxtColor2)).paddingOnly(right: 3),
+                                      child: Text(
+                                              "ID: ${controller.userProfileModel?.user?.uniqueId}",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: AppFontStyle.fontStyleW600(
+                                                  fontSize: 10,
+                                                  fontColor:
+                                                      AppColors.idTxtColor2))
+                                          .paddingOnly(right: 3),
                                     ),
                                     Image.asset(
                                       AppAsset.copyIcon,
@@ -204,7 +235,11 @@ class UserProfileInfoView extends StatelessWidget {
                   children: [
                     Text(
                       EnumLocale.txtUserDetails.name.tr,
-                      style: AppFontStyle.fontStyleW600(fontSize: 15, fontColor: AppColors.black, decorationColor: AppColors.black, textDecoration: TextDecoration.underline),
+                      style: AppFontStyle.fontStyleW600(
+                          fontSize: 15,
+                          fontColor: AppColors.black,
+                          decorationColor: AppColors.black,
+                          textDecoration: TextDecoration.underline),
                     ).paddingOnly(bottom: 16),
                     Row(
                       children: [
@@ -284,11 +319,16 @@ class UserProfileInfoView extends StatelessWidget {
                   children: [
                     Text(
                       EnumLocale.txtPersonalDetails.name.tr,
-                      style: AppFontStyle.fontStyleW600(fontSize: 15, fontColor: AppColors.black, decorationColor: AppColors.black, textDecoration: TextDecoration.underline),
+                      style: AppFontStyle.fontStyleW600(
+                          fontSize: 15,
+                          fontColor: AppColors.black,
+                          decorationColor: AppColors.black,
+                          textDecoration: TextDecoration.underline),
                     ).paddingOnly(bottom: 16),
                     Row(
                       children: [
-                        Image.asset(AppAsset.birthIcon, height: 20, width: 20).paddingOnly(right: 8),
+                        Image.asset(AppAsset.birthIcon, height: 20, width: 20)
+                            .paddingOnly(right: 8),
                         Text(
                           "${EnumLocale.txtDateOfBirth.name.tr} : ",
                           style: AppFontStyle.fontStyleW500(
@@ -307,7 +347,8 @@ class UserProfileInfoView extends StatelessWidget {
                     ).paddingOnly(bottom: 22),
                     Row(
                       children: [
-                        Image.asset(AppAsset.genderIcon, height: 20, width: 20).paddingOnly(right: 8),
+                        Image.asset(AppAsset.genderIcon, height: 20, width: 20)
+                            .paddingOnly(right: 8),
                         Text(
                           '${EnumLocale.txtGender.name.tr} : ',
                           style: AppFontStyle.fontStyleW500(
@@ -326,7 +367,8 @@ class UserProfileInfoView extends StatelessWidget {
                     ).paddingOnly(bottom: 22),
                     Row(
                       children: [
-                        Image.asset(AppAsset.countryIcon, height: 20, width: 20).paddingOnly(right: 8),
+                        Image.asset(AppAsset.countryIcon, height: 20, width: 20)
+                            .paddingOnly(right: 8),
                         Text(
                           '${EnumLocale.txtCountry.name.tr} : ',
                           style: AppFontStyle.fontStyleW500(
@@ -345,7 +387,8 @@ class UserProfileInfoView extends StatelessWidget {
                     ).paddingOnly(bottom: 22),
                     Row(
                       children: [
-                        Image.asset(AppAsset.emailIcon, height: 20, width: 20).paddingOnly(right: 8),
+                        Image.asset(AppAsset.emailIcon, height: 20, width: 20)
+                            .paddingOnly(right: 8),
                         Text(
                           "${EnumLocale.txtMailId.name.tr} : ",
                           style: AppFontStyle.fontStyleW500(
@@ -404,9 +447,12 @@ class UserProfileBottomButtonView extends StatelessWidget {
                 callerId: Database.fetchListenerProfileModel?.data?.id ?? '',
                 receiverId: controller.userProfileModel?.user?.id ?? '',
                 receiverName: controller.userProfileModel?.user?.fullName ?? '',
-                receiverImage: controller.userProfileModel?.user?.profilePic ?? '',
-                callerName: Database.fetchListenerProfileModel?.data?.name ?? '',
-                callerImage: Database.fetchListenerProfileModel?.data?.image ?? '',
+                receiverImage:
+                    controller.userProfileModel?.user?.profilePic ?? '',
+                callerName:
+                    Database.fetchListenerProfileModel?.data?.name ?? '',
+                callerImage:
+                    Database.fetchListenerProfileModel?.data?.image ?? '',
                 callerRole: 'listener',
                 receiverRole: 'user',
               ),
@@ -427,7 +473,8 @@ class UserProfileBottomButtonView extends StatelessWidget {
               ).paddingOnly(right: 8),
               Text(
                 EnumLocale.txtTalkNow.name.tr,
-                style: AppFontStyle.fontStyleW600(fontSize: 16, fontColor: AppColors.white),
+                style: AppFontStyle.fontStyleW600(
+                    fontSize: 16, fontColor: AppColors.white),
               )
             ],
           ),
