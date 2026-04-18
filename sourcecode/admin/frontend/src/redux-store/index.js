@@ -39,6 +39,7 @@ import coinTraderReducer from '@/redux-store/slices/coinTrader'
 import payoutRequestsReducer from '@/redux-store/slices/payoutRequests'
 import gameHistoryReducer from '@/redux-store/slices/gameHistory'
 import paymentOptionsReducer from '@/redux-store/slices/paymentOptions'
+import growthSpotlightReducer from '@/redux-store/slices/growthSpotlight'
 
 // Listener slice is intentionally mounted at `expert` key for Phase-1 compatibility.
 import listenerReducer from '@/redux-store/slices/listener'
@@ -87,9 +88,10 @@ export const store = configureStore({
     // hostList: hostListReducer,
     // coinTrader: coinTraderReducer,
     payoutRequests: payoutRequestsReducer,
-    
+
     // gameHistory: gameHistoryReducer,
     paymentOptions: paymentOptionsReducer,
+    growthSpotlight: growthSpotlightReducer,
     expert: listenerReducer
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false })

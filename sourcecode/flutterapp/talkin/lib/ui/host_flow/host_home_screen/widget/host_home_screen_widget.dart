@@ -7,6 +7,7 @@ import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
 import 'package:notisboard/custom/switch/switch.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/controller/host_home_screen_controller.dart';
+import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/constant.dart';
@@ -342,6 +343,30 @@ class HostImageView extends StatelessWidget {
   static final Color _brandDark = AppColors.redesignBrandDark;
   static final Color _softBorder = AppColors.redesignSoftBorder;
 
+  String _resolveSpotlightImageUrl(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) return "";
+    if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+      return trimmed;
+    }
+    final normalized = trimmed.startsWith("/") ? trimmed.substring(1) : trimmed;
+    return "${Api.baseUrl}$normalized";
+  }
+
+  String _resolveSpotlightCaption(dynamic item) {
+    final title = (item?.title ?? "").toString().trim();
+    final description = (item?.description ?? "").toString().trim();
+
+    if (title.isNotEmpty && description.isNotEmpty) {
+      return "$title\n$description";
+    }
+
+    if (title.isNotEmpty) return title;
+    if (description.isNotEmpty) return description;
+
+    return "Go online, stay visible, and earn more sessions.";
+  }
+
   Widget _ratePill({
     required String label,
     required String rate,
@@ -597,89 +622,149 @@ class HostImageView extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: CarouselSlider(
-                            options: CarouselOptions(
+                        if (controller.isSpotlightLoading)
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
                               height: isTablet ? 170 : 138,
-                              autoPlay: true,
-                              viewportFraction: 1,
-                              enlargeCenterPage: false,
-                              onPageChanged: controller.onPageChanged,
-                            ),
-                            items: controller.imageList.map((item) {
-                              return Builder(
-                                builder: (BuildContext context) {
-                                  return Stack(
-                                    fit: StackFit.expand,
-                                    children: [
-                                      Image.asset(
-                                        item,
-                                        fit: BoxFit.cover,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Container(
-                                            color: AppColors
-                                                .redesignSurfaceNeutralAlt,
-                                          );
-                                        },
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: [
-                                              AppColors.black
-                                                  .withValues(alpha: 0.08),
-                                              AppColors.black
-                                                  .withValues(alpha: 0.48),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        left: 12,
-                                        right: 12,
-                                        bottom: 10,
-                                        child: Text(
-                                          'Go online, stay visible, and earn more sessions.',
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: AppFontStyle.fontStyleW600(
-                                            fontSize: isTablet ? 14 : 12,
-                                            fontColor: AppColors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(controller.imageList.length,
-                              (index) {
-                            final isSelected = controller.currentIndex == index;
-
-                            return AnimatedContainer(
-                              duration: const Duration(milliseconds: 260),
-                              margin: const EdgeInsets.symmetric(horizontal: 3),
-                              width: isSelected ? 18 : 6,
-                              height: 6,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(999),
-                                color: isSelected
-                                    ? _brandRed
-                                    : AppColors.redesignSoftBorder,
+                              width: double.infinity,
+                              color: AppColors.redesignSurfaceNeutralAlt,
+                              alignment: Alignment.center,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.6,
+                                color: _brandRed,
                               ),
-                            );
-                          }),
-                        ),
+                            ),
+                          )
+                        else if (controller.spotlightItems.isEmpty)
+                          Container(
+                            height: isTablet ? 170 : 138,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: AppColors.redesignSurfaceNeutralAlt,
+                            ),
+                            alignment: Alignment.center,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 14),
+                              child: Text(
+                                'No spotlight image available. Add one from admin panel.',
+                                textAlign: TextAlign.center,
+                                style: AppFontStyle.fontStyleW500(
+                                  fontSize: isTablet ? 14 : 12,
+                                  fontColor: AppColors.redesignMutedText,
+                                ),
+                              ),
+                            ),
+                          )
+                        else
+                          Column(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: CarouselSlider(
+                                  options: CarouselOptions(
+                                    height: isTablet ? 170 : 138,
+                                    autoPlay:
+                                        controller.spotlightItems.length > 1,
+                                    viewportFraction: 1,
+                                    enlargeCenterPage: false,
+                                    onPageChanged: controller.onPageChanged,
+                                  ),
+                                  items: controller.spotlightItems.map((item) {
+                                    final imageUrl = _resolveSpotlightImageUrl(
+                                        item.image ?? "");
+                                    final caption =
+                                        _resolveSpotlightCaption(item);
+
+                                    return Builder(
+                                      builder: (BuildContext context) {
+                                        return Stack(
+                                          fit: StackFit.expand,
+                                          children: [
+                                            imageUrl.isEmpty
+                                                ? Container(
+                                                    color: AppColors
+                                                        .redesignSurfaceNeutralAlt,
+                                                  )
+                                                : Image.network(
+                                                    imageUrl,
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder: (context,
+                                                        error, stackTrace) {
+                                                      return Container(
+                                                        color: AppColors
+                                                            .redesignSurfaceNeutralAlt,
+                                                      );
+                                                    },
+                                                  ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    AppColors.black.withValues(
+                                                        alpha: 0.08),
+                                                    AppColors.black.withValues(
+                                                        alpha: 0.48),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              left: 12,
+                                              right: 12,
+                                              bottom: 10,
+                                              child: Text(
+                                                caption,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style:
+                                                    AppFontStyle.fontStyleW600(
+                                                  fontSize: isTablet ? 14 : 12,
+                                                  fontColor: AppColors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                              if (controller.spotlightItems.length > 1) ...[
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(
+                                      controller.spotlightItems.length,
+                                      (index) {
+                                    final isSelected =
+                                        controller.currentIndex == index;
+
+                                    return AnimatedContainer(
+                                      duration:
+                                          const Duration(milliseconds: 260),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 3),
+                                      width: isSelected ? 18 : 6,
+                                      height: 6,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(999),
+                                        color: isSelected
+                                            ? _brandRed
+                                            : AppColors.redesignSoftBorder,
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ],
+                            ],
+                          ),
                       ],
                     ),
                   ),

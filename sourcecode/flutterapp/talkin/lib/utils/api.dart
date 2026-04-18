@@ -143,6 +143,8 @@ abstract class Api {
   static const deleteListenerAccount =
       "${baseUrl}api/expert/deleteExpertAccount?";
   static const userProfileApi = "${baseUrl}api/expert/getProfileByUserId?";
+  static const listenerGrowthSpotlight =
+      "${baseUrl}api/expert/growthSpotlight/retrieveGrowthSpotlights";
 
   static const ipApi = "http://ip-api.com/json";
 

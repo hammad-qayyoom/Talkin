@@ -4,13 +4,14 @@ import 'package:carousel_slider/carousel_options.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
+import 'package:notisboard/ui/host_flow/host_home_screen/api/growth_spotlight_api.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/api/host_coin_api.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/api/update_expert_call_status_api.dart';
+import 'package:notisboard/ui/host_flow/host_home_screen/model/growth_spotlight_model.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/model/listener_coin_model.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/model/update_expert_call_status_model.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/model/fetch_listener_profile_model.dart';
-import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/enums.dart' show EnumLocale;
@@ -26,16 +27,16 @@ class HostHomeScreenController extends GetxController {
       false;
   bool isToastVisible = false;
   UpdateExpertCallStatusModel? updateExpertCallStatusModel;
-  final List<String> imageList = [
-    AppAsset.homeCallPerson,
-    AppAsset.homeCallPerson,
-    AppAsset.homeCallPerson,
-  ];
   bool isCoinLoading = false;
+  bool isSpotlightLoading = false;
   int currentIndex = 0;
   int totalCompletedSessions = 0;
   FetchListenerProfileModel? fetchListenerProfileModel;
   ListenerCoinModel? listenerCoinModel;
+  GrowthSpotlightModel? growthSpotlightModel;
+
+  List<GrowthSpotlightData> get spotlightItems =>
+      growthSpotlightModel?.data ?? const <GrowthSpotlightData>[];
 
   String get _listenerId {
     final fromLogin =
@@ -64,6 +65,7 @@ class HostHomeScreenController extends GetxController {
   Future<void> _initializeHome() async {
     await fetchRealStats();
     await hostCoin();
+    await fetchGrowthSpotlights();
   }
 
   fetchRealStats() async {
@@ -120,6 +122,7 @@ class HostHomeScreenController extends GetxController {
     update([Constant.idCoinUpdate]);
 
     await fetchRealStats();
+    await fetchGrowthSpotlights();
 
     listenerCoinModel = await HostCoinApi.callApi();
     Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
@@ -137,6 +140,33 @@ class HostHomeScreenController extends GetxController {
     Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
 
     update([Constant.idGetCoinPlan]);
+  }
+
+  Future<void> fetchGrowthSpotlights() async {
+    isSpotlightLoading = true;
+    update();
+
+    try {
+      growthSpotlightModel = await GrowthSpotlightApi.callApi();
+
+      final items = spotlightItems;
+      if (items.isEmpty) {
+        currentIndex = 0;
+      } else if (currentIndex >= items.length) {
+        currentIndex = 0;
+      }
+    } catch (e) {
+      log("Error fetching growth spotlights: $e");
+      growthSpotlightModel = GrowthSpotlightModel(
+        status: false,
+        message: "Failed to fetch growth spotlights",
+        data: const [],
+      );
+      currentIndex = 0;
+    }
+
+    isSpotlightLoading = false;
+    update();
   }
 
   /// availability switch permission
@@ -211,6 +241,12 @@ class HostHomeScreenController extends GetxController {
 
   /// slider change
   void onPageChanged(int index, CarouselPageChangedReason reason) {
+    if (spotlightItems.isEmpty) {
+      currentIndex = 0;
+      update();
+      return;
+    }
+
     currentIndex = index;
     update();
   }

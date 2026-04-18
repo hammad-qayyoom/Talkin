@@ -126,6 +126,9 @@ const VerticalMenu = ({ scrollMenu }) => {
             <MenuItem href='/identity-proofs' icon={<i className='tabler-id' />}>
               Identity Proof
             </MenuItem>
+            <MenuItem href='/growth-spotlight' icon={<i className='tabler-photo' />}>
+              Growth Spotlight
+            </MenuItem>
             <MenuItem href='/feed/posts' icon={<i className='tabler-news' />}>
               Feed Posts
             </MenuItem>
