@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart' show Shimmer;
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/image/professional_cached_image.dart';
 import 'package:notisboard/custom/switch/switch.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/controller/host_home_screen_controller.dart';
@@ -353,17 +354,15 @@ class HostImageView extends StatelessWidget {
     return "${Api.baseUrl}$normalized";
   }
 
-  String _resolveSpotlightCaption(dynamic item) {
+  String _resolveSpotlightTitle(dynamic item) {
     final title = (item?.title ?? "").toString().trim();
-    final description = (item?.description ?? "").toString().trim();
-
-    if (title.isNotEmpty && description.isNotEmpty) {
-      return "$title\n$description";
-    }
-
     if (title.isNotEmpty) return title;
-    if (description.isNotEmpty) return description;
+    return "Growth Spotlight";
+  }
 
+  String _resolveSpotlightDescription(dynamic item) {
+    final description = (item?.description ?? "").toString().trim();
+    if (description.isNotEmpty) return description;
     return "Go online, stay visible, and earn more sessions.";
   }
 
@@ -625,15 +624,18 @@ class HostImageView extends StatelessWidget {
                         if (controller.isSpotlightLoading)
                           ClipRRect(
                             borderRadius: BorderRadius.circular(16),
-                            child: Container(
+                            child: AppImageShimmer(
                               height: isTablet ? 170 : 138,
                               width: double.infinity,
-                              color: AppColors.redesignSurfaceNeutralAlt,
-                              alignment: Alignment.center,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.6,
-                                color: _brandRed,
-                              ),
+                            ),
+                          )
+                        else if (controller.spotlightItems.isEmpty &&
+                            controller.growthSpotlightModel == null)
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: AppImageShimmer(
+                              height: isTablet ? 170 : 138,
+                              width: double.infinity,
                             ),
                           )
                         else if (controller.spotlightItems.isEmpty)
@@ -675,8 +677,9 @@ class HostImageView extends StatelessWidget {
                                   items: controller.spotlightItems.map((item) {
                                     final imageUrl = _resolveSpotlightImageUrl(
                                         item.image ?? "");
-                                    final caption =
-                                        _resolveSpotlightCaption(item);
+                                    final title = _resolveSpotlightTitle(item);
+                                    final description =
+                                        _resolveSpotlightDescription(item);
 
                                     return Builder(
                                       builder: (BuildContext context) {
@@ -688,16 +691,14 @@ class HostImageView extends StatelessWidget {
                                                     color: AppColors
                                                         .redesignSurfaceNeutralAlt,
                                                   )
-                                                : Image.network(
-                                                    imageUrl,
+                                                : ProfessionalCachedImage(
+                                                    imageUrl: imageUrl,
                                                     fit: BoxFit.cover,
-                                                    errorBuilder: (context,
-                                                        error, stackTrace) {
-                                                      return Container(
-                                                        color: AppColors
-                                                            .redesignSurfaceNeutralAlt,
-                                                      );
-                                                    },
+                                                    placeholder: const AppImageShimmer(),
+                                                    errorWidget: Container(
+                                                      color: AppColors
+                                                          .redesignSurfaceNeutralAlt,
+                                                    ),
                                                   ),
                                             Container(
                                               decoration: BoxDecoration(
@@ -717,15 +718,42 @@ class HostImageView extends StatelessWidget {
                                               left: 12,
                                               right: 12,
                                               bottom: 10,
-                                              child: Text(
-                                                caption,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style:
-                                                    AppFontStyle.fontStyleW600(
-                                                  fontSize: isTablet ? 14 : 12,
-                                                  fontColor: AppColors.white,
-                                                ),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    title,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: AppFontStyle
+                                                        .fontStyleW700(
+                                                      fontSize:
+                                                          isTablet ? 14 : 12,
+                                                      fontColor:
+                                                          AppColors.white,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 2),
+                                                  Text(
+                                                    description,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: AppFontStyle
+                                                        .fontStyleW500(
+                                                      fontSize:
+                                                          isTablet ? 12 : 11,
+                                                      fontColor: AppColors
+                                                          .white
+                                                          .withValues(
+                                                        alpha: 0.94,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ],

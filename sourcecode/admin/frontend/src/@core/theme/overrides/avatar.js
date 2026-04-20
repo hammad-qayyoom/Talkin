@@ -22,6 +22,13 @@ const avatar = {
     }
   },
   MuiAvatar: {
+    defaultProps: {
+      imgProps: {
+        loading: 'lazy',
+        decoding: 'async',
+        referrerPolicy: 'no-referrer'
+      }
+    },
     styleOverrides: {
       root: ({ theme }) => ({
         color: 'var(--mui-palette-text-primary)',

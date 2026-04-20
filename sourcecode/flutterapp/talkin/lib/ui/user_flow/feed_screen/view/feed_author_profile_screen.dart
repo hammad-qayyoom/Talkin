@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:notisboard/custom/image/professional_cached_image.dart';
 import 'package:notisboard/ui/user_flow/feed_screen/api/feed_api.dart';
 import 'package:notisboard/ui/user_flow/feed_screen/controller/feed_screen_controller.dart';
 import 'package:notisboard/utils/api.dart';
@@ -480,19 +480,11 @@ class _ProfileAvatar extends StatelessWidget {
       );
     }
 
-    return CachedNetworkImage(
+    return ProfessionalCachedImage(
       imageUrl: _absoluteUrl(trimmed),
       fit: BoxFit.cover,
-      placeholder: (_, __) => Container(
-        color: AppColors.lightGrey,
-        child: Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: AppColors.appColor,
-          ),
-        ),
-      ),
-      errorWidget: (_, __, ___) => Container(
+      placeholder: const AppImageShimmer(),
+      errorWidget: Container(
         color: AppColors.lightGrey,
         child: Icon(
           Icons.person_rounded,
@@ -684,23 +676,15 @@ class _ProfileMedia extends StatelessWidget {
     if (post.mediaUrls.length == 1) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(16),
-        child: CachedNetworkImage(
+        child: ProfessionalCachedImage(
           imageUrl: _absoluteUrl(post.mediaUrls.first),
           width: double.infinity,
           height: 220,
           fit: BoxFit.cover,
-          placeholder: (_, __) => Container(
-            width: double.infinity,
+          placeholder: const AppImageShimmer(
             height: 220,
-            color: AppColors.lightGrey,
-            child: Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: AppColors.appColor,
-              ),
-            ),
           ),
-          errorWidget: (_, __, ___) => Container(
+          errorWidget: Container(
             width: double.infinity,
             height: 220,
             color: AppColors.lightGrey,
@@ -723,18 +707,20 @@ class _ProfileMedia extends StatelessWidget {
         itemBuilder: (_, index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: CachedNetworkImage(
+            child: ProfessionalCachedImage(
               imageUrl: _absoluteUrl(post.mediaUrls[index]),
               width: 200,
               fit: BoxFit.cover,
-              placeholder: (_, __) => Container(
+              placeholder: const AppImageShimmer(
+                width: 200,
+              ),
+              errorWidget: Container(
                 width: 200,
                 color: AppColors.lightGrey,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.appColor,
-                  ),
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.broken_image_outlined,
+                  color: AppColors.darkGrey,
                 ),
               ),
             ),

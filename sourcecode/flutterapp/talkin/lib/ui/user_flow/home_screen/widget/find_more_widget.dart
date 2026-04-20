@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notisboard/custom/image/professional_cached_image.dart';
 import 'package:notisboard/custom/notisboard_wordmark.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
@@ -142,10 +142,10 @@ class FindMoreWidget extends StatelessWidget {
                             size: isTablet ? 21 : 20,
                           ),
                         )
-                      : CachedNetworkImage(
+                      : ProfessionalCachedImage(
                           imageUrl: imageUrl,
                           fit: BoxFit.cover,
-                          placeholder: (context, url) => Center(
+                          placeholder: Center(
                             child: Icon(
                               category == null
                                   ? Icons.grid_view_rounded
@@ -154,7 +154,7 @@ class FindMoreWidget extends StatelessWidget {
                               size: isTablet ? 21 : 20,
                             ),
                           ),
-                          errorWidget: (context, url, error) => Center(
+                          errorWidget: Center(
                             child: Icon(
                               category == null
                                   ? Icons.grid_view_rounded

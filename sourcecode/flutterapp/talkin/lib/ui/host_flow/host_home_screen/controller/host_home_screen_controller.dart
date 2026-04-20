@@ -28,7 +28,7 @@ class HostHomeScreenController extends GetxController {
   bool isToastVisible = false;
   UpdateExpertCallStatusModel? updateExpertCallStatusModel;
   bool isCoinLoading = false;
-  bool isSpotlightLoading = false;
+  bool isSpotlightLoading = true;
   int currentIndex = 0;
   int totalCompletedSessions = 0;
   FetchListenerProfileModel? fetchListenerProfileModel;
@@ -59,6 +59,7 @@ class HostHomeScreenController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    isSpotlightLoading = true;
     _initializeHome();
   }
 

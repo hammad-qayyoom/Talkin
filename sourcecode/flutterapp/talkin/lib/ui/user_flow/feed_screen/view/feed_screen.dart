@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/bottom_sheet/report_bottom_sheet.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/image/professional_cached_image.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/feed_screen/controller/feed_screen_controller.dart';
 import 'package:notisboard/utils/api.dart';
@@ -1219,19 +1219,16 @@ class _PostMediaView extends StatelessWidget {
     if (post.mediaUrls.length == 1) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(16),
-        child: CachedNetworkImage(
+        child: ProfessionalCachedImage(
           imageUrl: _toAbsoluteUrl(post.mediaUrls.first),
           width: Get.width,
           height: 230,
           fit: BoxFit.cover,
-          placeholder: (_, __) => Container(
+          placeholder: AppImageShimmer(
             width: Get.width,
             height: 230,
-            color: AppColors.lightGrey,
-            child:
-                const Center(child: CircularProgressIndicator(strokeWidth: 2)),
           ),
-          errorWidget: (_, __, ___) => Container(
+          errorWidget: Container(
             width: Get.width,
             height: 230,
             color: AppColors.lightGrey,
@@ -1254,15 +1251,20 @@ class _PostMediaView extends StatelessWidget {
         itemBuilder: (_, index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: CachedNetworkImage(
+            child: ProfessionalCachedImage(
               imageUrl: _toAbsoluteUrl(post.mediaUrls[index]),
               width: Get.width * 0.78,
               fit: BoxFit.cover,
-              placeholder: (_, __) => Container(
+              placeholder: AppImageShimmer(
+                width: Get.width * 0.78,
+              ),
+              errorWidget: Container(
                 width: Get.width * 0.78,
                 color: AppColors.lightGrey,
-                child: const Center(
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.broken_image_outlined,
+                  color: AppColors.darkGrey,
                 ),
               ),
             ),
@@ -1405,10 +1407,12 @@ class _CommentTile extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 15,
-                backgroundColor: AppColors.lightGrey,
-                backgroundImage: _resolveAvatar(comment.authorProfilePic),
+              SizedBox(
+                width: 30,
+                height: 30,
+                child: ClipOval(
+                  child: _buildAvatar(comment.authorProfilePic),
+                ),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -1489,19 +1493,47 @@ class _CommentTile extends StatelessWidget {
     );
   }
 
-  ImageProvider? _resolveAvatar(String value) {
+  Widget _buildAvatar(String value) {
+    final fallback = Container(
+      color: AppColors.lightGrey,
+      alignment: Alignment.center,
+      child: Icon(
+        Icons.person_rounded,
+        size: 16,
+        color: AppColors.darkGrey,
+      ),
+    );
+
+    final imageUrl = _resolveAvatarUrl(value);
+    if (imageUrl.isEmpty) return fallback;
+
+    return ProfessionalCachedImage(
+      imageUrl: imageUrl,
+      width: 30,
+      height: 30,
+      shape: BoxShape.circle,
+      placeholder: const AppImageShimmer(
+        width: 30,
+        height: 30,
+        shape: BoxShape.circle,
+      ),
+      errorWidget: fallback,
+    );
+  }
+
+  String _resolveAvatarUrl(String value) {
     final path = value.trim();
-    if (path.isEmpty) return null;
+    if (path.isEmpty) return '';
 
     if (path.startsWith('http://') || path.startsWith('https://')) {
-      return NetworkImage(path);
+      return path;
     }
 
     final joined = path.startsWith('/')
         ? '${Api.baseUrl}${path.substring(1)}'
         : '${Api.baseUrl}$path';
 
-    return NetworkImage(joined);
+    return joined;
   }
 }
 

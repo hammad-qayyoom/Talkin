@@ -32,10 +32,15 @@ const Avatar = styled(MuiAvatar)(({ skin, color, size, theme }) => {
 })
 
 const CustomAvatar = forwardRef((props, ref) => {
-  // Props
-  const { color, skin = 'filled', ...rest } = props
+  const { color, skin = 'filled', imgProps, ...rest } = props
 
-  return <Avatar color={color} skin={skin} ref={ref} {...rest} />
+  const mergedImgProps = {
+    loading: 'lazy',
+    decoding: 'async',
+    ...(imgProps || {})
+  }
+
+  return <Avatar color={color} skin={skin} ref={ref} {...rest} imgProps={mergedImgProps} />
 })
 
 export default CustomAvatar
