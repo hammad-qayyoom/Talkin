@@ -364,12 +364,17 @@ class _HistoryTab extends StatelessWidget {
 class CoinHistoryScreenTabBarScreen extends StatelessWidget {
   const CoinHistoryScreenTabBarScreen({super.key});
 
-  String _coinTypeLabel(int type) {
+  String _coinTypeLabel(CoinHistory item) {
+    final type = item.type ?? 0;
     switch (type) {
       case 2:
         return 'Subscription Purchase';
       case 10:
         return 'Subscription Purchase';
+      case 11:
+        return _isIncome(item)
+            ? 'Session Cancellation Refund'
+            : 'Session Booking';
       case 3:
         return 'Private Audio Call';
       case 4:
@@ -385,16 +390,21 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
       case 9:
         return 'Admin Deducted Session Credit';
       default:
-        return 'Log In Bonus';
+        return type == 1 ? 'Log In Bonus' : 'Session Credit Activity';
     }
   }
 
-  IconData _coinTypeIcon(int type) {
+  IconData _coinTypeIcon(CoinHistory item) {
+    final type = item.type ?? 0;
     switch (type) {
       case 2:
         return Icons.shopping_bag_outlined;
       case 10:
         return Icons.shopping_bag_outlined;
+      case 11:
+        return _isIncome(item)
+            ? Icons.replay_circle_filled_outlined
+            : Icons.event_available_outlined;
       case 3:
         return Icons.call_outlined;
       case 4:
@@ -581,7 +591,7 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: type == 1 || type == 2
+              child: type == 1 || type == 2 || type == 10
                   ? CustomProfileImage(
                       image: Database.loginUserProfilePic,
                     )
@@ -596,7 +606,7 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  (type == 1 || type == 2)
+                  (type == 1 || type == 2 || type == 10)
                       ? Database.loginUserName
                       : (item.receiverName ?? ''),
                   maxLines: 1,
@@ -610,14 +620,14 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
                 Row(
                   children: [
                     Icon(
-                      _coinTypeIcon(type),
+                      _coinTypeIcon(item),
                       size: 13,
                       color: AppColors.redesignMutedText,
                     ),
                     const SizedBox(width: 5),
                     Expanded(
                       child: Text(
-                        _coinTypeLabel(type),
+                        _coinTypeLabel(item),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: AppFontStyle.fontStyleW500(

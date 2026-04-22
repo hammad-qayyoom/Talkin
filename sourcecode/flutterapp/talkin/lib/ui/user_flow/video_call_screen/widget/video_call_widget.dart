@@ -17,19 +17,26 @@ class VideoCallView1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primary.withValues(alpha: 0.5),
-      body: SizedBox(
+    final mediaQuery = MediaQuery.of(context);
+    return MediaQuery(
+      data: mediaQuery.copyWith(
+        textScaler: mediaQuery.textScaler.clamp(maxScaleFactor: 1.0),
+      ),
+      child: SizedBox(
         height: Get.height,
         width: Get.width,
         child: GetBuilder<VideoCallController>(
           id: Constant.idVideoCall,
           builder: (logic) {
             final viewport = Size(Get.width, Get.height);
+            final isCompactControls = viewport.width < 390;
+            final controlSize = isCompactControls ? 42.0 : 46.0;
+            final dangerControlSize = isCompactControls ? 46.0 : 48.0;
+            final controlBarPadding = isCompactControls ? 6.0 : 7.0;
             logic.prepareSelfPreviewLayout(
               viewport,
-              topPadding: 35,
-              bottomPadding: 120,
+              topPadding: 72,
+              bottomPadding: 136,
               horizontalPadding: 12,
             );
 
@@ -38,16 +45,123 @@ class VideoCallView1 extends StatelessWidget {
                 Positioned.fill(
                   child: _buildRemoteVideoArea(logic),
                 ),
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            AppColors.black.withValues(alpha: 0.45),
+                            AppColors.transparent,
+                            AppColors.black.withValues(alpha: 0.58),
+                          ],
+                          stops: const [0.0, 0.45, 1.0],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 _buildSelfPreviewOverlay(logic, viewport),
                 Positioned(
-                  bottom: 30,
-                  left: 0,
-                  right: 0,
+                  top: 44,
+                  left: 12,
+                  right: 12,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(7, 7, 7, 7),
+                        decoration: BoxDecoration(
+                          color: AppColors.black.withValues(alpha: 0.45),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: AppColors.white.withValues(alpha: 0.10),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Image.asset(
+                                  AppAsset.starCoin,
+                                  height: 17,
+                                  width: 17,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  Database.fetchLoginUserProfileModel?.user
+                                              ?.isListener ==
+                                          true
+                                      ? Database.listenerCoin.toString()
+                                      : Database.userCoin.toString(),
+                                  style: AppFontStyle.fontStyleW700(
+                                    fontSize: 12,
+                                    fontColor: AppColors.yellow,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 5),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  logic.formattedTime.toString(),
+                                  style: AppFontStyle.fontStyleW500(
+                                    fontColor: AppColors.white,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Image.asset(
+                                  AppAsset.flagIcon,
+                                  height: 10,
+                                  width: 10,
+                                  color: AppColors.white,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 8,
+                        width: 8,
+                        decoration: BoxDecoration(
+                          color: AppColors.green,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.green.withValues(alpha: 0.35),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  left: 12,
+                  right: 12,
+                  bottom: 16,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: controlBarPadding,
+                      vertical: controlBarPadding,
+                    ),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(60),
-                      color: AppColors.black.withValues(alpha: 0.40),
+                      color: AppColors.black.withValues(alpha: 0.62),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: AppColors.white.withValues(alpha: 0.10),
+                      ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,161 +170,45 @@ class VideoCallView1 extends StatelessWidget {
                           icon: logic.micMute == true
                               ? AppAsset.micMute
                               : AppAsset.microPhoneIcon,
-                          bgColor: Colors.white,
+                          isActive: logic.micMute,
+                          size: controlSize,
                           onTap: logic.onMicMute,
                         ),
                         ControlButton(
                           icon: logic.isCameraOff == true
                               ? AppAsset.videoMute
                               : AppAsset.videoCallIcon,
-                          bgColor: Colors.white,
+                          isActive: logic.isCameraOff,
+                          size: controlSize,
                           onTap: logic.onCameraOff,
                         ),
                         ControlButton(
                           icon: AppAsset.cameraFlipIcon,
-                          bgColor: Colors.white,
+                          size: controlSize,
                           onTap: logic.onCameraTurn,
                         ),
                         logic.isGroupSessionCall
-                            ? _buildGroupChatControlButton(context, logic)
+                            ? _buildGroupChatControlButton(
+                                context,
+                                logic,
+                                size: controlSize,
+                              )
                             : ControlButton(
                                 icon: AppAsset.circleMoreIcon,
-                                bgColor: Colors.white,
-                                onTap: () {
-                                  showMoreOptionsBottomSheet(
-                                    context: context,
-                                    isHost: Database.isListener,
-                                    userId: Database.loginUserId,
-                                    onBlock: () {
-                                      Get.dialog(
-                                        barrierColor:
-                                            AppColors.black.withValues(
-                                          alpha: 0.8,
-                                        ),
-                                        Dialog(
-                                          backgroundColor:
-                                              AppColors.transparent,
-                                          shadowColor: Colors.transparent,
-                                          surfaceTintColor: Colors.transparent,
-                                          elevation: 0,
-                                          child: BlockDialog(
-                                            hostId: Database
-                                                    .fetchListenerProfileModel
-                                                    ?.data
-                                                    ?.id ??
-                                                '',
-                                            isHost:
-                                                ((Database.fetchListenerProfileModel
-                                                                ?.data?.id ??
-                                                            '')
-                                                        .isNotEmpty)
-                                                    ? false
-                                                    : true,
-                                            userId: Database.loginUserId,
-                                            onTapCall: logic.endCurrentCall,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    onReport: () {
-                                      ReportBottomSheetUi.show(
-                                        context: context,
-                                        reportType: 'user',
-                                        targetId: logic.receiverId ?? '',
-                                      );
-                                    },
-                                  );
-                                },
+                                size: controlSize,
+                                onTap: () => _openMoreOptionsBottomSheet(
+                                  context,
+                                  logic,
+                                ),
                               ),
                         ControlButton(
                           icon: AppAsset.callCut,
-                          bgColor: Colors.red,
+                          isDanger: true,
+                          size: dangerControlSize,
                           onTap: logic.endCurrentCall,
                         ),
                       ],
-                    ).paddingSymmetric(horizontal: 10),
-                  ).paddingSymmetric(horizontal: 10),
-                ),
-                Positioned(
-                  top: 50,
-                  left: 16,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 4,
-                          vertical: 4,
-                        ).copyWith(right: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: AppColors.black.withValues(alpha: 0.40),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              AppAsset.starCoin,
-                              height: 26,
-                              width: 26,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              Database.fetchLoginUserProfileModel?.user
-                                          ?.isListener ==
-                                      true
-                                  ? Database.listenerCoin.toString()
-                                  : Database.userCoin.toString(),
-                              style: AppFontStyle.fontStyleW700(
-                                fontSize: 17,
-                                fontColor: AppColors.yellow,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ).paddingOnly(bottom: 10),
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: AppColors.black.withValues(alpha: 0.40),
-                            ),
-                            child: Center(
-                              child: GetBuilder<VideoCallController>(
-                                id: Constant.idVideoCall,
-                                builder: (controller) => Text(
-                                  overflow: TextOverflow.ellipsis,
-                                  controller.formattedTime.toString(),
-                                  style: AppFontStyle.fontStyleW400(
-                                    fontColor: AppColors.white,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ).paddingOnly(right: 6),
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.black.withValues(alpha: 0.40),
-                            ),
-                            child: Center(
-                              child: Image.asset(
-                                AppAsset.flagIcon,
-                                height: 12,
-                                width: 12,
-                                color: AppColors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ],
@@ -221,17 +219,56 @@ class VideoCallView1 extends StatelessWidget {
     );
   }
 
-  Widget _buildGroupChatControlButton(
+  void _openMoreOptionsBottomSheet(
     BuildContext context,
     VideoCallController logic,
   ) {
+    showMoreOptionsBottomSheet(
+      context: context,
+      isHost: Database.isListener,
+      userId: Database.loginUserId,
+      onBlock: () {
+        Get.dialog(
+          barrierColor: AppColors.black.withValues(alpha: 0.8),
+          Dialog(
+            backgroundColor: AppColors.transparent,
+            shadowColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            child: BlockDialog(
+              hostId: Database.fetchListenerProfileModel?.data?.id ?? '',
+              isHost: ((Database.fetchListenerProfileModel?.data?.id ?? '')
+                      .isNotEmpty)
+                  ? false
+                  : true,
+              userId: Database.loginUserId,
+              onTapCall: logic.endCurrentCall,
+            ),
+          ),
+        );
+      },
+      onReport: () {
+        ReportBottomSheetUi.show(
+          context: context,
+          reportType: 'user',
+          targetId: logic.receiverId ?? '',
+        );
+      },
+    );
+  }
+
+  Widget _buildGroupChatControlButton(
+    BuildContext context,
+    VideoCallController logic, {
+    required double size,
+  }) {
     return Stack(
       clipBehavior: Clip.none,
       children: [
         ControlButton(
           icon: AppAsset.circleMoreIcon,
-          bgColor: Colors.white,
-          onTap: () => _showGroupLiveChatBottomSheet(context, logic),
+          size: size,
+          onTap: () => _showGroupSessionActionsSheet(context, logic),
         ),
         if (logic.unreadGroupChatCount > 0)
           Positioned(
@@ -255,6 +292,114 @@ class VideoCallView1 extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+
+  void _showGroupSessionActionsSheet(
+    BuildContext context,
+    VideoCallController controller,
+  ) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: AppColors.transparent,
+      builder: (sheetContext) {
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+          ),
+          child: SafeArea(
+            top: false,
+            child: GetBuilder<VideoCallController>(
+              id: Constant.idVideoCall,
+              builder: (logic) {
+                final participantCount = logic.joinedParticipantCount;
+                final expertMode = logic.isExpertController;
+
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.chat_bubble_outline),
+                      title: const Text('Live Chat'),
+                      trailing: logic.unreadGroupChatCount <= 0
+                          ? const SizedBox.shrink()
+                          : Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                logic.unreadGroupChatCount > 99
+                                    ? '99+'
+                                    : logic.unreadGroupChatCount.toString(),
+                                style: AppFontStyle.fontStyleW600(
+                                  fontSize: 10,
+                                  fontColor: AppColors.white,
+                                ),
+                              ),
+                            ),
+                      onTap: () {
+                        Navigator.of(sheetContext).pop();
+                        _showGroupLiveChatBottomSheet(context, controller);
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.group_outlined),
+                      title: Text(
+                        expertMode
+                            ? 'Manage Participants'
+                            : 'Participant Controls',
+                      ),
+                      subtitle: Text(
+                        participantCount == 1
+                            ? '1 participant joined'
+                            : '$participantCount participants joined',
+                        style: AppFontStyle.fontStyleW500(
+                          fontSize: 12,
+                          fontColor: AppColors.black.withValues(alpha: 0.55),
+                        ),
+                      ),
+                      trailing: Container(
+                        constraints: const BoxConstraints(minWidth: 28),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.black.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          participantCount.toString(),
+                          textAlign: TextAlign.center,
+                          style: AppFontStyle.fontStyleW600(
+                            fontSize: 12,
+                            fontColor: AppColors.black.withValues(alpha: 0.72),
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.of(sheetContext).pop();
+                        _showParticipantManagementSheet(
+                          context,
+                          controller,
+                          expertMode: expertMode,
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -400,6 +545,225 @@ class VideoCallView1 extends StatelessWidget {
     ).whenComplete(logic.markGroupChatSheetClosed);
   }
 
+  void _showParticipantManagementSheet(
+    BuildContext context,
+    VideoCallController controller, {
+    required bool expertMode,
+  }) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.transparent,
+      builder: (sheetContext) {
+        return Container(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 18),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+          ),
+          child: SafeArea(
+            top: false,
+            child: GetBuilder<VideoCallController>(
+              id: Constant.idVideoCall,
+              builder: (logic) {
+                final participants = logic.manageableParticipants;
+                final participantCount = participants.length;
+
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      expertMode
+                          ? 'Manage Participants'
+                          : 'Participant Controls',
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: 16,
+                        fontColor: AppColors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      participantCount == 1
+                          ? '1 participant joined'
+                          : '$participantCount participants joined',
+                      style: AppFontStyle.fontStyleW500(
+                        fontSize: 12,
+                        fontColor: AppColors.black.withValues(alpha: 0.62),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    if (participants.isEmpty)
+                      Text(
+                        'No active users to manage',
+                        style: AppFontStyle.fontStyleW500(
+                          fontSize: 13,
+                          fontColor: AppColors.black.withValues(alpha: 0.7),
+                        ),
+                      )
+                    else
+                      ConstrainedBox(
+                        constraints:
+                            BoxConstraints(maxHeight: Get.height * 0.55),
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: participants.length,
+                          separatorBuilder: (_, __) => Divider(
+                            color: AppColors.black.withValues(alpha: 0.08),
+                            height: 14,
+                          ),
+                          itemBuilder: (context, index) {
+                            final participant = participants[index];
+                            return _buildParticipantControlRow(
+                              participant,
+                              logic,
+                              expertMode: expertMode,
+                            );
+                          },
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildParticipantControlRow(
+    VideoParticipantEntry participant,
+    VideoCallController controller, {
+    required bool expertMode,
+  }) {
+    final streamID = (participant.streamID ?? '').trim();
+    final hasStream = streamID.isNotEmpty;
+    final localAudioMuted =
+        hasStream ? controller.isLocalRemoteAudioMuted(streamID) : false;
+    final localVideoPaused =
+        hasStream ? controller.isLocalRemoteVideoMuted(streamID) : false;
+    final expertAudioMuted =
+        hasStream ? controller.isExpertRemoteAudioMuted(streamID) : false;
+    final expertVideoMuted =
+        hasStream ? controller.isExpertRemoteVideoMuted(streamID) : false;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          participant.userName,
+          style: AppFontStyle.fontStyleW600(
+            fontSize: 13,
+            fontColor: AppColors.black,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        Text(
+          participant.userID,
+          style: AppFontStyle.fontStyleW500(
+            fontSize: 11,
+            fontColor: AppColors.black.withValues(alpha: 0.55),
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          children: [
+            _buildParticipantActionChip(
+              label: localAudioMuted ? 'Unmute For Me' : 'Mute For Me',
+              enabled: hasStream,
+              onTap: () => controller.setLocalRemoteAudioMuted(
+                streamID,
+                muted: !localAudioMuted,
+              ),
+            ),
+            _buildParticipantActionChip(
+              label: localVideoPaused
+                  ? 'Resume Video For Me'
+                  : 'Pause Video For Me',
+              enabled: hasStream,
+              onTap: () => controller.setLocalRemoteVideoMuted(
+                streamID,
+                muted: !localVideoPaused,
+              ),
+            ),
+            if (expertMode)
+              _buildParticipantActionChip(
+                label: expertAudioMuted
+                    ? 'Unmute Audio For Everyone'
+                    : 'Mute Audio For Everyone',
+                enabled: hasStream,
+                onTap: () => controller.hostMuteUserAudio(
+                  streamID,
+                  mute: !expertAudioMuted,
+                ),
+              ),
+            if (expertMode)
+              _buildParticipantActionChip(
+                label: expertVideoMuted
+                    ? 'Unmute Video For Everyone'
+                    : 'Mute Video For Everyone',
+                enabled: hasStream,
+                onTap: () => controller.hostMuteUserVideo(
+                  streamID,
+                  mute: !expertVideoMuted,
+                ),
+              ),
+            if (expertMode)
+              _buildParticipantActionChip(
+                label: 'Remove',
+                enabled: hasStream,
+                isDanger: true,
+                onTap: () => controller.hostRemoveUser(streamID),
+              ),
+            if (!hasStream)
+              _buildParticipantActionChip(
+                label: 'No media stream yet',
+                enabled: false,
+                onTap: () {},
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildParticipantActionChip({
+    required String label,
+    required VoidCallback onTap,
+    bool isDanger = false,
+    bool enabled = true,
+  }) {
+    return InkWell(
+      onTap: enabled ? onTap : null,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+        decoration: BoxDecoration(
+          color: enabled
+              ? (isDanger
+                  ? Colors.red.withValues(alpha: 0.12)
+                  : AppColors.black.withValues(alpha: 0.08))
+              : AppColors.black.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          label,
+          style: AppFontStyle.fontStyleW600(
+            fontSize: 11,
+            fontColor: enabled
+                ? (isDanger ? Colors.red : AppColors.black)
+                : AppColors.black.withValues(alpha: 0.35),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildGroupLiveChatMessageBubble(GroupLiveChatMessage message) {
     final sentAt = DateTime.fromMillisecondsSinceEpoch(message.sentAtMs);
     final timeText =
@@ -489,7 +853,7 @@ class VideoCallView1 extends StatelessWidget {
             color: AppColors.black,
             width: Get.width,
             height: Get.height,
-            padding: const EdgeInsets.fromLTRB(10, 110, 10, 120),
+            padding: const EdgeInsets.fromLTRB(10, 96, 10, 108),
             child: GridView.builder(
               physics: const BouncingScrollPhysics(),
               itemCount: remoteEntries.length,
@@ -572,8 +936,8 @@ class VideoCallView1 extends StatelessWidget {
           logic.dragSelfPreview(
             details.delta,
             viewport,
-            topPadding: 35,
-            bottomPadding: 120,
+            topPadding: 72,
+            bottomPadding: 136,
             horizontalPadding: 12,
           );
         },
@@ -582,7 +946,7 @@ class VideoCallView1 extends StatelessWidget {
           width: logic.selfPreviewWidth,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: AppColors.white.withValues(alpha: 0.18),
             ),
@@ -606,12 +970,12 @@ class VideoCallView1 extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: AppColors.black.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(14),
                   ),
                   child: Text(
                     'You',
                     style: AppFontStyle.fontStyleW600(
-                      fontSize: 10,
+                      fontSize: 9,
                       fontColor: AppColors.white,
                     ),
                   ),
@@ -658,23 +1022,23 @@ class VideoCallView1 extends StatelessWidget {
                     logic.resizeSelfPreview(
                       details.delta,
                       viewport,
-                      topPadding: 35,
-                      bottomPadding: 120,
+                      topPadding: 72,
+                      bottomPadding: 136,
                       horizontalPadding: 12,
                     );
                   },
                   child: Container(
-                    width: 30,
-                    height: 30,
+                    width: 24,
+                    height: 24,
                     decoration: BoxDecoration(
                       color: AppColors.black.withValues(alpha: 0.58),
                       borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(12),
+                        topLeft: Radius.circular(10),
                       ),
                     ),
                     child: const Icon(
                       Icons.open_in_full,
-                      size: 14,
+                      size: 12,
                       color: Colors.white,
                     ),
                   ),
@@ -713,7 +1077,7 @@ class VideoCallView1 extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 95,
+          top: 88,
           left: 16,
           right: 16,
           child: Row(
@@ -740,10 +1104,9 @@ class VideoCallView1 extends StatelessWidget {
                       Expanded(
                         child: Text(
                           logic.focusedRemoteTitle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                           style: AppFontStyle.fontStyleW600(
-                            fontSize: 12,
+                            fontSize: 11,
                             fontColor: AppColors.white,
                           ),
                         ),
@@ -814,7 +1177,7 @@ class VideoCallView1 extends StatelessWidget {
               top: 6,
               left: 6,
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 132),
+                constraints: const BoxConstraints(maxWidth: 140),
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -828,10 +1191,10 @@ class VideoCallView1 extends StatelessWidget {
                       Flexible(
                         child: Text(
                           logic.remoteDisplayName(streamID),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          softWrap: true,
                           style: AppFontStyle.fontStyleW500(
-                            fontSize: 10,
+                            fontSize: 9,
                             fontColor: AppColors.white,
                           ),
                         ),
@@ -1055,7 +1418,7 @@ class VideoCallView1 extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
         ),
         child: SizedBox(
-          height: 76,
+          height: 70,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: minimizedEntries.length,
@@ -1066,7 +1429,7 @@ class VideoCallView1 extends StatelessWidget {
               return InkWell(
                 onTap: () => logic.toggleMinimizeRemoteTile(streamID),
                 child: Container(
-                  width: 82,
+                  width: 100,
                   padding:
                       const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   decoration: BoxDecoration(
@@ -1082,16 +1445,16 @@ class VideoCallView1 extends StatelessWidget {
                       const Icon(
                         Icons.person,
                         color: Colors.white,
-                        size: 18,
+                        size: 16,
                       ),
                       const SizedBox(height: 4),
                       Text(
                         logic.remoteDisplayName(streamID),
                         textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        softWrap: true,
                         style: AppFontStyle.fontStyleW500(
-                          fontSize: 10,
+                          fontSize: 9,
                           fontColor: AppColors.white,
                         ),
                       ),
@@ -1116,28 +1479,57 @@ class VideoCallView1 extends StatelessWidget {
 
 class ControlButton extends StatelessWidget {
   final String icon;
-  final Color bgColor;
+  final bool isDanger;
+  final bool isActive;
+  final Color? backgroundColor;
+  final Color? iconColor;
+  final double size;
   final VoidCallback? onTap;
 
   const ControlButton({
     super.key,
     required this.icon,
-    this.bgColor = Colors.white,
+    this.isDanger = false,
+    this.isActive = false,
+    this.backgroundColor,
+    this.iconColor,
+    this.size = 50,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final iconSize = (size * 0.40).clamp(15.0, 20.0);
+    final resolvedBackground = backgroundColor ??
+        (isDanger
+            ? AppColors.redesignBrandRed
+            : (isActive ? AppColors.redesignAccentSoftBg : Colors.white));
+    final resolvedIconColor =
+        iconColor ?? (isDanger ? Colors.white : AppColors.redesignBrandDark);
+    final borderColor = isDanger
+        ? AppColors.redesignBrandRed
+        : (isActive
+            ? AppColors.redesignBrandRed.withValues(alpha: 0.5)
+            : AppColors.transparent);
+
     return InkWell(
       onTap: onTap,
-      child: CircleAvatar(
-        radius: 28,
-        backgroundColor: bgColor,
+      borderRadius: BorderRadius.circular(size / 2),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        height: size,
+        width: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: resolvedBackground,
+          border: Border.all(color: borderColor, width: 1.15),
+        ),
         child: Image.asset(
           icon,
-          color: bgColor == Colors.white ? AppColors.darkPurple : Colors.white,
-          height: 26,
-          width: 26,
+          color: resolvedIconColor,
+          height: iconSize,
+          width: iconSize,
         ),
       ),
     );

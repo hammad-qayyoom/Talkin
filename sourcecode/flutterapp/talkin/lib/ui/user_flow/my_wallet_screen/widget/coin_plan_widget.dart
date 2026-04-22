@@ -107,11 +107,13 @@ class PaymentOptionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSelected = controller.selectedPaymentMethod == index;
+    final isDisabled = controller.isPaymentProcessing;
 
     return Material(
       color: AppColors.transparent,
       child: InkWell(
-        onTap: () => controller.onChangePaymentMethod(index),
+        onTap:
+            isDisabled ? null : () => controller.onChangePaymentMethod(index),
         child: Container(
           height: 58,
           margin: const EdgeInsets.symmetric(vertical: 8),
@@ -299,157 +301,214 @@ class PaymentOptionBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
-      child: GetBuilder<MyWalletController>(
-        id: Constant.onChangePaymentMethod,
-        builder: (controller) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Center(
-                child: Container(
-                  height: 5,
-                  width: 44,
-                  decoration: BoxDecoration(
-                    color: AppColors.redesignSoftBorder,
-                    borderRadius: BorderRadius.circular(999),
+    final screenHeight = MediaQuery.sizeOf(context).height;
+
+    return SafeArea(
+      top: false,
+      child: AnimatedPadding(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          constraints: BoxConstraints(maxHeight: screenHeight * 0.84),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: GetBuilder<MyWalletController>(
+            id: Constant.onChangePaymentMethod,
+            builder: (controller) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    child: Center(
+                      child: Container(
+                        height: 5,
+                        width: 44,
+                        decoration: BoxDecoration(
+                          color: AppColors.redesignSoftBorder,
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                EnumLocale.txtPaymentMethod.name.tr,
-                style: AppFontStyle.fontStyleW700(
-                  fontSize: 20,
-                  fontColor: AppColors.redesignBrandDark,
-                ),
-              ),
-              const SizedBox(height: 10),
-              if ((Platform.isAndroid &&
-                      Database.settingApiModel?.data?.isRazorpayEnabled ==
-                          true) ||
-                  (Platform.isIOS &&
-                      Database.settingApiModel?.data?.isRazorpayIosEnabled ==
-                          true))
-                PaymentOptionTile(
-                  index: 0,
-                  title: 'Razorpay',
-                  controller: controller,
-                  image: AppAsset.razorpay,
-                ),
-              if ((Platform.isAndroid &&
-                      Database.settingApiModel?.data?.isStripeEnabled ==
-                          true) ||
-                  (Platform.isIOS &&
-                      Database.settingApiModel?.data?.isStripeIosEnabled ==
-                          true))
-                PaymentOptionTile(
-                  index: 1,
-                  title: 'Stripe',
-                  controller: controller,
-                  image: AppAsset.stripe,
-                ),
-              if ((Platform.isAndroid &&
-                      Database.settingApiModel?.data?.isFlutterwaveEnabled ==
-                          true) ||
-                  (Platform.isIOS &&
-                      Database.settingApiModel?.data?.isFlutterwaveIosEnabled ==
-                          true))
-                PaymentOptionTile(
-                  index: 2,
-                  title: 'Flutterwave',
-                  controller: controller,
-                  image: AppAsset.flutterWave,
-                ),
-              if ((Platform.isAndroid &&
-                      Database.settingApiModel?.data?.isGooglePlayEnabled ==
-                          true) ||
-                  (Platform.isIOS &&
-                      Database.settingApiModel?.data?.isGooglePlayIosEnabled ==
-                          true))
-                PaymentOptionTile(
-                  index: 3,
-                  title: 'In App Purchase',
-                  controller: controller,
-                  image: Platform.isIOS
-                      ? AppAsset.appStoreImage
-                      : AppAsset.googleIcon,
-                  width: 50,
-                  height: 26,
-                ),
-              if ((Platform.isAndroid &&
-                      Database.settingApiModel?.data
-                              ?.isCashfreeAndroidEnabled ==
-                          true) ||
-                  (Platform.isIOS &&
-                      Database.settingApiModel?.data?.isCashfreeIosEnabled ==
-                          true))
-                PaymentOptionTile(
-                  index: 4,
-                  title: 'Cash Free',
-                  controller: controller,
-                  image: AppAsset.cashFreeImage,
-                  width: 50,
-                  height: 26,
-                ),
-              if ((Platform.isAndroid &&
-                      Database.settingApiModel?.data
-                              ?.isPaystackAndroidEnabled ==
-                          true) ||
-                  (Platform.isIOS &&
-                      Database.settingApiModel?.data?.isPaystackIosEnabled ==
-                          true))
-                PaymentOptionTile(
-                  index: 5,
-                  title: 'Pay Stack',
-                  controller: controller,
-                  image: AppAsset.payStackImage,
-                  width: 50,
-                  height: 26,
-                ),
-              if ((Platform.isAndroid &&
-                      Database.settingApiModel?.data?.isPaypalAndroidEnabled ==
-                          true) ||
-                  (Platform.isIOS &&
-                      Database.settingApiModel?.data?.isPaypalIosEnabled ==
-                          true))
-                PaymentOptionTile(
-                  index: 6,
-                  title: 'Pay Pal',
-                  controller: controller,
-                  image: AppAsset.payPalImage,
-                  width: 50,
-                  height: 26,
-                ),
-              const SizedBox(height: 12),
-              PrimaryAppButton(
-                onTap: () {
-                  log('message ${controller.coinPlan[index].id}');
-                  log('message ${controller.selectedCoinPlan?.productId}');
-                  controller.onClickPayNow(
-                    id: controller.coinPlan[index].id ?? '',
-                    amount: controller.coinPlan[index].price ?? 0,
-                    productKey: controller.selectedCoinPlan?.productId ?? '',
-                  );
-                },
-                height: 52,
-                borderRadius: 16,
-                color: AppColors.redesignBrandRed,
-                text: EnumLocale.txtPay.name.tr,
-                textStyle: AppFontStyle.fontStyleW600(
-                  fontSize: 17,
-                  fontColor: AppColors.white,
-                ),
-              ).paddingOnly(bottom: 10),
-            ],
-          );
-        },
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
+                    child: Text(
+                      EnumLocale.txtPaymentMethod.name.tr,
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: 20,
+                        fontColor: AppColors.redesignBrandDark,
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if ((Platform.isAndroid &&
+                                  Database.settingApiModel?.data
+                                          ?.isRazorpayEnabled ==
+                                      true) ||
+                              (Platform.isIOS &&
+                                  Database.settingApiModel?.data
+                                          ?.isRazorpayIosEnabled ==
+                                      true))
+                            PaymentOptionTile(
+                              index: 0,
+                              title: 'Razorpay',
+                              controller: controller,
+                              image: AppAsset.razorpay,
+                            ),
+                          if ((Platform.isAndroid &&
+                                  Database.settingApiModel?.data
+                                          ?.isStripeEnabled ==
+                                      true) ||
+                              (Platform.isIOS &&
+                                  Database.settingApiModel?.data
+                                          ?.isStripeIosEnabled ==
+                                      true))
+                            PaymentOptionTile(
+                              index: 1,
+                              title: 'Stripe',
+                              controller: controller,
+                              image: AppAsset.stripe,
+                            ),
+                          if ((Platform.isAndroid &&
+                                  Database.settingApiModel?.data
+                                          ?.isFlutterwaveEnabled ==
+                                      true) ||
+                              (Platform.isIOS &&
+                                  Database.settingApiModel?.data
+                                          ?.isFlutterwaveIosEnabled ==
+                                      true))
+                            PaymentOptionTile(
+                              index: 2,
+                              title: 'Flutterwave',
+                              controller: controller,
+                              image: AppAsset.flutterWave,
+                            ),
+                          if ((Platform.isAndroid &&
+                                  Database.settingApiModel?.data
+                                          ?.isGooglePlayEnabled ==
+                                      true) ||
+                              (Platform.isIOS &&
+                                  Database.settingApiModel?.data
+                                          ?.isGooglePlayIosEnabled ==
+                                      true))
+                            PaymentOptionTile(
+                              index: 3,
+                              title: 'In App Purchase',
+                              controller: controller,
+                              image: Platform.isIOS
+                                  ? AppAsset.appStoreImage
+                                  : AppAsset.googleIcon,
+                              width: 50,
+                              height: 26,
+                            ),
+                          if ((Platform.isAndroid &&
+                                  Database.settingApiModel?.data
+                                          ?.isCashfreeAndroidEnabled ==
+                                      true) ||
+                              (Platform.isIOS &&
+                                  Database.settingApiModel?.data
+                                          ?.isCashfreeIosEnabled ==
+                                      true))
+                            PaymentOptionTile(
+                              index: 4,
+                              title: 'Cash Free',
+                              controller: controller,
+                              image: AppAsset.cashFreeImage,
+                              width: 50,
+                              height: 26,
+                            ),
+                          if ((Platform.isAndroid &&
+                                  Database.settingApiModel?.data
+                                          ?.isPaystackAndroidEnabled ==
+                                      true) ||
+                              (Platform.isIOS &&
+                                  Database.settingApiModel?.data
+                                          ?.isPaystackIosEnabled ==
+                                      true))
+                            PaymentOptionTile(
+                              index: 5,
+                              title: 'Pay Stack',
+                              controller: controller,
+                              image: AppAsset.payStackImage,
+                              width: 50,
+                              height: 26,
+                            ),
+                          if ((Platform.isAndroid &&
+                                  Database.settingApiModel?.data
+                                          ?.isPaypalAndroidEnabled ==
+                                      true) ||
+                              (Platform.isIOS &&
+                                  Database.settingApiModel?.data
+                                          ?.isPaypalIosEnabled ==
+                                      true))
+                            PaymentOptionTile(
+                              index: 6,
+                              title: 'Pay Pal',
+                              controller: controller,
+                              image: AppAsset.payPalImage,
+                              width: 50,
+                              height: 26,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+                    child: PrimaryAppButton(
+                      onTap: controller.isPaymentProcessing
+                          ? null
+                          : () async {
+                              log('message ${controller.coinPlan[index].id}');
+                              log('message ${controller.selectedCoinPlan?.productId}');
+                              await controller.onClickPayNow(
+                                id: controller.coinPlan[index].id ?? '',
+                                amount: controller.coinPlan[index].price ?? 0,
+                                productKey:
+                                    controller.selectedCoinPlan?.productId ??
+                                        '',
+                              );
+                            },
+                      height: 52,
+                      borderRadius: 16,
+                      color: AppColors.redesignBrandRed,
+                      text: controller.isPaymentProcessing
+                          ? null
+                          : EnumLocale.txtPay.name.tr,
+                      textStyle: AppFontStyle.fontStyleW600(
+                        fontSize: 17,
+                        fontColor: AppColors.white,
+                      ),
+                      child: controller.isPaymentProcessing
+                          ? const SizedBox(
+                              height: 22,
+                              width: 22,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.4,
+                                color: AppColors.white,
+                              ),
+                            )
+                          : null,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }

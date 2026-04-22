@@ -439,7 +439,7 @@ class VoiceCallController extends GetxController {
   }
 
   Future<ZegoRoomLoginResult> loginRoom() async {
-    // await logoutRoom();
+    await logoutRoom();
     final user = ZegoUser(_resolvedZegoUserId(), _zegoUserName());
     final roomID = _resolvedRoomId();
     Utils.showLog('Resolved Zego roomID (voice): $roomID');

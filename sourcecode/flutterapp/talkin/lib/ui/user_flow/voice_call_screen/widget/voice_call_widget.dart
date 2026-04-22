@@ -192,152 +192,384 @@ class VoiceCallView extends StatelessWidget {
 
 class VoiceCallView1 extends StatelessWidget {
   const VoiceCallView1({super.key});
+  static final Color _brandRed = AppColors.redesignBrandRed;
+  static final Color _brandRedDark = AppColors.redesignBrandRedDark;
+  static final Color _brandDark = AppColors.redesignBrandDark;
+  static final Color _panelDark = AppColors.redesignBrandDarkAlt;
+  static final Color _mutedText = AppColors.redesignMutedText;
+  static final Color _softBorder = AppColors.redesignSoftBorder;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-            child: NotisboardWordmark(
-          textAlign: TextAlign.center,
-          style: AppFontStyle.fontStyleKaushanW400(
-            font: FontWeight.w600,
-            fontSize: 32,
-            fontColor: AppColors.black,
-          ),
-        )).paddingOnly(bottom: Get.height * 0.02, top: Get.height * 0.06),
-        GetBuilder<VoiceCallController>(
-            id: Constant.idVideoCall,
-            builder: (logic) {
-              return SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: ClipOval(
-                    child: CustomProfileImage(
-                      image: logic.callerId != Database.loginUserId
-                          ? logic.callerImage ?? ''
-                          : logic.receiverImage ?? '',
-                      fit: BoxFit.cover,
-                    ),
-                  )).paddingOnly(bottom: 20);
-            }),
-        GetBuilder<VoiceCallController>(
-            id: Constant.idVideoCall,
-            builder: (logic) {
-              return Text(
-                logic.callerId != Database.loginUserId
-                    ? logic.callerName ?? ""
-                    : logic.receiverName ?? "",
-                textAlign: TextAlign.center,
-                style: AppFontStyle.fontStyleW600(
-                  fontSize: 22,
-                  fontColor: AppColors.black,
-                ),
-              ).paddingOnly(bottom: 15);
-            }),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(Icons.lock, color: AppColors.appColor, size: 15),
-            Text(
-              EnumLocale.txtEndToEndEncrypted.name.tr,
-              textAlign: TextAlign.center,
-              style: AppFontStyle.fontStyleW500(
-                fontSize: 13,
-                fontColor: AppColors.black.withValues(alpha: 0.80),
-              ),
-            ),
-          ],
-        ).paddingOnly(bottom: 15),
-        GetBuilder<VoiceCallController>(
-            id: Constant.idVideoCall,
-            builder: (logic) {
-              return Text(
-                logic.formattedTime ?? "",
-                style: AppFontStyle.fontStyleW500(
-                  fontSize: 21,
-                  fontColor: AppColors.black,
-                ),
-              );
-            }),
-        Spacer(),
-        GetBuilder<VoiceCallController>(
-          id: Constant.idVideoCall,
-          builder: (controller) {
-            final isGroupSession = controller.isGroupSessionCall;
-            final canManageUsers =
-                isGroupSession && controller.isExpertController;
+    return GetBuilder<VoiceCallController>(
+      id: Constant.idVideoCall,
+      builder: (controller) {
+        final displayImage = controller.callerId != Database.loginUserId
+            ? controller.callerImage ?? ''
+            : controller.receiverImage ?? '';
+        final displayName = controller.callerId != Database.loginUserId
+            ? controller.callerName ?? ""
+            : controller.receiverName ?? "";
+        final callerName =
+            displayName.trim().isEmpty ? 'Expert' : displayName.trim();
+        final elapsedTime = (controller.formattedTime ?? '').trim().isEmpty
+            ? '00:00'
+            : controller.formattedTime!.trim();
+        final isGroupSession = controller.isGroupSessionCall;
+        final canManageUsers = isGroupSession && controller.isExpertController;
+        final callTypeLabel =
+            (controller.callType ?? '').toLowerCase() == 'audio'
+                ? EnumLocale.txtAudioCalling.name.tr
+                : EnumLocale.txtVideoCalling.name.tr;
 
-            return Container(
-              padding:
-                  EdgeInsets.only(top: 20, bottom: 20, left: 22, right: 22),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                color: AppColors.black.withValues(alpha: 0.80),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GetBuilder<VoiceCallController>(
-                      id: Constant.idMicMute,
-                      builder: (logic) {
-                        return buildControlButton(
-                          text:
-                              "${EnumLocale.txtMute.name.tr} \n${logic.isMicMute ? EnumLocale.txtOn.name.tr : EnumLocale.txtOff.name.tr}",
-                          iconColor: AppColors.appColor,
-                          icon: controller.isMicMute == true
-                              ? AppAsset.micMute
-                              : AppAsset.microPhoneIcon,
-                          onTap: () {
-                            controller.onMicMute();
-                          },
-                        );
-                      }),
-                  GetBuilder<VoiceCallController>(
-                      id: Constant.idSpeakerOpen,
-                      builder: (logic) {
-                        return buildControlButton(
-                          text:
-                              '${logic.isSpeakerOn ? EnumLocale.txtSpeaker.name.tr : EnumLocale.txtEarpiece.name.tr}\n${EnumLocale.txtOn.name.tr}',
-                          iconColor: AppColors.appColor,
-                          icon: controller.isSpeakerOn == false
-                              ? AppAsset.speakerOff
-                              : AppAsset.speakerOn,
-                          onTap: () {
-                            controller.onSpeakerOn();
-                          },
-                        );
-                      }),
-                  if (isGroupSession)
-                    buildControlButton(
-                      text: 'Group\nTools',
-                      icon: AppAsset.circleMoreIcon,
-                      iconColor: AppColors.appColor,
-                      onTap: () {
-                        _showGroupSessionActionsSheet(
-                          context,
-                          controller,
-                          expertMode: canManageUsers,
-                        );
-                      },
-                    ),
+        return SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isCompact = constraints.maxWidth < 360;
+              final horizontalPadding = isCompact ? 14.0 : 18.0;
+              final cardWidth = constraints.maxWidth > 560 ? 440.0 : 420.0;
+              final avatarSize = isCompact ? 92.0 : 104.0;
+
+              final actionItems = <Widget>[
+                GetBuilder<VoiceCallController>(
+                  id: Constant.idMicMute,
+                  builder: (logic) => buildControlButton(
+                    text: EnumLocale.txtMute.name.tr,
+                    value: logic.isMicMute
+                        ? EnumLocale.txtOn.name.tr
+                        : EnumLocale.txtOff.name.tr,
+                    icon: logic.isMicMute
+                        ? AppAsset.micMute
+                        : AppAsset.microPhoneIcon,
+                    isActive: logic.isMicMute,
+                    onTap: controller.onMicMute,
+                  ),
+                ),
+                GetBuilder<VoiceCallController>(
+                  id: Constant.idSpeakerOpen,
+                  builder: (logic) => buildControlButton(
+                    text: logic.isSpeakerOn
+                        ? EnumLocale.txtSpeaker.name.tr
+                        : EnumLocale.txtEarpiece.name.tr,
+                    value: logic.isSpeakerOn
+                        ? EnumLocale.txtOn.name.tr
+                        : EnumLocale.txtOff.name.tr,
+                    icon: logic.isSpeakerOn
+                        ? AppAsset.speakerOn
+                        : AppAsset.speakerOff,
+                    isActive: logic.isSpeakerOn,
+                    onTap: controller.onSpeakerOn,
+                  ),
+                ),
+                if (isGroupSession)
                   buildControlButton(
-                    text: EnumLocale.txtEndCall.name.tr,
-                    icon: AppAsset.callCut,
-                    iconColor: AppColors.white,
-                    bgColor: Colors.red,
+                    text: 'Group',
+                    value: 'Tools',
+                    icon: AppAsset.circleMoreIcon,
                     onTap: () {
-                      controller.endCurrentCall();
-                      // Get.toNamed(AppRoutes.callCutScreen);
+                      _showGroupSessionActionsSheet(
+                        context,
+                        controller,
+                        expertMode: canManageUsers,
+                      );
                     },
                   ),
+                buildControlButton(
+                  text: EnumLocale.txtEndCall.name.tr,
+                  icon: AppAsset.callCut,
+                  isDanger: true,
+                  onTap: controller.endCurrentCall,
+                ),
+              ];
+
+              return Stack(
+                children: [
+                  Positioned.fill(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: AppColors.redesignScreenBackground,
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            AppColors.white,
+                            AppColors.redesignScreenBackground,
+                            AppColors.redesignScreenBackground,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: -55,
+                    left: -22,
+                    child: Container(
+                      height: 140,
+                      width: 140,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: [
+                            _brandRed.withValues(alpha: 0.17),
+                            _brandRed.withValues(alpha: 0.02),
+                            AppColors.transparent,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          horizontalPadding,
+                          10,
+                          horizontalPadding,
+                          8,
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: NotisboardWordmark(
+                                style: AppFontStyle.fontStyleKaushanW400(
+                                  font: FontWeight.w600,
+                                  fontSize: isCompact ? 24 : 28,
+                                  fontColor: _brandRed,
+                                ),
+                                baseColor: _brandRed,
+                                highlightColor: _brandDark,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(color: _softBorder),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.graphic_eq_rounded,
+                                    size: 12,
+                                    color: _brandDark,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    callTypeLabel,
+                                    style: AppFontStyle.fontStyleW600(
+                                      fontSize: 9,
+                                      fontColor: _brandDark,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(maxWidth: cardWidth),
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(
+                                  horizontalPadding,
+                                  8,
+                                  horizontalPadding,
+                                  10,
+                                ),
+                                padding: EdgeInsets.fromLTRB(
+                                  isCompact ? 14 : 18,
+                                  16,
+                                  isCompact ? 14 : 18,
+                                  18,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(24),
+                                  border: Border.all(color: _softBorder),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppColors.black
+                                          .withValues(alpha: 0.07),
+                                      blurRadius: 24,
+                                      offset: const Offset(0, 10),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      height: 3,
+                                      width: 56,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(999),
+                                        gradient: LinearGradient(
+                                          colors: [_brandRed, _brandRedDark],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Container(
+                                      height: avatarSize,
+                                      width: avatarSize,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [_brandRed, _brandRedDark],
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(3),
+                                        child: ClipOval(
+                                          child: CustomProfileImage(
+                                            image: displayImage,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 14),
+                                    Text(
+                                      callerName,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppFontStyle.fontStyleW700(
+                                        fontSize: isCompact ? 24 : 28,
+                                        fontColor: _brandDark,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 6,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            AppColors.redesignSurfaceNeutralAlt,
+                                        borderRadius:
+                                            BorderRadius.circular(999),
+                                        border: Border.all(color: _softBorder),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.lock_outline_rounded,
+                                            size: 13,
+                                            color: _mutedText,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Text(
+                                            EnumLocale
+                                                .txtEndToEndEncrypted.name.tr,
+                                            style: AppFontStyle.fontStyleW500(
+                                              fontSize: 11,
+                                              fontColor: _mutedText,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 14),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 14,
+                                        vertical: 9,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [_brandRed, _brandRedDark],
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(999),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: _brandRed.withValues(
+                                                alpha: 0.26),
+                                            blurRadius: 16,
+                                            offset: const Offset(0, 8),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.timer_outlined,
+                                            size: 15,
+                                            color: AppColors.white,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Text(
+                                            elapsedTime,
+                                            style: AppFontStyle.fontStyleW600(
+                                              fontSize: isCompact ? 18 : 20,
+                                              fontColor: AppColors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(
+                          horizontalPadding,
+                          0,
+                          horizontalPadding,
+                          0,
+                        ),
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
+                        decoration: BoxDecoration(
+                          color: _panelDark.withValues(alpha: 0.96),
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(24),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.black.withValues(alpha: 0.20),
+                              blurRadius: 20,
+                              offset: const Offset(0, -8),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            for (var i = 0; i < actionItems.length; i++) ...[
+                              Expanded(child: actionItems[i]),
+                              if (i != actionItems.length - 1)
+                                const SizedBox(width: 6),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
-              ).paddingSymmetric(horizontal: 13),
-            );
-          },
-        ),
-      ],
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -767,35 +999,76 @@ class VoiceCallView1 extends StatelessWidget {
     );
   }
 
-  Widget buildControlButton(
-      {String? icon,
-      Color bgColor = Colors.white,
-      Color iconColor = Colors.white,
-      VoidCallback? onTap,
-      String text = ''}) {
+  Widget buildControlButton({
+    required String icon,
+    required String text,
+    String? value,
+    bool isDanger = false,
+    bool isActive = false,
+    VoidCallback? onTap,
+  }) {
+    final Color iconBackground = isDanger
+        ? AppColors.redesignBrandRed
+        : (isActive ? AppColors.redesignAccentSoftBg : AppColors.white);
+    final Color borderColor = isDanger
+        ? AppColors.redesignBrandRed
+        : (isActive
+            ? AppColors.redesignBrandRed.withValues(alpha: 0.55)
+            : AppColors.transparent);
+    final Color iconColor =
+        isDanger ? AppColors.white : AppColors.redesignBrandDark;
+
     return InkWell(
       onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12), color: bgColor),
-            child: Image.asset(
-              icon ?? '',
-              color: iconColor,
-              height: 26,
-              width: 26,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 1),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              curve: Curves.easeOut,
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                color: iconBackground,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: borderColor, width: 1.4),
+              ),
+              child: Center(
+                child: Image.asset(
+                  icon,
+                  color: iconColor,
+                  height: 20,
+                  width: 20,
+                ),
+              ),
             ),
-          ).paddingOnly(bottom: 6),
-          Text(
-            text,
-            textAlign: TextAlign.center,
-            style: AppFontStyle.fontStyleW500(
-                fontSize: 13, fontColor: AppColors.white),
-          )
-        ],
+            const SizedBox(height: 6),
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppFontStyle.fontStyleW600(
+                fontSize: 12,
+                fontColor: AppColors.white,
+              ),
+            ),
+            if ((value ?? '').trim().isNotEmpty)
+              Text(
+                value!,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppFontStyle.fontStyleW500(
+                  fontSize: 10,
+                  fontColor: AppColors.white.withValues(alpha: 0.75),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

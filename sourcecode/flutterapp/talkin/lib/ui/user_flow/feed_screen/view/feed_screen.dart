@@ -187,10 +187,8 @@ class _FeedListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (controller.isLoading && controller.posts.isEmpty) {
-      return Center(
-        child: CircularProgressIndicator(
-          color: FeedScreen._brandRed,
-        ),
+      return _FeedLoadingShimmer(
+        horizontalInset: horizontalInset,
       );
     }
 
@@ -268,15 +266,7 @@ class _FeedListView extends StatelessWidget {
                   (controller.isPaginationLoading ? 1 : 0),
               itemBuilder: (context, index) {
                 if (index >= controller.posts.length) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: FeedScreen._brandRed,
-                      ),
-                    ),
-                  );
+                  return const _FeedPaginationShimmer();
                 }
 
                 final post = controller.posts[index];
@@ -292,6 +282,150 @@ class _FeedListView extends StatelessWidget {
                 );
               },
             ),
+    );
+  }
+}
+
+class _FeedLoadingShimmer extends StatelessWidget {
+  const _FeedLoadingShimmer({
+    required this.horizontalInset,
+  });
+
+  final double horizontalInset;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      padding: EdgeInsets.fromLTRB(horizontalInset, 2, horizontalInset, 14),
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        final mediaHeight = index == 1 ? 120.0 : 190.0;
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: AppColors.borderColor.withValues(alpha: 0.75),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.04),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: const [
+                  AppImageShimmer(
+                    width: 36,
+                    height: 36,
+                    shape: BoxShape.circle,
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppImageShimmer(
+                          width: 140,
+                          height: 12,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        SizedBox(height: 6),
+                        AppImageShimmer(
+                          width: 90,
+                          height: 10,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              const AppImageShimmer(
+                width: double.infinity,
+                height: 12,
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
+              const SizedBox(height: 7),
+              const AppImageShimmer(
+                width: 220,
+                height: 12,
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
+              const SizedBox(height: 12),
+              AppImageShimmer(
+                width: double.infinity,
+                height: mediaHeight,
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: const [
+                  Expanded(
+                    child: AppImageShimmer(
+                      height: 30,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: AppImageShimmer(
+                      height: 30,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: AppImageShimmer(
+                      height: 30,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _FeedPaginationShimmer extends StatelessWidget {
+  const _FeedPaginationShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          AppImageShimmer(
+            width: 120,
+            height: 10,
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          SizedBox(width: 8),
+          AppImageShimmer(
+            width: 56,
+            height: 10,
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+        ],
+      ),
     );
   }
 }

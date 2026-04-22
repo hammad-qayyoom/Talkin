@@ -21,9 +21,10 @@ class _VoiceCallScreenState extends State<VoiceCallScreen>
   @override
   void initState() {
     super.initState();
-    controller = Get.isRegistered<VoiceCallController>()
-        ? Get.find<VoiceCallController>()
-        : Get.put<VoiceCallController>(VoiceCallController());
+    if (Get.isRegistered<VoiceCallController>()) {
+      Get.delete<VoiceCallController>(force: true);
+    }
+    controller = Get.put<VoiceCallController>(VoiceCallController());
     // enableProximitySensorFallback();
     WidgetsBinding.instance.addObserver(this);
   }
@@ -75,7 +76,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen>
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.redesignScreenBackground,
         body: const VoiceCallView1(),
       ),
     );

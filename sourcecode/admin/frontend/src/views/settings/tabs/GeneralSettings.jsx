@@ -679,7 +679,7 @@ const GeneralSettings = () => {
               <TextField
                 fullWidth
                 type='text'
-                label='User Cancellation Refund (%)'
+                label='User Late Cancellation Refund (%)'
                 value={formData.sessionUserCancellationRefundPercent || ''}
                 onChange={e => handleFieldChange('sessionUserCancellationRefundPercent', e.target.value)}
                 InputProps={{

@@ -81,7 +81,7 @@ void main() async {
   Utils.showLog("FCM Token => $fcmToken");
 
   await Database.init(identity, fcmToken ?? "");
-  NotificationServices.init();
+  await NotificationServices.init();
 
   // Set up Awesome Notifications listeners
   AwesomeNotifications().setListeners(
@@ -89,8 +89,7 @@ void main() async {
         NotificationServices.onAwesomeNotificationActionReceived,
   );
 
-  NotificationServices.firebaseInit();
-  FirebaseMessaging.onBackgroundMessage(backgroundNotification);
+  await NotificationServices.firebaseInit();
 
   runApp(const MyApp());
 }

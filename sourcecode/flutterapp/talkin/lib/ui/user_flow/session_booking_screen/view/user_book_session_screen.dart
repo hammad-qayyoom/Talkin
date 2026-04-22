@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -35,6 +36,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
   String _listenerId = '';
   String _expertId = '';
   String _listenerName = '';
+  String _listenerImage = '';
   bool _isAudioServiceEnabled = true;
   bool _isVideoServiceEnabled = true;
 
@@ -75,6 +77,13 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
       }
 
       _listenerName = (arguments['listenerName'] ?? '').toString();
+      _listenerImage = (arguments['listenerImage'] ??
+              arguments['expertImage'] ??
+              arguments['image'] ??
+              arguments['profilePic'] ??
+              '')
+          .toString()
+          .trim();
 
       final hasAudioFlag =
           arguments.containsKey('availableForPrivateAudioCall');
@@ -402,11 +411,17 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
               color: AppColors.redesignAccentSoftBg,
               borderRadius: BorderRadius.circular(11),
             ),
-            child: Icon(
-              Icons.person_outline_rounded,
-              size: 20,
-              color: AppColors.redesignBrandRed,
-            ),
+            clipBehavior: Clip.hardEdge,
+            child: _listenerImage.isNotEmpty
+                ? CustomListenerProfileImage(
+                    image: _listenerImage,
+                    fit: BoxFit.cover,
+                  )
+                : Icon(
+                    Icons.person_outline_rounded,
+                    size: 20,
+                    color: AppColors.redesignBrandRed,
+                  ),
           ),
           const SizedBox(width: 10),
           Expanded(

@@ -14,7 +14,7 @@ class FakeOutgoingCallScreen extends StatelessWidget {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.redesignScreenBackground,
         body: GetBuilder<FakeOutgoingCallController>(
             id: Constant.idVideoCall,
             builder: (controller) {

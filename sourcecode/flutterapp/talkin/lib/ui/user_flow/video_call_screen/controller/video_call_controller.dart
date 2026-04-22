@@ -14,6 +14,18 @@ import 'package:notisboard/utils/utils.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 
+class VideoParticipantEntry {
+  final String userID;
+  final String userName;
+  final String? streamID;
+
+  const VideoParticipantEntry({
+    required this.userID,
+    required this.userName,
+    this.streamID,
+  });
+}
+
 class VideoCallController extends GetxController {
   static const String _hostControlType = 'host_control';
   static const String _groupChatType = 'group_chat';
@@ -87,11 +99,11 @@ class VideoCallController extends GetxController {
   String? focusedRemoteStreamId;
   String? _runtimeGroupZegoUserId;
 
-  static const double _selfPreviewMinWidth = 104;
-  static const double _selfPreviewMaxWidth = 230;
+  static const double _selfPreviewMinWidth = 90;
+  static const double _selfPreviewMaxWidth = 190;
   static const double _selfPreviewAspectRatio = 132 / 160;
-  double selfPreviewWidth = 132;
-  double selfPreviewHeight = 160;
+  double selfPreviewWidth = 110;
+  double selfPreviewHeight = 133.33;
   double selfPreviewLeft = 0;
   double selfPreviewTop = 35;
   bool _selfPreviewLayoutInitialized = false;
@@ -790,6 +802,73 @@ class VideoCallController extends GetxController {
   bool isLocalRemoteVideoMuted(String streamID) {
     return locallyMutedRemoteVideoStreamIds.contains(streamID);
   }
+
+  String? _streamIdForUserId(String userID) {
+    final cleanUserId = userID.trim();
+    if (cleanUserId.isEmpty) {
+      return null;
+    }
+
+    for (final entry in remoteUserIdsByStream.entries) {
+      if (entry.value.trim() == cleanUserId) {
+        return entry.key;
+      }
+    }
+
+    return null;
+  }
+
+  List<VideoParticipantEntry> get manageableParticipants {
+    final selfId = _resolvedZegoUserId();
+    final participants = <VideoParticipantEntry>[];
+    final seenUserIds = <String>{};
+
+    for (final user in roomUsersById.values) {
+      final userId = user.userID.trim();
+      if (userId.isEmpty || userId == selfId || seenUserIds.contains(userId)) {
+        continue;
+      }
+
+      final userName = user.userName.trim().isEmpty ? userId : user.userName;
+      participants.add(
+        VideoParticipantEntry(
+          userID: userId,
+          userName: userName,
+          streamID: _streamIdForUserId(userId),
+        ),
+      );
+      seenUserIds.add(userId);
+    }
+
+    for (final entry in remoteUserIdsByStream.entries) {
+      final streamID = entry.key.trim();
+      final userId = entry.value.trim();
+      if (streamID.isEmpty ||
+          userId.isEmpty ||
+          userId == selfId ||
+          seenUserIds.contains(userId)) {
+        continue;
+      }
+
+      final fallbackName = (remoteUserNamesByStream[streamID] ?? '').trim();
+      participants.add(
+        VideoParticipantEntry(
+          userID: userId,
+          userName: fallbackName.isEmpty ? userId : fallbackName,
+          streamID: streamID,
+        ),
+      );
+      seenUserIds.add(userId);
+    }
+
+    participants.sort(
+      (a, b) => a.userName.toLowerCase().compareTo(b.userName.toLowerCase()),
+    );
+
+    return participants;
+  }
+
+  int get joinedParticipantCount => manageableParticipants.length;
 
   void markGroupChatSheetOpened() {
     unreadGroupChatCount = 0;

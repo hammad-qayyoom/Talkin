@@ -25,6 +25,7 @@ class MyWalletController extends GetxController implements IAPCallback {
   FetchCoinPlan? fetchCoinPlan;
   List<CoinPlan> coinPlan = [];
   bool isLoading = false;
+  bool isPaymentProcessing = false;
   int selectedPaymentMethod = -1;
   PurchaseCoinPlan? purchaseCoinPlan;
   UserCoinModel? userCoinModel;
@@ -36,6 +37,30 @@ class MyWalletController extends GetxController implements IAPCallback {
   void onInit() {
     fetchCoinPlanList();
     super.onInit();
+  }
+
+  void _showBlockingLoader() {
+    if (Get.isDialogOpen != true) {
+      Get.dialog(const LoadingWidget(), barrierDismissible: false);
+    }
+  }
+
+  void _closeBlockingLoader() {
+    if (Get.isDialogOpen == true) {
+      Get.back();
+    }
+  }
+
+  void _closePaymentSelectorIfOpen() {
+    if (Get.isBottomSheetOpen == true) {
+      Get.back();
+    }
+  }
+
+  void _setPaymentProcessing(bool value) {
+    if (isPaymentProcessing == value) return;
+    isPaymentProcessing = value;
+    update([Constant.onChangePaymentMethod]);
   }
 
   Future<void> syncSessionCredits({bool refreshHome = true}) async {
@@ -86,36 +111,41 @@ class MyWalletController extends GetxController implements IAPCallback {
   Future<void> onClickPayNow(
       {required String id,
       required num amount,
-      required String productKey}) async {
+      required String productKey,
+      bool dismissSelector = false}) async {
     if (selectedPaymentMethod == -1) {
-      Utils.showToast(Get.context!, EnumLocale.txtSelectPaymentMethod.name.tr);
-    }
-    if (selectedPaymentMethod == 0) {
-      await onClickRazorPay(amount, id);
+      Utils.showToast(Get.context, EnumLocale.txtSelectPaymentMethod.name.tr);
+      return;
     }
 
-    if (selectedPaymentMethod == 1) {
-      await onClickStripe(amount, id);
+    if (isPaymentProcessing) {
+      return;
     }
 
-    if (selectedPaymentMethod == 2) {
-      onClickFlutterWave(amount, id);
-    }
+    _setPaymentProcessing(true);
+    try {
+      if (dismissSelector) {
+        _closePaymentSelectorIfOpen();
+        await 250.milliseconds.delay();
+      }
 
-    if (selectedPaymentMethod == 3) {
-      onClickInAppPurchase(amount, id, productKey);
-    }
-
-    if (selectedPaymentMethod == 4) {
-      onClickCashFree(amount, id);
-    }
-
-    if (selectedPaymentMethod == 5) {
-      onClickPayStack(amount, id);
-    }
-
-    if (selectedPaymentMethod == 6) {
-      onClickPayPal(amount, id);
+      if (selectedPaymentMethod == 0) {
+        await onClickRazorPay(amount, id);
+      } else if (selectedPaymentMethod == 1) {
+        await onClickStripe(amount, id);
+      } else if (selectedPaymentMethod == 2) {
+        await onClickFlutterWave(amount, id);
+      } else if (selectedPaymentMethod == 3) {
+        await onClickInAppPurchase(amount, id, productKey);
+      } else if (selectedPaymentMethod == 4) {
+        await onClickCashFree(amount, id);
+      } else if (selectedPaymentMethod == 5) {
+        await onClickPayStack(amount, id);
+      } else if (selectedPaymentMethod == 6) {
+        await onClickPayPal(amount, id);
+      }
+    } finally {
+      _setPaymentProcessing(false);
     }
   }
 
@@ -125,8 +155,8 @@ class MyWalletController extends GetxController implements IAPCallback {
     try {
       Get.dialog(const LoadingWidget(),
           barrierDismissible: false); // Start Loading...
-      flutterWave(
-        // context: Get.context!,
+      await flutterWave(
+        // context: Get.context,
         amount: amount,
         onPaymentSuccess: () async {
           final token = await FirebaseAccessToken.onGet() ?? "";
@@ -138,78 +168,85 @@ class MyWalletController extends GetxController implements IAPCallback {
               barrierDismissible: false); // Start Loading...
 
           purchaseCoinPlan = await PurchaseCoinPlanApi.callApi(
-              coinPlanId: id, paymentGateway: "Stripe", token: token, uid: uid);
+              coinPlanId: id,
+              paymentGateway: "Flutter Wave",
+              token: token,
+              uid: uid);
 
-          Get.back(); // Stop Loading...
+          _closeBlockingLoader();
 
           if (purchaseCoinPlan?.status == true) {
             await fetchCoinPlanList();
             await syncSessionCredits();
 
-            Utils.showToast(
-                Get.context!, "Subscription activated successfully");
-            Get.back(); // Close Bottom Sheet...
+            Utils.showToast(Get.context, "Subscription activated successfully");
+            _closePaymentSelectorIfOpen();
           } else {
             Utils.showToast(
-                Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+                Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
           }
         },
       );
       update();
-      Get.back(); // Stop Loading...
+      _closeBlockingLoader();
     } catch (e) {
-      Get.back(); // Stop Loading...
+      _closeBlockingLoader();
       Utils.showLog("Flutter Wave Payment Failed => $e");
     }
   }
 
   /// stripe
   Future<void> onClickStripe(num amount, String id) async {
+    Utils.showLog("Stripe Payment Working...");
+
+    if (amount <= 0) {
+      Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
+      return;
+    }
+
     try {
-      Utils.showLog("Stripe Payment Working...");
-
-      Get.dialog(const LoadingWidget(),
-          barrierDismissible: false); // Start Loading...
-      // await StripeService().init(isTest: true);
-      await 1.seconds.delay();
-
-      stripe(
+      await stripe(
         amount: amount,
         onPaymentSuccess: () async {
-          final token = await FirebaseAccessToken.onGet() ?? "";
-          final uid = Database.loginUserFirebaseId;
-
-          Utils.showLog("Stripe Payment Success Method Called....");
-
-          Get.dialog(const LoadingWidget(),
-              barrierDismissible: false); // Start Loading...
-
-          purchaseCoinPlan = await PurchaseCoinPlanApi.callApi(
-              coinPlanId: id, paymentGateway: "Stripe", token: token, uid: uid);
-
-          Get.back(); // Stop Loading...
-
-          if (purchaseCoinPlan?.status == true) {
-            await fetchCoinPlanList();
-
-            Utils.showToast(
-                Get.context!, "Subscription activated successfully");
-            await syncSessionCredits();
-            Get.back(); // Close Bottom Sheet...
-          } else {
-            Utils.showToast(
-                Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
-          }
+          await _handleStripePaymentSuccess(id);
         },
-      ).then((value) async {
-        Utils.showLog("Stripe Payment Successfully");
-      }).catchError((e) {
-        Utils.showLog("Stripe Payment Error !!!");
-      });
-      Get.back(); // Stop Loading...
+      );
+      Utils.showLog("Stripe Payment flow completed.");
     } catch (e) {
-      Get.back(); // Stop Loading...
+      _closeBlockingLoader();
       Utils.showLog("Stripe Payment Failed !! => $e");
+    }
+  }
+
+  Future<void> _handleStripePaymentSuccess(String coinPlanId) async {
+    try {
+      final token = await FirebaseAccessToken.onGet() ?? "";
+      final uid = Database.loginUserFirebaseId;
+
+      Utils.showLog("Stripe Payment Success Method Called....");
+
+      _showBlockingLoader();
+
+      purchaseCoinPlan = await PurchaseCoinPlanApi.callApi(
+        coinPlanId: coinPlanId,
+        paymentGateway: "Stripe",
+        token: token,
+        uid: uid,
+      );
+      _closeBlockingLoader();
+
+      if (purchaseCoinPlan?.status == true) {
+        await fetchCoinPlanList();
+        await syncSessionCredits();
+        Utils.showToast(Get.context, "Subscription activated successfully");
+        _closePaymentSelectorIfOpen();
+      } else {
+        Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
+      }
+    } catch (e) {
+      _closeBlockingLoader();
+      Utils.showLog("Stripe Success Callback Failed => $e");
+      Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
     }
   }
 
@@ -220,7 +257,7 @@ class MyWalletController extends GetxController implements IAPCallback {
     try {
       Get.dialog(const LoadingWidget(),
           barrierDismissible: false); // Start Loading...
-      razorPay(
+      await razorPay(
         amount: amount,
         // razorKey: Database.settingApiModel?.data?.razorpayKeySecret ?? '',
         // razorKey: "rzp_test_SjZz9HC7RGCfCb",
@@ -239,15 +276,14 @@ class MyWalletController extends GetxController implements IAPCallback {
               token: token,
               uid: uid);
 
-          Get.back(); // Stop Loading...
+          _closeBlockingLoader();
 
           if (purchaseCoinPlan?.status == true) {
             await fetchCoinPlanList();
             await syncSessionCredits();
 
-            Utils.showToast(
-                Get.context!, "Subscription activated successfully");
-            Get.back(); // Close Bottom Sheet...
+            Utils.showToast(Get.context, "Subscription activated successfully");
+            _closePaymentSelectorIfOpen();
             Get.toNamed(AppRoutes.coinPurchaseScreen, arguments: {
               "date": purchaseCoinPlan?.historyRecord?.date,
               "amount": purchaseCoinPlan?.historyRecord?.amountPaid,
@@ -256,15 +292,15 @@ class MyWalletController extends GetxController implements IAPCallback {
             });
           } else {
             Utils.showToast(
-                Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+                Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
           }
         },
       );
       await 1.seconds.delay();
       RazorPayService().razorPayCheckout((amount * 100).toInt());
-      Get.back(); // Stop Loading...
+      _closeBlockingLoader();
     } catch (e) {
-      Get.back(); // Stop Loading...
+      _closeBlockingLoader();
       Utils.showLog("RazorPay Payment Failed => $e");
     }
   }
@@ -286,7 +322,7 @@ class MyWalletController extends GetxController implements IAPCallback {
     //   },
     // );
 
-    inAppPurchase(
+    await inAppPurchase(
       amount: amount,
       onPaymentSuccess: () async {
         Utils.showLog("In App Purchase Payment Successfully");
@@ -306,7 +342,7 @@ class MyWalletController extends GetxController implements IAPCallback {
       Utils.showLog("Product found: ${product.title} - ${product.price}");
       InAppPurchaseHelper().buySubscription(product, purchases!);
     } else {
-      Utils.showToast(Get.context!, "Product not found: $productKey");
+      Utils.showToast(Get.context, "Product not found: $productKey");
       Utils.showLog(
           "Available products: ${InAppPurchaseHelper().getAvailableProducts()}");
     }
@@ -318,8 +354,8 @@ class MyWalletController extends GetxController implements IAPCallback {
     try {
       Get.dialog(const LoadingWidget(),
           barrierDismissible: false); // Start Loading...
-      cashFree(
-        // context: Get.context!,
+      await cashFree(
+        // context: Get.context,
         amount: amount,
         onPaymentSuccess: () async {
           final token = await FirebaseAccessToken.onGet() ?? "";
@@ -336,25 +372,24 @@ class MyWalletController extends GetxController implements IAPCallback {
               token: token,
               uid: uid);
 
-          Get.back(); // Stop Loading...
+          _closeBlockingLoader();
 
           if (purchaseCoinPlan?.status == true) {
             await fetchCoinPlanList();
             await syncSessionCredits();
 
-            Utils.showToast(
-                Get.context!, "Subscription activated successfully");
-            Get.back(); // Close Bottom Sheet...
+            Utils.showToast(Get.context, "Subscription activated successfully");
+            _closePaymentSelectorIfOpen();
           } else {
             Utils.showToast(
-                Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+                Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
           }
         },
       );
       update();
-      Get.back(); // Stop Loading...
+      _closeBlockingLoader();
     } catch (e) {
-      Get.back(); // Stop Loading...
+      _closeBlockingLoader();
       Utils.showLog("cash free Payment Failed => $e");
     }
   }
@@ -365,8 +400,8 @@ class MyWalletController extends GetxController implements IAPCallback {
     try {
       Get.dialog(const LoadingWidget(),
           barrierDismissible: false); // Start Loading...
-      payPal(
-        // context: Get.context!,
+      await payPal(
+        // context: Get.context,
         amount: amount,
         onPaymentSuccess: () async {
           final token = await FirebaseAccessToken.onGet() ?? "";
@@ -383,25 +418,24 @@ class MyWalletController extends GetxController implements IAPCallback {
               token: token,
               uid: uid);
 
-          Get.back(); // Stop Loading...
+          _closeBlockingLoader();
 
           if (purchaseCoinPlan?.status == true) {
             await fetchCoinPlanList();
             await syncSessionCredits();
 
-            Utils.showToast(
-                Get.context!, "Subscription activated successfully");
-            Get.back(); // Close Bottom Sheet...
+            Utils.showToast(Get.context, "Subscription activated successfully");
+            _closePaymentSelectorIfOpen();
           } else {
             Utils.showToast(
-                Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+                Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
           }
         },
       );
       update();
-      Get.back(); // Stop Loading...
+      _closeBlockingLoader();
     } catch (e) {
-      Get.back(); // Stop Loading...
+      _closeBlockingLoader();
       Utils.showLog("pay pal Payment Failed => $e");
     }
   }
@@ -412,8 +446,8 @@ class MyWalletController extends GetxController implements IAPCallback {
     try {
       Get.dialog(const LoadingWidget(),
           barrierDismissible: false); // Start Loading...
-      payStack(
-        // context: Get.context!,
+      await payStack(
+        // context: Get.context,
         amount: amount,
         onPaymentSuccess: () async {
           final token = await FirebaseAccessToken.onGet() ?? "";
@@ -430,25 +464,24 @@ class MyWalletController extends GetxController implements IAPCallback {
               token: token,
               uid: uid);
 
-          Get.back(); // Stop Loading...
+          _closeBlockingLoader();
 
           if (purchaseCoinPlan?.status == true) {
             await fetchCoinPlanList();
             await syncSessionCredits();
 
-            Utils.showToast(
-                Get.context!, "Subscription activated successfully");
-            Get.back(); // Close Bottom Sheet...
+            Utils.showToast(Get.context, "Subscription activated successfully");
+            _closePaymentSelectorIfOpen();
           } else {
             Utils.showToast(
-                Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+                Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
           }
         },
       );
       update();
-      Get.back(); // Stop Loading...
+      _closeBlockingLoader();
     } catch (e) {
-      Get.back(); // Stop Loading...
+      _closeBlockingLoader();
       Utils.showLog("pay stack Payment Failed => $e");
     }
   }
@@ -460,7 +493,7 @@ class MyWalletController extends GetxController implements IAPCallback {
   @override
   void onBillingError(error) {
     Utils.showLog("IAP Billing Error: $error");
-    Utils.showToast(Get.context!, "Payment failed: $error");
+    Utils.showToast(Get.context, "Payment failed: $error");
   }
 
   @override
@@ -471,7 +504,7 @@ class MyWalletController extends GetxController implements IAPCallback {
   @override
   void onPending(PurchaseDetails product) {
     Utils.showLog("IAP Pending: ${product.productID}");
-    Utils.showToast(Get.context!, "Payment is pending...");
+    Utils.showToast(Get.context, "Payment is pending...");
   }
 
   @override
@@ -500,10 +533,10 @@ class MyWalletController extends GetxController implements IAPCallback {
       if (isSuccess?.status == true) {
         await fetchCoinPlanList();
         await syncSessionCredits();
-        Utils.showToast(Get.context!, "Subscription activated successfully");
-        Get.close(2); // Close payment screens
+        Utils.showToast(Get.context, "Subscription activated successfully");
+        _closePaymentSelectorIfOpen();
       } else {
-        Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+        Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
       }
     } catch (e) {
       // Hide loading dialog if there's an error
@@ -511,7 +544,7 @@ class MyWalletController extends GetxController implements IAPCallback {
         Get.back();
       }
       Utils.showLog("API call failed: $e");
-      Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+      Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
     }
   }
 }

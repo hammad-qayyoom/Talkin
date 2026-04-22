@@ -43,7 +43,7 @@ class CoinHistoryModel {
 class CoinHistory {
   String? id;
   String? duration;
-  int? userCoin;
+  num? userCoin;
   String? date;
   int? type;
   DateTime? createdAt;
@@ -67,9 +67,9 @@ class CoinHistory {
   factory CoinHistory.fromJson(Map<String, dynamic> json) => CoinHistory(
         id: json["_id"],
         duration: json["duration"],
-        userCoin: json["userCoin"],
+        userCoin: _parseNum(json["userCoin"]),
         date: json["date"],
-        type: json["type"],
+        type: _parseInt(json["type"]),
         createdAt: json["createdAt"] == null
             ? null
             : DateTime.parse(json["createdAt"]),
@@ -89,4 +89,17 @@ class CoinHistory {
         "receiverImage": receiverImage,
         "isIncome": isIncome,
       };
+}
+
+num _parseNum(dynamic value) {
+  if (value is num) return value;
+  if (value == null) return 0;
+  return num.tryParse(value.toString()) ?? 0;
+}
+
+int _parseInt(dynamic value) {
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  if (value == null) return 0;
+  return int.tryParse(value.toString()) ?? 0;
 }

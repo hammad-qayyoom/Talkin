@@ -123,6 +123,100 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
     return (maxParticipants - currentParticipants).clamp(0, 999999);
   }
 
+  String _sessionStatus(Map<String, dynamic> session) {
+    return (session['sessionStatus'] ?? session['status'] ?? '')
+        .toString()
+        .trim()
+        .toLowerCase();
+  }
+
+  bool _isLiveStatus(String sessionStatus) {
+    return ['live', 'active', 'ongoing', 'started'].contains(sessionStatus);
+  }
+
+  bool _isJoinableStatus(String sessionStatus) {
+    return sessionStatus == 'scheduled' || _isLiveStatus(sessionStatus);
+  }
+
+  bool _isClosedStatus(String sessionStatus) {
+    return ['completed', 'canceled', 'cancelled'].contains(sessionStatus);
+  }
+
+  String? _joinBlockedReason(Map<String, dynamic> session) {
+    if (_currentUserId.isEmpty) {
+      return 'Please login again to join this session.';
+    }
+
+    final status = _sessionStatus(session);
+    if (_isClosedStatus(status)) {
+      return 'Session is no longer open for joining.';
+    }
+
+    if (!_isJoinableStatus(status)) {
+      return 'Session is not open for joining right now.';
+    }
+
+    if (_availableSeats(session) <= 0) {
+      return 'Session participant limit is full.';
+    }
+
+    return null;
+  }
+
+  String? _accessBlockedReason(Map<String, dynamic> session) {
+    if (_currentUserId.isEmpty) {
+      return 'Please login again to access this session.';
+    }
+
+    final status = _sessionStatus(session);
+    if (_isClosedStatus(status)) {
+      return 'Session is no longer active.';
+    }
+
+    if (!_isLiveStatus(status)) {
+      return 'Session host has not started live stream yet.';
+    }
+
+    return null;
+  }
+
+  String _joinButtonLabel(Map<String, dynamic> session) {
+    final status = _sessionStatus(session);
+    if (_availableSeats(session) <= 0) {
+      return 'Session Full';
+    }
+
+    if (_isClosedStatus(status)) {
+      return 'Session Closed';
+    }
+
+    if (!_isJoinableStatus(status)) {
+      return 'Unavailable';
+    }
+
+    return 'Join Session';
+  }
+
+  Future<void> _onJoinSessionTap(Map<String, dynamic> session) async {
+    final blockedReason = _joinBlockedReason(session);
+    if (blockedReason != null) {
+      Utils.showToast(context, blockedReason);
+      return;
+    }
+
+    await _onJoinSession(session);
+  }
+
+  Future<void> _onAccessSessionTap(Map<String, dynamic> session) async {
+    final blockedReason = _accessBlockedReason(session);
+    if (blockedReason != null) {
+      Utils.showToast(context, blockedReason);
+      return;
+    }
+
+    await _onAccessSession(session);
+  }
+
   List<Map<String, dynamic>> get _activeSessions {
     final now = DateTime.now();
 
@@ -287,6 +381,13 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
     final normalizedMessage =
         (response['message'] ?? '').toString().trim().toLowerCase();
     if (normalizedMessage.contains('already joined')) {
+      final blockedReason = _accessBlockedReason(session);
+      if (blockedReason != null) {
+        Utils.showToast(context, blockedReason);
+        _fetchSessions();
+        return;
+      }
+
       await _onAccessSession(session);
     }
   }
@@ -330,6 +431,12 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
       return;
     }
 
+    final blockedReason = _accessBlockedReason(session);
+    if (blockedReason != null) {
+      Utils.showToast(context, blockedReason);
+      return;
+    }
+
     setState(() {
       _accessingSessionId = sessionId;
     });
@@ -362,7 +469,17 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
     });
 
     if (accessResponse['status'] == true) {
-      _openGroupCallRoom(session, bookingId: bookingId);
+      final accessData = accessResponse['data'] is Map<String, dynamic>
+          ? accessResponse['data'] as Map<String, dynamic>
+          : <String, dynamic>{};
+      final grantedSession = accessData['session'] is Map<String, dynamic>
+          ? accessData['session'] as Map<String, dynamic>
+          : <String, dynamic>{};
+
+      _openGroupCallRoom(
+        grantedSession.isNotEmpty ? grantedSession : session,
+        bookingId: bookingId,
+      );
       return;
     }
 
@@ -721,11 +838,9 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
         ? session['expertId'] as Map<String, dynamic>
         : <String, dynamic>{};
 
-    final sessionStatus = (session['sessionStatus'] ?? session['status'] ?? '')
-        .toString()
-        .trim()
-        .toLowerCase();
-    final isJoinable = ['scheduled', 'live'].contains(sessionStatus) && !isFull;
+    final sessionStatus = _sessionStatus(session);
+    final canJoinNow = _joinBlockedReason(session) == null;
+    final canAccessNow = _accessBlockedReason(session) == null;
 
     final title = (session['title'] ?? 'Group Session').toString().trim();
     final expertName = (expert['displayName'] ?? 'Unknown').toString().trim();
@@ -865,12 +980,12 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
               width: double.infinity,
               height: 46,
               child: ElevatedButton(
-                onPressed: joining || !isJoinable
-                    ? null
-                    : () => _onJoinSession(session),
+                onPressed: joining ? null : () => _onJoinSessionTap(session),
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
-                  backgroundColor: AppColors.redesignBrandDark,
+                  backgroundColor: canJoinNow
+                      ? AppColors.redesignBrandDark
+                      : AppColors.redesignSoftBorder,
                   disabledBackgroundColor: AppColors.redesignSoftBorder,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -885,13 +1000,21 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
                           color: AppColors.white,
                         ),
                       )
-                    : Text(
-                        isJoinable ? 'Join Session' : 'Session Unavailable',
-                        style: AppFontStyle.fontStyleW700(
-                          fontSize: 14,
-                          fontColor: isJoinable
-                              ? AppColors.white
-                              : AppColors.redesignMutedText,
+                    : SizedBox(
+                        width: double.infinity,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            _joinButtonLabel(session),
+                            maxLines: 1,
+                            softWrap: false,
+                            style: AppFontStyle.fontStyleW700(
+                              fontSize: 14,
+                              fontColor: canJoinNow
+                                  ? AppColors.white
+                                  : AppColors.redesignMutedText,
+                            ),
+                          ),
                         ),
                       ),
               ),
@@ -904,10 +1027,12 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
                     height: 46,
                     child: ElevatedButton(
                       onPressed:
-                          accessing ? null : () => _onAccessSession(session),
+                          accessing ? null : () => _onAccessSessionTap(session),
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
-                        backgroundColor: AppColors.redesignBrandDark,
+                        backgroundColor: canAccessNow
+                            ? AppColors.redesignBrandDark
+                            : AppColors.redesignSoftBorder,
                         disabledBackgroundColor: AppColors.redesignSoftBorder,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -922,11 +1047,21 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
                                 color: AppColors.white,
                               ),
                             )
-                          : Text(
-                              'Access Session',
-                              style: AppFontStyle.fontStyleW700(
-                                fontSize: 13,
-                                fontColor: AppColors.white,
+                          : SizedBox(
+                              width: double.infinity,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  'Access Session',
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  style: AppFontStyle.fontStyleW700(
+                                    fontSize: 13,
+                                    fontColor: canAccessNow
+                                        ? AppColors.white
+                                        : AppColors.redesignMutedText,
+                                  ),
+                                ),
                               ),
                             ),
                     ),
@@ -954,11 +1089,19 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
                                 color: AppColors.redesignBrandDark,
                               ),
                             )
-                          : Text(
-                              'Leave',
-                              style: AppFontStyle.fontStyleW700(
-                                fontSize: 13,
-                                fontColor: AppColors.redesignBrandDark,
+                          : SizedBox(
+                              width: double.infinity,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  'Leave',
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  style: AppFontStyle.fontStyleW700(
+                                    fontSize: 13,
+                                    fontColor: AppColors.redesignBrandDark,
+                                  ),
+                                ),
                               ),
                             ),
                     ),

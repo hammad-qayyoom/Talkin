@@ -326,13 +326,16 @@ class FindMoreWidget extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Flexible(
-                                  child: Text(
-                                    'Find Experts',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AppFontStyle.fontStyleW600(
-                                      fontSize: isTablet ? 15 : 14,
-                                      fontColor: AppColors.white,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      'Find Experts',
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      style: AppFontStyle.fontStyleW600(
+                                        fontSize: isTablet ? 15 : 14,
+                                        fontColor: AppColors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -362,13 +365,16 @@ class FindMoreWidget extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(14),
                               ),
                             ),
-                            child: Text(
-                              'Group Sessions',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppFontStyle.fontStyleW600(
-                                fontSize: isTablet ? 14 : 13,
-                                fontColor: AppColors.white,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                'Group Sessions',
+                                maxLines: 1,
+                                softWrap: false,
+                                style: AppFontStyle.fontStyleW600(
+                                  fontSize: isTablet ? 14 : 13,
+                                  fontColor: AppColors.white,
+                                ),
                               ),
                             ),
                           ),
@@ -395,13 +401,16 @@ class FindMoreWidget extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Flexible(
-                                    child: Text(
-                                      'Find Experts',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: AppFontStyle.fontStyleW600(
-                                        fontSize: isTablet ? 15 : 14,
-                                        fontColor: AppColors.white,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        'Find Experts',
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        style: AppFontStyle.fontStyleW600(
+                                          fontSize: isTablet ? 15 : 14,
+                                          fontColor: AppColors.white,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -433,13 +442,16 @@ class FindMoreWidget extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(14),
                                 ),
                               ),
-                              child: Text(
-                                'Group Sessions',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppFontStyle.fontStyleW600(
-                                  fontSize: isTablet ? 14 : 13,
-                                  fontColor: AppColors.white,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  'Group Sessions',
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  style: AppFontStyle.fontStyleW600(
+                                    fontSize: isTablet ? 14 : 13,
+                                    fontColor: AppColors.white,
+                                  ),
                                 ),
                               ),
                             ),

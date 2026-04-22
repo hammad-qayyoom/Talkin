@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:incodes_payment/incodes_payment_services.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -6,6 +9,15 @@ import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/utils.dart';
 
 import '../custom/progress_indicator/progress_dialog.dart';
+
+BuildContext? _currentContext() => Get.context ?? Get.overlayContext;
+
+void _showPaymentFailedToast() {
+  Utils.showToast(
+    _currentContext(),
+    EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr,
+  );
+}
 
 /// razor pay payment
 Future<void> razorPay({
@@ -47,10 +59,7 @@ Future<void> razorPay({
       appName: appName,
       colorCode: hexColor,
       onPaymentSuccess: onPaymentSuccess,
-      onPaymentFailure: () {
-        Utils.showToast(
-            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
-      },
+      onPaymentFailure: _showPaymentFailedToast,
       onExternalWallet: () {
         Utils.showLog("RazorPay External Wallet selected");
       },
@@ -64,43 +73,70 @@ Future<void> razorPay({
 /// stripe payment
 Future<void> stripe({
   required num amount,
-  required Function()? onPaymentSuccess,
+  required Future<void> Function()? onPaymentSuccess,
 }) async {
   try {
     Utils.showLog("Stripe Payment (Incodes) starting...");
 
     final publishableKey =
-        Database.settingApiModel?.data?.stripePublicKey ?? "";
+        (Database.settingApiModel?.data?.stripePublicKey ?? "").trim();
 
-    final secretKey = Database.settingApiModel?.data?.stripeSecretKey ?? "";
+    final secretKey =
+        (Database.settingApiModel?.data?.stripeSecretKey ?? "").trim();
 
     final currency =
         Database.settingApiModel?.data?.currency?.currencyCode ?? "INR";
 
     final merchantDisplayName = EnumLocale.txtAppName.name.tr;
 
-    final merchantCountryCode = "IN";
+    if (publishableKey.isEmpty || secretKey.isEmpty) {
+      Utils.showLog("Stripe keys are missing, aborting payment flow.");
+      _showPaymentFailedToast();
+      return;
+    }
+
+    final configuredCountryCode =
+        (Database.settingApiModel?.data?.currency?.countryCode ?? "")
+            .trim()
+            .toUpperCase();
+    final merchantCountryCode =
+        configuredCountryCode.length == 2 ? configuredCountryCode : "IN";
+
     final int minorAmount = (amount * 100).toInt();
+    if (minorAmount <= 0) {
+      Utils.showLog("Stripe payment skipped due to invalid amount: $amount");
+      _showPaymentFailedToast();
+      return;
+    }
+
+    final isTestMode =
+        publishableKey.startsWith("pk_test") || secretKey.startsWith("sk_test");
+
+    Utils.showLog(
+      "Stripe config => testMode: $isTestMode, country: $merchantCountryCode, currency: $currency",
+    );
 
     await IncodesPaymentServices.stripePayment(
       amount: minorAmount,
       currency: currency,
-      isTest: true,
+      isTest: isTestMode,
       merchantCountryCode: merchantCountryCode,
       merchantDisplayName: merchantDisplayName,
       publishableKey: publishableKey,
       secretKey: secretKey,
-      onPaymentSuccess: onPaymentSuccess,
-      onPaymentFailure: () {
-        Utils.showToast(
-            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
-      },
+      onPaymentSuccess: onPaymentSuccess == null
+          ? null
+          : () async {
+              await onPaymentSuccess();
+            },
+      onPaymentFailure: _showPaymentFailedToast,
     );
 
-    Utils.showLog("Stripe payment flow finished (returned).");
+    Utils.showLog("Stripe payment flow finished.");
   } catch (e) {
     if (Get.isDialogOpen == true) Get.back();
     Utils.showLog("Stripe Payment Failed !! => $e");
+    _showPaymentFailedToast();
   }
 }
 
@@ -132,18 +168,22 @@ Future<void> flutterWave({
     Utils.showLog("currency>>>>>>>>>>>>>>>>>>>>>>$currency");
     Utils.showLog("publicKey>>>>>>>>>>>>>>>>>>>>>>$publicKey");
 
+    final context = _currentContext();
+    if (context == null) {
+      Utils.showLog("Flutterwave payment skipped: context unavailable.");
+      _showPaymentFailedToast();
+      return;
+    }
+
     await IncodesPaymentServices.flutterWavePayment(
-      context: Get.context!,
+      context: context,
       publicKey: publicKey,
       currency: currency,
       amount: amount.toString(),
       customerName: customerName,
       customerEmail: customerEmail.toString(),
       onPaymentSuccess: onPaymentSuccess,
-      onPaymentFailure: () {
-        Utils.showToast(
-            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
-      },
+      onPaymentFailure: _showPaymentFailedToast,
     );
 
     Utils.showLog("Flutterwave payment flow finished.");
@@ -181,18 +221,21 @@ Future<void> payStack({
     //      "NGN";
 
     final int majorAmount = amount.toInt();
+    final context = _currentContext();
+    if (context == null) {
+      Utils.showLog("Paystack payment skipped: context unavailable.");
+      _showPaymentFailedToast();
+      return;
+    }
 
     await IncodesPaymentServices.payStackPayment(
-      context: Get.context!,
+      context: context,
       secretKey: settingsSecret.toString(),
       customerEmail: customerEmail.toString(),
       amount: majorAmount,
       currency: currency,
       onPaymentSuccess: onPaymentSuccess,
-      onPaymentFailure: () {
-        Utils.showToast(
-            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
-      },
+      onPaymentFailure: _showPaymentFailedToast,
     );
 
     Utils.showLog("Paystack payment flow finished.");
@@ -219,9 +262,15 @@ Future<void> payPal({
 
     final paypalClientId = Database.settingApiModel?.data?.paypalClientId;
     final secretKey = Database.settingApiModel?.data?.paypalSecretKey;
+    final context = _currentContext();
+    if (context == null) {
+      Utils.showLog("PayPal payment skipped: context unavailable.");
+      _showPaymentFailedToast();
+      return;
+    }
 
     await IncodesPaymentServices.paypalPayment(
-      context: Get.context!,
+      context: context,
       clientId: paypalClientId.toString(),
       secretKey: secretKey.toString(),
       transactions: [
@@ -249,10 +298,7 @@ Future<void> payPal({
         },
       ],
       onPaymentSuccess: onPaymentSuccess,
-      onPaymentFailure: () {
-        Utils.showToast(
-            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
-      },
+      onPaymentFailure: _showPaymentFailedToast,
     );
 
     Utils.showLog("PayPal payment flow finished.");
@@ -282,10 +328,7 @@ Future<void> inAppPurchase({
       productIds: [productId],
       amount: amount.toDouble(),
       onPaymentSuccess: onPaymentSuccess,
-      onPaymentFailure: () {
-        Utils.showToast(
-            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
-      },
+      onPaymentFailure: _showPaymentFailedToast,
     );
 
     Utils.showLog("InAppPurchase payment flow finished.");
@@ -323,9 +366,15 @@ Future<void> cashFree({
 // final currency ="INR";
     final currency =
         Database.settingApiModel?.data?.currency?.currencyCode ?? "INR";
+    final context = _currentContext();
+    if (context == null) {
+      Utils.showLog("Cashfree payment skipped: context unavailable.");
+      _showPaymentFailedToast();
+      return;
+    }
 
     await IncodesPaymentServices.cashFreePayment(
-      context: Get.context!,
+      context: context,
       clientId: cashfreeClientId.toString(),
       clientSecret: cashfreeSecretKey.toString(),
       amount: amount.toDouble(),
@@ -335,10 +384,7 @@ Future<void> cashFree({
       customerPhone: "9876543210",
       paymentGatewayName: "Cashfree",
       onPaymentSuccess: onPaymentSuccess,
-      onPaymentFailure: () {
-        Utils.showToast(
-            Get.context!, EnumLocale.txtPaymentFailedPleaseTryAgain.name.tr);
-      },
+      onPaymentFailure: _showPaymentFailedToast,
     );
 
     Utils.showLog("CashFree payment flow finished.");

@@ -304,6 +304,23 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
       return;
     }
 
+    final accessResponse = await SessionBookingService.getSessionAccess(
+      sessionId: sessionId,
+      bookingId: bookingId,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    if (accessResponse['status'] != true) {
+      Utils.showToast(
+        context,
+        (accessResponse['message'] ?? 'Session not started yet').toString(),
+      );
+      return;
+    }
+
     await _triggerDirectSessionCall(
       callType: sessionCallType,
       receiverId: userId,
@@ -614,13 +631,9 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
     final sessionStatusLabel = _toTitleCase(rawSessionStatus);
 
     final canCancel = _view == 'upcoming' && sessionStatusLower != 'canceled';
-    final accessWindow = session['accessWindow'] is Map<String, dynamic>
-        ? session['accessWindow'] as Map<String, dynamic>
-        : const <String, dynamic>{};
-
     final canStartSession = _view == 'upcoming' &&
         bookingStatusLower == 'confirmed' &&
-        accessWindow['allowed'] == true;
+        !['completed', 'canceled', 'cancelled'].contains(sessionStatusLower);
     final showStartControl = _view == 'upcoming';
     final isCancellingThis = _cancellingSessionId == sessionId;
     final callTypeRaw = (session['callType'] ?? '').toString().trim();
@@ -631,9 +644,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
 
     final startLabel = bookingStatusLower != 'confirmed'
         ? 'Awaiting Confirmation'
-        : canStartSession
-            ? 'Start Session'
-            : 'Not Live Yet';
+        : 'Start Session';
 
     return Container(
       padding: const EdgeInsets.all(11),

@@ -28,7 +28,7 @@ class Utils {
 
   /// =================== Toast =================== ///
   static showToast(
-    BuildContext context,
+    BuildContext? context,
     String msg, {
     ToastGravity gravity = ToastGravity.BOTTOM,
     Toast toastLength = Toast.LENGTH_LONG, // default to 2 sec

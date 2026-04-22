@@ -542,19 +542,6 @@ class HostImageView extends StatelessWidget {
                               rate: videoRate,
                               isCompact: isCompact,
                             ),
-                            const SizedBox(height: 12),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(14),
-                              child: Image.asset(
-                                AppAsset.hostHomeImage,
-                                fit: BoxFit.cover,
-                                height: 90,
-                                width: double.infinity,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return const SizedBox.shrink();
-                                },
-                              ),
-                            ),
                           ],
                         )
                       else
@@ -575,20 +562,6 @@ class HostImageView extends StatelessWidget {
                                 isCompact: false,
                               ),
                             ),
-                            if (!isTablet) const SizedBox(width: 10),
-                            if (!isTablet)
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(14),
-                                child: Image.asset(
-                                  AppAsset.hostHomeImage,
-                                  fit: BoxFit.cover,
-                                  height: 58,
-                                  width: 70,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const SizedBox.shrink();
-                                  },
-                                ),
-                              ),
                           ],
                         ),
                     ],

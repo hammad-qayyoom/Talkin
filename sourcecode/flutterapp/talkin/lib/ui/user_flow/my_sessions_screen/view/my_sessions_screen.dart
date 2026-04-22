@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:notisboard/routes/app_routes.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:notisboard/services/permission_handler/permission_handler.dart';
 import 'package:notisboard/socket/socket_emit.dart';
@@ -104,9 +106,12 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       return;
     }
 
+    final fetchedSessions = (response['data'] as List<dynamic>? ?? []);
+    final visibleSessions = _applyMySessionsVisibilityRules(fetchedSessions);
+
     setState(() {
       _isLoading = false;
-      _sessions = (response['data'] as List<dynamic>? ?? []);
+      _sessions = visibleSessions;
       // _reviewSubmittedKeys is NOT cleared - it persists across refreshes
     });
 
@@ -114,6 +119,118 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       Utils.showToast(context,
           (response['message'] ?? 'Failed to fetch sessions.').toString());
     }
+  }
+
+  List<dynamic> _applyMySessionsVisibilityRules(List<dynamic> sessions) {
+    if (_view != 'upcoming') {
+      return sessions;
+    }
+
+    return sessions.where((rawItem) {
+      if (rawItem is! Map<String, dynamic>) {
+        return false;
+      }
+
+      final session = _extractSession(rawItem);
+      if (session.isEmpty) {
+        return false;
+      }
+
+      if (!_isGroupSessionType(session)) {
+        return true;
+      }
+
+      final status = _sessionStatus(session);
+      return _isLiveStatus(status);
+    }).toList();
+  }
+
+  Map<String, dynamic> _extractSession(Map<String, dynamic> item) {
+    if (item['session'] is Map<String, dynamic>) {
+      return item['session'] as Map<String, dynamic>;
+    }
+
+    if (item['sessionId'] is Map<String, dynamic>) {
+      return item['sessionId'] as Map<String, dynamic>;
+    }
+
+    return <String, dynamic>{};
+  }
+
+  Map<String, dynamic> _extractExpert(Map<String, dynamic> session) {
+    if (session['expertId'] is Map<String, dynamic>) {
+      return session['expertId'] as Map<String, dynamic>;
+    }
+
+    return <String, dynamic>{};
+  }
+
+  String _sessionStatus(Map<String, dynamic> session) {
+    return (session['sessionStatus'] ?? session['status'] ?? '')
+        .toString()
+        .trim()
+        .toLowerCase();
+  }
+
+  bool _isLiveStatus(String status) {
+    return ['live', 'active', 'ongoing', 'started'].contains(status);
+  }
+
+  bool _isGroupSessionType(Map<String, dynamic> session) {
+    final sessionType =
+        (session['sessionType'] ?? '').toString().trim().toLowerCase();
+
+    return sessionType == 'group' ||
+        sessionType == 'group_audio' ||
+        sessionType == 'group_video';
+  }
+
+  String? _startBlockedReason({
+    required Map<String, dynamic> item,
+    required Map<String, dynamic> session,
+  }) {
+    final sessionStatus = _sessionStatus(session);
+    final bookingStatus =
+        (item['bookingStatus'] ?? '').toString().trim().toLowerCase();
+    final isConfirmedBooking = bookingStatus.isNotEmpty
+        ? bookingStatus == 'confirmed'
+        : item['canStartSession'] == true;
+
+    if (!isConfirmedBooking) {
+      return 'Your booking is awaiting confirmation.';
+    }
+
+    if (['completed', 'canceled', 'cancelled'].contains(sessionStatus)) {
+      return 'Session is no longer active.';
+    }
+
+    if (_isGroupSessionType(session) && !_isLiveStatus(sessionStatus)) {
+      return 'Session host has not started live stream yet.';
+    }
+
+    return null;
+  }
+
+  String _startButtonLabel({
+    required bool canStart,
+    required bool isGroupSession,
+    required bool isConfirmedBooking,
+    required String sessionStatus,
+  }) {
+    if (canStart) {
+      return 'Start Session';
+    }
+
+    if (!isConfirmedBooking) {
+      return 'Awaiting Confirmation';
+    }
+
+    if (isGroupSession &&
+        !['completed', 'canceled', 'cancelled'].contains(sessionStatus)) {
+      return 'Waiting for Expert';
+    }
+
+    return 'Unavailable';
   }
 
   String _toTitleCase(String value) {
@@ -238,6 +355,91 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     );
   }
 
+  void _openGroupCallRoom({
+    required Map<String, dynamic> session,
+    required Map<String, dynamic> expert,
+    String? bookingId,
+  }) {
+    final sessionId = (session['_id'] ?? '').toString().trim();
+    final roomId = (session['channelName'] ?? sessionId).toString().trim();
+    final callType =
+        (session['callType'] ?? 'audio').toString().trim().toLowerCase() ==
+                'video'
+            ? 'video'
+            : 'audio';
+
+    final expertId = (expert['userId'] ??
+            expert['legacyListenerId'] ??
+            expert['_id'] ??
+            session['expertId'] ??
+            '')
+        .toString()
+        .trim();
+    if (sessionId.isEmpty || roomId.isEmpty || expertId.isEmpty) {
+      Utils.showToast(
+        context,
+        'Unable to access group session. Missing room details.',
+      );
+      return;
+    }
+
+    final expertName =
+        (expert['displayName'] ?? expert['name'] ?? session['title'] ?? 'Host')
+            .toString()
+            .trim();
+    final expertImage =
+        (expert['image'] ?? expert['imageUrl'] ?? expert['profilePic'] ?? '')
+            .toString()
+            .trim();
+    final currentUserId =
+        (Database.fetchLoginUserProfileModel?.user?.id ?? Database.loginUserId)
+            .toString()
+            .trim();
+    if (currentUserId.isEmpty) {
+      Utils.showToast(context, 'Please login again to access this session.');
+      return;
+    }
+
+    final route = callType == 'video'
+        ? AppRoutes.videoCallScreen
+        : AppRoutes.voiceCallScreen;
+
+    Get.toNamed(
+      route,
+      arguments: {
+        'callerId': expertId,
+        'receiverId': currentUserId,
+        'callType': callType,
+        'callerRole': 'listener',
+        'receiverRole': 'user',
+        'callId': roomId,
+        'receiverName': Database.loginUserName,
+        'callerfullName': expertName,
+        'callerName': expertName,
+        'receiverImage': '',
+        'callerImage': expertImage,
+        'isAccept': true,
+        'callMode': 'group_session',
+        'sessionId': sessionId,
+        if ((bookingId ?? '').trim().isNotEmpty) 'bookingId': bookingId,
+      },
+    );
+  }
+
+  Future<void> _onStartSessionTap(
+    Map<String, dynamic> booking,
+    Map<String, dynamic> session,
+    Map<String, dynamic> expert,
+  ) async {
+    final blockedReason = _startBlockedReason(item: booking, session: session);
+    if (blockedReason != null) {
+      Utils.showToast(context, blockedReason);
+      return;
+    }
+
+    await _onStartSession(booking, session, expert);
+  }
+
   Future<void> _onStartSession(
     Map<String, dynamic> booking,
     Map<String, dynamic> session,
@@ -268,14 +470,33 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       return;
     }
 
+    final accessData = accessResponse['data'] is Map<String, dynamic>
+        ? accessResponse['data'] as Map<String, dynamic>
+        : <String, dynamic>{};
+    final grantedSession = accessData['session'] is Map<String, dynamic>
+        ? accessData['session'] as Map<String, dynamic>
+        : <String, dynamic>{};
+    final effectiveSession =
+        grantedSession.isNotEmpty ? grantedSession : session;
+    final grantedExpert = grantedSession['expertId'] is Map<String, dynamic>
+        ? grantedSession['expertId'] as Map<String, dynamic>
+        : <String, dynamic>{};
+    final effectiveExpert = grantedExpert.isNotEmpty ? grantedExpert : expert;
+
     final sessionType =
-        (session['sessionType'] ?? '').toString().trim().toLowerCase();
-    if (sessionType == 'group') {
-      Utils.showToast(context, 'Group session access granted.');
+        (effectiveSession['sessionType'] ?? '').toString().trim().toLowerCase();
+    if (sessionType == 'group' ||
+        sessionType == 'group_audio' ||
+        sessionType == 'group_video') {
+      _openGroupCallRoom(
+        session: effectiveSession,
+        expert: effectiveExpert,
+        bookingId: bookingId,
+      );
       return;
     }
 
-    final listenerId = (expert['legacyListenerId'] ?? '').toString();
+    final listenerId = (effectiveExpert['legacyListenerId'] ?? '').toString();
     if (listenerId.isEmpty) {
       Utils.showToast(
           context, 'Unable to start session. Expert is unavailable.');
@@ -283,19 +504,22 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     }
 
     final expertName =
-        (expert['displayName'] ?? expert['name'] ?? 'Expert').toString();
-    final expertImage =
-        (expert['image'] ?? expert['imageUrl'] ?? expert['profilePic'] ?? '')
+        (effectiveExpert['displayName'] ?? effectiveExpert['name'] ?? 'Expert')
             .toString();
+    final expertImage = (effectiveExpert['image'] ??
+            effectiveExpert['imageUrl'] ??
+            effectiveExpert['profilePic'] ??
+            '')
+        .toString();
     final sessionCallType =
-        (session['callType'] ?? '').toString().trim().toLowerCase();
+        (effectiveSession['callType'] ?? '').toString().trim().toLowerCase();
 
     await _triggerDirectSessionCall(
       callType: sessionCallType,
       receiverId: listenerId,
       receiverName: expertName,
       receiverImage: expertImage,
-      sessionId: sessionId,
+      sessionId: (effectiveSession['_id'] ?? sessionId).toString(),
       bookingId: bookingId,
     );
   }
@@ -905,24 +1129,29 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     required Map<String, dynamic> item,
     required double cardWidth,
   }) {
-    final session = item['session'] is Map<String, dynamic>
-        ? item['session'] as Map<String, dynamic>
-        : item['sessionId'] is Map<String, dynamic>
-            ? item['sessionId'] as Map<String, dynamic>
-            : <String, dynamic>{};
-    final expert = session['expertId'] is Map<String, dynamic>
-        ? session['expertId'] as Map<String, dynamic>
-        : <String, dynamic>{};
+    final session = _extractSession(item);
+    final expert = _extractExpert(session);
 
     final callTypeRaw = (session['callType'] ?? '').toString().trim();
     final callTypeLabel =
         callTypeRaw.isEmpty ? 'Unknown' : callTypeRaw.toUpperCase();
-    final status =
-        (session['sessionStatus'] ?? session['status'] ?? '').toString();
-    final statusLower = status.trim().toLowerCase();
+    final status = _sessionStatus(session);
+    final statusLower = status;
     final statusLabel = _toTitleCase(status);
     final isCompletedSession = statusLower == 'completed';
-    final canStart = item['canStartSession'] == true;
+    final bookingStatus =
+        (item['bookingStatus'] ?? '').toString().trim().toLowerCase();
+    final isConfirmedBooking = bookingStatus.isNotEmpty
+        ? bookingStatus == 'confirmed'
+        : item['canStartSession'] == true;
+    final isGroupSession = _isGroupSessionType(session);
+    final canStart = _startBlockedReason(item: item, session: session) == null;
+    final startButtonLabel = _startButtonLabel(
+      canStart: canStart,
+      isGroupSession: isGroupSession,
+      isConfirmedBooking: isConfirmedBooking,
+      sessionStatus: statusLower,
+    );
     final showStartSession = _view == 'upcoming';
     final showReviewAction = _view == 'completed' && isCompletedSession;
     final bookingId = (item['_id'] ?? '').toString();
@@ -1020,15 +1249,17 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                     width: double.infinity,
                     height: 42,
                     child: ElevatedButton.icon(
-                      onPressed: canStart
-                          ? () => _onStartSession(item, session, expert)
-                          : null,
+                      onPressed: () =>
+                          _onStartSessionTap(item, session, expert),
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         disabledBackgroundColor: AppColors.redesignSoftBorder,
                         disabledForegroundColor: _mutedText,
-                        backgroundColor: _brandDark,
-                        foregroundColor: AppColors.white,
+                        backgroundColor: canStart
+                            ? _brandDark
+                            : AppColors.redesignSoftBorder,
+                        foregroundColor:
+                            canStart ? AppColors.white : _mutedText,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -1040,7 +1271,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                         size: 16,
                       ),
                       label: Text(
-                        canStart ? 'Start Session' : 'Not Live Yet',
+                        startButtonLabel,
                         style: AppFontStyle.fontStyleW600(
                           fontSize: 13,
                           fontColor: canStart ? AppColors.white : _mutedText,
@@ -1090,15 +1321,17 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                     child: SizedBox(
                       height: 42,
                       child: ElevatedButton.icon(
-                        onPressed: canStart
-                            ? () => _onStartSession(item, session, expert)
-                            : null,
+                        onPressed: () =>
+                            _onStartSessionTap(item, session, expert),
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
                           disabledBackgroundColor: AppColors.redesignSoftBorder,
                           disabledForegroundColor: _mutedText,
-                          backgroundColor: _brandDark,
-                          foregroundColor: AppColors.white,
+                          backgroundColor: canStart
+                              ? _brandDark
+                              : AppColors.redesignSoftBorder,
+                          foregroundColor:
+                              canStart ? AppColors.white : _mutedText,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -1110,7 +1343,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                           size: 16,
                         ),
                         label: Text(
-                          canStart ? 'Start Session' : 'Not Live Yet',
+                          startButtonLabel,
                           style: AppFontStyle.fontStyleW600(
                             fontSize: 13,
                             fontColor: canStart ? AppColors.white : _mutedText,

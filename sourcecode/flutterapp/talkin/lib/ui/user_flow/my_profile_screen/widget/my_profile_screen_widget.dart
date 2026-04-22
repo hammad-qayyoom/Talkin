@@ -668,13 +668,17 @@ class CenterOption extends StatelessWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppFontStyle.fontStyleW700(
-                                fontSize: 16,
-                                fontColor: AppColors.redesignBrandDark,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                title,
+                                maxLines: 1,
+                                softWrap: false,
+                                style: AppFontStyle.fontStyleW700(
+                                  fontSize: 16,
+                                  fontColor: AppColors.redesignBrandDark,
+                                ),
                               ),
                             ),
                           ),
@@ -691,13 +695,16 @@ class CenterOption extends StatelessWidget {
                                 color: AppColors.redesignBrandDark,
                                 borderRadius: BorderRadius.circular(999),
                               ),
-                              child: Text(
-                                badgeText!,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppFontStyle.fontStyleW700(
-                                  fontSize: 10,
-                                  fontColor: AppColors.white,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  badgeText!,
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  style: AppFontStyle.fontStyleW700(
+                                    fontSize: 10,
+                                    fontColor: AppColors.white,
+                                  ),
                                 ),
                               ),
                             ),

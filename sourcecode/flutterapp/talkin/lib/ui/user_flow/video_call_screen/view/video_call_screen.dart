@@ -47,8 +47,8 @@ class _VideoCallScreenState extends State<VideoCallScreen>
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: Colors.white,
-        body: VideoCallView1(),
+        backgroundColor: Colors.black,
+        body: const VideoCallView1(),
       ),
     );
   }
