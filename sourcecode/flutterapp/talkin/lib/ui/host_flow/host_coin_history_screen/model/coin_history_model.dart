@@ -67,6 +67,8 @@ class HostCoinHistory {
   String? duration;
   num? listenerCoin;
   int? payoutStatus;
+  String? reason;
+  String? entityType;
   String? date;
   int? type;
   DateTime? createdAt;
@@ -78,6 +80,8 @@ class HostCoinHistory {
     this.duration,
     this.listenerCoin,
     this.payoutStatus,
+    this.reason,
+    this.entityType,
     this.date,
     this.type,
     this.createdAt,
@@ -91,6 +95,8 @@ class HostCoinHistory {
         duration: _parseString(json["duration"]),
         listenerCoin: _parseNum(json["listenerCoin"]),
         payoutStatus: _parseInt(json["payoutStatus"]),
+        reason: _parseString(json["reason"]),
+        entityType: _parseString(json["entityType"]),
         date: _parseString(json["date"]),
         type: _parseInt(json["type"]),
         createdAt: _parseString(json["createdAt"]) == null
@@ -105,6 +111,8 @@ class HostCoinHistory {
         "duration": duration,
         "listenerCoin": listenerCoin,
         "payoutStatus": payoutStatus,
+        "reason": reason,
+        "entityType": entityType,
         "date": date,
         "type": type,
         "createdAt": createdAt?.toIso8601String(),

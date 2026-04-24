@@ -201,6 +201,76 @@ class HostCoinHistoryScreenTabBar extends StatelessWidget {
 class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
   const HostCoinHistoryScreenTabBarScreen({super.key});
 
+  String _coinTypeLabel(
+    int? type, {
+    String? reason,
+    String? entityType,
+  }) {
+    switch (type ?? 0) {
+      case 1:
+        return "Log In Bonus";
+      case 2:
+      case 10:
+        return "Subscription Purchase";
+      case 3:
+        return "Private audio call";
+      case 4:
+        return "Private video call";
+      case 5:
+        return "Audio call";
+      case 6:
+        return "Video call";
+      case 7:
+        return "Withdraw Request";
+      case 8:
+        return "Admin Added Session Credit";
+      case 9:
+        return "Admin Deducted Session Credit";
+      case 11:
+        final entity = (entityType ?? "").trim().toLowerCase();
+        if (entity == "group_session_booking") {
+          return "Group Session Booking";
+        }
+        if (entity == "session_booking") {
+          return "1-to-1 Session Booking";
+        }
+        return "Session Booking";
+      default:
+        final fallback = (reason ?? "").trim();
+        return fallback.isNotEmpty ? fallback : "Session Credit Activity";
+    }
+  }
+
+  String _coinTypeIconAsset(int? type) {
+    switch (type ?? 0) {
+      case 2:
+      case 10:
+        return AppAsset.coinPurchaseIcon;
+      case 3:
+      case 5:
+        return AppAsset.callIcon;
+      case 4:
+      case 6:
+        return AppAsset.videoCallIcon;
+      case 7:
+        return AppAsset.withdrawIcon;
+      case 8:
+        return AppAsset.addWalletCoin;
+      case 9:
+        return AppAsset.removeWalletCoin;
+      case 11:
+        return AppAsset.coinPurchaseIcon;
+      default:
+        return AppAsset.loginBonusIcon;
+    }
+  }
+
+  bool _showDuration(int? type, String? duration) {
+    final isCallType = type == 3 || type == 4 || type == 5 || type == 6;
+    if (!isCallType) return false;
+    return (duration ?? "").trim().isNotEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HostCoinHistoryScreenController>(
@@ -308,12 +378,11 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                                             .start,
                                                     children: [
                                                       Text(
-                                                        item.type == 1 ||
-                                                                item.type == 2
+                                                        item.type == 1
                                                             ? Database
                                                                 .loginUserName
-                                                            : item.fullName ??
-                                                                '',
+                                                            : (item.fullName ??
+                                                                ''),
                                                         style: AppFontStyle
                                                             .fontStyleW700(
                                                           fontSize: 13,
@@ -324,22 +393,8 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                                       Row(
                                                         children: [
                                                           Image.asset(
-                                                            item.type == 2
-                                                                ? AppAsset
-                                                                    .coinPurchaseIcon
-                                                                : item.type == 3
-                                                                    ? AppAsset
-                                                                        .callIcon
-                                                                    : item.type ==
-                                                                            4
-                                                                        ? AppAsset
-                                                                            .videoCallIcon
-                                                                        : item.type ==
-                                                                                5
-                                                                            ? AppAsset.callIcon
-                                                                            : item.type == 6
-                                                                                ? AppAsset.videoCallIcon
-                                                                                : AppAsset.loginBonusIcon,
+                                                            _coinTypeIconAsset(
+                                                                item.type),
                                                             color: AppColors
                                                                 .historyCallType,
                                                             height: 12,
@@ -348,19 +403,13 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                                           ).paddingOnly(
                                                               right: 4),
                                                           Text(
-                                                            item.type == 2
-                                                                ? "Subscription Purchase"
-                                                                : item.type == 3
-                                                                    ? "Private audio call"
-                                                                    : item.type ==
-                                                                            4
-                                                                        ? "private video call"
-                                                                        : item.type ==
-                                                                                5
-                                                                            ? "Audio call"
-                                                                            : item.type == 6
-                                                                                ? "Video call"
-                                                                                : "Log In Bonus",
+                                                            _coinTypeLabel(
+                                                              item.type,
+                                                              reason:
+                                                                  item.reason,
+                                                              entityType: item
+                                                                  .entityType,
+                                                            ),
                                                             style: AppFontStyle
                                                                 .fontStyleW500(
                                                                     fontSize:
@@ -373,14 +422,11 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                                           Text(
                                                             textAlign: TextAlign
                                                                 .center,
-                                                            item.type == 1 ||
-                                                                    item.type ==
-                                                                        2
-                                                                ? ""
-                                                                : item.duration ==
-                                                                        null
-                                                                    ? ''
-                                                                    : "${item.duration}",
+                                                            _showDuration(
+                                                                    item.type,
+                                                                    item.duration)
+                                                                ? "${item.duration}"
+                                                                : "",
                                                             style: AppFontStyle
                                                                 .fontStyleW600(
                                                               fontSize: 11,

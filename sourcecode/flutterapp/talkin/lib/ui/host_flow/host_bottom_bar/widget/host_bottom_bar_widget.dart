@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/bottom_bar/salomon_bottom_bar.dart';
@@ -17,24 +15,27 @@ class HostBottomBarView extends StatelessWidget {
     return GetBuilder<HostBottomBarController>(
       id: Constant.idBottomBar,
       builder: (logic) {
+        final double bottomInset = MediaQuery.paddingOf(context).bottom;
+        final double barHeight = (bottomInset > 0 ? 94 : 80) + bottomInset;
         final int currentIndex = logic.selectIndex >= 0 && logic.selectIndex < 5
             ? logic.selectIndex
             : 0;
 
         return Container(
-          height: Platform.isIOS ? 85 : 80,
+          height: barHeight,
           decoration: BoxDecoration(
             color: AppColors.white,
+            border: Border(
+              top: BorderSide(
+                color: AppColors.black.withValues(alpha: 0.05),
+              ),
+            ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.5),
-                offset: const Offset(
-                  6.0,
-                  6.0,
-                ),
-                blurRadius: 6.0,
-                spreadRadius: 2.0,
-              ), //BoxShadow
+                color: AppColors.black.withValues(alpha: 0.08),
+                offset: const Offset(0, -2),
+                blurRadius: 14,
+              ),
             ],
           ),
           child: OverflowBox(
@@ -47,7 +48,11 @@ class HostBottomBarView extends StatelessWidget {
               },
               curve: Curves.easeInOut,
               margin: EdgeInsets.only(
-                  left: 10, right: 10, top: Platform.isIOS ? 10 : 0),
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: bottomInset > 0 ? 8 : 6,
+              ),
               selectedColorOpacity: 1,
               items: [
                 bottomBarItemView(

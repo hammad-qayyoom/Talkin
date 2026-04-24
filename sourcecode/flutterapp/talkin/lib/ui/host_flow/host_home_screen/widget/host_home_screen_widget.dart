@@ -13,7 +13,6 @@ import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
-import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
 import 'package:notisboard/utils/utils.dart';
 
@@ -343,6 +342,9 @@ class HostImageView extends StatelessWidget {
   static final Color _brandRed = AppColors.redesignBrandRed;
   static final Color _brandDark = AppColors.redesignBrandDark;
   static final Color _softBorder = AppColors.redesignSoftBorder;
+  static const String _heroTitle = 'Go Online, Help Users, Earn More';
+  static const String _heroDescription =
+      'Set your audio and video availability, connect with users, and grow your earnings.';
 
   String _resolveSpotlightImageUrl(String value) {
     final trimmed = value.trim();
@@ -511,7 +513,7 @@ class HostImageView extends StatelessWidget {
                       ),
                       const SizedBox(height: 14),
                       Text(
-                        EnumLocale.txtHomeFastLalk.name.tr,
+                        _heroTitle,
                         style: AppFontStyle.fontStyleW700(
                           fontSize: titleSize,
                           fontColor: AppColors.white,
@@ -519,7 +521,7 @@ class HostImageView extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        EnumLocale.txtHomeDescription.name.tr,
+                        _heroDescription,
                         style: AppFontStyle.fontStyleW500(
                           fontSize: isTablet ? 15 : 13,
                           height: 1.4,
@@ -624,7 +626,7 @@ class HostImageView extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 14),
                               child: Text(
-                                'No spotlight image available. Add one from admin panel.',
+                                'No growth spotlight available right now.',
                                 textAlign: TextAlign.center,
                                 style: AppFontStyle.fontStyleW500(
                                   fontSize: isTablet ? 14 : 12,
@@ -667,7 +669,8 @@ class HostImageView extends StatelessWidget {
                                                 : ProfessionalCachedImage(
                                                     imageUrl: imageUrl,
                                                     fit: BoxFit.cover,
-                                                    placeholder: const AppImageShimmer(),
+                                                    placeholder:
+                                                        const AppImageShimmer(),
                                                     errorWidget: Container(
                                                       color: AppColors
                                                           .redesignSurfaceNeutralAlt,
@@ -719,8 +722,7 @@ class HostImageView extends StatelessWidget {
                                                         .fontStyleW500(
                                                       fontSize:
                                                           isTablet ? 12 : 11,
-                                                      fontColor: AppColors
-                                                          .white
+                                                      fontColor: AppColors.white
                                                           .withValues(
                                                         alpha: 0.94,
                                                       ),
@@ -784,6 +786,9 @@ class PermissionView extends StatelessWidget {
 
   static final Color _brandDark = AppColors.redesignBrandDark;
   static final Color _mutedText = AppColors.redesignMutedText;
+  static const String _title = 'Set Your Availability';
+  static const String _subtitle =
+      'Choose which session modes users can request.';
 
   @override
   Widget build(BuildContext context) {
@@ -791,7 +796,7 @@ class PermissionView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          EnumLocale.txtImAvailableFor.name.tr,
+          _title,
           style: AppFontStyle.fontStyleW700(
             fontSize: 28,
             fontColor: _brandDark,
@@ -799,7 +804,7 @@ class PermissionView extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          'Control your live availability and session modes.',
+          _subtitle,
           style: AppFontStyle.fontStyleW500(
             fontSize: 13,
             fontColor: _mutedText,
@@ -814,8 +819,8 @@ class PermissionView extends StatelessWidget {
               builder: (controller) {
                 return CustomSwitchView(
                   iconData: Icons.call_rounded,
-                  text: EnumLocale.txtAvailableForAudioCall.name.tr,
-                  subtitle: 'Allow private audio sessions',
+                  text: 'Accept Audio Calls',
+                  subtitle: 'Receive private audio session requests',
                   callCoin: Database
                           .fetchListenerProfileModel?.data?.ratePrivateAudioCall
                           .toString() ??
@@ -836,8 +841,8 @@ class PermissionView extends StatelessWidget {
               builder: (controller) {
                 return CustomSwitchView(
                   iconData: Icons.videocam_rounded,
-                  text: EnumLocale.txtAvailableForVideoCall.name.tr,
-                  subtitle: 'Allow private video sessions',
+                  text: 'Accept Video Calls',
+                  subtitle: 'Receive private video session requests',
                   callCoin: Database
                           .fetchListenerProfileModel?.data?.ratePrivateVideoCall
                           .toString() ??
@@ -883,6 +888,9 @@ class NoteView extends StatelessWidget {
 
   static final Color _brandDark = AppColors.redesignBrandDark;
   static final Color _mutedText = AppColors.redesignMutedText;
+  static const String _title = 'Expert Guidelines :';
+  static const String _description =
+      'Keep every session professional and safe. Do not ask users for passwords, OTPs, phone numbers, personal details, or money transfers. Report suspicious requests and avoid any obscene or inappropriate content.';
 
   @override
   Widget build(BuildContext context) {
@@ -923,7 +931,7 @@ class NoteView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  EnumLocale.txtNote.name.tr,
+                  _title,
                   style: AppFontStyle.fontStyleW700(
                     fontSize: 15,
                     fontColor: _brandDark,
@@ -931,7 +939,7 @@ class NoteView extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  EnumLocale.txtHostHomeNote.name.tr,
+                  _description,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: 12,
                     height: 1.62,
@@ -1081,6 +1089,12 @@ class CustomSwitchView extends StatelessWidget {
 class HostStatisticsCard extends StatelessWidget {
   const HostStatisticsCard({super.key});
 
+  static const String _title = 'Expert Performance';
+  static const String _earningsLabel = 'Coin Earnings';
+  static const String _ratingLabel = 'Rating';
+  static const String _sessionsLabel = 'Completed';
+  static const String _experienceLabel = 'Experience';
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HostHomeScreenController>(
@@ -1121,7 +1135,7 @@ class HostStatisticsCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Your Statistics',
+                    _title,
                     style: AppFontStyle.fontStyleW700(
                       fontSize: 16,
                       fontColor: AppColors.redesignBrandDark,
@@ -1136,7 +1150,7 @@ class HostStatisticsCard extends StatelessWidget {
                     child: _buildStatItem(
                       icon: Icons.wallet_rounded,
                       iconColor: AppColors.redesignCoinText,
-                      title: 'Earnings',
+                      title: _earningsLabel,
                       value: coins,
                       showCoinIcon: true,
                     ),
@@ -1149,7 +1163,7 @@ class HostStatisticsCard extends StatelessWidget {
                     child: _buildStatItem(
                       icon: Icons.star_rounded,
                       iconColor: Colors.amber,
-                      title: 'Rating',
+                      title: _ratingLabel,
                       value: rating,
                     ),
                   ),
@@ -1164,7 +1178,7 @@ class HostStatisticsCard extends StatelessWidget {
                     child: _buildStatItem(
                       icon: Icons.call_rounded,
                       iconColor: AppColors.redesignBrandRed,
-                      title: 'Sessions',
+                      title: _sessionsLabel,
                       value: callCount,
                     ),
                   ),
@@ -1176,7 +1190,7 @@ class HostStatisticsCard extends StatelessWidget {
                     child: _buildStatItem(
                       icon: Icons.access_time_rounded,
                       iconColor: Colors.blue,
-                      title: 'Experience (Yrs)',
+                      title: _experienceLabel,
                       value: experience,
                     ),
                   ),

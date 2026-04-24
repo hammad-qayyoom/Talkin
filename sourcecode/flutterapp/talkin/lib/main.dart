@@ -144,21 +144,25 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       debugShowCheckedModeBanner: false,
       locale: const Locale("en"),
       builder: (context, child) {
+        final bool isBottomBarRoute = Get.currentRoute == AppRoutes.bottomBar ||
+            Get.currentRoute == AppRoutes.hostBottomBar;
+
         return MediaQuery(
           data: MediaQuery.of(context)
               .copyWith(textScaler: const TextScaler.linear(1.0)),
           child: Container(
             color: AppColors.white,
             child: SafeArea(
-              bottom: true,
+              bottom: !isBottomBarRoute,
               top: false,
               left: false,
               right: false,
               child: Scaffold(
                 // backgroundColor: AppColors.black,
                 body: Stack(
+                  fit: StackFit.expand,
                   children: [
-                    child ?? const SizedBox(),
+                    child ?? const SizedBox.expand(),
                   ],
                 ),
               ),

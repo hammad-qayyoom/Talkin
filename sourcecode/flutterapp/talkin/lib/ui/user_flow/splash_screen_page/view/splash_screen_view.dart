@@ -25,137 +25,176 @@ class SplashScreenView extends GetView<SplashScreenController> {
       backgroundColor: _screenBg,
       body: GetBuilder<SplashScreenController>(
         builder: (controller) {
-          final insets = MediaQuery.of(context).padding;
+          final mediaQuery = MediaQuery.of(context);
+          final insets = mediaQuery.padding;
 
-          return Stack(
-            children: [
-              Positioned(
-                top: -120,
-                right: -90,
-                child: Container(
-                  height: 300,
-                  width: 300,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _brandRed.withValues(alpha: 0.09),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 170,
-                left: -130,
-                child: Container(
-                  height: 280,
-                  width: 280,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _brandDark.withValues(alpha: 0.05),
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: -140,
-                right: -80,
-                child: Container(
-                  height: 260,
-                  width: 260,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _brandRed.withValues(alpha: 0.06),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(
-                    24, insets.top + 20, 24, insets.bottom + 10),
-                child: Column(
-                  children: [
-                    const Spacer(flex: 5),
-                    Container(
-                      height: 238,
-                      width: 238,
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final width = constraints.maxWidth;
+              final height = constraints.maxHeight;
+              final shortestSide = mediaQuery.size.shortestSide;
+              final isTablet = shortestSide >= 600 || width >= 760;
+              final horizontalPadding = isTablet ? 40.0 : 24.0;
+              final contentMaxWidth = isTablet ? 560.0 : double.infinity;
+              final logoOuterSize = isTablet ? 248.0 : 238.0;
+              final logoInnerSize = isTablet ? 180.0 : 174.0;
+              final wordmarkSize = isTablet ? 58.0 : 52.0;
+              final topCircleSize = isTablet ? 360.0 : 300.0;
+              final sideCircleSize = isTablet ? 340.0 : 280.0;
+              final bottomCircleSize = isTablet ? 320.0 : 260.0;
+
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  Positioned(
+                    top: -topCircleSize * 0.35,
+                    right: isTablet ? width * 0.12 : -90,
+                    child: Container(
+                      height: topCircleSize,
+                      width: topCircleSize,
                       decoration: BoxDecoration(
-                        color: AppColors.white,
                         shape: BoxShape.circle,
-                        border: Border.all(color: _softBorder),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.black.withValues(alpha: 0.08),
-                            blurRadius: 30,
-                            offset: const Offset(0, 12),
-                          ),
-                        ],
+                        color: _brandRed.withValues(alpha: 0.09),
                       ),
-                      child: Center(
-                        child: Container(
-                          height: 174,
-                          width: 174,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.white,
-                            border: Border.all(
-                              color: _softBorder.withValues(alpha: 0.9),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(22),
-                            child: Image.asset(
-                              AppAsset.splashLogo,
-                              fit: BoxFit.contain,
-                              filterQuality: FilterQuality.none,
+                    ),
+                  ),
+                  Positioned(
+                    top: height * 0.11,
+                    left: -sideCircleSize * 0.48,
+                    child: Container(
+                      height: sideCircleSize,
+                      width: sideCircleSize,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _brandDark.withValues(alpha: 0.05),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: -bottomCircleSize * 0.52,
+                    right: isTablet ? width * 0.16 : -80,
+                    child: Container(
+                      height: bottomCircleSize,
+                      width: bottomCircleSize,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _brandRed.withValues(alpha: 0.06),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      horizontalPadding,
+                      insets.top + 24,
+                      horizontalPadding,
+                      insets.bottom + 24,
+                    ),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints:
+                                  BoxConstraints(maxWidth: contentMaxWidth),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    height: logoOuterSize,
+                                    width: logoOuterSize,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: _softBorder),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: AppColors.black
+                                              .withValues(alpha: 0.08),
+                                          blurRadius: 30,
+                                          offset: const Offset(0, 12),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Container(
+                                        height: logoInnerSize,
+                                        width: logoInnerSize,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: AppColors.white,
+                                          border: Border.all(
+                                            color: _softBorder.withValues(
+                                              alpha: 0.9,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(22),
+                                          child: Image.asset(
+                                            AppAsset.splashLogo,
+                                            fit: BoxFit.contain,
+                                            filterQuality: FilterQuality.none,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 30),
+                                  NotisboardWordmark(
+                                    textAlign: TextAlign.center,
+                                    style: AppFontStyle.fontStyleKaushanW400(
+                                      fontSize: wordmarkSize,
+                                      fontColor: _brandDark,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "Fast, private conversations with experts you trust.",
+                                    textAlign: TextAlign.center,
+                                    style: AppFontStyle.fontStyleW500(
+                                      fontSize: isTablet ? 16 : 15,
+                                      fontColor: _mutedText,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    NotisboardWordmark(
-                      textAlign: TextAlign.center,
-                      style: AppFontStyle.fontStyleKaushanW400(
-                        fontSize: 52,
-                        fontColor: _brandDark,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      "Fast, private conversations with experts you trust.",
-                      textAlign: TextAlign.center,
-                      style: AppFontStyle.fontStyleW500(
-                        fontSize: 15,
-                        fontColor: _mutedText,
-                      ),
-                    ),
-                    const Spacer(flex: 4),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: _softBorder),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          LoadingAnimationWidget.staggeredDotsWave(
-                            color: _brandRed,
-                            size: 30,
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
                           ),
-                          const SizedBox(width: 10),
-                          Text(
-                            "Setting things up...",
-                            style: AppFontStyle.fontStyleW600(
-                              fontSize: 14,
-                              fontColor: _brandDark,
-                            ),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: _softBorder),
                           ),
-                        ],
-                      ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              LoadingAnimationWidget.staggeredDotsWave(
+                                color: _brandRed,
+                                size: 30,
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                "Setting things up...",
+                                style: AppFontStyle.fontStyleW600(
+                                  fontSize: 14,
+                                  fontColor: _brandDark,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            ],
+                  ),
+                ],
+              );
+            },
           );
         },
       ),

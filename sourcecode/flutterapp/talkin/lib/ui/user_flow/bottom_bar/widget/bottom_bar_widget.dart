@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/bottom_bar/salomon_bottom_bar.dart';
@@ -17,8 +15,11 @@ class BottomBarView extends StatelessWidget {
     return GetBuilder<BottomBarController>(
       id: Constant.idBottomBar,
       builder: (logic) {
+        final double bottomInset = MediaQuery.paddingOf(context).bottom;
+        final double barHeight = (bottomInset > 0 ? 94 : 80) + bottomInset;
+
         return Container(
-          height: Platform.isIOS ? 94 : 80,
+          height: barHeight,
           decoration: BoxDecoration(
             color: AppColors.white,
             border: Border(
@@ -48,7 +49,7 @@ class BottomBarView extends StatelessWidget {
                 left: 10,
                 right: 10,
                 top: 10,
-                bottom: Platform.isIOS ? 10 : 6,
+                bottom: bottomInset > 0 ? 8 : 6,
               ),
               selectedColorOpacity: 1,
               items: [
