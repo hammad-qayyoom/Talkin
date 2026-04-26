@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.notisboard.app"
+    namespace = "com.notisboard.mobile"
     compileSdk = 36
     buildToolsVersion = "35.0.0"
     ndkVersion = flutter.ndkVersion
@@ -25,7 +25,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.notisboard.app"
+        applicationId = "com.notisboard.mobile"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdkVersion = 24
@@ -129,11 +129,11 @@ dependencies {
 //}
 //
 //android {
-//    namespace = "com.notisboard.app"
+//    namespace = "com.notisboard.mobile"
 //    compileSdk = 33  // Update to the desired compile SDK version (should match flutter.compileSdkVersion)
 //
 //    defaultConfig {
-//        applicationId = "com.notisboard.app"
+//        applicationId = "com.notisboard.mobile"
 //        minSdk = 23  // Minimum SDK version
 //        targetSdk = 33  // Target SDK version (should match flutter.targetSdkVersion)
 //        versionCode = 1  // Update this value as per your versioning

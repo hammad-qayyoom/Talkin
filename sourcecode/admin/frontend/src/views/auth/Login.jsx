@@ -339,7 +339,7 @@ const LoginV2 = ({ mode }) => {
     <div className='flex bs-full justify-center overflow-hidden'>
       <div
         className={classNames(
-          'flex bs-full items-center justify-center flex-1 min-bs-[100dvh] relative p-0 max-md:hidden',
+          'flex bs-full items-start justify-center flex-1 min-bs-[100dvh] relative p-0 max-md:hidden',
           {
             'border-ie': settings.skin === 'bordered'
           }
@@ -347,21 +347,27 @@ const LoginV2 = ({ mode }) => {
       >
         {/* <SidebarBackground /> */}
         <LoginIllustration>
-          <PhotoContainer >
-            <div className=''>
-            <img
-
-              src='/images/illustrations/auth/login5.png'
-              className='p-14 rounded-3xl'
-
-              // src='/images/illustrations/auth/login-bg.webp'
-              alt='login collage'
-              style={{ width: '100%', height: '99dvh' }}
-              width={100}
-              height={100}
-            />
+          <PhotoContainer>
+            <div className='h-full w-full p-6 flex items-center justify-center'>
+              <div className='h-[calc(100dvh-3rem)] w-full overflow-hidden rounded-[42px] bg-[#f4f5f7]'>
+                <picture className='block h-full w-full'>
+                  <source srcSet='/images/notisboard-app/admin-login-banner.avif' type='image/avif' />
+                  <img
+                    src='/images/notisboard-app/admin-login-banner.png'
+                    className='h-full w-full object-contain'
+                    alt='Notisboard app preview'
+                    width={100}
+                    height={100}
+                    loading='eager'
+                    decoding='async'
+                    onError={event => {
+                      event.currentTarget.onerror = null
+                      event.currentTarget.src = '/images/illustrations/auth/login5.png'
+                    }}
+                  />
+                </picture>
+              </div>
             </div>
-          
           </PhotoContainer>
         </LoginIllustration>
         {/* {!hidden && <MaskImg alt='mask' src={authBackground} />} */}

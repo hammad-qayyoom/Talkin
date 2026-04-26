@@ -11,7 +11,7 @@ class Utils {
   static const sandboxVerifyReceiptUrl = false;
 
   static RxBool isAppOpen = false.obs;
-  static String? playStoreId = "com.notisboard.app";
+  static String? playStoreId = "com.notisboard.mobile";
   static String? appStoreId = "6747668315";
 
   // /// =================== Toast =================== ///

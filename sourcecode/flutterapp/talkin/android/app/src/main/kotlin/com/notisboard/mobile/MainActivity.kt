@@ -1,11 +1,11 @@
-//package com.notisboard.app
+//package com.notisboard.mobile
 //
 //import io.flutter.embedding.android.FlutterFragmentActivity
 //
 //class MainActivity: FlutterFragmentActivity()
 
 
-package com.notisboard.app
+package com.notisboard.mobile
 
 import android.media.Ringtone
 import android.media.RingtoneManager

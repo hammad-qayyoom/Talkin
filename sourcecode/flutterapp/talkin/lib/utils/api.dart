@@ -1,6 +1,6 @@
 abstract class Api {
   /// server url
-  static const baseUrl = "https://talkin.notisboard.com/";
+  static const baseUrl = "https://admin.notisboard.com/";
   static const secretKey = "Eb6ek8wbjlrR3fiK36IXsUw";
 
   // >>>>> >>>>> Login Page Api <<<<< <<<<<

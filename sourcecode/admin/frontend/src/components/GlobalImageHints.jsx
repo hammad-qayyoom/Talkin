@@ -9,7 +9,7 @@ const shouldOptimizeImage = img => {
 
   return (
     src.includes('/storage/') ||
-    src.includes('talkin.notisboard.com/storage/') ||
+    src.includes('admin.notisboard.com/storage/') ||
     src.startsWith('http://') ||
     src.startsWith('https://')
   )

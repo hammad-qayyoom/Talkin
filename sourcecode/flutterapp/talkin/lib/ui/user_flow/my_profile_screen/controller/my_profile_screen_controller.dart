@@ -33,7 +33,7 @@ class MyProfileScreenController extends GetxController {
   }
 
   // Future<void> onClickShare() async {
-  //   var url = Uri.parse("https://play.google.com/store/apps/details?id=com.notisboard.app");
+  //   var url = Uri.parse("https://play.google.com/store/apps/details?id=com.notisboard.mobile");
   //   if (await canLaunchUrl(url)) {
   //     launchUrl(url, mode: LaunchMode.externalApplication);
   //     throw "Cannot load the page";

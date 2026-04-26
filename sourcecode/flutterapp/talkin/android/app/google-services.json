@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:787587737004:android:c8a5cb355ba83bfc7b8609",
+        "mobilesdk_app_id": "1:787587737004:android:0f4060959e6a1e0b7b8609",
         "android_client_info": {
-          "package_name": "com.notisboard.app"
+          "package_name": "com.notisboard.mobile"
         }
       },
       "oauth_client": [],

@@ -1,4 +1,4 @@
-export const baseURL = 'https://talkin.notisboard.com'
+export const baseURL = 'https://admin.notisboard.com'
 export const secretKey = 'Eb6ek8wbjlrR3fiK36IXsUw'
 export const projectName = 'Notisboard'
 export const firebase_apiKey = 'AIzaSyDoj1P6kzFrQsPpPYy8X2pUUQ636x8q6LI'
