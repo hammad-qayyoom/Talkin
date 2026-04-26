@@ -7,6 +7,7 @@ import 'package:notisboard/ui/user_flow/edit_profile_screen/controller/edit_prof
 import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -67,6 +68,41 @@ class HomeAppBarWidget extends StatelessWidget {
     final idFontSize = isTablet ? 11.0 : 10.0;
 
     Widget coinCard() {
+      if (AuthGuard.isGuest) {
+        return GestureDetector(
+          onTap: () => AuthGuard.showLoginPrompt(
+            message: 'Please log in to view and purchase session credits.',
+          ),
+          child: Container(
+            height: actionSize,
+            padding: EdgeInsets.symmetric(horizontal: isCompact ? 12 : 14),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(isCompact ? 16 : 18),
+              border: Border.all(color: _borderColor),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.login_rounded,
+                  size: isTablet ? 22 : 20,
+                  color: _brandRed,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'Login',
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: coinValueFontSize,
+                    fontColor: _brandDark,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+
       return GetBuilder<HomeScreenController>(
         id: Constant.idCoinUpdate,
         builder: (controller) {
@@ -137,6 +173,11 @@ class HomeAppBarWidget extends StatelessWidget {
     Widget notificationButton() {
       return GestureDetector(
         onTap: () {
+          if (!AuthGuard.requireLogin(
+            message: 'Please log in to view notifications.',
+          )) {
+            return;
+          }
           Get.toNamed(AppRoutes.userNotificationView);
         },
         child: Container(
@@ -167,6 +208,63 @@ class HomeAppBarWidget extends StatelessWidget {
     }
 
     Widget profileSection() {
+      if (AuthGuard.isGuest) {
+        return GestureDetector(
+          onTap: () => AuthGuard.showLoginPrompt(
+            message: 'Please log in to manage your profile.',
+          ),
+          child: Row(
+            children: [
+              Container(
+                height: profileImageSize,
+                width: profileImageSize,
+                decoration: BoxDecoration(
+                  color: AppColors.redesignAvatarSurface,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: _brandRed.withValues(alpha: 0.28),
+                    width: 2,
+                  ),
+                ),
+                child: Icon(
+                  Icons.person_outline_rounded,
+                  color: _brandRed,
+                  size: isTablet ? 30 : 26,
+                ),
+              ),
+              SizedBox(width: isCompact ? 8 : 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Guest',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: nameFontSize,
+                        fontColor: _brandDark,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Browse experts',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppFontStyle.fontStyleW600(
+                        fontSize: idFontSize + 1,
+                        fontColor: AppColors.redesignMutedText,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+
       return GetBuilder<EditProfileController>(
         id: Constant.idProfile,
         builder: (controller) {

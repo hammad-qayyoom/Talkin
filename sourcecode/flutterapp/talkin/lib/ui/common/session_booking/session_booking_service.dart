@@ -5,9 +5,16 @@ import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/api_params.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/guest_auth.dart';
 
 class SessionBookingService {
-  static Future<Map<String, String>> _headers() async {
+  static Future<Map<String, String>> _headers({
+    bool allowGuest = false,
+  }) async {
+    if (allowGuest) {
+      return GuestAuth.headers(allowGuest: true);
+    }
+
     final token = await FirebaseAccessToken.onGet();
 
     return {
@@ -55,7 +62,7 @@ class SessionBookingService {
         };
       }
 
-      final headers = await _headers();
+      final headers = await _headers(allowGuest: true);
       final dateValue =
           '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
       final uri = Uri.parse(Api.sessionGetAvailableSlots).replace(
@@ -100,7 +107,7 @@ class SessionBookingService {
     int limit = 20,
   }) async {
     try {
-      final headers = await _headers();
+      final headers = await _headers(allowGuest: true);
 
       final queryParameters = <String, String>{
         'start': '$start',
@@ -239,7 +246,7 @@ class SessionBookingService {
     String? userId,
   }) async {
     try {
-      final headers = await _headers();
+      final headers = await _headers(allowGuest: true);
 
       final body = <String, dynamic>{
         'sessionId': sessionId,
@@ -592,7 +599,7 @@ class SessionBookingService {
     String view = 'upcoming',
   }) async {
     try {
-      final headers = await _headers();
+      final headers = await _headers(allowGuest: true);
       final normalizedListenerId = (listenerId ?? '').trim();
       final normalizedExpertId = (expertId ?? '').trim();
       final uri = Uri.parse(Api.sessionGetExpertSessions).replace(

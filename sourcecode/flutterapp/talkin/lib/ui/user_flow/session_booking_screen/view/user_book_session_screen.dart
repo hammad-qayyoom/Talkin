@@ -4,6 +4,7 @@ import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
 import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/font_style.dart';
 import 'package:notisboard/utils/utils.dart';
@@ -63,6 +64,16 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
   @override
   void initState() {
     super.initState();
+    if (AuthGuard.isGuest) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.back();
+        AuthGuard.showLoginPrompt(
+          message: 'Please log in to book sessions with experts.',
+        );
+      });
+      return;
+    }
+
     final arguments = Get.arguments;
     if (arguments is Map<String, dynamic>) {
       _listenerId = (arguments['listenerId'] ?? '').toString().trim();
@@ -180,6 +191,12 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
   }
 
   Future<void> _bookSelectedSlot() async {
+    if (!AuthGuard.requireLogin(
+      message: 'Please log in to book sessions with experts.',
+    )) {
+      return;
+    }
+
     final selectedTypeEnabled =
         (_callType == 'audio' && _isAudioServiceEnabled) ||
             (_callType == 'video' && _isVideoServiceEnabled);

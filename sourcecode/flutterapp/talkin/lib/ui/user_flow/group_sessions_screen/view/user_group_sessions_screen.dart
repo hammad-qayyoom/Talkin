@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
 import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/font_style.dart';
 import 'package:notisboard/utils/utils.dart';
@@ -143,6 +144,10 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
   }
 
   String? _joinBlockedReason(Map<String, dynamic> session) {
+    if (AuthGuard.isGuest) {
+      return 'Please log in to join this session.';
+    }
+
     if (_currentUserId.isEmpty) {
       return 'Please login again to join this session.';
     }
@@ -164,6 +169,10 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
   }
 
   String? _accessBlockedReason(Map<String, dynamic> session) {
+    if (AuthGuard.isGuest) {
+      return 'Please log in to access this session.';
+    }
+
     if (_currentUserId.isEmpty) {
       return 'Please login again to access this session.';
     }
@@ -200,6 +209,10 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
   Future<void> _onJoinSessionTap(Map<String, dynamic> session) async {
     final blockedReason = _joinBlockedReason(session);
     if (blockedReason != null) {
+      if (AuthGuard.isGuest) {
+        AuthGuard.showLoginPrompt(message: blockedReason);
+        return;
+      }
       Utils.showToast(context, blockedReason);
       return;
     }
@@ -210,6 +223,10 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
   Future<void> _onAccessSessionTap(Map<String, dynamic> session) async {
     final blockedReason = _accessBlockedReason(session);
     if (blockedReason != null) {
+      if (AuthGuard.isGuest) {
+        AuthGuard.showLoginPrompt(message: blockedReason);
+        return;
+      }
       Utils.showToast(context, blockedReason);
       return;
     }

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -82,6 +83,7 @@ class Database {
       localStorage.read("isSeenOnBoarding") ?? false;
   static bool get isNewUser => localStorage.read("isNewUser") ?? true;
   static bool get isLogin => localStorage.read("isLogin") ?? false;
+  static bool get isGuestMode => localStorage.read("isGuestMode") ?? false;
   static bool get isFillProfile => localStorage.read("isFillProfile") ?? false;
   static bool get isListener => localStorage.read("isListener") ?? false;
   static bool get userExist => localStorage.read("userExist") ?? false;
@@ -156,6 +158,8 @@ class Database {
       await localStorage.write("isNewUser", isNewUser);
   static onSetIsLogin(bool isLogin) async =>
       await localStorage.write("isLogin", isLogin);
+  static onSetGuestMode(bool isGuestMode) async =>
+      await localStorage.write("isGuestMode", isGuestMode);
   static onSetFillProfile(bool isFillProfile) async =>
       await localStorage.write("isFillProfile", isFillProfile);
   static onSetIsListener(bool isListener) async =>
@@ -230,7 +234,8 @@ class Database {
       await GoogleSignIn().signOut();
     }
 
-    localStorage.erase();
+    await FirebaseAuth.instance.signOut();
+    await localStorage.erase();
 
     log("logout app language $selectedLanguage");
 

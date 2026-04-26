@@ -11,6 +11,7 @@ import 'package:notisboard/ui/user_flow/listener_screen/view/listeners_screen.da
 import 'package:notisboard/ui/user_flow/my_sessions_screen/view/my_sessions_screen.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/setting_api.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/model/setting_api_model.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/utils.dart';
@@ -35,15 +36,19 @@ class BottomBarController extends GetxController {
 
   init() async {
     log("Enter user bottomBar Controller");
-    await SocketService.socketDisConnect();
-    await SocketService.socketConnect().then((_) {
-      Utils.showLog(" Socket connect User");
-      SocketListen.registerListeners();
-    });
+    if (!AuthGuard.isGuest) {
+      await SocketService.socketDisConnect();
+      await SocketService.socketConnect().then((_) {
+        Utils.showLog(" Socket connect User");
+        SocketListen.registerListeners();
+      });
+    }
 
     settingApiModel = await SettingApi.callApi();
     Database.settingApiModel = settingApiModel;
-    createEngine();
+    if (!AuthGuard.isGuest) {
+      createEngine();
+    }
   }
 
   Future<void> createEngine() async {
@@ -78,6 +83,14 @@ class BottomBarController extends GetxController {
 
   onClick(value) async {
     if (value != null) {
+      if (AuthGuard.isGuest && (value == 3 || value == 4)) {
+        AuthGuard.showLoginPrompt(
+          message:
+              'Chats and your sessions need an account. You can keep browsing experts without logging in.',
+        );
+        return;
+      }
+
       selectIndex = value;
       update([Constant.idBottomBar]);
     }

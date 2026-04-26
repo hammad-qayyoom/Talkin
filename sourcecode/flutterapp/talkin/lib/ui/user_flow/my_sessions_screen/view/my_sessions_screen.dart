@@ -709,8 +709,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       builder: (sheetContext) {
         return StatefulBuilder(
           builder: (modalContext, setModalState) {
-            return WillPopScope(
-              onWillPop: () async => !isSubmitting,
+            return PopScope(
+              canPop: !isSubmitting,
               child: Padding(
                 padding: EdgeInsets.only(
                   left: 16,

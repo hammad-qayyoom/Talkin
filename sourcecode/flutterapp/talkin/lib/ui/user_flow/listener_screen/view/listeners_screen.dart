@@ -8,6 +8,7 @@ import 'package:notisboard/ui/user_flow/home_screen/shimmer/top_listener_shimmer
 import 'package:notisboard/ui/user_flow/listener_screen/controller/listeners_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/listener_screen/widget/listeners_screen_widget.dart';
 import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/font_style.dart';
 
@@ -103,6 +104,11 @@ class ListenersScreen extends StatelessWidget {
                   );
                 },
                 onBookTap: () {
+                  if (!AuthGuard.requireLogin(
+                    message: 'Please log in to book sessions with experts.',
+                  )) {
+                    return;
+                  }
                   Get.toNamed(
                     AppRoutes.userBookSessionScreen,
                     arguments: {

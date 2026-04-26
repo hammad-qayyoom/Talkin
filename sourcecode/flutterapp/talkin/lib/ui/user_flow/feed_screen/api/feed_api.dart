@@ -9,9 +9,16 @@ import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/api_params.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/guest_auth.dart';
 
 class FeedApi {
-  static Future<Map<String, String>> _headers() async {
+  static Future<Map<String, String>> _headers({
+    bool allowGuest = false,
+  }) async {
+    if (allowGuest) {
+      return GuestAuth.headers(allowGuest: true);
+    }
+
     final token = await FirebaseAccessToken.onGet();
 
     return {
@@ -29,7 +36,7 @@ class FeedApi {
     String? expertId,
   }) async {
     try {
-      final headers = await _headers();
+      final headers = await _headers(allowGuest: true);
       final uri = Uri.parse(Api.feedPostsFeed).replace(
         queryParameters: {
           'start': '$start',
@@ -154,7 +161,7 @@ class FeedApi {
     String channel = 'external',
   }) async {
     try {
-      final headers = await _headers();
+      final headers = await _headers(allowGuest: true);
       final response = await http.post(
         Uri.parse(Api.feedPostsShare),
         headers: headers,
@@ -185,7 +192,7 @@ class FeedApi {
     required String postId,
   }) async {
     try {
-      final headers = await _headers();
+      final headers = await _headers(allowGuest: true);
       final response = await http.delete(
         Uri.parse('${Api.feedPostsDeletePrefix}$postId'),
         headers: headers,
@@ -278,7 +285,7 @@ class FeedApi {
     required String postId,
   }) async {
     try {
-      final headers = await _headers();
+      final headers = await _headers(allowGuest: true);
       final uri = Uri.parse(Api.feedCommentsList).replace(
         queryParameters: {
           'postId': postId,

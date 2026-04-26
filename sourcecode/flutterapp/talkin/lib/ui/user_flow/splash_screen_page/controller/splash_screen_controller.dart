@@ -24,6 +24,7 @@ import 'package:notisboard/ui/user_flow/splash_screen_page/model/setting_api_mod
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/guest_browsing_setup.dart';
 import 'package:notisboard/utils/utils.dart';
 
 import '../api/aap_configuration_api.dart';
@@ -36,6 +37,7 @@ class SplashScreenController extends GetxController {
   AppConfigurationModel? appConfigurationModel;
 
   Future<void> syncInitialBalances() async {
+    if (Database.isGuestMode) return;
     if (fetchLoginUserProfileModel?.status != true) return;
 
     if (fetchLoginUserProfileModel?.user?.isListener == true) {
@@ -66,8 +68,12 @@ class SplashScreenController extends GetxController {
     final token = await FirebaseAccessToken.onGet();
     settingApiModel = await SettingApi.callApi();
     Database.settingApiModel = settingApiModel;
-    fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(
-        loginUserId: Database.loginUserFirebaseId, token: token ?? '');
+    if (Database.isLogin &&
+        Database.loginUserFirebaseId.isNotEmpty &&
+        (token ?? '').isNotEmpty) {
+      fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(
+          loginUserId: Database.loginUserFirebaseId, token: token ?? '');
+    }
     Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
 
     if (Database.loginUserFirebaseId.isEmpty &&
@@ -188,12 +194,30 @@ Future<void> splashScreen() async {
         await Database.onSetSeenOnboarding(true);
       }
 
-      if (Database.fetchLoginUserProfileModel?.status == false ||
+      final hasValidProfile =
+          Database.fetchLoginUserProfileModel?.status == true &&
+              Database.fetchLoginUserProfileModel?.user != null;
+
+      if (!hasValidProfile ||
           Database.fetchLoginUserProfileModel?.message ==
               "User not found in the database." ||
           token == null) {
-        Utils.showLog("No valid login profile. Redirecting to main.");
-        Get.offAllNamed(AppRoutes.main);
+        Utils.showLog(
+            "No valid login profile. Trying authenticated guest browsing.");
+
+        final guestSessionReady =
+            await GuestBrowsingSetup.ensureAuthenticatedGuestSession();
+        if (guestSessionReady) {
+          Utils.showLog("Authenticated guest session is ready.");
+          Get.offAllNamed(AppRoutes.bottomBar);
+          return;
+        }
+
+        Utils.showLog("Guest session setup fallback: limited browsing mode.");
+        await Database.onSetIsLogin(false);
+        await Database.onSetGuestMode(true);
+        await Database.onSetFillProfile(false);
+        Get.offAllNamed(AppRoutes.bottomBar);
         return;
       } else {
         Utils.showLog("lllllllllllllllllllllllllllllllllllllll");
@@ -212,7 +236,7 @@ Future<void> splashScreen() async {
             ]);
           }
         } else {
-          Get.offAllNamed(AppRoutes.main);
+          Get.offAllNamed(AppRoutes.bottomBar);
         }
       }
     }

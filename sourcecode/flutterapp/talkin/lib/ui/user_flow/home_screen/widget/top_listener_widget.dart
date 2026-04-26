@@ -8,6 +8,7 @@ import 'package:notisboard/ui/user_flow/home_screen/shimmer/top_listener_shimmer
 import 'package:notisboard/ui/user_flow/profile_detail_screen/controller/profile_detail_screen_controller.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -474,6 +475,12 @@ class TopListenerWidget extends StatelessWidget {
                                   );
                                 },
                                 onBookSession: () {
+                                  if (!AuthGuard.requireLogin(
+                                    message:
+                                        'Please log in to book sessions with experts.',
+                                  )) {
+                                    return;
+                                  }
                                   Get.toNamed(
                                     AppRoutes.userBookSessionScreen,
                                     arguments: {

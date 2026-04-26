@@ -6,6 +6,7 @@ import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.da
 import 'package:notisboard/ui/user_flow/home_screen/shimmer/top_listener_shimmer.dart';
 import 'package:notisboard/ui/user_flow/top_listeners_view_all/controller/top_listeners_view_all_controller.dart';
 import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -299,6 +300,12 @@ class TopListenersViewAllView extends StatelessWidget {
                                   );
                                 },
                                 onBookTap: () {
+                                  if (!AuthGuard.requireLogin(
+                                    message:
+                                        'Please log in to book sessions with experts.',
+                                  )) {
+                                    return;
+                                  }
                                   Get.toNamed(
                                     AppRoutes.userBookSessionScreen,
                                     arguments: {
@@ -338,6 +345,12 @@ class TopListenersViewAllView extends StatelessWidget {
                                         );
                                       },
                                       onBookTap: () {
+                                        if (!AuthGuard.requireLogin(
+                                          message:
+                                              'Please log in to book sessions with experts.',
+                                        )) {
+                                          return;
+                                        }
                                         Get.toNamed(
                                           AppRoutes.userBookSessionScreen,
                                           arguments: {

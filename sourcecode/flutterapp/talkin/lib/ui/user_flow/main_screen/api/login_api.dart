@@ -42,6 +42,14 @@ class LoginApi {
     };
     Utils.showLog("Login Api Headers :: $headers");
 
+    final compliancePayload = {
+      if ((birthDate ?? '').trim().isNotEmpty) ApiParams.birthDate: birthDate,
+      if (age != null) 'age': age,
+      if (acceptTerms != null) 'acceptTerms': acceptTerms,
+      if ((acceptanceSource ?? '').trim().isNotEmpty)
+        'acceptanceSource': acceptanceSource,
+    };
+
     final body = loginType == 4
         ? json.encode(
             Database.userExist == false
@@ -76,6 +84,7 @@ class LoginApi {
                   ApiParams.identity: identity,
                   ApiParams.fcmToken: fcmToken,
                   ApiParams.countryCode: countryCode,
+                  ...compliancePayload,
                 },
               )
             : json.encode(
@@ -87,6 +96,7 @@ class LoginApi {
                   ApiParams.profilePic: profilePic,
                   ApiParams.fullName: userName,
                   ApiParams.countryCode: countryCode,
+                  ...compliancePayload,
                 },
               );
     Utils.showLog("Login Api Body :: $body");

@@ -6,6 +6,7 @@ import 'package:notisboard/services/permission_handler/permission_handler.dart';
 import 'package:notisboard/socket/socket_emit.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -175,6 +176,12 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
   Widget _buildAudioButton() {
     return PrimaryAppButton(
       onTap: () {
+        if (!AuthGuard.requireLogin(
+          message: 'Please log in to start audio calls.',
+        )) {
+          return;
+        }
+
         Utils.showLog(
             "audio call rate $audioCallRatePrivate video call rate $videoCallRatePrivate");
 
@@ -261,6 +268,12 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
   Widget _buildVideoButton() {
     return PrimaryAppButton(
       onTap: () {
+        if (!AuthGuard.requireLogin(
+          message: 'Please log in to start video calls.',
+        )) {
+          return;
+        }
+
         // SocketEmit.emitCallOutgoingRinging(
         //     callerId: callerId, receiverId: receiverId, callType: callType, callerRole: callerRole, receiverRole: receiverRole);
         Utils.showLog(

@@ -3,25 +3,18 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:notisboard/ui/user_flow/splash_screen_page/model/setting_api_model.dart';
 import 'package:notisboard/utils/api.dart';
-import 'package:notisboard/utils/database.dart';
-import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/guest_auth.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class SettingApi {
   static Future<SettingApiModel?> callApi() async {
     Utils.showLog("Setting Api Calling...");
-    final token = await FirebaseAccessToken.onGet();
 
     final uri = Uri.parse(Api.settingAPi);
 
     Utils.showLog("Setting uri => $uri");
 
-    final headers = {
-      "key": Api.secretKey,
-      "Content-Type": "application/json",
-      "x-auth-token": "Bearer $token",
-      "x-auth-uid": Database.loginUserFirebaseId,
-    };
+    final headers = await GuestAuth.headers(allowGuest: true);
 
     log("Setting api headers  $headers");
     try {

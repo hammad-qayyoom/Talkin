@@ -283,6 +283,7 @@ class RegistrationController extends GetxController {
 
   Future<void> _handleEmailAuthSuccess(UserCredential userCredential) async {
     Database.onSetIsLogin(true);
+    Database.onSetGuestMode(false);
     Database.onSetSeenOnboarding(true);
     Database.onSetFillProfile(true);
 

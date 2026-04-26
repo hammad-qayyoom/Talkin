@@ -7,6 +7,7 @@ import 'package:notisboard/ui/user_flow/all_listeners_screen/widget/all_listener
 import 'package:notisboard/ui/user_flow/home_screen/shimmer/top_listener_shimmer.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
 
 class AllListenersScreen extends StatelessWidget {
@@ -147,6 +148,12 @@ class AllListenersScreen extends StatelessWidget {
                                           );
                                         },
                                         talkNowOnTap: () {
+                                          if (!AuthGuard.requireLogin(
+                                            message:
+                                                'Please log in to book sessions with experts.',
+                                          )) {
+                                            return;
+                                          }
                                           Get.toNamed(
                                             AppRoutes.userBookSessionScreen,
                                             arguments: {

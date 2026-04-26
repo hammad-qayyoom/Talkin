@@ -55,6 +55,7 @@ abstract class Api {
   static const appConfigurationApi =
       "${baseUrl}api/user/setting/getAppConfiguration";
   static const expertCategories = "${baseUrl}api/v2/categories/list";
+  static const expertsDiscover = "${baseUrl}api/v2/experts/discover";
 
   static const groupSessionCreate = "${baseUrl}api/v2/sessions/group/create";
   static const groupSessionList = "${baseUrl}api/v2/sessions/group/list?";

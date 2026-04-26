@@ -6,7 +6,7 @@ import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.da
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/api_params.dart';
 import 'package:notisboard/utils/database.dart';
-import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/guest_auth.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class AllListenersApi {
@@ -19,8 +19,6 @@ class AllListenersApi {
     String? language,
     String? categoryId,
   }) async {
-    final token = await FirebaseAccessToken.onGet();
-
     Utils.showLog("All Listeners Api Calling...");
     startPagination += 1;
 
@@ -44,17 +42,23 @@ class AllListenersApi {
 
     log("All Listeners queryParameters ::$queryParameters");
 
-    String query = Uri(queryParameters: queryParameters).query;
+    final allListenersUri = Uri.parse(Api.allListeners).replace(
+      queryParameters: {
+        for (final entry in queryParameters.entries)
+          entry.key: entry.value.toString(),
+      },
+    );
+    final discoverUri = Uri.parse(Api.expertsDiscover).replace(
+      queryParameters: {
+        for (final entry in queryParameters.entries)
+          (entry.key == ApiParams.searchString ? 'search' : entry.key):
+              entry.value.toString(),
+      },
+    );
+    final useAuthenticatedEndpoint = Database.isLogin;
+    final uri = useAuthenticatedEndpoint ? allListenersUri : discoverUri;
 
-    final uri = Uri.parse(Api.allListeners + (query.isNotEmpty ? query : ''));
-    // final uri = Uri.parse("${Api.allListeners}${ApiParams.start}=$start&${ApiParams.limit}=$limit&${ApiParams.searchString}=$searchString");
-
-    final headers = {
-      ApiParams.key: Api.secretKey,
-      ApiParams.authToken: "Bearer $token",
-      ApiParams.authUid: Database.loginUserFirebaseId,
-      ApiParams.contentType: "application/json",
-    };
+    final headers = await GuestAuth.headers(allowGuest: true);
     Utils.showLog("All Listeners Api uri :: $uri");
     Utils.showLog("All Listeners Api headers :: $headers");
 
@@ -65,9 +69,31 @@ class AllListenersApi {
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-        return TopListenersModel.fromJson(jsonResponse);
-      } else {
-        throw Exception('Status code is not 200');
+        if (jsonResponse is Map<String, dynamic> &&
+            jsonResponse['status'] == true) {
+          return TopListenersModel.fromJson(jsonResponse);
+        }
+      }
+
+      if (useAuthenticatedEndpoint) {
+        Utils.showLog(
+            "All Listeners primary endpoint failed, trying discover fallback.");
+        final fallbackResponse = await http.get(
+          discoverUri,
+          headers: {
+            ApiParams.key: Api.secretKey,
+          },
+        );
+
+        Utils.showLog(
+            "All Listeners Discover Fallback => ${fallbackResponse.body}");
+
+        if (fallbackResponse.statusCode == 200) {
+          final jsonResponse = json.decode(fallbackResponse.body);
+          if (jsonResponse is Map<String, dynamic>) {
+            return TopListenersModel.fromJson(jsonResponse);
+          }
+        }
       }
     } catch (e) {
       log("All Listeners :: $e");

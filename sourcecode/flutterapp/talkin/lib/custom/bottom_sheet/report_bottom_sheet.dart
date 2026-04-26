@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:notisboard/custom/bottom_sheet/api/moderation_report_api.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -114,6 +115,12 @@ class ReportBottomSheetUi {
     String targetId = '',
     Callback? onComplete,
   }) async {
+    if (!AuthGuard.requireLogin(
+      message: 'Please log in to send reports.',
+    )) {
+      return;
+    }
+
     ReportBottomSheetUi.selectedReportType.value = 0;
     showModalBottomSheet(
       isScrollControlled: true,

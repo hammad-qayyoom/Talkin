@@ -7,6 +7,7 @@ import 'package:notisboard/ui/user_flow/profile_detail_screen/model/listener_pro
 import 'package:notisboard/ui/user_flow/profile_detail_screen/model/listener_review_model.dart';
 import 'package:notisboard/ui/user_flow/profile_detail_screen/shimmer/profile_detail_shimmer.dart';
 import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -914,6 +915,12 @@ class ProfileBottomButtonView extends StatelessWidget {
   const ProfileBottomButtonView({super.key});
 
   void _openChat(ProfileDetailScreenController controller) {
+    if (!AuthGuard.requireLogin(
+      message: 'Please log in to chat with experts.',
+    )) {
+      return;
+    }
+
     Get.toNamed(
       AppRoutes.personalChatScreen,
       arguments: [
@@ -932,6 +939,12 @@ class ProfileBottomButtonView extends StatelessWidget {
   }
 
   void _openBookSession(ProfileDetailScreenController controller) {
+    if (!AuthGuard.requireLogin(
+      message: 'Please log in to book sessions with experts.',
+    )) {
+      return;
+    }
+
     Get.toNamed(
       AppRoutes.userBookSessionScreen,
       arguments: {

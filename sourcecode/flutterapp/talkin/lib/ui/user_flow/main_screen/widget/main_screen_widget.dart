@@ -80,7 +80,7 @@ class MainScreenView extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          "Login to continue with secure and fast access.",
+                          "Browse experts freely, or log in to book sessions and manage your account.",
                           style: AppFontStyle.fontStyleW500(
                             fontSize: 14,
                             fontColor: _mutedText,
@@ -222,7 +222,7 @@ class MainScreenView extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12),
                               child: Text(
-                                "or continue with",
+                                "or",
                                 style: AppFontStyle.fontStyleW500(
                                   fontSize: 12,
                                   fontColor: _mutedText,
@@ -236,10 +236,10 @@ class MainScreenView extends StatelessWidget {
                         ),
                         const SizedBox(height: 14),
                         _buildPrimaryButton(
-                          text: EnumLocale.txtQuickLogin.name.tr,
+                          text: 'Continue as Guest',
                           backgroundColor: _brandRed,
-                          icon: Icons.rocket_launch_rounded,
-                          onTap: controller.onQuickLogin1,
+                          icon: Icons.explore_outlined,
+                          onTap: controller.onContinueAsGuest,
                         ),
                         const SizedBox(height: 4),
                       ],

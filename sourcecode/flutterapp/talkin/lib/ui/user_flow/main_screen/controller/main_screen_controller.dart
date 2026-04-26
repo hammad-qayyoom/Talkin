@@ -128,6 +128,7 @@ class MainScreenController extends GetxController {
 
       if (loginModel?.status == true) {
         Database.onSetIsLogin(true);
+        Database.onSetGuestMode(false);
         Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
         Database.onSetSeenOnboarding(true);
         Database.onSetFillProfile(true);
@@ -210,6 +211,7 @@ class MainScreenController extends GetxController {
 
         if (loginModel?.status == true) {
           Database.onSetIsLogin(true);
+          Database.onSetGuestMode(false);
           Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
           Database.onSetSeenOnboarding(true);
           Database.onSetFillProfile(true);
@@ -518,6 +520,148 @@ class MainScreenController extends GetxController {
     }
   }
 
+  Future<void> onContinueAsGuest() async {
+    Database.onSetDemoListener(false);
+    Get.dialog(const LoadingWidget(), barrierDismissible: false);
+
+    try {
+      final identity =
+          (await MobileDeviceIdentifier().getDeviceId())?.trim() ?? '';
+      if (identity.isEmpty) {
+        throw Exception('Device identity is unavailable.');
+      }
+
+      Database.onSetIdentity(identity);
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+      Database.onSetFcmToken(fcmToken ?? "");
+
+      final guestUidState = await _resolveGuestFirebaseUid(identity);
+
+      getFirebaseCustomTokenModel = await GetFirebaseCustomTokenApi.callApi(
+        firebaseUid: guestUidState.firebaseUid,
+      );
+
+      final customToken =
+          (getFirebaseCustomTokenModel?.customToken ?? '').trim();
+      if (getFirebaseCustomTokenModel?.status != true || customToken.isEmpty) {
+        throw Exception(
+            getFirebaseCustomTokenModel?.message ?? 'Failed to create token');
+      }
+
+      final UserCredential credential =
+          await FirebaseAuth.instance.signInWithCustomToken(customToken);
+      final loginUid =
+          (credential.user?.uid ?? guestUidState.firebaseUid).trim();
+      if (loginUid.isEmpty) {
+        throw Exception('Guest Firebase UID missing after auth.');
+      }
+
+      final loggedIn = await _completeGuestLoginFlow(
+        uid: loginUid,
+        isNewUser: !guestUidState.isExistingUser,
+      );
+
+      if (!loggedIn) {
+        throw Exception('Guest login failed.');
+      }
+
+      if (Get.isDialogOpen ?? false) Get.back();
+      Get.offAllNamed(AppRoutes.bottomBar);
+    } catch (error) {
+      if (Get.isDialogOpen ?? false) Get.back();
+      Utils.showLog("Guest browsing setup failed => $error");
+
+      await Database.onSetIsLogin(false);
+      await Database.onSetGuestMode(true);
+      await Database.onSetFillProfile(false);
+      await Database.onSetSeenOnboarding(true);
+
+      Get.offAllNamed(AppRoutes.bottomBar);
+      Utils.showToast(Get.context!, "Guest browsing limited mode enabled.");
+    }
+  }
+
+  Future<_GuestFirebaseUidState> _resolveGuestFirebaseUid(
+      String identity) async {
+    getFirebaseUidByDeviceUUidModel = await GetFirebaseUidByDeviceApi.callApi(
+      loginType: 2,
+      deviceUuid: identity,
+    );
+
+    final existingFirebaseUid =
+        (getFirebaseUidByDeviceUUidModel?.firebaseId ?? '').trim();
+    final isExistingUser = getFirebaseUidByDeviceUUidModel?.status == true &&
+        existingFirebaseUid.isNotEmpty;
+
+    if (isExistingUser) {
+      return _GuestFirebaseUidState(
+        firebaseUid: existingFirebaseUid,
+        isExistingUser: true,
+      );
+    }
+
+    return _GuestFirebaseUidState(
+      firebaseUid: _buildGuestFirebaseUid(identity),
+      isExistingUser: false,
+    );
+  }
+
+  String _buildGuestFirebaseUid(String identity) {
+    final normalized =
+        identity.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
+    final suffix = normalized.isEmpty
+        ? DateTime.now().millisecondsSinceEpoch.toString()
+        : normalized;
+    final trimmedSuffix = suffix.length > 56 ? suffix.substring(0, 56) : suffix;
+    return 'guest_$trimmedSuffix';
+  }
+
+  Future<bool> _completeGuestLoginFlow({
+    required String uid,
+    required bool isNewUser,
+  }) async {
+    loginModel = await LoginApi.callApi(
+      countryCode: Database.selectedCountryCode,
+      loginType: 2,
+      email: Database.identity,
+      identity: Database.identity,
+      fcmToken: Database.fcmToken,
+      userName: isNewUser ? randomName : null,
+      profilePic: isNewUser ? randomImage : null,
+      age: 25,
+      birthDate: "2000-01-01",
+      acceptTerms: true,
+      acceptanceSource: "guest",
+    );
+
+    if (loginModel?.status != true) {
+      Utils.showLog(loginModel?.message ?? "Guest login api failed");
+      return false;
+    }
+
+    await Database.onSetIsLogin(true);
+    await Database.onSetGuestMode(true);
+    await Database.onSetLoginType(2);
+    await Database.onSetSeenOnboarding(true);
+    await Database.onSetFillProfile(true);
+
+    await onGetProfile(loginUserId: uid, loginType: 2);
+
+    final hasProfile = Database.fetchLoginUserProfileModel?.status == true &&
+        Database.fetchLoginUserProfileModel?.user?.firebaseId != null;
+    if (!hasProfile) {
+      Utils.showLog("Guest profile fetch failed after login.");
+      return false;
+    }
+
+    await Database.onSetIsLogin(true);
+    await Database.onSetGuestMode(true);
+    await Database.onSetLoginType(2);
+    await Database.onSetSeenOnboarding(true);
+    await Database.onSetFillProfile(true);
+    return true;
+  }
+
   Future<void> _completeLoginFlow(String uid, String? token, String? fcmToken,
       {required bool isNewUser}) async {
     loginModel = await LoginApi.callApi(
@@ -534,6 +678,7 @@ class MainScreenController extends GetxController {
 
     if (loginModel?.status == true) {
       Database.onSetIsLogin(true);
+      Database.onSetGuestMode(false);
       Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
       Database.onSetSeenOnboarding(true);
       Database.onSetFillProfile(true);
@@ -639,6 +784,7 @@ class MainScreenController extends GetxController {
 
           if (loginModel?.status == true) {
             Database.onSetIsLogin(true);
+            Database.onSetGuestMode(false);
             Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
             Database.onSetSeenOnboarding(true);
             Database.onSetFillProfile(true);
@@ -727,6 +873,16 @@ class MainScreenController extends GetxController {
       log('Invalid privacy policy URL');
     }
   }
+}
+
+class _GuestFirebaseUidState {
+  final String firebaseUid;
+  final bool isExistingUser;
+
+  const _GuestFirebaseUidState({
+    required this.firebaseUid,
+    required this.isExistingUser,
+  });
 }
 
 class AppleAuthentication {

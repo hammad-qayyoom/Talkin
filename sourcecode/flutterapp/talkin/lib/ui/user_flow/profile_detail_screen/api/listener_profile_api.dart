@@ -5,8 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:notisboard/ui/user_flow/profile_detail_screen/model/listener_profile_response_model.dart';
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/api_params.dart';
-import 'package:notisboard/utils/database.dart';
-import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/guest_auth.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class ListenerProfileApi {
@@ -14,8 +13,6 @@ class ListenerProfileApi {
     String? listenerId,
     String? expertId,
   }) async {
-    final token = await FirebaseAccessToken.onGet();
-
     Utils.showLog("Listener profile Api Calling...");
 
     final resolvedListenerId = (listenerId ?? '').trim();
@@ -33,12 +30,7 @@ class ListenerProfileApi {
         if (resolvedExpertId.isNotEmpty) ApiParams.expertId: resolvedExpertId,
       },
     );
-    final headers = {
-      ApiParams.key: Api.secretKey,
-      ApiParams.authToken: "Bearer $token",
-      ApiParams.authUid: Database.loginUserFirebaseId,
-      ApiParams.contentType: "application/json",
-    };
+    final headers = await GuestAuth.headers(allowGuest: true);
     Utils.showLog("Listener profile Api uri :: $uri");
     Utils.showLog("Listener profile Api headers :: $headers");
 

@@ -9,6 +9,7 @@ import 'package:notisboard/ui/user_flow/home_screen/model/user_coin_model.dart';
 import 'package:notisboard/ui/user_flow/host_verification_screen/api/talk_topic_api.dart';
 import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
 import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/firebse_access_token.dart';
 
@@ -40,14 +41,18 @@ class HomeScreenController extends GetxController {
   }
 
   init() async {
-    isCoinLoading = true;
-    update([Constant.idCoinUpdate]);
-    userCoinModel = await UserCoinApi.callApi();
-    if (userCoinModel?.status == true) {
-      Database.onSetUserCoin((userCoinModel?.coin ?? 0).toString());
+    if (!AuthGuard.isGuest) {
+      isCoinLoading = true;
+      update([Constant.idCoinUpdate]);
+      userCoinModel = await UserCoinApi.callApi();
+      if (userCoinModel?.status == true) {
+        Database.onSetUserCoin((userCoinModel?.coin ?? 0).toString());
+      }
+      isCoinLoading = false;
+      update([Constant.idCoinUpdate]);
+    } else {
+      Database.onSetUserCoin('0');
     }
-    isCoinLoading = false;
-    update([Constant.idCoinUpdate]);
 
     log("Enter In Home screen Controller");
     scrollController.addListener(onTopListenersPagination);
@@ -129,9 +134,13 @@ class HomeScreenController extends GetxController {
     TopListenersApi.startPagination = 0;
     topListeners.clear();
     await loadHomeCategories();
-    userCoinModel = await UserCoinApi.callApi();
-    if (userCoinModel?.status == true) {
-      Database.onSetUserCoin((userCoinModel?.coin ?? 0).toString());
+    if (!AuthGuard.isGuest) {
+      userCoinModel = await UserCoinApi.callApi();
+      if (userCoinModel?.status == true) {
+        Database.onSetUserCoin((userCoinModel?.coin ?? 0).toString());
+      }
+    } else {
+      Database.onSetUserCoin('0');
     }
     update([Constant.idCoinUpdate]);
 

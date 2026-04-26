@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:notisboard/ui/user_flow/feed_screen/api/feed_api.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/utils.dart';
@@ -78,8 +79,14 @@ class FeedScreenController extends GetxController {
       }
     }
 
+    if (AuthGuard.isGuest) {
+      showComposer = false;
+    }
+
     scrollController.addListener(_onScroll);
-    fetchFollowingExperts();
+    if (!AuthGuard.isGuest) {
+      fetchFollowingExperts();
+    }
     fetchFeed(reset: true);
   }
 
@@ -231,6 +238,12 @@ class FeedScreenController extends GetxController {
   }
 
   Future<void> createPost() async {
+    if (!AuthGuard.requireLogin(
+      message: 'Please log in to create posts.',
+    )) {
+      return;
+    }
+
     if (!showComposer) {
       return;
     }
@@ -270,6 +283,12 @@ class FeedScreenController extends GetxController {
   }
 
   Future<void> toggleLike(FeedPostItem post) async {
+    if (!AuthGuard.requireLogin(
+      message: 'Please log in to like posts.',
+    )) {
+      return;
+    }
+
     final response = await FeedApi.likePost(postId: post.id);
     if (response['status'] != true) {
       _showToast((response['message'] ?? 'Unable to update like.').toString());
@@ -294,6 +313,10 @@ class FeedScreenController extends GetxController {
   }
 
   Future<void> deletePost(FeedPostItem post) async {
+    if (!AuthGuard.requireLogin()) {
+      return;
+    }
+
     if (!isMyPost(post)) {
       _showToast('You can only delete your own post.');
       return;
@@ -316,6 +339,10 @@ class FeedScreenController extends GetxController {
     required FeedPostItem post,
     required String content,
   }) async {
+    if (!AuthGuard.requireLogin()) {
+      return false;
+    }
+
     if (!isMyPost(post)) {
       _showToast('You can only edit your own post.');
       return false;
@@ -351,6 +378,12 @@ class FeedScreenController extends GetxController {
   }
 
   Future<void> openMyPostsManager() async {
+    if (!AuthGuard.requireLogin(
+      message: 'Please log in to manage your posts.',
+    )) {
+      return;
+    }
+
     final isListener =
         Database.fetchLoginUserProfileModel?.user?.isListener == true ||
             Database.isListener;
@@ -410,6 +443,12 @@ class FeedScreenController extends GetxController {
   }
 
   Future<void> toggleFollowForPost(FeedPostItem post) async {
+    if (!AuthGuard.requireLogin(
+      message: 'Please log in to follow experts.',
+    )) {
+      return;
+    }
+
     if (post.expertId.isEmpty) {
       return;
     }
@@ -494,6 +533,12 @@ class FeedScreenController extends GetxController {
   }
 
   Future<void> submitComment(String postId) async {
+    if (!AuthGuard.requireLogin(
+      message: 'Please log in to comment on posts.',
+    )) {
+      return;
+    }
+
     final text = commentInputController.text.trim();
     if (text.isEmpty) {
       return;
@@ -556,6 +601,11 @@ class FeedScreenController extends GetxController {
   }
 
   void _showToast(String message) {
+    if (AuthGuard.isGuest &&
+        message.toLowerCase().contains('authorization token required')) {
+      return;
+    }
+
     if (Get.context != null) {
       Utils.showToast(Get.context!, message);
     }
@@ -653,11 +703,11 @@ class FeedPostItem {
   }
 
   String get displayName {
-    final nick = authorNickName.trim();
-    if (nick.isNotEmpty) return nick;
-
     final full = authorName.trim();
     if (full.isNotEmpty) return full;
+
+    final nick = authorNickName.trim();
+    if (nick.isNotEmpty) return nick;
 
     return 'User';
   }
@@ -722,6 +772,9 @@ class FeedCommentItem {
             .toList()
         : <FeedCommentItem>[];
 
+    final fullName = (author['fullName'] ?? '').toString().trim();
+    final nickName = (author['nickName'] ?? '').toString().trim();
+
     return FeedCommentItem(
       id: (json['id'] ?? json['_id'] ?? '').toString(),
       postId: (json['postId'] ?? '').toString(),
@@ -729,7 +782,7 @@ class FeedCommentItem {
           ? null
           : (json['parentCommentId']).toString(),
       text: (json['text'] ?? '').toString(),
-      authorName: ((author['nickName'] ?? author['fullName'] ?? '')).toString(),
+      authorName: fullName.isNotEmpty ? fullName : nickName,
       authorProfilePic: (author['profilePic'] ?? '').toString(),
       createdAt:
           DateTime.tryParse((json['createdAt'] ?? '').toString())?.toLocal(),

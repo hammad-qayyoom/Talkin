@@ -126,6 +126,7 @@ class VerifyOtpController extends GetxController {
 
         if (loginModel?.status == true) {
           Database.onSetIsLogin(true);
+          Database.onSetGuestMode(false);
           Database.onSetSeenOnboarding(true);
           Database.onSetFillProfile(true);
 
