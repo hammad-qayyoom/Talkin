@@ -10,8 +10,18 @@ import 'package:notisboard/utils/app_color.dart';
 String _resolveImageUrl(String image) {
   final value = image.trim();
   if (value.isEmpty) return '';
+  if (value.startsWith('data:image/')) return value;
   if (value.startsWith('http://') || value.startsWith('https://')) {
     return value;
+  }
+  if (value.startsWith('//')) {
+    return 'https:$value';
+  }
+  if (value.startsWith('www.')) {
+    return 'https://$value';
+  }
+  if (value.startsWith('${Uri.parse(Api.baseUrl).host}/')) {
+    return 'https://$value';
   }
 
   final normalized = value.startsWith('/') ? value.substring(1) : value;
@@ -101,7 +111,8 @@ class CustomListenerProfileImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final imageUrl = _resolveImageUrl(image);
     if (imageUrl.isEmpty) {
-      return Image.asset(AppAsset.listenerPlaceHolder, fit: fit ?? BoxFit.cover);
+      return Image.asset(AppAsset.listenerPlaceHolder,
+          fit: fit ?? BoxFit.cover);
     }
 
     return ProfessionalCachedImage(

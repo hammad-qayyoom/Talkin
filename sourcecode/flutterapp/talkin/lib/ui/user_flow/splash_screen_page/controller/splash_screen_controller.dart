@@ -120,6 +120,10 @@ class SplashScreenController extends GetxController {
 
     ipApiResponseModel = await IpApi.callApi();
     Database.onSetSelectedCountryCode(ipApiResponseModel?.countryCode ?? '');
+    if (ipApiResponseModel?.lat != null && ipApiResponseModel?.lon != null) {
+      await Database.onSetUserLatitude(ipApiResponseModel!.lat!);
+      await Database.onSetUserLongitude(ipApiResponseModel!.lon!);
+    }
     log("Database.selectedCountryCode :: ${Database.selectedCountryCode}");
     Database.getDialCode();
 

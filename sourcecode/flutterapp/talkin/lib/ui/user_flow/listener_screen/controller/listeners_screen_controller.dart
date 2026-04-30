@@ -9,6 +9,7 @@ import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.da
 import 'package:notisboard/ui/user_flow/host_verification_screen/api/talk_topic_api.dart';
 import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
 import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/expert_proximity_sorter.dart';
 
 class ListenersScreenController extends GetxController {
   int selectedIndex = 0;
@@ -69,6 +70,7 @@ class ListenersScreenController extends GetxController {
 
       topListenersModel = data;
       allListener = data?.data ?? [];
+      await ExpertProximitySorter.sortNearestFirst(allListener);
 
       log("Search result => ${allListener.length}");
     } catch (e, st) {
@@ -86,6 +88,7 @@ class ListenersScreenController extends GetxController {
 
     topListenersModel = await AllListenersApi.callApi(searchString: "All");
     allListener.addAll(topListenersModel?.data ?? []);
+    await ExpertProximitySorter.sortNearestFirst(allListener);
     log(" ::::: $allListener");
 
     isLoading = false;
@@ -156,6 +159,7 @@ class ListenersScreenController extends GetxController {
 
       topListenersModel = data;
       allListener = data?.data ?? [];
+      await ExpertProximitySorter.sortNearestFirst(allListener);
       log("language filter  :: $allListener");
       for (var listener in allListener) {
         log('language filter Listener: ${listener.name}');
@@ -259,6 +263,7 @@ class ListenersScreenController extends GetxController {
 
       topListenersModel = data;
       allListener = data?.data ?? [];
+      await ExpertProximitySorter.sortNearestFirst(allListener);
 
       log('Category filter result: $allListener');
     } catch (e, st) {
@@ -280,6 +285,7 @@ class ListenersScreenController extends GetxController {
       );
 
       allListener.addAll(topListenersModel?.data ?? []);
+      await ExpertProximitySorter.sortNearestFirst(allListener);
 
       isPaginationLoading = false;
       update([Constant.idPaginationListener, Constant.idAllListener]);

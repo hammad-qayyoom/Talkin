@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:notisboard/ui/user_flow/all_listeners_screen/api/all_listeners_api.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
 import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/expert_proximity_sorter.dart';
 
 class SearchScreenController extends GetxController {
   final TextEditingController searchController = TextEditingController();
@@ -48,6 +49,9 @@ class SearchScreenController extends GetxController {
       var data = await AllListenersApi.callApi(searchString: "All");
       topListenersModel = data;
       allListener = data?.data ?? [];
+      if (allListener != null) {
+        await ExpertProximitySorter.sortNearestFirst(allListener!);
+      }
       log('All listeners fetched: ${allListener?.length}');
 
       filterListeners(

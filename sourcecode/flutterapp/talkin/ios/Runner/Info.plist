@@ -47,6 +47,8 @@
     <string>Take a video for display</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Read your photos for display</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We use your location to show nearest experts first.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

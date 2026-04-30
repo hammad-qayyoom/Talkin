@@ -44,6 +44,9 @@ class TopListeners {
   String? id;
   String? name;
   int? age;
+  double? latitude;
+  double? longitude;
+  double? distanceKm;
   List<String>? talkTopics;
   List<String>? language;
   String? image;
@@ -67,6 +70,9 @@ class TopListeners {
     this.id,
     this.name,
     this.age,
+    this.latitude,
+    this.longitude,
+    this.distanceKm,
     this.talkTopics,
     this.language,
     this.image,
@@ -95,6 +101,41 @@ class TopListeners {
           .toList();
     }
     return [];
+  }
+
+  static String? _nonEmptyString(dynamic value) {
+    final parsed = value?.toString().trim() ?? '';
+    return parsed.isEmpty ? null : parsed;
+  }
+
+  static String? _firstNonEmptyString(Iterable<dynamic> values) {
+    for (final value in values) {
+      final parsed = _nonEmptyString(value);
+      if (parsed != null) return parsed;
+    }
+    return null;
+  }
+
+  static String? _imageFromValue(dynamic value) {
+    if (value is Map<String, dynamic>) {
+      return _firstNonEmptyString([
+        value["url"],
+        value["secureUrl"],
+        value["secure_url"],
+        value["path"],
+        value["image"],
+        value["profilePic"],
+        value["profileImage"],
+        value["avatar"],
+        value["avatarUrl"],
+      ]);
+    }
+    if (value is Map) {
+      return _imageFromValue(value.map(
+        (key, item) => MapEntry(key.toString(), item),
+      ));
+    }
+    return _nonEmptyString(value);
   }
 
   static List<String> _categoryNames(dynamic value) {
@@ -153,7 +194,86 @@ class TopListeners {
     return false;
   }
 
+  static Map<String, dynamic>? _mapValue(dynamic value) {
+    if (value is Map<String, dynamic>) {
+      return value;
+    }
+    if (value is Map) {
+      return value.map(
+        (key, item) => MapEntry(key.toString(), item),
+      );
+    }
+    return null;
+  }
+
+  static List<dynamic> _listValue(dynamic value) {
+    if (value is List) {
+      return value;
+    }
+    return [];
+  }
+
+  static String? _resolveImage(Map<String, dynamic> json) {
+    final user = _mapValue(json["user"]);
+    final profile = _mapValue(json["profile"]);
+    final expert = _mapValue(json["expert"]);
+
+    return _firstNonEmptyString([
+      _imageFromValue(json["image"]),
+      _imageFromValue(json["profilePic"]),
+      _imageFromValue(json["profileImage"]),
+      _imageFromValue(json["avatar"]),
+      _imageFromValue(json["avatarUrl"]),
+      _imageFromValue(user?["image"]),
+      _imageFromValue(user?["profilePic"]),
+      _imageFromValue(user?["profileImage"]),
+      _imageFromValue(user?["avatar"]),
+      _imageFromValue(user?["avatarUrl"]),
+      _imageFromValue(profile?["image"]),
+      _imageFromValue(profile?["profilePic"]),
+      _imageFromValue(profile?["profileImage"]),
+      _imageFromValue(profile?["avatar"]),
+      _imageFromValue(profile?["avatarUrl"]),
+      _imageFromValue(expert?["image"]),
+      _imageFromValue(expert?["profilePic"]),
+      _imageFromValue(expert?["profileImage"]),
+      _imageFromValue(expert?["avatar"]),
+      _imageFromValue(expert?["avatarUrl"]),
+    ]);
+  }
+
   factory TopListeners.fromJson(Map<String, dynamic> json) => TopListeners(
+        latitude: () {
+          final location = _mapValue(json["location"]);
+          final geo = _mapValue(location?["geo"]);
+          final coordinates = _listValue(geo?["coordinates"]);
+          if (coordinates.length >= 2) {
+            final fromGeo = _doubleValue(coordinates[1]);
+            if (fromGeo != null) return fromGeo;
+          }
+
+          return _doubleValue(location?["lat"] ??
+              location?["latitude"] ??
+              json["lat"] ??
+              json["latitude"]);
+        }(),
+        longitude: () {
+          final location = _mapValue(json["location"]);
+          final geo = _mapValue(location?["geo"]);
+          final coordinates = _listValue(geo?["coordinates"]);
+          if (coordinates.length >= 2) {
+            final fromGeo = _doubleValue(coordinates[0]);
+            if (fromGeo != null) return fromGeo;
+          }
+
+          return _doubleValue(location?["lng"] ??
+              location?["lon"] ??
+              location?["longitude"] ??
+              json["lng"] ??
+              json["lon"] ??
+              json["longitude"]);
+        }(),
+        distanceKm: _doubleValue(json["distanceKm"] ?? json["distance"]),
         id: (json["_id"] ?? json["id"] ?? json["listenerId"])?.toString(),
         name: json["name"] ?? json["displayName"],
         age: _intValue(json["age"]),
@@ -165,7 +285,7 @@ class TopListeners {
         language: json["language"] == null
             ? _stringList(json["languages"])
             : _stringList(json["language"]),
-        image: json["image"] ?? json["profilePic"],
+        image: _resolveImage(json),
         ratePrivateVideoCall: _intValue(json["ratePrivateVideoCall"] ??
             (json["pricing"] is Map ? json["pricing"]["oneToOneVideo"] : null)),
         ratePrivateAudioCall: _intValue(json["ratePrivateAudioCall"] ??
@@ -207,6 +327,9 @@ class TopListeners {
         "_id": id,
         "name": name,
         "age": age,
+        "latitude": latitude,
+        "longitude": longitude,
+        "distanceKm": distanceKm,
         "talkTopics": talkTopics == null
             ? []
             : List<dynamic>.from(talkTopics!.map((x) => x)),

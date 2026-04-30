@@ -34,6 +34,12 @@ class Database {
     return parsed.toStringAsFixed(2);
   }
 
+  static double? _toDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is num) return value.toDouble();
+    return double.tryParse(value.toString());
+  }
+
   static FetchLoginUserProfileModel? fetchLoginUserProfileModel;
   static FetchListenerProfileModel? fetchListenerProfileModel;
   static SettingApiModel? settingApiModel;
@@ -111,6 +117,10 @@ class Database {
       localStorage.read("sellerPayoutAmount") ?? 0;
   static String get selectedCountryCode =>
       localStorage.read("countryCode") ?? "IN";
+  static double? get userLatitude =>
+      _toDouble(localStorage.read("userLatitude"));
+  static double? get userLongitude =>
+      _toDouble(localStorage.read("userLongitude"));
 
   static String get loginListenerId =>
       localStorage.read("loginListenerId") ?? "";
@@ -194,6 +204,10 @@ class Database {
       localStorage.write("isListeners", isListeners);
   static onSetSelectedCountryCode(String countryCode) async =>
       await localStorage.write("countryCode", countryCode);
+  static onSetUserLatitude(double latitude) async =>
+      await localStorage.write("userLatitude", latitude);
+  static onSetUserLongitude(double longitude) async =>
+      await localStorage.write("userLongitude", longitude);
   static onSetLoginListenerId(String loginListenerId) async =>
       localStorage.write("loginListenerId", loginListenerId);
   static onSetUserCoin(String userCoin) async =>

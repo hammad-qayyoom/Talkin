@@ -11,6 +11,7 @@ import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topi
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/expert_proximity_sorter.dart';
 import 'package:notisboard/utils/firebse_access_token.dart';
 
 class HomeScreenController extends GetxController {
@@ -103,6 +104,7 @@ class HomeScreenController extends GetxController {
       categoryId: selectedCategoryId,
     );
     topListeners.addAll(topListenersModel?.data ?? []);
+    await ExpertProximitySorter.sortNearestFirst(topListeners);
 
     isLoading = false;
     update([Constant.idGetListener]);
@@ -124,6 +126,7 @@ class HomeScreenController extends GetxController {
         categoryId: selectedCategoryId,
       );
       topListeners.addAll(topListenersModel?.data ?? []);
+      await ExpertProximitySorter.sortNearestFirst(topListeners);
 
       isPaginationLoading = false;
       update([Constant.idPaginationListener]);

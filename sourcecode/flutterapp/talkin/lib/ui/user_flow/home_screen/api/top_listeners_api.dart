@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:notisboard/services/location/user_location_service.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/api_params.dart';
@@ -15,14 +16,21 @@ class TopListenersApi {
   static Uri _discoverUri({
     required String searchString,
     String? categoryId,
+    UserLocationData? userLocation,
   }) {
+    final normalizedSearch = searchString.trim().isEmpty ? "All" : searchString;
+
     return Uri.parse(Api.expertsDiscover).replace(
       queryParameters: {
         ApiParams.start: startPagination.toString(),
         ApiParams.limit: limitPagination.toString(),
-        'search': searchString,
+        'search': normalizedSearch,
         if (categoryId != null && categoryId.isNotEmpty)
           ApiParams.categoryId: categoryId,
+        if (userLocation != null) 'lat': userLocation.latitude.toString(),
+        if (userLocation != null) 'lng': userLocation.longitude.toString(),
+        if (userLocation != null) 'sortBy': 'distance',
+        if (userLocation != null) 'sortOrder': 'asc',
       },
     );
   }
@@ -56,12 +64,16 @@ class TopListenersApi {
 
     startPagination += 1;
 
-    final discoverUri =
-        _discoverUri(searchString: searchString, categoryId: categoryId);
+    final userLocation = await UserLocationService.resolveLocation();
+    final discoverUri = _discoverUri(
+      searchString: searchString,
+      categoryId: categoryId,
+      userLocation: userLocation,
+    );
     final topUri =
         _topListenersUri(searchString: searchString, categoryId: categoryId);
-    final useAuthenticatedEndpoint = Database.isLogin;
-    final primaryUri = useAuthenticatedEndpoint ? topUri : discoverUri;
+    final useLegacyPrimary = Database.isLogin;
+    final primaryUri = useLegacyPrimary ? topUri : discoverUri;
 
     Utils.showLog("Top Listeners Api url => $primaryUri");
 
@@ -82,14 +94,11 @@ class TopListenersApi {
         Utils.showLog("Top Listeners Api StateCode Error");
       }
 
-      if (useAuthenticatedEndpoint) {
-        Utils.showLog(
-            "Top Listeners primary endpoint failed, trying discover fallback.");
+      if (useLegacyPrimary) {
+        Utils.showLog("Top Listeners legacy failed, trying discover fallback.");
         final fallbackResponse = await http.get(
           discoverUri,
-          headers: {
-            ApiParams.key: Api.secretKey,
-          },
+          headers: headers,
         );
 
         Utils.showLog(
@@ -97,7 +106,8 @@ class TopListenersApi {
 
         if (fallbackResponse.statusCode == 200) {
           final jsonResponse = json.decode(fallbackResponse.body);
-          if (jsonResponse is Map<String, dynamic>) {
+          if (jsonResponse is Map<String, dynamic> &&
+              _isSuccess(jsonResponse)) {
             return TopListenersModel.fromJson(jsonResponse);
           }
         }

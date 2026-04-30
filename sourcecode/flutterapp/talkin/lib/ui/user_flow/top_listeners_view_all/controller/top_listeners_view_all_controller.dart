@@ -6,6 +6,7 @@ import 'package:notisboard/ui/user_flow/home_screen/api/top_listeners_api.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/expert_proximity_sorter.dart';
 import 'package:notisboard/utils/firebse_access_token.dart';
 
 class TopListenersViewAllController extends GetxController {
@@ -61,6 +62,7 @@ class TopListenersViewAllController extends GetxController {
       categoryId: selectedCategoryId,
     );
     topListeners.addAll(topListenersModel?.data ?? []);
+    await ExpertProximitySorter.sortNearestFirst(topListeners);
 
     isLoading = false;
     update([Constant.idGetListener]);
@@ -83,6 +85,7 @@ class TopListenersViewAllController extends GetxController {
         categoryId: selectedCategoryId,
       );
       topListeners.addAll(topListenersModel?.data ?? []);
+      await ExpertProximitySorter.sortNearestFirst(topListeners);
 
       isPaginationLoading = false;
       update([Constant.idPaginationListener, Constant.idGetListener]);

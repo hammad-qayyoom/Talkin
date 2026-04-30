@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
+import 'package:notisboard/services/location/user_location_service.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/api_params.dart';
@@ -12,6 +13,35 @@ import 'package:notisboard/utils/utils.dart';
 class AllListenersApi {
   static int startPagination = 0;
   static int limitPagination = 20;
+
+  static Uri _discoverUri({
+    required Map<String, dynamic> queryParameters,
+    UserLocationData? userLocation,
+  }) {
+    final mappedQueryParameters = <String, String>{
+      for (final entry in queryParameters.entries)
+        (entry.key == ApiParams.searchString ? 'search' : entry.key):
+            entry.value.toString(),
+      if (userLocation != null) 'lat': userLocation.latitude.toString(),
+      if (userLocation != null) 'lng': userLocation.longitude.toString(),
+      if (userLocation != null) 'sortBy': 'distance',
+      if (userLocation != null) 'sortOrder': 'asc',
+    };
+
+    return Uri.parse(Api.expertsDiscover)
+        .replace(queryParameters: mappedQueryParameters);
+  }
+
+  static Uri _legacyAllListenersUri({
+    required Map<String, dynamic> queryParameters,
+  }) {
+    return Uri.parse(Api.allListeners).replace(
+      queryParameters: {
+        for (final entry in queryParameters.entries)
+          entry.key: entry.value.toString(),
+      },
+    );
+  }
 
   static Future<TopListenersModel?> callApi({
     String? searchString,
@@ -42,28 +72,22 @@ class AllListenersApi {
 
     log("All Listeners queryParameters ::$queryParameters");
 
-    final allListenersUri = Uri.parse(Api.allListeners).replace(
-      queryParameters: {
-        for (final entry in queryParameters.entries)
-          entry.key: entry.value.toString(),
-      },
+    final userLocation = await UserLocationService.resolveLocation();
+    final discoverUri = _discoverUri(
+      queryParameters: queryParameters,
+      userLocation: userLocation,
     );
-    final discoverUri = Uri.parse(Api.expertsDiscover).replace(
-      queryParameters: {
-        for (final entry in queryParameters.entries)
-          (entry.key == ApiParams.searchString ? 'search' : entry.key):
-              entry.value.toString(),
-      },
-    );
-    final useAuthenticatedEndpoint = Database.isLogin;
-    final uri = useAuthenticatedEndpoint ? allListenersUri : discoverUri;
+    final allListenersUri =
+        _legacyAllListenersUri(queryParameters: queryParameters);
+    final useLegacyPrimary = Database.isLogin;
+    final primaryUri = useLegacyPrimary ? allListenersUri : discoverUri;
 
     final headers = await GuestAuth.headers(allowGuest: true);
-    Utils.showLog("All Listeners Api uri :: $uri");
+    Utils.showLog("All Listeners Api uri :: $primaryUri");
     Utils.showLog("All Listeners Api headers :: $headers");
 
     try {
-      final response = await http.get(uri, headers: headers);
+      final response = await http.get(primaryUri, headers: headers);
 
       log('All Listeners API STATUS CODE :: ${response.statusCode} \n RESPONSE :: ${response.body}');
 
@@ -75,14 +99,11 @@ class AllListenersApi {
         }
       }
 
-      if (useAuthenticatedEndpoint) {
-        Utils.showLog(
-            "All Listeners primary endpoint failed, trying discover fallback.");
+      if (useLegacyPrimary) {
+        Utils.showLog("All Listeners legacy failed, trying discover fallback.");
         final fallbackResponse = await http.get(
           discoverUri,
-          headers: {
-            ApiParams.key: Api.secretKey,
-          },
+          headers: headers,
         );
 
         Utils.showLog(
@@ -90,7 +111,8 @@ class AllListenersApi {
 
         if (fallbackResponse.statusCode == 200) {
           final jsonResponse = json.decode(fallbackResponse.body);
-          if (jsonResponse is Map<String, dynamic>) {
+          if (jsonResponse is Map<String, dynamic> &&
+              jsonResponse['status'] == true) {
             return TopListenersModel.fromJson(jsonResponse);
           }
         }
