@@ -1,2 +1,6 @@
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
 #include "Generated.xcconfig"
+GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO
+CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO
+OTHER_CFLAGS = $(inherited) -Wno-deprecated-declarations
+OTHER_SWIFT_FLAGS = $(inherited) -suppress-warnings -Xcc -Wno-deprecated-declarations

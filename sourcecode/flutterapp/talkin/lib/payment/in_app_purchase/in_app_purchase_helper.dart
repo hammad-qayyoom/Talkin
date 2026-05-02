@@ -60,6 +60,39 @@ class InAppPurchaseHelper {
   List<PurchaseDetails> _purchases = [];
   IAPCallback? _iapCallback;
 
+  void setCallback(IAPCallback iapCallback) {
+    _iapCallback = iapCallback;
+  }
+
+  void ensurePurchaseListener() {
+    if (_subscription != null) return;
+
+    final Stream<List<PurchaseDetails>> purchaseUpdated =
+        _connection.purchaseStream;
+    _subscription = purchaseUpdated.listen(
+        (purchaseDetailsList) {
+          if (purchaseDetailsList.isNotEmpty) {
+            purchaseDetailsList.sort(
+                (a, b) => a.transactionDate!.compareTo(b.transactionDate!));
+
+            if (purchaseDetailsList[0].status == PurchaseStatus.restored) {
+              getPastPurchases(purchaseDetailsList);
+            } else {
+              _listenToPurchaseUpdated(purchaseDetailsList);
+            }
+          }
+        },
+        cancelOnError: true,
+        onDone: () {
+          _subscription?.cancel();
+          _subscription = null;
+        },
+        onError: (error) {
+          log("Purchase stream error: $error");
+          handleError(error);
+        });
+  }
+
   initialize() {
     if (Platform.isAndroid) {
       // FIXED: The enablePendingPurchases() method has been deprecated and removed
@@ -111,30 +144,8 @@ class InAppPurchaseHelper {
   }
 
   getAlreadyPurchaseItems(IAPCallback iapCallback) {
-    _iapCallback = iapCallback;
-    final Stream<List<PurchaseDetails>> purchaseUpdated =
-        _connection.purchaseStream;
-    _subscription = purchaseUpdated.listen(
-        (purchaseDetailsList) {
-          if (purchaseDetailsList.isNotEmpty) {
-            purchaseDetailsList.sort(
-                (a, b) => a.transactionDate!.compareTo(b.transactionDate!));
-
-            if (purchaseDetailsList[0].status == PurchaseStatus.restored) {
-              getPastPurchases(purchaseDetailsList);
-            } else {
-              _listenToPurchaseUpdated(purchaseDetailsList);
-            }
-          }
-        },
-        cancelOnError: true,
-        onDone: () {
-          _subscription?.cancel();
-        },
-        onError: (error) {
-          log("Purchase stream error: $error");
-          handleError(error);
-        });
+    setCallback(iapCallback);
+    ensurePurchaseListener();
     initStoreInfo();
   }
 

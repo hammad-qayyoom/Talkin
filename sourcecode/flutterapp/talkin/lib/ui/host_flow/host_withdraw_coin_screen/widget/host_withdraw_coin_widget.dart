@@ -163,7 +163,7 @@ class HostWithdrawCoinTopView extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Ready to Withdraw',
+                      'Ready to Request',
                       style: AppFontStyle.fontStyleW700(
                         fontSize: isTablet ? 27 : 21,
                         fontColor: AppColors.white,
@@ -285,7 +285,7 @@ class HostWithdrawCoinView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const _SectionChip(title: 'Withdrawal Details'),
+            const _SectionChip(title: 'Reward Details'),
             const SizedBox(height: 8),
             Text(
               EnumLocale.txtListenerWithdrawDescription.name.tr,

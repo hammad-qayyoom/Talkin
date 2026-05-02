@@ -308,43 +308,48 @@ class MyWalletController extends GetxController implements IAPCallback {
   ///in app purchase
   Future<void> onClickInAppPurchase(
       num amount, String id, String productKey) async {
-    Utils.showLog("Starting IAP with product: $productKey");
+    final normalizedProductKey = productKey.trim();
+    Utils.showLog("Starting IAP with product: $normalizedProductKey");
 
-    // await InAppPurchaseHelper().init(
-    //   paymentType: "In App Purchase",
-    //   userId: Database.loginUserFirebaseId,
-    //   productKey: kProductIds,
-    //   rupee: amount.toDouble(),
-    //   callBack: () async {
-    //     Utils.showLog("In App Purchase Payment Successfully");
-    //     // This callback is called from InAppPurchaseHelper
-    //     // The actual API call will be made in onSuccessPurchase method below
-    //   },
-    // );
+    if (normalizedProductKey.isEmpty) {
+      Utils.showToast(Get.context, "Product not configured");
+      return;
+    }
 
-    await inAppPurchase(
-      amount: amount,
-      onPaymentSuccess: () async {
-        Utils.showLog("In App Purchase Payment Successfully");
+    final helper = InAppPurchaseHelper();
+    helper.init(
+      paymentType: "In App Purchase",
+      userId: Database.loginUserFirebaseId,
+      productKey: [normalizedProductKey],
+      rupee: amount.toDouble(),
+      callBack: () {
+        Utils.showLog("In App Purchase callback completed");
       },
     );
+    helper.setCallback(this);
+    helper.ensurePurchaseListener();
 
-    // Add debug logging
-    await InAppPurchaseHelper().debugProductLoading();
+    _showBlockingLoader();
+    try {
+      await helper.debugProductLoading();
+      await helper.initStoreInfo();
+      purchases = helper.getPurchases();
 
-    InAppPurchaseHelper().initStoreInfo();
-    await Future.delayed(const Duration(seconds: 3)); // Increased delay
+      final product = helper.getProductDetail(normalizedProductKey);
+      _closeBlockingLoader();
 
-    ProductDetails? product =
-        InAppPurchaseHelper().getProductDetail(productKey);
-
-    if (product != null) {
-      Utils.showLog("Product found: ${product.title} - ${product.price}");
-      InAppPurchaseHelper().buySubscription(product, purchases!);
-    } else {
-      Utils.showToast(Get.context, "Product not found: $productKey");
-      Utils.showLog(
-          "Available products: ${InAppPurchaseHelper().getAvailableProducts()}");
+      if (product != null) {
+        Utils.showLog("Product found: ${product.title} - ${product.price}");
+        await helper.buySubscription(product, purchases ?? {});
+      } else {
+        Utils.showToast(
+            Get.context, "Product not found: $normalizedProductKey");
+        Utils.showLog("Available products: ${helper.getAvailableProducts()}");
+      }
+    } catch (e) {
+      _closeBlockingLoader();
+      Utils.showLog("In App Purchase Failed => $e");
+      Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
     }
   }
 

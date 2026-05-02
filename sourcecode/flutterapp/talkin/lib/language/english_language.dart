@@ -95,7 +95,7 @@ final Map<String, String> enUS = {
       "Select topics to find matching experts.",
   EnumLocale.txtRecommendedProfile.name: "Recommended Profile",
   EnumLocale.txtSelectCallTypeNote.name:
-      "Please do not trust fraudulent information such as money transfer,lottery etc from strangers. Please do not share any personal information such as passwords,mobile numbers, otp etc. Please do not engage in nudity, pornography or any obscene acts.",
+      "Please ignore suspicious requests from strangers. Do not share passwords, mobile numbers, OTP codes, private details, or engage in nudity, pornography, or obscene acts.",
   EnumLocale.txtTotalCall.name: "Total Calls",
   EnumLocale.txtRating.name: "Rating",
   EnumLocale.txtExperience.name: "Experience",
@@ -237,39 +237,39 @@ final Map<String, String> enUS = {
       "We are committed to providing you with the best service. Learn more about our team and our mission.",
   EnumLocale.txtPaymentMethod.name: "Payment Method",
   EnumLocale.txtListenerWithdrawDescription.name:
-      "1. You can withdraw your earned Session Credits as real money once you meet the minimum withdrawal threshold set by the platform. Make sure your profile and payment details are fully verified to avoid delays in processing your withdrawal request.",
+      "1. You can request a reward review for eligible earned Session Credits once you meet the minimum threshold set by the platform. Make sure your profile details are verified to avoid delays in processing your request.",
   EnumLocale.txtListenerGuide.name:
-      "1. Your wallet balance shows the total Session Credits you've earned from users who call you as an expert. These Session Credits are rewarded for your time and engagement during each call.\n\n2. Users purchase Session Credits and spend them by calling experts like you. The more users call you, the more Session Credits you earn in your wallet.\n\n3. Earned Session Credits can be accumulated and later withdrawn as money, depending on the platform's withdrawal rules. Keep engaging actively to grow your wallet balance.",
+      "1. Your wallet balance shows the total Session Credits earned from completed sessions. These credits are rewards for your time and engagement during each session.\n\n2. Users purchase Session Credits and spend them to connect with experts like you. The more sessions you complete, the more Session Credits you earn.\n\n3. Eligible Session Credits can be submitted for a reward review according to platform rules. Keep engaging actively to grow your wallet balance.",
   EnumLocale.txtUserGuide.name:
       "1. Your wallet balance represents the number of Session Credits available in your account. These Session Credits can be used to access premium features, connect with experts, or make in-app purchases.\n\n2. You can top up your Session Credit balance by selecting a subscription from the options below. Each subscription offers a different Session Credit-to-dollar rate, so choose the one that best fits your needs.\n\n3. The more Session Credits you buy, the better the value. Higher subscriptions often include bonus Session Credits or special offers. Make sure to check for the 'Most Popular Subscription' tag for recommended choices.",
   EnumLocale.txtWallet.name: "Wallet",
   EnumLocale.txtProfile.name: "Profile",
   EnumLocale.txtRecentCalling.name: "Recent Calling",
-  EnumLocale.txtEarnMoney.name: "Earn Money",
+  EnumLocale.txtEarnMoney.name: "Earn Credits",
   EnumLocale.txtPermissionAllow.name: "Permission Allow",
   EnumLocale.txtHostHomeNote.name:
-      "Please do not trust fraudulent information such as money transfer,lottery etc from strangers. Please do not share any personal information such as passwords,mobile numbers, otp etc. Please do not engage in nudity, pornography or any obscene acts.",
-  EnumLocale.txtWithdrawCoin.name: "Withdraw Session Credit",
+      "Please ignore suspicious requests from strangers. Do not share passwords, mobile numbers, OTP codes, private details, or engage in nudity, pornography, or obscene acts.",
+  EnumLocale.txtWithdrawCoin.name: "Request Reward",
   EnumLocale.txtSecurePayment.name: "Secure Payment",
   EnumLocale.txtGuarantedChat.name: "Guaranted Chat",
   EnumLocale.txt1CrPayments.name: "1 Cr+ Payments",
   EnumLocale.txtTrustedUser.name: "Trusted User",
   EnumLocale.txtReceiveCoin.name: "Receive Session Credit",
-  EnumLocale.txtWithdrawAmount.name: "Withdraw Amount",
-  EnumLocale.txtWithdraw.name: "Withdraw",
+  EnumLocale.txtWithdrawAmount.name: "Reward Amount",
+  EnumLocale.txtWithdraw.name: "Request",
   EnumLocale.txtCoin.name: "Session Credit",
   EnumLocale.txtAvailableCoinBalance.name: "Available Session Credit Balance",
-  EnumLocale.txtWithdrawalDetails.name: "Withdrawal Details :-",
+  EnumLocale.txtWithdrawalDetails.name: "Reward Details :-",
   EnumLocale.txtEnterCoinAmount.name: "Enter Session Credit Amount",
-  EnumLocale.txtMinimumWithdrawCoin.name: "*Minimum Withdraw Session Credit : ",
+  EnumLocale.txtMinimumWithdrawCoin.name: "*Minimum Session Credit : ",
   EnumLocale.txtMyAmountBalance.name: "My Amount Balance : ",
   EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
-      "Get Your Withdrawable Session Credit Amount Here...",
+      "Check your eligible Session Credit amount here...",
   EnumLocale.txtListenerDetails.name: "Expert Details :-",
   EnumLocale.txtEnterIntroduction.name: "Enter Introduction",
   EnumLocale.txtTalkLanguages.name: "Talk Languages :-",
   EnumLocale.txtSAVED.name: "SAVED",
-  EnumLocale.txtAmountWithdraw.name: "Amount Withdraw",
+  EnumLocale.txtAmountWithdraw.name: "Reward Requested",
   EnumLocale.txtSelectPaymentMode.name: "Select Payment Mode",
   EnumLocale.txtAvailableBalance.name: "Available Balance",
   EnumLocale.txtSomeThingWentWrong.name: "Some thing went wrong !!",
@@ -286,13 +286,12 @@ final Map<String, String> enUS = {
   EnumLocale.txtPleaseFillProfile.name: "Please fill profile",
   EnumLocale.txtPleaseEnterWithdrawCoin.name:
       "Please Enter Session Credit Amount",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name:
-      "Please Select Withdraw Method",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name: "Please Select Reward Method",
   EnumLocale.txtPleaseEnterAllPaymentDetails.name:
       "Please Enter All Payment Details",
   EnumLocale.txtSelectPaymentGateway.name: "Select Payment Gateway",
   EnumLocale.txtNumberOfCoin.name: "Number Of Session Credit :",
-  EnumLocale.txtWithdrawalID.name: "Withdrawal ID :",
+  EnumLocale.txtWithdrawalID.name: "Reward ID :",
   EnumLocale.txtTransactionID.name: "Transaction ID :",
   EnumLocale.txtViewMore.name: "View More",
   EnumLocale.txtPaymentMethod.name: "Payment Method :",
@@ -307,13 +306,13 @@ final Map<String, String> enUS = {
   EnumLocale.txtAppRestartDesc.name:
       "Your expert request has been accepted. Please restart the app to continue.",
   EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
-      "The User Does Not Have Sufficient Funds To Make The Withdrawal",
+      "The user does not have sufficient Session Credits for this request",
   EnumLocale
           .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
-      "Withdrawal Requested Session Credit Must Be Greater Than Specified By The Admin",
+      "Requested Session Credit must be greater than the platform minimum",
   EnumLocale.txtSkip.name: "Skip",
   EnumLocale.txtHostHomeDescription.name:
-      "Get rewarded while guiding users through professional consultations. Enable private session availability and earn from booked sessions.",
+      "Get rewarded with Session Credits while guiding users through professional conversations and booked sessions.",
   EnumLocale.txtManageYourAccountSettingsSubText.name:
       "Customize your app experience by changing the language, logging out, or permanently deleting your account. Make sure to review each option carefully before making changes.",
   EnumLocale.txtSelectLanguage.name: "Select Language",
@@ -336,7 +335,7 @@ final Map<String, String> enUS = {
       "Expert Request Sent Successfully....",
   EnumLocale.txtSearchLanguage.name: "Search language...",
   EnumLocale.txtHostVerificationUploadImageTxt.name:
-      "To verify your identity, please upload a recent personal photo and a clear photo of your government-issued ID. Make sure the images are visible and not blurry. Your details will remain confidential and are used only for verification purposes.",
+      "To verify your identity, please upload a recent personal photo and a clear photo of your official ID. Make sure the images are visible and not blurry. Your details will remain confidential and are used only for verification purposes.",
   EnumLocale.txtSelectTalkaboutTxt.name:
       "Select topics for the expert content in app.",
   EnumLocale.txtSelectAppLanguageTxt.name:

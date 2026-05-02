@@ -94,7 +94,7 @@ final Map<String, String> trTR = {
       "Uygulamada içerik hakkında konuşmayı seçin",
   EnumLocale.txtRecommendedProfile.name: "Önerilen Profil",
   EnumLocale.txtSelectCallTypeNote.name:
-      "Lütfen yabancılardan gelen para transferi, piyango vb. gibi sahte bilgilere güvenmeyin. Lütfen şifreler, cep telefonu numaraları, otp vb. gibi hiçbir kişisel bilgiyi paylaşmayın. Lütfen çıplaklık, pornografi veya herhangi bir müstehcen eylemde bulunmayın.",
+      "Please ignore suspicious requests from strangers. Do not share passwords, mobile numbers, OTP codes, private details, or engage in nudity, pornography, or obscene acts.",
   EnumLocale.txtTotalCall.name: "Toplam Çağrılar",
   EnumLocale.txtRating.name: "Derecelendirme",
   EnumLocale.txtExperience.name: "Deneyim",
@@ -242,40 +242,39 @@ final Map<String, String> trTR = {
       "Size en iyi hizmeti sunmaya kararlıyız. Ekibimiz ve misyonumuz hakkında daha fazla bilgi edinin.",
   EnumLocale.txtPaymentMethod.name: "Ödeme yöntemi",
   EnumLocale.txtListenerWithdrawDescription.name:
-      "1. Platform tarafından belirlenen minimum çekim eşiğine ulaştığınızda kazandığınız Session Credit bakiyesini gerçek para olarak çekebilirsiniz. Çekim talebinizin işlenmesinde gecikmeleri önlemek için profilinizin ve ödeme bilgilerinizin tamamen doğrulandığından emin olun.",
+      "1. You can request a reward review for eligible earned Session Credits once you meet the minimum threshold set by the platform. Make sure your profile details are verified to avoid delays in processing your request.",
   EnumLocale.txtListenerGuide.name:
-      "1. Cüzdan bakiyeniz, kullanıcı görüşmelerinden kazandığınız toplam Session Credit miktarını gösterir. Bu Session Creditler, görüşme sırasında harcadığınız zaman ve etkileşim için size ödül olarak verilir.\n\n2. Kullanıcılar Session Credit satın alır ve sizin gibi uzmanları arayarak harcar. Sizi ne kadar çok kullanıcı ararsa, cüzdanınızda o kadar çok Session Credit birikir.\n\n3. Kazandığınız Session Creditler biriktirilebilir ve platformun çekim kurallarına bağlı olarak daha sonra para olarak çekilebilir. Cüzdan bakiyenizi büyütmek için aktif olarak etkileşimde bulunmaya devam edin.",
+      "1. Your wallet balance shows the total Session Credits earned from completed sessions. These credits are rewards for your time and engagement during each session.\n\n2. Users purchase Session Credits and spend them to connect with experts like you. The more sessions you complete, the more Session Credits you earn.\n\n3. Eligible Session Credits can be submitted for a reward review according to platform rules. Keep engaging actively to grow your wallet balance.",
   EnumLocale.txtUserGuide.name:
       "1. Cüzdan bakiyeniz, hesabınızda bulunan Session Credit miktarını temsil eder. Bu Session Creditler, premium özelliklere erişmek, uzmanlarla bağlantı kurmak veya uygulama içi satın alımlar yapmak için kullanılabilir.\n\n2. Aşağıdaki seçeneklerden bir abonelik seçerek Session Credit bakiyenizi doldurabilirsiniz. Her abonelik farklı bir Session Credit-dolar oranı sunar, bu nedenle ihtiyaçlarınıza en uygun olanı seçin.\n\n3. Ne kadar çok Session Credit satın alırsanız, değer o kadar iyi olur. Daha yüksek abonelikler genellikle bonus Session Credit veya özel tekliflerle gelir. Önerilen seçenekler için 'En Popüler Abonelik' etiketini kontrol ettiğinizden emin olun.",
   EnumLocale.txtWallet.name: "Cüzdan",
   EnumLocale.txtProfile.name: "Profil",
   EnumLocale.txtRecentCalling.name: "Son Çağrı",
-  EnumLocale.txtEarnMoney.name: "Para Kazan",
+  EnumLocale.txtEarnMoney.name: "Earn Credits",
   EnumLocale.txtPermissionAllow.name: "İzin Ver",
   EnumLocale.txtHostHomeNote.name:
-      "Lütfen yabancılardan gelen para transferi, piyango vb. gibi sahte bilgilere güvenmeyin. Lütfen şifreler, cep telefonu numaraları, otp vb. gibi hiçbir kişisel bilgiyi paylaşmayın. Lütfen çıplaklık, pornografi veya herhangi bir müstehcen eylemde bulunmayın.",
-  EnumLocale.txtWithdrawCoin.name: "Session Credit Çekme",
+      "Please ignore suspicious requests from strangers. Do not share passwords, mobile numbers, OTP codes, private details, or engage in nudity, pornography, or obscene acts.",
+  EnumLocale.txtWithdrawCoin.name: "Request Reward",
   EnumLocale.txtSecurePayment.name: "Güvenli Ödeme",
   EnumLocale.txtGuarantedChat.name: "Garantili Sohbet",
   EnumLocale.txt1CrPayments.name: "1 Cr+ Ödemeler",
   EnumLocale.txtTrustedUser.name: "Güvenilir Kullanıcı",
   EnumLocale.txtReceiveCoin.name: "Session Credit Al",
-  EnumLocale.txtWithdrawAmount.name: "Çekilecek Miktar",
-  EnumLocale.txtWithdraw.name: "Geri çekilmek",
+  EnumLocale.txtWithdrawAmount.name: "Reward Amount",
+  EnumLocale.txtWithdraw.name: "Request",
   EnumLocale.txtCoin.name: "Session Credit",
   EnumLocale.txtAvailableCoinBalance.name: "Mevcut Session Credit Bakiyesi",
-  EnumLocale.txtWithdrawalDetails.name: "Para Çekme Ayrıntıları :-",
+  EnumLocale.txtWithdrawalDetails.name: "Reward Details :-",
   EnumLocale.txtEnterCoinAmount.name: "Session Credit Miktarını Girin",
-  EnumLocale.txtMinimumWithdrawCoin.name:
-      "*Minimum Session Credit Çekim Tutarı :",
+  EnumLocale.txtMinimumWithdrawCoin.name: "*Minimum Session Credit : ",
   EnumLocale.txtMyAmountBalance.name: "Bakiyem Miktarı :",
   EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
-      "Çekilebilir Session Credit Tutarınızı Buradan Görün...",
+      "Check your eligible Session Credit amount here...",
   EnumLocale.txtListenerDetails.name: "Dinleyici Ayrıntıları :-",
   EnumLocale.txtEnterIntroduction.name: "Giriş Giriş",
   EnumLocale.txtTalkLanguages.name: "Konuşma Dilleri :-",
   EnumLocale.txtSAVED.name: "KAYDEDİLDİ",
-  EnumLocale.txtAmountWithdraw.name: "Para Çekme Tutarı",
+  EnumLocale.txtAmountWithdraw.name: "Reward Requested",
   EnumLocale.txtSelectPaymentMode.name: "Ödeme Modunu Seçin",
   EnumLocale.txtAvailableBalance.name: "Mevcut Bakiye",
   EnumLocale.txtSomeThingWentWrong.name: "Bir şeyler ters gitti!!",
@@ -291,14 +290,13 @@ final Map<String, String> trTR = {
   EnumLocale.txtNOte.name: "Not :",
   EnumLocale.txtPleaseFillProfile.name: "Lütfen profili doldurun",
   EnumLocale.txtPleaseEnterWithdrawCoin.name:
-      "Lütfen çekilecek Session Credit miktarını girin",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name:
-      "Lütfen Para Çekme Yöntemini Seçin",
+      "Please Enter Session Credit Amount",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name: "Please Select Reward Method",
   EnumLocale.txtPleaseEnterAllPaymentDetails.name:
       "Lütfen Tüm Ödeme Ayrıntılarını Girin",
   EnumLocale.txtSelectPaymentGateway.name: "Ödeme Ağ Geçidini Seçin",
   EnumLocale.txtNumberOfCoin.name: "Session Credit Sayısı :",
-  EnumLocale.txtWithdrawalID.name: "Para Çekme Kimliği :",
+  EnumLocale.txtWithdrawalID.name: "Reward ID :",
   EnumLocale.txtTransactionID.name: "İşlem Kimliği :",
   EnumLocale.txtViewMore.name: "Daha Fazlasını Gör",
   EnumLocale.txtPaymentMethod.name: "Ödeme yöntemi :",
@@ -311,13 +309,13 @@ final Map<String, String> trTR = {
   EnumLocale.txtPaymentDetails.name: "Ödeme Detayları :",
   EnumLocale.txtAppRestart.name: "Dinleyici İsteğiniz Kabul Edildi",
   EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
-      "Kullanıcının Para Çekme İşlemini Gerçekleştirmek İçin Yeterli Parası Yok",
+      "The user does not have sufficient Session Credits for this request",
   EnumLocale
           .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
-      "Talep edilen Session Credit çekim miktarı yönetici tarafından belirtilen tutardan daha büyük olmalıdır",
+      "Requested Session Credit must be greater than the platform minimum",
   EnumLocale.txtSkip.name: "Atlamak",
   EnumLocale.txtHostHomeDescription.name:
-      "Başkalarına yardım ederken ödüllendiril! Bir uzman olarak, rastgele aramalar sırasında oturum başına Session Credit kazanabilirsiniz. İhtiyacı olan kullanıcılara destek olun ve aynı zamanda kazanın.",
+      "Get rewarded with Session Credits while guiding users through professional conversations and booked sessions.",
   EnumLocale.txtManageYourAccountSettingsSubText.name:
       "Dilinizi değiştirerek, oturumu kapatarak veya hesabınızı kalıcı olarak silerek uygulama deneyiminizi özelleştirin. Değişiklik yapmadan önce her seçeneği dikkatlice incelediğinizden emin olun.",
   EnumLocale.txtSelectLanguage.name: "Dil Seçin",

@@ -96,7 +96,7 @@ final Map<String, String> taIN = {
       "பயன்பாட்டில் உள்ள உள்ளடக்கத்திற்கான பேச்சு என்பதைத் தேர்ந்தெடுக்கவும்",
   EnumLocale.txtRecommendedProfile.name: "பரிந்துரைக்கப்பட்ட சுயவிவரம்",
   EnumLocale.txtSelectCallTypeNote.name:
-      "அந்நியர்களிடமிருந்து பணப் பரிமாற்றம், லாட்டரி போன்ற மோசடியான தகவல்களை நம்ப வேண்டாம். கடவுச்சொற்கள், மொபைல் எண்கள், OTP போன்ற தனிப்பட்ட தகவல்களைப் பகிர வேண்டாம். தயவு செய்து நிர்வாணம், ஆபாசம் அல்லது ஆபாசமான செயல்களில் ஈடுபட வேண்டாம்.",
+      "Please ignore suspicious requests from strangers. Do not share passwords, mobile numbers, OTP codes, private details, or engage in nudity, pornography, or obscene acts.",
   EnumLocale.txtTotalCall.name: "மொத்த அழைப்புகள்",
   EnumLocale.txtRating.name: "மதிப்பீடு",
   EnumLocale.txtExperience.name: "அனுபவம்",
@@ -250,40 +250,39 @@ final Map<String, String> taIN = {
       "உங்களுக்கு சிறந்த சேவையை வழங்க நாங்கள் கடமைப்பட்டுள்ளோம். எங்கள் குழு மற்றும் எங்கள் பணி பற்றி மேலும் அறிக.",
   EnumLocale.txtPaymentMethod.name: "பணம் செலுத்தும் முறை",
   EnumLocale.txtListenerWithdrawDescription.name:
-      "1. பிளாட்ஃபார்ம் நிர்ணயித்த குறைந்தபட்ச திரும்பப் பெறும் வரம்பை நீங்கள் அடைந்தவுடன், நீங்கள் சம்பாதித்த நாணயங்களை உண்மையான பணமாக திரும்பப் பெறலாம். உங்கள் திரும்பப் பெறும் கோரிக்கையைச் செயல்படுத்துவதில் தாமதத்தைத் தவிர்க்க, உங்கள் சுயவிவரம் மற்றும் கட்டண விவரங்கள் முழுமையாகச் சரிபார்க்கப்பட்டிருப்பதை உறுதிசெய்யவும்.",
+      "1. You can request a reward review for eligible earned Session Credits once you meet the minimum threshold set by the platform. Make sure your profile details are verified to avoid delays in processing your request.",
   EnumLocale.txtListenerGuide.name:
-      "1. உங்களை கேட்பவர் என்று அழைக்கும் பயனர்களிடமிருந்து நீங்கள் சம்பாதித்த மொத்த நாணயங்களை உங்கள் வாலட் இருப்பு காட்டுகிறது. அழைப்பின் போது உங்கள் நேரம் மற்றும் ஈடுபாட்டிற்காக இந்த நாணயங்கள் உங்களுக்கு வெகுமதி அளிக்கப்படுகின்றன.\n\n2. பயனர்கள் நாணயங்களை வாங்கி, உங்களைப் போன்ற கேட்பவர்களை அழைப்பதன் மூலம் அவற்றைச் செலவிடுகிறார்கள். அதிகமான பயனர்கள் உங்களை அழைக்கும் போது, ​​உங்கள் பணப்பையில் அதிக நாணயங்களைப் பெறுவீர்கள்.\n\n3. சம்பாதித்த நாணயங்கள் பிளாட்ஃபார்ம் திரும்பப் பெறும் விதிகளைப் பொறுத்து, குவிந்து பின்னர் பணமாகப் பெறலாம். உங்கள் வாலட் பேலன்ஸ் அதிகரிக்க, தீவிரமாக ஈடுபடுங்கள்.",
+      "1. Your wallet balance shows the total Session Credits earned from completed sessions. These credits are rewards for your time and engagement during each session.\n\n2. Users purchase Session Credits and spend them to connect with experts like you. The more sessions you complete, the more Session Credits you earn.\n\n3. Eligible Session Credits can be submitted for a reward review according to platform rules. Keep engaging actively to grow your wallet balance.",
   EnumLocale.txtUserGuide.name:
       "1. உங்கள் பணப்பை இருப்பு உங்கள் கணக்கில் உள்ள நாணயங்களின் எண்ணிக்கையைக் குறிக்கிறது. இந்த நாணயங்கள் பிரீமியம் அம்சங்களை அணுக, கேட்பவர்களுடன் இணைக்க அல்லது பயன்பாட்டில் கொள்முதல் செய்ய பயன்படுத்தப்படலாம்.\n\n2. கீழே உள்ள விருப்பங்களிலிருந்து ஒரு திட்டத்தைத் தேர்ந்தெடுப்பதன் மூலம் உங்கள் நாணய இருப்பை நிரப்பலாம். ஒவ்வொரு திட்டமும் வெவ்வேறு நாணயத்திலிருந்து டாலர் விகிதத்தை வழங்குகிறது, எனவே உங்கள் தேவைகளுக்கு மிகவும் பொருத்தமான ஒன்றைத் தேர்ந்தெடுக்கவும்.\n\n3. நீங்கள் எவ்வளவு நாணயங்களை வாங்குகிறீர்களோ, அவ்வளவு சிறந்த மதிப்பு. உயர் திட்டங்கள் பெரும்பாலும் போனஸ் நாணயங்கள் அல்லது சிறப்புச் சலுகைகளுடன் வருகின்றன. பரிந்துரைக்கப்பட்ட தேர்வுகளுக்கு 'மிகவும் பிரபலமான திட்டம்' குறிச்சொல்லைச் சரிபார்க்கவும்.",
   EnumLocale.txtWallet.name: "பணப்பை",
   EnumLocale.txtProfile.name: "சுயவிவரம்",
   EnumLocale.txtRecentCalling.name: "சமீபத்திய அழைப்பு",
-  EnumLocale.txtEarnMoney.name: "பணம் சம்பாதிக்க",
+  EnumLocale.txtEarnMoney.name: "Earn Credits",
   EnumLocale.txtPermissionAllow.name: "அனுமதி அனுமதி",
   EnumLocale.txtHostHomeNote.name:
-      "அந்நியர்களிடமிருந்து பணப் பரிமாற்றம், லாட்டரி போன்ற மோசடியான தகவல்களை நம்ப வேண்டாம். கடவுச்சொற்கள், மொபைல் எண்கள், OTP போன்ற தனிப்பட்ட தகவல்களைப் பகிர வேண்டாம். தயவு செய்து நிர்வாணம், ஆபாசம் அல்லது ஆபாசமான செயல்களில் ஈடுபட வேண்டாம்.",
-  EnumLocale.txtWithdrawCoin.name: "நாணயத்தை திரும்பப் பெறவும்",
+      "Please ignore suspicious requests from strangers. Do not share passwords, mobile numbers, OTP codes, private details, or engage in nudity, pornography, or obscene acts.",
+  EnumLocale.txtWithdrawCoin.name: "Request Reward",
   EnumLocale.txtSecurePayment.name: "பாதுகாப்பான கட்டணம்",
   EnumLocale.txtGuarantedChat.name: "உத்தரவாதமான அரட்டை",
   EnumLocale.txt1CrPayments.name: "1 Cr+ கொடுப்பனவுகள்",
   EnumLocale.txtTrustedUser.name: "நம்பகமான பயனர்",
   EnumLocale.txtReceiveCoin.name: "நாணயத்தைப் பெறுங்கள்",
-  EnumLocale.txtWithdrawAmount.name: "திரும்பப் பெறும் தொகை",
-  EnumLocale.txtWithdraw.name: "திரும்பப் பெறவும்",
+  EnumLocale.txtWithdrawAmount.name: "Reward Amount",
+  EnumLocale.txtWithdraw.name: "Request",
   EnumLocale.txtCoin.name: "நாணயம்",
   EnumLocale.txtAvailableCoinBalance.name: "கிடைக்கும் நாணய இருப்பு",
-  EnumLocale.txtWithdrawalDetails.name: "திரும்பப் பெறுதல் விவரங்கள்:-",
+  EnumLocale.txtWithdrawalDetails.name: "Reward Details :-",
   EnumLocale.txtEnterCoinAmount.name: "நாணயத்தின் அளவை உள்ளிடவும்",
-  EnumLocale.txtMinimumWithdrawCoin.name:
-      "*குறைந்தபட்சம் திரும்பப் பெறும் நாணயம்:",
+  EnumLocale.txtMinimumWithdrawCoin.name: "*Minimum Session Credit : ",
   EnumLocale.txtMyAmountBalance.name: "எனது இருப்புத் தொகை:",
   EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
-      "உங்கள் திரும்பப் பெறக்கூடிய நாணயத் தொகையை இங்கே பெறுங்கள்...",
+      "Check your eligible Session Credit amount here...",
   EnumLocale.txtListenerDetails.name: "கேட்போர் விவரம்:-",
   EnumLocale.txtEnterIntroduction.name: "அறிமுகத்தை உள்ளிடவும்",
   EnumLocale.txtTalkLanguages.name: "பேச்சு மொழிகள்:-",
   EnumLocale.txtSAVED.name: "சேமிக்கப்பட்டது",
-  EnumLocale.txtAmountWithdraw.name: "தொகை திரும்பப் பெறுதல்",
+  EnumLocale.txtAmountWithdraw.name: "Reward Requested",
   EnumLocale.txtSelectPaymentMode.name: "கட்டண முறையைத் தேர்ந்தெடுக்கவும்",
   EnumLocale.txtAvailableBalance.name: "இருப்பு உள்ளது",
   EnumLocale.txtSomeThingWentWrong.name: "ஏதோ தவறாகிவிட்டது !!",
@@ -300,15 +299,14 @@ final Map<String, String> taIN = {
   EnumLocale.txtNOte.name: "குறிப்பு:",
   EnumLocale.txtPleaseFillProfile.name: "சுயவிவரத்தை நிரப்பவும்",
   EnumLocale.txtPleaseEnterWithdrawCoin.name:
-      "தயவுசெய்து Session Credit தொகையை உள்ளிடவும்",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name:
-      "திரும்பப் பெறும் முறையைத் தேர்ந்தெடுக்கவும்",
+      "Please Enter Session Credit Amount",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name: "Please Select Reward Method",
   EnumLocale.txtPleaseEnterAllPaymentDetails.name:
       "அனைத்து கட்டண விவரங்களையும் உள்ளிடவும்",
   EnumLocale.txtSelectPaymentGateway.name:
       "கட்டண நுழைவாயிலைத் தேர்ந்தெடுக்கவும்",
   EnumLocale.txtNumberOfCoin.name: "நாணயத்தின் எண்ணிக்கை:",
-  EnumLocale.txtWithdrawalID.name: "திரும்பப் பெறுதல் ஐடி:",
+  EnumLocale.txtWithdrawalID.name: "Reward ID :",
   EnumLocale.txtTransactionID.name: "பரிவர்த்தனை ஐடி:",
   EnumLocale.txtViewMore.name: "மேலும் காண்க",
   EnumLocale.txtPaymentMethod.name: "பணம் செலுத்தும் முறை:",
@@ -321,13 +319,13 @@ final Map<String, String> taIN = {
   EnumLocale.txtPaymentDetails.name: "கட்டண விவரங்கள்:",
   EnumLocale.txtAppRestart.name: "உங்கள் கேட்போர் கோரிக்கை ஏற்கப்படுகிறது",
   EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
-      "திரும்பப் பெறுவதற்கு பயனரிடம் போதிய நிதி இல்லை",
+      "The user does not have sufficient Session Credits for this request",
   EnumLocale
           .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
-      "திரும்பப் பெற கோரப்பட்ட நாணயம் நிர்வாகியால் குறிப்பிடப்பட்டதை விட அதிகமாக இருக்க வேண்டும்",
+      "Requested Session Credit must be greater than the platform minimum",
   EnumLocale.txtSkip.name: "தவிர்க்கவும்",
   EnumLocale.txtHostHomeDescription.name:
-      "மற்றவர்களுக்கு உதவும் போது வெகுமதி பெறுங்கள்! கேட்பவராக, சீரற்ற அழைப்புகளின் போது நிமிடத்திற்கு  நாணயங்களைப் பெறலாம். தேவைப்படும் ஒருவரை ஆதரித்து அதே நேரத்தில் சம்பாதிக்கவும்.",
+      "Get rewarded with Session Credits while guiding users through professional conversations and booked sessions.",
   EnumLocale.txtManageYourAccountSettingsSubText.name:
       "மொழியை மாற்றுவதன் மூலம், வெளியேறுதல் அல்லது உங்கள் கணக்கை நிரந்தரமாக நீக்குவதன் மூலம் உங்கள் பயன்பாட்டு அனுபவத்தைத் தனிப்பயனாக்கவும். மாற்றங்களைச் செய்வதற்கு முன் ஒவ்வொரு விருப்பத்தையும் கவனமாக மதிப்பாய்வு செய்வதை உறுதிசெய்யவும்.",
   EnumLocale.txtSelectLanguage.name: "மொழியைத் தேர்ந்தெடுக்கவும்",

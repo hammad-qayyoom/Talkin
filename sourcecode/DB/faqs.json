@@ -88,7 +88,7 @@
   },
   "category": "User",
   "question": "What are the benefits of being a User?",
-  "answer": "Users can connect with verified experts, access mental wellness tools, and track their progress.",
+  "answer": "Users can connect with verified experts, access supportive conversation tools, and track their progress.",
   "createdAt": {
     "$date": "2025-05-13T05:49:41.059Z"
   },

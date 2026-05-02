@@ -15,6 +15,7 @@ import 'package:notisboard/ui/user_flow/splash_screen_page/model/fetch_listener_
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/play_policy_topic_filter.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class HostListenersDetailController extends GetxController {
@@ -139,12 +140,15 @@ class HostListenersDetailController extends GetxController {
 
       var data = await TalkTopicApi.callApi();
       talkTopicsModel = data;
-      talkTopic = data?.talkTopics ?? [];
+      talkTopic = (data?.talkTopics ?? [])
+          .where((topic) => !PlayPolicyTopicFilter.isRestrictedText(
+              '${topic.name ?? ''} ${topic.icon ?? ''}'))
+          .toList();
 
       final savedCategoryIds =
           Database.fetchListenerProfileModel?.data?.categoryIds ?? [];
-      final savedTopics =
-          Database.fetchListenerProfileModel?.data?.talkTopics ?? [];
+      final savedTopics = PlayPolicyTopicFilter.visibleNames(
+          Database.fetchListenerProfileModel?.data?.talkTopics);
       selectedTopics.clear(); // Reset selection
 
       if (savedCategoryIds.isNotEmpty) {
@@ -215,17 +219,16 @@ class HostListenersDetailController extends GetxController {
 
     String talkTopics = selectedTopicNames.isNotEmpty
         ? selectedTopicNames.join(',')
-        : (Database.fetchListenerProfileModel?.data?.talkTopics?.join(',') ??
-            '');
+        : PlayPolicyTopicFilter.visibleNames(
+                Database.fetchListenerProfileModel?.data?.talkTopics)
+            .join(',');
 
     if (selectedTopicName != null && selectedTopicName!.isNotEmpty) {
       talkTopics = selectedTopicName!;
     }
 
-    String categoryIds = selectedCategoryIds.isNotEmpty
-        ? selectedCategoryIds.join(',')
-        : (Database.fetchListenerProfileModel?.data?.categoryIds?.join(',') ??
-            '');
+    String categoryIds =
+        selectedCategoryIds.isNotEmpty ? selectedCategoryIds.join(',') : '';
 
     hostListenerProfileUpdateModel = await HostListenerProfileUpdateApi.callApi(
       name: nameCnt.text,

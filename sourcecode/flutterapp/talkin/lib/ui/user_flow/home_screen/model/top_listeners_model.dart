@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:notisboard/utils/play_policy_topic_filter.dart';
+
 TopListenersModel topListenersModelFromJson(String str) =>
     TopListenersModel.fromJson(json.decode(str));
 
@@ -98,6 +100,7 @@ class TopListeners {
       return value
           .map((item) => item?.toString().trim() ?? '')
           .where((item) => item.isNotEmpty)
+          .where((item) => !PlayPolicyTopicFilter.isRestrictedText(item))
           .toList();
     }
     return [];
@@ -144,6 +147,7 @@ class TopListeners {
           .whereType<Map<String, dynamic>>()
           .map((item) => (item['name'] ?? '').toString().trim())
           .where((item) => item.isNotEmpty)
+          .where((item) => !PlayPolicyTopicFilter.isRestrictedText(item))
           .toList();
     }
     return [];

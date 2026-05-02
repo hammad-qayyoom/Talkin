@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:notisboard/utils/play_policy_topic_filter.dart';
+
 ListenerProfileModel listenerProfileModelFromJson(String str) =>
     ListenerProfileModel.fromJson(json.decode(str));
 
@@ -93,7 +95,8 @@ class ListenerData {
         name: json["name"]?.toString(),
         selfIntro: json["selfIntro"]?.toString(),
         talkTopics: json["talkTopics"] is List
-            ? (json["talkTopics"] as List).map((e) => e.toString()).toList()
+            ? PlayPolicyTopicFilter.visibleNames(
+                (json["talkTopics"] as List).map((e) => e.toString()))
             : [],
         language: json["language"] is List
             ? (json["language"] as List).map((e) => e.toString()).toList()

@@ -10,6 +10,7 @@ import 'package:notisboard/ui/user_flow/host_verification_screen/api/talk_topic_
 import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/expert_proximity_sorter.dart';
+import 'package:notisboard/utils/play_policy_topic_filter.dart';
 
 class ListenersScreenController extends GetxController {
   int selectedIndex = 0;
@@ -183,7 +184,10 @@ class ListenersScreenController extends GetxController {
       var data = await TalkTopicApi.callApi();
       talkTopicsModel = data;
 
-      talkTopic = data?.talkTopics ?? [];
+      talkTopic = (data?.talkTopics ?? [])
+          .where((topic) => !PlayPolicyTopicFilter.isRestrictedText(
+              '${topic.name ?? ''} ${topic.icon ?? ''}'))
+          .toList();
 
       update([Constant.talkAboutTopic]);
     } catch (e, st) {

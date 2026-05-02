@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:notisboard/utils/play_policy_topic_filter.dart';
+
 FetchListenerProfileModel fetchListenerProfileModelFromJson(String str) =>
     FetchListenerProfileModel.fromJson(json.decode(str));
 
@@ -114,7 +116,8 @@ class Data {
         uniqueId: _pickString(json, ["uniqueId", "expertUniqueId"]),
         email: _pickString(json, ["email"]),
         selfIntro: _pickString(json, ["selfIntro", "bio"]),
-        talkTopics: _toStringList(json["talkTopics"]),
+        talkTopics: PlayPolicyTopicFilter.visibleNames(
+            _toStringList(json["talkTopics"])),
         categoryIds: _toStringList(json["categoryIds"]),
         language: _toStringList(json["language"]),
         image: _pickString(json, ["image", "profilePic", "avatar"]),

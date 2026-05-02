@@ -13,6 +13,7 @@ import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/expert_proximity_sorter.dart';
 import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/play_policy_topic_filter.dart';
 
 class HomeScreenController extends GetxController {
   bool isLoading = false;
@@ -67,7 +68,10 @@ class HomeScreenController extends GetxController {
       update([Constant.idHomeCategories]);
 
       final data = await TalkTopicApi.callApi();
-      homeCategories = data?.talkTopics ?? [];
+      homeCategories = (data?.talkTopics ?? [])
+          .where((topic) => !PlayPolicyTopicFilter.isRestrictedText(
+              '${topic.name ?? ''} ${topic.icon ?? ''}'))
+          .toList();
     } finally {
       isCategoryLoading = false;
       update([Constant.idHomeCategories]);

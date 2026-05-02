@@ -94,7 +94,7 @@ final Map<String, String> swKE = <String, String>{
       "Chagua mazungumzo kuhusu maudhui Katika programu",
   EnumLocale.txtRecommendedProfile.name: "Wasifu Unaopendekezwa",
   EnumLocale.txtSelectCallTypeNote.name:
-      "Tafadhali usiamini taarifa za ulaghai kama vile uhamisho wa pesa, bahati nasibu n.k kutoka kwa wageni. Tafadhali usishiriki taarifa zozote za kibinafsi kama vile nenosiri, nambari za simu, otp n.k. Tafadhali usijihusishe na uchi, ponografia au vitendo vyovyote vichafu.",
+      "Please ignore suspicious requests from strangers. Do not share passwords, mobile numbers, OTP codes, private details, or engage in nudity, pornography, or obscene acts.",
   EnumLocale.txtTotalCall.name: "Jumla ya Simu",
   EnumLocale.txtRating.name: "Ukadiriaji",
   EnumLocale.txtExperience.name: "Uzoefu",
@@ -241,40 +241,39 @@ final Map<String, String> swKE = <String, String>{
       "Tumejitolea kukupa huduma bora zaidi. Jifunze zaidi kuhusu timu yetu na dhamira yetu.",
   EnumLocale.txtPaymentMethod.name: "Njia ya Malipo",
   EnumLocale.txtListenerWithdrawDescription.name:
-      "1. Unaweza kutoa sarafu ulizochuma kama pesa halisi pindi tu utakapofikia kiwango cha chini cha uondoaji kilichowekwa na jukwaa. Hakikisha wasifu na maelezo yako ya malipo yamethibitishwa kikamilifu ili kuepuka ucheleweshaji katika kushughulikia ombi lako la kujiondoa.",
+      "1. You can request a reward review for eligible earned Session Credits once you meet the minimum threshold set by the platform. Make sure your profile details are verified to avoid delays in processing your request.",
   EnumLocale.txtListenerGuide.name:
-      "1. Salio lako la pochi linaonyesha jumla ya sarafu ulizopata kutoka kwa watumiaji wanaokuita kama msikilizaji. Sarafu hizi utazawadiwa kwa muda na shughuli yako wakati wa simu.\n\n2. Watumiaji hununua sarafu na kuzitumia kwa kuwapigia simu wasikilizaji kama wewe. Kadiri watumiaji wanavyokupigia simu, ndivyo unavyochuma sarafu nyingi zaidi kwenye pochi yako.\n\n3. Sarafu zinazopatikana zinaweza kukusanywa na baadaye kutolewa kama pesa, kulingana na sheria za uondoaji za jukwaa. Endelea kushiriki kikamilifu ili kukuza salio la pochi yako.",
+      "1. Your wallet balance shows the total Session Credits earned from completed sessions. These credits are rewards for your time and engagement during each session.\n\n2. Users purchase Session Credits and spend them to connect with experts like you. The more sessions you complete, the more Session Credits you earn.\n\n3. Eligible Session Credits can be submitted for a reward review according to platform rules. Keep engaging actively to grow your wallet balance.",
   EnumLocale.txtUserGuide.name:
       "1. Salio lako la pochi linawakilisha idadi ya sarafu zinazopatikana kwenye akaunti yako. Sarafu hizi zinaweza kutumika kufikia vipengele vinavyolipiwa, kuwasiliana na wasikilizaji au kufanya ununuzi wa ndani ya programu.\n\n2. Unaweza kuongeza salio la sarafu yako kwa kuchagua mpango kutoka kwa chaguo zilizo hapa chini. Kila mpango hutoa kiwango tofauti cha sarafu hadi dola, kwa hivyo chagua kile kinachofaa mahitaji yako.\n\n3. Kadiri unavyonunua sarafu nyingi, ndivyo thamani inavyokuwa bora zaidi. Mipango ya juu mara nyingi huja na sarafu za bonasi au matoleo maalum. Hakikisha umeangalia lebo ya 'Mpango Maarufu Zaidi' kwa chaguo zinazopendekezwa.",
   EnumLocale.txtWallet.name: "Mkoba",
   EnumLocale.txtProfile.name: "Wasifu",
   EnumLocale.txtRecentCalling.name: "Simu ya Hivi Karibuni",
-  EnumLocale.txtEarnMoney.name: "Pata Pesa",
+  EnumLocale.txtEarnMoney.name: "Earn Credits",
   EnumLocale.txtPermissionAllow.name: "Ruhusa Ruhusu",
   EnumLocale.txtHostHomeNote.name:
-      "Tafadhali usiamini taarifa za ulaghai kama vile uhamisho wa pesa, bahati nasibu n.k kutoka kwa wageni. Tafadhali usishiriki taarifa zozote za kibinafsi kama vile nenosiri, nambari za simu, otp n.k. Tafadhali usijihusishe na uchi, ponografia au vitendo vyovyote vichafu.",
-  EnumLocale.txtWithdrawCoin.name: "Toa Sarafu",
+      "Please ignore suspicious requests from strangers. Do not share passwords, mobile numbers, OTP codes, private details, or engage in nudity, pornography, or obscene acts.",
+  EnumLocale.txtWithdrawCoin.name: "Request Reward",
   EnumLocale.txtSecurePayment.name: "Malipo Salama",
   EnumLocale.txtGuarantedChat.name: "Gumzo la Uhakikisho",
   EnumLocale.txt1CrPayments.name: "1 Cr+ Malipo",
   EnumLocale.txtTrustedUser.name: "Mtumiaji Anayeaminika",
   EnumLocale.txtReceiveCoin.name: "Pokea Sarafu",
-  EnumLocale.txtWithdrawAmount.name: "Toa Kiasi",
-  EnumLocale.txtWithdraw.name: "Ondoa",
+  EnumLocale.txtWithdrawAmount.name: "Reward Amount",
+  EnumLocale.txtWithdraw.name: "Request",
   EnumLocale.txtCoin.name: "Sarafu",
   EnumLocale.txtAvailableCoinBalance.name: "Salio la Sarafu Inapatikana",
-  EnumLocale.txtWithdrawalDetails.name: "Maelezo ya uondoaji :-",
+  EnumLocale.txtWithdrawalDetails.name: "Reward Details :-",
   EnumLocale.txtEnterCoinAmount.name: "Weka Kiasi cha Sarafu",
-  EnumLocale.txtMinimumWithdrawCoin.name:
-      "*Kima cha chini cha Sarafu ya Kutoa :",
+  EnumLocale.txtMinimumWithdrawCoin.name: "*Minimum Session Credit : ",
   EnumLocale.txtMyAmountBalance.name: "Salio Langu la Kiasi:",
   EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
-      "Pata Kiasi chako cha Sarafu Unayoweza Kuitoa Hapa...",
+      "Check your eligible Session Credit amount here...",
   EnumLocale.txtListenerDetails.name: "Maelezo ya Wasikilizaji:-",
   EnumLocale.txtEnterIntroduction.name: "Ingiza Utangulizi",
   EnumLocale.txtTalkLanguages.name: "Lugha za Maongezi:-",
   EnumLocale.txtSAVED.name: "IMEOKOKA",
-  EnumLocale.txtAmountWithdraw.name: "Uondoaji wa Kiasi",
+  EnumLocale.txtAmountWithdraw.name: "Reward Requested",
   EnumLocale.txtSelectPaymentMode.name: "Chagua Njia ya Malipo",
   EnumLocale.txtAvailableBalance.name: "Salio Inapatikana",
   EnumLocale.txtSomeThingWentWrong.name: "Kuna kitu kimeharibika!!",
@@ -290,14 +289,13 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtNOte.name: "Kumbuka :",
   EnumLocale.txtPleaseFillProfile.name: "Tafadhali jaza wasifu",
   EnumLocale.txtPleaseEnterWithdrawCoin.name:
-      "Tafadhali ingiza kiasi cha Session Credit",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name:
-      "Tafadhali Chagua Njia ya Kuondoa",
+      "Please Enter Session Credit Amount",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name: "Please Select Reward Method",
   EnumLocale.txtPleaseEnterAllPaymentDetails.name:
       "Tafadhali Weka Maelezo Yote ya Malipo",
   EnumLocale.txtSelectPaymentGateway.name: "Chagua Njia ya Malipo",
   EnumLocale.txtNumberOfCoin.name: "Idadi ya Sarafu :",
-  EnumLocale.txtWithdrawalID.name: "Kitambulisho cha uondoaji :",
+  EnumLocale.txtWithdrawalID.name: "Reward ID :",
   EnumLocale.txtTransactionID.name: "Kitambulisho cha muamala :",
   EnumLocale.txtViewMore.name: "Tazama Zaidi",
   EnumLocale.txtPaymentMethod.name: "Njia ya Malipo :",
@@ -312,13 +310,13 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtPaymentDetails.name: "Maelezo ya Malipo :",
   EnumLocale.txtAppRestart.name: "Ombi Lako la Msikilizaji Limekubaliwa",
   EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
-      "Mtumiaji Hana Pesa za Kutosha Kufanya Uondoaji",
+      "The user does not have sufficient Session Credits for this request",
   EnumLocale
           .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
-      "Sarafu Iliyoombwa Kutoa Lazima Iwe Kubwa Kuliko Ilivyobainishwa na Msimamizi",
+      "Requested Session Credit must be greater than the platform minimum",
   EnumLocale.txtSkip.name: "Ruka",
   EnumLocale.txtHostHomeDescription.name:
-      "Pata zawadi unapowasaidia wengine! Kama msikilizaji, unaweza kupata sarafu  kwa dakika wakati wa simu za nasibu. Saidia mtu anayehitaji na upate pesa kwa wakati mmoja.",
+      "Get rewarded with Session Credits while guiding users through professional conversations and booked sessions.",
   EnumLocale.txtManageYourAccountSettingsSubText.name:
       "Weka mapendeleo kwenye matumizi ya programu yako kwa kubadilisha lugha, kuondoka, au kufuta kabisa akaunti yako. Hakikisha unakagua kila chaguo kwa uangalifu kabla ya kufanya mabadiliko.",
   EnumLocale.txtSelectLanguage.name: "Chagua Lugha",

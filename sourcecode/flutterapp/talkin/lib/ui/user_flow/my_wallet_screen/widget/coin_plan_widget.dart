@@ -354,56 +354,7 @@ class PaymentOptionBottomSheet extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if ((Platform.isAndroid &&
-                                  Database.settingApiModel?.data
-                                          ?.isRazorpayEnabled ==
-                                      true) ||
-                              (Platform.isIOS &&
-                                  Database.settingApiModel?.data
-                                          ?.isRazorpayIosEnabled ==
-                                      true))
-                            PaymentOptionTile(
-                              index: 0,
-                              title: 'Razorpay',
-                              controller: controller,
-                              image: AppAsset.razorpay,
-                            ),
-                          if ((Platform.isAndroid &&
-                                  Database.settingApiModel?.data
-                                          ?.isStripeEnabled ==
-                                      true) ||
-                              (Platform.isIOS &&
-                                  Database.settingApiModel?.data
-                                          ?.isStripeIosEnabled ==
-                                      true))
-                            PaymentOptionTile(
-                              index: 1,
-                              title: 'Stripe',
-                              controller: controller,
-                              image: AppAsset.stripe,
-                            ),
-                          if ((Platform.isAndroid &&
-                                  Database.settingApiModel?.data
-                                          ?.isFlutterwaveEnabled ==
-                                      true) ||
-                              (Platform.isIOS &&
-                                  Database.settingApiModel?.data
-                                          ?.isFlutterwaveIosEnabled ==
-                                      true))
-                            PaymentOptionTile(
-                              index: 2,
-                              title: 'Flutterwave',
-                              controller: controller,
-                              image: AppAsset.flutterWave,
-                            ),
-                          if ((Platform.isAndroid &&
-                                  Database.settingApiModel?.data
-                                          ?.isGooglePlayEnabled ==
-                                      true) ||
-                              (Platform.isIOS &&
-                                  Database.settingApiModel?.data
-                                          ?.isGooglePlayIosEnabled ==
-                                      true))
+                          if (Platform.isAndroid || Platform.isIOS)
                             PaymentOptionTile(
                               index: 3,
                               title: 'In App Purchase',
@@ -411,54 +362,6 @@ class PaymentOptionBottomSheet extends StatelessWidget {
                               image: Platform.isIOS
                                   ? AppAsset.appStoreImage
                                   : AppAsset.googleIcon,
-                              width: 50,
-                              height: 26,
-                            ),
-                          if ((Platform.isAndroid &&
-                                  Database.settingApiModel?.data
-                                          ?.isCashfreeAndroidEnabled ==
-                                      true) ||
-                              (Platform.isIOS &&
-                                  Database.settingApiModel?.data
-                                          ?.isCashfreeIosEnabled ==
-                                      true))
-                            PaymentOptionTile(
-                              index: 4,
-                              title: 'Cash Free',
-                              controller: controller,
-                              image: AppAsset.cashFreeImage,
-                              width: 50,
-                              height: 26,
-                            ),
-                          if ((Platform.isAndroid &&
-                                  Database.settingApiModel?.data
-                                          ?.isPaystackAndroidEnabled ==
-                                      true) ||
-                              (Platform.isIOS &&
-                                  Database.settingApiModel?.data
-                                          ?.isPaystackIosEnabled ==
-                                      true))
-                            PaymentOptionTile(
-                              index: 5,
-                              title: 'Pay Stack',
-                              controller: controller,
-                              image: AppAsset.payStackImage,
-                              width: 50,
-                              height: 26,
-                            ),
-                          if ((Platform.isAndroid &&
-                                  Database.settingApiModel?.data
-                                          ?.isPaypalAndroidEnabled ==
-                                      true) ||
-                              (Platform.isIOS &&
-                                  Database.settingApiModel?.data
-                                          ?.isPaypalIosEnabled ==
-                                      true))
-                            PaymentOptionTile(
-                              index: 6,
-                              title: 'Pay Pal',
-                              controller: controller,
-                              image: AppAsset.payPalImage,
                               width: 50,
                               height: 26,
                             ),

@@ -35,7 +35,7 @@ class HostWalletScreenAppBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Track earnings and withdraw securely',
+                  'Track earned credits and reward requests',
                   style: AppFontStyle.fontStyleW500(
                     fontSize: isTablet ? 12 : 11,
                     fontColor: AppColors.redesignMutedText,
@@ -241,7 +241,7 @@ class WithdrawCoinView extends StatelessWidget {
               borderRadius: BorderRadius.circular(999),
             ),
             child: Text(
-              'Payout',
+              'Rewards',
               style: AppFontStyle.fontStyleW600(
                 fontSize: 10,
                 fontColor: AppColors.redesignMutedText,
@@ -403,7 +403,7 @@ class BottomView extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Fast payouts, secure transactions and a trusted community.',
+                'Fast reviews, secure sessions and a trusted community.',
                 style: AppFontStyle.fontStyleW500(
                   fontSize: 11,
                   fontColor: AppColors.redesignMutedText,

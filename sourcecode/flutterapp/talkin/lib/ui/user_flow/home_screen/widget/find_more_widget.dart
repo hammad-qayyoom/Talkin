@@ -41,18 +41,12 @@ class FindMoreWidget extends StatelessWidget {
     final combined =
         '${category.icon ?? ''} ${category.name ?? ''}'.toLowerCase();
 
-    if (combined.contains('doctor') ||
-        combined.contains('medical') ||
-        combined.contains('stethoscope')) {
-      return Icons.medical_services_outlined;
-    }
-
     if (combined.contains('family') || combined.contains('relationship')) {
       return Icons.family_restroom_outlined;
     }
 
-    if (combined.contains('mental') || combined.contains('mind')) {
-      return Icons.psychology_outlined;
+    if (combined.contains('stress') || combined.contains('mind')) {
+      return Icons.spa_outlined;
     }
 
     if (combined.contains('work') ||

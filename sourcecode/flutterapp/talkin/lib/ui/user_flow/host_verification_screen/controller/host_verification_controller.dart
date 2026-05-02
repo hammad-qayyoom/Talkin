@@ -19,6 +19,7 @@ import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topi
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/play_policy_topic_filter.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class HostVerificationController extends GetxController {
@@ -269,7 +270,10 @@ class HostVerificationController extends GetxController {
       var data = await TalkTopicApi.callApi();
       talkTopicsModel = data;
 
-      talkTopic = data?.talkTopics ?? [];
+      talkTopic = (data?.talkTopics ?? [])
+          .where((topic) => !PlayPolicyTopicFilter.isRestrictedText(
+              '${topic.name ?? ''} ${topic.icon ?? ''}'))
+          .toList();
 
       update([Constant.idIdentityProof]);
     } catch (e, st) {

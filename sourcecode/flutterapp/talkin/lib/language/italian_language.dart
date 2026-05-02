@@ -95,7 +95,7 @@ final Map<String, String> itIT = <String, String>{
       "Seleziona 'Parla di' per il contenuto nell'app",
   EnumLocale.txtRecommendedProfile.name: "Profilo consigliato",
   EnumLocale.txtSelectCallTypeNote.name:
-      "Si prega di non fidarsi di informazioni fraudolente come trasferimenti di denaro, lotterie, ecc. provenienti da sconosciuti. Si prega di non condividere informazioni personali come password, numeri di cellulare, OTP, ecc. Si prega di non partecipare a scene di nudo, pornografia o altri atti osceni.",
+      "Please ignore suspicious requests from strangers. Do not share passwords, mobile numbers, OTP codes, private details, or engage in nudity, pornography, or obscene acts.",
   EnumLocale.txtTotalCall.name: "Chiamate totali",
   EnumLocale.txtRating.name: "Valutazione",
   EnumLocale.txtExperience.name: "Esperienza",
@@ -244,39 +244,39 @@ final Map<String, String> itIT = <String, String>{
       "Ci impegniamo a offrirti il ​​miglior servizio. Scopri di più sul nostro team e sulla nostra missione.",
   EnumLocale.txtPaymentMethod.name: "Metodo di pagamento",
   EnumLocale.txtListenerWithdrawDescription.name:
-      "1. Puoi prelevare le monete guadagnate come denaro reale una volta raggiunta la soglia minima di prelievo stabilita dalla piattaforma. Assicurati che il tuo profilo e i dati di pagamento siano completamente verificati per evitare ritardi nell'elaborazione della tua richiesta di prelievo.",
+      "1. You can request a reward review for eligible earned Session Credits once you meet the minimum threshold set by the platform. Make sure your profile details are verified to avoid delays in processing your request.",
   EnumLocale.txtListenerGuide.name:
-      "1. Il saldo del tuo portafoglio mostra il totale delle monete che hai guadagnato dagli utenti che ti chiamano come ascoltatore. Queste monete ti vengono assegnate come ricompensa per il tempo e il coinvolgimento durante la chiamata.\n\n2. Gli utenti acquistano monete e le spendono chiamando ascoltatori come te. Più utenti ti chiamano, più monete guadagni nel tuo portafoglio.\n\n3. Le monete guadagnate possono essere accumulate e successivamente prelevate come denaro, a seconda delle regole di prelievo della piattaforma. Continua a interagire attivamente per far crescere il saldo del tuo portafoglio.",
+      "1. Your wallet balance shows the total Session Credits earned from completed sessions. These credits are rewards for your time and engagement during each session.\n\n2. Users purchase Session Credits and spend them to connect with experts like you. The more sessions you complete, the more Session Credits you earn.\n\n3. Eligible Session Credits can be submitted for a reward review according to platform rules. Keep engaging actively to grow your wallet balance.",
   EnumLocale.txtUserGuide.name:
       "1. Il saldo del tuo portafoglio rappresenta il numero di monete disponibili sul tuo account. Queste monete possono essere utilizzate per accedere a funzionalità premium, connettersi con gli ascoltatori o effettuare acquisti in-app. 2. Puoi ricaricare il tuo saldo di monete selezionando un piano tra le opzioni seguenti. Ogni piano offre un diverso rapporto monete/dollaro, quindi scegli quello più adatto alle tue esigenze. 3. Più monete acquisti, maggiore è il valore. I piani più costosi spesso includono monete bonus o offerte speciali. Assicurati di controllare la sezione 'Piano più popolare' per le opzioni consigliate.",
   EnumLocale.txtWallet.name: "Portafoglio",
   EnumLocale.txtProfile.name: "Profilo",
   EnumLocale.txtRecentCalling.name: "Chiamate recenti",
-  EnumLocale.txtEarnMoney.name: "Guadagnare soldi",
+  EnumLocale.txtEarnMoney.name: "Earn Credits",
   EnumLocale.txtPermissionAllow.name: "Permesso Consenti",
   EnumLocale.txtHostHomeNote.name:
-      "Si prega di non fidarsi di informazioni fraudolente come trasferimenti di denaro, lotterie, ecc. provenienti da sconosciuti. Si prega di non condividere informazioni personali come password, numeri di cellulare, OTP, ecc. Si prega di non partecipare a scene di nudo, pornografia o altri atti osceni.",
-  EnumLocale.txtWithdrawCoin.name: "Preleva monete",
+      "Please ignore suspicious requests from strangers. Do not share passwords, mobile numbers, OTP codes, private details, or engage in nudity, pornography, or obscene acts.",
+  EnumLocale.txtWithdrawCoin.name: "Request Reward",
   EnumLocale.txtSecurePayment.name: "Pagamento sicuro",
   EnumLocale.txtGuarantedChat.name: "Chat garantita",
   EnumLocale.txt1CrPayments.name: "Pagamenti da 1 Cr+",
   EnumLocale.txtTrustedUser.name: "Utente fidato",
   EnumLocale.txtReceiveCoin.name: "Ricevi moneta",
-  EnumLocale.txtWithdrawAmount.name: "Importo prelevato",
-  EnumLocale.txtWithdraw.name: "Ritirare",
+  EnumLocale.txtWithdrawAmount.name: "Reward Amount",
+  EnumLocale.txtWithdraw.name: "Request",
   EnumLocale.txtCoin.name: "Coniare",
   EnumLocale.txtAvailableCoinBalance.name: "Saldo monete disponibile",
-  EnumLocale.txtWithdrawalDetails.name: "Dettagli del prelievo:",
+  EnumLocale.txtWithdrawalDetails.name: "Reward Details :-",
   EnumLocale.txtEnterCoinAmount.name: "Inserisci l'importo della moneta",
-  EnumLocale.txtMinimumWithdrawCoin.name: "*Prelievo minimo di monete:",
+  EnumLocale.txtMinimumWithdrawCoin.name: "*Minimum Session Credit : ",
   EnumLocale.txtMyAmountBalance.name: "Il mio importo Saldo:",
   EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
-      "Ottieni qui l'importo delle tue monete prelevabili...",
+      "Check your eligible Session Credit amount here...",
   EnumLocale.txtListenerDetails.name: "Dettagli dell'ascoltatore:",
   EnumLocale.txtEnterIntroduction.name: "Inserisci Introduzione",
   EnumLocale.txtTalkLanguages.name: "Parlare Lingue :-",
   EnumLocale.txtSAVED.name: "SALVATO",
-  EnumLocale.txtAmountWithdraw.name: "Importo prelevato",
+  EnumLocale.txtAmountWithdraw.name: "Reward Requested",
   EnumLocale.txtSelectPaymentMode.name: "Seleziona la modalità di pagamento",
   EnumLocale.txtAvailableBalance.name: "Saldo disponibile",
   EnumLocale.txtSomeThingWentWrong.name: "Qualcosa è andato storto!!",
@@ -292,14 +292,13 @@ final Map<String, String> itIT = <String, String>{
   EnumLocale.txtNOte.name: "Nota:",
   EnumLocale.txtPleaseFillProfile.name: "Si prega di compilare il profilo",
   EnumLocale.txtPleaseEnterWithdrawCoin.name:
-      "Inserisci l'importo Session Credit",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name:
-      "Seleziona il metodo di prelievo",
+      "Please Enter Session Credit Amount",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name: "Please Select Reward Method",
   EnumLocale.txtPleaseEnterAllPaymentDetails.name:
       "Inserisci tutti i dettagli di pagamento",
   EnumLocale.txtSelectPaymentGateway.name: "Seleziona il gateway di pagamento",
   EnumLocale.txtNumberOfCoin.name: "Numero di monete:",
-  EnumLocale.txtWithdrawalID.name: "ID prelievo:",
+  EnumLocale.txtWithdrawalID.name: "Reward ID :",
   EnumLocale.txtTransactionID.name: "ID transazione:",
   EnumLocale.txtViewMore.name: "Visualizza altro",
   EnumLocale.txtPaymentMethod.name: "Metodo di pagamento:",
@@ -313,13 +312,13 @@ final Map<String, String> itIT = <String, String>{
   EnumLocale.txtAppRestart.name:
       "La tua richiesta di ascolto è stata accettata",
   EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
-      "L'utente non ha fondi sufficienti per effettuare il prelievo",
+      "The user does not have sufficient Session Credits for this request",
   EnumLocale
           .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
-      "La moneta richiesta per il prelievo deve essere maggiore di quella specificata dall'amministratore",
+      "Requested Session Credit must be greater than the platform minimum",
   EnumLocale.txtSkip.name: "Saltare",
   EnumLocale.txtHostHomeDescription.name:
-      "Ricevi ricompense aiutando gli altri! Come ascoltatore, puoi guadagnare  monete al minuto durante le chiamate casuali. Sostieni chi ha bisogno e guadagna allo stesso tempo.",
+      "Get rewarded with Session Credits while guiding users through professional conversations and booked sessions.",
   EnumLocale.txtManageYourAccountSettingsSubText.name:
       "Personalizza la tua esperienza con l'app cambiando la lingua, disconnettendoti o eliminando definitivamente il tuo account. Assicurati di esaminare attentamente ogni opzione prima di apportare modifiche.",
   EnumLocale.txtSelectLanguage.name: "Seleziona la lingua",

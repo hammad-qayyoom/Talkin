@@ -22,6 +22,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>GIDClientID</key>
+	<string>488115751804-cfbjg8p58dpi6k1la5cfrq48ia2m7imm.apps.googleusercontent.com</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -29,26 +31,57 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>CFBundleURLTypes</key>
-    	<array>
-    		<dict>
-    			<key>CFBundleTypeRole</key>
-    			<string>Editor</string>
-    			<key>CFBundleURLName</key>
-    			<string>com.notisboard.mobile</string>
-    			<key>CFBundleURLSchemes</key>
-    			<array>
-    				<string>com.googleusercontent.apps.488115751804-cfbjg8p58dpi6k1la5cfrq48ia2m7imm</string>
-    			</array>
-    		</dict>
-    	</array>
-    <key>NSCameraUsageDescription</key>
-    <string>Take a photo for display</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>Take a video for display</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Read your photos for display</string>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.notisboard.mobile</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.488115751804-cfbjg8p58dpi6k1la5cfrq48ia2m7imm</string>
+			</array>
+		</dict>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>mailto</string>
+		<string>upi</string>
+		<string>amazonpay</string>
+		<string>bhim</string>
+		<string>bobupi</string>
+		<string>credpay</string>
+		<string>freecharge</string>
+		<string>in.fampay.app</string>
+		<string>indusmobile</string>
+		<string>jupiter</string>
+		<string>kiwi</string>
+		<string>kotakbank</string>
+		<string>mobikwik</string>
+		<string>myjio</string>
+		<string>navi</string>
+		<string>omnicard</string>
+		<string>paytm</string>
+		<string>paytmmp</string>
+		<string>payzapp</string>
+		<string>phonepe</string>
+		<string>popclubapp</string>
+		<string>sbiyono</string>
+		<string>shriramone</string>
+		<string>slice-upi</string>
+		<string>tez</string>
+		<string>whatsapp</string>
+	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Notisboard uses the camera for profile photos, verification uploads, video calls, and card scanning during payments.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Notisboard uses the microphone for voice messages and audio or video calls.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Notisboard lets you choose photos or videos for your profile, chats, feed posts, and verification uploads.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We use your location to show nearest experts first.</string>
+	<string>Notisboard uses your location while you use the app to show nearby experts and improve recommendations.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Notisboard uses your location to show nearby experts and improve recommendations while you use the app.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

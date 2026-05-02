@@ -890,7 +890,7 @@ class NoteView extends StatelessWidget {
   static final Color _mutedText = AppColors.redesignMutedText;
   static const String _title = 'Expert Guidelines :';
   static const String _description =
-      'Keep every session professional and safe. Do not ask users for passwords, OTPs, phone numbers, personal details, or money transfers. Report suspicious requests and avoid any obscene or inappropriate content.';
+      'Keep every session professional and safe. Do not ask users for passwords, OTPs, phone numbers, private details, or off-platform transfers. Report suspicious requests and avoid any obscene or inappropriate content.';
 
   @override
   Widget build(BuildContext context) {

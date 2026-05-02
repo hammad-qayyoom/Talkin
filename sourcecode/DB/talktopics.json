@@ -2,7 +2,7 @@
   "_id": {
     "$oid": "6821c64d01b9e00a24797fd3"
   },
-  "name": "Health Issues",
+  "name": "Daily Challenges",
   "createdAt": {
     "$date": "2025-05-12T09:58:37.086Z"
   },
@@ -38,7 +38,7 @@
   "_id": {
     "$oid": "68411c56709097c01ae6027f"
   },
-  "name": "Mental Health",
+  "name": "Stress & Balance",
   "createdAt": {
     "$date": "2025-06-05T04:25:58.109Z"
   },
@@ -62,7 +62,7 @@
   "_id": {
     "$oid": "68411c6e709097c01ae60285"
   },
-  "name": "Financial Problems",
+  "name": "Life Planning",
   "createdAt": {
     "$date": "2025-06-05T04:26:22.684Z"
   },

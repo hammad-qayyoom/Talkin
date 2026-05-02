@@ -98,7 +98,7 @@ final Map<String, String> frCH = <String, String>{
       "Sélectionnez « Parler de » pour le contenu dans l'application",
   EnumLocale.txtRecommendedProfile.name: "Profil recommandé",
   EnumLocale.txtSelectCallTypeNote.name:
-      "Veuillez ne pas faire confiance aux informations frauduleuses provenant d'inconnus, comme les virements bancaires, les loteries, etc. Veuillez ne pas divulguer d'informations personnelles telles que les mots de passe, les numéros de téléphone portable, les OTP, etc. Veuillez éviter la nudité, la pornographie et tout acte obscène.",
+      "Please ignore suspicious requests from strangers. Do not share passwords, mobile numbers, OTP codes, private details, or engage in nudity, pornography, or obscene acts.",
   EnumLocale.txtTotalCall.name: "Nombre total d'appels",
   EnumLocale.txtRating.name: "Notation",
   EnumLocale.txtExperience.name: "Expérience",
@@ -247,40 +247,39 @@ final Map<String, String> frCH = <String, String>{
       "Nous nous engageons à vous offrir le meilleur service. Découvrez notre équipe et notre mission.",
   EnumLocale.txtPaymentMethod.name: "Mode de paiement",
   EnumLocale.txtListenerWithdrawDescription.name:
-      "1. Vous pouvez retirer vos jetons gagnés en argent réel dès que vous atteignez le seuil de retrait minimum fixé par la plateforme. Assurez-vous que votre profil et vos informations de paiement sont entièrement vérifiés pour éviter tout retard dans le traitement de votre demande de retrait.",
+      "1. You can request a reward review for eligible earned Session Credits once you meet the minimum threshold set by the platform. Make sure your profile details are verified to avoid delays in processing your request.",
   EnumLocale.txtListenerGuide.name:
-      "1. Le solde de votre portefeuille indique le total des pièces gagnées grâce aux appels des utilisateurs. Ces pièces vous sont versées en récompense de votre temps et de votre engagement pendant l'appel. 2. Les utilisateurs achètent des pièces et les dépensent en appelant des utilisateurs comme vous. Plus vous appelez, plus vous gagnez de pièces dans votre portefeuille. 3. Les pièces gagnées peuvent être cumulées et retirées ultérieurement, selon les règles de retrait de la plateforme. Continuez à interagir activement pour faire fructifier votre portefeuille.",
+      "1. Your wallet balance shows the total Session Credits earned from completed sessions. These credits are rewards for your time and engagement during each session.\n\n2. Users purchase Session Credits and spend them to connect with experts like you. The more sessions you complete, the more Session Credits you earn.\n\n3. Eligible Session Credits can be submitted for a reward review according to platform rules. Keep engaging actively to grow your wallet balance.",
   EnumLocale.txtUserGuide.name:
       "1. Le solde de votre portefeuille représente le nombre de pièces disponibles sur votre compte. Ces pièces peuvent être utilisées pour accéder aux fonctionnalités premium, communiquer avec vos auditeurs ou effectuer des achats intégrés.\n\n2. Vous pouvez recharger votre solde de pièces en sélectionnant un forfait parmi les options ci-dessous. Chaque forfait offre un taux de conversion pièce-dollar différent ; choisissez donc celui qui correspond le mieux à vos besoins.\n\n3. Plus vous achetez de pièces, meilleure est la valeur. Les forfaits les plus élevés offrent souvent des pièces bonus ou des offres spéciales. N'oubliez pas de consulter la section « Forfait le plus populaire » pour connaître les options recommandées.",
   EnumLocale.txtWallet.name: "Portefeuille",
   EnumLocale.txtProfile.name: "Profil",
   EnumLocale.txtRecentCalling.name: "Appel récent",
-  EnumLocale.txtEarnMoney.name: "Gagner de l'argent",
+  EnumLocale.txtEarnMoney.name: "Earn Credits",
   EnumLocale.txtPermissionAllow.name: "Autorisation Autoriser",
   EnumLocale.txtHostHomeNote.name:
-      "Veuillez ne pas faire confiance aux informations frauduleuses provenant d'inconnus, comme les virements bancaires, les loteries, etc. Veuillez ne pas divulguer d'informations personnelles telles que les mots de passe, les numéros de téléphone portable, les OTP, etc. Veuillez éviter la nudité, la pornographie et tout acte obscène.",
-  EnumLocale.txtWithdrawCoin.name: "Retirer des pièces",
+      "Please ignore suspicious requests from strangers. Do not share passwords, mobile numbers, OTP codes, private details, or engage in nudity, pornography, or obscene acts.",
+  EnumLocale.txtWithdrawCoin.name: "Request Reward",
   EnumLocale.txtSecurePayment.name: "Paiement sécurisé",
   EnumLocale.txtGuarantedChat.name: "Chat garanti",
   EnumLocale.txt1CrPayments.name: "1 Cr+ Paiements",
   EnumLocale.txtTrustedUser.name: "Utilisateur de confiance",
   EnumLocale.txtReceiveCoin.name: "Recevoir une pièce",
-  EnumLocale.txtWithdrawAmount.name: "Montant retiré",
-  EnumLocale.txtWithdraw.name: "Retirer",
+  EnumLocale.txtWithdrawAmount.name: "Reward Amount",
+  EnumLocale.txtWithdraw.name: "Request",
   EnumLocale.txtCoin.name: "Pièce de monnaie",
   EnumLocale.txtAvailableCoinBalance.name: "Solde de pièces disponible",
-  EnumLocale.txtWithdrawalDetails.name: "Détails du retrait :-",
+  EnumLocale.txtWithdrawalDetails.name: "Reward Details :-",
   EnumLocale.txtEnterCoinAmount.name: "Entrez le montant de la pièce",
-  EnumLocale.txtMinimumWithdrawCoin.name:
-      "*Montant minimum de retrait de pièces :",
+  EnumLocale.txtMinimumWithdrawCoin.name: "*Minimum Session Credit : ",
   EnumLocale.txtMyAmountBalance.name: "Mon solde de montant :",
   EnumLocale.txtGetYourWithdrawableCoinAmountHere.name:
-      "Obtenez votre montant de pièces retirables ici...",
+      "Check your eligible Session Credit amount here...",
   EnumLocale.txtListenerDetails.name: "Détails de l'auditeur :-",
   EnumLocale.txtEnterIntroduction.name: "Entrez l'introduction",
   EnumLocale.txtTalkLanguages.name: "Parler Langues :-",
   EnumLocale.txtSAVED.name: "SAUVÉ",
-  EnumLocale.txtAmountWithdraw.name: "Montant retiré",
+  EnumLocale.txtAmountWithdraw.name: "Reward Requested",
   EnumLocale.txtSelectPaymentMode.name: "Sélectionnez le mode de paiement",
   EnumLocale.txtAvailableBalance.name: "Solde disponible",
   EnumLocale.txtSomeThingWentWrong.name: "Quelque chose s'est mal passé !!",
@@ -296,15 +295,14 @@ final Map<String, String> frCH = <String, String>{
   EnumLocale.txtNOte.name: "Note :",
   EnumLocale.txtPleaseFillProfile.name: "Veuillez remplir le profil",
   EnumLocale.txtPleaseEnterWithdrawCoin.name:
-      "Veuillez saisir le montant de Session Credit",
-  EnumLocale.txtPleaseSelectWithdrawMethod.name:
-      "Veuillez sélectionner la méthode de retrait",
+      "Please Enter Session Credit Amount",
+  EnumLocale.txtPleaseSelectWithdrawMethod.name: "Please Select Reward Method",
   EnumLocale.txtPleaseEnterAllPaymentDetails.name:
       "Veuillez saisir tous les détails de paiement",
   EnumLocale.txtSelectPaymentGateway.name:
       "Sélectionnez la passerelle de paiement",
   EnumLocale.txtNumberOfCoin.name: "Nombre de pièces :",
-  EnumLocale.txtWithdrawalID.name: "ID de retrait :",
+  EnumLocale.txtWithdrawalID.name: "Reward ID :",
   EnumLocale.txtTransactionID.name: "ID de transaction :",
   EnumLocale.txtViewMore.name: "Voir plus",
   EnumLocale.txtPaymentMethod.name: "Mode de paiement :",
@@ -317,13 +315,13 @@ final Map<String, String> frCH = <String, String>{
   EnumLocale.txtPaymentDetails.name: "Détails de paiement :",
   EnumLocale.txtAppRestart.name: "Vos demandes d'auditeur sont acceptées",
   EnumLocale.txtTheUserDoesNotHaveSufficientFundsToMakeTheWithdrawal.name:
-      "L'utilisateur ne dispose pas de fonds suffisants pour effectuer le retrait",
+      "The user does not have sufficient Session Credits for this request",
   EnumLocale
           .txtWithdrawalRequestedCoinMustBeGreaterThanSpecifiedByTheAdmin.name:
-      "La pièce de retrait demandée doit être supérieure à celle spécifiée par l'administrateur",
+      "Requested Session Credit must be greater than the platform minimum",
   EnumLocale.txtSkip.name: "Sauter",
   EnumLocale.txtHostHomeDescription.name:
-      "Soyez récompensé en aidant les autres! En tant qu'auditeur, vous pouvez gagner 20 pièces par minute lors d'appels aléatoires. Soutenez une personne dans le besoin et gagnez en même temps.",
+      "Get rewarded with Session Credits while guiding users through professional conversations and booked sessions.",
   EnumLocale.txtManageYourAccountSettingsSubText.name:
       "Personnalisez votre expérience utilisateur en changeant la langue, en vous déconnectant ou en supprimant définitivement votre compte. Assurez-vous de bien examiner chaque option avant d'effectuer des modifications.",
   EnumLocale.txtSelectLanguage.name: "Sélectionner la langue",

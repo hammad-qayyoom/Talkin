@@ -1,4 +1,4 @@
-#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"
 #include "Generated.xcconfig"
 GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO
 CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO
