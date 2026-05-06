@@ -14,7 +14,6 @@ enum EnumLocale {
   txtYouHaveNewUser,
   txtGetRegister,
   txtMobileLogin,
-  txtGoogleLogin,
   txtQuickLogin,
   txtEnterMail,
   txtEnterYourName,

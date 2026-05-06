@@ -24,7 +24,6 @@ final Map<String, String> bnIN = <String, String>{
   EnumLocale.txtGetRegister.name: "রেজিস্টার পান",
   EnumLocale.txtMobileLogin.name: "মোবাইল লগইন",
   EnumLocale.txtSearchCountryCode.name: "দেশের কোড অনুসন্ধান করুন",
-  EnumLocale.txtGoogleLogin.name: "গুগল লগইন",
   EnumLocale.txtQuickLogin.name: "দ্রুত লগ ইন করুন",
   EnumLocale.txtEnterMail.name: "মেইল আইডি দিন",
   EnumLocale.txtEnterYourName.name: "আপনার নাম লিখুন",

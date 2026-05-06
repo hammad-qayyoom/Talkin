@@ -24,7 +24,6 @@ final Map<String, String> ruRU = <String, String>{
   EnumLocale.txtGetRegister.name: "Получить регистрацию",
   EnumLocale.txtMobileLogin.name: "Мобильный вход",
   EnumLocale.txtSearchCountryCode.name: "Поиск кода страны",
-  EnumLocale.txtGoogleLogin.name: "Вход через Google",
   EnumLocale.txtQuickLogin.name: "Быстрый вход",
   EnumLocale.txtEnterMail.name: "Введите почтовый идентификатор",
   EnumLocale.txtEnterYourName.name: "Введите свое имя",

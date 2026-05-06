@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -16,10 +14,10 @@ import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/services/notification_service/notification_services.dart';
+import 'package:notisboard/utils/startup_helper.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'localization/localizations_delegate.dart';
 import 'utils/utils.dart';
-import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 
 AppLifecycleState? currentAppLifecycleState;
 
@@ -39,59 +37,71 @@ Future<void> _preloadSplashFonts() async {
   }
 }
 
-Future<String?> _getSafeFcmToken() async {
-  try {
-    if (GetPlatform.isIOS) {
-      await FirebaseMessaging.instance.requestPermission(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
+Future<void> _initializePostLaunchServices() async {
+  unawaited(AppStartupHelper.runTask<void>(
+    "Wakelock init",
+    () => WakelockPlus.enable(),
+    timeout: const Duration(seconds: 2),
+  ));
 
-      // On iOS, getToken can fail early until APNS token is ready.
-      for (int i = 0; i < 10; i++) {
-        final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-        if (apnsToken != null && apnsToken.isNotEmpty) {
-          break;
-        }
-        await Future<void>.delayed(const Duration(milliseconds: 300));
-      }
-    }
+  unawaited(AppStartupHelper.runTask<void>(
+    "Ringtone service init",
+    () => RingtoneService.init(),
+    timeout: const Duration(seconds: 2),
+  ));
 
-    return await FirebaseMessaging.instance.getToken();
-  } catch (e, stackTrace) {
-    Utils.showLog("FCM token init error => $e");
-    log("FCM token init error", error: e, stackTrace: stackTrace);
-    return null;
-  }
-}
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await _preloadSplashFonts();
-
-  await Firebase.initializeApp();
-  await GetStorage.init();
-  WakelockPlus.enable();
-  await RingtoneService.init();
-  final identity = (await MobileDeviceIdentifier().getDeviceId())!;
-  final fcmToken = await _getSafeFcmToken();
+  final identity = await AppStartupHelper.getSafeDeviceId();
+  final fcmToken = await AppStartupHelper.runTask<String?>(
+    "FCM token init",
+    () => AppStartupHelper.getSafeFcmToken(),
+    timeout: const Duration(seconds: 5),
+  );
 
   Utils.showLog("Device Id => $identity");
   Utils.showLog("FCM Token => $fcmToken");
 
-  await Database.init(identity, fcmToken ?? "");
-  await NotificationServices.init();
-
-  // Set up Awesome Notifications listeners
-  AwesomeNotifications().setListeners(
-    onActionReceivedMethod:
-        NotificationServices.onAwesomeNotificationActionReceived,
+  await AppStartupHelper.runTask<void>(
+    "Local database startup",
+    () => Database.init(identity, fcmToken ?? ""),
+    timeout: const Duration(seconds: 8),
   );
 
-  await NotificationServices.firebaseInit();
+  await AppStartupHelper.runTask<void>(
+    "Notification services init",
+    () => NotificationServices.init(),
+    timeout: const Duration(seconds: 5),
+  );
+
+  await AppStartupHelper.runTask<void>(
+    "Firebase notification listeners init",
+    () => NotificationServices.firebaseInit(),
+    timeout: const Duration(seconds: 5),
+  );
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  GoogleFonts.config.allowRuntimeFetching = false;
+
+  await AppStartupHelper.runTask<FirebaseApp>(
+    "Firebase initialize",
+    () => Firebase.initializeApp(),
+    timeout: const Duration(seconds: 8),
+  );
+  await AppStartupHelper.runTask<void>(
+    "Local storage initialize",
+    () async {
+      await GetStorage.init();
+    },
+    timeout: const Duration(seconds: 4),
+  );
+  await _preloadSplashFonts();
 
   runApp(const MyApp());
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    unawaited(_initializePostLaunchServices());
+  });
 }
 
 class MyApp extends StatefulWidget {

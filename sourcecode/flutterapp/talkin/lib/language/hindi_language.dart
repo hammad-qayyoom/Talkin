@@ -24,7 +24,6 @@ final Map<String, String> hiIN = <String, String>{
   EnumLocale.txtGetRegister.name: "रजिस्टर करें",
   EnumLocale.txtMobileLogin.name: "मोबाइल लॉगिन",
   EnumLocale.txtSearchCountryCode.name: "देश कोड खोजें",
-  EnumLocale.txtGoogleLogin.name: "गूगल लॉगिन",
   EnumLocale.txtQuickLogin.name: "त्वरित लॉग इन",
   EnumLocale.txtEnterMail.name: "मेल आईडी दर्ज करें",
   EnumLocale.txtEnterYourName.name: "अपना नाम दर्ज करें",

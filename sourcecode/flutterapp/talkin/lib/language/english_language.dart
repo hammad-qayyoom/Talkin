@@ -24,7 +24,6 @@ final Map<String, String> enUS = {
   EnumLocale.txtGetRegister.name: "Get Register",
   EnumLocale.txtMobileLogin.name: "Mobile Login",
   EnumLocale.txtSearchCountryCode.name: "Search country code",
-  EnumLocale.txtGoogleLogin.name: "Google Login",
   EnumLocale.txtQuickLogin.name: "Quick Log In",
   EnumLocale.txtEnterMail.name: "Enter Email id",
   EnumLocale.txtEnterYourName.name: "Enter your name",

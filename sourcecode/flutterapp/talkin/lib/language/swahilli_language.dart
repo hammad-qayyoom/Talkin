@@ -24,7 +24,6 @@ final Map<String, String> swKE = <String, String>{
   EnumLocale.txtGetRegister.name: "Pata Usajili",
   EnumLocale.txtMobileLogin.name: "Kuingia kwa Simu ya Mkononi",
   EnumLocale.txtSearchCountryCode.name: "Tafuta msimbo wa nchi",
-  EnumLocale.txtGoogleLogin.name: "Ingia kwenye Google",
   EnumLocale.txtQuickLogin.name: "Ingia Haraka",
   EnumLocale.txtEnterMail.name: "Ingiza kitambulisho cha barua",
   EnumLocale.txtEnterYourName.name: "Ingiza jina lako",

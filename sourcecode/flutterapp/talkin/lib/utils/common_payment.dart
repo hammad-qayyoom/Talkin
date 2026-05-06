@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:incodes_payment/methods/flutter_wave/flutter_wave_service.dart';
 import 'package:incodes_payment/incodes_payment_services.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/database.dart';
@@ -28,7 +29,12 @@ Future<void> razorPay({
   Utils.showLog("Razorpay Payment (Incodes) starting...$amount");
 
   try {
-    final razorKey = Database.settingApiModel?.data?.razorpayKeySecret ?? '';
+    final configuredKeyId =
+        (Database.settingApiModel?.data?.razorpayKeyId ?? '').trim();
+    final configuredSecret =
+        (Database.settingApiModel?.data?.razorpayKeySecret ?? '').trim();
+    final razorKey =
+        configuredKeyId.startsWith('rzp_') ? configuredKeyId : configuredSecret;
     final email = Database.fetchLoginUserProfileModel?.user?.email;
 
     final currency =
@@ -175,13 +181,14 @@ Future<void> flutterWave({
       return;
     }
 
-    await IncodesPaymentServices.flutterWavePayment(
+    await FlutterWaveService.openFlutterWave(
       context: context,
       publicKey: publicKey,
       currency: currency,
       amount: amount.toString(),
       customerName: customerName,
       customerEmail: customerEmail.toString(),
+      paymentGatewayName: "Flutterwave",
       onPaymentSuccess: onPaymentSuccess,
       onPaymentFailure: _showPaymentFailedToast,
     );

@@ -29,26 +29,50 @@ import 'package:notisboard/utils/utils.dart';
 
 import '../api/aap_configuration_api.dart';
 
+Future<T?> _guardedSplashTask<T>(
+  String label,
+  Future<T?> Function() task, {
+  Duration timeout = const Duration(seconds: 8),
+}) async {
+  try {
+    return await task().timeout(timeout);
+  } catch (error, stackTrace) {
+    Utils.showLog("$label failed => $error");
+    log(label, error: error, stackTrace: stackTrace);
+    return null;
+  }
+}
+
 class SplashScreenController extends GetxController {
   SettingApiModel? settingApiModel;
   FetchLoginUserProfileModel? fetchLoginUserProfileModel;
   FetchListenerProfileModel? fetchListenerProfileModel;
   IpApiResponseModel? ipApiResponseModel;
   AppConfigurationModel? appConfigurationModel;
+  bool _didScheduleSplashNavigation = false;
 
   Future<void> syncInitialBalances() async {
     if (Database.isGuestMode) return;
     if (fetchLoginUserProfileModel?.status != true) return;
 
     if (fetchLoginUserProfileModel?.user?.isListener == true) {
-      ListenerCoinModel? listenerCoinModel = await HostCoinApi.callApi();
+      ListenerCoinModel? listenerCoinModel =
+          await _guardedSplashTask<ListenerCoinModel>(
+        "Listener balance sync",
+        () => HostCoinApi.callApi(),
+        timeout: const Duration(seconds: 6),
+      );
       if (listenerCoinModel?.status == true) {
         Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
       }
       return;
     }
 
-    UserCoinModel? userCoinModel = await UserCoinApi.callApi();
+    UserCoinModel? userCoinModel = await _guardedSplashTask<UserCoinModel>(
+      "User balance sync",
+      () => UserCoinApi.callApi(),
+      timeout: const Duration(seconds: 6),
+    );
     if (userCoinModel?.status == true) {
       Database.onSetUserCoin((userCoinModel?.coin ?? 0).toString());
     }
@@ -57,81 +81,139 @@ class SplashScreenController extends GetxController {
   @override
   void onInit() {
     log('Enter splash screen controller');
-    init();
+    unawaited(init());
     super.onInit();
   }
 
   Future<void> init() async {
-    /// for privacy policy link and app live key
-    appConfigurationModel = await AppConfigurationApi.callApi();
-    Database.appConfigurationModel = appConfigurationModel;
-    final token = await FirebaseAccessToken.onGet();
-    settingApiModel = await SettingApi.callApi();
-    Database.settingApiModel = settingApiModel;
-    if (Database.isLogin &&
-        Database.loginUserFirebaseId.isNotEmpty &&
-        (token ?? '').isNotEmpty) {
-      fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(
-          loginUserId: Database.loginUserFirebaseId, token: token ?? '');
-    }
-    Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
-
-    if (Database.loginUserFirebaseId.isEmpty &&
-        (fetchLoginUserProfileModel?.user?.firebaseId ?? '').isNotEmpty) {
-      Database.onSetLoginUserFirebaseId(
-          fetchLoginUserProfileModel?.user?.firebaseId ?? '');
-    }
-
-    ///version update dialog show in splash screen not go main screen
-    final bool waitter = await checkForceUpdate();
-    if (waitter) return;
-    if (Database.settingApiModel?.data?.isApplicationLive == false) {
-      log("Application is not live...");
-      Get.dialog(
-        barrierColor: AppColors.black.withValues(alpha: 0.8),
-        Dialog(
-          backgroundColor: AppColors.transparent,
-          shadowColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          child: const AppNotLiveDialog(),
-        ),
+    bool shouldScheduleNavigation = true;
+    try {
+      /// for privacy policy link and app live key
+      appConfigurationModel = await _guardedSplashTask<AppConfigurationModel>(
+        "App configuration",
+        () => AppConfigurationApi.callApi(),
       );
-    }
-
-    // if (fetchLoginUserProfileModel?.status == false || fetchLoginUserProfileModel?.message == "User not found in the database." || token == null) {
-    //   log("Login user not found, redirecting to main screen...");
-    //   Get.offAllNamed(AppRoutes.main);
-    //   return;
-    // }
-
-    if (fetchLoginUserProfileModel?.user?.isListener == true) {
-      fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(
-          loginListenerId:
-              Database.fetchLoginUserProfileModel?.user?.listenerId ?? '');
-      Database.onSetLoginUserId(fetchListenerProfileModel!.data!.id!);
-      if (fetchListenerProfileModel?.status == false) {
-        Utils.showLog(fetchListenerProfileModel?.message ?? "");
+      Database.appConfigurationModel = appConfigurationModel;
+      final token = await _guardedSplashTask<String>(
+        "Firebase access token",
+        () => FirebaseAccessToken.onGet(),
+        timeout: const Duration(seconds: 5),
+      );
+      settingApiModel = await _guardedSplashTask<SettingApiModel>(
+        "Setting api",
+        () => SettingApi.callApi(),
+      );
+      Database.settingApiModel = settingApiModel;
+      if (Database.isLogin &&
+          Database.loginUserFirebaseId.isNotEmpty &&
+          (token ?? '').isNotEmpty) {
+        fetchLoginUserProfileModel =
+            await _guardedSplashTask<FetchLoginUserProfileModel>(
+          "Login profile fetch",
+          () => FetchLoginUserProfileApi.callApi(
+            loginUserId: Database.loginUserFirebaseId,
+            token: token ?? '',
+          ),
+        );
       }
-      Database.fetchListenerProfileModel = fetchListenerProfileModel;
+      Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
+
+      if (Database.loginUserFirebaseId.isEmpty &&
+          (fetchLoginUserProfileModel?.user?.firebaseId ?? '').isNotEmpty) {
+        Database.onSetLoginUserFirebaseId(
+            fetchLoginUserProfileModel?.user?.firebaseId ?? '');
+      }
+
+      ///version update dialog show in splash screen not go main screen
+      final bool waitter = await checkForceUpdate();
+      if (waitter) {
+        shouldScheduleNavigation = false;
+        return;
+      }
+      if (Database.settingApiModel?.data?.isApplicationLive == false) {
+        log("Application is not live...");
+        Get.dialog(
+          barrierColor: AppColors.black.withValues(alpha: 0.8),
+          Dialog(
+            backgroundColor: AppColors.transparent,
+            shadowColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            child: const AppNotLiveDialog(),
+          ),
+        );
+        shouldScheduleNavigation = false;
+        return;
+      }
+
+      // if (fetchLoginUserProfileModel?.status == false || fetchLoginUserProfileModel?.message == "User not found in the database." || token == null) {
+      //   log("Login user not found, redirecting to main screen...");
+      //   Get.offAllNamed(AppRoutes.main);
+      //   return;
+      // }
+
+      if (fetchLoginUserProfileModel?.user?.isListener == true) {
+        fetchListenerProfileModel =
+            await _guardedSplashTask<FetchListenerProfileModel>(
+          "Listener profile fetch",
+          () => FetchListenerProfileAPi.callApi(
+            loginListenerId:
+                Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
+          ),
+        );
+        final listenerUserId = fetchListenerProfileModel?.data?.id ?? '';
+        if (listenerUserId.isNotEmpty) {
+          Database.onSetLoginUserId(listenerUserId);
+        }
+        if (fetchListenerProfileModel?.status == false) {
+          Utils.showLog(fetchListenerProfileModel?.message ?? "");
+        }
+        Database.fetchListenerProfileModel = fetchListenerProfileModel;
+      }
+
+      await syncInitialBalances();
+
+      ipApiResponseModel = await _guardedSplashTask<IpApiResponseModel>(
+        "IP location fetch",
+        () => IpApi.callApi(),
+        timeout: const Duration(seconds: 5),
+      );
+      final countryCode = ipApiResponseModel?.countryCode;
+      if ((countryCode ?? '').isNotEmpty) {
+        Database.onSetSelectedCountryCode(countryCode ?? '');
+      }
+      if (ipApiResponseModel?.lat != null && ipApiResponseModel?.lon != null) {
+        await Database.onSetUserLatitude(ipApiResponseModel!.lat!);
+        await Database.onSetUserLongitude(ipApiResponseModel!.lon!);
+      }
+      log("Database.selectedCountryCode :: ${Database.selectedCountryCode}");
+      Database.getDialCode();
+    } catch (error, stackTrace) {
+      Utils.showLog("Splash init failed => $error");
+      log("Splash init failed", error: error, stackTrace: stackTrace);
+    } finally {
+      if (shouldScheduleNavigation) {
+        _scheduleSplashNavigation();
+      }
     }
+  }
 
-    await syncInitialBalances();
-
-    ipApiResponseModel = await IpApi.callApi();
-    Database.onSetSelectedCountryCode(ipApiResponseModel?.countryCode ?? '');
-    if (ipApiResponseModel?.lat != null && ipApiResponseModel?.lon != null) {
-      await Database.onSetUserLatitude(ipApiResponseModel!.lat!);
-      await Database.onSetUserLongitude(ipApiResponseModel!.lon!);
-    }
-    log("Database.selectedCountryCode :: ${Database.selectedCountryCode}");
-    Database.getDialCode();
-
-    // await splashScreen();
+  void _scheduleSplashNavigation() {
+    if (_didScheduleSplashNavigation) return;
+    _didScheduleSplashNavigation = true;
+    unawaited(splashScreen());
   }
 
   Future<bool> checkForceUpdate() async {
-    final packageInfo = await PackageInfo.fromPlatform();
+    final packageInfo = await _guardedSplashTask<PackageInfo>(
+      "Package info",
+      () => PackageInfo.fromPlatform(),
+      timeout: const Duration(seconds: 3),
+    );
+    if (packageInfo == null) {
+      _scheduleSplashNavigation();
+      return false;
+    }
     final currentVersion = packageInfo.version;
     Utils.showLog("Current version ==> ${packageInfo.version}");
     // 🔴 Replace this with API response
@@ -143,7 +225,7 @@ class SplashScreenController extends GetxController {
     Utils.showLog("Latest  version ==> $latestVersion");
     if (latestVersion.isEmpty) {
       Utils.showLog("⚠️ Latest version missing from API");
-      splashScreen();
+      _scheduleSplashNavigation();
       return false;
     }
     if (isUpdateRequired(currentVersion, latestVersion)) {
@@ -153,14 +235,14 @@ class SplashScreenController extends GetxController {
       );
       return true;
     } else {
-      splashScreen();
+      _scheduleSplashNavigation();
       return false;
     }
   }
 
   bool isUpdateRequired(String current, String latest) {
-    final currentParts = current.split('.').map(int.parse).toList();
-    final latestParts = latest.split('.').map(int.parse).toList();
+    final currentParts = _parseVersionParts(current);
+    final latestParts = _parseVersionParts(latest);
 
     for (int i = 0; i < latestParts.length; i++) {
       if (currentParts[i] < latestParts[i]) return true;
@@ -168,81 +250,116 @@ class SplashScreenController extends GetxController {
     }
     return false;
   }
+
+  List<int> _parseVersionParts(String version) {
+    final parts = version
+        .split('+')
+        .first
+        .split('-')
+        .first
+        .split('.')
+        .map((part) => int.tryParse(part.replaceAll(RegExp(r'[^0-9]'), '')))
+        .map((part) => part ?? 0)
+        .toList();
+
+    while (parts.length < 3) {
+      parts.add(0);
+    }
+    return parts.take(3).toList();
+  }
 }
 
 Future<void> splashScreen() async {
-  Timer(Duration(seconds: 2), () async {
+  Timer(const Duration(seconds: 2), () async {
     // Check User Is Login Or Not...
-    final token = await FirebaseAccessToken.onGet();
-
-    log("isLogin :: ${Database.isLogin}");
-    log("isFillProfile :: ${Database.isFillProfile}");
-    log("isSeenOnBoarding :: ${Database.isSeenOnBoarding}");
-    log("Database.fetchLoginUserProfileModel?.user?.isListener :: ${Database.fetchLoginUserProfileModel?.user?.isListener}");
-
-    if (Database.settingApiModel?.data?.isApplicationLive == false) {
-      log("Application is not live...");
-      Get.dialog(
-        barrierColor: AppColors.black.withValues(alpha: 0.8),
-        Dialog(
-          backgroundColor: AppColors.transparent,
-          shadowColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          child: const AppNotLiveDialog(),
-        ),
+    try {
+      final token = await _guardedSplashTask<String>(
+        "Splash Firebase token",
+        () => FirebaseAccessToken.onGet(),
+        timeout: const Duration(seconds: 5),
       );
-    } else {
-      // Onboarding screens are disabled: mark as seen and always continue with main/login flow.
-      if (!Database.isSeenOnBoarding) {
-        await Database.onSetSeenOnboarding(true);
-      }
 
-      final hasValidProfile =
-          Database.fetchLoginUserProfileModel?.status == true &&
-              Database.fetchLoginUserProfileModel?.user != null;
+      log("isLogin :: ${Database.isLogin}");
+      log("isFillProfile :: ${Database.isFillProfile}");
+      log("isSeenOnBoarding :: ${Database.isSeenOnBoarding}");
+      log("Database.fetchLoginUserProfileModel?.user?.isListener :: ${Database.fetchLoginUserProfileModel?.user?.isListener}");
 
-      if (!hasValidProfile ||
-          Database.fetchLoginUserProfileModel?.message ==
-              "User not found in the database." ||
-          token == null) {
-        Utils.showLog(
-            "No valid login profile. Trying authenticated guest browsing.");
+      if (Database.settingApiModel?.data?.isApplicationLive == false) {
+        log("Application is not live...");
+        Get.dialog(
+          barrierColor: AppColors.black.withValues(alpha: 0.8),
+          Dialog(
+            backgroundColor: AppColors.transparent,
+            shadowColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            child: const AppNotLiveDialog(),
+          ),
+        );
+      } else {
+        // Onboarding screens are disabled: mark as seen and always continue with main/login flow.
+        if (!Database.isSeenOnBoarding) {
+          await Database.onSetSeenOnboarding(true);
+        }
 
-        final guestSessionReady =
-            await GuestBrowsingSetup.ensureAuthenticatedGuestSession();
-        if (guestSessionReady) {
-          Utils.showLog("Authenticated guest session is ready.");
+        final hasValidProfile =
+            Database.fetchLoginUserProfileModel?.status == true &&
+                Database.fetchLoginUserProfileModel?.user != null;
+
+        if (!hasValidProfile ||
+            Database.fetchLoginUserProfileModel?.message ==
+                "User not found in the database." ||
+            token == null) {
+          Utils.showLog(
+              "No valid login profile. Trying authenticated guest browsing.");
+
+          final guestSessionReady = await _guardedSplashTask<bool>(
+                "Guest browsing setup",
+                () => GuestBrowsingSetup.ensureAuthenticatedGuestSession(),
+                timeout: const Duration(seconds: 12),
+              ) ??
+              false;
+          if (guestSessionReady) {
+            Utils.showLog("Authenticated guest session is ready.");
+            Get.offAllNamed(AppRoutes.bottomBar);
+            return;
+          }
+
+          Utils.showLog("Guest session setup fallback: limited browsing mode.");
+          await Database.onSetIsLogin(false);
+          await Database.onSetGuestMode(true);
+          await Database.onSetFillProfile(false);
           Get.offAllNamed(AppRoutes.bottomBar);
           return;
-        }
-
-        Utils.showLog("Guest session setup fallback: limited browsing mode.");
-        await Database.onSetIsLogin(false);
-        await Database.onSetGuestMode(true);
-        await Database.onSetFillProfile(false);
-        Get.offAllNamed(AppRoutes.bottomBar);
-        return;
-      } else {
-        Utils.showLog("lllllllllllllllllllllllllllllllllllllll");
-        if (Database.isLogin == true) {
-          if (Database.isFillProfile == true) {
-            if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
-              Get.toNamed(AppRoutes.hostBottomBar);
+        } else {
+          Utils.showLog("lllllllllllllllllllllllllllllllllllllll");
+          if (Database.isLogin == true) {
+            if (Database.isFillProfile == true) {
+              if (Database.fetchLoginUserProfileModel?.user?.isListener ==
+                  true) {
+                Get.toNamed(AppRoutes.hostBottomBar);
+              } else {
+                Get.toNamed(AppRoutes.bottomBar);
+              }
             } else {
-              Get.toNamed(AppRoutes.bottomBar);
+              Get.offAllNamed(AppRoutes.fillProfileScreen, arguments: [
+                Database.loginUserName,
+                Database.loginUserProfilePic,
+                Database.loginUserEmail,
+              ]);
             }
           } else {
-            Get.offAllNamed(AppRoutes.fillProfileScreen, arguments: [
-              Database.loginUserName,
-              Database.loginUserProfilePic,
-              Database.loginUserEmail,
-            ]);
+            Get.offAllNamed(AppRoutes.bottomBar);
           }
-        } else {
-          Get.offAllNamed(AppRoutes.bottomBar);
         }
       }
+    } catch (error, stackTrace) {
+      Utils.showLog("Splash navigation failed => $error");
+      log("Splash navigation failed", error: error, stackTrace: stackTrace);
+      await Database.onSetIsLogin(false);
+      await Database.onSetGuestMode(true);
+      await Database.onSetFillProfile(false);
+      Get.offAllNamed(AppRoutes.bottomBar);
     }
   });
 }

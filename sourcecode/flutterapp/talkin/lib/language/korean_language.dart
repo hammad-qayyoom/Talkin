@@ -23,7 +23,6 @@ final Map<String, String> koKR = {
   EnumLocale.txtGetRegister.name: "등록하기",
   EnumLocale.txtMobileLogin.name: "모바일 로그인",
   EnumLocale.txtSearchCountryCode.name: "국가 코드 검색",
-  EnumLocale.txtGoogleLogin.name: "구글 로그인",
   EnumLocale.txtQuickLogin.name: "빠른 로그인",
   EnumLocale.txtEnterMail.name: "메일 ID를 입력하세요",
   EnumLocale.txtEnterYourName.name: "이름을 입력하세요",

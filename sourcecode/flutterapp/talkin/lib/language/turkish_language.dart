@@ -24,7 +24,6 @@ final Map<String, String> trTR = {
   EnumLocale.txtGetRegister.name: "Kayıt Ol",
   EnumLocale.txtMobileLogin.name: "Mobil Giriş",
   EnumLocale.txtSearchCountryCode.name: "Ülke kodunu ara",
-  EnumLocale.txtGoogleLogin.name: "Google Girişi",
   EnumLocale.txtQuickLogin.name: "Hızlı Giriş",
   EnumLocale.txtEnterMail.name: "E-posta kimliğini girin",
   EnumLocale.txtEnterYourName.name: "Adınızı girin",

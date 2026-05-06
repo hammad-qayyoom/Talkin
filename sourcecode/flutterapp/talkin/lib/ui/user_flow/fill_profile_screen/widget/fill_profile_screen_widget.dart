@@ -374,9 +374,8 @@ class FillProfileEditInfoView extends StatelessWidget {
                         fontSize: 15,
                         textInputAction: TextInputAction.next,
                         textInputType: TextInputType.emailAddress,
-                        readOnly: Database.loginType == 1 ||
-                            Database.loginType == 4 ||
-                            Database.loginType == 5,
+                        readOnly:
+                            Database.loginType == 4 || Database.loginType == 5,
                       ),
                     ],
                     const SizedBox(height: 12),

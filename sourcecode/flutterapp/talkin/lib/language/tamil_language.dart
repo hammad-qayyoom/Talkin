@@ -24,7 +24,6 @@ final Map<String, String> taIN = {
   EnumLocale.txtGetRegister.name: "பதிவு பெறவும்",
   EnumLocale.txtMobileLogin.name: "மொபைல் உள்நுழைவு",
   EnumLocale.txtSearchCountryCode.name: "நாட்டின் குறியீட்டைத் தேடுங்கள்",
-  EnumLocale.txtGoogleLogin.name: "Google உள்நுழைவு",
   EnumLocale.txtQuickLogin.name: "விரைவான உள்நுழைவு",
   EnumLocale.txtEnterMail.name: "அஞ்சல் ஐடியை உள்ளிடவும்",
   EnumLocale.txtEnterYourName.name: "உங்கள் பெயரை உள்ளிடவும்",

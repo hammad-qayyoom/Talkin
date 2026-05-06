@@ -1,24 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 import 'package:notisboard/ui/user_flow/main_screen/api/get_firebase_custom_token_api.dart';
 import 'package:notisboard/ui/user_flow/main_screen/api/get_firebase_uid_by_device_u_uid_api.dart';
 import 'package:notisboard/ui/user_flow/main_screen/api/login_api.dart';
 import 'package:notisboard/utils/database.dart';
+import 'package:notisboard/utils/startup_helper.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class GuestBrowsingSetup {
   static Future<bool> ensureAuthenticatedGuestSession() async {
     try {
-      final identity =
-          (await MobileDeviceIdentifier().getDeviceId())?.trim() ?? '';
+      final identity = await AppStartupHelper.getSafeDeviceId();
       if (identity.isEmpty) {
         Utils.showLog("Guest setup: device identity missing.");
         return false;
       }
 
       await Database.onSetIdentity(identity);
-      final fcmToken = await FirebaseMessaging.instance.getToken();
+      final fcmToken = await AppStartupHelper.getSafeFcmToken();
       await Database.onSetFcmToken(fcmToken ?? "");
 
       final uidResponse = await GetFirebaseUidByDeviceApi.callApi(

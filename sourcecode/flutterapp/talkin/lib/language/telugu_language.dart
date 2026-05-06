@@ -24,7 +24,6 @@ final Map<String, String> teIN = <String, String>{
   EnumLocale.txtGetRegister.name: "రిజిస్టర్ పొందండి",
   EnumLocale.txtMobileLogin.name: "మొబైల్ లాగిన్",
   EnumLocale.txtSearchCountryCode.name: "దేశం కోడ్‌ని శోధించండి",
-  EnumLocale.txtGoogleLogin.name: "Google లాగిన్",
   EnumLocale.txtQuickLogin.name: "త్వరిత లాగిన్",
   EnumLocale.txtEnterMail.name: "మెయిల్ ఐడిని నమోదు చేయండి",
   EnumLocale.txtEnterYourName.name: "మీ పేరును నమోదు చేయండి",

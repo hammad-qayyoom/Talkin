@@ -49,8 +49,6 @@ dependencies:
   intl: ^0.20.2
   firebase_core: ^4.2.1
   firebase_auth: ^6.1.2
-#  google_sign_in: ^7.1.1
-  google_sign_in: ^6.2.2
   firebase_messaging: ^16.0.4
   connectivity_plus: ^7.0.0
   mobile_device_identifier: ^0.0.3
@@ -147,6 +145,7 @@ flutter:
     - assets/all_language.json
     - assets/audio/
     - assets/lottie/
+    - google_fonts/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

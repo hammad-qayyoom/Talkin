@@ -24,7 +24,6 @@ final Map<String, String> idID = <String, String>{
   EnumLocale.txtGetRegister.name: "Dapatkan Daftar",
   EnumLocale.txtMobileLogin.name: "Masuk Seluler",
   EnumLocale.txtSearchCountryCode.name: "Cari kode negara",
-  EnumLocale.txtGoogleLogin.name: "Masuk ke Google",
   EnumLocale.txtQuickLogin.name: "Masuk Cepat",
   EnumLocale.txtEnterMail.name: "Masukkan ID email",
   EnumLocale.txtEnterYourName.name: "Masukkan nama Anda",

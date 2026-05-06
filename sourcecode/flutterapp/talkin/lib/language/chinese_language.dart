@@ -21,7 +21,6 @@ final Map<String, String> zhCN = <String, String>{
   EnumLocale.txtGetRegister.name: "获取注册",
   EnumLocale.txtMobileLogin.name: "手机登录",
   EnumLocale.txtSearchCountryCode.name: "搜索国家代码",
-  EnumLocale.txtGoogleLogin.name: "Google 登录",
   EnumLocale.txtQuickLogin.name: "快速登录",
   EnumLocale.txtEnterMail.name: "输入邮件ID",
   EnumLocale.txtEnterYourName.name: "输入您的姓名",

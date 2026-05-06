@@ -24,7 +24,6 @@ final Map<String, String> ptPT = {
   EnumLocale.txtGetRegister.name: "Obter Registro",
   EnumLocale.txtMobileLogin.name: "Login móvel",
   EnumLocale.txtSearchCountryCode.name: "Pesquisar código do país",
-  EnumLocale.txtGoogleLogin.name: "Login do Google",
   EnumLocale.txtQuickLogin.name: "Login rápido",
   EnumLocale.txtEnterMail.name: "Digite o ID do e-mail",
   EnumLocale.txtEnterYourName.name: "Digite seu nome",

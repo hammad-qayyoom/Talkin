@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/socket/socket_service.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_login_user_profile_api.dart';
@@ -242,11 +241,6 @@ class Database {
   static Future<void> onLogOut() async {
     final identityDevice = identity;
     final fcmTokenFirebase = fcmToken;
-
-    if (loginType == 1) {
-      Utils.showLog("Google Logout Success");
-      await GoogleSignIn().signOut();
-    }
 
     await FirebaseAuth.instance.signOut();
     await localStorage.erase();

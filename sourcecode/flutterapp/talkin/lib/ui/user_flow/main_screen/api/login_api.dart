@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:notisboard/ui/user_flow/main_screen/model/login_model.dart';
 import 'package:notisboard/utils/api.dart';
@@ -22,25 +23,47 @@ class LoginApi {
     int? age,
     bool? acceptTerms,
     String? acceptanceSource,
-    // String? password,
+    String? password,
     String? confirmPassword,
     String? authToken,
     String? authUid,
   }) async {
     Utils.showLog("Login Api Calling...");
 
-    final token = await FirebaseAccessToken.onGet();
+    String? token = authToken?.trim();
+    if (token?.startsWith(ApiParams.tokenStartPoint) == true) {
+      token = token!.substring(ApiParams.tokenStartPoint.length).trim();
+    }
+    if ((token ?? '').isEmpty) {
+      token = await FirebaseAccessToken.onGet();
+    }
+
+    final currentUserUid = FirebaseAuth.instance.currentUser?.uid;
+    final uid = (authUid ?? '').trim().isNotEmpty
+        ? authUid!.trim()
+        : (currentUserUid ?? '').trim().isNotEmpty
+            ? currentUserUid!.trim()
+            : Database.loginUserFirebaseId;
+
     Utils.showLog("Login Api Token :: $token");
+    Utils.showLog("Login Api UID :: $uid");
 
     final uri = Uri.parse(Api.login);
     Utils.showLog("Login Api URL :: $uri");
 
     final headers = {
       ApiParams.key: Api.secretKey,
-      ApiParams.authToken: "Bearer $token",
+      ApiParams.authToken: "Bearer ${token ?? ''}",
+      if (uid.isNotEmpty) ApiParams.authUid: uid,
       ApiParams.contentType: "application/json",
     };
     Utils.showLog("Login Api Headers :: $headers");
+
+    final resolvedIdentity = identity.trim();
+    final resolvedFcmToken = fcmToken.trim().isNotEmpty
+        ? fcmToken.trim()
+        : "pending_fcm_${resolvedIdentity.isNotEmpty ? resolvedIdentity : uid}";
+    Utils.showLog("Login Api Effective FCM Token :: $resolvedFcmToken");
 
     final compliancePayload = {
       if ((birthDate ?? '').trim().isNotEmpty) ApiParams.birthDate: birthDate,
@@ -57,13 +80,14 @@ class LoginApi {
                     ApiParams.loginType: loginType,
                     ApiParams.email: email,
                     ApiParams.identity: identity,
-                    ApiParams.fcmToken: fcmToken,
+                    ApiParams.fcmToken: resolvedFcmToken,
                     ApiParams.fullName: userName,
                     ApiParams.birthDate: birthDate,
                     'age': age,
                     'acceptTerms': acceptTerms ?? false,
                     'acceptanceSource': acceptanceSource ?? 'signup',
-                    // ApiParams.password: password,
+                    if ((password ?? '').trim().isNotEmpty)
+                      ApiParams.password: password?.trim(),
                     ApiParams.confirmPassword: confirmPassword,
                     ApiParams.countryCode: countryCode,
                   }
@@ -71,8 +95,9 @@ class LoginApi {
                     ApiParams.loginType: loginType,
                     ApiParams.email: email,
                     ApiParams.identity: identity,
-                    ApiParams.fcmToken: fcmToken,
-                    // ApiParams.password: password,
+                    ApiParams.fcmToken: resolvedFcmToken,
+                    if ((password ?? '').trim().isNotEmpty)
+                      ApiParams.password: password?.trim(),
                     ApiParams.countryCode: countryCode,
                   },
           )
@@ -82,7 +107,7 @@ class LoginApi {
                   ApiParams.loginType: loginType,
                   ApiParams.phoneNumber: mobileNumber,
                   ApiParams.identity: identity,
-                  ApiParams.fcmToken: fcmToken,
+                  ApiParams.fcmToken: resolvedFcmToken,
                   ApiParams.countryCode: countryCode,
                   ...compliancePayload,
                 },
@@ -92,7 +117,7 @@ class LoginApi {
                   ApiParams.loginType: loginType,
                   ApiParams.email: email,
                   ApiParams.identity: identity,
-                  ApiParams.fcmToken: fcmToken,
+                  ApiParams.fcmToken: resolvedFcmToken,
                   ApiParams.profilePic: profilePic,
                   ApiParams.fullName: userName,
                   ApiParams.countryCode: countryCode,

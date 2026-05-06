@@ -1,6 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/app_button/primary_app_button.dart';
@@ -319,6 +317,8 @@ class PaymentOptionBottomSheet extends StatelessWidget {
           child: GetBuilder<MyWalletController>(
             id: Constant.onChangePaymentMethod,
             builder: (controller) {
+              final paymentMethods = controller.availablePaymentMethods;
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -354,16 +354,36 @@ class PaymentOptionBottomSheet extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (Platform.isAndroid || Platform.isIOS)
+                          if (paymentMethods.isEmpty)
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 16,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.redesignSurfaceNeutralAlt,
+                                border: Border.all(
+                                  color: AppColors.redesignSoftBorder,
+                                ),
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: Text(
+                                'No payment method is enabled',
+                                style: AppFontStyle.fontStyleW600(
+                                  fontSize: 13,
+                                  fontColor: AppColors.redesignMutedText,
+                                ),
+                              ),
+                            ),
+                          for (final method in paymentMethods)
                             PaymentOptionTile(
-                              index: 3,
-                              title: 'In App Purchase',
+                              index: method.id,
+                              title: method.title,
                               controller: controller,
-                              image: Platform.isIOS
-                                  ? AppAsset.appStoreImage
-                                  : AppAsset.googleIcon,
-                              width: 50,
-                              height: 26,
+                              image: method.image,
+                              width: method.width,
+                              height: method.height,
                             ),
                         ],
                       ),
@@ -372,7 +392,8 @@ class PaymentOptionBottomSheet extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
                     child: PrimaryAppButton(
-                      onTap: controller.isPaymentProcessing
+                      onTap: controller.isPaymentProcessing ||
+                              paymentMethods.isEmpty
                           ? null
                           : () async {
                               log('message ${controller.coinPlan[index].id}');

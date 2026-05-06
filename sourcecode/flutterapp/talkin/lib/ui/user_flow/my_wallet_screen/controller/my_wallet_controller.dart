@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -6,7 +7,6 @@ import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
 import 'package:notisboard/payment/api/purchase_coin_plan_api.dart';
 import 'package:notisboard/payment/in_app_purchase/iap_callback.dart';
 import 'package:notisboard/payment/in_app_purchase/in_app_purchase_helper.dart';
-import 'package:notisboard/payment/razor_pay/razor_pay_service.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/home_screen/api/user_coin_api.dart';
 import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
@@ -14,6 +14,8 @@ import 'package:notisboard/ui/user_flow/home_screen/model/user_coin_model.dart';
 import 'package:notisboard/ui/user_flow/my_wallet_screen/api/fetch_coin_plan_api.dart';
 import 'package:notisboard/ui/user_flow/my_wallet_screen/model/fetch_coin_plan.dart';
 import 'package:notisboard/ui/user_flow/my_wallet_screen/model/purchase_coin_plan.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/setting_api.dart';
+import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/common_payment.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
@@ -21,7 +23,31 @@ import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/firebse_access_token.dart';
 import 'package:notisboard/utils/utils.dart';
 
+class PaymentMethodOption {
+  const PaymentMethodOption({
+    required this.id,
+    required this.title,
+    required this.image,
+    this.width,
+    this.height,
+  });
+
+  final int id;
+  final String title;
+  final String image;
+  final double? width;
+  final double? height;
+}
+
 class MyWalletController extends GetxController implements IAPCallback {
+  static const int paymentRazorpay = 0;
+  static const int paymentStripe = 1;
+  static const int paymentFlutterWave = 2;
+  static const int paymentInAppPurchase = 3;
+  static const int paymentCashFree = 4;
+  static const int paymentPayStack = 5;
+  static const int paymentPayPal = 6;
+
   FetchCoinPlan? fetchCoinPlan;
   List<CoinPlan> coinPlan = [];
   bool isLoading = false;
@@ -89,6 +115,11 @@ class MyWalletController extends GetxController implements IAPCallback {
     isLoading = true;
     update([Constant.idGetCoinPlan]);
 
+    final latestSettings = await SettingApi.callApi();
+    if (latestSettings?.status == true) {
+      Database.settingApiModel = latestSettings;
+    }
+
     fetchCoinPlan = await FetchCoinPlanApi.callApi(
       uid: uid,
       token: token,
@@ -105,6 +136,135 @@ class MyWalletController extends GetxController implements IAPCallback {
   void onChangePaymentMethod(int index) async {
     selectedPaymentMethod = index;
     update([Constant.onChangePaymentMethod]);
+  }
+
+  bool _isEnabledForPlatform({
+    bool? android,
+    bool? ios,
+    bool? fallback,
+  }) {
+    if (Platform.isAndroid) return android ?? fallback ?? false;
+    if (Platform.isIOS) return ios ?? fallback ?? false;
+    return false;
+  }
+
+  List<PaymentMethodOption> get availablePaymentMethods {
+    final settings = Database.settingApiModel?.data;
+
+    if (settings == null) {
+      return Platform.isAndroid || Platform.isIOS
+          ? [
+              PaymentMethodOption(
+                id: paymentInAppPurchase,
+                title: Platform.isIOS ? 'App Store' : 'Google Play',
+                image: Platform.isIOS
+                    ? AppAsset.appStoreImage
+                    : AppAsset.googleIcon,
+                width: 50,
+                height: 26,
+              ),
+            ]
+          : [];
+    }
+
+    final methods = <PaymentMethodOption>[];
+
+    if (_isEnabledForPlatform(
+      android: settings.isStripeEnabled,
+      ios: settings.isStripeIosEnabled,
+      fallback: settings.isStripeEnabled,
+    )) {
+      methods.add(const PaymentMethodOption(
+        id: paymentStripe,
+        title: 'Stripe',
+        image: AppAsset.stripe,
+        width: 52,
+        height: 26,
+      ));
+    }
+
+    if (_isEnabledForPlatform(
+      android: settings.isRazorpayEnabled,
+      ios: settings.isRazorpayIosEnabled,
+      fallback: settings.isRazorpayEnabled,
+    )) {
+      methods.add(const PaymentMethodOption(
+        id: paymentRazorpay,
+        title: 'Razorpay',
+        image: AppAsset.razorpay,
+        width: 54,
+        height: 28,
+      ));
+    }
+
+    if (_isEnabledForPlatform(
+      android: settings.isFlutterwaveEnabled,
+      ios: settings.isFlutterwaveIosEnabled,
+      fallback: settings.isFlutterwaveEnabled,
+    )) {
+      methods.add(const PaymentMethodOption(
+        id: paymentFlutterWave,
+        title: 'Flutterwave',
+        image: AppAsset.flutterWave,
+        width: 54,
+        height: 28,
+      ));
+    }
+
+    if (_isEnabledForPlatform(
+      android: settings.isPaystackAndroidEnabled,
+      ios: settings.isPaystackIosEnabled,
+    )) {
+      methods.add(const PaymentMethodOption(
+        id: paymentPayStack,
+        title: 'Paystack',
+        image: AppAsset.payStackImage,
+        width: 52,
+        height: 28,
+      ));
+    }
+
+    if (_isEnabledForPlatform(
+      android: settings.isCashfreeAndroidEnabled,
+      ios: settings.isCashfreeIosEnabled,
+    )) {
+      methods.add(const PaymentMethodOption(
+        id: paymentCashFree,
+        title: 'Cashfree',
+        image: AppAsset.cashFreeImage,
+        width: 54,
+        height: 28,
+      ));
+    }
+
+    if (_isEnabledForPlatform(
+      android: settings.isPaypalAndroidEnabled,
+      ios: settings.isPaypalIosEnabled,
+    )) {
+      methods.add(const PaymentMethodOption(
+        id: paymentPayPal,
+        title: 'PayPal',
+        image: AppAsset.payPalImage,
+        width: 52,
+        height: 28,
+      ));
+    }
+
+    if (_isEnabledForPlatform(
+      android: settings.isGooglePlayEnabled,
+      ios: settings.isGooglePlayIosEnabled,
+      fallback: settings.isGooglePlayEnabled,
+    )) {
+      methods.add(PaymentMethodOption(
+        id: paymentInAppPurchase,
+        title: Platform.isIOS ? 'App Store' : 'Google Play',
+        image: Platform.isIOS ? AppAsset.appStoreImage : AppAsset.googleIcon,
+        width: 50,
+        height: 26,
+      ));
+    }
+
+    return methods;
   }
 
   /// payment method condition
@@ -129,20 +289,22 @@ class MyWalletController extends GetxController implements IAPCallback {
         await 250.milliseconds.delay();
       }
 
-      if (selectedPaymentMethod == 0) {
+      if (selectedPaymentMethod == paymentRazorpay) {
         await onClickRazorPay(amount, id);
-      } else if (selectedPaymentMethod == 1) {
+      } else if (selectedPaymentMethod == paymentStripe) {
         await onClickStripe(amount, id);
-      } else if (selectedPaymentMethod == 2) {
+      } else if (selectedPaymentMethod == paymentFlutterWave) {
         await onClickFlutterWave(amount, id);
-      } else if (selectedPaymentMethod == 3) {
+      } else if (selectedPaymentMethod == paymentInAppPurchase) {
         await onClickInAppPurchase(amount, id, productKey);
-      } else if (selectedPaymentMethod == 4) {
+      } else if (selectedPaymentMethod == paymentCashFree) {
         await onClickCashFree(amount, id);
-      } else if (selectedPaymentMethod == 5) {
+      } else if (selectedPaymentMethod == paymentPayStack) {
         await onClickPayStack(amount, id);
-      } else if (selectedPaymentMethod == 6) {
+      } else if (selectedPaymentMethod == paymentPayPal) {
         await onClickPayPal(amount, id);
+      } else {
+        Utils.showToast(Get.context, EnumLocale.txtSelectPaymentMethod.name.tr);
       }
     } finally {
       _setPaymentProcessing(false);
@@ -296,8 +458,6 @@ class MyWalletController extends GetxController implements IAPCallback {
           }
         },
       );
-      await 1.seconds.delay();
-      RazorPayService().razorPayCheckout((amount * 100).toInt());
       _closeBlockingLoader();
     } catch (e) {
       _closeBlockingLoader();

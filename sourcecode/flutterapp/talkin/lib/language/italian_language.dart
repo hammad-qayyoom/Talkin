@@ -24,7 +24,6 @@ final Map<String, String> itIT = <String, String>{
   EnumLocale.txtGetRegister.name: "Ottieni il registro",
   EnumLocale.txtMobileLogin.name: "Accesso mobile",
   EnumLocale.txtSearchCountryCode.name: "Cerca il prefisso internazionale",
-  EnumLocale.txtGoogleLogin.name: "Accesso Google",
   EnumLocale.txtQuickLogin.name: "Accesso rapido",
   EnumLocale.txtEnterMail.name: "Inserisci l'ID e-mail",
   EnumLocale.txtEnterYourName.name: "Inserisci il tuo nome",

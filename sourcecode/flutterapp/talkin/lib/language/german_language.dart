@@ -24,7 +24,6 @@ final Map<String, String> deat = {
   EnumLocale.txtGetRegister.name: "Registrieren",
   EnumLocale.txtMobileLogin.name: "Mobile Anmeldung",
   EnumLocale.txtSearchCountryCode.name: "Suche nach Ländercode",
-  EnumLocale.txtGoogleLogin.name: "Google-Anmeldung",
   EnumLocale.txtQuickLogin.name: "Schnelle Anmeldung",
   EnumLocale.txtEnterMail.name: "E-Mail-ID eingeben",
   EnumLocale.txtEnterYourName.name: "Geben Sie Ihren Namen ein",

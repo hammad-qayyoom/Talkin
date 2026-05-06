@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
 import 'package:notisboard/ui/user_flow/setting_screen/api/delete_user_api.dart';
 import 'package:notisboard/ui/user_flow/setting_screen/api/user_notification_update_api.dart';
@@ -15,8 +14,6 @@ import 'package:notisboard/utils/firebse_access_token.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class SettingController extends GetxController {
-  // final GoogleSignIn _googleSignIn = GoogleSignIn();
-  GoogleSignInAccount? googleSignInAccountUser;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool isShowNotification =
       Database.fetchLoginUserProfileModel?.user?.isNotificationEnabled ?? false;
@@ -25,8 +22,6 @@ class SettingController extends GetxController {
 
   /// log out
   Future<void> signOut() async {
-    // await _googleSignIn.signOut();
-    googleSignInAccountUser = null;
     await _auth.signOut();
     Database.localStorage.erase();
     Database.onSetSelectedLanguage(Constant.languageEn);

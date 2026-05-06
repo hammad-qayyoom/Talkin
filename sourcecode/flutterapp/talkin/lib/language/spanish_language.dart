@@ -24,7 +24,6 @@ final Map<String, String> esES = {
   EnumLocale.txtGetRegister.name: "Obtener Registrarse",
   EnumLocale.txtMobileLogin.name: "Inicio de sesión móvil",
   EnumLocale.txtSearchCountryCode.name: "Buscar código de país",
-  EnumLocale.txtGoogleLogin.name: "Inicio de sesión de Google",
   EnumLocale.txtQuickLogin.name: "Inicio de sesión rápido",
   EnumLocale.txtEnterMail.name: "Ingrese su ID de correo electrónico",
   EnumLocale.txtEnterYourName.name: "Introduce tu nombre",

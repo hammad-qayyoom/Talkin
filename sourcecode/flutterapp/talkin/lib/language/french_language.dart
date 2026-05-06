@@ -24,7 +24,6 @@ final Map<String, String> frCH = <String, String>{
   EnumLocale.txtGetRegister.name: "S'inscrire",
   EnumLocale.txtMobileLogin.name: "Connexion mobile",
   EnumLocale.txtSearchCountryCode.name: "Rechercher le code du pays",
-  EnumLocale.txtGoogleLogin.name: "Connexion Google",
   EnumLocale.txtQuickLogin.name: "Connexion rapide",
   EnumLocale.txtEnterMail.name: "Entrez l'identifiant de messagerie",
   EnumLocale.txtEnterYourName.name: "Entrez votre nom",

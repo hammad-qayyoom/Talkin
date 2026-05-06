@@ -24,7 +24,6 @@ final Map<String, String> urPK = <String, String>{
   EnumLocale.txtGetRegister.name: "رجسٹر حاصل کریں۔",
   EnumLocale.txtMobileLogin.name: "موبائل لاگ ان",
   EnumLocale.txtSearchCountryCode.name: "ملک کا کوڈ تلاش کریں۔",
-  EnumLocale.txtGoogleLogin.name: "گوگل لاگ ان",
   EnumLocale.txtQuickLogin.name: "فوری لاگ ان",
   EnumLocale.txtEnterMail.name: "میل آئی ڈی درج کریں۔",
   EnumLocale.txtEnterYourName.name: "اپنا نام درج کریں۔",

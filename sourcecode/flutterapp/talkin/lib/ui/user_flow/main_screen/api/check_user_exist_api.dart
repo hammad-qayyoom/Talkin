@@ -18,8 +18,17 @@ class CheckUserExistApi {
   }) async {
     Utils.showLog("Check User Exist Api Calling...");
 
-    final uri = Uri.parse(
-        "${Api.checkUserExit}${ApiParams.loginType}=$loginType&${ApiParams.identity}=$identity&${ApiParams.email}=$email&${ApiParams.password}=$password");
+    final queryParameters = <String, String>{
+      ApiParams.loginType: loginType,
+      ApiParams.identity: identity,
+      if ((email ?? '').trim().isNotEmpty) ApiParams.email: email!.trim(),
+      if ((mobileNumber ?? '').trim().isNotEmpty)
+        ApiParams.phoneNumber: mobileNumber!.trim(),
+      if ((password ?? '').isNotEmpty) ApiParams.password: password!,
+    };
+
+    final uri =
+        Uri.parse(Api.checkUserExit).replace(queryParameters: queryParameters);
 
     Utils.showLog("Check User Exist Api uri => $uri");
     final headers = {ApiParams.key: Api.secretKey};

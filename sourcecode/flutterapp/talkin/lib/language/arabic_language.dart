@@ -24,7 +24,6 @@ final Map<String, String> ardz = <String, String>{
   EnumLocale.txtGetRegister.name: "احصل على التسجيل",
   EnumLocale.txtMobileLogin.name: "تسجيل الدخول عبر الهاتف المحمول",
   EnumLocale.txtSearchCountryCode.name: "البحث عن رمز الدولة",
-  EnumLocale.txtGoogleLogin.name: "تسجيل الدخول إلى جوجل",
   EnumLocale.txtQuickLogin.name: "تسجيل الدخول السريع",
   EnumLocale.txtEnterMail.name: "أدخل معرف البريد الإلكتروني",
   EnumLocale.txtEnterYourName.name: "أدخل اسمك",
