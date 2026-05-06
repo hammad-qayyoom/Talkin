@@ -58,6 +58,11 @@ class FindMoreWidget extends StatelessWidget {
     return Icons.category_outlined;
   }
 
+  String _categoryLabel(TalkTopic category) {
+    final label = (category.name ?? '').trim();
+    return label.isEmpty ? 'Category' : label;
+  }
+
   void _openExpertsTab(HomeScreenController homeController) {
     if (Get.isRegistered<BottomBarController>()) {
       Get.find<BottomBarController>().onClick(2);
@@ -72,6 +77,282 @@ class FindMoreWidget extends StatelessWidget {
     );
   }
 
+  Widget _buildCategoryIcon({
+    required bool isSelected,
+    required bool isTablet,
+    String? imagePath,
+    TalkTopic? category,
+    double? size,
+  }) {
+    final imageUrl = _resolveCategoryImageUrl(imagePath);
+    final iconSize = size ?? (isTablet ? 42.0 : 38.0);
+    final fallbackIcon = category == null
+        ? Icons.grid_view_rounded
+        : _resolveFallbackIcon(category);
+    final iconColor = isSelected ? AppColors.white : _brandRed;
+
+    return Container(
+      height: iconSize,
+      width: iconSize,
+      decoration: BoxDecoration(
+        color: isSelected
+            ? AppColors.white.withValues(alpha: 0.18)
+            : AppColors.redesignAccentSoftBg,
+        borderRadius: BorderRadius.circular(isTablet ? 14 : 12),
+      ),
+      child: imageUrl == null
+          ? Icon(
+              fallbackIcon,
+              color: iconColor,
+              size: isTablet ? 22 : 20,
+            )
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(isTablet ? 12 : 10),
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: ProfessionalCachedImage(
+                  imageUrl: imageUrl,
+                  fit: BoxFit.contain,
+                  placeholder: Icon(
+                    fallbackIcon,
+                    color: iconColor,
+                    size: isTablet ? 22 : 20,
+                  ),
+                  errorWidget: Icon(
+                    fallbackIcon,
+                    color: iconColor,
+                    size: isTablet ? 22 : 20,
+                  ),
+                ),
+              ),
+            ),
+    );
+  }
+
+  Widget _buildCategorySheetTile({
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+    TalkTopic? category,
+    String? imagePath,
+    bool isTablet = false,
+  }) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.all(isTablet ? 14 : 12),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? _brandRed.withValues(alpha: 0.09)
+                : AppColors.redesignSurfaceNeutralAlt,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isSelected ? _brandRed : _neutralBorder,
+              width: isSelected ? 1.4 : 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              _buildCategoryIcon(
+                isSelected: isSelected,
+                isTablet: isTablet,
+                imagePath: imagePath,
+                category: category,
+                size: isTablet ? 44 : 40,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: isTablet ? 14 : 12.5,
+                    fontColor: isSelected ? _brandRed : _brandDark,
+                  ),
+                ),
+              ),
+              if (isSelected) ...[
+                const SizedBox(width: 8),
+                Icon(
+                  Icons.check_circle_rounded,
+                  color: _brandRed,
+                  size: isTablet ? 21 : 18,
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showAllCategoriesSheet(
+    BuildContext context,
+    HomeScreenController homeController,
+  ) {
+    final sheetWidth = MediaQuery.sizeOf(context).width;
+    final isTablet = sheetWidth >= 760;
+
+    Get.bottomSheet(
+      FractionallySizedBox(
+        heightFactor: isTablet ? 0.68 : 0.72,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          ),
+          child: SafeArea(
+            top: false,
+            child: GetBuilder<HomeScreenController>(
+              id: Constant.idHomeCategories,
+              builder: (controller) {
+                final categories = controller.homeCategories;
+                final itemCount = categories.length + 1;
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    Center(
+                      child: Container(
+                        height: 5,
+                        width: 52,
+                        decoration: BoxDecoration(
+                          color: _neutralBorder,
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        isTablet ? 22 : 16,
+                        16,
+                        isTablet ? 22 : 16,
+                        10,
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: isTablet ? 42 : 38,
+                            width: isTablet ? 42 : 38,
+                            decoration: BoxDecoration(
+                              color: AppColors.redesignAccentSoftBg,
+                              borderRadius: BorderRadius.circular(13),
+                            ),
+                            child: Icon(
+                              Icons.grid_view_rounded,
+                              color: _brandRed,
+                              size: isTablet ? 23 : 20,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              'All categories',
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: isTablet ? 24 : 20,
+                                fontColor: _brandDark,
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: Get.back,
+                            child: Container(
+                              height: 36,
+                              width: 36,
+                              decoration: BoxDecoration(
+                                color: AppColors.redesignSurfaceNeutralAlt,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: _neutralBorder),
+                              ),
+                              child: Icon(
+                                Icons.close_rounded,
+                                color: _neutralText,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: controller.isCategoryLoading && categories.isEmpty
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: _brandRed,
+                              ),
+                            )
+                          : GridView.builder(
+                              padding: EdgeInsets.fromLTRB(
+                                isTablet ? 22 : 16,
+                                4,
+                                isTablet ? 22 : 16,
+                                18,
+                              ),
+                              physics: const BouncingScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: isTablet ? 3 : 2,
+                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 10,
+                                mainAxisExtent: isTablet ? 82 : 76,
+                              ),
+                              itemCount: itemCount,
+                              itemBuilder: (context, index) {
+                                if (index == 0) {
+                                  return _buildCategorySheetTile(
+                                    label: 'All',
+                                    isSelected:
+                                        controller.selectedCategoryId == null,
+                                    onTap: () {
+                                      Get.back();
+                                      homeController.selectHomeCategory(null);
+                                    },
+                                    isTablet: isTablet,
+                                  );
+                                }
+
+                                final category = categories[index - 1];
+                                final categoryId = (category.id ?? '').trim();
+                                final isSelected = categoryId.isNotEmpty &&
+                                    controller.selectedCategoryId == categoryId;
+
+                                return _buildCategorySheetTile(
+                                  label: _categoryLabel(category),
+                                  isSelected: isSelected,
+                                  onTap: () {
+                                    Get.back();
+                                    homeController.selectHomeCategory(
+                                      categoryId.isEmpty ? null : categoryId,
+                                    );
+                                  },
+                                  category: category,
+                                  imagePath: category.image,
+                                  isTablet: isTablet,
+                                );
+                              },
+                            ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+      backgroundColor: AppColors.transparent,
+      barrierColor: AppColors.black.withValues(alpha: 0.34),
+    );
+  }
+
   Widget _buildCategoryCard({
     required String label,
     required bool isSelected,
@@ -81,98 +362,62 @@ class FindMoreWidget extends StatelessWidget {
     double width = 136,
     bool isTablet = false,
   }) {
-    final imageUrl = _resolveCategoryImageUrl(imagePath);
     final cardColor = isSelected ? _brandRed : AppColors.white;
     final textColor = isSelected ? AppColors.white : _brandDark;
-    final iconFallbackColor = isSelected ? AppColors.white : _brandDark;
 
-    return GestureDetector(
-      onTap: onTap,
+    return Material(
+      color: AppColors.transparent,
       child: SizedBox(
         width: width,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          curve: Curves.easeOut,
-          padding: EdgeInsets.symmetric(
-            horizontal: isTablet ? 14 : 12,
-            vertical: isTablet ? 11 : 10,
-          ),
-          decoration: BoxDecoration(
-            color: cardColor,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(
-              color: isSelected ? _brandRed : _neutralBorder,
-              width: 1.2,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(18),
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+            padding: EdgeInsets.symmetric(
+              horizontal: isTablet ? 14 : 12,
+              vertical: isTablet ? 10 : 9,
             ),
-            boxShadow: [
-              BoxShadow(
-                color:
-                    AppColors.black.withValues(alpha: isSelected ? 0.10 : 0.04),
-                blurRadius: isSelected ? 18 : 10,
-                offset: const Offset(0, 6),
+            decoration: BoxDecoration(
+              color: cardColor,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: isSelected ? _brandRed : _neutralBorder,
+                width: isSelected ? 1.4 : 1,
               ),
-            ],
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                height: isTablet ? 38 : 34,
-                width: isTablet ? 38 : 34,
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.white.withValues(alpha: 0.2)
-                      : AppColors.redesignSurfaceNeutralAlt,
-                  shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.black
+                      .withValues(alpha: isSelected ? 0.11 : 0.035),
+                  blurRadius: isSelected ? 16 : 10,
+                  offset: const Offset(0, 6),
                 ),
-                child: ClipOval(
-                  child: imageUrl == null
-                      ? Center(
-                          child: Icon(
-                            category == null
-                                ? Icons.grid_view_rounded
-                                : _resolveFallbackIcon(category),
-                            color: iconFallbackColor,
-                            size: isTablet ? 21 : 20,
-                          ),
-                        )
-                      : ProfessionalCachedImage(
-                          imageUrl: imageUrl,
-                          fit: BoxFit.cover,
-                          placeholder: Center(
-                            child: Icon(
-                              category == null
-                                  ? Icons.grid_view_rounded
-                                  : _resolveFallbackIcon(category),
-                              color: iconFallbackColor,
-                              size: isTablet ? 21 : 20,
-                            ),
-                          ),
-                          errorWidget: Center(
-                            child: Icon(
-                              category == null
-                                  ? Icons.grid_view_rounded
-                                  : _resolveFallbackIcon(category),
-                              color: iconFallbackColor,
-                              size: isTablet ? 21 : 20,
-                            ),
-                          ),
-                        ),
+              ],
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _buildCategoryIcon(
+                  isSelected: isSelected,
+                  isTablet: isTablet,
+                  imagePath: imagePath,
+                  category: category,
                 ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppFontStyle.fontStyleW600(
-                    fontSize: isTablet ? 13 : 12,
-                    fontColor: textColor,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppFontStyle.fontStyleW600(
+                      fontSize: isTablet ? 13.5 : 12.5,
+                      fontColor: textColor,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -474,15 +719,56 @@ class FindMoreWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Flexible(
-                child: Text(
-                  'Show all categories',
-                  maxLines: 1,
-                  textAlign: TextAlign.end,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppFontStyle.fontStyleW500(
-                    fontSize: isTabletScreen ? 15 : 12,
-                    fontColor: _neutralText,
+              Material(
+                color: AppColors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(999),
+                  onTap: () => _showAllCategoriesSheet(context, homeController),
+                  child: Container(
+                    height: isTabletScreen ? 38 : 34,
+                    padding: EdgeInsets.only(
+                      left: isTabletScreen ? 14 : 12,
+                      right: isTabletScreen ? 12 : 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(color: _neutralBorder),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.black.withValues(alpha: 0.035),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: isTabletScreen ? 160 : 126,
+                          ),
+                          child: Text(
+                            screenWidth < 360
+                                ? 'All categories'
+                                : 'Show all categories',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: isTabletScreen ? 13 : 11.5,
+                              fontColor: _brandRed,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: _brandRed,
+                          size: isTabletScreen ? 20 : 18,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -494,12 +780,17 @@ class FindMoreWidget extends StatelessWidget {
           id: Constant.idHomeCategories,
           builder: (controller) {
             final categories = controller.homeCategories;
-            final cardWidth = isLargeTabletScreen
+            final categoryCardWidth = isLargeTabletScreen
                 ? 190.0
                 : isTabletScreen
                     ? 170.0
-                    : 136.0;
-            final rowHeight = isTabletScreen ? 62.0 : 56.0;
+                    : 146.0;
+            final allCardWidth = isLargeTabletScreen
+                ? 150.0
+                : isTabletScreen
+                    ? 138.0
+                    : 118.0;
+            final rowHeight = isTabletScreen ? 64.0 : 58.0;
 
             return SizedBox(
               height: rowHeight,
@@ -515,7 +806,7 @@ class FindMoreWidget extends StatelessWidget {
                       label: 'All',
                       isSelected: controller.selectedCategoryId == null,
                       onTap: () => controller.selectHomeCategory(null),
-                      width: cardWidth,
+                      width: allCardWidth,
                       isTablet: isTabletScreen,
                     );
                   }
@@ -526,16 +817,14 @@ class FindMoreWidget extends StatelessWidget {
                       controller.selectedCategoryId == categoryId;
 
                   return _buildCategoryCard(
-                    label: (category.name ?? '').trim().isEmpty
-                        ? 'Category'
-                        : category.name!.trim(),
+                    label: _categoryLabel(category),
                     isSelected: isSelected,
                     onTap: () => controller.selectHomeCategory(
                       categoryId.isEmpty ? null : categoryId,
                     ),
                     imagePath: category.image,
                     category: category,
-                    width: cardWidth,
+                    width: categoryCardWidth,
                     isTablet: isTabletScreen,
                   );
                 },
