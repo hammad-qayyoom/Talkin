@@ -64,6 +64,9 @@ class HostHomeScreenController extends GetxController {
   }
 
   Future<void> _initializeHome() async {
+    isCoinLoading = true;
+    update([Constant.idCoinUpdate]);
+
     await fetchRealStats();
     await hostCoin();
     await fetchGrowthSpotlights();
@@ -111,7 +114,9 @@ class HostHomeScreenController extends GetxController {
     isCoinLoading = true;
     update([Constant.idCoinUpdate]);
     listenerCoinModel = await HostCoinApi.callApi();
-    Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
+    if (listenerCoinModel?.status == true) {
+      Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
+    }
     isCoinLoading = false;
     update([Constant.idCoinUpdate]);
     log("Listener Session Credit => ${listenerCoinModel?.coin}");
@@ -126,7 +131,9 @@ class HostHomeScreenController extends GetxController {
     await fetchGrowthSpotlights();
 
     listenerCoinModel = await HostCoinApi.callApi();
-    Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
+    if (listenerCoinModel?.status == true) {
+      Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
+    }
     isCoinLoading = false;
 
     update([Constant.idCoinUpdate]);
@@ -137,9 +144,16 @@ class HostHomeScreenController extends GetxController {
 
   /// get host coin
   hostCoin() async {
-    listenerCoinModel = await HostCoinApi.callApi();
-    Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
+    isCoinLoading = true;
+    update([Constant.idCoinUpdate]);
 
+    listenerCoinModel = await HostCoinApi.callApi();
+    if (listenerCoinModel?.status == true) {
+      Database.onSetListenerCoin((listenerCoinModel?.coin ?? 0).toString());
+    }
+
+    isCoinLoading = false;
+    update([Constant.idCoinUpdate]);
     update([Constant.idGetCoinPlan]);
   }
 

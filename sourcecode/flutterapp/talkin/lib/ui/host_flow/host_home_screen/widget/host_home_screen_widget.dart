@@ -1090,7 +1090,7 @@ class HostStatisticsCard extends StatelessWidget {
   const HostStatisticsCard({super.key});
 
   static const String _title = 'Expert Performance';
-  static const String _earningsLabel = 'Coin Earnings';
+  static const String _earningsLabel = 'Earnings';
   static const String _ratingLabel = 'Rating';
   static const String _sessionsLabel = 'Completed';
   static const String _experienceLabel = 'Experience';
