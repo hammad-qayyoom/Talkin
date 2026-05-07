@@ -21,6 +21,10 @@ class _HostWalletScreenState extends State<HostWalletScreen> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
+        if (didPop || (Get.isDialogOpen ?? false)) {
+          return;
+        }
+
         Get.dialog(
           barrierColor: AppColors.black.withValues(alpha: 0.8),
           Dialog(
@@ -31,9 +35,6 @@ class _HostWalletScreenState extends State<HostWalletScreen> {
             child: const ExitAppDialog(),
           ),
         );
-        if (didPop) {
-          return;
-        }
       },
       child: Scaffold(
         backgroundColor: AppColors.redesignScreenBackground,

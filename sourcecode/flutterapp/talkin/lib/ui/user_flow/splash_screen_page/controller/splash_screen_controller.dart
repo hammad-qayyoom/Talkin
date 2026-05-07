@@ -271,6 +271,16 @@ class SplashScreenController extends GetxController {
 
 Future<void> splashScreen() async {
   Timer(const Duration(seconds: 2), () async {
+    void navigateFromSplash(String route, {dynamic arguments}) {
+      if (Get.currentRoute != AppRoutes.splashScreenPage) {
+        Utils.showLog(
+            "Splash navigation skipped because current route is ${Get.currentRoute}");
+        return;
+      }
+
+      Get.offAllNamed(route, arguments: arguments);
+    }
+
     // Check User Is Login Or Not...
     try {
       final token = await _guardedSplashTask<String>(
@@ -321,7 +331,7 @@ Future<void> splashScreen() async {
               false;
           if (guestSessionReady) {
             Utils.showLog("Authenticated guest session is ready.");
-            Get.offAllNamed(AppRoutes.bottomBar);
+            navigateFromSplash(AppRoutes.bottomBar);
             return;
           }
 
@@ -329,7 +339,7 @@ Future<void> splashScreen() async {
           await Database.onSetIsLogin(false);
           await Database.onSetGuestMode(true);
           await Database.onSetFillProfile(false);
-          Get.offAllNamed(AppRoutes.bottomBar);
+          navigateFromSplash(AppRoutes.bottomBar);
           return;
         } else {
           Utils.showLog("lllllllllllllllllllllllllllllllllllllll");
@@ -337,19 +347,22 @@ Future<void> splashScreen() async {
             if (Database.isFillProfile == true) {
               if (Database.fetchLoginUserProfileModel?.user?.isListener ==
                   true) {
-                Get.toNamed(AppRoutes.hostBottomBar);
+                navigateFromSplash(AppRoutes.hostBottomBar);
               } else {
-                Get.toNamed(AppRoutes.bottomBar);
+                navigateFromSplash(AppRoutes.bottomBar);
               }
             } else {
-              Get.offAllNamed(AppRoutes.fillProfileScreen, arguments: [
-                Database.loginUserName,
-                Database.loginUserProfilePic,
-                Database.loginUserEmail,
-              ]);
+              navigateFromSplash(
+                AppRoutes.fillProfileScreen,
+                arguments: [
+                  Database.loginUserName,
+                  Database.loginUserProfilePic,
+                  Database.loginUserEmail,
+                ],
+              );
             }
           } else {
-            Get.offAllNamed(AppRoutes.bottomBar);
+            navigateFromSplash(AppRoutes.bottomBar);
           }
         }
       }
@@ -359,7 +372,7 @@ Future<void> splashScreen() async {
       await Database.onSetIsLogin(false);
       await Database.onSetGuestMode(true);
       await Database.onSetFillProfile(false);
-      Get.offAllNamed(AppRoutes.bottomBar);
+      navigateFromSplash(AppRoutes.bottomBar);
     }
   });
 }

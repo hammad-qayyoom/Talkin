@@ -175,11 +175,8 @@ class MainScreenView extends StatelessWidget {
                                 text: EnumLocale.txtContinue.name.tr,
                                 backgroundColor: _brandDark,
                                 icon: Icons.north_east_rounded,
-                                onTap: () {
-                                  if (controller.validateLogin()) {
-                                    controller.onClickSignIn();
-                                  }
-                                },
+                                isLoading: controller.isLoading,
+                                onTap: controller.onClickSignIn,
                               ),
                             ],
                           ),
@@ -312,21 +309,33 @@ class MainScreenView extends StatelessWidget {
     required Color backgroundColor,
     required IconData icon,
     required VoidCallback onTap,
+    bool isLoading = false,
   }) {
     return SizedBox(
       width: double.infinity,
       height: 54,
       child: ElevatedButton.icon(
-        onPressed: onTap,
+        onPressed: isLoading ? null : onTap,
         style: ElevatedButton.styleFrom(
           elevation: 0,
           backgroundColor: backgroundColor,
+          disabledBackgroundColor: backgroundColor.withValues(alpha: 0.72),
           foregroundColor: AppColors.white,
+          disabledForegroundColor: AppColors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-        icon: Icon(icon, size: 20),
+        icon: isLoading
+            ? SizedBox(
+                height: 18,
+                width: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.white,
+                ),
+              )
+            : Icon(icon, size: 20),
         label: Text(
           text,
           style: AppFontStyle.fontStyleW600(

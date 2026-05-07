@@ -12,6 +12,10 @@ class OnBoardingScreen extends StatelessWidget {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
+        if (didPop || (Get.isDialogOpen ?? false)) {
+          return;
+        }
+
         Get.dialog(
           barrierColor: AppColors.black.withValues(alpha: 0.8),
           Dialog(
@@ -22,9 +26,6 @@ class OnBoardingScreen extends StatelessWidget {
             child: const ExitAppDialog(),
           ),
         );
-        if (didPop) {
-          return;
-        }
       },
       child: Scaffold(
         backgroundColor: AppColors.white,

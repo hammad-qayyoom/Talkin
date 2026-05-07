@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -102,11 +102,44 @@ class MainScreenController extends GetxController {
     }
   }
 
+  void _stopLoginLoading() {
+    _dismissLoadingDialog();
+    if (isLoading) {
+      isLoading = false;
+      update();
+    }
+  }
+
+  Future<void> _showLoginLoadingNow() async {
+    isLoading = true;
+    update();
+    if (!(Get.isDialogOpen ?? false)) {
+      Get.dialog(const LoadingWidget(), barrierDismissible: false);
+    }
+
+    await Future<void>.delayed(Duration.zero);
+    await WidgetsBinding.instance.endOfFrame;
+  }
+
+  Future<String?> _getFreshAuthToken(firebase_auth.User? user) async {
+    try {
+      final token = await user?.getIdToken(true);
+      if ((token ?? '').trim().isNotEmpty) {
+        return token;
+      }
+    } catch (error) {
+      Utils.showLog("Fresh Firebase token failed => $error");
+    }
+
+    return FirebaseAccessToken.onGet();
+  }
+
   String _invalidEmailPasswordMessage() {
     return "Incorrect email or password. Please try again.";
   }
 
-  String _firebaseSignInErrorMessage(FirebaseAuthException error) {
+  String _firebaseSignInErrorMessage(
+      firebase_auth.FirebaseAuthException error) {
     switch (error.code) {
       case 'invalid-email':
       case 'invalid-credential':
@@ -153,11 +186,11 @@ class MainScreenController extends GetxController {
 
     await _refreshDeviceContext();
 
-    UserCredential? userCredential =
+    firebase_auth.UserCredential? userCredential =
         await AppleAuthentication.signInWithApple(); // Apple Login...
 
     if (userCredential == null) {
-      if (Get.isDialogOpen ?? false) Get.back();
+      _dismissLoadingDialog();
       Utils.showToast(Get.context!, "Apple Login Failed.");
       Utils.showLog("Apple Login Failed !! Credential missing");
       return;
@@ -190,7 +223,7 @@ class MainScreenController extends GetxController {
       );
 
       if (loginModel?.status == true) {
-        if (Get.isDialogOpen ?? false) Get.back();
+        _dismissLoadingDialog();
         Database.onSetIsLogin(true);
         Database.onSetGuestMode(false);
         Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
@@ -213,20 +246,20 @@ class MainScreenController extends GetxController {
               loginUserId: userCredential.user!.uid, loginType: 5);
 
           if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
-            Get.toNamed(AppRoutes.hostBottomBar);
+            Get.offAllNamed(AppRoutes.hostBottomBar);
           } else {
-            Get.toNamed(AppRoutes.bottomBar);
+            Get.offAllNamed(AppRoutes.bottomBar);
           }
         }
       } else {
-        if (Get.isDialogOpen ?? false) Get.back();
+        _dismissLoadingDialog();
         Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
         Utils.showLog("Login Api Calling Failed !!");
       }
 
       // Get.back();
     } else {
-      if (Get.isDialogOpen ?? false) Get.back();
+      _dismissLoadingDialog();
       Utils.showToast(Get.context!, "Apple Login Failed: No email found.");
       Utils.showLog("Apple Login Failed !! Email missing in response");
     }
@@ -234,63 +267,78 @@ class MainScreenController extends GetxController {
 
   /// user get profile
 
-  Future<void> onGetProfile(
-      {required String loginUserId, required int loginType}) async {
-    final token = await FirebaseAccessToken.onGet();
+  Future<void> onGetProfile({
+    required String loginUserId,
+    required int loginType,
+    String? authToken,
+  }) async {
+    final token = (authToken ?? '').trim().isNotEmpty
+        ? authToken!.trim()
+        : await FirebaseAccessToken.onGet();
+
+    if (loginUserId.trim().isEmpty || (token ?? '').trim().isEmpty) {
+      Database.onLogOut();
+      return;
+    }
 
     fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(
         loginUserId: loginUserId, token: token ?? '');
+
+    if (fetchLoginUserProfileModel?.status != true) {
+      final retryToken = await _getFreshAuthToken(
+          firebase_auth.FirebaseAuth.instance.currentUser);
+      if ((retryToken ?? '').trim().isNotEmpty && retryToken != token) {
+        fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(
+            loginUserId: loginUserId, token: retryToken ?? '');
+      }
+    }
+
     Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
 
     log("fetchLoginUserProfileModel?.user?.id${fetchLoginUserProfileModel?.user?.id}");
-    if (loginUserId.trim().isNotEmpty && token!.trim().isNotEmpty) {
-      if (fetchLoginUserProfileModel?.user?.loginType != null) {
-        Database.onSetIsNewUser(false);
-        log("fetchLoginUserProfileModel?.user?.Email${fetchLoginUserProfileModel?.user?.email}");
+    if (fetchLoginUserProfileModel?.user?.loginType != null) {
+      Database.onSetIsNewUser(false);
+      log("fetchLoginUserProfileModel?.user?.Email${fetchLoginUserProfileModel?.user?.email}");
 
-        Database.onSetLoginUserId(fetchLoginUserProfileModel!.user!.id!);
-        Database.onSetLoginUserFirebaseId(
-            fetchLoginUserProfileModel!.user!.firebaseId!);
-        Database.onSetLoginUserProfilePic(
-            fetchLoginUserProfileModel?.user?.profilePic ?? "");
-        Database.onSetLoginUserName(
-            fetchLoginUserProfileModel!.user!.fullName!);
-        Database.onSetLoginUserNickName(
-            fetchLoginUserProfileModel?.user?.nickName ?? "");
-        Database.onSetLoginUserEmail(fetchLoginUserProfileModel!.user!.email!);
-        Database.onSetLoginUserCountry(
-            fetchLoginUserProfileModel!.user!.country!);
-        Database.onSetLoginUserCountryFlag(
-            fetchLoginUserProfileModel!.user!.countryFlag!);
-        Database.onSetLoginUserBirthDate(
-            fetchLoginUserProfileModel?.user?.birthDate ?? "");
-        Database.onSetLoginUserGender(
-            fetchLoginUserProfileModel?.user?.gender ?? "Male");
-        Database.onSetLoginUserPhoneNumber(
-            fetchLoginUserProfileModel?.user?.phoneNumber ?? "");
-        Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
-        log("Database.loginUserId  ${Database.loginUserId}");
-        log("Database.loginUserEmail  ${Database.loginUserEmail}");
-        log("Database.loginUserFirebaseId  ${Database.loginUserFirebaseId}");
-        log("Database.image  ${Database.loginUserProfilePic}");
+      Database.onSetLoginUserId(fetchLoginUserProfileModel!.user!.id!);
+      Database.onSetLoginUserFirebaseId(
+          fetchLoginUserProfileModel!.user!.firebaseId!);
+      Database.onSetLoginUserProfilePic(
+          fetchLoginUserProfileModel?.user?.profilePic ?? "");
+      Database.onSetLoginUserName(fetchLoginUserProfileModel!.user!.fullName!);
+      Database.onSetLoginUserNickName(
+          fetchLoginUserProfileModel?.user?.nickName ?? "");
+      Database.onSetLoginUserEmail(fetchLoginUserProfileModel!.user!.email!);
+      Database.onSetLoginUserCountry(
+          fetchLoginUserProfileModel!.user!.country!);
+      Database.onSetLoginUserCountryFlag(
+          fetchLoginUserProfileModel!.user!.countryFlag!);
+      Database.onSetLoginUserBirthDate(
+          fetchLoginUserProfileModel?.user?.birthDate ?? "");
+      Database.onSetLoginUserGender(
+          fetchLoginUserProfileModel?.user?.gender ?? "Male");
+      Database.onSetLoginUserPhoneNumber(
+          fetchLoginUserProfileModel?.user?.phoneNumber ?? "");
+      Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
+      log("Database.loginUserId  ${Database.loginUserId}");
+      log("Database.loginUserEmail  ${Database.loginUserEmail}");
+      log("Database.loginUserFirebaseId  ${Database.loginUserFirebaseId}");
+      log("Database.image  ${Database.loginUserProfilePic}");
 
-        if (fetchLoginUserProfileModel?.user?.isListener == true) {
-          fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(
-            loginListenerId:
-                Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
-          );
-          Database.onSetLoginUserId(fetchListenerProfileModel!.data!.id!);
-          if (fetchListenerProfileModel?.status == false) {
-            Utils.showLog(fetchListenerProfileModel?.message ?? "");
-          }
-          Database.fetchListenerProfileModel = fetchListenerProfileModel;
+      if (fetchLoginUserProfileModel?.user?.isListener == true) {
+        fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(
+          loginListenerId:
+              Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
+        );
+        Database.onSetLoginUserId(fetchListenerProfileModel!.data!.id!);
+        if (fetchListenerProfileModel?.status == false) {
+          Utils.showLog(fetchListenerProfileModel?.message ?? "");
         }
-      } else {
-        Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
-        Utils.showLog("Get Profile Api Calling Failed !!");
+        Database.fetchListenerProfileModel = fetchListenerProfileModel;
       }
     } else {
-      Database.onLogOut();
+      Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
+      Utils.showLog("Get Profile Api Calling Failed !!");
     }
   }
 
@@ -402,8 +450,9 @@ class MainScreenController extends GetxController {
           Utils.showLog("Firebase Custom Token => $customToken");
 
           /// Step 3: Sign in with custom token (CRITICAL - this maintains same user!)
-          final UserCredential userCredential =
-              await FirebaseAuth.instance.signInWithCustomToken(customToken);
+          final firebase_auth.UserCredential userCredential =
+              await firebase_auth.FirebaseAuth.instance
+                  .signInWithCustomToken(customToken);
 
           Utils.showLog(
               "Signed in with existing Firebase user: ${userCredential.user?.uid}");
@@ -419,7 +468,7 @@ class MainScreenController extends GetxController {
           // For existing users, pass isNewUser = false
           await _completeLoginFlow(uid, token, fcmToken, isNewUser: false);
         } else {
-          Get.back();
+          _dismissLoadingDialog();
           Utils.showToast(Get.context!, "Failed to get custom token");
         }
       } else {
@@ -427,8 +476,8 @@ class MainScreenController extends GetxController {
         Utils.showLog("New device detected - creating new anonymous user");
 
         /// Step 1: Create anonymous Firebase user
-        final UserCredential userCredential =
-            await FirebaseAuth.instance.signInAnonymously();
+        final firebase_auth.UserCredential userCredential =
+            await firebase_auth.FirebaseAuth.instance.signInAnonymously();
 
         final String firebaseUid = userCredential.user?.uid ?? "";
         Utils.showLog("New Firebase UID created => $firebaseUid");
@@ -443,7 +492,7 @@ class MainScreenController extends GetxController {
         await _completeLoginFlow(firebaseUid, token, fcmToken, isNewUser: true);
       }
     } catch (e) {
-      Get.back();
+      _dismissLoadingDialog();
       Utils.showLog("Login error: $e");
       Utils.showToast(Get.context!, "Login failed. Please try again.");
     }
@@ -476,8 +525,9 @@ class MainScreenController extends GetxController {
             getFirebaseCustomTokenModel?.message ?? 'Failed to create token');
       }
 
-      final UserCredential credential =
-          await FirebaseAuth.instance.signInWithCustomToken(customToken);
+      final firebase_auth.UserCredential credential = await firebase_auth
+          .FirebaseAuth.instance
+          .signInWithCustomToken(customToken);
       final loginUid =
           (credential.user?.uid ?? guestUidState.firebaseUid).trim();
       if (loginUid.isEmpty) {
@@ -620,6 +670,7 @@ class MainScreenController extends GetxController {
         log("Database.loginUserProfilePic  ${Database.loginUserProfilePic}");
         log("Database.loginUserEmail  ${Database.loginUserEmail}");
 
+        _dismissLoadingDialog();
         Get.offAllNamed(AppRoutes.fillProfileScreen, arguments: [
           Database.loginUserName,
           Database.loginUserProfilePic,
@@ -633,13 +684,15 @@ class MainScreenController extends GetxController {
             loginUserId: Database.loginUserFirebaseId, loginType: 2);
         // route bottom bar
         // Get.toNamed(AppRoutes.bottomBar);
+        _dismissLoadingDialog();
         if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
-          Get.toNamed(AppRoutes.hostBottomBar);
+          Get.offAllNamed(AppRoutes.hostBottomBar);
         } else {
-          Get.toNamed(AppRoutes.bottomBar);
+          Get.offAllNamed(AppRoutes.bottomBar);
         }
       }
     } else {
+      _dismissLoadingDialog();
       Utils.showLog(loginModel?.message ?? "");
       Utils.showLog(" login Api Calling Failed !!");
     }
@@ -648,10 +701,10 @@ class MainScreenController extends GetxController {
   /// email password login user
 
   Future<void> onClickSignIn() async {
-    Database.onSetDemoListener(false);
-    FocusManager.instance.primaryFocus?.unfocus();
-    Utils.showLog("Email => ${emailController.text}");
-    Utils.showLog("Password => ${passwordController.text}");
+    if (isLoading) {
+      return;
+    }
+
     final email = emailController.text.trim().toLowerCase();
     final password = passwordController.text.trim();
 
@@ -663,37 +716,43 @@ class MainScreenController extends GetxController {
       return;
     }
 
-    await _refreshDeviceContext();
-
     try {
-      Get.dialog(const LoadingWidget(), barrierDismissible: false);
+      await _showLoginLoadingNow();
+
+      Database.onSetDemoListener(false);
+      FocusManager.instance.primaryFocus?.unfocus();
+      Utils.showLog("Email => $email");
+      Utils.showLog("Password => $password");
+
+      await _refreshDeviceContext();
 
       Database.onSetUserExist(true);
       Utils.showLog("Database.userExist :: ${Database.userExist}");
 
-      final UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-            email: email,
-            password: password,
-          )
-          .timeout(const Duration(seconds: 12));
+      final firebase_auth.UserCredential userCredential =
+          await firebase_auth.FirebaseAuth.instance
+              .signInWithEmailAndPassword(
+                email: email,
+                password: password,
+              )
+              .timeout(const Duration(seconds: 12));
 
-      final token =
-          await FirebaseAccessToken.onGet().timeout(const Duration(seconds: 8));
       final firebaseUID = userCredential.user?.uid;
+      final token = await _getFreshAuthToken(userCredential.user)
+          .timeout(const Duration(seconds: 8));
 
       Utils.showLog("Firebase UID => $firebaseUID");
       Utils.showLog("Firebase Token => $token");
 
       if (firebaseUID == null || firebaseUID.isEmpty) {
-        _dismissLoadingDialog();
+        _stopLoginLoading();
         Utils.showToast(
             Get.context!, "Unable to verify your account. Please try again.");
         return;
       }
 
       if ((token ?? '').isEmpty) {
-        _dismissLoadingDialog();
+        _stopLoginLoading();
         Utils.showToast(Get.context!,
             "Unable to authenticate right now. Please try again.");
         return;
@@ -733,8 +792,7 @@ class MainScreenController extends GetxController {
       }
 
       if (loginModel?.status != true) {
-        _dismissLoadingDialog();
-        isLoading = false;
+        _stopLoginLoading();
         Utils.showToast(
             Get.context!, _normalizeBackendLoginError(loginModel?.message));
         Utils.showLog("Login API call failed");
@@ -747,10 +805,9 @@ class MainScreenController extends GetxController {
       Database.onSetSeenOnboarding(true);
       Database.onSetFillProfile(true);
 
-      Get.back(); // Stop loading
-
       if (loginModel?.signUp == true) {
         Database.onSetFillProfile(false);
+        _stopLoginLoading();
         Get.offAllNamed(
           AppRoutes.fillProfileScreen,
           arguments: [
@@ -761,32 +818,26 @@ class MainScreenController extends GetxController {
         );
       } else {
         Database.onSetFillProfile(true);
-        await onGetProfile(loginUserId: userCredential.user!.uid, loginType: 4);
+        await onGetProfile(
+          loginUserId: userCredential.user!.uid,
+          loginType: 4,
+          authToken: token,
+        );
         // Get.toNamed(AppRoutes.bottomBar);
         if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
-          fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(
-            loginListenerId:
-                Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
-          );
-          Database.onSetLoginUserId(fetchListenerProfileModel!.data!.id!);
-          if (fetchListenerProfileModel?.status == false) {
-            Utils.showLog(fetchListenerProfileModel?.message ?? "");
-          }
-          Database.fetchListenerProfileModel = fetchListenerProfileModel;
-
-          Get.toNamed(AppRoutes.hostBottomBar);
+          _stopLoginLoading();
+          Get.offAllNamed(AppRoutes.hostBottomBar);
         } else {
-          Get.toNamed(AppRoutes.bottomBar);
+          _stopLoginLoading();
+          Get.offAllNamed(AppRoutes.bottomBar);
         }
       }
-    } on FirebaseAuthException catch (e) {
-      _dismissLoadingDialog();
-      isLoading = false;
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      _stopLoginLoading();
       Utils.showToast(Get.context!, _firebaseSignInErrorMessage(e));
       Utils.showLog("Firebase Sign-In Failed => $e");
     } catch (e) {
-      _dismissLoadingDialog();
-      isLoading = false;
+      _stopLoginLoading();
       Utils.showToast(Get.context!,
           "Login failed. Please check your details and try again.");
       Utils.showLog("Sign In Failed => $e");
@@ -817,18 +868,19 @@ class _GuestFirebaseUidState {
 }
 
 class AppleAuthentication {
-  static Future<UserCredential?> signInWithApple() async {
+  static Future<firebase_auth.UserCredential?> signInWithApple() async {
     try {
       final appleCredential = await SignInWithApple.getAppleIDCredential(
           scopes: [
             AppleIDAuthorizationScopes.email,
             AppleIDAuthorizationScopes.fullName
           ]);
-      final oauthCredential = OAuthProvider("apple.com").credential(
-          idToken: appleCredential.identityToken,
-          accessToken: appleCredential.authorizationCode);
-      final response =
-          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      final oauthCredential = firebase_auth.OAuthProvider("apple.com")
+          .credential(
+              idToken: appleCredential.identityToken,
+              accessToken: appleCredential.authorizationCode);
+      final response = await firebase_auth.FirebaseAuth.instance
+          .signInWithCredential(oauthCredential);
 
       Utils.showLog(
           "✅ Apple Login isNewUser => ${response.additionalUserInfo?.isNewUser} Email => ${response.additionalUserInfo?.profile?["email"] ?? ""}");
