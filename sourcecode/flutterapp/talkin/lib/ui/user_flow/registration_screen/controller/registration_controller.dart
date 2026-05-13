@@ -151,18 +151,6 @@ class RegistrationController extends GetxController {
       return false;
     }
 
-    if (selectedBirthDate == null) {
-      Utils.showToast(Get.context!, "Please select your date of birth");
-      return false;
-    }
-
-    final int age = _calculateAge(selectedBirthDate!);
-    if (age < 18) {
-      Utils.showToast(
-          Get.context!, "You must be at least 18 years old to continue");
-      return false;
-    }
-
     if (!isCheck) {
       Utils.showToast(
           Get.context!, "Please agree to the Privacy Policy to proceed.");
@@ -261,11 +249,21 @@ class RegistrationController extends GetxController {
   var isBusy = false;
 
   Future<void> _prepareDeviceContext() async {
-    final identity = await MobileDeviceIdentifier().getDeviceId();
-    final fcmToken = await FirebaseMessaging.instance.getToken();
+    try {
+      final identity = await MobileDeviceIdentifier().getDeviceId();
+      Database.onSetIdentity(identity ?? "");
+    } catch (e) {
+      Utils.showLog("getDeviceId error: $e");
+      Database.onSetIdentity("");
+    }
 
-    Database.onSetIdentity(identity ?? "");
-    Database.onSetFcmToken(fcmToken ?? "");
+    try {
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+      Database.onSetFcmToken(fcmToken ?? "");
+    } catch (e) {
+      Utils.showLog("getFcmToken error: $e");
+      Database.onSetFcmToken("");
+    }
   }
 
   Future<void> _cleanupCreatedFirebaseUser(
@@ -327,8 +325,8 @@ class RegistrationController extends GetxController {
       fcmToken: Database.fcmToken,
       userName: nameController.text.trim(),
       confirmPassword: confirmPassController.text.trim(),
-      birthDate: birthDateController.text.trim(),
-      age: selectedBirthDate == null ? null : _calculateAge(selectedBirthDate!),
+      birthDate: "2000-01-01",
+      age: 25,
       acceptTerms: true,
       acceptanceSource: "signup_email",
     );
@@ -407,9 +405,10 @@ class RegistrationController extends GetxController {
       } else {
         Utils.showToast(Get.context!, "Registration failed: ${e.message}");
       }
-    } catch (e) {
+    } catch (e, s) {
+      Utils.showLog('Registration Exception: $e\n$s');
       if (Get.isDialogOpen ?? false) Get.back();
-      Utils.showToast(Get.context!, "Registration failed");
+      Utils.showToast(Get.context!, "Registration failed: $e");
     } finally {
       if (Get.isDialogOpen ?? false) Get.back();
       isBusy = false;

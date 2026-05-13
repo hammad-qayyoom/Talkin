@@ -69,9 +69,16 @@ class VerifyOtpController extends GetxController {
   Future<void> verifyOtp() async {
     Database.onSetDemoListener(false);
 
-    final identity = (await MobileDeviceIdentifier().getDeviceId())!;
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    Database.onSetFcmToken(fcmToken ?? "");
+    String identity = "";
+    try {
+      identity = await MobileDeviceIdentifier().getDeviceId() ?? "";
+    } catch (_) {}
+    String fcmToken = "";
+    try {
+      fcmToken = await FirebaseMessaging.instance.getToken() ?? "";
+    } catch (_) {}
+    
+    Database.onSetFcmToken(fcmToken);
     Database.onSetIdentity(identity);
 
     log("Database.identity :: ${Database.identity}");

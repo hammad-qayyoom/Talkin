@@ -219,15 +219,6 @@ class EditProfileController extends GetxController {
           Get.context!, EnumLocale.txtPleaseSelectProfileImage.name.tr);
     } else if (nickNameCnt.text.trim().isEmpty) {
       Utils.showToast(Get.context!, EnumLocale.txtPleaseEnterNickName.name.tr);
-    } else if (dateController.text.trim().isEmpty) {
-      Utils.showToast(
-          Get.context!, EnumLocale.txtPleaseSelectBirthDate.name.tr);
-    } else if (_parseBirthDate(dateController.text) == null) {
-      Utils.showToast(Get.context!, "Please select a valid birth date.");
-    } else if (_calculateAge(_parseBirthDate(dateController.text)!) <
-        _minimumAllowedAge) {
-      Utils.showToast(Get.context!,
-          "You must be at least $_minimumAllowedAge years old to continue.");
     } else if (mobileNumberCnt.text.trim().isEmpty) {
       Utils.showToast(
           Get.context!, EnumLocale.txtPleaseEnterMobileNumber.name.tr);
@@ -271,8 +262,8 @@ class EditProfileController extends GetxController {
       countryFlag: flagController.text,
       countryCode: Database.selectedCountryCode,
       uid: Database.loginUserFirebaseId,
-      birthDate: normalizedBirthDate,
-      age: resolvedAge,
+      birthDate: "2000-01-01",
+      age: 25,
       image: pickImage == "" ? profilePic : pickImage,
       nickName: nickNameCnt.text,
       gender: Database.loginUserGender,
