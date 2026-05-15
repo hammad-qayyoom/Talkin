@@ -5,7 +5,6 @@ import 'package:flutter_cashfree_pg_sdk/utils/cfexceptionconstants.dart';
 import 'package:flutter_cashfree_pg_sdk/utils/cfexceptions.dart';
 
 class CFNetbankingPaymentBuilder {
-
   CFSession? _session;
   CFNetbanking? _cfNetbanking;
 
@@ -22,8 +21,8 @@ class CFNetbankingPaymentBuilder {
   }
 
   CFNetbankingPayment build() {
-    if(_session == null) {
-      throw CFException(CFExceptionConstants.SESSION_NOT_PRESENT);
+    if (_session == null) {
+      throw CFException(CFExceptionConstants.sessionNotPresent);
     }
     return CFNetbankingPayment(this);
   }
@@ -35,17 +34,13 @@ class CFNetbankingPaymentBuilder {
   CFNetbanking getNetbanking() {
     return _cfNetbanking!;
   }
-
 }
 
 class CFNetbankingPayment extends CFPayment {
-
   late CFSession _session;
   CFNetbanking? _cfNetbanking;
 
   // Constructor
-  CFNetbankingPayment._();
-
   CFNetbankingPayment(CFNetbankingPaymentBuilder builder) {
     _session = builder.getSession();
     _cfNetbanking = builder.getNetbanking();

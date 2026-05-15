@@ -1,119 +1,112 @@
 import 'package:flutter_cashfree_pg_sdk/api/cfcard/cfcardwidget.dart';
 
 class CFCardBuilder {
-
-  String? _card_expiry_month;
-  String? _card_expiry_year;
-  String? _card_cvv;
-  String? _card_holder_name;
-  String? _instrument_id;
-  CFCardWidget? _card_widget;
+  String? _cardExpiryMonth;
+  String? _cardExpiryYear;
+  String? _cardCvv;
+  String? _cardHolderName;
+  String? _instrumentId;
+  CFCardWidget? _cardWidget;
 
   CFCardBuilder();
 
-  CFCardBuilder setCardExpiryMonth(String card_expiry_month) {
-    _card_expiry_month = card_expiry_month;
+  CFCardBuilder setCardExpiryMonth(String cardExpiryMonth) {
+    _cardExpiryMonth = cardExpiryMonth;
     return this;
   }
 
-  CFCardBuilder setCardExpiryYear(String card_expiry_year) {
-    _card_expiry_year = card_expiry_year;
+  CFCardBuilder setCardExpiryYear(String cardExpiryYear) {
+    _cardExpiryYear = cardExpiryYear;
     return this;
   }
 
-  CFCardBuilder setCardCVV(String card_cvv) {
-    _card_cvv = card_cvv;
+  CFCardBuilder setCardCVV(String cardCvv) {
+    _cardCvv = cardCvv;
     return this;
   }
 
-  CFCardBuilder setCardHolderName(String card_holder_name) {
-    _card_holder_name = card_holder_name;
+  CFCardBuilder setCardHolderName(String cardHolderName) {
+    _cardHolderName = cardHolderName;
     return this;
   }
 
-  CFCardBuilder setCardWidget(CFCardWidget card_widget) {
-    _card_widget = card_widget;
+  CFCardBuilder setCardWidget(CFCardWidget cardWidget) {
+    _cardWidget = cardWidget;
     return this;
   }
 
-  CFCardBuilder setInstrumentId(String instrument_id) {
-    _instrument_id = instrument_id;
+  CFCardBuilder setInstrumentId(String instrumentId) {
+    _instrumentId = instrumentId;
     return this;
   }
 
   String getCardExpiryMonth() {
-    return _card_expiry_month ?? "";
+    return _cardExpiryMonth ?? "";
   }
 
   String getCardExpiryYear() {
-    return _card_expiry_year ?? "";
+    return _cardExpiryYear ?? "";
   }
 
   String getCardCvv() {
-    return _card_cvv ?? "";
+    return _cardCvv ?? "";
   }
 
   String getCardHolderName() {
-    return _card_holder_name ?? "";
+    return _cardHolderName ?? "";
   }
 
   CFCardWidget? getCardNumber() {
-    return _card_widget;
+    return _cardWidget;
   }
 
   String? getInstrumentId() {
-    return _instrument_id;
+    return _instrumentId;
   }
 
   CFCard build() {
     return CFCard(this);
   }
-
 }
 
 class CFCard {
-
-  String? _card_expiry_month;
-  String? _card_expiry_year;
-  String? _card_cvv;
-  String? _card_holder_name;
-  String? _instrument_id;
-  CFCardWidget? _card_widget;
-
-  // Constructor
-  CFCard._();
+  String? _cardExpiryMonth;
+  String? _cardExpiryYear;
+  String? _cardCvv;
+  String? _cardHolderName;
+  String? _instrumentId;
+  CFCardWidget? _cardWidget;
 
   CFCard(CFCardBuilder builder) {
-    _card_expiry_month = builder.getCardExpiryMonth();
-    _card_expiry_year = builder.getCardExpiryYear();
-    _card_cvv = builder.getCardCvv();
-    _card_holder_name = builder.getCardHolderName();
-    _card_widget = builder.getCardNumber();
-    _instrument_id = builder.getInstrumentId();
+    _cardExpiryMonth = builder.getCardExpiryMonth();
+    _cardExpiryYear = builder.getCardExpiryYear();
+    _cardCvv = builder.getCardCvv();
+    _cardHolderName = builder.getCardHolderName();
+    _cardWidget = builder.getCardNumber();
+    _instrumentId = builder.getInstrumentId();
   }
 
   String? getInstrumentId() {
-    return _instrument_id;
+    return _instrumentId;
   }
 
   String getCardExpiryMonth() {
-    return _card_expiry_month ?? "";
+    return _cardExpiryMonth ?? "";
   }
 
   String getCardExpiryYear() {
-    return _card_expiry_year ?? "";
+    return _cardExpiryYear ?? "";
   }
 
   String getCardCvv() {
-    return _card_cvv ?? "";
+    return _cardCvv ?? "";
   }
 
   String getCardHolderName() {
-    return _card_holder_name ?? "";
+    return _cardHolderName ?? "";
   }
 
   CFCardWidget? getCardNumber() {
-    return _card_widget;
+    return _cardWidget;
   }
-
 }

@@ -141,7 +141,8 @@ class RecentListenersSearchView extends StatelessWidget {
                                     onTap: () {
                                       Get.toNamed(
                                         AppRoutes.profileDetailScreenView,
-                                        arguments: listener.id,
+                                        arguments:
+                                            listener.profileRouteArguments,
                                       );
                                     },
                                     callCount: listener.callCount.toString(),

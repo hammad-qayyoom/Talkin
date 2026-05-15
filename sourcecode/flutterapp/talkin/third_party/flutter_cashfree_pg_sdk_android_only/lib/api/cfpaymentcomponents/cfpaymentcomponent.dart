@@ -1,11 +1,19 @@
 import 'package:flutter_cashfree_pg_sdk/utils/cfenums.dart';
 
-@Deprecated("This integration is no longer supported. Please use CFWebCheckoutPayment")
+@Deprecated(
+    "This integration is no longer supported. Please use CFWebCheckoutPayment")
 class CFPaymentComponentBuilder {
-  List<CFPaymentModes> _components = [CFPaymentModes.CARD, CFPaymentModes.UPI, CFPaymentModes.NETBANKING, CFPaymentModes.WALLET, CFPaymentModes.PAYLATER, CFPaymentModes.EMI];
+  List<CFPaymentModes> _components = [
+    CFPaymentModes.card,
+    CFPaymentModes.upi,
+    CFPaymentModes.netbanking,
+    CFPaymentModes.wallet,
+    CFPaymentModes.paylater,
+    CFPaymentModes.emi
+  ];
 
   CFPaymentComponentBuilder setComponents(List<CFPaymentModes> components) {
-    if(components.isNotEmpty) {
+    if (components.isNotEmpty) {
       _components = components;
     }
     return this;
@@ -18,14 +26,17 @@ class CFPaymentComponentBuilder {
   List<CFPaymentModes> getComponents() {
     return _components;
   }
-
 }
 
 class CFPaymentComponent {
-
-  List<CFPaymentModes> _components = [CFPaymentModes.CARD, CFPaymentModes.UPI, CFPaymentModes.NETBANKING, CFPaymentModes.WALLET, CFPaymentModes.PAYLATER, CFPaymentModes.EMI];
-  CFPaymentComponent._();
-
+  List<CFPaymentModes> _components = [
+    CFPaymentModes.card,
+    CFPaymentModes.upi,
+    CFPaymentModes.netbanking,
+    CFPaymentModes.wallet,
+    CFPaymentModes.paylater,
+    CFPaymentModes.emi
+  ];
   CFPaymentComponent(CFPaymentComponentBuilder builder) {
     _components = builder.getComponents();
   }
@@ -33,7 +44,7 @@ class CFPaymentComponent {
   List<String> getComponents() {
     var i = 0;
     List<String> components = [];
-    for(i=0; i<_components.length; i++) {
+    for (i = 0; i < _components.length; i++) {
       components.add(_components[i].name.toLowerCase());
     }
     return components;

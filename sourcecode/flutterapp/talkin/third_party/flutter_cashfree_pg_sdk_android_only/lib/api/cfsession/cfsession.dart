@@ -51,13 +51,13 @@ class CFSessionBuilder {
 
   CFSession build() {
     if (_environment == null) {
-      throw CFException(CFExceptionConstants.ENVIRONMENT_NOT_PRESENT);
+      throw CFException(CFExceptionConstants.environmentNotPresent);
     }
     if (_orderId == null || _orderId!.isEmpty) {
-      throw CFException(CFExceptionConstants.ORDER_ID_NOT_PRESENT);
+      throw CFException(CFExceptionConstants.orderIdNotPresent);
     }
-    if(_paymentSessionId == null || _paymentSessionId!.isEmpty) {
-      throw CFException(CFExceptionConstants.PAYMENT_SESSION_ID_NOT_PRESENT);
+    if (_paymentSessionId == null || _paymentSessionId!.isEmpty) {
+      throw CFException(CFExceptionConstants.paymentSessionIdNotPresent);
     }
     return CFSession(this);
   }
@@ -68,8 +68,6 @@ class CFSession {
   late String _orderId;
   late String _orderToken;
   late String _paymentSessionId;
-
-  CFSession._();
 
   CFSession(CFSessionBuilder sessionBuilder) {
     _environment = sessionBuilder.getEnvironment();
@@ -90,7 +88,7 @@ class CFSession {
   }
 
   String getEnvironment() {
-    return _environment == CFEnvironment.SANDBOX ? CFEnvironment.SANDBOX.name : CFEnvironment.PRODUCTION.name;
+    return _environment == CFEnvironment.sandbox ? "SANDBOX" : "PRODUCTION";
   }
 
   CFEnvironment getEnvironmentEnum() {

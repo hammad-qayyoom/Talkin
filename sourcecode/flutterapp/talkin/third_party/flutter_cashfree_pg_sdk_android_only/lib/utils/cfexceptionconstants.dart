@@ -1,15 +1,19 @@
 class CFExceptionConstants {
+  static const String orderIdNotPresent = "order id cannot be empty";
+  static const String orderTokenNotPresent = "order token cannot be empty";
+  static const String paymentSessionIdNotPresent =
+      "payment session id cannot be empty";
+  static const String environmentNotPresent =
+      "environment value cannot be empty";
+  static const String sessionNotPresent = "session value cannot be empty";
 
-  static String ORDER_ID_NOT_PRESENT = "order id cannot be empty";
-  static String ORDER_TOKEN_NOT_PRESENT = "order token cannot be empty";
-  static String PAYMENT_SESSION_ID_NOT_PRESENT = "payment session id cannot be empty";
-  static String ENVIRONMENT_NOT_PRESENT = "environment value cannot be empty";
-  static String SESSION_NOT_PRESENT = "session value cannot be empty";
+  static const String callbackNotSet =
+      "callbacks have to be set before initiating the payment";
+  static const String onePaymentModeIsRequired =
+      "at least one payment mode should be present";
 
-  static String CALLBACK_NOT_SET = "callbacks have to be set before initiating the payment";
-  static String ONE_PAYMENT_MODE_IS_REQUIRED = "at least one payment mode should be present";
-
-  static String SUBSCRIPTION_ID_NOT_PRESENT = "subscription id cannot be empty";
-  static String SUBSCRIPTION_SESSION_ID_NOT_PRESENT = "subscription session id cannot be empty";
-
+  static const String subscriptionIdNotPresent =
+      "subscription id cannot be empty";
+  static const String subscriptionSessionIdNotPresent =
+      "subscription session id cannot be empty";
 }

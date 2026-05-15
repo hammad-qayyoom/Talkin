@@ -1,0 +1,35 @@
+name: incodes_payment
+description: A Flutter payment SDK supporting multiple payment gateways including Stripe, PayPal, Razorpay, Flutterwave, Cashfree, PayStack, and In-App Purchases.
+version: 1.0.1
+repository : 'https://gitlab.com/maulik.xitijinfo/incodes_payment.git'
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  pay_with_paystack: ^1.0.14
+  fluttertoast: ^8.2.12
+  flutter_paypal_payment: ^1.0.8
+  flutter_cashfree_pg_sdk: ^2.2.9+47
+  http: ^1.5.0
+  uuid: ^4.5.1
+  flutter_stripe: ^10.0.0
+  razorpay_flutter: ^1.4.0
+  flutterwave_standard: ^1.1.0
+  in_app_purchase: ^3.2.3
+  change_app_package_name: ^1.5.0
+  dio: ^5.9.0
+  in_app_purchase_android: ^0.4.0+5
+  in_app_purchase_storekit: ^0.4.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true

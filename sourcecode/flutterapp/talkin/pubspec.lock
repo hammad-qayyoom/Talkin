@@ -927,7 +927,7 @@ packages:
     source: hosted
     version: "3.2.3"
   in_app_purchase_android:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: in_app_purchase_android
       sha256: abb254ae159a5a9d4f867795ecb076864faeba59ce015ab81d4cca380f23df45
@@ -943,7 +943,7 @@ packages:
     source: hosted
     version: "1.4.0"
   in_app_purchase_storekit:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: in_app_purchase_storekit
       sha256: f7cbbd7fb47ab5a4fb736fc3f20ae81a4f6def0af9297b3c525ca727761e2589
@@ -953,10 +953,9 @@ packages:
   incodes_payment:
     dependency: "direct main"
     description:
-      name: incodes_payment
-      sha256: dcaa16c5824e820c4da657dac1449bbc83ae460458b82ac3fe3696ab59c44057
-      url: "https://pub.dev"
-    source: hosted
+      path: "third_party/incodes_payment_fixed"
+      relative: true
+    source: path
     version: "1.0.1"
   intl:
     dependency: "direct main"

@@ -11,23 +11,22 @@ enum CFCardBrand {
 // Detect Card Brand through API
 
 class CFCardValidator {
-
   CFCardBrand detectCardBrand(String scheme) {
-  if (scheme == "visa") {
-  return CFCardBrand.visa;
-  } else if (scheme == "mastercard") {
-  return CFCardBrand.mastercard;
-  } else if (scheme == "amex") {
-  return CFCardBrand.amex;
-  } else if (scheme == "discover") {
-  return CFCardBrand.discover;
-  } else if (scheme == "rupay") {
-    return CFCardBrand.rupay;
-  } else if (scheme == "jcb") {
-    return CFCardBrand.jcb;
-  } else {
-  return CFCardBrand.other;
-  }
+    if (scheme == "visa") {
+      return CFCardBrand.visa;
+    } else if (scheme == "mastercard") {
+      return CFCardBrand.mastercard;
+    } else if (scheme == "amex") {
+      return CFCardBrand.amex;
+    } else if (scheme == "discover") {
+      return CFCardBrand.discover;
+    } else if (scheme == "rupay") {
+      return CFCardBrand.rupay;
+    } else if (scheme == "jcb") {
+      return CFCardBrand.jcb;
+    } else {
+      return CFCardBrand.other;
+    }
   }
 
   bool luhnCheck(String cardNumber) {
@@ -56,5 +55,4 @@ class CFCardValidator {
 
     return sum % 10 == 0;
   }
-
 }

@@ -1,5 +1,4 @@
 class CFErrorResponse {
-
   String? _status;
   String? _message;
   String? _code;
@@ -27,5 +26,4 @@ class CFErrorResponse {
   String? getType() {
     return _type;
   }
-
 }

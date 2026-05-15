@@ -11,13 +11,15 @@ import 'package:notisboard/utils/enums.dart';
 class OnBoardingController extends GetxController {
   @override
   void onInit() {
-    // TODO: implement onInit
-    // Database.onSetFillProfile(false);
-
+    super.onInit();
     Database.onSetSeenOnboarding(true);
     log("init isSeenOnBoarding ::  ${Database.isSeenOnBoarding}");
+  }
 
-    super.onInit();
+  @override
+  void onClose() {
+    pageController.dispose();
+    super.onClose();
   }
 
   PageController pageController = PageController(initialPage: 0);

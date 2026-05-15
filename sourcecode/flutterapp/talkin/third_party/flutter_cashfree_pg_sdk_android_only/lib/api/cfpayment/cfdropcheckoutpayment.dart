@@ -5,9 +5,9 @@ import 'package:flutter_cashfree_pg_sdk/utils/cfexceptions.dart';
 import '../cfpaymentcomponents/cfpaymentcomponent.dart';
 import '../cftheme/cftheme.dart';
 
-@Deprecated("This integration is no longer supported. Please use CFWebCheckoutPayment")
+@Deprecated(
+    "This integration is no longer supported. Please use CFWebCheckoutPayment")
 class CFDropCheckoutPaymentBuilder {
-
   CFSession? _session;
   CFTheme _cfTheme = CFThemeBuilder().build();
   CFPaymentComponent _paymentComponent = CFPaymentComponentBuilder().build();
@@ -24,14 +24,15 @@ class CFDropCheckoutPaymentBuilder {
     return this;
   }
 
-  CFDropCheckoutPaymentBuilder setPaymentComponent(CFPaymentComponent cfPaymentComponent) {
+  CFDropCheckoutPaymentBuilder setPaymentComponent(
+      CFPaymentComponent cfPaymentComponent) {
     _paymentComponent = cfPaymentComponent;
     return this;
   }
 
   CFDropCheckoutPayment build() {
-    if(_session == null) {
-      throw CFException(CFExceptionConstants.SESSION_NOT_PRESENT);
+    if (_session == null) {
+      throw CFException(CFExceptionConstants.sessionNotPresent);
     }
     return CFDropCheckoutPayment(this);
   }
@@ -47,18 +48,14 @@ class CFDropCheckoutPaymentBuilder {
   CFPaymentComponent getPaymentComponent() {
     return _paymentComponent;
   }
-
 }
 
 class CFDropCheckoutPayment extends CFPayment {
-
   late CFSession _session;
   CFTheme _cfTheme = CFThemeBuilder().build();
   CFPaymentComponent _paymentComponent = CFPaymentComponentBuilder().build();
 
   // Constructor
-  CFDropCheckoutPayment._();
-
   CFDropCheckoutPayment(CFDropCheckoutPaymentBuilder builder) {
     _session = builder.getSession();
     _cfTheme = builder.getTheme();
@@ -76,5 +73,4 @@ class CFDropCheckoutPayment extends CFPayment {
   CFPaymentComponent getPaymentComponent() {
     return _paymentComponent;
   }
-
 }

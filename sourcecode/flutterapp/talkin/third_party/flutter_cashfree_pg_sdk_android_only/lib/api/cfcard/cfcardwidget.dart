@@ -1,50 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cashfree_pg_sdk/api/cfcard/cfcardvalidator.dart';
-import 'package:flutter_cashfree_pg_sdk/api/cfnetwork/CFNetworkManager.dart';
+import 'package:flutter_cashfree_pg_sdk/api/cfnetwork/cf_network_manager.dart';
 import 'dart:convert';
 import '../cferrorresponse/cferrorresponse.dart';
 import '../cfsession/cfsession.dart';
 import 'cfcardlistener.dart';
 
 class CFCardWidget extends StatefulWidget {
-
   final InputDecoration? inputDecoration;
   final TextStyle? textStyle;
   final CFSession? cfSession;
   final void Function(CFCardListener) cardListener;
 
-  const CFCardWidget({key = Key, required this.inputDecoration, required this.textStyle, required this.cardListener, required this.cfSession}): super(key: key);
+  const CFCardWidget({
+    super.key,
+    required this.inputDecoration,
+    required this.textStyle,
+    required this.cardListener,
+    required this.cfSession,
+  });
 
   @override
-  // ignore: no_logic_in_create_state
-  State<CFCardWidget> createState() => CFCardWidgetState(inputDecoration, textStyle, cardListener, cfSession!);
+  State<CFCardWidget> createState() => CFCardWidgetState();
 }
 
 class CFCardWidgetState extends State<CFCardWidget> {
-
   final TextEditingController _controller = TextEditingController();
-  CFSession? _cfSession;
-  InputDecoration? _inputDecoration;
-  void Function(CFCardListener)? _cardListener;
-  TextStyle? _textStyle;
   CFCardValidator cfCardValidator = CFCardValidator();
-  dynamic _tdrJson = null;
-  dynamic _cardbinJson = null;
-  String _first_eight_digits = "";
+  dynamic _tdrJson;
+  dynamic _cardbinJson;
+  String _firstEightDigits = "";
 
-  Image _suffixIcon = Image.asset('packages/flutter_cashfree_pg_sdk/assets/credit-card-default.png',
+  Image _suffixIcon = Image.asset(
+    'packages/flutter_cashfree_pg_sdk/assets/credit-card-default.png',
     width: 30,
     height: 25,
     fit: BoxFit.fitHeight,
   );
-
-  CFCardWidgetState(InputDecoration? inputDecoration, TextStyle? textStyle, Function(CFCardListener) cardListener, CFSession cfSession) {
-    _inputDecoration = inputDecoration;
-    _cardListener = cardListener;
-    _textStyle = textStyle;
-    _cfSession = cfSession;
-  }
 
   @override
   void dispose() {
@@ -55,69 +48,69 @@ class CFCardWidgetState extends State<CFCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: TextField(
-          controller: _controller,
-          keyboardType: TextInputType.number,
-          style: _textStyle,
-          decoration: InputDecoration(
-            icon: _inputDecoration?.icon,
-            iconColor: _inputDecoration?.iconColor,
-            label: _inputDecoration?.label,
-            labelText: _inputDecoration?.labelText,
-            labelStyle: _inputDecoration?.labelStyle,
-            floatingLabelStyle: _inputDecoration?.floatingLabelStyle,
-            helperText: _inputDecoration?.helperText,
-            helperStyle: _inputDecoration?.helperStyle,
-            helperMaxLines: _inputDecoration?.helperMaxLines,
-            hintText: "XXXX XXXX XXXX XXXX",
-            hintStyle: _inputDecoration?.hintStyle,
-            hintTextDirection: _inputDecoration?.hintTextDirection,
-            hintMaxLines: 1,
-            errorText: _inputDecoration?.errorText,
-            errorStyle: _inputDecoration?.errorStyle,
-            errorMaxLines: 1,
-            floatingLabelBehavior: _inputDecoration?.floatingLabelBehavior,
-            floatingLabelAlignment: _inputDecoration?.floatingLabelAlignment,
-            isCollapsed: _inputDecoration?.isCollapsed ?? false,
-            contentPadding: _inputDecoration?.contentPadding,
-            prefixIcon: _inputDecoration?.prefixIcon,
-            prefixIconConstraints: _inputDecoration?.prefixIconConstraints,
-            prefix: _inputDecoration?.prefix,
-            prefixText: _inputDecoration?.prefixText,
-            prefixStyle: _inputDecoration?.prefixStyle,
-            prefixIconColor: _inputDecoration?.prefixIconColor,
-            suffixIcon: Transform.translate(
-                offset: const Offset(-10.0, 0.0),
-                child: _suffixIcon
-            ),
-            suffix: _inputDecoration?.suffix,
-            suffixText: _inputDecoration?.suffixText,
-            suffixStyle: _inputDecoration?.suffixStyle,
-            suffixIconColor: _inputDecoration?.suffixIconColor,
-            suffixIconConstraints: const BoxConstraints(minWidth: 25, minHeight: 25, maxWidth: 30, maxHeight: 25),
-            counter: _inputDecoration?.counter,
-            counterText: _inputDecoration?.counterText,
-            counterStyle: _inputDecoration?.counterStyle,
-            filled: _inputDecoration?.filled,
-            fillColor: _inputDecoration?.fillColor,
-            focusColor: _inputDecoration?.focusColor,
-            hoverColor: _inputDecoration?.hoverColor,
-            errorBorder: _inputDecoration?.errorBorder,
-            focusedBorder: _inputDecoration?.focusedBorder,
-            focusedErrorBorder: _inputDecoration?.focusedErrorBorder,
-            disabledBorder: _inputDecoration?.disabledBorder,
-            enabledBorder: _inputDecoration?.enabledBorder,
-            border: _inputDecoration?.border,
-            enabled: _inputDecoration!.enabled,
-            semanticCounterText: _inputDecoration?.semanticCounterText,
-            alignLabelWithHint: _inputDecoration?.alignLabelWithHint,
-            constraints: _inputDecoration?.constraints,
-          ),
-          maxLines: 1,
-          onChanged: _handleTextChanged,
-          maxLength: 19,
+      margin: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextField(
+        controller: _controller,
+        keyboardType: TextInputType.number,
+        style: widget.textStyle,
+        decoration: InputDecoration(
+          icon: widget.inputDecoration?.icon,
+          iconColor: widget.inputDecoration?.iconColor,
+          label: widget.inputDecoration?.label,
+          labelText: widget.inputDecoration?.labelText,
+          labelStyle: widget.inputDecoration?.labelStyle,
+          floatingLabelStyle: widget.inputDecoration?.floatingLabelStyle,
+          helperText: widget.inputDecoration?.helperText,
+          helperStyle: widget.inputDecoration?.helperStyle,
+          helperMaxLines: widget.inputDecoration?.helperMaxLines,
+          hintText: "XXXX XXXX XXXX XXXX",
+          hintStyle: widget.inputDecoration?.hintStyle,
+          hintTextDirection: widget.inputDecoration?.hintTextDirection,
+          hintMaxLines: 1,
+          errorText: widget.inputDecoration?.errorText,
+          errorStyle: widget.inputDecoration?.errorStyle,
+          errorMaxLines: 1,
+          floatingLabelBehavior: widget.inputDecoration?.floatingLabelBehavior,
+          floatingLabelAlignment:
+              widget.inputDecoration?.floatingLabelAlignment,
+          isCollapsed: widget.inputDecoration?.isCollapsed ?? false,
+          contentPadding: widget.inputDecoration?.contentPadding,
+          prefixIcon: widget.inputDecoration?.prefixIcon,
+          prefixIconConstraints: widget.inputDecoration?.prefixIconConstraints,
+          prefix: widget.inputDecoration?.prefix,
+          prefixText: widget.inputDecoration?.prefixText,
+          prefixStyle: widget.inputDecoration?.prefixStyle,
+          prefixIconColor: widget.inputDecoration?.prefixIconColor,
+          suffixIcon: Transform.translate(
+              offset: const Offset(-10.0, 0.0), child: _suffixIcon),
+          suffix: widget.inputDecoration?.suffix,
+          suffixText: widget.inputDecoration?.suffixText,
+          suffixStyle: widget.inputDecoration?.suffixStyle,
+          suffixIconColor: widget.inputDecoration?.suffixIconColor,
+          suffixIconConstraints: const BoxConstraints(
+              minWidth: 25, minHeight: 25, maxWidth: 30, maxHeight: 25),
+          counter: widget.inputDecoration?.counter,
+          counterText: widget.inputDecoration?.counterText,
+          counterStyle: widget.inputDecoration?.counterStyle,
+          filled: widget.inputDecoration?.filled,
+          fillColor: widget.inputDecoration?.fillColor,
+          focusColor: widget.inputDecoration?.focusColor,
+          hoverColor: widget.inputDecoration?.hoverColor,
+          errorBorder: widget.inputDecoration?.errorBorder,
+          focusedBorder: widget.inputDecoration?.focusedBorder,
+          focusedErrorBorder: widget.inputDecoration?.focusedErrorBorder,
+          disabledBorder: widget.inputDecoration?.disabledBorder,
+          enabledBorder: widget.inputDecoration?.enabledBorder,
+          border: widget.inputDecoration?.border,
+          enabled: widget.inputDecoration!.enabled,
+          semanticCounterText: widget.inputDecoration?.semanticCounterText,
+          alignLabelWithHint: widget.inputDecoration?.alignLabelWithHint,
+          constraints: widget.inputDecoration?.constraints,
         ),
+        maxLines: 1,
+        onChanged: _handleTextChanged,
+        maxLength: 19,
+      ),
     );
   }
 
@@ -146,35 +139,39 @@ class CFCardWidgetState extends State<CFCardWidget> {
         selection: TextSelection.collapsed(offset: formattedText.length),
       );
     }
-    if(textWithoutSpaces.length == 8) {
-      _first_eight_digits = textWithoutSpaces;
-      var tdrResponse = await CFNetworkManager().getTDR(_cfSession!, textWithoutSpaces);
-      var cardbinResponse = await CFNetworkManager().getCardBin(_cfSession!, textWithoutSpaces);
+    if (textWithoutSpaces.length == 8) {
+      _firstEightDigits = textWithoutSpaces;
+      var tdrResponse =
+          await CFNetworkManager().getTDR(widget.cfSession!, textWithoutSpaces);
+      var cardbinResponse = await CFNetworkManager()
+          .getCardBin(widget.cfSession!, textWithoutSpaces);
       _tdrJson = null;
       _cardbinJson = null;
-      if(tdrResponse.statusCode == 200) {
+      if (tdrResponse.statusCode == 200) {
         _tdrJson = json.decode(tdrResponse.body);
         completeResponse["tdr_info"] = _tdrJson;
       }
-      if(cardbinResponse.statusCode == 200) {
+      if (cardbinResponse.statusCode == 200) {
         _cardbinJson = jsonDecode(cardbinResponse.body);
         completeResponse["card_bin_info"] = _cardbinJson;
       }
     } else if (textWithoutSpaces.length > 8) {
-      if(_first_eight_digits == textWithoutSpaces.substring(0, 8)) {
+      if (_firstEightDigits == textWithoutSpaces.substring(0, 8)) {
         completeResponse["tdr_info"] = _tdrJson;
         completeResponse["card_bin_info"] = _cardbinJson;
       } else {
-        _first_eight_digits = textWithoutSpaces.substring(0, 8);
-        var tdrResponse = await CFNetworkManager().getTDR(_cfSession!, _first_eight_digits);
-        var cardbinResponse = await CFNetworkManager().getCardBin(_cfSession!, _first_eight_digits);
+        _firstEightDigits = textWithoutSpaces.substring(0, 8);
+        var tdrResponse = await CFNetworkManager()
+            .getTDR(widget.cfSession!, _firstEightDigits);
+        var cardbinResponse = await CFNetworkManager()
+            .getCardBin(widget.cfSession!, _firstEightDigits);
         _tdrJson = null;
         _cardbinJson = null;
-        if(tdrResponse.statusCode == 200) {
+        if (tdrResponse.statusCode == 200) {
           _tdrJson = json.decode(tdrResponse.body);
           completeResponse["tdr_info"] = _tdrJson;
         }
-        if(cardbinResponse.statusCode == 200) {
+        if (cardbinResponse.statusCode == 200) {
           _cardbinJson = jsonDecode(cardbinResponse.body);
           completeResponse["card_bin_info"] = _cardbinJson;
         }
@@ -184,13 +181,14 @@ class CFCardWidgetState extends State<CFCardWidget> {
       _cardbinJson = null;
       _tdrJson = null;
     }
-    if(_cardbinJson != null) {
+    if (_cardbinJson != null) {
       var scheme = _cardbinJson["scheme"] as String;
       var brand = cfCardValidator.detectCardBrand(scheme);
-      switch(brand) {
+      switch (brand) {
         case CFCardBrand.mastercard:
           setState(() {
-            _suffixIcon = Image.asset('packages/flutter_cashfree_pg_sdk/assets/mastercard.png',
+            _suffixIcon = Image.asset(
+              'packages/flutter_cashfree_pg_sdk/assets/mastercard.png',
               width: 30,
               height: 25,
               fit: BoxFit.fitWidth,
@@ -199,7 +197,8 @@ class CFCardWidgetState extends State<CFCardWidget> {
           break;
         case CFCardBrand.jcb:
           setState(() {
-            _suffixIcon = Image.asset('packages/flutter_cashfree_pg_sdk/assets/jcb.png',
+            _suffixIcon = Image.asset(
+              'packages/flutter_cashfree_pg_sdk/assets/jcb.png',
               width: 30,
               height: 25,
               fit: BoxFit.fitWidth,
@@ -208,7 +207,8 @@ class CFCardWidgetState extends State<CFCardWidget> {
           break;
         case CFCardBrand.discover:
           setState(() {
-            _suffixIcon = Image.asset('packages/flutter_cashfree_pg_sdk/assets/discover.png',
+            _suffixIcon = Image.asset(
+              'packages/flutter_cashfree_pg_sdk/assets/discover.png',
               width: 30,
               height: 25,
               fit: BoxFit.fitWidth,
@@ -217,7 +217,8 @@ class CFCardWidgetState extends State<CFCardWidget> {
           break;
         case CFCardBrand.amex:
           setState(() {
-            _suffixIcon = Image.asset('packages/flutter_cashfree_pg_sdk/assets/amex.png',
+            _suffixIcon = Image.asset(
+              'packages/flutter_cashfree_pg_sdk/assets/amex.png',
               width: 30,
               height: 25,
               fit: BoxFit.fitWidth,
@@ -226,27 +227,28 @@ class CFCardWidgetState extends State<CFCardWidget> {
           break;
         case CFCardBrand.visa:
           setState(() {
-            _suffixIcon =
-                Image.asset('packages/flutter_cashfree_pg_sdk/assets/visa.png',
-                  width: 30,
-                  height: 25,
-                  fit: BoxFit.fitWidth,
-                );
+            _suffixIcon = Image.asset(
+              'packages/flutter_cashfree_pg_sdk/assets/visa.png',
+              width: 30,
+              height: 25,
+              fit: BoxFit.fitWidth,
+            );
           });
           break;
         case CFCardBrand.rupay:
           setState(() {
-            _suffixIcon =
-                Image.asset('packages/flutter_cashfree_pg_sdk/assets/rupay.png',
-                  width: 30,
-                  height: 25,
-                  fit: BoxFit.fitWidth,
-                );
+            _suffixIcon = Image.asset(
+              'packages/flutter_cashfree_pg_sdk/assets/rupay.png',
+              width: 30,
+              height: 25,
+              fit: BoxFit.fitWidth,
+            );
           });
           break;
         default:
           setState(() {
-            _suffixIcon = Image.asset('packages/flutter_cashfree_pg_sdk/assets/credit-card-default.png',
+            _suffixIcon = Image.asset(
+              'packages/flutter_cashfree_pg_sdk/assets/credit-card-default.png',
               width: 30,
               height: 25,
               fit: BoxFit.fitHeight,
@@ -267,36 +269,40 @@ class CFCardWidgetState extends State<CFCardWidget> {
       }
     }
     completeResponse["luhn_check_info"] = "SUCCESS";
-    if(!cfCardValidator.luhnCheck(textWithoutSpaces)){
+    if (!cfCardValidator.luhnCheck(textWithoutSpaces)) {
       completeResponse["luhn_check_info"] = "FAIL";
     }
     completeResponse["card_length"] = textWithoutSpaces.length;
-    _cardListener!(CFCardListener(textWithoutSpaces.length, "This contains all the information about the card.", "card_info", completeResponse));
+    widget.cardListener(CFCardListener(
+        textWithoutSpaces.length,
+        "This contains all the information about the card.",
+        "card_info",
+        completeResponse));
   }
 
-  void completePayment(final void Function(String) verifyPayment,
+  void completePayment(
+      final void Function(String) verifyPayment,
       final void Function(CFErrorResponse, String) onError,
-      String card_cvv,
-      String card_holder_name,
-      String card_expiry_month,
-      String card_expiry_year,
+      String cardCvv,
+      String cardHolderName,
+      String cardExpiryMonth,
+      String cardExpiryYear,
       Map<String, dynamic> session,
-      bool save_payment_method,
-      String? instrument_id) {
-
+      bool savePaymentMethod,
+      String? instrumentId) {
     Map<String, String> card = {};
 
-    if(instrument_id != null) {
+    if (instrumentId != null) {
       card = {
-        "instrument_id": instrument_id,
-        "card_cvv": card_cvv,
+        "instrument_id": instrumentId,
+        "card_cvv": cardCvv,
       };
     } else {
       card = {
-        "card_holder_name": card_holder_name,
-        "card_cvv": card_cvv,
-        "card_expiry_month": card_expiry_month,
-        "card_expiry_year": card_expiry_year,
+        "card_holder_name": cardHolderName,
+        "card_cvv": cardCvv,
+        "card_expiry_month": cardExpiryMonth,
+        "card_expiry_year": cardExpiryYear,
         "card_number": _controller.text.replaceAll(' ', ''),
       };
     }
@@ -304,37 +310,42 @@ class CFCardWidgetState extends State<CFCardWidget> {
     Map<String, dynamic> data = {
       "session": session,
       "card": card,
-      "save_payment_method": save_payment_method,
+      "save_payment_method": savePaymentMethod,
     };
 
     // Create Method channel here
-    MethodChannel methodChannel = const MethodChannel(
-        'flutter_cashfree_pg_sdk');
-      methodChannel.invokeMethod("doCardPayment", data).then((value) {
-        if(value != null) {
-          final body = json.decode(value);
-          var status = body["status"] as String;
-          switch (status) {
-            case "exception":
-              var data = body["data"] as Map<String, dynamic>;
-              var cfErrorResponse = CFErrorResponse("FAILED", data["message"] as String, "invalid_request", "invalid_request");
-              onError(cfErrorResponse, session["order_id"] ?? "order_id_not_found");
-              break;
-            case "success":
-              var data = body["data"] as Map<String, dynamic>;
-              verifyPayment(data["order_id"] as String);
-              break;
-            case "failed":
-              var data = body["data"] as Map<String, dynamic>;
-              var errorResponse = CFErrorResponse(
-                  data["status"] as String, data["message"] as String,
-                  data["code"] as String, data["type"] as String);
-              onError(errorResponse, data["order_id"] as String);
-              break;
-          }
+    MethodChannel methodChannel =
+        const MethodChannel('flutter_cashfree_pg_sdk');
+    methodChannel.invokeMethod("doCardPayment", data).then((value) {
+      if (value != null) {
+        final body = json.decode(value);
+        var status = body["status"] as String;
+        switch (status) {
+          case "exception":
+            var data = body["data"] as Map<String, dynamic>;
+            var cfErrorResponse = CFErrorResponse(
+                "FAILED",
+                data["message"] as String,
+                "invalid_request",
+                "invalid_request");
+            onError(
+                cfErrorResponse, session["order_id"] ?? "order_id_not_found");
+            break;
+          case "success":
+            var data = body["data"] as Map<String, dynamic>;
+            verifyPayment(data["order_id"] as String);
+            break;
+          case "failed":
+            var data = body["data"] as Map<String, dynamic>;
+            var errorResponse = CFErrorResponse(
+                data["status"] as String,
+                data["message"] as String,
+                data["code"] as String,
+                data["type"] as String);
+            onError(errorResponse, data["order_id"] as String);
+            break;
         }
-      });
+      }
+    });
   }
-
 }
-

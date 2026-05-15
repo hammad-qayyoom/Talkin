@@ -1,13 +1,13 @@
 enum CFEnvironment {
-  SANDBOX,
-  PRODUCTION
+  sandbox,
+  production,
 }
 
-enum CFPaymentModes{
-  CARD,
-  UPI,
-  NETBANKING,
-  WALLET,
-  PAYLATER,
-  EMI
+enum CFPaymentModes {
+  card,
+  upi,
+  netbanking,
+  wallet,
+  paylater,
+  emi,
 }

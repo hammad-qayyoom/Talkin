@@ -1,7 +1,6 @@
 class CFNetbankingBuilder {
-
   String? _channel = "link";
-  int? _netbanking_bank_code;
+  int? _netbankingBankCode;
 
   CFNetbankingBuilder();
 
@@ -10,8 +9,8 @@ class CFNetbankingBuilder {
     return this;
   }
 
-  CFNetbankingBuilder setBankCode(int bank_code) {
-    _netbanking_bank_code = bank_code;
+  CFNetbankingBuilder setBankCode(int bankCode) {
+    _netbankingBankCode = bankCode;
     return this;
   }
 
@@ -20,26 +19,21 @@ class CFNetbankingBuilder {
   }
 
   int getBankCode() {
-    return _netbanking_bank_code!;
+    return _netbankingBankCode!;
   }
 
   CFNetbanking build() {
     return CFNetbanking(this);
   }
-
 }
 
 class CFNetbanking {
-
   String? _channel = "link";
-  int? _netbanking_bank_code;
-
-  // Constructor
-  CFNetbanking._();
+  int? _netbankingBankCode;
 
   CFNetbanking(CFNetbankingBuilder builder) {
     _channel = builder.getChannel();
-    _netbanking_bank_code = builder.getBankCode();
+    _netbankingBankCode = builder.getBankCode();
   }
 
   String getChannel() {
@@ -47,7 +41,6 @@ class CFNetbanking {
   }
 
   int getBankCode() {
-    return _netbanking_bank_code!;
+    return _netbankingBankCode!;
   }
-
 }

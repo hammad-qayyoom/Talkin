@@ -13,7 +13,7 @@ class CFSubscriptionPaymentBuilder {
 
   CFSubscriptionPayment build() {
     if (_session == null) {
-      throw CFException(CFExceptionConstants.SESSION_NOT_PRESENT);
+      throw CFException(CFExceptionConstants.sessionNotPresent);
     }
     return CFSubscriptionPayment(this);
   }
@@ -42,8 +42,6 @@ class CFSubscriptionPayment extends CFPayment {
   CFTheme _cfTheme = CFThemeBuilder().build();
 
   // Constructor
-  CFSubscriptionPayment._();
-
   CFSubscriptionPayment(CFSubscriptionPaymentBuilder builder) {
     _session = builder.getSession();
     _cfTheme = builder.getTheme();

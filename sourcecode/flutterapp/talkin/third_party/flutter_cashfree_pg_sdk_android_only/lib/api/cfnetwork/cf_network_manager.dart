@@ -15,30 +15,29 @@ class CFNetworkManager {
 
   Future<http.Response> getTDR(CFSession session, String bin) async {
     var url = "api.cashfree.com";
-    if(session.getEnvironmentEnum() == CFEnvironment.SANDBOX) {
+    if (session.getEnvironmentEnum() == CFEnvironment.sandbox) {
       url = "sandbox.cashfree.com";
     }
-    var uri = Uri.https(url, '/pg/sdk/js/${session.getPaymentSessionId()}/v2/tdr');
-    var response = await http.post(uri, body: jsonEncode({
-      "code": bin,
-      "code_type": "bin"
-    }), headers: {
-      "Content-Type": "application/json"
-    });
+    var uri =
+        Uri.https(url, '/pg/sdk/js/${session.getPaymentSessionId()}/v2/tdr');
+    var response = await http.post(uri,
+        body: jsonEncode({"code": bin, "code_type": "bin"}),
+        headers: {"Content-Type": "application/json"});
     return response;
   }
 
   Future<http.Response> getCardBin(CFSession session, String bin) async {
     var url = "api.cashfree.com";
-    if(session.getEnvironmentEnum() == CFEnvironment.SANDBOX) {
+    if (session.getEnvironmentEnum() == CFEnvironment.sandbox) {
       url = "sandbox.cashfree.com";
     }
-    var uri = Uri.https(url, '/pg/sdk/js/${session.getPaymentSessionId()}/cardBin');
-    var response = await http.post(uri, body: jsonEncode({
-      "card_number": bin,
-    }), headers: {
-      "Content-Type": "application/json"
-    });
+    var uri =
+        Uri.https(url, '/pg/sdk/js/${session.getPaymentSessionId()}/cardBin');
+    var response = await http.post(uri,
+        body: jsonEncode({
+          "card_number": bin,
+        }),
+        headers: {"Content-Type": "application/json"});
     return response;
   }
 }

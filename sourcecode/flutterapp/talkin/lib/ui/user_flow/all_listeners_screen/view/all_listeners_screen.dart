@@ -144,7 +144,8 @@ class AllListenersScreen extends StatelessWidget {
                                         viewProfileOnTap: () {
                                           Get.toNamed(
                                             AppRoutes.profileDetailScreenView,
-                                            arguments: allListener.id,
+                                            arguments: allListener
+                                                .profileRouteArguments,
                                           );
                                         },
                                         talkNowOnTap: () {
@@ -156,28 +157,8 @@ class AllListenersScreen extends StatelessWidget {
                                           }
                                           Get.toNamed(
                                             AppRoutes.userBookSessionScreen,
-                                            arguments: {
-                                              'listenerId':
-                                                  allListener.id ?? '',
-                                              'listenerName':
-                                                  allListener.name ?? '',
-                                              'listenerImage':
-                                                  allListener.image ?? '',
-                                              'availableForPrivateAudioCall':
-                                                  allListener
-                                                          .isAvailableForPrivateAudioCall ??
-                                                      false,
-                                              'availableForPrivateVideoCall':
-                                                  allListener
-                                                          .isAvailableForPrivateVideoCall ??
-                                                      false,
-                                              'ratePrivateAudioCall': allListener
-                                                      .ratePrivateAudioCall ??
-                                                  0,
-                                              'ratePrivateVideoCall': allListener
-                                                      .ratePrivateVideoCall ??
-                                                  0,
-                                            },
+                                            arguments: allListener
+                                                .sessionBookingArguments,
                                           );
                                         },
                                       ).paddingOnly(

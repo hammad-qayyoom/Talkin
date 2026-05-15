@@ -24,7 +24,8 @@ class CFThemeBuilder {
     return this;
   }
 
-  CFThemeBuilder setNavigationBarBackgroundColorColor(String navigationBarBackgroundColor) {
+  CFThemeBuilder setNavigationBarBackgroundColorColor(
+      String navigationBarBackgroundColor) {
     _navigationBarBackgroundColor = navigationBarBackgroundColor;
     return this;
   }
@@ -93,11 +94,9 @@ class CFThemeBuilder {
   String getButtonTextColor() {
     return _buttonTextColor;
   }
-
 }
 
 class CFTheme {
-
   String _primaryTextColor = "#11385b";
   String _secondaryTextColor = "#808080";
   String _backgroundColor = "#FFFFFF";
@@ -107,9 +106,6 @@ class CFTheme {
   String _secondaryFont = "";
   String _buttonBackgroundColor = "#6A3FD3";
   String _buttonTextColor = "#FFFFFF";
-
-  CFTheme._();
-
   CFTheme(CFThemeBuilder builder) {
     _primaryTextColor = builder.getPrimaryTextColor();
     _secondaryTextColor = builder.getSecondaryTextColor();

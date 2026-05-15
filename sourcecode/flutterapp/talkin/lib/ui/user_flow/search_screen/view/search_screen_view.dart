@@ -87,7 +87,8 @@ class SearchScreenView extends StatelessWidget {
                                                 Get.toNamed(
                                                   AppRoutes
                                                       .profileDetailScreenView,
-                                                  arguments: listener.id,
+                                                  arguments: listener
+                                                      .profileRouteArguments,
                                                 );
                                               },
                                               callCount:

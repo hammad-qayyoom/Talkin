@@ -5,7 +5,6 @@ import 'package:flutter_cashfree_pg_sdk/utils/cfexceptionconstants.dart';
 import 'package:flutter_cashfree_pg_sdk/utils/cfexceptions.dart';
 
 class CFUPIPaymentBuilder {
-
   CFSession? _session;
   CFUPI? _cfupi;
 
@@ -22,8 +21,8 @@ class CFUPIPaymentBuilder {
   }
 
   CFUPIPayment build() {
-    if(_session == null) {
-      throw CFException(CFExceptionConstants.SESSION_NOT_PRESENT);
+    if (_session == null) {
+      throw CFException(CFExceptionConstants.sessionNotPresent);
     }
     return CFUPIPayment(this);
   }
@@ -35,17 +34,13 @@ class CFUPIPaymentBuilder {
   CFUPI getUPI() {
     return _cfupi!;
   }
-
 }
 
 class CFUPIPayment extends CFPayment {
-
   late CFSession _session;
   CFUPI? _cfupi;
 
   // Constructor
-  CFUPIPayment._();
-
   CFUPIPayment(CFUPIPaymentBuilder builder) {
     _session = builder.getSession();
     _cfupi = builder.getUPI();

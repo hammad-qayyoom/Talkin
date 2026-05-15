@@ -44,6 +44,7 @@ class TopListenersModel {
 
 class TopListeners {
   String? id;
+  String? expertId;
   String? name;
   int? age;
   double? latitude;
@@ -67,9 +68,11 @@ class TopListeners {
   bool? isAvailableForPrivateVideoCall;
   bool? isAvailableForChat;
   String? audio;
+  bool hasLegacyListener;
 
   TopListeners({
     this.id,
+    this.expertId,
     this.name,
     this.age,
     this.latitude,
@@ -93,6 +96,7 @@ class TopListeners {
     this.isAvailableForPrivateVideoCall,
     this.isAvailableForChat,
     this.audio,
+    this.hasLegacyListener = true,
   });
 
   static List<String> _stringList(dynamic value) {
@@ -117,6 +121,23 @@ class TopListeners {
       if (parsed != null) return parsed;
     }
     return null;
+  }
+
+  static String? _idFromValue(dynamic value) {
+    if (value is Map<String, dynamic>) {
+      return _firstNonEmptyString([
+        value["_id"],
+        value["id"],
+        value["listenerId"],
+        value["expertId"],
+      ]);
+    }
+    if (value is Map) {
+      return _idFromValue(value.map(
+        (key, item) => MapEntry(key.toString(), item),
+      ));
+    }
+    return _nonEmptyString(value);
   }
 
   static String? _imageFromValue(dynamic value) {
@@ -246,89 +267,132 @@ class TopListeners {
     ]);
   }
 
-  factory TopListeners.fromJson(Map<String, dynamic> json) => TopListeners(
-        latitude: () {
-          final location = _mapValue(json["location"]);
-          final geo = _mapValue(location?["geo"]);
-          final coordinates = _listValue(geo?["coordinates"]);
-          if (coordinates.length >= 2) {
-            final fromGeo = _doubleValue(coordinates[1]);
-            if (fromGeo != null) return fromGeo;
-          }
+  factory TopListeners.fromJson(Map<String, dynamic> json) {
+    final legacyListenerId = _firstNonEmptyString([
+      json["listenerId"],
+      _idFromValue(json["legacyListenerId"]),
+    ]);
+    final rawId = _nonEmptyString(json["_id"] ?? json["id"]);
+    final expertProfileId = _firstNonEmptyString([
+      json["expertId"],
+      json["expertProfileId"],
+      json["profileId"],
+      if (legacyListenerId != null && rawId != legacyListenerId) rawId,
+    ]);
+    final hasLegacyListener =
+        legacyListenerId != null || !json.containsKey("legacyListenerId");
 
-          return _doubleValue(location?["lat"] ??
-              location?["latitude"] ??
-              json["lat"] ??
-              json["latitude"]);
-        }(),
-        longitude: () {
-          final location = _mapValue(json["location"]);
-          final geo = _mapValue(location?["geo"]);
-          final coordinates = _listValue(geo?["coordinates"]);
-          if (coordinates.length >= 2) {
-            final fromGeo = _doubleValue(coordinates[0]);
-            if (fromGeo != null) return fromGeo;
-          }
+    return TopListeners(
+      latitude: () {
+        final location = _mapValue(json["location"]);
+        final geo = _mapValue(location?["geo"]);
+        final coordinates = _listValue(geo?["coordinates"]);
+        if (coordinates.length >= 2) {
+          final fromGeo = _doubleValue(coordinates[1]);
+          if (fromGeo != null) return fromGeo;
+        }
 
-          return _doubleValue(location?["lng"] ??
-              location?["lon"] ??
-              location?["longitude"] ??
-              json["lng"] ??
-              json["lon"] ??
-              json["longitude"]);
-        }(),
-        distanceKm: _doubleValue(json["distanceKm"] ?? json["distance"]),
-        id: (json["_id"] ?? json["id"] ?? json["listenerId"])?.toString(),
-        name: json["name"] ?? json["displayName"],
-        age: _intValue(json["age"]),
-        talkTopics: json["talkTopics"] == null
-            ? (_stringList(json["skills"]).isNotEmpty
-                ? _stringList(json["skills"])
-                : _categoryNames(json["categories"]))
-            : _stringList(json["talkTopics"]),
-        language: json["language"] == null
-            ? _stringList(json["languages"])
-            : _stringList(json["language"]),
-        image: _resolveImage(json),
-        ratePrivateVideoCall: _intValue(json["ratePrivateVideoCall"] ??
-            (json["pricing"] is Map ? json["pricing"]["oneToOneVideo"] : null)),
-        ratePrivateAudioCall: _intValue(json["ratePrivateAudioCall"] ??
-            (json["pricing"] is Map ? json["pricing"]["oneToOneAudio"] : null)),
-        video: json["video"] == null
-            ? []
-            : List<String>.from(json["video"]!.map((x) => x)),
-        rating: _doubleValue(json["rating"] ??
-            json["averageRating"] ??
-            (json["trustSignals"] is Map
-                ? json["trustSignals"]["averageRating"]
-                : null)),
-        callCount: _intValue(json["callCount"] ?? json["totalSessions"]),
-        experience:
-            (json["experience"] ?? json["totalSessions"] ?? 0).toString(),
-        isFake: json["isFake"],
-        isOnline: json["isOnline"],
-        statusLabel: json["statusLabel"] ??
-            (json["isOnline"] == true ? "Available" : "Offline"),
-        uniqueId: json["uniqueId"],
-        categoryIds: json["categoryIds"] == null
-            ? _categoryIds(json["categories"])
-            : _stringList(json["categoryIds"]),
-        isAvailableForPrivateAudioCall:
-            json["isAvailableForPrivateAudioCall"] ??
-                (_hasSessionType(
-                        json["availabilityWindows"], "one_to_one_audio") ||
-                    _positivePricing(json["pricing"], "oneToOneAudio")),
-        isAvailableForPrivateVideoCall:
-            json["isAvailableForPrivateVideoCall"] ??
-                (_hasSessionType(
-                        json["availabilityWindows"], "one_to_one_video") ||
-                    _positivePricing(json["pricing"], "oneToOneVideo")),
-        isAvailableForChat: json["isAvailableForChat"],
-        audio: json["audio"],
-      );
+        return _doubleValue(location?["lat"] ??
+            location?["latitude"] ??
+            json["lat"] ??
+            json["latitude"]);
+      }(),
+      longitude: () {
+        final location = _mapValue(json["location"]);
+        final geo = _mapValue(location?["geo"]);
+        final coordinates = _listValue(geo?["coordinates"]);
+        if (coordinates.length >= 2) {
+          final fromGeo = _doubleValue(coordinates[0]);
+          if (fromGeo != null) return fromGeo;
+        }
+
+        return _doubleValue(location?["lng"] ??
+            location?["lon"] ??
+            location?["longitude"] ??
+            json["lng"] ??
+            json["lon"] ??
+            json["longitude"]);
+      }(),
+      distanceKm: _doubleValue(json["distanceKm"] ?? json["distance"]),
+      id: _firstNonEmptyString([
+        legacyListenerId,
+        if (!json.containsKey("legacyListenerId")) rawId,
+      ]),
+      expertId: expertProfileId,
+      name: json["name"] ?? json["displayName"],
+      age: _intValue(json["age"]),
+      talkTopics: json["talkTopics"] == null
+          ? (_stringList(json["skills"]).isNotEmpty
+              ? _stringList(json["skills"])
+              : _categoryNames(json["categories"]))
+          : _stringList(json["talkTopics"]),
+      language: json["language"] == null
+          ? _stringList(json["languages"])
+          : _stringList(json["language"]),
+      image: _resolveImage(json),
+      ratePrivateVideoCall: _intValue(json["ratePrivateVideoCall"] ??
+          (json["pricing"] is Map ? json["pricing"]["oneToOneVideo"] : null)),
+      ratePrivateAudioCall: _intValue(json["ratePrivateAudioCall"] ??
+          (json["pricing"] is Map ? json["pricing"]["oneToOneAudio"] : null)),
+      video: json["video"] == null
+          ? []
+          : List<String>.from(json["video"]!.map((x) => x)),
+      rating: _doubleValue(json["rating"] ??
+          json["averageRating"] ??
+          (json["trustSignals"] is Map
+              ? json["trustSignals"]["averageRating"]
+              : null)),
+      callCount: _intValue(json["callCount"] ?? json["totalSessions"]),
+      experience: (json["experience"] ?? json["totalSessions"] ?? 0).toString(),
+      isFake: json["isFake"],
+      isOnline: json["isOnline"],
+      statusLabel: json["statusLabel"] ??
+          (json["isOnline"] == true ? "Available" : "Offline"),
+      uniqueId: json["uniqueId"],
+      categoryIds: json["categoryIds"] == null
+          ? _categoryIds(json["categories"])
+          : _stringList(json["categoryIds"]),
+      isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"] ??
+          (_hasSessionType(json["availabilityWindows"], "one_to_one_audio") ||
+              _positivePricing(json["pricing"], "oneToOneAudio")),
+      isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"] ??
+          (_hasSessionType(json["availabilityWindows"], "one_to_one_video") ||
+              _positivePricing(json["pricing"], "oneToOneVideo")),
+      isAvailableForChat: json["isAvailableForChat"],
+      audio: json["audio"],
+      hasLegacyListener: hasLegacyListener,
+    );
+  }
+
+  Map<String, dynamic> get profileRouteArguments {
+    final listenerId = (id ?? '').trim();
+    final resolvedExpertId = (expertId ?? '').trim();
+
+    return {
+      if (listenerId.isNotEmpty) "listenerId": listenerId,
+      if (resolvedExpertId.isNotEmpty) "expertId": resolvedExpertId,
+    };
+  }
+
+  Map<String, dynamic> get sessionBookingArguments {
+    final listenerId = (id ?? '').trim();
+    final resolvedExpertId = (expertId ?? '').trim();
+
+    return {
+      'listenerId': listenerId,
+      if (resolvedExpertId.isNotEmpty) 'expertId': resolvedExpertId,
+      'listenerName': name ?? '',
+      'listenerImage': image ?? '',
+      'availableForPrivateAudioCall': isAvailableForPrivateAudioCall ?? false,
+      'availableForPrivateVideoCall': isAvailableForPrivateVideoCall ?? false,
+      'ratePrivateAudioCall': ratePrivateAudioCall ?? 0,
+      'ratePrivateVideoCall': ratePrivateVideoCall ?? 0,
+    };
+  }
 
   Map<String, dynamic> toJson() => {
         "_id": id,
+        "expertId": expertId,
         "name": name,
         "age": age,
         "latitude": latitude,

@@ -24,7 +24,8 @@ class CFSubscriptionSessionBuilder {
     return this;
   }
 
-  CFSubscriptionSessionBuilder setSubscriptionSessionId(String subscriptionSessionID) {
+  CFSubscriptionSessionBuilder setSubscriptionSessionId(
+      String subscriptionSessionID) {
     _subscriptionSessionID = subscriptionSessionID;
     return this;
   }
@@ -33,21 +34,19 @@ class CFSubscriptionSessionBuilder {
     return _subscriptionId!;
   }
 
-
   String getSubscriptionSessionId() {
     return _subscriptionSessionID!;
   }
 
-
   CFSubscriptionSession build() {
     if (_environment == null) {
-      throw CFException(CFExceptionConstants.ENVIRONMENT_NOT_PRESENT);
+      throw CFException(CFExceptionConstants.environmentNotPresent);
     }
     if (_subscriptionId == null || _subscriptionId!.isEmpty) {
-      throw CFException(CFExceptionConstants.SUBSCRIPTION_ID_NOT_PRESENT);
+      throw CFException(CFExceptionConstants.subscriptionIdNotPresent);
     }
-    if(_subscriptionSessionID == null || _subscriptionSessionID!.isEmpty) {
-      throw CFException(CFExceptionConstants.SUBSCRIPTION_SESSION_ID_NOT_PRESENT);
+    if (_subscriptionSessionID == null || _subscriptionSessionID!.isEmpty) {
+      throw CFException(CFExceptionConstants.subscriptionSessionIdNotPresent);
     }
     return CFSubscriptionSession(this);
   }
@@ -57,8 +56,6 @@ class CFSubscriptionSession {
   late CFEnvironment _environment;
   late String _subscriptionId;
   late String _subscriptionSessionID;
-
-  CFSubscriptionSession._();
 
   CFSubscriptionSession(CFSubscriptionSessionBuilder sessionBuilder) {
     _environment = sessionBuilder.getEnvironment();
@@ -75,6 +72,6 @@ class CFSubscriptionSession {
   }
 
   String getEnvironment() {
-    return _environment == CFEnvironment.SANDBOX ? CFEnvironment.SANDBOX.name : CFEnvironment.PRODUCTION.name;
+    return _environment == CFEnvironment.sandbox ? "SANDBOX" : "PRODUCTION";
   }
 }

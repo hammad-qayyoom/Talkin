@@ -7,7 +7,7 @@ class ExpertProximitySorter {
   static Future<void> sortNearestFirst(List<TopListeners> experts) async {
     if (experts.length < 2) return;
 
-    final userLocation = await UserLocationService.resolveLocation();
+    final userLocation = UserLocationService.cachedLocation;
     if (userLocation == null) return;
 
     final indexedExperts = experts.asMap().entries.toList();

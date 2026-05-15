@@ -5,7 +5,6 @@ import 'package:flutter_cashfree_pg_sdk/utils/cfexceptionconstants.dart';
 import 'package:flutter_cashfree_pg_sdk/utils/cfexceptions.dart';
 
 class CFCardPaymentBuilder {
-
   CFSession? _session;
   CFCard? _cfCard;
   bool _savePaymentMethod = false;
@@ -28,8 +27,8 @@ class CFCardPaymentBuilder {
   }
 
   CFCardPayment build() {
-    if(_session == null) {
-      throw CFException(CFExceptionConstants.SESSION_NOT_PRESENT);
+    if (_session == null) {
+      throw CFException(CFExceptionConstants.sessionNotPresent);
     }
     return CFCardPayment(this);
   }
@@ -45,18 +44,14 @@ class CFCardPaymentBuilder {
   bool getSavePaymentMethodFlag() {
     return _savePaymentMethod;
   }
-
 }
 
 class CFCardPayment extends CFPayment {
-
   late CFSession _session;
   CFCard? _cfCard;
   bool _savePaymentMethod = false;
 
   // Constructor
-  CFCardPayment._();
-
   CFCardPayment(CFCardPaymentBuilder builder) {
     _session = builder.getSession();
     _cfCard = builder.getCard();

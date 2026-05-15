@@ -17,9 +17,9 @@ class RazorPayService {
     required Callback callback,
   }) {
     razorPay = Razorpay();
-    razorPay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccess);
-    razorPay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
-    razorPay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
+    razorPay.on(Razorpay.eventPaymentSuccess, handlePaymentSuccess);
+    razorPay.on(Razorpay.eventPaymentError, handlePaymentError);
+    razorPay.on(Razorpay.eventExternalWallet, handleExternalWallet);
     razorKeys = razorKey;
     onComplete = () => callback.call();
   }

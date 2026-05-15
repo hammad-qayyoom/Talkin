@@ -316,6 +316,7 @@ class RegistrationController extends GetxController {
 
   Future<bool> _syncEmailUserWithBackend(UserCredential userCredential) async {
     Database.onSetUserExist(false);
+    final birthDate = selectedBirthDate ?? DateTime(2000);
 
     loginModel = await LoginApi.callApi(
       countryCode: Database.selectedCountryCode,
@@ -325,8 +326,8 @@ class RegistrationController extends GetxController {
       fcmToken: Database.fcmToken,
       userName: nameController.text.trim(),
       confirmPassword: confirmPassController.text.trim(),
-      birthDate: "2000-01-01",
-      age: 25,
+      birthDate: DateFormat('yyyy-MM-dd').format(birthDate),
+      age: _calculateAge(birthDate),
       acceptTerms: true,
       acceptanceSource: "signup_email",
     );

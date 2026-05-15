@@ -1,13 +1,12 @@
 enum CFUPIChannel {
-  COLLECT,
-  INTENT,
-  INTENT_WITH_UI
+  collect,
+  intent,
+  intentWithUi,
 }
 
 class CFUPIBuilder {
-
   CFUPIChannel? _channel;
-  String? _upi_id;
+  String? _upiId;
 
   CFUPIBuilder();
 
@@ -16,13 +15,13 @@ class CFUPIBuilder {
     return this;
   }
 
-  CFUPIBuilder setUPIID(String upi_id) {
-    _upi_id = upi_id;
+  CFUPIBuilder setUPIID(String upiId) {
+    _upiId = upiId;
     return this;
   }
 
   String getUPIID() {
-    return _upi_id!;
+    return _upiId!;
   }
 
   CFUPIChannel getChannel() {
@@ -30,33 +29,27 @@ class CFUPIBuilder {
   }
 
   CFUPI build() {
-    if(_channel == CFUPIChannel.INTENT_WITH_UI) {
-      _upi_id = "";
+    if (_channel == CFUPIChannel.intentWithUi) {
+      _upiId = "";
     }
     return CFUPI(this);
   }
-
 }
 
 class CFUPI {
-
   CFUPIChannel? _channel;
-  String? _upi_id;
-
-  // Constructor
-  CFUPI._();
+  String? _upiId;
 
   CFUPI(CFUPIBuilder builder) {
     _channel = builder.getChannel();
-    _upi_id = builder.getUPIID();
+    _upiId = builder.getUPIID();
   }
 
   String getUPIID() {
-    return _upi_id!;
+    return _upiId!;
   }
 
   CFUPIChannel getChannel() {
     return _channel!;
   }
-
 }

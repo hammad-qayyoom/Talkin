@@ -296,7 +296,7 @@ class TopListenersViewAllView extends StatelessWidget {
                                 onProfileTap: () {
                                   Get.toNamed(
                                     AppRoutes.profileDetailScreenView,
-                                    arguments: listener.id,
+                                    arguments: listener.profileRouteArguments,
                                   );
                                 },
                                 onBookTap: () {
@@ -308,21 +308,7 @@ class TopListenersViewAllView extends StatelessWidget {
                                   }
                                   Get.toNamed(
                                     AppRoutes.userBookSessionScreen,
-                                    arguments: {
-                                      'listenerId': listener.id ?? '',
-                                      'listenerName': listener.name ?? '',
-                                      'listenerImage': listener.image ?? '',
-                                      'availableForPrivateAudioCall': listener
-                                              .isAvailableForPrivateAudioCall ??
-                                          false,
-                                      'availableForPrivateVideoCall': listener
-                                              .isAvailableForPrivateVideoCall ??
-                                          false,
-                                      'ratePrivateAudioCall':
-                                          listener.ratePrivateAudioCall ?? 0,
-                                      'ratePrivateVideoCall':
-                                          listener.ratePrivateVideoCall ?? 0,
-                                    },
+                                    arguments: listener.sessionBookingArguments,
                                   );
                                 },
                               ),
@@ -341,7 +327,8 @@ class TopListenersViewAllView extends StatelessWidget {
                                       onProfileTap: () {
                                         Get.toNamed(
                                           AppRoutes.profileDetailScreenView,
-                                          arguments: listener.id,
+                                          arguments:
+                                              listener.profileRouteArguments,
                                         );
                                       },
                                       onBookTap: () {
@@ -353,24 +340,8 @@ class TopListenersViewAllView extends StatelessWidget {
                                         }
                                         Get.toNamed(
                                           AppRoutes.userBookSessionScreen,
-                                          arguments: {
-                                            'listenerId': listener.id ?? '',
-                                            'listenerName': listener.name ?? '',
-                                            'listenerImage':
-                                                listener.image ?? '',
-                                            'availableForPrivateAudioCall':
-                                                listener.isAvailableForPrivateAudioCall ??
-                                                    false,
-                                            'availableForPrivateVideoCall':
-                                                listener.isAvailableForPrivateVideoCall ??
-                                                    false,
-                                            'ratePrivateAudioCall':
-                                                listener.ratePrivateAudioCall ??
-                                                    0,
-                                            'ratePrivateVideoCall':
-                                                listener.ratePrivateVideoCall ??
-                                                    0,
-                                          },
+                                          arguments:
+                                              listener.sessionBookingArguments,
                                         );
                                       },
                                     ),

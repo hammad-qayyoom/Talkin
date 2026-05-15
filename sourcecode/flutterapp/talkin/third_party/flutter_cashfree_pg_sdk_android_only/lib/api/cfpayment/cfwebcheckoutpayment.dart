@@ -5,7 +5,6 @@ import '../cftheme/cftheme.dart';
 import 'cfpayment.dart';
 
 class CFWebCheckoutPaymentBuilder {
-
   CFSession? _session;
   CFTheme _cfTheme = CFThemeBuilder().build();
   CFWebCheckoutPaymentBuilder();
@@ -15,10 +14,9 @@ class CFWebCheckoutPaymentBuilder {
     return this;
   }
 
-
   CFWebCheckoutPayment build() {
-    if(_session == null) {
-      throw CFException(CFExceptionConstants.SESSION_NOT_PRESENT);
+    if (_session == null) {
+      throw CFException(CFExceptionConstants.sessionNotPresent);
     }
     return CFWebCheckoutPayment(this);
   }
@@ -35,17 +33,13 @@ class CFWebCheckoutPaymentBuilder {
   CFTheme getTheme() {
     return _cfTheme;
   }
-
 }
 
 class CFWebCheckoutPayment extends CFPayment {
-
   late CFSession _session;
   CFTheme _cfTheme = CFThemeBuilder().build();
 
   // Constructor
-  CFWebCheckoutPayment._();
-
   CFWebCheckoutPayment(CFWebCheckoutPaymentBuilder builder) {
     _session = builder.getSession();
     _cfTheme = builder.getTheme();
@@ -58,5 +52,4 @@ class CFWebCheckoutPayment extends CFPayment {
   CFTheme getTheme() {
     return _cfTheme;
   }
-
 }

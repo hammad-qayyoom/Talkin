@@ -53,6 +53,52 @@ class TopListenersApi {
     return payload['status'] == true;
   }
 
+  static bool _hasExperts(TopListenersModel? model) {
+    return (model?.data ?? []).isNotEmpty;
+  }
+
+  static bool _hasLocationSortSignal(TopListenersModel model) {
+    return (model.data ?? []).any(
+      (expert) =>
+          expert.distanceKm != null ||
+          (expert.latitude != null && expert.longitude != null),
+    );
+  }
+
+  static Future<TopListenersModel?> _fetchListeners({
+    required Uri uri,
+    required Map<String, String> headers,
+    required String logLabel,
+    bool requireLocationSortSignal = false,
+  }) async {
+    final response = await http.get(uri, headers: headers);
+
+    Utils.showLog("$logLabel Response => ${response.body}");
+
+    if (response.statusCode != 200) {
+      Utils.showLog("$logLabel StateCode Error => ${response.statusCode}");
+      return null;
+    }
+
+    final jsonResponse = json.decode(response.body);
+    if (jsonResponse is Map<String, dynamic> && _isSuccess(jsonResponse)) {
+      final model = TopListenersModel.fromJson(jsonResponse);
+      model.data?.removeWhere(
+        (expert) =>
+            !expert.hasLegacyListener || (expert.id ?? '').trim().isEmpty,
+      );
+      if (requireLocationSortSignal && !_hasLocationSortSignal(model)) {
+        Utils.showLog(
+          "$logLabel skipped: no distance or coordinates in response.",
+        );
+        return null;
+      }
+      return model;
+    }
+
+    return null;
+  }
+
   static Future<TopListenersModel?> callApi({
     required String searchString,
     String token = '',
@@ -63,7 +109,7 @@ class TopListenersApi {
 
     startPagination += 1;
 
-    final userLocation = await UserLocationService.resolveLocation();
+    final userLocation = UserLocationService.cachedLocation;
     final discoverUri = _discoverUri(
       searchString: searchString,
       categoryId: categoryId,
@@ -71,7 +117,9 @@ class TopListenersApi {
     );
     final topUri =
         _topListenersUri(searchString: searchString, categoryId: categoryId);
-    final primaryUri = topUri;
+    final hasLocation = userLocation != null;
+    final primaryUri = hasLocation ? discoverUri : topUri;
+    final fallbackUri = hasLocation ? topUri : discoverUri;
 
     Utils.showLog("Top Listeners Api url => $primaryUri");
 
@@ -79,34 +127,26 @@ class TopListenersApi {
         await GuestAuth.headers(contentType: false, allowGuest: true);
 
     try {
-      final response = await http.get(primaryUri, headers: headers);
-
-      Utils.showLog("Top Listeners Api Response => ${response.body}");
-
-      if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
-        if (jsonResponse is Map<String, dynamic> && _isSuccess(jsonResponse)) {
-          return TopListenersModel.fromJson(jsonResponse);
-        }
-      } else {
-        Utils.showLog("Top Listeners Api StateCode Error");
-      }
-
-      Utils.showLog("Top Listeners legacy failed, trying discover fallback.");
-      final fallbackResponse = await http.get(
-        discoverUri,
+      final primaryModel = await _fetchListeners(
+        uri: primaryUri,
         headers: headers,
+        logLabel:
+            hasLocation ? "Top Listeners Discover Api" : "Top Listeners Api",
+        requireLocationSortSignal: hasLocation,
       );
+      if (_hasExperts(primaryModel)) return primaryModel;
 
-      Utils.showLog(
-          "Top Listeners Discover Fallback => ${fallbackResponse.body}");
+      Utils.showLog("Top Listeners primary empty, trying fallback.");
+      final fallbackModel = await _fetchListeners(
+        uri: fallbackUri,
+        headers: headers,
+        logLabel: hasLocation
+            ? "Top Listeners Legacy Fallback"
+            : "Top Listeners Discover Fallback",
+      );
+      if (_hasExperts(fallbackModel)) return fallbackModel;
 
-      if (fallbackResponse.statusCode == 200) {
-        final jsonResponse = json.decode(fallbackResponse.body);
-        if (jsonResponse is Map<String, dynamic> && _isSuccess(jsonResponse)) {
-          return TopListenersModel.fromJson(jsonResponse);
-        }
-      }
+      return primaryModel ?? fallbackModel;
     } catch (e) {
       Utils.showLog("Top Listeners Api Response => ${e.toString()}");
     }

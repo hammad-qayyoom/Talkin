@@ -21,6 +21,27 @@ class UserLocationService {
   static UserLocationData? _memoryCache;
   static DateTime? _cachedAt;
   static Future<UserLocationData?>? _inFlightRequest;
+  static Future<UserLocationData?>? _inFlightPreciseRequest;
+
+  static UserLocationData? get cachedLocation => _readCachedLocation();
+
+  static Future<UserLocationData?> primeStartupLocation() async {
+    final pending = _inFlightRequest;
+    if (pending != null) {
+      return pending;
+    }
+
+    final request = _primeStartupLocationInternal();
+    _inFlightRequest = request;
+
+    try {
+      return await request;
+    } finally {
+      if (identical(_inFlightRequest, request)) {
+        _inFlightRequest = null;
+      }
+    }
+  }
 
   static Future<UserLocationData?> resolveLocation() async {
     final cached = _readCachedLocation();
@@ -43,6 +64,28 @@ class UserLocationService {
         _inFlightRequest = null;
       }
     }
+  }
+
+  static Future<UserLocationData?> _primeStartupLocationInternal() async {
+    final preciseLocation =
+        await _resolvePreciseLocation(requestPermission: false);
+    if (preciseLocation != null) {
+      await _cacheLocation(preciseLocation);
+      return preciseLocation;
+    }
+
+    final cached = _readCachedLocation();
+    if (cached != null) {
+      return cached;
+    }
+
+    final fallbackIpLocation = await _resolveIpLocation();
+    if (fallbackIpLocation != null) {
+      await _cacheLocation(fallbackIpLocation);
+      return fallbackIpLocation;
+    }
+
+    return null;
   }
 
   static UserLocationData? _readCachedLocation() {
@@ -69,7 +112,8 @@ class UserLocationService {
   }
 
   static Future<UserLocationData?> _resolveInternal() async {
-    final preciseLocation = await _resolvePreciseLocation();
+    final preciseLocation =
+        await _resolvePreciseLocation(requestPermission: true);
     if (preciseLocation != null) {
       await _cacheLocation(preciseLocation);
       return preciseLocation;
@@ -84,7 +128,45 @@ class UserLocationService {
     return null;
   }
 
-  static Future<UserLocationData?> _resolvePreciseLocation() async {
+  static Future<UserLocationData?> requestPreciseLocation() async {
+    final pendingPreciseRequest = _inFlightPreciseRequest;
+    if (pendingPreciseRequest != null) {
+      return pendingPreciseRequest;
+    }
+
+    final startupRequest = _inFlightRequest;
+    if (startupRequest != null) {
+      try {
+        await startupRequest;
+      } catch (_) {
+        // Continue with the explicit Home-screen permission request.
+      }
+    }
+
+    final request = _requestPreciseLocationInternal();
+    _inFlightPreciseRequest = request;
+
+    try {
+      return await request;
+    } finally {
+      if (identical(_inFlightPreciseRequest, request)) {
+        _inFlightPreciseRequest = null;
+      }
+    }
+  }
+
+  static Future<UserLocationData?> _requestPreciseLocationInternal() async {
+    final preciseLocation =
+        await _resolvePreciseLocation(requestPermission: true);
+    if (preciseLocation != null) {
+      await _cacheLocation(preciseLocation);
+    }
+    return preciseLocation;
+  }
+
+  static Future<UserLocationData?> _resolvePreciseLocation({
+    required bool requestPermission,
+  }) async {
     try {
       final isServiceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!isServiceEnabled) {
@@ -92,7 +174,7 @@ class UserLocationService {
       }
 
       var permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
+      if (permission == LocationPermission.denied && requestPermission) {
         permission = await Geolocator.requestPermission();
       }
 

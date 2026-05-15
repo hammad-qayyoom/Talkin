@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:notisboard/services/location/user_location_service.dart';
 import 'package:notisboard/ui/user_flow/home_screen/api/top_listeners_api.dart';
 import 'package:notisboard/ui/user_flow/home_screen/api/user_coin_api.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
@@ -29,6 +30,7 @@ class HomeScreenController extends GetxController {
   UserCoinModel? userCoinModel;
   bool isToastVisible = false;
   bool isCoinLoading = false;
+  bool _didRequestHomeLocation = false;
 
   @override
   void onInit() {
@@ -37,9 +39,45 @@ class HomeScreenController extends GetxController {
     log("Enter home screen controller");
     loadHomeCategories();
     getTopListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      requestHomeLocationAfterFirstFrame();
+    });
 
     init();
     super.onInit();
+  }
+
+  Future<void> requestHomeLocationAfterFirstFrame() async {
+    if (_didRequestHomeLocation) return;
+    _didRequestHomeLocation = true;
+
+    final previousLocation = UserLocationService.cachedLocation;
+    final location = await UserLocationService.requestPreciseLocation();
+    if (location == null || isClosed) return;
+
+    if (_isSameLocation(previousLocation, location)) return;
+
+    await _reloadExpertsForUpdatedLocation();
+  }
+
+  bool _isSameLocation(
+    UserLocationData? previousLocation,
+    UserLocationData nextLocation,
+  ) {
+    if (previousLocation == null) return false;
+
+    return (previousLocation.latitude - nextLocation.latitude).abs() <
+            0.00001 &&
+        (previousLocation.longitude - nextLocation.longitude).abs() < 0.00001;
+  }
+
+  Future<void> _reloadExpertsForUpdatedLocation() async {
+    for (int index = 0; index < 80 && isLoading && !isClosed; index++) {
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
+    if (isClosed || isLoading) return;
+
+    await getTopListeners(reset: true, preserveExistingOnEmpty: true);
   }
 
   init() async {
@@ -94,24 +132,48 @@ class HomeScreenController extends GetxController {
     await getTopListeners();
   }
 
-  getTopListeners() async {
+  Future<void> getTopListeners({
+    bool reset = false,
+    bool preserveExistingOnEmpty = false,
+  }) async {
     final uid = Database.loginUserFirebaseId;
     final token = await FirebaseAccessToken.onGet() ?? "";
+    final previousListeners = List<TopListeners>.from(topListeners);
+
+    if (reset) {
+      TopListenersApi.startPagination = 0;
+    }
 
     isLoading = true;
     update([Constant.idGetListener]);
 
-    topListenersModel = await TopListenersApi.callApi(
-      token: token,
-      uid: uid,
-      searchString: "All",
-      categoryId: selectedCategoryId,
-    );
-    topListeners.addAll(topListenersModel?.data ?? []);
-    await ExpertProximitySorter.sortNearestFirst(topListeners);
+    try {
+      topListenersModel = await TopListenersApi.callApi(
+        token: token,
+        uid: uid,
+        searchString: "All",
+        categoryId: selectedCategoryId,
+      );
 
-    isLoading = false;
-    update([Constant.idGetListener]);
+      final nextListeners = topListenersModel?.data ?? [];
+      if (reset) {
+        topListeners.clear();
+        if (nextListeners.isNotEmpty ||
+            !preserveExistingOnEmpty ||
+            previousListeners.isEmpty) {
+          topListeners.addAll(nextListeners);
+        } else {
+          topListeners.addAll(previousListeners);
+        }
+      } else {
+        topListeners.addAll(nextListeners);
+      }
+
+      await ExpertProximitySorter.sortNearestFirst(topListeners);
+    } finally {
+      isLoading = false;
+      update([Constant.idGetListener]);
+    }
   }
 
   Future<void> onTopListenersPagination() async {
