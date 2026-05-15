@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/edit_profile_screen/controller/edit_profile_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/my_profile_screen/controller/my_profile_screen_controller.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -486,7 +487,14 @@ class ProfileOptionsView extends StatelessWidget {
                                 icon: AppAsset.wallet,
                                 title: EnumLocale.txtMyWallet.name.tr,
                                 onTap: () {
-                                  Get.toNamed(AppRoutes.myWalletScreen);
+                                  Get.toNamed(AppRoutes.myWalletScreen)
+                                      ?.then((_) {
+                                    if (Get.isRegistered<
+                                        HomeScreenController>()) {
+                                      Get.find<HomeScreenController>()
+                                          .onRefresh();
+                                    }
+                                  });
                                 },
                               ),
                             ),

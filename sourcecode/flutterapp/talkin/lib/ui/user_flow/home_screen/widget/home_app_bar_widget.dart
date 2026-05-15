@@ -24,6 +24,14 @@ class HomeAppBarWidget extends StatelessWidget {
   static final Color _brandDark = AppColors.redesignBrandDark;
   static final Color _borderColor = AppColors.redesignSoftBorder;
 
+  Future<void> _openWalletAndRefreshHome() async {
+    await Get.toNamed(AppRoutes.myWalletScreen);
+
+    if (Get.isRegistered<HomeScreenController>()) {
+      await Get.find<HomeScreenController>().onRefresh();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -76,7 +84,7 @@ class HomeAppBarWidget extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             if (isIosGuest) {
-              Get.toNamed(AppRoutes.myWalletScreen);
+              _openWalletAndRefreshHome();
               return;
             }
 
@@ -121,7 +129,7 @@ class HomeAppBarWidget extends StatelessWidget {
         builder: (controller) {
           return GestureDetector(
             onTap: () {
-              Get.toNamed(AppRoutes.myWalletScreen);
+              _openWalletAndRefreshHome();
             },
             child: Container(
               height: actionSize,

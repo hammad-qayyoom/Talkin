@@ -72,6 +72,7 @@ class ActiveSubscription {
   String? paymentGateway;
   String? purchasePlatform;
   String? status;
+  bool? autoRenew;
   DateTime? startsAt;
   DateTime? endsAt;
   int? remainingSessionCredits;
@@ -85,6 +86,7 @@ class ActiveSubscription {
     this.paymentGateway,
     this.purchasePlatform,
     this.status,
+    this.autoRenew,
     this.startsAt,
     this.endsAt,
     this.remainingSessionCredits,
@@ -108,6 +110,11 @@ class ActiveSubscription {
       paymentGateway: json["paymentGateway"]?.toString(),
       purchasePlatform: json["purchasePlatform"]?.toString(),
       status: json["status"]?.toString(),
+      autoRenew: json["autoRenew"] is bool
+          ? json["autoRenew"]
+          : json["autoRenew"] == null
+              ? null
+              : json["autoRenew"].toString().toLowerCase() == 'true',
       startsAt: json["startsAt"] == null
           ? null
           : DateTime.tryParse(json["startsAt"].toString()),
@@ -129,6 +136,7 @@ class ActiveSubscription {
         "paymentGateway": paymentGateway,
         "purchasePlatform": purchasePlatform,
         "status": status,
+        "autoRenew": autoRenew,
         "startsAt": startsAt?.toIso8601String(),
         "endsAt": endsAt?.toIso8601String(),
         "remainingSessionCredits": remainingSessionCredits,

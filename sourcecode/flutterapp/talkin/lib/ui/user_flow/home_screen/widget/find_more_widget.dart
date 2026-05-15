@@ -85,7 +85,11 @@ class FindMoreWidget extends StatelessWidget {
 
   void _openPrimaryHeroAction(HomeScreenController homeController) {
     if (_shouldOfferSubscriptionCheckout) {
-      Get.toNamed(AppRoutes.myWalletScreen);
+      Get.toNamed(AppRoutes.myWalletScreen)?.then((_) {
+        if (Get.isRegistered<HomeScreenController>()) {
+          Get.find<HomeScreenController>().onRefresh();
+        }
+      });
       return;
     }
 

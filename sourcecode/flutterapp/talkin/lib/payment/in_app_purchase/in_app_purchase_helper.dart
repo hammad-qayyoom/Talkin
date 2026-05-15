@@ -71,12 +71,10 @@ class InAppPurchaseHelper {
     _subscription = purchaseUpdated.listen(
         (purchaseDetailsList) {
           if (purchaseDetailsList.isNotEmpty) {
-            purchaseDetailsList.sort(
-              (a, b) =>
-                  (a.transactionDate ?? '').compareTo(b.transactionDate ?? ''),
-            );
+            purchaseDetailsList.sort(_comparePurchaseEvents);
 
-            if (purchaseDetailsList[0].status == PurchaseStatus.restored) {
+            if (purchaseDetailsList.every(
+                (purchase) => purchase.status == PurchaseStatus.restored)) {
               getPastPurchases(purchaseDetailsList);
             } else {
               _listenToPurchaseUpdated(purchaseDetailsList);
@@ -251,6 +249,28 @@ class InAppPurchaseHelper {
         text.contains('failed to get response from platform');
   }
 
+  int _purchaseStatusPriority(PurchaseStatus status) {
+    switch (status) {
+      case PurchaseStatus.purchased:
+      case PurchaseStatus.restored:
+        return 0;
+      case PurchaseStatus.pending:
+        return 1;
+      case PurchaseStatus.canceled:
+        return 2;
+      case PurchaseStatus.error:
+        return 3;
+    }
+  }
+
+  int _comparePurchaseEvents(PurchaseDetails a, PurchaseDetails b) {
+    final priority = _purchaseStatusPriority(a.status)
+        .compareTo(_purchaseStatusPriority(b.status));
+    if (priority != 0) return priority;
+
+    return (a.transactionDate ?? '').compareTo(b.transactionDate ?? '');
+  }
+
   Future<void> getPastPurchases(List<PurchaseDetails> verifiedPurchases) async {
     verifiedPurchases.sort(
         (a, b) => (a.transactionDate ?? '').compareTo(b.transactionDate ?? ''));
@@ -389,19 +409,35 @@ class InAppPurchaseHelper {
 
   Future<void> _listenToPurchaseUpdated(
       List<PurchaseDetails> purchaseDetailsList) async {
-    for (PurchaseDetails detailsPurchase in purchaseDetailsList) {
+    final sortedPurchaseDetails = [...purchaseDetailsList]
+      ..sort(_comparePurchaseEvents);
+    var handledSuccessfulPurchase = false;
+
+    for (PurchaseDetails detailsPurchase in sortedPurchaseDetails) {
       if (detailsPurchase.status == PurchaseStatus.pending) {
         _iapCallback?.onPending(detailsPurchase);
       } else {
         if (detailsPurchase.status == PurchaseStatus.error) {
-          handleError(detailsPurchase.error);
+          if (handledSuccessfulPurchase) {
+            log("Ignoring trailing StoreKit error after a successful purchase event: ${detailsPurchase.error}");
+          } else {
+            handleError(detailsPurchase.error);
+          }
         } else if (detailsPurchase.status == PurchaseStatus.restored) {
-          getPastPurchases(purchaseDetailsList);
+          bool valid = await _verifyPurchase(detailsPurchase);
+          if (valid) {
+            handledSuccessfulPurchase = true;
+            deliverProduct(detailsPurchase);
+          } else {
+            _handleInvalidPurchase(detailsPurchase);
+            return;
+          }
         } else if (detailsPurchase.status == PurchaseStatus.canceled) {
           _iapCallback?.onBillingError("Purchase canceled");
         } else if (detailsPurchase.status == PurchaseStatus.purchased) {
           bool valid = await _verifyPurchase(detailsPurchase);
           if (valid) {
+            handledSuccessfulPurchase = true;
             onComplete.call();
             deliverProduct(detailsPurchase);
           } else {

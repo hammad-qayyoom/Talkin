@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
@@ -48,7 +49,9 @@ class PaymentMethodOption {
   final double? height;
 }
 
-class MyWalletController extends GetxController implements IAPCallback {
+class MyWalletController extends GetxController
+    with WidgetsBindingObserver
+    implements IAPCallback {
   static const int paymentRazorpay = 0;
   static const int paymentStripe = 1;
   static const int paymentFlutterWave = 2;
@@ -71,18 +74,39 @@ class MyWalletController extends GetxController implements IAPCallback {
   bool _isRestoringAppleSubscriptions = false;
   bool _didReceiveRestoredPurchase = false;
   bool _didReceiveAppleStoreError = false;
+  bool _awaitingApplePurchaseResult = false;
+  bool _refreshAfterExternalManage = false;
+  bool _walletStateChanged = false;
   Timer? _pendingAppleStoreErrorTimer;
+  Timer? _applePurchaseTimeoutTimer;
+  final Set<String> _activeAppleVerificationKeys = <String>{};
 
   @override
   void onInit() {
+    WidgetsBinding.instance.addObserver(this);
     fetchCoinPlanList();
     super.onInit();
   }
 
   @override
   void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
     _cancelPendingAppleStoreError();
+    _cancelApplePurchaseTimeout();
+    if (_walletStateChanged) {
+      unawaited(_notifyAuthenticatedWalletStateChanged());
+    }
     super.onClose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed || !_refreshAfterExternalManage) {
+      return;
+    }
+
+    _refreshAfterExternalManage = false;
+    unawaited(_refreshWalletAfterExternalManage());
   }
 
   void _showBlockingLoader() {
@@ -120,6 +144,48 @@ class MyWalletController extends GetxController implements IAPCallback {
     _pendingAppleStoreErrorTimer = null;
   }
 
+  void _cancelApplePurchaseTimeout() {
+    _applePurchaseTimeoutTimer?.cancel();
+    _applePurchaseTimeoutTimer = null;
+  }
+
+  void _markWalletStateChanged() {
+    _walletStateChanged = true;
+  }
+
+  void _startApplePurchaseWait() {
+    _awaitingApplePurchaseResult = true;
+    _setPaymentProcessing(true);
+    _cancelApplePurchaseTimeout();
+    _applePurchaseTimeoutTimer = Timer(const Duration(seconds: 75), () {
+      _applePurchaseTimeoutTimer = null;
+      if (!_awaitingApplePurchaseResult || hasActiveSubscription) return;
+
+      _awaitingApplePurchaseResult = false;
+      _closeBlockingLoader();
+      _setPaymentProcessing(false);
+      Utils.showToast(
+        Get.context,
+        'App Store is taking longer than expected. If Apple charged you, tap Restore.',
+      );
+    });
+  }
+
+  void _finishApplePurchaseWait() {
+    if (!_awaitingApplePurchaseResult && !isPaymentProcessing) return;
+
+    _awaitingApplePurchaseResult = false;
+    _cancelApplePurchaseTimeout();
+    _setPaymentProcessing(false);
+  }
+
+  bool _isTransientStoreKitError(dynamic error) {
+    final text = error.toString().toLowerCase();
+    return text.contains('storekit_no_response') ||
+        text.contains('storekit_platform_no_response') ||
+        text.contains('failed to get response from platform');
+  }
+
   void _queueAppleStoreErrorToast(dynamic error) {
     final message = _friendlyIapError(error);
 
@@ -130,9 +196,18 @@ class MyWalletController extends GetxController implements IAPCallback {
 
     _didReceiveAppleStoreError = true;
     _cancelPendingAppleStoreError();
-    _pendingAppleStoreErrorTimer = Timer(const Duration(seconds: 6), () {
+    final delay = (_awaitingApplePurchaseResult || isRestoreProcessing)
+        ? const Duration(seconds: 24)
+        : const Duration(seconds: 8);
+
+    _pendingAppleStoreErrorTimer = Timer(delay, () {
       _pendingAppleStoreErrorTimer = null;
-      if (_didReceiveRestoredPurchase || hasActiveSubscription) return;
+      if (_didReceiveRestoredPurchase ||
+          hasActiveSubscription ||
+          _awaitingApplePurchaseResult ||
+          isRestoreProcessing) {
+        return;
+      }
       Utils.showToast(Get.context, message);
     });
   }
@@ -246,8 +321,13 @@ class MyWalletController extends GetxController implements IAPCallback {
   String activeSubscriptionMessage() {
     final gateway = (activeSubscription?.paymentGateway ?? '').trim();
     final platform = (activeSubscription?.purchasePlatform ?? '').trim();
+    final hasCancelledRenewal = activeSubscription?.autoRenew == false;
 
     if (gateway.toLowerCase().contains('app store') || platform == 'ios') {
+      if (hasCancelledRenewal) {
+        return 'Your App Store subscription is cancelled and remains active until ${_formatSubscriptionDate(activeSubscription?.endsAt)}.';
+      }
+
       return Platform.isIOS
           ? 'You already have an active App Store subscription. Use Manage or Restore instead of buying again.'
           : 'Your active subscription was purchased on App Store. Please manage it from an iPhone or App Store subscriptions.';
@@ -260,6 +340,13 @@ class MyWalletController extends GetxController implements IAPCallback {
     }
 
     return 'You already have an active subscription.';
+  }
+
+  String _formatSubscriptionDate(DateTime? date) {
+    if (date == null) return 'the current billing period ends';
+
+    final localDate = date.toLocal();
+    return '${localDate.day.toString().padLeft(2, '0')}/${localDate.month.toString().padLeft(2, '0')}/${localDate.year}';
   }
 
   /// change payment method
@@ -511,7 +598,9 @@ class MyWalletController extends GetxController implements IAPCallback {
         Utils.showToast(Get.context, EnumLocale.txtSelectPaymentMethod.name.tr);
       }
     } finally {
-      _setPaymentProcessing(false);
+      if (!_awaitingApplePurchaseResult) {
+        _setPaymentProcessing(false);
+      }
     }
   }
 
@@ -715,9 +804,11 @@ class MyWalletController extends GetxController implements IAPCallback {
 
       if (product != null) {
         Utils.showLog("Product found: ${product.title} - ${product.price}");
+        _startApplePurchaseWait();
         final started = await helper.buySubscription(product, purchases ?? {});
         if (!started) {
           Utils.showLog("IAP purchase sheet did not start.");
+          _finishApplePurchaseWait();
         }
       } else {
         Utils.showToast(
@@ -729,6 +820,7 @@ class MyWalletController extends GetxController implements IAPCallback {
     } catch (e) {
       _closeBlockingLoader();
       Utils.showLog("In App Purchase Failed => $e");
+      _finishApplePurchaseWait();
       Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
     }
   }
@@ -919,7 +1011,7 @@ class MyWalletController extends GetxController implements IAPCallback {
       _cancelPendingAppleStoreError();
       await helper.restorePurchases(this);
       _closeBlockingLoader();
-      await 6000.milliseconds.delay();
+      await 10000.milliseconds.delay();
       if (!_didReceiveRestoredPurchase && !_didReceiveAppleStoreError) {
         Utils.showToast(
           Get.context,
@@ -950,10 +1042,18 @@ class MyWalletController extends GetxController implements IAPCallback {
   }
 
   Future<void> openAppleManageSubscriptions() async {
+    _refreshAfterExternalManage = true;
     await _openExternalUrl(
       Database.settingApiModel?.data?.appleManageSubscriptionsUrl,
       "https://apps.apple.com/account/subscriptions",
     );
+  }
+
+  Future<void> _refreshWalletAfterExternalManage() async {
+    await 1200.milliseconds.delay();
+    await fetchCoinPlanList();
+    await syncSessionCredits();
+    await _notifyAuthenticatedWalletStateChanged();
   }
 
   Future<void> openAppleEula() async {
@@ -974,6 +1074,25 @@ class MyWalletController extends GetxController implements IAPCallback {
   void onBillingError(error) {
     _closeBlockingLoader();
     Utils.showLog("IAP Billing Error: $error");
+    final errorText = error.toString().toLowerCase();
+
+    if (errorText.contains('cancel')) {
+      _finishApplePurchaseWait();
+      Utils.showToast(Get.context, _friendlyIapError(error));
+      return;
+    }
+
+    if (Platform.isIOS &&
+        _awaitingApplePurchaseResult &&
+        _isTransientStoreKitError(error)) {
+      _queueAppleStoreErrorToast(error);
+      return;
+    }
+
+    if (!_isTransientStoreKitError(error)) {
+      _finishApplePurchaseWait();
+    }
+
     _queueAppleStoreErrorToast(error);
   }
 
@@ -1028,6 +1147,14 @@ class MyWalletController extends GetxController implements IAPCallback {
   @override
   void onSuccessPurchase(PurchaseDetails product) async {
     Utils.showLog("IAP Success: ${product.productID}");
+    final purchaseEventKey =
+        '${product.productID}:${product.purchaseID ?? product.transactionDate ?? product.status.name}';
+
+    if (!_activeAppleVerificationKeys.add(purchaseEventKey)) {
+      Utils.showLog("IAP duplicate event ignored: $purchaseEventKey");
+      return;
+    }
+
     _cancelPendingAppleStoreError();
     final isRestoreEvent = _isRestoringAppleSubscriptions ||
         product.status == PurchaseStatus.restored;
@@ -1077,6 +1204,7 @@ class MyWalletController extends GetxController implements IAPCallback {
         await _applyLinkedPurchaseAuth(isSuccess?.auth);
         await fetchCoinPlanList();
         await syncSessionCredits();
+        _markWalletStateChanged();
         await _notifyAuthenticatedWalletStateChanged();
         Utils.showToast(
           Get.context,
@@ -1103,6 +1231,9 @@ class MyWalletController extends GetxController implements IAPCallback {
       }
       Utils.showLog("API call failed: $e");
       Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
+    } finally {
+      _activeAppleVerificationKeys.remove(purchaseEventKey);
+      _finishApplePurchaseWait();
     }
   }
 
