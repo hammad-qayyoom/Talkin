@@ -23,6 +23,8 @@ class EditProfileApi {
     String? image,
     String? fullName,
     String? email,
+    String? newPassword,
+    String? confirmPassword,
   }) async {
     Utils.showLog("Edit Profile Api Calling...");
     final token = await FirebaseAccessToken.onGet();
@@ -54,6 +56,8 @@ class EditProfileApi {
         ApiParams.countryCode: countryCode ?? '',
         ApiParams.country: country ?? '',
         ApiParams.countryFlag: countryFlag ?? '',
+        ApiParams.newPassword: newPassword ?? '',
+        ApiParams.confirmPassword: confirmPassword ?? '',
       });
 
       if (image != null) {

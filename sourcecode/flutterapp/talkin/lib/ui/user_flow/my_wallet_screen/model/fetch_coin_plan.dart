@@ -14,7 +14,8 @@ class FetchCoinPlan {
   String? message;
   num? userCoin;
   bool? hasActiveSubscription;
-  dynamic activeSubscription;
+  ActiveSubscription? activeSubscription;
+  List<ActiveSubscription>? activeSubscriptions;
   List<CoinPlan>? data;
 
   FetchCoinPlan({
@@ -23,6 +24,7 @@ class FetchCoinPlan {
     this.userCoin,
     this.hasActiveSubscription,
     this.activeSubscription,
+    this.activeSubscriptions,
     this.data,
   });
 
@@ -33,7 +35,13 @@ class FetchCoinPlan {
             ? json["userCoin"]
             : num.tryParse(json["userCoin"]?.toString() ?? "0") ?? 0,
         hasActiveSubscription: json["hasActiveSubscription"],
-        activeSubscription: json["activeSubscription"],
+        activeSubscription: json["activeSubscription"] == null
+            ? null
+            : ActiveSubscription.fromJson(json["activeSubscription"]),
+        activeSubscriptions: json["activeSubscriptions"] == null
+            ? []
+            : List<ActiveSubscription>.from(json["activeSubscriptions"]!
+                .map((x) => ActiveSubscription.fromJson(x))),
         data: json["data"] == null
             ? []
             : List<CoinPlan>.from(
@@ -45,10 +53,85 @@ class FetchCoinPlan {
         "message": message,
         "userCoin": userCoin,
         "hasActiveSubscription": hasActiveSubscription,
-        "activeSubscription": activeSubscription,
+        "activeSubscription": activeSubscription?.toJson(),
+        "activeSubscriptions": activeSubscriptions == null
+            ? []
+            : List<dynamic>.from(activeSubscriptions!.map((x) => x.toJson())),
         "data": data == null
             ? []
             : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
+}
+
+class ActiveSubscription {
+  String? id;
+  String? planId;
+  String? planName;
+  String? appleProductId;
+  String? googleProductId;
+  String? paymentGateway;
+  String? purchasePlatform;
+  String? status;
+  DateTime? startsAt;
+  DateTime? endsAt;
+  int? remainingSessionCredits;
+
+  ActiveSubscription({
+    this.id,
+    this.planId,
+    this.planName,
+    this.appleProductId,
+    this.googleProductId,
+    this.paymentGateway,
+    this.purchasePlatform,
+    this.status,
+    this.startsAt,
+    this.endsAt,
+    this.remainingSessionCredits,
+  });
+
+  factory ActiveSubscription.fromJson(Map<String, dynamic> json) {
+    final planIdValue = json["planId"];
+    String? normalizedPlanId;
+    if (planIdValue is Map<String, dynamic>) {
+      normalizedPlanId = planIdValue["_id"]?.toString();
+    } else {
+      normalizedPlanId = planIdValue?.toString();
+    }
+
+    return ActiveSubscription(
+      id: json["_id"]?.toString(),
+      planId: normalizedPlanId,
+      planName: json["planName"]?.toString(),
+      appleProductId: json["appleProductId"]?.toString(),
+      googleProductId: json["googleProductId"]?.toString(),
+      paymentGateway: json["paymentGateway"]?.toString(),
+      purchasePlatform: json["purchasePlatform"]?.toString(),
+      status: json["status"]?.toString(),
+      startsAt: json["startsAt"] == null
+          ? null
+          : DateTime.tryParse(json["startsAt"].toString()),
+      endsAt: json["endsAt"] == null
+          ? null
+          : DateTime.tryParse(json["endsAt"].toString()),
+      remainingSessionCredits: json["remainingSessionCredits"] is int
+          ? json["remainingSessionCredits"]
+          : int.tryParse(json["remainingSessionCredits"]?.toString() ?? ''),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "planId": planId,
+        "planName": planName,
+        "appleProductId": appleProductId,
+        "googleProductId": googleProductId,
+        "paymentGateway": paymentGateway,
+        "purchasePlatform": purchasePlatform,
+        "status": status,
+        "startsAt": startsAt?.toIso8601String(),
+        "endsAt": endsAt?.toIso8601String(),
+        "remainingSessionCredits": remainingSessionCredits,
       };
 }
 
@@ -62,6 +145,8 @@ class CoinPlan {
   String? currency;
   String? billingCycle;
   String? productId;
+  String? appleProductId;
+  String? googleProductId;
   bool? isPopular;
   bool? isActive;
   DateTime? createdAt;
@@ -77,6 +162,8 @@ class CoinPlan {
     this.currency,
     this.billingCycle,
     this.productId,
+    this.appleProductId,
+    this.googleProductId,
     this.isPopular,
     this.isActive,
     this.createdAt,
@@ -93,6 +180,8 @@ class CoinPlan {
         currency: json["currency"],
         billingCycle: json["billingCycle"],
         productId: json["productId"] ?? json["slug"],
+        appleProductId: json["appleProductId"],
+        googleProductId: json["googleProductId"],
         isPopular: json["isPopular"],
         isActive: json["isActive"],
         createdAt: json["createdAt"] == null
@@ -113,6 +202,8 @@ class CoinPlan {
         "currency": currency,
         "billingCycle": billingCycle,
         "productId": productId,
+        "appleProductId": appleProductId,
+        "googleProductId": googleProductId,
         "isPopular": isPopular,
         "isActive": isActive,
         "createdAt": createdAt?.toIso8601String(),

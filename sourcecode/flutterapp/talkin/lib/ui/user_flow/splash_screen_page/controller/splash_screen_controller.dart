@@ -24,7 +24,6 @@ import 'package:notisboard/ui/user_flow/splash_screen_page/model/setting_api_mod
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/firebse_access_token.dart';
-import 'package:notisboard/utils/guest_browsing_setup.dart';
 import 'package:notisboard/utils/utils.dart';
 
 import '../api/aap_configuration_api.dart';
@@ -281,6 +280,25 @@ Future<void> splashScreen() async {
       Get.offAllNamed(route, arguments: arguments);
     }
 
+    Future<void> enterLimitedGuestBrowsing() async {
+      Database.fetchLoginUserProfileModel = null;
+      await Database.onSetIsLogin(false);
+      await Database.onSetGuestMode(true);
+      await Database.onSetLoginType(0);
+      await Database.onSetFillProfile(false);
+      await Database.onSetSeenOnboarding(true);
+      await Database.onSetLoginUserFirebaseId("");
+      await Database.onSetLoginUserId("");
+      await Database.onSetLoginUserName("");
+      await Database.onSetLoginUserNickName("");
+      await Database.onSetLoginUserEmail("");
+      await Database.onSetLoginUserProfilePic("");
+      await Database.onSetLoginUserPhoneNumber("");
+      await Database.onSetLoginUserBirthDate("");
+      await Database.onSetLoginUserGender("Male");
+      await Database.onSetUserCoin("0.00");
+    }
+
     // Check User Is Login Or Not...
     try {
       final token = await _guardedSplashTask<String>(
@@ -321,24 +339,8 @@ Future<void> splashScreen() async {
                 "User not found in the database." ||
             token == null) {
           Utils.showLog(
-              "No valid login profile. Trying authenticated guest browsing.");
-
-          final guestSessionReady = await _guardedSplashTask<bool>(
-                "Guest browsing setup",
-                () => GuestBrowsingSetup.ensureAuthenticatedGuestSession(),
-                timeout: const Duration(seconds: 12),
-              ) ??
-              false;
-          if (guestSessionReady) {
-            Utils.showLog("Authenticated guest session is ready.");
-            navigateFromSplash(AppRoutes.bottomBar);
-            return;
-          }
-
-          Utils.showLog("Guest session setup fallback: limited browsing mode.");
-          await Database.onSetIsLogin(false);
-          await Database.onSetGuestMode(true);
-          await Database.onSetFillProfile(false);
+              "No valid login profile. Using limited guest browsing.");
+          await enterLimitedGuestBrowsing();
           navigateFromSplash(AppRoutes.bottomBar);
           return;
         } else {
@@ -369,9 +371,7 @@ Future<void> splashScreen() async {
     } catch (error, stackTrace) {
       Utils.showLog("Splash navigation failed => $error");
       log("Splash navigation failed", error: error, stackTrace: stackTrace);
-      await Database.onSetIsLogin(false);
-      await Database.onSetGuestMode(true);
-      await Database.onSetFillProfile(false);
+      await enterLimitedGuestBrowsing();
       navigateFromSplash(AppRoutes.bottomBar);
     }
   });

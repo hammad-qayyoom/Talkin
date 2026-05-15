@@ -6,8 +6,12 @@ import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/font_style.dart';
 
 class AuthGuard {
-  static bool get isGuest =>
-      !Database.isLogin || (Database.isGuestMode && Database.loginType == 2);
+  static bool get hasAuthenticatedAccount =>
+      Database.isLogin &&
+      Database.loginUserFirebaseId.trim().isNotEmpty &&
+      Database.loginUserId.trim().isNotEmpty;
+
+  static bool get isGuest => !hasAuthenticatedAccount;
 
   static bool requireLogin({
     String message = 'Please log in to continue.',

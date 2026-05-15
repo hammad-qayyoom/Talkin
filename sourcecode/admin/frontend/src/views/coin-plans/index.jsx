@@ -80,7 +80,7 @@ const CoinPlans = () => {
     if (!defaultCurrency) {
       dispatch(fetchDefaultCurrencies())
     }
-  }, [])
+  }, [defaultCurrency, dispatch])
 
   // Client-side paginated data
   // const paginatedData = useMemo(() => {
@@ -127,9 +127,19 @@ const CoinPlans = () => {
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor(row => row.productId, {
-        id: 'productId',
-        header: 'Plan Slug',
+      columnHelper.accessor(row => row.name, {
+        id: 'name',
+        header: 'Plan Name',
+        cell: ({ getValue }) => <Typography>{getValue() || '-'}</Typography>
+      }),
+      columnHelper.accessor(row => row.appleProductId || row.productId, {
+        id: 'appleProductId',
+        header: 'Apple Product ID',
+        cell: ({ getValue }) => <Typography>{getValue() || '-'}</Typography>
+      }),
+      columnHelper.accessor(row => row.googleProductId, {
+        id: 'googleProductId',
+        header: 'Google Product ID',
         cell: ({ getValue }) => <Typography>{getValue() || '-'}</Typography>
       }),
       columnHelper.accessor(row => row.coins, {
@@ -195,7 +205,7 @@ const CoinPlans = () => {
         )
       })
     ],
-    [coinPlans, defaultCurrency]
+    [defaultCurrency]
   )
 
   const table = useReactTable({

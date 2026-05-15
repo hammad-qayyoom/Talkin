@@ -35,6 +35,8 @@ abstract class Api {
   static const sendImageAudioApi = "${baseUrl}api/user/chat/sendChatMessage";
   static const purchasedCoinPlan =
       "${baseUrl}api/user/coinplan/recordPurchasedCoinPlan?";
+  static const verifyAppleInAppPurchase =
+      "${baseUrl}api/user/coinplan/verifyAppleInAppPurchase";
   static const paymentHistory =
       "${baseUrl}api/user/history/getCoinPackagePurchaseHistory?";
   static const coinHistory = "${baseUrl}api/user/history/getCoinWalletRecords?";

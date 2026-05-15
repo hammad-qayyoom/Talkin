@@ -54,7 +54,7 @@
 		<string>mailto</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>Notisboard uses the camera for profile photos, verification uploads, video calls, and card scanning during payments.</string>
+	<string>Notisboard uses the camera for profile photos, verification uploads, and video calls.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Notisboard uses the microphone for voice messages and audio or video calls.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

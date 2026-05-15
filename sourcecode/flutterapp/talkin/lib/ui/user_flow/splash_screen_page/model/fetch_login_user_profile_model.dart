@@ -63,6 +63,7 @@ class User {
   bool? isOnline;
   bool? isBusy;
   bool? isNotificationEnabled;
+  bool? isGuestAccount;
   dynamic callId;
   bool? isListener;
   dynamic listenerId;
@@ -99,6 +100,7 @@ class User {
     this.isOnline,
     this.isBusy,
     this.isNotificationEnabled,
+    this.isGuestAccount,
     this.callId,
     this.isListener,
     this.listenerId,
@@ -136,6 +138,7 @@ class User {
         isOnline: json["isOnline"],
         isBusy: json["isBusy"],
         isNotificationEnabled: json["isNotificationEnabled"],
+        isGuestAccount: json["isGuestAccount"],
         callId: json["callId"],
         isListener: json["isListener"],
         listenerId: json["listenerId"],
@@ -177,6 +180,7 @@ class User {
         "isOnline": isOnline,
         "isBusy": isBusy,
         "isNotificationEnabled": isNotificationEnabled,
+        "isGuestAccount": isGuestAccount,
         "callId": callId,
         "isListener": isListener,
         "listenerId": listenerId,

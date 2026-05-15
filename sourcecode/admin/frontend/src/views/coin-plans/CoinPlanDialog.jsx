@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField'
 import CircularProgress from '@mui/material/CircularProgress'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
+import MenuItem from '@mui/material/MenuItem'
 import { toast } from 'react-toastify'
 
 import DialogCloseButton from '@components/dialogs/DialogCloseButton'
@@ -32,9 +33,12 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
   const { loading } = useSelector(state => state.coinPlansReducer)
 
   const [formData, setFormData] = useState({
+    name: '',
     sessionCredits: '',
     price: '',
-    productId: '',
+    billingCycle: 'monthly',
+    appleProductId: '',
+    googleProductId: '',
     isPopular: false,
     isActive: true
   })
@@ -45,17 +49,23 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
   useEffect(() => {
     if (mode === 'edit' && coinPlan) {
       setFormData({
+        name: coinPlan.name || '',
         sessionCredits: coinPlan.sessionCredits || coinPlan.coins || '',
         price: coinPlan.price || '',
-        productId: coinPlan.productId || '',
+        billingCycle: coinPlan.billingCycle || 'monthly',
+        appleProductId: coinPlan.appleProductId || coinPlan.productId || '',
+        googleProductId: coinPlan.googleProductId || '',
         isPopular: coinPlan.isPopular || false,
         isActive: coinPlan.isActive !== undefined ? coinPlan.isActive : true
       })
     } else {
       setFormData({
+        name: '',
         sessionCredits: '',
         price: '',
-        productId: '',
+        billingCycle: 'monthly',
+        appleProductId: '',
+        googleProductId: '',
         isPopular: false,
         isActive: true
       })
@@ -73,8 +83,8 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
         delete updatedErrors.sessionCredits
       } else if (field === 'price' && value > 0) {
         delete updatedErrors.price
-      } else if (field === 'productId' && value.trim() !== '') {
-        delete updatedErrors.productId
+      } else if (field === 'appleProductId' && value.trim() !== '') {
+        delete updatedErrors.appleProductId
       }
 
       return updatedErrors
@@ -92,8 +102,8 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
       newErrors.price = 'Price must be a positive number'
     }
 
-    if (!formData.productId || formData.productId.trim() === '') {
-      newErrors.productId = 'Product ID is required'
+    if (!formData.appleProductId || formData.appleProductId.trim() === '') {
+      newErrors.appleProductId = 'Apple product ID is required for iOS subscriptions'
     }
 
     setErrors(newErrors)
@@ -120,8 +130,16 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
           updatedPayload.coins = formData.sessionCredits
         }
 
+        if (formData.name !== coinPlan.name) updatedPayload.name = formData.name
         if (formData.price !== coinPlan.price) updatedPayload.price = formData.price
-        if (formData.productId !== coinPlan.productId) updatedPayload.productId = formData.productId
+        if (formData.billingCycle !== coinPlan.billingCycle) updatedPayload.billingCycle = formData.billingCycle
+
+        if (formData.appleProductId !== (coinPlan.appleProductId || coinPlan.productId)) {
+          updatedPayload.appleProductId = formData.appleProductId
+          updatedPayload.productId = formData.appleProductId
+        }
+
+        if (formData.googleProductId !== coinPlan.googleProductId) updatedPayload.googleProductId = formData.googleProductId
         if (formData.isPopular !== coinPlan.isPopular) updatedPayload.isPopular = formData.isPopular
         if (formData.isActive !== coinPlan.isActive) updatedPayload.isActive = formData.isActive
 
@@ -133,7 +151,13 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
           ).unwrap()
         }
       } else {
-        await dispatch(createCoinPlan({ ...formData, coins: formData.sessionCredits })).unwrap()
+        await dispatch(
+          createCoinPlan({
+            ...formData,
+            productId: formData.appleProductId,
+            coins: formData.sessionCredits
+          })
+        ).unwrap()
       }
 
       resetForm()
@@ -148,9 +172,12 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
 
   const resetForm = () => {
     setFormData({
+      name: '',
       sessionCredits: '',
       price: '',
-      productId: '',
+      billingCycle: 'monthly',
+      appleProductId: '',
+      googleProductId: '',
       isPopular: false,
       isActive: true
     })
@@ -190,6 +217,14 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
 
       <DialogContent className='flex flex-col gap-4 py-4'>
         <TextField
+          label='Plan Name'
+          fullWidth
+          value={formData.name}
+          onChange={e => handleChange('name', e.target.value)}
+          placeholder='Premium Monthly'
+        />
+
+        <TextField
           label='Session Credits'
           type='number'
           fullWidth
@@ -214,13 +249,34 @@ const CoinPlanDialog = ({ open, onClose, mode = 'create', coinPlan = null }) => 
         />
 
         <TextField
-          label='Plan Slug / Product ID'
+          select
+          label='Billing Cycle'
           fullWidth
-          value={formData.productId}
-          error={!!errors.productId}
-          helperText={errors.productId || ''}
-          onChange={e => handleChange('productId', e.target.value)}
-          placeholder='starter-monthly'
+          value={formData.billingCycle}
+          onChange={e => handleChange('billingCycle', e.target.value)}
+        >
+          <MenuItem value='monthly'>Monthly</MenuItem>
+          <MenuItem value='quarterly'>Quarterly</MenuItem>
+          <MenuItem value='yearly'>Yearly</MenuItem>
+        </TextField>
+
+        <TextField
+          label='Apple Product ID'
+          fullWidth
+          value={formData.appleProductId}
+          error={!!errors.appleProductId}
+          helperText={errors.appleProductId || 'Must match the Product ID created in App Store Connect.'}
+          onChange={e => handleChange('appleProductId', e.target.value)}
+          placeholder='com.notisboard.premium.monthly'
+        />
+
+        <TextField
+          label='Google Play Product ID'
+          fullWidth
+          value={formData.googleProductId}
+          helperText='Optional. Used only when Google Play Billing is enabled on Android.'
+          onChange={e => handleChange('googleProductId', e.target.value)}
+          placeholder='premium_monthly'
         />
 
         {/* <div className='flex flex-col gap-2'>

@@ -5,7 +5,6 @@ import 'package:notisboard/services/location/user_location_service.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/api_params.dart';
-import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/guest_auth.dart';
 import 'package:notisboard/utils/utils.dart';
 
@@ -72,8 +71,7 @@ class TopListenersApi {
     );
     final topUri =
         _topListenersUri(searchString: searchString, categoryId: categoryId);
-    final useLegacyPrimary = Database.isLogin;
-    final primaryUri = useLegacyPrimary ? topUri : discoverUri;
+    final primaryUri = topUri;
 
     Utils.showLog("Top Listeners Api url => $primaryUri");
 
@@ -94,22 +92,19 @@ class TopListenersApi {
         Utils.showLog("Top Listeners Api StateCode Error");
       }
 
-      if (useLegacyPrimary) {
-        Utils.showLog("Top Listeners legacy failed, trying discover fallback.");
-        final fallbackResponse = await http.get(
-          discoverUri,
-          headers: headers,
-        );
+      Utils.showLog("Top Listeners legacy failed, trying discover fallback.");
+      final fallbackResponse = await http.get(
+        discoverUri,
+        headers: headers,
+      );
 
-        Utils.showLog(
-            "Top Listeners Discover Fallback => ${fallbackResponse.body}");
+      Utils.showLog(
+          "Top Listeners Discover Fallback => ${fallbackResponse.body}");
 
-        if (fallbackResponse.statusCode == 200) {
-          final jsonResponse = json.decode(fallbackResponse.body);
-          if (jsonResponse is Map<String, dynamic> &&
-              _isSuccess(jsonResponse)) {
-            return TopListenersModel.fromJson(jsonResponse);
-          }
+      if (fallbackResponse.statusCode == 200) {
+        final jsonResponse = json.decode(fallbackResponse.body);
+        if (jsonResponse is Map<String, dynamic> && _isSuccess(jsonResponse)) {
+          return TopListenersModel.fromJson(jsonResponse);
         }
       }
     } catch (e) {

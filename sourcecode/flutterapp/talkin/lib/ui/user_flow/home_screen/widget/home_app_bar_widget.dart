@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -69,10 +71,19 @@ class HomeAppBarWidget extends StatelessWidget {
 
     Widget coinCard() {
       if (AuthGuard.isGuest) {
+        final isIosGuest = Platform.isIOS;
+
         return GestureDetector(
-          onTap: () => AuthGuard.showLoginPrompt(
-            message: 'Please log in to view and purchase session credits.',
-          ),
+          onTap: () {
+            if (isIosGuest) {
+              Get.toNamed(AppRoutes.myWalletScreen);
+              return;
+            }
+
+            AuthGuard.showLoginPrompt(
+              message: 'Please log in to view and purchase session credits.',
+            );
+          },
           child: Container(
             height: actionSize,
             padding: EdgeInsets.symmetric(horizontal: isCompact ? 12 : 14),
@@ -85,13 +96,15 @@ class HomeAppBarWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  Icons.login_rounded,
+                  isIosGuest
+                      ? Icons.account_balance_wallet_outlined
+                      : Icons.login_rounded,
                   size: isTablet ? 22 : 20,
                   color: _brandRed,
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  'Login',
+                  isIosGuest ? 'Subscribe' : 'Login',
                   style: AppFontStyle.fontStyleW700(
                     fontSize: coinValueFontSize,
                     fontColor: _brandDark,
@@ -209,10 +222,23 @@ class HomeAppBarWidget extends StatelessWidget {
 
     Widget profileSection() {
       if (AuthGuard.isGuest) {
+        final canManageGuestProfile = Platform.isIOS && Database.isLogin;
+
         return GestureDetector(
-          onTap: () => AuthGuard.showLoginPrompt(
-            message: 'Please log in to manage your profile.',
-          ),
+          onTap: () {
+            if (canManageGuestProfile) {
+              Get.toNamed(AppRoutes.myProfileScreen)?.then(
+                (value) {
+                  Utils.onChangeStatusBar(brightness: Brightness.dark);
+                },
+              );
+              return;
+            }
+
+            AuthGuard.showLoginPrompt(
+              message: 'Please log in to manage your profile.',
+            );
+          },
           child: Row(
             children: [
               Container(
@@ -239,7 +265,11 @@ class HomeAppBarWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Guest',
+                      canManageGuestProfile
+                          ? (Database.loginUserName.trim().isEmpty
+                              ? 'Guest'
+                              : Database.loginUserName)
+                          : 'Guest',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppFontStyle.fontStyleW700(
@@ -249,7 +279,9 @@ class HomeAppBarWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Browse experts',
+                      canManageGuestProfile
+                          ? 'Manage optional account'
+                          : 'Browse experts',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppFontStyle.fontStyleW600(

@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
@@ -8,20 +10,27 @@ import 'package:notisboard/payment/api/purchase_coin_plan_api.dart';
 import 'package:notisboard/payment/in_app_purchase/iap_callback.dart';
 import 'package:notisboard/payment/in_app_purchase/in_app_purchase_helper.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/all_listeners_screen/controller/all_listeners_controller.dart';
+import 'package:notisboard/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
+import 'package:notisboard/ui/user_flow/edit_profile_screen/controller/edit_profile_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/home_screen/api/user_coin_api.dart';
 import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/user_coin_model.dart';
+import 'package:notisboard/ui/user_flow/listener_screen/controller/listeners_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/my_wallet_screen/api/fetch_coin_plan_api.dart';
 import 'package:notisboard/ui/user_flow/my_wallet_screen/model/fetch_coin_plan.dart';
 import 'package:notisboard/ui/user_flow/my_wallet_screen/model/purchase_coin_plan.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/setting_api.dart';
+import 'package:notisboard/ui/user_flow/top_listeners_view_all/controller/top_listeners_view_all_controller.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/common_payment.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/guest_browsing_setup.dart';
 import 'package:notisboard/utils/utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PaymentMethodOption {
   const PaymentMethodOption({
@@ -52,17 +61,28 @@ class MyWalletController extends GetxController implements IAPCallback {
   List<CoinPlan> coinPlan = [];
   bool isLoading = false;
   bool isPaymentProcessing = false;
+  bool isRestoreProcessing = false;
   int selectedPaymentMethod = -1;
   PurchaseCoinPlan? purchaseCoinPlan;
   UserCoinModel? userCoinModel;
   // String productKey = '';
   Map<String, PurchaseDetails>? purchases;
   CoinPlan? selectedCoinPlan;
+  bool _isRestoringAppleSubscriptions = false;
+  bool _didReceiveRestoredPurchase = false;
+  bool _didReceiveAppleStoreError = false;
+  Timer? _pendingAppleStoreErrorTimer;
 
   @override
   void onInit() {
     fetchCoinPlanList();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    _cancelPendingAppleStoreError();
+    super.onClose();
   }
 
   void _showBlockingLoader() {
@@ -89,6 +109,37 @@ class MyWalletController extends GetxController implements IAPCallback {
     update([Constant.onChangePaymentMethod]);
   }
 
+  void _setRestoreProcessing(bool value) {
+    if (isRestoreProcessing == value) return;
+    isRestoreProcessing = value;
+    update([Constant.onChangePaymentMethod]);
+  }
+
+  void _cancelPendingAppleStoreError() {
+    _pendingAppleStoreErrorTimer?.cancel();
+    _pendingAppleStoreErrorTimer = null;
+  }
+
+  void _queueAppleStoreErrorToast(dynamic error) {
+    final message = _friendlyIapError(error);
+
+    if (!Platform.isIOS) {
+      Utils.showToast(Get.context, message);
+      return;
+    }
+
+    _didReceiveAppleStoreError = true;
+    _cancelPendingAppleStoreError();
+    _pendingAppleStoreErrorTimer = Timer(const Duration(seconds: 6), () {
+      _pendingAppleStoreErrorTimer = null;
+      if (_didReceiveRestoredPurchase || hasActiveSubscription) return;
+      Utils.showToast(Get.context, message);
+    });
+  }
+
+  bool get _hasAuthenticatedWalletContext =>
+      Database.isLogin && Database.loginUserFirebaseId.trim().isNotEmpty;
+
   Future<void> syncSessionCredits({bool refreshHome = true}) async {
     userCoinModel = await UserCoinApi.callApi();
 
@@ -109,27 +160,106 @@ class MyWalletController extends GetxController implements IAPCallback {
 
   /// fetch coin plan
   Future<void> fetchCoinPlanList() async {
-    final uid = Database.loginUserFirebaseId;
-    final token = await FirebaseAccessToken.onGet() ?? "";
-
     isLoading = true;
     update([Constant.idGetCoinPlan]);
 
-    final latestSettings = await SettingApi.callApi();
-    if (latestSettings?.status == true) {
-      Database.settingApiModel = latestSettings;
+    try {
+      final shouldUseUserContext = _hasAuthenticatedWalletContext;
+      final uid = shouldUseUserContext ? Database.loginUserFirebaseId : "";
+      final token =
+          shouldUseUserContext ? await FirebaseAccessToken.onGet() ?? "" : "";
+
+      final latestSettings = await SettingApi.callApi();
+      if (latestSettings?.status == true) {
+        Database.settingApiModel = latestSettings;
+      }
+
+      fetchCoinPlan = await FetchCoinPlanApi.callApi(
+        uid: uid,
+        token: token,
+      );
+      coinPlan.clear();
+      coinPlan.addAll(fetchCoinPlan?.data ?? []);
+
+      if (shouldUseUserContext) {
+        await syncSessionCredits(refreshHome: false);
+      } else {
+        final normalizedCredits = fetchCoinPlan?.userCoin ?? 0;
+        await Database.onSetUserCoin(normalizedCredits.toString());
+      }
+    } finally {
+      isLoading = false;
+      update([Constant.idGetCoinPlan]);
+    }
+  }
+
+  Future<bool> _ensureAppleGuestAccountReady() async {
+    if (!Platform.isIOS) return true;
+
+    if (!Database.isLogin || Database.loginUserFirebaseId.trim().isEmpty) {
+      final ready = await GuestBrowsingSetup.ensureAuthenticatedGuestSession();
+      if (!ready) return false;
     }
 
-    fetchCoinPlan = await FetchCoinPlanApi.callApi(
-      uid: uid,
-      token: token,
-    );
-    coinPlan.clear();
-    coinPlan.addAll(fetchCoinPlan?.data ?? []);
-    await syncSessionCredits(refreshHome: false);
+    final profileSynced = await GuestBrowsingSetup.refreshCurrentGuestProfile();
+    if (!profileSynced &&
+        (Database.isGuestMode ||
+            Database.loginType == 2 ||
+            Database.loginUserId.trim().isEmpty)) {
+      await Database.onSetIsLogin(false);
+      await Database.onSetGuestMode(true);
+      final ready = await GuestBrowsingSetup.ensureAuthenticatedGuestSession();
+      if (!ready) return false;
+    }
 
-    isLoading = false;
-    update([Constant.idGetCoinPlan]);
+    return Database.isLogin &&
+        Database.loginUserFirebaseId.trim().isNotEmpty &&
+        Database.loginUserId.trim().isNotEmpty;
+  }
+
+  ActiveSubscription? get activeSubscription =>
+      fetchCoinPlan?.activeSubscription;
+
+  bool get hasActiveSubscription {
+    final sub = activeSubscription;
+    if (sub == null) return false;
+
+    final status = (sub.status ?? '').toLowerCase();
+    final endsAt = sub.endsAt;
+    return status == 'active' &&
+        (endsAt == null || endsAt.isAfter(DateTime.now()));
+  }
+
+  bool isPlanActive(CoinPlan plan) {
+    if (!hasActiveSubscription) return false;
+
+    final active = activeSubscription;
+    final planId = (plan.id ?? '').trim();
+    final appleProductId = _appleProductKey(plan);
+    final googleProductId = _googleProductKey(plan);
+
+    return (active?.planId ?? '').trim() == planId ||
+        (active?.appleProductId ?? '').trim() == appleProductId ||
+        (active?.googleProductId ?? '').trim() == googleProductId;
+  }
+
+  String activeSubscriptionMessage() {
+    final gateway = (activeSubscription?.paymentGateway ?? '').trim();
+    final platform = (activeSubscription?.purchasePlatform ?? '').trim();
+
+    if (gateway.toLowerCase().contains('app store') || platform == 'ios') {
+      return Platform.isIOS
+          ? 'You already have an active App Store subscription. Use Manage or Restore instead of buying again.'
+          : 'Your active subscription was purchased on App Store. Please manage it from an iPhone or App Store subscriptions.';
+    }
+
+    if (gateway.isNotEmpty) {
+      return Platform.isIOS
+          ? 'Your active subscription was purchased on $gateway. Please manage it on that platform.'
+          : 'You already have an active subscription. Please manage it on $gateway.';
+    }
+
+    return 'You already have an active subscription.';
   }
 
   /// change payment method
@@ -148,18 +278,65 @@ class MyWalletController extends GetxController implements IAPCallback {
     return false;
   }
 
+  String _appleProductKey(CoinPlan? plan) {
+    return (plan?.appleProductId?.trim().isNotEmpty == true)
+        ? plan!.appleProductId!.trim()
+        : (plan?.productId ?? '').trim();
+  }
+
+  String _googleProductKey(CoinPlan? plan) {
+    return (plan?.googleProductId?.trim().isNotEmpty == true)
+        ? plan!.googleProductId!.trim()
+        : (plan?.productId ?? '').trim();
+  }
+
+  CoinPlan? _findPlanByProductId(String productId) {
+    final normalizedProductId = productId.trim();
+    if (normalizedProductId.isEmpty) return null;
+
+    for (final plan in coinPlan) {
+      if (_appleProductKey(plan) == normalizedProductId ||
+          _googleProductKey(plan) == normalizedProductId ||
+          (plan.productId ?? '').trim() == normalizedProductId) {
+        return plan;
+      }
+    }
+
+    return null;
+  }
+
+  String productKeyForSelectedPlan() {
+    if (Platform.isIOS) return _appleProductKey(selectedCoinPlan);
+    return _googleProductKey(selectedCoinPlan);
+  }
+
   List<PaymentMethodOption> get availablePaymentMethods {
     final settings = Database.settingApiModel?.data;
 
-    if (settings == null) {
-      return Platform.isAndroid || Platform.isIOS
-          ? [
+    if (Platform.isIOS) {
+      final isAppleIapEnabled =
+          settings == null || settings.isAppleInAppPurchaseEnabled != false;
+
+      return isAppleIapEnabled
+          ? const [
               PaymentMethodOption(
                 id: paymentInAppPurchase,
-                title: Platform.isIOS ? 'App Store' : 'Google Play',
-                image: Platform.isIOS
-                    ? AppAsset.appStoreImage
-                    : AppAsset.googleIcon,
+                title: 'App Store',
+                image: AppAsset.appStoreImage,
+                width: 50,
+                height: 26,
+              ),
+            ]
+          : [];
+    }
+
+    if (settings == null) {
+      return Platform.isAndroid
+          ? [
+              const PaymentMethodOption(
+                id: paymentInAppPurchase,
+                title: 'Google Play',
+                image: AppAsset.googleIcon,
                 width: 50,
                 height: 26,
               ),
@@ -257,8 +434,8 @@ class MyWalletController extends GetxController implements IAPCallback {
     )) {
       methods.add(PaymentMethodOption(
         id: paymentInAppPurchase,
-        title: Platform.isIOS ? 'App Store' : 'Google Play',
-        image: Platform.isIOS ? AppAsset.appStoreImage : AppAsset.googleIcon,
+        title: 'Google Play',
+        image: AppAsset.googleIcon,
         width: 50,
         height: 26,
       ));
@@ -273,17 +450,41 @@ class MyWalletController extends GetxController implements IAPCallback {
       required num amount,
       required String productKey,
       bool dismissSelector = false}) async {
-    if (selectedPaymentMethod == -1) {
-      Utils.showToast(Get.context, EnumLocale.txtSelectPaymentMethod.name.tr);
-      return;
-    }
-
-    if (isPaymentProcessing) {
+    if (isPaymentProcessing || isRestoreProcessing) {
       return;
     }
 
     _setPaymentProcessing(true);
     try {
+      if (Platform.isIOS) {
+        final ready = await _ensureAppleGuestAccountReady();
+        if (!ready) {
+          Utils.showToast(Get.context,
+              "Unable to prepare App Store checkout. Please try again.");
+          return;
+        }
+      }
+
+      if (Platform.isIOS && selectedPaymentMethod == -1) {
+        selectedPaymentMethod = paymentInAppPurchase;
+        update([Constant.onChangePaymentMethod]);
+      }
+
+      if (Platform.isIOS && selectedPaymentMethod != paymentInAppPurchase) {
+        Utils.showToast(Get.context, "iOS subscriptions use App Store only");
+        return;
+      }
+
+      if (selectedPaymentMethod == -1) {
+        Utils.showToast(Get.context, EnumLocale.txtSelectPaymentMethod.name.tr);
+        return;
+      }
+
+      if (hasActiveSubscription) {
+        Utils.showToast(Get.context, activeSubscriptionMessage());
+        return;
+      }
+
       if (dismissSelector) {
         _closePaymentSelectorIfOpen();
         await 250.milliseconds.delay();
@@ -296,7 +497,10 @@ class MyWalletController extends GetxController implements IAPCallback {
       } else if (selectedPaymentMethod == paymentFlutterWave) {
         await onClickFlutterWave(amount, id);
       } else if (selectedPaymentMethod == paymentInAppPurchase) {
-        await onClickInAppPurchase(amount, id, productKey);
+        final checkoutProductKey = productKeyForSelectedPlan().isNotEmpty
+            ? productKeyForSelectedPlan()
+            : productKey;
+        await onClickInAppPurchase(amount, id, checkoutProductKey);
       } else if (selectedPaymentMethod == paymentCashFree) {
         await onClickCashFree(amount, id);
       } else if (selectedPaymentMethod == paymentPayStack) {
@@ -468,6 +672,15 @@ class MyWalletController extends GetxController implements IAPCallback {
   ///in app purchase
   Future<void> onClickInAppPurchase(
       num amount, String id, String productKey) async {
+    if (Platform.isIOS) {
+      final ready = await _ensureAppleGuestAccountReady();
+      if (!ready) {
+        Utils.showToast(Get.context,
+            "Unable to prepare App Store checkout. Please try again.");
+        return;
+      }
+    }
+
     final normalizedProductKey = productKey.trim();
     Utils.showLog("Starting IAP with product: $normalizedProductKey");
 
@@ -491,8 +704,10 @@ class MyWalletController extends GetxController implements IAPCallback {
 
     _showBlockingLoader();
     try {
-      await helper.debugProductLoading();
-      await helper.initStoreInfo();
+      _didReceiveAppleStoreError = false;
+      _cancelPendingAppleStoreError();
+      final productsReady = await helper.initStoreInfo();
+      if (!productsReady) return;
       purchases = helper.getPurchases();
 
       final product = helper.getProductDetail(normalizedProductKey);
@@ -500,10 +715,15 @@ class MyWalletController extends GetxController implements IAPCallback {
 
       if (product != null) {
         Utils.showLog("Product found: ${product.title} - ${product.price}");
-        await helper.buySubscription(product, purchases ?? {});
+        final started = await helper.buySubscription(product, purchases ?? {});
+        if (!started) {
+          Utils.showLog("IAP purchase sheet did not start.");
+        }
       } else {
         Utils.showToast(
-            Get.context, "Product not found: $normalizedProductKey");
+          Get.context,
+          _friendlyIapError("No products found"),
+        );
         Utils.showLog("Available products: ${helper.getAvailableProducts()}");
       }
     } catch (e) {
@@ -652,13 +872,146 @@ class MyWalletController extends GetxController implements IAPCallback {
   }
 
   onRefresh() async {
-    fetchCoinPlanList();
+    await fetchCoinPlanList();
+  }
+
+  Future<void> restoreAppleSubscriptions() async {
+    if (!Platform.isIOS) return;
+
+    if (isRestoreProcessing || isPaymentProcessing) {
+      return;
+    }
+
+    _setRestoreProcessing(true);
+    try {
+      final ready = await _ensureAppleGuestAccountReady();
+      if (!ready) {
+        Utils.showToast(
+            Get.context, "Unable to prepare restore. Please try again.");
+        return;
+      }
+
+      final productKeys = coinPlan
+          .map(_appleProductKey)
+          .where((productId) => productId.trim().isNotEmpty)
+          .toSet()
+          .toList();
+
+      if (productKeys.isEmpty) {
+        Utils.showToast(Get.context, "No App Store product is configured");
+        return;
+      }
+
+      final helper = InAppPurchaseHelper();
+      helper.init(
+        paymentType: "App Store",
+        userId: Database.loginUserFirebaseId,
+        productKey: productKeys,
+        rupee: 0,
+        callBack: () {},
+      );
+      helper.setCallback(this);
+
+      _showBlockingLoader();
+      _isRestoringAppleSubscriptions = true;
+      _didReceiveRestoredPurchase = false;
+      _didReceiveAppleStoreError = false;
+      _cancelPendingAppleStoreError();
+      await helper.restorePurchases(this);
+      _closeBlockingLoader();
+      await 6000.milliseconds.delay();
+      if (!_didReceiveRestoredPurchase && !_didReceiveAppleStoreError) {
+        Utils.showToast(
+          Get.context,
+          "No App Store subscription was found to restore.",
+        );
+      }
+    } catch (e) {
+      _closeBlockingLoader();
+      Utils.showLog("Restore Apple Subscription Failed => $e");
+      Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
+    } finally {
+      _isRestoringAppleSubscriptions = false;
+      _closeBlockingLoader();
+      _setRestoreProcessing(false);
+    }
+  }
+
+  Future<void> _openExternalUrl(String? url, String fallbackUrl) async {
+    final value = (url?.trim().isNotEmpty == true) ? url!.trim() : fallbackUrl;
+    final uri = Uri.tryParse(value);
+
+    if (uri == null) {
+      Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
+      return;
+    }
+
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  Future<void> openAppleManageSubscriptions() async {
+    await _openExternalUrl(
+      Database.settingApiModel?.data?.appleManageSubscriptionsUrl,
+      "https://apps.apple.com/account/subscriptions",
+    );
+  }
+
+  Future<void> openAppleEula() async {
+    await _openExternalUrl(
+      null,
+      "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
+    );
+  }
+
+  Future<void> openPrivacyPolicy() async {
+    await _openExternalUrl(
+      null,
+      "https://notisboard.com/privacy-policy",
+    );
   }
 
   @override
   void onBillingError(error) {
+    _closeBlockingLoader();
     Utils.showLog("IAP Billing Error: $error");
-    Utils.showToast(Get.context, "Payment failed: $error");
+    _queueAppleStoreErrorToast(error);
+  }
+
+  String _friendlyIapError(dynamic error) {
+    final raw = error?.toString() ?? '';
+    final lower = raw.toLowerCase();
+    final isRestore = _isRestoringAppleSubscriptions;
+
+    if (lower.contains('purchase canceled') || lower.contains('cancel')) {
+      return 'Purchase canceled';
+    }
+
+    if (lower.contains('store not available')) {
+      return 'App Store is not available on this device. Please check App Store sign-in and try again.';
+    }
+
+    if (lower.contains('storekit_no_response') ||
+        lower.contains('storekit_platform_no_response') ||
+        lower.contains('failed to get response from platform')) {
+      return isRestore
+          ? 'Restore could not reach App Store. Please wait a few seconds and try Restore again.'
+          : 'App Store did not return this subscription. Please confirm the Apple Product ID is active in App Store Connect.';
+    }
+
+    if (lower.contains('no products found') ||
+        lower.contains('product not found')) {
+      return 'App Store product is not available yet. Please confirm the Apple Product ID is active in App Store Connect.';
+    }
+
+    if (lower.trim().isEmpty || lower.contains('null')) {
+      return isRestore
+          ? 'Restore failed. Please try again.'
+          : 'Payment failed. Please try again.';
+    }
+
+    return isRestore
+        ? 'Restore failed. Please try again.'
+        : 'Payment failed. Please try again.';
   }
 
   @override
@@ -675,33 +1028,73 @@ class MyWalletController extends GetxController implements IAPCallback {
   @override
   void onSuccessPurchase(PurchaseDetails product) async {
     Utils.showLog("IAP Success: ${product.productID}");
+    _cancelPendingAppleStoreError();
+    final isRestoreEvent = _isRestoringAppleSubscriptions ||
+        product.status == PurchaseStatus.restored;
+    if (isRestoreEvent) {
+      _didReceiveRestoredPurchase = true;
+    }
 
     try {
       // Show loading dialog
-      Get.dialog(const LoadingWidget(), barrierDismissible: false);
+      _showBlockingLoader();
       final token = await FirebaseAccessToken.onGet() ?? "";
       final uid = Database.loginUserFirebaseId;
+      final resolvedPlan =
+          selectedCoinPlan ?? _findPlanByProductId(product.productID);
 
-      // Call the API to record the purchase
-      // final isSuccess =
-      //     await CreateCoinPlanHistoryApi.callApi(loginUserId: Database.loginUserId, coinPlanId: coinPlanId, paymentType: "In App Purchase");
+      if (resolvedPlan == null) {
+        _closeBlockingLoader();
+        Utils.showToast(Get.context, "Subscription plan not configured");
+        return;
+      }
 
-      final isSuccess = await PurchaseCoinPlanApi.callApi(
-          coinPlanId: selectedCoinPlan?.id.toString() ?? '',
-          paymentGateway: "In App Purchase",
-          token: token,
-          uid: uid);
+      final receiptData =
+          product.verificationData.serverVerificationData.trim().isNotEmpty
+              ? product.verificationData.serverVerificationData
+              : product.verificationData.localVerificationData;
+
+      final isSuccess = Platform.isIOS
+          ? await PurchaseCoinPlanApi.verifyAppleInAppPurchase(
+              coinPlanId: resolvedPlan.id.toString(),
+              productId: product.productID,
+              receiptData: receiptData,
+              transactionId: product.purchaseID ?? '',
+              token: token,
+              uid: uid,
+            )
+          : await PurchaseCoinPlanApi.callApi(
+              coinPlanId: resolvedPlan.id.toString(),
+              paymentGateway: "Google Play",
+              token: token,
+              uid: uid,
+            );
 
       // Hide loading dialog
-      Get.back();
+      _closeBlockingLoader();
 
       if (isSuccess?.status == true) {
+        await _applyLinkedPurchaseAuth(isSuccess?.auth);
         await fetchCoinPlanList();
         await syncSessionCredits();
-        Utils.showToast(Get.context, "Subscription activated successfully");
+        await _notifyAuthenticatedWalletStateChanged();
+        Utils.showToast(
+          Get.context,
+          isRestoreEvent
+              ? "Subscription restored successfully"
+              : isSuccess?.duplicate == true
+                  ? "Subscription already active"
+                  : "Subscription activated successfully",
+        );
         _closePaymentSelectorIfOpen();
       } else {
-        Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
+        final message = isSuccess?.message?.trim();
+        Utils.showToast(
+          Get.context,
+          message?.isNotEmpty == true
+              ? message!
+              : EnumLocale.txtSomeThingWentWrong.name.tr,
+        );
       }
     } catch (e) {
       // Hide loading dialog if there's an error
@@ -712,4 +1105,77 @@ class MyWalletController extends GetxController implements IAPCallback {
       Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
     }
   }
+
+  Future<void> _applyLinkedPurchaseAuth(PurchaseAuth? auth) async {
+    final firebaseId =
+        (auth?.firebaseId ?? auth?.user?.firebaseId ?? '').trim();
+    final customToken = (auth?.customToken ?? '').trim();
+
+    if (firebaseId.isEmpty) return;
+
+    final currentUid = firebase_auth.FirebaseAuth.instance.currentUser?.uid;
+    if (customToken.isNotEmpty && currentUid != firebaseId) {
+      await firebase_auth.FirebaseAuth.instance
+          .signInWithCustomToken(customToken);
+    }
+
+    final user = auth?.user;
+    await Database.onSetIsLogin(true);
+    await Database.onSetGuestMode(user?.isGuestAccount == true);
+    await Database.onSetLoginUserFirebaseId(firebaseId);
+
+    if ((user?.id ?? '').trim().isNotEmpty) {
+      await Database.onSetLoginUserId(user!.id!);
+    }
+    await Database.onSetLoginType(user?.loginType ?? Database.loginType);
+    await Database.onSetFillProfile(true);
+    await Database.onSetSeenOnboarding(true);
+    await Database.onSetLoginUserName(user?.fullName ?? Database.loginUserName);
+    await Database.onSetLoginUserNickName(
+        user?.nickName ?? Database.loginUserNickName);
+    await Database.onSetLoginUserEmail(user?.email ?? Database.loginUserEmail);
+    await Database.onSetLoginUserProfilePic(
+        user?.profilePic ?? Database.loginUserProfilePic);
+    await Database.onSetLoginUserPhoneNumber(
+        user?.phoneNumber ?? Database.loginUserPhoneNumber);
+    await Database.onSetLoginUserBirthDate(
+        user?.birthDate ?? Database.loginUserBirthDate);
+    await Database.onSetLoginUserGender(
+        user?.gender ?? Database.loginUserGender);
+    await Database.onSetLoginUserCountry(user?.country ?? Database.country);
+    await Database.onSetLoginUserCountryFlag(
+        user?.countryFlag ?? Database.countryFlag);
+    await GuestBrowsingSetup.refreshCurrentGuestProfile(
+        firebaseUid: firebaseId);
+  }
+
+  Future<void> _notifyAuthenticatedWalletStateChanged() async {
+    update([Constant.idGetCoinPlan, Constant.onChangePaymentMethod]);
+
+    if (_hasLiveController<BottomBarController>()) {
+      Get.find<BottomBarController>().update([Constant.idBottomBar]);
+    }
+
+    if (_hasLiveController<HomeScreenController>()) {
+      await Get.find<HomeScreenController>().onRefresh();
+    }
+
+    if (_hasLiveController<ListenersScreenController>()) {
+      await Get.find<ListenersScreenController>().onRefresh();
+    }
+
+    if (_hasLiveController<AllListenersController>()) {
+      await Get.find<AllListenersController>().onRefresh();
+    }
+
+    if (_hasLiveController<TopListenersViewAllController>()) {
+      await Get.find<TopListenersViewAllController>().onRefresh();
+    }
+
+    if (_hasLiveController<EditProfileController>()) {
+      Get.find<EditProfileController>().update([Constant.idProfile]);
+    }
+  }
+
+  bool _hasLiveController<T>() => Get.isRegistered<T>() && !Get.isPrepared<T>();
 }

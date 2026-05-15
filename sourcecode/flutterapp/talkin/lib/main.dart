@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+// ignore: depend_on_referenced_packages
+import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:notisboard/custom/ringtone/ringtone_method.dart';
 import 'package:notisboard/localization/locale_constant.dart';
 import 'package:notisboard/routes/app_pages.dart';
@@ -79,9 +82,24 @@ Future<void> _initializePostLaunchServices() async {
   );
 }
 
+Future<void> _configureInAppPurchases() async {
+  if (!Platform.isIOS) return;
+
+  try {
+    // StoreKit 1 is still the more stable path for this plugin in TestFlight
+    // when App Store Connect is returning sparse subscription metadata.
+    // ignore: deprecated_member_use
+    final usesStoreKit2 = await InAppPurchaseStoreKitPlatform.enableStoreKit1();
+    log('iOS IAP configured with ${usesStoreKit2 ? 'StoreKit 2' : 'StoreKit 1'}');
+  } catch (e, stackTrace) {
+    log('iOS IAP configuration failed', error: e, stackTrace: stackTrace);
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
+  await _configureInAppPurchases();
 
   await AppStartupHelper.runTask<FirebaseApp>(
     "Firebase initialize",

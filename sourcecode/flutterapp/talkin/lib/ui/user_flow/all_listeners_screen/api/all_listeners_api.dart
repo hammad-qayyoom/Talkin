@@ -6,7 +6,6 @@ import 'package:notisboard/services/location/user_location_service.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/api_params.dart';
-import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/guest_auth.dart';
 import 'package:notisboard/utils/utils.dart';
 
@@ -79,8 +78,7 @@ class AllListenersApi {
     );
     final allListenersUri =
         _legacyAllListenersUri(queryParameters: queryParameters);
-    final useLegacyPrimary = Database.isLogin;
-    final primaryUri = useLegacyPrimary ? allListenersUri : discoverUri;
+    final primaryUri = allListenersUri;
 
     final headers = await GuestAuth.headers(allowGuest: true);
     Utils.showLog("All Listeners Api uri :: $primaryUri");
@@ -99,22 +97,20 @@ class AllListenersApi {
         }
       }
 
-      if (useLegacyPrimary) {
-        Utils.showLog("All Listeners legacy failed, trying discover fallback.");
-        final fallbackResponse = await http.get(
-          discoverUri,
-          headers: headers,
-        );
+      Utils.showLog("All Listeners legacy failed, trying discover fallback.");
+      final fallbackResponse = await http.get(
+        discoverUri,
+        headers: headers,
+      );
 
-        Utils.showLog(
-            "All Listeners Discover Fallback => ${fallbackResponse.body}");
+      Utils.showLog(
+          "All Listeners Discover Fallback => ${fallbackResponse.body}");
 
-        if (fallbackResponse.statusCode == 200) {
-          final jsonResponse = json.decode(fallbackResponse.body);
-          if (jsonResponse is Map<String, dynamic> &&
-              jsonResponse['status'] == true) {
-            return TopListenersModel.fromJson(jsonResponse);
-          }
+      if (fallbackResponse.statusCode == 200) {
+        final jsonResponse = json.decode(fallbackResponse.body);
+        if (jsonResponse is Map<String, dynamic> &&
+            jsonResponse['status'] == true) {
+          return TopListenersModel.fromJson(jsonResponse);
         }
       }
     } catch (e) {

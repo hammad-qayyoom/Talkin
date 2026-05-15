@@ -1,131 +1,159 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
-// MUI Imports
+import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
+import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import CircularProgress from '@mui/material/CircularProgress'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Grid from '@mui/material/Grid'
+import MenuItem from '@mui/material/MenuItem'
 import Switch from '@mui/material/Switch'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Button from '@mui/material/Button'
-import CircularProgress from '@mui/material/CircularProgress'
-import { toast } from 'react-toastify'
 
-import { Divider } from '@mui/material'
-
-// Redux Actions
 import { updateSettings, toggleSetting } from '@/redux-store/slices/settings'
-import HoverPopover from '@/common/HoverPopover'
-import { toolTipData } from '@/settingTooltip'
+
+const APPLE_EULA_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/'
+const APPLE_MANAGE_SUBSCRIPTIONS_URL = 'https://apps.apple.com/account/subscriptions'
+
+const defaultFormData = {
+  _id: '',
+  isAppleInAppPurchaseEnabled: true,
+  appStoreBundleId: '',
+  appStoreSharedSecret: '',
+  appStoreIssuerId: '',
+  appStoreKeyId: '',
+  appStorePrivateKey: '',
+  appStoreEnvironment: 'auto',
+  appleManageSubscriptionsUrl: APPLE_MANAGE_SUBSCRIPTIONS_URL,
+  appleEulaUrl: APPLE_EULA_URL,
+
+  isStripeEnabled: false,
+  stripePublicKey: '',
+  stripeSecretKey: '',
+
+  isRazorpayEnabled: false,
+  razorpayKeyId: '',
+  razorpayKeySecret: '',
+
+  isFlutterwaveEnabled: false,
+  flutterwavePublicKey: '',
+
+  isPaystackAndroidEnabled: false,
+  paystackPublicKey: '',
+  paystackSecretKey: '',
+
+  isCashfreeAndroidEnabled: false,
+  cashfreeClientId: '',
+  cashfreeClientSecret: '',
+
+  isPaypalAndroidEnabled: false,
+  paypalClientId: '',
+  paypalSecretKey: '',
+
+  isGooglePlayEnabled: false
+}
+
+const androidGateways = [
+  {
+    title: 'Stripe',
+    switchField: 'isStripeEnabled',
+    switchLabel: 'Enable Stripe (Android)',
+    fields: [
+      { name: 'stripePublicKey', label: 'Stripe Publishable Key' },
+      { name: 'stripeSecretKey', label: 'Stripe Secret Key', secret: true }
+    ]
+  },
+  {
+    title: 'Razorpay',
+    switchField: 'isRazorpayEnabled',
+    switchLabel: 'Enable Razorpay (Android)',
+    fields: [
+      { name: 'razorpayKeyId', label: 'Razorpay ID' },
+      { name: 'razorpayKeySecret', label: 'Razorpay Secret Key', secret: true }
+    ]
+  },
+  {
+    title: 'Flutterwave',
+    switchField: 'isFlutterwaveEnabled',
+    switchLabel: 'Enable Flutterwave (Android)',
+    fields: [{ name: 'flutterwavePublicKey', label: 'Flutterwave Public Key' }]
+  },
+  {
+    title: 'Paystack',
+    switchField: 'isPaystackAndroidEnabled',
+    switchLabel: 'Enable Paystack (Android)',
+    fields: [
+      { name: 'paystackPublicKey', label: 'Paystack Public Key' },
+      { name: 'paystackSecretKey', label: 'Paystack Secret Key', secret: true }
+    ]
+  },
+  {
+    title: 'Cashfree',
+    switchField: 'isCashfreeAndroidEnabled',
+    switchLabel: 'Enable Cashfree (Android)',
+    fields: [
+      { name: 'cashfreeClientId', label: 'Cashfree Client ID' },
+      { name: 'cashfreeClientSecret', label: 'Cashfree Client Secret', secret: true }
+    ]
+  },
+  {
+    title: 'PayPal',
+    switchField: 'isPaypalAndroidEnabled',
+    switchLabel: 'Enable PayPal (Android)',
+    fields: [
+      { name: 'paypalClientId', label: 'PayPal Client ID' },
+      { name: 'paypalSecretKey', label: 'PayPal Secret Key', secret: true }
+    ]
+  },
+  {
+    title: 'Google Play Billing',
+    switchField: 'isGooglePlayEnabled',
+    switchLabel: 'Enable Google Play Billing (Android)',
+    fields: []
+  }
+]
 
 const PaymentSettings = () => {
   const dispatch = useDispatch()
-  const [initialData, setInitialData] = useState({})
   const { settings, loading } = useSelector(state => state.settings)
-  const { profileData } = useSelector(state => state.adminSlice)
 
-  
-
-  // Using string values for inputs to allow empty fields
-  const [formData, setFormData] = useState({
-    _id: '',
-    stripePublicKey: '',
-    stripeSecretKey: '',
-    razorpayKeyId: '',
-    paystackPublicKey: '',
-    razorpayKeySecret: '',
-    paystackSecretKey: '',
-    flutterwavePublicKey: '',
-    isStripeEnabled: false,
-    isRazorpayEnabled: false,
-    isPaystackAndroidEnabled: false,
-    isPaystackIosEnabled: false,
-    isFlutterwaveEnabled: false,
-    isGooglePlayEnabled: false,
-    // ✅ NEW – iOS toggles
-    isGooglePlayIosEnabled: false,
-    isStripeIosEnabled: false,
-    isRazorpayIosEnabled: false,
-    isFlutterwaveIosEnabled: false,
-
-    // ✅ NEW – Cashfree
-    isCashfreeAndroidEnabled: false,
-    isCashfreeIosEnabled: false,
-    cashfreeClientId: '',
-    cashfreeClientSecret: '',
-
-    // ✅ NEW – PayPal
-    isPaypalAndroidEnabled: false,
-    isPaypalIosEnabled: false,
-    paypalClientId: '',
-    paypalSecretKey: ''
-  })
+  const [formData, setFormData] = useState(defaultFormData)
+  const [initialData, setInitialData] = useState(defaultFormData)
 
   useEffect(() => {
-    if (settings) {
-      const newData = {
-        _id: settings._id || '',
-        stripePublicKey: settings.stripePublicKey || '',
-        stripeSecretKey: settings.stripeSecretKey || '',
-        razorpayKeyId: settings.razorpayKeyId || '',
-        paystackPublicKey: settings.paystackPublicKey || '',
-        razorpayKeySecret: settings.razorpayKeySecret || '',
-        paystackSecretKey: settings.paystackSecretKey || '',
-        flutterwavePublicKey: settings.flutterwavePublicKey || '',
-        isStripeEnabled: settings.isStripeEnabled || false,
-        isRazorpayEnabled: settings.isRazorpayEnabled || false,
-        isPaystackAndroidEnabled: settings.isPaystackAndroidEnabled || false,
-        isPaystackIosEnabled: settings.isPaystackIosEnabled || false,
-        isFlutterwaveEnabled: settings.isFlutterwaveEnabled || false,
-        isGooglePlayEnabled: settings.isGooglePlayEnabled || false,
-        // ✅ iOS toggles
-        isGooglePlayIosEnabled: settings.isGooglePlayIosEnabled || false,
-        isStripeIosEnabled: settings.isStripeIosEnabled || false,
-        isRazorpayIosEnabled: settings.isRazorpayIosEnabled || false,
-        isFlutterwaveIosEnabled: settings.isFlutterwaveIosEnabled || false,
-        // ✅ Cashfree
-        isCashfreeAndroidEnabled: settings.isCashfreeAndroidEnabled || false,
-        isCashfreeIosEnabled: settings.isCashfreeIosEnabled || false,
-        cashfreeClientId: settings.cashfreeClientId || '',
-        cashfreeClientSecret: settings.cashfreeClientSecret || '',
+    if (!settings) return
 
-        // ✅ PayPal
-        isPaypalAndroidEnabled: settings.isPaypalAndroidEnabled || false,
-        isPaypalIosEnabled: settings.isPaypalIosEnabled || false,
-        paypalClientId: settings.paypalClientId || '',
-        paypalSecretKey: settings.paypalSecretKey || ''
-      }
-
-      setFormData(newData)
-      setInitialData(newData) // store original data
+    const nextData = {
+      ...defaultFormData,
+      ...Object.fromEntries(Object.keys(defaultFormData).map(key => [key, settings[key] ?? defaultFormData[key]])),
+      _id: settings._id || '',
+      isAppleInAppPurchaseEnabled: settings.isAppleInAppPurchaseEnabled !== false,
+      appStoreEnvironment: settings.appStoreEnvironment || 'auto',
+      appleManageSubscriptionsUrl: settings.appleManageSubscriptionsUrl || APPLE_MANAGE_SUBSCRIPTIONS_URL,
+      appleEulaUrl: settings.appleEulaUrl || APPLE_EULA_URL
     }
+
+    setFormData(nextData)
+    setInitialData(nextData)
   }, [settings])
 
   const handleToggle = type => {
-    
+    if (!settings?._id) return
 
-    if (settings?._id) {
-      dispatch(toggleSetting({ settingId: settings._id, type }))
-
-      // Update local state too
-      setFormData(prev => ({
-        ...prev,
-        [type]: !prev[type]
-      }))
-    }
+    dispatch(toggleSetting({ settingId: settings._id, type }))
+    setFormData(prev => ({ ...prev, [type]: !prev[type] }))
   }
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }))
+    setFormData(prev => ({ ...prev, [field]: value }))
   }
 
   const getUpdatedFields = () => {
@@ -141,32 +169,72 @@ const PaymentSettings = () => {
   }
 
   const handleSubmit = () => {
-    
-    // if (settings?._id) {
-    //   dispatch(updateSettings(formData))
-    // }
+    if (!settings?._id) return
 
-    if (settings?._id) {
-      const updatedFields = getUpdatedFields()
+    const updatedFields = getUpdatedFields()
 
-      if (Object.keys(updatedFields).length === 0) {
-        toast.info("No changes to update")
-        return
-      }
+    if (Object.keys(updatedFields).length === 0) {
+      toast.info('No changes to update')
 
-      dispatch(updateSettings({ _id: settings._id, ...updatedFields }))
+      return
     }
+
+    dispatch(updateSettings({ _id: settings._id, ...updatedFields }))
   }
 
-  // if (!settings) return null
+  const renderGatewayCard = gateway => (
+    <Grid item size={12} key={gateway.title}>
+      <Card>
+        <CardContent>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, gap: 2 }}>
+            <Typography variant='subtitle1' sx={{ fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+              <i className='tabler-settings mr-2' />
+              {gateway.title} Setting
+            </Typography>
+            <Typography variant='caption' color='text.secondary'>
+              Android only
+            </Typography>
+          </Box>
+
+          <FormControlLabel
+            control={
+              <Switch
+                checked={Boolean(formData[gateway.switchField])}
+                onChange={() => handleToggle(gateway.switchField)}
+                name={gateway.switchField}
+              />
+            }
+            label={gateway.switchLabel}
+            sx={{ mb: gateway.fields.length ? 4 : 0 }}
+          />
+
+          {gateway.fields.length > 0 ? (
+            <Grid container spacing={4}>
+              {gateway.fields.map(field => (
+                <Grid item size={gateway.fields.length === 1 ? 12 : 6} key={field.name}>
+                  <TextField
+                    fullWidth
+                    label={field.label}
+                    type={field.secret ? 'password' : 'text'}
+                    value={formData[field.name] || ''}
+                    onChange={event => handleInputChange(field.name, event.target.value)}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          ) : null}
+        </CardContent>
+      </Card>
+    </Grid>
+  )
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, gap: 3 }}>
         <Box>
           <Typography variant='h4'>Payment Setting</Typography>
           <Typography variant='body2' color='text.secondary'>
-            Configure and manage payment gateway integrations and platform billing credentials.
+            Configure Android payment gateways and Apple In-App Purchase credentials for iOS subscriptions.
           </Typography>
         </Box>
         <Button
@@ -183,290 +251,108 @@ const PaymentSettings = () => {
       </Box>
 
       <Grid container spacing={6}>
-        {/* Stripe Settings */}
         <Grid item size={12}>
           <Card>
             <CardContent>
-              {/* <Box sx={{ mb: 4 }}>
-                <Typography variant='h6'>Stripe Setting</Typography>
-              </Box> */}
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-                  <i className='tabler-settings mr-2' />
-                  Stripe Setting
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, gap: 2 }}>
+                <Typography variant='subtitle1' sx={{ fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+                  <i className='tabler-brand-apple mr-2' />
+                  Apple In-App Purchase Setting
                 </Typography>
-                <HoverPopover
-                  popoverContent={
-                    <>
-                      <Box>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isStripeEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isStripeEnabled'].tooltip}</p>
-                      </Box>
-                      <Box>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isStripeIosEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isStripeIosEnabled'].tooltip}</p>
-                      </Box>
-                      <Box className='mt-2'>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['stripePublicKey'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['stripePublicKey'].tooltip}</p>
-                      </Box>
-                      <Box className='mt-2'>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['stripeSecretKey'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['stripeSecretKey'].tooltip}</p>
-                      </Box>
-                    </>
-                  }
-                >
-                  <i className='tabler-info-circle' />
-                </HoverPopover>
+                <Typography variant='caption' color='text.secondary'>
+                  iOS only
+                </Typography>
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isStripeEnabled}
-                      onChange={() => handleToggle('isStripeEnabled')}
-                      name='stripeEnabled'
-                    />
-                  }
-                  label='Enable Stripe (Android) (Enable/Disable)'
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isStripeIosEnabled}
-                      onChange={() => handleToggle('isStripeIosEnabled')}
-                      name='isStripeIosEnabled'
-                    />
-                  }
-                  label='Enable Stripe (IOS) (Enable/Disable)'
-                />
-              </Box>
-              <Grid container spacing={4}>
-                <Grid item size={6}>
-                  <TextField
-                    fullWidth
-                    label='Stripe Publishable Key'
-                    value={formData.stripePublicKey || ''}
-                    onChange={e => handleInputChange('stripePublicKey', e.target.value)}
-                  />
-                </Grid>
-                <Grid item size={6}>
-                  <TextField
-                    fullWidth
-                    label='Stripe Secret Key'
-                    value={formData.stripeSecretKey || ''}
-                    onChange={e => handleInputChange('stripeSecretKey', e.target.value)}
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
 
-        {/* Razorpay Settings */}
-        <Grid item size={12}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-                  <i className='tabler-settings mr-2' />
-                  Razorpay Setting
-                </Typography>
-                <HoverPopover
-                  popoverContent={
-                    <>
-                      <Box>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isRazorpayEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isRazorpayEnabled'].tooltip}</p>
-                      </Box>
-                      <Box>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isRazorpayIosEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isRazorpayIosEnabled'].tooltip}</p>
-                      </Box>
-                      <Box className='mt-2'>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['razorpayKeyId'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['razorpayKeyId'].tooltip}</p>
-                      </Box>
-                      <Box className='mt-2'>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['razorpayKeySecret'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['razorpayKeySecret'].tooltip}</p>
-                      </Box>
-                    </>
-                  }
-                >
-                  <i className='tabler-info-circle' />
-                </HoverPopover>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isRazorpayEnabled}
-                      onChange={() => handleToggle('isRazorpayEnabled')}
-                      name='razorpayEnabled'
-                    />
-                  }
-                  label='Enable Razorpay (Android) (Enable/Disable)'
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isRazorpayIosEnabled}
-                      onChange={() => handleToggle('isRazorpayIosEnabled')}
-                      name='isRazorpayIosEnabled'
-                    />
-                  }
-                  label='Enable Razorpay (IOS) (Enable/Disable)'
-                />
-              </Box>
-              <Grid container spacing={4}>
-                <Grid item size={6}>
-                  <TextField
-                    fullWidth
-                    label='Razorpay ID'
-                    value={formData.razorpayKeyId || ''}
-                    onChange={e => handleInputChange('razorpayKeyId', e.target.value)}
-                  />
-                </Grid>
-                <Grid item size={6}>
-                  <TextField
-                    fullWidth
-                    label='Razorpay Secret Key'
-                    value={formData.razorpayKeySecret || ''}
-                    onChange={e => handleInputChange('razorpayKeySecret', e.target.value)}
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
+              <Alert severity='info' sx={{ mb: 4 }}>
+                iOS checkout uses only Apple In-App Purchase. Stripe, Razorpay, PayPal, Paystack, Cashfree, Flutterwave,
+                and Google Play are kept Android-only.
+              </Alert>
 
-        {/* Flutterwave Settings */}
-        <Grid item size={12}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-                  <i className='tabler-settings mr-2' />
-                  Flutter wave Setting
-                </Typography>
-                <HoverPopover
-                  popoverContent={
-                    <>
-                      <Box>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isFlutterwaveEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isFlutterwaveEnabled'].tooltip}</p>
-                      </Box>
-                      <Box>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isFlutterwaveEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isFlutterwaveEnabled'].tooltip}</p>
-                      </Box>
-                      <Box className='mt-2'>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isFlutterwaveIosEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isFlutterwaveIosEnabled'].tooltip}</p>
-                      </Box>
-                    </>
-                  }
-                >
-                  <i className='tabler-info-circle' />
-                </HoverPopover>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isFlutterwaveEnabled}
-                      onChange={() => handleToggle('isFlutterwaveEnabled')}
-                      name='flutterwaveEnabled'
-                    />
-                  }
-                  label='Enable Flutterwave (Android) (Enable/Disable) '
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isFlutterwaveIosEnabled}
-                      onChange={() => handleToggle('isFlutterwaveIosEnabled')}
-                      name='isFlutterwaveIosEnabled'
-                    />
-                  }
-                  label='Enable Flutterwave (IOS) (Enable/Disable)'
-                />
-              </Box>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.isAppleInAppPurchaseEnabled)}
+                    onChange={() => handleToggle('isAppleInAppPurchaseEnabled')}
+                    name='isAppleInAppPurchaseEnabled'
+                  />
+                }
+                label='Enable Apple In-App Purchase (iOS)'
+                sx={{ mb: 4 }}
+              />
+
               <Grid container spacing={4}>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    label='iOS Bundle ID'
+                    value={formData.appStoreBundleId || ''}
+                    onChange={event => handleInputChange('appStoreBundleId', event.target.value)}
+                    placeholder='com.company.notisboard'
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    select
+                    label='Receipt Environment'
+                    value={formData.appStoreEnvironment || 'auto'}
+                    onChange={event => handleInputChange('appStoreEnvironment', event.target.value)}
+                  >
+                    <MenuItem value='auto'>Auto</MenuItem>
+                    <MenuItem value='production'>Production</MenuItem>
+                    <MenuItem value='sandbox'>Sandbox</MenuItem>
+                  </TextField>
+                </Grid>
                 <Grid item size={12}>
                   <TextField
                     fullWidth
-                    label='Flutterwave ID'
-                    value={formData.flutterwavePublicKey || ''}
-                    onChange={e => handleInputChange('flutterwavePublicKey', e.target.value)}
+                    label='App-Specific Shared Secret'
+                    type='password'
+                    value={formData.appStoreSharedSecret || ''}
+                    onChange={event => handleInputChange('appStoreSharedSecret', event.target.value)}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    label='Issuer ID'
+                    value={formData.appStoreIssuerId || ''}
+                    onChange={event => handleInputChange('appStoreIssuerId', event.target.value)}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    label='Key ID'
+                    value={formData.appStoreKeyId || ''}
+                    onChange={event => handleInputChange('appStoreKeyId', event.target.value)}
+                  />
+                </Grid>
+                <Grid item size={12}>
+                  <TextField
+                    fullWidth
+                    multiline
+                    minRows={4}
+                    label='In-App Purchase Private Key (.p8)'
+                    value={formData.appStorePrivateKey || ''}
+                    onChange={event => handleInputChange('appStorePrivateKey', event.target.value)}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    label='Manage Subscriptions URL'
+                    value={formData.appleManageSubscriptionsUrl || ''}
+                    onChange={event => handleInputChange('appleManageSubscriptionsUrl', event.target.value)}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    label='Apple Standard EULA URL'
+                    value={formData.appleEulaUrl || ''}
+                    onChange={event => handleInputChange('appleEulaUrl', event.target.value)}
                   />
                 </Grid>
               </Grid>
@@ -474,410 +360,8 @@ const PaymentSettings = () => {
           </Card>
         </Grid>
 
-        {/* Paystack Settings */}
-        <Grid item size={12}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-                  <i className='tabler-settings mr-2' />
-                  Paystack Setting
-                </Typography>
-                <HoverPopover
-                  popoverContent={
-                    <>
-                      <Box>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isPaystackAndroidEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isPaystackAndroidEnabled'].tooltip}</p>
-                      </Box>
-                      <Box>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isPaystackIosEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isPaystackIosEnabled'].tooltip}</p>
-                      </Box>
-                      <Box className='mt-2'>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['paystackPublicKey'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['paystackPublicKey'].tooltip}</p>
-                      </Box>
-                      <Box className='mt-2'>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['paystackSecretKey'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['paystackSecretKey'].tooltip}</p>
-                      </Box>
-                    </>
-                  }
-                >
-                  <i className='tabler-info-circle' />
-                </HoverPopover>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isPaystackAndroidEnabled}
-                      onChange={() => handleToggle('isPaystackAndroidEnabled')}
-                      name='isPaystackAndroidEnabled'
-                    />
-                  }
-                  label='Enable Paystack (Android) (Enable/Disable)'
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isPaystackIosEnabled}
-                      onChange={() => handleToggle('isPaystackIosEnabled')}
-                      name='isPaystackIosEnabled'
-                    />
-                  }
-                  label='Enable Paystack (IOS) (Enable/Disable)'
-                />
-              </Box>
-              <Grid container spacing={4}>
-                <Grid item size={6}>
-                  <TextField
-                    fullWidth
-                    label='Paystack Public Key'
-                    value={formData.paystackPublicKey || ''}
-                    onChange={e => handleInputChange('paystackPublicKey', e.target.value)}
-                  />
-                </Grid>
-                <Grid item size={6}>
-                  <TextField
-                    fullWidth
-                    label='Paystack Secret Key'
-                    value={formData.paystackSecretKey || ''}
-                    onChange={e => handleInputChange('paystackSecretKey', e.target.value)}
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Cashfree Settings */}
-        <Grid item size={12}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant='subtitle1' sx={{ fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-                  <i className='tabler-settings mr-2' />
-                  Cashfree Setting
-                </Typography>
-                <HoverPopover
-                  popoverContent={
-                    <>
-                      <Box>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isCashfreeAndroidEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isCashfreeAndroidEnabled'].tooltip}</p>
-                      </Box>
-                      <Box>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isCashfreeIosEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isCashfreeIosEnabled'].tooltip}</p>
-                      </Box>
-                      <Box className='mt-2'>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['cashfreeClientId'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['cashfreeClientId'].tooltip}</p>
-                      </Box>
-                      <Box className='mt-2'>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['cashfreeClientSecret'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['cashfreeClientSecret'].tooltip}</p>
-                      </Box>
-                    </>
-                  }
-                >
-                  <i className='tabler-info-circle' />
-                </HoverPopover>
-              </Box>
-
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isCashfreeAndroidEnabled}
-                      onChange={() => handleToggle('isCashfreeAndroidEnabled')}
-                    />
-                  }
-                  label='Enable Cashfree (Android) (Enable/Disable)'
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isCashfreeIosEnabled}
-                      onChange={() => handleToggle('isCashfreeIosEnabled')}
-                    />
-                  }
-                  label='Enable Cashfree (IOS) (Enable/Disable)'
-                />
-              </Box>
-
-              <Grid container spacing={4}>
-                <Grid item size={6}>
-                  <TextField
-                    fullWidth
-                    label='Cashfree Client ID'
-                    value={formData.cashfreeClientId}
-                    onChange={e => handleInputChange('cashfreeClientId', e.target.value)}
-                  />
-                </Grid>
-                <Grid item size={6}>
-                  <TextField
-                    fullWidth
-                    label='Cashfree Client Secret'
-                    value={formData.cashfreeClientSecret}
-                    onChange={e => handleInputChange('cashfreeClientSecret', e.target.value)}
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* PayPal Settings */}
-        <Grid item size={12}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant='subtitle1' sx={{ fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-                  <i className='tabler-settings mr-2' />
-                  PayPal Setting
-                </Typography>
-                <HoverPopover
-                  popoverContent={
-                    <>
-                      <Box>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isPaypalAndroidEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isPaypalAndroidEnabled'].tooltip}</p>
-                      </Box>
-                      <Box>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['isPaypalIosEnabled'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['isPaypalIosEnabled'].tooltip}</p>
-                      </Box>
-                      <Box className='mt-2'>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['paypalClientId'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['paypalClientId'].tooltip}</p>
-                      </Box>
-                      <Box className='mt-2'>
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                        >
-                          {toolTipData['paypalSecretKey'].title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData['paypalSecretKey'].tooltip}</p>
-                      </Box>
-                    </>
-                  }
-                >
-                  <i className='tabler-info-circle' />
-                </HoverPopover>
-              </Box>
-
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isPaypalAndroidEnabled}
-                      onChange={() => handleToggle('isPaypalAndroidEnabled')}
-                    />
-                  }
-                  label='Enable PayPal (Android) (Enable/Disable)'
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isPaypalIosEnabled}
-                      onChange={() => handleToggle('isPaypalIosEnabled')}
-                    />
-                  }
-                  label='Enable PayPal (IOS) (Enable/Disable)'
-                />
-              </Box>
-
-              <Grid container spacing={4}>
-                <Grid item size={6}>
-                  <TextField
-                    fullWidth
-                    label='PayPal Client ID'
-                    value={formData.paypalClientId}
-                    onChange={e => handleInputChange('paypalClientId', e.target.value)}
-                  />
-                </Grid>
-                <Grid item size={6}>
-                  <TextField
-                    fullWidth
-                    label='PayPal Secret Key'
-                    value={formData.paypalSecretKey}
-                    onChange={e => handleInputChange('paypalSecretKey', e.target.value)}
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Google Play Settings */}
-        <Grid item size={12}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography
-                  variant='subtitle1'
-                  sx={{ fontWeight: 500, display: 'flex', alignItems: 'center' }}
-                >
-                  <i className='tabler-settings mr-2' />
-                  Google Play Setting
-                </Typography>
-
-                <HoverPopover
-                  popoverContent={
-                    <>
-                      {/* Google Play Android */}
-                      <Box>
-                        <Typography variant='subtitle1' sx={{ mb: 1, fontWeight: 500 }}>
-                          {toolTipData.isGooglePlayEnabled.title}
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>{toolTipData.isGooglePlayEnabled.tooltip}</p>
-                      </Box>
-
-                      {/* Google Play iOS */}
-                      <Box className='mt-2'>
-                        <Typography variant='subtitle1' sx={{ mb: 1, fontWeight: 500 }}>
-                          Enable Google Play iOS
-                        </Typography>
-                        <Divider sx={{ mb: 0 }} />
-                        <p>Toggle to enable or disable Google Play for iOS platform.</p>
-                      </Box>
-
-                    </>
-                  }
-                >
-                  <i className='tabler-info-circle' />
-                </HoverPopover>
-              </Box>
-
-              <Box sx={{ mt: 1 }}>
-                <Grid container spacing={2} labelPlacement='start'
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    ml: 0
-                  }}>
-                  {/* Google Play Android */}
-                  <Grid item xs={12} sm={6}>
-                    <FormControlLabel
-                      sx={{ justifyContent: 'start', width: '100%' }}
-                      control={
-                        <Switch
-                          checked={formData.isGooglePlayEnabled}
-                          onChange={() => handleToggle('isGooglePlayEnabled')}
-                        />
-                      }
-                      label='Enable Google Play (Android) (Enable/Disable)'
-                    />
-                  </Grid>
-
-                  {/* Google Play iOS */}
-                  <Grid item xs={12} sm={6}>
-                    <FormControlLabel
-                      sx={{ justifyContent: 'start', width: '100%' }}
-                      control={
-                        <Switch
-                          checked={formData.isGooglePlayIosEnabled}
-                          onChange={() => handleToggle('isGooglePlayIosEnabled')}
-                        />
-                      }
-                      label='Enable Google Play (IOS) (Enable/Disable)'
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-
-
-
-            </CardContent>
-          </Card>
-        </Grid>
-
-
+        {androidGateways.map(renderGatewayCard)}
       </Grid>
-
-      {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 4 }}>
-        <Button
-          variant='contained'
-          onClick={handleSubmit}
-          disabled={loading}
-          startIcon={loading ? <CircularProgress size={20} /> : <i className='tabler-device-floppy' />}
-        >
-          Save Changes
-        </Button>
-      </Box> */}
     </Box>
   )
 }

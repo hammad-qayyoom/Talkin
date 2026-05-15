@@ -15,12 +15,18 @@ class PurchaseCoinPlan {
   String? message;
   int? totalCoins;
   HistoryRecord? historyRecord;
+  PurchaseAuth? auth;
+  bool? duplicate;
+  bool? linkedExistingAccount;
 
   PurchaseCoinPlan({
     this.status,
     this.message,
     this.totalCoins,
     this.historyRecord,
+    this.auth,
+    this.duplicate,
+    this.linkedExistingAccount,
   });
 
   factory PurchaseCoinPlan.fromJson(Map<String, dynamic> json) =>
@@ -31,6 +37,9 @@ class PurchaseCoinPlan {
         historyRecord: json["historyRecord"] == null
             ? null
             : HistoryRecord.fromJson(json["historyRecord"]),
+        auth: json["auth"] == null ? null : PurchaseAuth.fromJson(json["auth"]),
+        duplicate: json["duplicate"],
+        linkedExistingAccount: json["linkedExistingAccount"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -38,6 +47,97 @@ class PurchaseCoinPlan {
         "message": message,
         "totalCoins": totalCoins,
         "historyRecord": historyRecord?.toJson(),
+        "auth": auth?.toJson(),
+        "duplicate": duplicate,
+        "linkedExistingAccount": linkedExistingAccount,
+      };
+}
+
+class PurchaseAuth {
+  String? firebaseId;
+  String? customToken;
+  PurchaseUser? user;
+
+  PurchaseAuth({
+    this.firebaseId,
+    this.customToken,
+    this.user,
+  });
+
+  factory PurchaseAuth.fromJson(Map<String, dynamic> json) => PurchaseAuth(
+        firebaseId: json["firebaseId"],
+        customToken: json["customToken"],
+        user: json["user"] == null ? null : PurchaseUser.fromJson(json["user"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "firebaseId": firebaseId,
+        "customToken": customToken,
+        "user": user?.toJson(),
+      };
+}
+
+class PurchaseUser {
+  String? id;
+  String? firebaseId;
+  int? loginType;
+  String? nickName;
+  String? fullName;
+  String? email;
+  String? profilePic;
+  String? phoneNumber;
+  String? birthDate;
+  String? gender;
+  String? country;
+  String? countryFlag;
+  bool? isGuestAccount;
+
+  PurchaseUser({
+    this.id,
+    this.firebaseId,
+    this.loginType,
+    this.nickName,
+    this.fullName,
+    this.email,
+    this.profilePic,
+    this.phoneNumber,
+    this.birthDate,
+    this.gender,
+    this.country,
+    this.countryFlag,
+    this.isGuestAccount,
+  });
+
+  factory PurchaseUser.fromJson(Map<String, dynamic> json) => PurchaseUser(
+        id: json["_id"],
+        firebaseId: json["firebaseId"],
+        loginType: json["loginType"],
+        nickName: json["nickName"],
+        fullName: json["fullName"],
+        email: json["email"],
+        profilePic: json["profilePic"],
+        phoneNumber: json["phoneNumber"],
+        birthDate: json["birthDate"],
+        gender: json["gender"],
+        country: json["country"],
+        countryFlag: json["countryFlag"],
+        isGuestAccount: json["isGuestAccount"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "firebaseId": firebaseId,
+        "loginType": loginType,
+        "nickName": nickName,
+        "fullName": fullName,
+        "email": email,
+        "profilePic": profilePic,
+        "phoneNumber": phoneNumber,
+        "birthDate": birthDate,
+        "gender": gender,
+        "country": country,
+        "countryFlag": countryFlag,
+        "isGuestAccount": isGuestAccount,
       };
 }
 

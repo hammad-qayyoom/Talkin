@@ -44,6 +44,9 @@ class User {
   final String? profilePic;
   final String? email;
   final int? loginType;
+  final String? firebaseId;
+  final String? uniqueId;
+  final bool? isGuestAccount;
   final String? fcmToken;
   final bool? isBlock;
   final bool? isListener;
@@ -58,6 +61,9 @@ class User {
     this.profilePic,
     this.email,
     this.loginType,
+    this.firebaseId,
+    this.uniqueId,
+    this.isGuestAccount,
     this.fcmToken,
     this.isBlock,
     this.isListener,
@@ -73,6 +79,9 @@ class User {
         profilePic: json["profilePic"],
         email: json["email"],
         loginType: json["loginType"],
+        firebaseId: json["firebaseId"],
+        uniqueId: json["uniqueId"],
+        isGuestAccount: json["isGuestAccount"],
         fcmToken: json["fcmToken"],
         isBlock: json["isBlock"],
         isListener: json["isListener"],
@@ -90,6 +99,9 @@ class User {
         "profilePic": profilePic,
         "email": email,
         "loginType": loginType,
+        "firebaseId": firebaseId,
+        "uniqueId": uniqueId,
+        "isGuestAccount": isGuestAccount,
         "fcmToken": fcmToken,
         "isBlock": isBlock,
         "isListener": isListener,

@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:notisboard/ui/user_flow/my_wallet_screen/model/fetch_coin_plan.dart';
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/api_params.dart';
-import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class FetchCoinPlanApi {
@@ -17,14 +16,12 @@ class FetchCoinPlanApi {
 
     Utils.showLog("Fetch Session Credit plan Api url => $uri");
 
-    final authUid = uid.isNotEmpty
-        ? uid
-        : (Database.fetchLoginUserProfileModel?.user?.firebaseId ?? "");
-
     final headers = {
       ApiParams.key: Api.secretKey,
-      ApiParams.authToken: ApiParams.tokenStartPoint + token,
-      ApiParams.authUid: authUid
+      if (token.trim().isNotEmpty && uid.trim().isNotEmpty)
+        ApiParams.authToken: ApiParams.tokenStartPoint + token.trim(),
+      if (token.trim().isNotEmpty && uid.trim().isNotEmpty)
+        ApiParams.authUid: uid.trim(),
     };
 
     try {

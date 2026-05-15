@@ -41,6 +41,9 @@ class Data {
   final String? privacyPolicyUrl;
   final String? termsOfUseUrl;
   final bool? isGooglePlayEnabled;
+  final bool? isAppleInAppPurchaseEnabled;
+  final String? appleManageSubscriptionsUrl;
+  final String? appleEulaUrl;
   final bool? isStripeEnabled;
   final String? stripePublicKey;
   final String? stripeSecretKey;
@@ -98,6 +101,9 @@ class Data {
     this.privacyPolicyUrl,
     this.termsOfUseUrl,
     this.isGooglePlayEnabled,
+    this.isAppleInAppPurchaseEnabled,
+    this.appleManageSubscriptionsUrl,
+    this.appleEulaUrl,
     this.isStripeEnabled,
     this.stripePublicKey,
     this.stripeSecretKey,
@@ -158,6 +164,9 @@ class Data {
         privacyPolicyUrl: json["privacyPolicyUrl"],
         termsOfUseUrl: json["termsOfUseUrl"],
         isGooglePlayEnabled: json["isGooglePlayEnabled"],
+        isAppleInAppPurchaseEnabled: json["isAppleInAppPurchaseEnabled"],
+        appleManageSubscriptionsUrl: json["appleManageSubscriptionsUrl"],
+        appleEulaUrl: json["appleEulaUrl"],
         isStripeEnabled: json["isStripeEnabled"],
         stripePublicKey: json["stripePublicKey"],
         stripeSecretKey: json["stripeSecretKey"],
@@ -222,6 +231,9 @@ class Data {
         "privacyPolicyUrl": privacyPolicyUrl,
         "termsOfUseUrl": termsOfUseUrl,
         "isGooglePlayEnabled": isGooglePlayEnabled,
+        "isAppleInAppPurchaseEnabled": isAppleInAppPurchaseEnabled,
+        "appleManageSubscriptionsUrl": appleManageSubscriptionsUrl,
+        "appleEulaUrl": appleEulaUrl,
         "isStripeEnabled": isStripeEnabled,
         "stripePublicKey": stripePublicKey,
         "stripeSecretKey": stripeSecretKey,

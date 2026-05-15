@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/image/professional_cached_image.dart';
@@ -9,6 +11,7 @@ import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topi
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -75,6 +78,18 @@ class FindMoreWidget extends StatelessWidget {
         'categoryId': homeController.selectedCategoryId,
       },
     );
+  }
+
+  bool get _shouldOfferSubscriptionCheckout =>
+      Platform.isIOS && AuthGuard.isGuest;
+
+  void _openPrimaryHeroAction(HomeScreenController homeController) {
+    if (_shouldOfferSubscriptionCheckout) {
+      Get.toNamed(AppRoutes.myWalletScreen);
+      return;
+    }
+
+    _openExpertsTab(homeController);
   }
 
   Widget _buildCategoryIcon({
@@ -552,7 +567,8 @@ class FindMoreWidget extends StatelessWidget {
                           width: double.infinity,
                           height: ctaHeight,
                           child: ElevatedButton(
-                            onPressed: () => _openExpertsTab(homeController),
+                            onPressed: () =>
+                                _openPrimaryHeroAction(homeController),
                             style: ElevatedButton.styleFrom(
                               elevation: 0,
                               backgroundColor: _brandDark,
@@ -568,7 +584,9 @@ class FindMoreWidget extends StatelessWidget {
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                      'Find Experts',
+                                      _shouldOfferSubscriptionCheckout
+                                          ? 'Subscribe'
+                                          : 'Find Experts',
                                       maxLines: 1,
                                       softWrap: false,
                                       style: AppFontStyle.fontStyleW600(
@@ -627,7 +645,8 @@ class FindMoreWidget extends StatelessWidget {
                           child: SizedBox(
                             height: ctaHeight,
                             child: ElevatedButton(
-                              onPressed: () => _openExpertsTab(homeController),
+                              onPressed: () =>
+                                  _openPrimaryHeroAction(homeController),
                               style: ElevatedButton.styleFrom(
                                 elevation: 0,
                                 backgroundColor: _brandDark,
@@ -643,7 +662,9 @@ class FindMoreWidget extends StatelessWidget {
                                     child: FittedBox(
                                       fit: BoxFit.scaleDown,
                                       child: Text(
-                                        'Find Experts',
+                                        _shouldOfferSubscriptionCheckout
+                                            ? 'Subscribe'
+                                            : 'Find Experts',
                                         maxLines: 1,
                                         softWrap: false,
                                         style: AppFontStyle.fontStyleW600(

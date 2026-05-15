@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -27,6 +28,8 @@ class EditProfileController extends GetxController {
   TextEditingController nickNameCnt = TextEditingController();
   TextEditingController nameCnt = TextEditingController();
   TextEditingController emailCnt = TextEditingController();
+  TextEditingController passwordCnt = TextEditingController();
+  TextEditingController confirmPasswordCnt = TextEditingController();
   TextEditingController genderCnt = TextEditingController();
   TextEditingController mobileNumberCnt = TextEditingController();
   TextEditingController flagController = TextEditingController();
@@ -41,6 +44,11 @@ class EditProfileController extends GetxController {
   String? dialCode;
 
   FetchLoginUserProfileModel? fetchLoginUserProfileModel;
+
+  bool get canEditEmail => Database.loginType != 5;
+
+  bool get shouldShowPasswordFields =>
+      Database.isGuestMode || Database.loginType == 2 || Database.loginType == 4;
 
   @override
   void onInit() {
@@ -214,14 +222,8 @@ class EditProfileController extends GetxController {
   Future<void> onSaveProfile() async {
     Utils.showLog("Click On Save Profile => ${Database.loginUserId}");
 
-    if (profilePic == "" && pickImage == null) {
-      Utils.showToast(
-          Get.context!, EnumLocale.txtPleaseSelectProfileImage.name.tr);
-    } else if (nickNameCnt.text.trim().isEmpty) {
+    if (nickNameCnt.text.trim().isEmpty) {
       Utils.showToast(Get.context!, EnumLocale.txtPleaseEnterNickName.name.tr);
-    } else if (mobileNumberCnt.text.trim().isEmpty) {
-      Utils.showToast(
-          Get.context!, EnumLocale.txtPleaseEnterMobileNumber.name.tr);
     } else {
       Get.dialog(const LoadingWidget(),
           barrierDismissible: false); // Start Loading...
@@ -233,6 +235,47 @@ class EditProfileController extends GetxController {
   /// edit profile api
   Future<void> callEditApi({String? image}) async {
     final token = await FirebaseAccessToken.onGet();
+    final email = emailCnt.text.trim().toLowerCase();
+    final password = passwordCnt.text.trim();
+    final confirmPassword = confirmPasswordCnt.text.trim();
+
+    if (email.isNotEmpty &&
+        !RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) {
+      _closeLoadingIfOpen();
+      Utils.showToast(Get.context!, "Please enter a valid email address");
+      return;
+    }
+
+    if ((password.isNotEmpty || confirmPassword.isNotEmpty) &&
+        email.isEmpty) {
+      _closeLoadingIfOpen();
+      Utils.showToast(Get.context!, "Email is required to set a password");
+      return;
+    }
+
+    if (password.isNotEmpty || confirmPassword.isNotEmpty) {
+      if (password.length < 6) {
+        _closeLoadingIfOpen();
+        Utils.showToast(Get.context!, "Password must be at least 6 characters");
+        return;
+      }
+
+      if (password != confirmPassword) {
+        _closeLoadingIfOpen();
+        Utils.showToast(Get.context!, "Passwords do not match");
+        return;
+      }
+
+      final linked = await _linkEmailPasswordCredential(
+        email: email,
+        password: password,
+      );
+      if (!linked) {
+        _closeLoadingIfOpen();
+        return;
+      }
+    }
+
     final parsedBirthDate = _parseBirthDate(dateController.text);
     final normalizedBirthDate = parsedBirthDate == null
         ? dateController.text.trim()
@@ -269,6 +312,9 @@ class EditProfileController extends GetxController {
       gender: Database.loginUserGender,
       phoneNumber: mobileNumberCnt.text,
       fullName: nameCnt.text,
+      email: email,
+      newPassword: password,
+      confirmPassword: confirmPassword,
     );
 
     debugPrint("Calling EditProfileApi with following data:");
@@ -297,6 +343,11 @@ class EditProfileController extends GetxController {
       Database.onSetLoginUserNickName(
           fetchLoginUserProfileModel?.user?.nickName ?? "");
       Database.onSetLoginUserEmail(fetchLoginUserProfileModel!.user!.email!);
+      Database.onSetLoginType(fetchLoginUserProfileModel?.user?.loginType ??
+          Database.loginType);
+      if (password.isNotEmpty) {
+        Database.onSetGuestMode(false);
+      }
       Database.onSetLoginUserCountry(
           fetchLoginUserProfileModel!.user!.country!);
       Database.onSetLoginUserCountryFlag(
@@ -324,6 +375,54 @@ class EditProfileController extends GetxController {
           editProfileModel?.message?.trim().isNotEmpty == true
               ? editProfileModel!.message!
               : EnumLocale.txtSomeThingWentWrong.name.tr);
+    }
+  }
+
+  Future<bool> _linkEmailPasswordCredential({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final user = firebase_auth.FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        Utils.showToast(Get.context!, "Please login again to set password");
+        return false;
+      }
+
+      final credential = firebase_auth.EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      );
+
+      final providerIds =
+          user.providerData.map((provider) => provider.providerId).toSet();
+
+      if (providerIds.contains('password')) {
+        if ((user.email ?? '').toLowerCase() != email) {
+          await user.verifyBeforeUpdateEmail(email);
+        }
+        await user.updatePassword(password);
+      } else {
+        await user.linkWithCredential(credential);
+      }
+
+      return true;
+    } on firebase_auth.FirebaseAuthException catch (error) {
+      final message = switch (error.code) {
+        'email-already-in-use' =>
+          'This email is already linked to another account.',
+        'credential-already-in-use' =>
+          'This email is already linked to another account.',
+        'requires-recent-login' =>
+          'Please logout and login again before setting a password.',
+        _ => error.message ?? 'Unable to set password. Please try again.',
+      };
+      Utils.showToast(Get.context!, message);
+      return false;
+    } catch (error) {
+      Utils.showLog("Set password failed => $error");
+      Utils.showToast(Get.context!, "Unable to set password. Please try again.");
+      return false;
     }
   }
 

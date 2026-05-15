@@ -236,6 +236,7 @@ class MainScreenView extends StatelessWidget {
                           text: 'Continue as Guest',
                           backgroundColor: _brandRed,
                           icon: Icons.explore_outlined,
+                          isLoading: controller.isGuestContinueLoading,
                           onTap: controller.onContinueAsGuest,
                         ),
                         const SizedBox(height: 4),

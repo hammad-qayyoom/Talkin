@@ -50,4 +50,49 @@ class PurchaseCoinPlanApi {
     }
     return null;
   }
+
+  static Future<PurchaseCoinPlan?> verifyAppleInAppPurchase({
+    required String coinPlanId,
+    required String productId,
+    required String receiptData,
+    required String transactionId,
+    required String token,
+    required String uid,
+  }) async {
+    Utils.showLog("Verify Apple In-App Purchase Api Calling...");
+
+    final uri = Uri.parse(Api.verifyAppleInAppPurchase);
+
+    final headers = {
+      ApiParams.key: Api.secretKey,
+      ApiParams.authToken: ApiParams.tokenStartPoint + token,
+      ApiParams.authUid: uid,
+      ApiParams.contentType: "application/json",
+    };
+
+    final body = jsonEncode({
+      ApiParams.coinPlanId: coinPlanId,
+      "productId": productId,
+      "receiptData": receiptData,
+      "transactionId": transactionId,
+    });
+
+    try {
+      final response = await http.post(uri, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        Utils.showLog(
+            "Verify Apple In-App Purchase Api Response => ${response.body}");
+
+        final jsonResponse = jsonDecode(response.body);
+
+        return PurchaseCoinPlan.fromJson(jsonResponse);
+      } else {
+        Utils.showLog("Verify Apple In-App Purchase Api StateCode Error");
+      }
+    } catch (error) {
+      Utils.showLog("Verify Apple In-App Purchase Api Error => $error");
+    }
+    return null;
+  }
 }

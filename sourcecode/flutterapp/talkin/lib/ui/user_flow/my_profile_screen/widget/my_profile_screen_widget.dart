@@ -16,11 +16,18 @@ class MyProfileTopView extends StatelessWidget {
   const MyProfileTopView({super.key});
 
   String _secondaryText() {
-    if (Database.loginType == 2) {
-      return Database.loginUserNickName;
+    final email = Database.loginUserEmail.trim();
+    if (email.isNotEmpty) {
+      return email;
     }
 
-    return Database.loginUserEmail;
+    if (Database.loginType == 2) {
+      return 'Add email and password';
+    }
+
+    return Database.loginUserNickName.trim().isEmpty
+        ? 'Manage account'
+        : Database.loginUserNickName;
   }
 
   void _onCopyId({
