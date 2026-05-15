@@ -421,13 +421,17 @@ class FindMoreWidget extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppFontStyle.fontStyleW600(
-                      fontSize: isTablet ? 13.5 : 12.5,
-                      fontColor: textColor,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      softWrap: false,
+                      style: AppFontStyle.fontStyleW600(
+                        fontSize: isTablet ? 13.5 : 12.5,
+                        fontColor: textColor,
+                      ),
                     ),
                   ),
                 ),
@@ -770,15 +774,19 @@ class FindMoreWidget extends StatelessWidget {
                           constraints: BoxConstraints(
                             maxWidth: isTabletScreen ? 160 : 126,
                           ),
-                          child: Text(
-                            screenWidth < 360
-                                ? 'All categories'
-                                : 'Show all categories',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppFontStyle.fontStyleW600(
-                              fontSize: isTabletScreen ? 13 : 11.5,
-                              fontColor: _brandRed,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              screenWidth < 360
+                                  ? 'All categories'
+                                  : 'Show all categories',
+                              maxLines: 1,
+                              softWrap: false,
+                              style: AppFontStyle.fontStyleW600(
+                                fontSize: isTabletScreen ? 13 : 11.5,
+                                fontColor: _brandRed,
+                              ),
                             ),
                           ),
                         ),

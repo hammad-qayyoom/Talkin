@@ -482,6 +482,24 @@ class _TopExpertCard extends StatelessWidget {
     );
   }
 
+  Widget _buttonLabel({
+    required String text,
+    required Color color,
+  }) {
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(
+        text,
+        maxLines: 1,
+        softWrap: false,
+        style: AppFontStyle.fontStyleW600(
+          fontSize: 14,
+          fontColor: color,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final status = (listener.statusLabel ?? 'Offline').trim().isEmpty
@@ -639,14 +657,12 @@ class _TopExpertCard extends StatelessWidget {
                     child: OutlinedButton.icon(
                       onPressed: onProfileTap,
                       icon: const Icon(Icons.person_outline_rounded, size: 18),
-                      label: Text(
-                        'Profile',
-                        style: AppFontStyle.fontStyleW600(
-                          fontSize: 14,
-                          fontColor: AppColors.redesignBrandDark,
-                        ),
+                      label: _buttonLabel(
+                        text: 'Profile',
+                        color: AppColors.redesignBrandDark,
                       ),
                       style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         side: BorderSide(color: AppColors.redesignSoftBorder),
                         foregroundColor: AppColors.redesignBrandDark,
                         backgroundColor: AppColors.redesignSurfaceSoft,
@@ -663,14 +679,12 @@ class _TopExpertCard extends StatelessWidget {
                     child: ElevatedButton.icon(
                       onPressed: onBookTap,
                       icon: const Icon(Icons.calendar_month_rounded, size: 18),
-                      label: Text(
-                        'Book Session',
-                        style: AppFontStyle.fontStyleW600(
-                          fontSize: 14,
-                          fontColor: AppColors.white,
-                        ),
+                      label: _buttonLabel(
+                        text: 'Book Session',
+                        color: AppColors.white,
                       ),
                       style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         elevation: 0,
                         backgroundColor: AppColors.redesignBrandDark,
                         foregroundColor: AppColors.white,
@@ -692,14 +706,12 @@ class _TopExpertCard extends StatelessWidget {
                         onPressed: onProfileTap,
                         icon:
                             const Icon(Icons.person_outline_rounded, size: 18),
-                        label: Text(
-                          'Profile',
-                          style: AppFontStyle.fontStyleW600(
-                            fontSize: 14,
-                            fontColor: AppColors.redesignBrandDark,
-                          ),
+                        label: _buttonLabel(
+                          text: 'Profile',
+                          color: AppColors.redesignBrandDark,
                         ),
                         style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           side: BorderSide(color: AppColors.redesignSoftBorder),
                           foregroundColor: AppColors.redesignBrandDark,
                           backgroundColor: AppColors.redesignSurfaceSoft,
@@ -719,14 +731,12 @@ class _TopExpertCard extends StatelessWidget {
                         onPressed: onBookTap,
                         icon:
                             const Icon(Icons.calendar_month_rounded, size: 18),
-                        label: Text(
-                          'Book Session',
-                          style: AppFontStyle.fontStyleW600(
-                            fontSize: 14,
-                            fontColor: AppColors.white,
-                          ),
+                        label: _buttonLabel(
+                          text: 'Book Session',
+                          color: AppColors.white,
                         ),
                         style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           elevation: 0,
                           backgroundColor: AppColors.redesignBrandDark,
                           foregroundColor: AppColors.white,

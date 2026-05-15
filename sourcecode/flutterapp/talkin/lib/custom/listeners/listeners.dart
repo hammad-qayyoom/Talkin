@@ -49,6 +49,21 @@ class CustomListeners extends StatelessWidget {
     required this.fake,
   });
 
+  Widget _fittedLabel({
+    required String text,
+    required TextStyle style,
+  }) {
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(
+        text,
+        maxLines: 1,
+        softWrap: false,
+        style: style,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -210,9 +225,18 @@ class CustomListeners extends StatelessWidget {
                   height: 38,
                   color: AppColors.white,
                   borderColor: AppColors.appColor,
-                  text: EnumLocale.txtViewProfile.name.tr,
-                  textStyle: AppFontStyle.fontStyleW600(
-                      fontSize: 14, fontColor: AppColors.appColor),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: _fittedLabel(
+                        text: EnumLocale.txtViewProfile.name.tr,
+                        style: AppFontStyle.fontStyleW600(
+                          fontSize: 14,
+                          fontColor: AppColors.appColor,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(width: 14),
@@ -222,21 +246,33 @@ class CustomListeners extends StatelessWidget {
                   height: 38,
                   color: AppColors.appColor,
                   borderColor: AppColors.appColor,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        AppAsset.calendar,
-                        color: AppColors.white,
-                        height: 19,
-                        width: 19,
-                      ).paddingOnly(right: 8),
-                      Text(
-                        'Book Session',
-                        style: AppFontStyle.fontStyleW600(
-                            fontSize: 14, fontColor: AppColors.white),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset(
+                              AppAsset.calendar,
+                              color: AppColors.white,
+                              height: 19,
+                              width: 19,
+                            ).paddingOnly(right: 8),
+                            Text(
+                              'Book Session',
+                              maxLines: 1,
+                              softWrap: false,
+                              style: AppFontStyle.fontStyleW600(
+                                fontSize: 14,
+                                fontColor: AppColors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
