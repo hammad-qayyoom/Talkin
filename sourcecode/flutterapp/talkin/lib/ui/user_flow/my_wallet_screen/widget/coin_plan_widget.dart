@@ -179,6 +179,147 @@ class PaymentOptionTile extends StatelessWidget {
   }
 }
 
+class AppleSubscriptionDisclosureCard extends StatelessWidget {
+  const AppleSubscriptionDisclosureCard({super.key, required this.coinPlan});
+
+  final CoinPlan coinPlan;
+
+  String _currencySymbol() {
+    final settingsSymbol =
+        Database.settingApiModel?.data?.currency?.symbol?.trim();
+    if (settingsSymbol != null &&
+        settingsSymbol.isNotEmpty &&
+        settingsSymbol.toLowerCase() != 'null') {
+      return settingsSymbol;
+    }
+
+    switch ((coinPlan.currency ?? '').trim().toUpperCase()) {
+      case 'USD':
+        return r'$';
+      case 'INR':
+        return 'INR';
+      case 'GBP':
+        return 'GBP';
+      case 'EUR':
+        return 'EUR';
+      case 'PKR':
+        return 'PKR';
+      default:
+        return '';
+    }
+  }
+
+  String _priceText() {
+    final value = coinPlan.price ?? 0;
+    final formattedPrice =
+        value % 1 == 0 ? value.toStringAsFixed(0) : value.toStringAsFixed(2);
+    final symbol = _currencySymbol();
+    return symbol.isEmpty ? formattedPrice : '$symbol $formattedPrice';
+  }
+
+  String _cycleText() {
+    switch ((coinPlan.billingCycle ?? '').trim().toLowerCase()) {
+      case 'day':
+      case 'daily':
+        return 'Daily';
+      case 'week':
+      case 'weekly':
+        return 'Weekly';
+      case 'month':
+      case 'monthly':
+        return 'Monthly';
+      case 'quarter':
+      case 'quarterly':
+      case '3 months':
+      case '3_months':
+        return 'Quarterly';
+      case 'year':
+      case 'yearly':
+      case 'annual':
+      case 'annually':
+        return 'Yearly';
+      default:
+        return 'Auto-renewable';
+    }
+  }
+
+  String _pricePeriodText() {
+    switch (_cycleText()) {
+      case 'Daily':
+        return '${_priceText()} / day';
+      case 'Weekly':
+        return '${_priceText()} / week';
+      case 'Monthly':
+        return '${_priceText()} / month';
+      case 'Quarterly':
+        return '${_priceText()} / 3 months';
+      case 'Yearly':
+        return '${_priceText()} / year';
+      default:
+        return _priceText();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final credits = coinPlan.sessionCredits ?? coinPlan.coins ?? 0;
+    final planName = (coinPlan.name?.trim().isNotEmpty == true)
+        ? coinPlan.name!.trim()
+        : 'Subscription Plan';
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.redesignSurfaceNeutralAlt,
+        border: Border.all(color: AppColors.redesignSoftBorder),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  planName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: 14,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  _pricePeriodText(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.end,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: 13,
+                    fontColor: AppColors.redesignBrandRed,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '$credits session credits. Auto-renews until cancelled in App Store subscriptions.',
+            style: AppFontStyle.fontStyleW600(
+              fontSize: 11,
+              fontColor: AppColors.redesignMutedText,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class CoinPlanTile extends StatelessWidget {
   const CoinPlanTile({super.key, required this.coinPlan});
 
@@ -459,6 +600,12 @@ class PaymentOptionBottomSheet extends StatelessWidget {
                                 ),
                               ),
                             ),
+                          if (Platform.isIOS && !hasActiveSubscription) ...[
+                            AppleSubscriptionDisclosureCard(
+                              coinPlan: controller.coinPlan[index],
+                            ),
+                            const SizedBox(height: 8),
+                          ],
                           if (!hasActiveSubscription)
                             for (final method in paymentMethods)
                               PaymentOptionTile(

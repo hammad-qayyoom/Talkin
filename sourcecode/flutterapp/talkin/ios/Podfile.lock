@@ -9,15 +9,6 @@ PODS:
     - IosAwnCore (~> 0.10.0)
   - camera_avfoundation (0.0.1):
     - Flutter
-  - CashfreeAnalyticsSDK (2.2.0):
-    - CFNetworkSDK (= 2.2.0)
-  - CashfreePG (2.2.4):
-    - CashfreePGUISDK (= 2.2.4)
-  - CashfreePGCoreSDK (2.2.4):
-    - CashfreeAnalyticsSDK (= 2.2.0)
-  - CashfreePGUISDK (2.2.4):
-    - CashfreePGCoreSDK (= 2.2.4)
-  - CFNetworkSDK (2.2.0)
   - connectivity_plus (0.0.1):
     - Flutter
   - device_info_plus (0.0.1):
@@ -76,9 +67,6 @@ PODS:
     - nanopb (~> 3.30910.0)
   - Flutter (1.0.0)
   - flutter_audio_output (0.0.3):
-    - Flutter
-  - flutter_cashfree_pg_sdk (0.0.1):
-    - CashfreePG (= 2.2.4)
     - Flutter
   - flutter_inappwebview_ios (0.0.1):
     - Flutter
@@ -152,12 +140,6 @@ PODS:
     - Flutter
   - proximity_sensor (0.0.1):
     - Flutter
-  - razorpay-core-pod (1.0.6)
-  - razorpay-pod (1.5.3):
-    - razorpay-core-pod (= 1.0.6)
-  - razorpay_flutter (1.1.10):
-    - Flutter
-    - razorpay-pod
   - RecaptchaInterop (101.0.0)
   - record_ios (1.1.0):
     - Flutter
@@ -173,42 +155,6 @@ PODS:
   - sqflite_darwin (0.0.4):
     - Flutter
     - FlutterMacOS
-  - Stripe (23.27.6):
-    - StripeApplePay (= 23.27.6)
-    - StripeCore (= 23.27.6)
-    - StripePayments (= 23.27.6)
-    - StripePaymentsUI (= 23.27.6)
-    - StripeUICore (= 23.27.6)
-  - stripe_ios (0.0.1):
-    - Flutter
-    - Stripe (~> 23.27.0)
-    - StripeApplePay (~> 23.27.0)
-    - StripeFinancialConnections (~> 23.27.0)
-    - StripePayments (~> 23.27.0)
-    - StripePaymentSheet (~> 23.27.0)
-    - StripePaymentsUI (~> 23.27.0)
-  - StripeApplePay (23.27.6):
-    - StripeCore (= 23.27.6)
-  - StripeCore (23.27.6)
-  - StripeFinancialConnections (23.27.6):
-    - StripeCore (= 23.27.6)
-    - StripeUICore (= 23.27.6)
-  - StripePayments (23.27.6):
-    - StripeCore (= 23.27.6)
-    - StripePayments/Stripe3DS2 (= 23.27.6)
-  - StripePayments/Stripe3DS2 (23.27.6):
-    - StripeCore (= 23.27.6)
-  - StripePaymentSheet (23.27.6):
-    - StripeApplePay (= 23.27.6)
-    - StripeCore (= 23.27.6)
-    - StripePayments (= 23.27.6)
-    - StripePaymentsUI (= 23.27.6)
-  - StripePaymentsUI (23.27.6):
-    - StripeCore (= 23.27.6)
-    - StripePayments (= 23.27.6)
-    - StripeUICore (= 23.27.6)
-  - StripeUICore (23.27.6):
-    - StripeCore (= 23.27.6)
   - url_launcher_ios (0.0.1):
     - Flutter
   - vibration (3.0.0):
@@ -236,7 +182,6 @@ DEPENDENCIES:
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_audio_output (from `.symlinks/plugins/flutter_audio_output/ios`)
-  - flutter_cashfree_pg_sdk (from `.symlinks/plugins/flutter_cashfree_pg_sdk/ios`)
   - flutter_inappwebview_ios (from `.symlinks/plugins/flutter_inappwebview_ios/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_ringtone_player (from `.symlinks/plugins/flutter_ringtone_player/ios`)
@@ -250,14 +195,12 @@ DEPENDENCIES:
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - proximity_screen_lock_ios (from `.symlinks/plugins/proximity_screen_lock_ios/ios`)
   - proximity_sensor (from `.symlinks/plugins/proximity_sensor/ios`)
-  - razorpay_flutter (from `.symlinks/plugins/razorpay_flutter/ios`)
   - record_ios (from `.symlinks/plugins/record_ios/ios`)
   - screen_brightness_ios (from `.symlinks/plugins/screen_brightness_ios/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
-  - stripe_ios (from `.symlinks/plugins/stripe_ios/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - vibration (from `.symlinks/plugins/vibration/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
@@ -267,11 +210,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - CashfreeAnalyticsSDK
-    - CashfreePG
-    - CashfreePGCoreSDK
-    - CashfreePGUISDK
-    - CFNetworkSDK
     - Firebase
     - FirebaseAppCheckInterop
     - FirebaseAuth
@@ -289,17 +227,7 @@ SPEC REPOS:
     - nanopb
     - OrderedSet
     - PromisesObjC
-    - razorpay-core-pod
-    - razorpay-pod
     - RecaptchaInterop
-    - Stripe
-    - StripeApplePay
-    - StripeCore
-    - StripeFinancialConnections
-    - StripePayments
-    - StripePaymentSheet
-    - StripePaymentsUI
-    - StripeUICore
 
 EXTERNAL SOURCES:
   audio_session:
@@ -324,8 +252,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_audio_output:
     :path: ".symlinks/plugins/flutter_audio_output/ios"
-  flutter_cashfree_pg_sdk:
-    :path: ".symlinks/plugins/flutter_cashfree_pg_sdk/ios"
   flutter_inappwebview_ios:
     :path: ".symlinks/plugins/flutter_inappwebview_ios/ios"
   flutter_local_notifications:
@@ -352,8 +278,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/proximity_screen_lock_ios/ios"
   proximity_sensor:
     :path: ".symlinks/plugins/proximity_sensor/ios"
-  razorpay_flutter:
-    :path: ".symlinks/plugins/razorpay_flutter/ios"
   record_ios:
     :path: ".symlinks/plugins/record_ios/ios"
   screen_brightness_ios:
@@ -366,8 +290,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sqflite_darwin:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
-  stripe_ios:
-    :path: ".symlinks/plugins/stripe_ios/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
   vibration:
@@ -386,11 +308,6 @@ SPEC CHECKSUMS:
   audioplayers_darwin: 4f9ca89d92d3d21cec7ec580e78ca888e5fb68bd
   awesome_notifications: 0f432b28098d193920b11a44cfa9d2d9313a3888
   camera_avfoundation: be3be85408cd4126f250386828e9b1dfa40ab436
-  CashfreeAnalyticsSDK: ae25b71a54607c920d519103d154d9727ca2c15a
-  CashfreePG: 6554c215b8eabc9fa13e59c847262b8ba6f29ff6
-  CashfreePGCoreSDK: 133e1ba5aeb8a89bf2188eb3312c88fcad084c75
-  CashfreePGUISDK: 5e943fcca20c45b66c9837bbb87ebbfb75c013a5
-  CFNetworkSDK: 4e431b55f607544f5ca45bc1a36a13e602f51841
   connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
   device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
   Firebase: f07b15ae5a6ec0f93713e30b923d9970d144af3e
@@ -407,7 +324,6 @@ SPEC CHECKSUMS:
   FirebaseMessaging: d33971b7bb252745ea6cd31ab190d1a1df4b8ed5
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_audio_output: dfbb99c67d7e8c8b2391f688ac08d43cbbdc56fc
-  flutter_cashfree_pg_sdk: 969a7cfdec1a6b13fd0a1c2d1d0acd9d1768107a
   flutter_inappwebview_ios: b89ba3482b96fb25e00c967aae065701b66e9b99
   flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
   flutter_ringtone_player: a77c42464250845611eaa44c27e8714acc800138
@@ -429,9 +345,6 @@ SPEC CHECKSUMS:
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   proximity_screen_lock_ios: 1823ea79f192d8e136140ad2c633216c817430cc
   proximity_sensor: 2aef59f90cf0382935faf58ad0a79e1e860773bd
-  razorpay-core-pod: 6da5fb4ed280279d665507fdb50e213d793a5fe2
-  razorpay-pod: 4385cf844aa29389313b741e20c72fe668970d49
-  razorpay_flutter: 0e98e4fcaae27ad50e011d85f66d85e0a008754a
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   record_ios: f75fa1d57f840012775c0e93a38a7f3ceea1a374
   screen_brightness_ios: 9953fd7da5bd480f1a93990daeec2eb42d4f3b52
@@ -439,15 +352,6 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
   sign_in_with_apple: c5dcc141574c8c54d5ac99dd2163c0c72ad22418
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
-  Stripe: 9fec845645e39f371e6898926d096fd9c2feb5a5
-  stripe_ios: 5accba1ff472f89300e1676c351166f29dc93ced
-  StripeApplePay: 5f017e8dfe259fafbab70137776189deef754bb2
-  StripeCore: 01ec57f0dddfe742054dc6a322f811426c25313d
-  StripeFinancialConnections: 56698cb6274bf89fb8c76b934f6156f368e97765
-  StripePayments: 6adf11faf1b7038e77aa97019410305c6adca79d
-  StripePaymentSheet: 3eaf870c4388e44b0cc37e4c69d00b6957fd8bd7
-  StripePaymentsUI: 59ccddeacad592b09fa67e8d641340820ddb4751
-  StripeUICore: 879bbf5889265db13f52fac8aad7a176ba62481f
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
   vibration: 69774ad57825b11c951ee4c46155f455d7a592ce
   video_player_avfoundation: 2cef49524dd1f16c5300b9cd6efd9611ce03639b

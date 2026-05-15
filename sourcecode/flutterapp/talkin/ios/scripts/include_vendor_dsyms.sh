@@ -47,14 +47,6 @@ generate_dsym() {
   echo "Generated vendor dSYM: ${framework_name}.framework.dSYM"
 }
 
-# Razorpay ships this dSYM, but CocoaPods does not copy it into Runner.xcarchive.
-copy_dsym "${SRCROOT}/Pods/razorpay-core-pod/Pod/core/Razorpay.xcframework/ios-arm64/dSYMs/Razorpay.framework.dSYM"
-
-# Cashfree and Zego do not currently ship dSYM bundles in these pods. Generate
-# UUID-matching dSYMs so App Store Connect receives the symbol files it expects.
-generate_dsym "${SRCROOT}/Pods/CFNetworkSDK/CFNetworkSDK.xcframework/ios-arm64/CFNetworkSDK.framework/CFNetworkSDK" "CFNetworkSDK"
-generate_dsym "${SRCROOT}/Pods/CashfreeAnalyticsSDK/CashfreeAnalyticsSDK.xcframework/ios-arm64/CashfreeAnalyticsSDK.framework/CashfreeAnalyticsSDK" "CashfreeAnalyticsSDK"
-generate_dsym "${SRCROOT}/Pods/CashfreePG/CashfreePG.xcframework/ios-arm64/CashfreePG.framework/CashfreePG" "CashfreePG"
-generate_dsym "${SRCROOT}/Pods/CashfreePGCoreSDK/CashfreePGCoreSDK.xcframework/ios-arm64/CashfreePGCoreSDK.framework/CashfreePGCoreSDK" "CashfreePGCoreSDK"
-generate_dsym "${SRCROOT}/Pods/CashfreePGUISDK/CashfreePGUISDK.xcframework/ios-arm64/CashfreePGUISDK.framework/CashfreePGUISDK" "CashfreePGUISDK"
+# Zego does not currently ship a dSYM bundle in this pod. Generate a
+# UUID-matching dSYM so App Store Connect receives the symbol file it expects.
 generate_dsym "${SRCROOT}/.symlinks/plugins/zego_express_engine/ios/libs/ZegoExpressEngine.xcframework/ios-arm64/ZegoExpressEngine.framework/ZegoExpressEngine" "ZegoExpressEngine"

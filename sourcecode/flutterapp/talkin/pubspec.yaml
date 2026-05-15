@@ -118,6 +118,14 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.4
 
+dependency_overrides:
+  flutter_cashfree_pg_sdk:
+    path: third_party/flutter_cashfree_pg_sdk_android_only
+  flutter_stripe:
+    path: third_party/flutter_stripe_android_only
+  razorpay_flutter:
+    path: third_party/razorpay_flutter_android_only
+
 flutter_icons:
   android: true
   ios: true
