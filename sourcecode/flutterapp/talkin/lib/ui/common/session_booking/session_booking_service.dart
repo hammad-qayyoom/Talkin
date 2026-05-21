@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:http/http.dart' as http;
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/api_params.dart';
@@ -15,14 +16,22 @@ class SessionBookingService {
       return GuestAuth.headers(allowGuest: true);
     }
 
-    final token = await FirebaseAccessToken.onGet();
+    final token = (await FirebaseAccessToken.onGet() ?? '').trim();
+    final authUid = Database.loginUserFirebaseId.trim().isNotEmpty
+        ? Database.loginUserFirebaseId.trim()
+        : (firebase_auth.FirebaseAuth.instance.currentUser?.uid ?? '').trim();
 
-    return {
+    final headers = <String, String>{
       ApiParams.key: Api.secretKey,
-      ApiParams.authToken: 'Bearer $token',
-      ApiParams.authUid: Database.loginUserFirebaseId,
       ApiParams.contentType: 'application/json',
     };
+
+    if (token.isNotEmpty && authUid.isNotEmpty) {
+      headers[ApiParams.authToken] = 'Bearer $token';
+      headers[ApiParams.authUid] = authUid;
+    }
+
+    return headers;
   }
 
   static String _normalizeSessionAccessErrorMessage(dynamic message) {

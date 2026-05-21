@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/app_button/primary_app_button.dart';
@@ -600,7 +599,7 @@ class PaymentOptionBottomSheet extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          if (Platform.isIOS && !hasActiveSubscription) ...[
+                          if (GetPlatform.isIOS && !hasActiveSubscription) ...[
                             AppleSubscriptionDisclosureCard(
                               coinPlan: controller.coinPlan[index],
                             ),
@@ -616,7 +615,7 @@ class PaymentOptionBottomSheet extends StatelessWidget {
                                 width: method.width,
                                 height: method.height,
                               ),
-                          if (Platform.isIOS) ...[
+                          if (GetPlatform.isIOS) ...[
                             const SizedBox(height: 8),
                             Row(
                               children: [
@@ -689,7 +688,7 @@ class PaymentOptionBottomSheet extends StatelessWidget {
                           ? null
                           : () async {
                               if (hasActiveSubscription) {
-                                if (Platform.isIOS ||
+                                if (GetPlatform.isIOS ||
                                     (controller.activeSubscription
                                                 ?.paymentGateway ??
                                             '')

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -58,6 +58,10 @@ class InAppPurchaseHelper {
   List<PurchaseDetails> _purchases = [];
   IAPCallback? _iapCallback;
   static Future<void> _storeOperationQueue = Future<void>.value();
+  static bool get _isAndroid =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+  static bool get _isIOS =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 
   void setCallback(IAPCallback iapCallback) {
     _iapCallback = iapCallback;
@@ -93,7 +97,7 @@ class InAppPurchaseHelper {
   }
 
   initialize() {
-    if (Platform.isAndroid) {
+    if (_isAndroid) {
       // FIXED: The enablePendingPurchases() method has been deprecated and removed
       // Pending purchases are now enabled by default in newer versions
       // No action needed for Android initialization
@@ -302,7 +306,7 @@ class InAppPurchaseHelper {
   }
 
   Future<void> finishTransaction() async {
-    if (Platform.isIOS) {
+    if (_isIOS) {
       final transactions = await SKPaymentQueueWrapper().transactions();
 
       if (transactions.isNotEmpty) {
@@ -329,7 +333,7 @@ class InAppPurchaseHelper {
       Map<String, PurchaseDetails> purchases) async {
     PurchaseParam purchaseParam;
 
-    if (Platform.isAndroid) {
+    if (_isAndroid) {
       final oldSubscription = _getOldSubscription(productDetails, purchases);
 
       purchaseParam = GooglePlayPurchaseParam(
@@ -354,16 +358,22 @@ class InAppPurchaseHelper {
     } on PlatformException catch (error) {
       handleError(error);
       log("Purchase error: $error");
+      if (_isIOS && _isStoreKitNoResponse(error)) {
+        return true;
+      }
       return false;
     } catch (error) {
       handleError(error);
       log("Purchase error: $error");
+      if (_isIOS && _isStoreKitNoResponse(error)) {
+        return true;
+      }
       return false;
     }
   }
 
   Future<void> clearTransactions() async {
-    if (Platform.isIOS) {
+    if (_isIOS) {
       final transactions = await SKPaymentQueueWrapper().transactions();
       for (final transaction in transactions) {
         try {

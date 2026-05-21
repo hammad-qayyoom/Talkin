@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/socket/socket_listen.dart';
 import 'package:notisboard/socket/socket_service.dart';
@@ -52,10 +51,12 @@ class BottomBarController extends GetxController {
   }
 
   Future<void> createEngine() async {
-    final appId = int.tryParse(
-        Database.settingApiModel?.data?.zegoAppId?.toString() ?? '');
+    final appIdText =
+        (Database.settingApiModel?.data?.zegoAppId?.toString() ?? '').trim();
+    final appId = int.tryParse(appIdText) ?? num.tryParse(appIdText)?.toInt();
     final appSign =
-        Database.settingApiModel?.data?.zegoAppSignIn?.toString() ?? '';
+        (Database.settingApiModel?.data?.zegoAppSignIn?.toString() ?? '')
+            .trim();
 
     if (appId == null || appId <= 0 || appSign.isEmpty) {
       Utils.showLog("Zego engine skipped: invalid app settings for user.");
@@ -66,7 +67,7 @@ class BottomBarController extends GetxController {
       await ZegoExpressEngine.createEngineWithProfile(ZegoEngineProfile(
         appId,
         ZegoScenario.Default,
-        appSign: kIsWeb ? null : appSign,
+        appSign: appSign,
       ));
     } catch (e) {
       Utils.showLog("Zego engine create (user) skipped/failed: $e");

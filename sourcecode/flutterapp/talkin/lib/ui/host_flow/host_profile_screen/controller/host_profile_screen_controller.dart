@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:notisboard/custom/custom_web_view/web_view_screen.dart';
@@ -45,9 +44,9 @@ class HostProfileScreenController extends GetxController {
   // Future<void> onClickShare() async {
   //   Uri url;
   //
-  //   if (Platform.isAndroid) {
+  //   if (GetPlatform.isAndroid) {
   //     url = Uri.parse("https://play.google.com/store/apps/details?id=${Utils.playStoreId}");
-  //   } else if (Platform.isIOS) {
+  //   } else if (GetPlatform.isIOS) {
   //     url = Uri.parse("https://apps.apple.com/app/${Utils.appStoreId}");
   //   } else {
   //     // Other platforms (optional fallback)
@@ -68,11 +67,11 @@ class HostProfileScreenController extends GetxController {
 
     Uri url;
 
-    if (Platform.isAndroid) {
+    if (GetPlatform.isAndroid) {
       url = Uri.parse(
         "https://play.google.com/store/apps/details?id=$packageName",
       );
-    } else if (Platform.isIOS) {
+    } else if (GetPlatform.isIOS) {
       url = Uri.parse(
         "https://apps.apple.com/app/id${Utils.appStoreId}",
       );

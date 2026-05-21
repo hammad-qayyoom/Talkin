@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -79,7 +77,7 @@ class HomeAppBarWidget extends StatelessWidget {
 
     Widget coinCard() {
       if (AuthGuard.isGuest) {
-        final isIosGuest = Platform.isIOS;
+        final isIosGuest = GetPlatform.isIOS;
 
         return GestureDetector(
           onTap: () {
@@ -230,7 +228,7 @@ class HomeAppBarWidget extends StatelessWidget {
 
     Widget profileSection() {
       if (AuthGuard.isGuest) {
-        final canManageGuestProfile = Platform.isIOS && Database.isLogin;
+        final canManageGuestProfile = GetPlatform.isIOS && Database.isLogin;
 
         return GestureDetector(
           onTap: () {

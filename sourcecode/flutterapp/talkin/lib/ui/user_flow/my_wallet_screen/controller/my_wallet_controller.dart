@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/widgets.dart';
@@ -14,6 +13,7 @@ import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/all_listeners_screen/controller/all_listeners_controller.dart';
 import 'package:notisboard/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
 import 'package:notisboard/ui/user_flow/edit_profile_screen/controller/edit_profile_screen_controller.dart';
+import 'package:notisboard/ui/user_flow/main_screen/api/get_firebase_custom_token_api.dart';
 import 'package:notisboard/ui/user_flow/home_screen/api/user_coin_api.dart';
 import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/user_coin_model.dart';
@@ -189,7 +189,7 @@ class MyWalletController extends GetxController
   void _queueAppleStoreErrorToast(dynamic error) {
     final message = _friendlyIapError(error);
 
-    if (!Platform.isIOS) {
+    if (!GetPlatform.isIOS) {
       Utils.showToast(Get.context, message);
       return;
     }
@@ -269,7 +269,7 @@ class MyWalletController extends GetxController
   }
 
   Future<bool> _ensureAppleGuestAccountReady() async {
-    if (!Platform.isIOS) return true;
+    if (!GetPlatform.isIOS) return true;
 
     if (!Database.isLogin || Database.loginUserFirebaseId.trim().isEmpty) {
       final ready = await GuestBrowsingSetup.ensureAuthenticatedGuestSession();
@@ -328,13 +328,13 @@ class MyWalletController extends GetxController
         return 'Your App Store subscription is cancelled and remains active until ${_formatSubscriptionDate(activeSubscription?.endsAt)}.';
       }
 
-      return Platform.isIOS
+      return GetPlatform.isIOS
           ? 'You already have an active App Store subscription. Use Manage or Restore instead of buying again.'
           : 'Your active subscription was purchased on App Store. Please manage it from an iPhone or App Store subscriptions.';
     }
 
     if (gateway.isNotEmpty) {
-      return Platform.isIOS
+      return GetPlatform.isIOS
           ? 'Your active subscription was purchased on $gateway. Please manage it on that platform.'
           : 'You already have an active subscription. Please manage it on $gateway.';
     }
@@ -360,8 +360,8 @@ class MyWalletController extends GetxController
     bool? ios,
     bool? fallback,
   }) {
-    if (Platform.isAndroid) return android ?? fallback ?? false;
-    if (Platform.isIOS) return ios ?? fallback ?? false;
+    if (GetPlatform.isAndroid) return android ?? fallback ?? false;
+    if (GetPlatform.isIOS) return ios ?? fallback ?? false;
     return false;
   }
 
@@ -393,14 +393,14 @@ class MyWalletController extends GetxController
   }
 
   String productKeyForSelectedPlan() {
-    if (Platform.isIOS) return _appleProductKey(selectedCoinPlan);
+    if (GetPlatform.isIOS) return _appleProductKey(selectedCoinPlan);
     return _googleProductKey(selectedCoinPlan);
   }
 
   List<PaymentMethodOption> get availablePaymentMethods {
     final settings = Database.settingApiModel?.data;
 
-    if (Platform.isIOS) {
+    if (GetPlatform.isIOS) {
       final isAppleIapEnabled =
           settings == null || settings.isAppleInAppPurchaseEnabled != false;
 
@@ -418,7 +418,7 @@ class MyWalletController extends GetxController
     }
 
     if (settings == null) {
-      return Platform.isAndroid
+      return GetPlatform.isAndroid
           ? [
               const PaymentMethodOption(
                 id: paymentInAppPurchase,
@@ -543,7 +543,7 @@ class MyWalletController extends GetxController
 
     _setPaymentProcessing(true);
     try {
-      if (Platform.isIOS) {
+      if (GetPlatform.isIOS) {
         final ready = await _ensureAppleGuestAccountReady();
         if (!ready) {
           Utils.showToast(Get.context,
@@ -552,12 +552,12 @@ class MyWalletController extends GetxController
         }
       }
 
-      if (Platform.isIOS && selectedPaymentMethod == -1) {
+      if (GetPlatform.isIOS && selectedPaymentMethod == -1) {
         selectedPaymentMethod = paymentInAppPurchase;
         update([Constant.onChangePaymentMethod]);
       }
 
-      if (Platform.isIOS && selectedPaymentMethod != paymentInAppPurchase) {
+      if (GetPlatform.isIOS && selectedPaymentMethod != paymentInAppPurchase) {
         Utils.showToast(Get.context, "iOS subscriptions use App Store only");
         return;
       }
@@ -761,7 +761,7 @@ class MyWalletController extends GetxController
   ///in app purchase
   Future<void> onClickInAppPurchase(
       num amount, String id, String productKey) async {
-    if (Platform.isIOS) {
+    if (GetPlatform.isIOS) {
       final ready = await _ensureAppleGuestAccountReady();
       if (!ready) {
         Utils.showToast(Get.context,
@@ -968,7 +968,7 @@ class MyWalletController extends GetxController
   }
 
   Future<void> restoreAppleSubscriptions() async {
-    if (!Platform.isIOS) return;
+    if (!GetPlatform.isIOS) return;
 
     if (isRestoreProcessing || isPaymentProcessing) {
       return;
@@ -1082,7 +1082,7 @@ class MyWalletController extends GetxController
       return;
     }
 
-    if (Platform.isIOS &&
+    if (GetPlatform.isIOS &&
         _awaitingApplePurchaseResult &&
         _isTransientStoreKitError(error)) {
       _queueAppleStoreErrorToast(error);
@@ -1165,8 +1165,19 @@ class MyWalletController extends GetxController
     try {
       // Show loading dialog
       _showBlockingLoader();
-      final token = await FirebaseAccessToken.onGet() ?? "";
-      final uid = Database.loginUserFirebaseId;
+      final token = (await FirebaseAccessToken.onGet() ?? '').trim();
+      final uid = Database.loginUserFirebaseId.trim().isNotEmpty
+          ? Database.loginUserFirebaseId.trim()
+          : (firebase_auth.FirebaseAuth.instance.currentUser?.uid ?? '').trim();
+
+      if (token.isEmpty || uid.isEmpty) {
+        _closeBlockingLoader();
+        Utils.showToast(
+          Get.context,
+          "Session expired. Please login again to continue purchase sync.",
+        );
+        return;
+      }
       final resolvedPlan =
           selectedCoinPlan ?? _findPlanByProductId(product.productID);
 
@@ -1181,7 +1192,7 @@ class MyWalletController extends GetxController
               ? product.verificationData.serverVerificationData
               : product.verificationData.localVerificationData;
 
-      final isSuccess = Platform.isIOS
+      final isSuccess = GetPlatform.isIOS
           ? await PurchaseCoinPlanApi.verifyAppleInAppPurchase(
               coinPlanId: resolvedPlan.id.toString(),
               productId: product.productID,
@@ -1244,16 +1255,40 @@ class MyWalletController extends GetxController
 
     if (firebaseId.isEmpty) return;
 
-    final currentUid = firebase_auth.FirebaseAuth.instance.currentUser?.uid;
-    if (customToken.isNotEmpty && currentUid != firebaseId) {
-      await firebase_auth.FirebaseAuth.instance
-          .signInWithCustomToken(customToken);
+    var currentUid =
+        (firebase_auth.FirebaseAuth.instance.currentUser?.uid ?? '').trim();
+    if (currentUid != firebaseId) {
+      var tokenForSignIn = customToken;
+
+      if (tokenForSignIn.isEmpty) {
+        final customTokenResponse = await GetFirebaseCustomTokenApi.callApi(
+          firebaseUid: firebaseId,
+        );
+        tokenForSignIn = (customTokenResponse?.customToken ?? '').trim();
+      }
+
+      if (tokenForSignIn.isNotEmpty) {
+        await firebase_auth.FirebaseAuth.instance
+            .signInWithCustomToken(tokenForSignIn);
+      } else {
+        Utils.showLog(
+            "Purchase auth link skipped: missing custom token for $firebaseId");
+        return;
+      }
+
+      currentUid =
+          (firebase_auth.FirebaseAuth.instance.currentUser?.uid ?? '').trim();
+      if (currentUid != firebaseId) {
+        Utils.showLog(
+            "Purchase auth link skipped: uid mismatch after sign-in. currentUid=$currentUid targetUid=$firebaseId");
+        return;
+      }
     }
 
     final user = auth?.user;
     await Database.onSetIsLogin(true);
     await Database.onSetGuestMode(user?.isGuestAccount == true);
-    await Database.onSetLoginUserFirebaseId(firebaseId);
+    await Database.onSetLoginUserFirebaseId(currentUid);
 
     if ((user?.id ?? '').trim().isNotEmpty) {
       await Database.onSetLoginUserId(user!.id!);
@@ -1277,7 +1312,7 @@ class MyWalletController extends GetxController
     await Database.onSetLoginUserCountryFlag(
         user?.countryFlag ?? Database.countryFlag);
     await GuestBrowsingSetup.refreshCurrentGuestProfile(
-        firebaseUid: firebaseId);
+        firebaseUid: currentUid);
   }
 
   Future<void> _notifyAuthenticatedWalletStateChanged() async {

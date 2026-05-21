@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -226,10 +225,10 @@ class SplashScreenController extends GetxController {
     Utils.showLog("Current version ==> ${packageInfo.version}");
     // 🔴 Replace this with API response
 
-    final latestVersion = Platform.isIOS
+    final latestVersion = GetPlatform.isIOS
         ? Database.settingApiModel?.data?.iosAppVersion ?? ""
         : Database.settingApiModel?.data?.androidAppVersion ?? "";
-    // final latestVersion = Platform.isIOS ? "0.1.1" ?? "" : "0.1.1" ?? "";
+    // final latestVersion = GetPlatform.isIOS ? "0.1.1" ?? "" : "0.1.1" ?? "";
     Utils.showLog("Latest  version ==> $latestVersion");
     if (latestVersion.isEmpty) {
       Utils.showLog("⚠️ Latest version missing from API");

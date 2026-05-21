@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -163,9 +162,9 @@ class CallCutController extends GetxController {
   // Future<void> onClickShare() async {
   //   Uri url;
   //
-  //   if (Platform.isAndroid) {
+  //   if (GetPlatform.isAndroid) {
   //     url = Uri.parse("https://play.google.com/store/apps/details?id=${Utils.playStoreId}");
-  //   } else if (Platform.isIOS) {
+  //   } else if (GetPlatform.isIOS) {
   //     url = Uri.parse("https://apps.apple.com/app/${Utils.appStoreId}");
   //   } else {
   //     // Other platforms (optional fallback)
@@ -186,11 +185,11 @@ class CallCutController extends GetxController {
 
     Uri url;
 
-    if (Platform.isAndroid) {
+    if (GetPlatform.isAndroid) {
       url = Uri.parse(
         "https://play.google.com/store/apps/details?id=$packageName",
       );
-    } else if (Platform.isIOS) {
+    } else if (GetPlatform.isIOS) {
       url = Uri.parse(
         "https://apps.apple.com/app/id${Utils.appStoreId}",
       );

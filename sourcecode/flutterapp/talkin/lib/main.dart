@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,6 +11,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 // ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:notisboard/custom/ringtone/ringtone_method.dart';
+import 'package:notisboard/firebase_options.dart';
 import 'package:notisboard/localization/locale_constant.dart';
 import 'package:notisboard/routes/app_pages.dart';
 import 'package:notisboard/routes/app_routes.dart';
@@ -83,7 +84,7 @@ Future<void> _initializePostLaunchServices() async {
 }
 
 Future<void> _configureInAppPurchases() async {
-  if (!Platform.isIOS) return;
+  if (kIsWeb || defaultTargetPlatform != TargetPlatform.iOS) return;
 
   try {
     // StoreKit 1 is still the more stable path for this plugin in TestFlight
@@ -96,6 +97,24 @@ Future<void> _configureInAppPurchases() async {
   }
 }
 
+Future<FirebaseApp> _initializeFirebaseApp() async {
+  if (Firebase.apps.isNotEmpty) {
+    return Firebase.app();
+  }
+
+  try {
+    return await Firebase.initializeApp();
+  } catch (_) {
+    if (Firebase.apps.isNotEmpty) {
+      return Firebase.app();
+    }
+
+    return Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
@@ -103,7 +122,7 @@ void main() async {
 
   await AppStartupHelper.runTask<FirebaseApp>(
     "Firebase initialize",
-    () => Firebase.initializeApp(),
+    () => _initializeFirebaseApp(),
     timeout: const Duration(seconds: 8),
   );
   await AppStartupHelper.runTask<void>(

@@ -36,6 +36,12 @@ class GuestAuth {
         return null;
       }
 
+      if (user == null && Database.isLogin) {
+        // Try to self-heal Firebase session if local login state exists.
+        await FirebaseAccessToken.onGet();
+        user = FirebaseAuth.instance.currentUser;
+      }
+
       if (user == null) {
         return null;
       }

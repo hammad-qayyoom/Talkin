@@ -95,8 +95,24 @@ class Database {
   static bool get isListeners => localStorage.read("isListeners") ?? false;
   static int get loginType => localStorage.read("loginType") ?? 0;
   static String get loginUserId => localStorage.read("loginUserId") ?? "";
-  static String get loginUserFirebaseId =>
-      localStorage.read("loginUserFirebaseId") ?? "";
+  static String get storedLoginUserFirebaseId =>
+      (localStorage.read("loginUserFirebaseId") ?? "").toString();
+
+  static String get loginUserFirebaseId {
+    final storedFirebaseId = storedLoginUserFirebaseId.trim();
+    final currentFirebaseId =
+        (FirebaseAuth.instance.currentUser?.uid ?? '').trim();
+
+    if (!isLogin) return storedFirebaseId;
+    if (currentFirebaseId.isEmpty) return storedFirebaseId;
+
+    // Keep API headers aligned with the active Firebase session after iOS IAP
+    // account linking to avoid stale UID + fresh token mismatches.
+    return storedFirebaseId.isEmpty || storedFirebaseId != currentFirebaseId
+        ? currentFirebaseId
+        : storedFirebaseId;
+  }
+
   static String get loginUserProfilePic =>
       localStorage.read("loginUserProfilePic") ?? "";
   static String get loginUserEmail => localStorage.read("loginUserEmail") ?? "";
@@ -179,6 +195,22 @@ class Database {
       localStorage.write("loginUserId", loginUserId);
   static onSetLoginUserFirebaseId(String loginUserFirebaseId) async =>
       localStorage.write("loginUserFirebaseId", loginUserFirebaseId);
+
+  static Future<void> syncLoginUserFirebaseIdWithCurrentUser() async {
+    if (!isLogin) return;
+
+    final currentFirebaseId =
+        (FirebaseAuth.instance.currentUser?.uid ?? '').trim();
+    if (currentFirebaseId.isEmpty) return;
+
+    final storedFirebaseId = storedLoginUserFirebaseId.trim();
+    if (storedFirebaseId == currentFirebaseId) return;
+
+    await onSetLoginUserFirebaseId(currentFirebaseId);
+    Utils.showLog(
+        "Synced stored firebase uid to active session uid => $currentFirebaseId");
+  }
+
   static onSetLoginUserProfilePic(String loginUserProfilePic) async =>
       localStorage.write("loginUserProfilePic", loginUserProfilePic);
   static onSetLoginUserEmail(String loginUserEmail) async =>

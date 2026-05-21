@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/image/professional_cached_image.dart';
@@ -81,7 +79,7 @@ class FindMoreWidget extends StatelessWidget {
   }
 
   bool get _shouldOfferSubscriptionCheckout =>
-      Platform.isIOS && AuthGuard.isGuest;
+      GetPlatform.isIOS && AuthGuard.isGuest;
 
   void _openPrimaryHeroAction(HomeScreenController homeController) {
     if (_shouldOfferSubscriptionCheckout) {

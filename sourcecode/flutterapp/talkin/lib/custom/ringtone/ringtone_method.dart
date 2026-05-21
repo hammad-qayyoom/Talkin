@@ -1,7 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'dart:io';
 
 import 'package:notisboard/utils/app_asset.dart';
 
@@ -17,7 +16,7 @@ class RingtoneService {
     await _ringtonePlayer?.setReleaseMode(ReleaseMode.loop);
     await _ringtonePlayer?.setVolume(1.0);
 
-    if (Platform.isAndroid) {
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
       await _ringtonePlayer?.setAudioContext(
         AudioContext(
           android: AudioContextAndroid(

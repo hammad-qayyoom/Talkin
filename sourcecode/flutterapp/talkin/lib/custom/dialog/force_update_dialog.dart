@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/database.dart';
@@ -230,9 +230,11 @@ class _ForceUpdateDialogState extends State<ForceUpdateDialog>
   }
 
   void _openStore() async {
-    final url = Platform.isAndroid
-        ? Database.settingApiModel?.data?.androidAppLink ?? ""
-        : Database.settingApiModel?.data?.iosAppLink ?? "";
+    final androidUrl = Database.settingApiModel?.data?.androidAppLink ?? "";
+    final iosUrl = Database.settingApiModel?.data?.iosAppLink ?? "";
+    final isIos = !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+    final url = isIos ? iosUrl : androidUrl;
+    if (url.isEmpty) return;
 
     await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
   }

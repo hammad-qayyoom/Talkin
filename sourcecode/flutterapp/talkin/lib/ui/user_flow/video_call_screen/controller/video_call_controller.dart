@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:notisboard/services/permission_handler/permission_handler.dart';
 import 'package:notisboard/socket/socket_emit.dart';
 import 'package:notisboard/ui/user_flow/my_wallet_screen/model/fetch_coin_plan.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/setting_api.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/utils.dart';
@@ -61,6 +62,7 @@ class VideoCallController extends GetxController {
   String? callMode;
   String? callerRole;
   String? receiverRole;
+  String? zegoRoomToken;
 
   int countTime = 0;
 
@@ -120,7 +122,21 @@ class VideoCallController extends GetxController {
       return;
     }
 
-    await createEngine();
+    final engineReady = await createEngine();
+    if (!engineReady) {
+      if (Get.context != null) {
+        Utils.showToast(
+          Get.context!,
+          'Unable to initialize call engine. Please try again.',
+        );
+      }
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (Get.currentRoute.isNotEmpty) {
+          Get.back();
+        }
+      });
+      return;
+    }
 
     ZegoExpressEngine.instance.muteMicrophone(micMute);
     ZegoExpressEngine.instance.setAudioRouteToSpeaker(true);
@@ -134,6 +150,17 @@ class VideoCallController extends GetxController {
       startTimer();
     } else {
       Utils.showLog("Video call login failed: ${loginRoomResult.errorCode}");
+      if (Get.context != null) {
+        Utils.showToast(
+          Get.context!,
+          'Call connection failed (${loginRoomResult.errorCode})',
+        );
+      }
+      Future.delayed(const Duration(milliseconds: 250), () {
+        if (Get.currentRoute.isNotEmpty) {
+          Get.back();
+        }
+      });
     }
   }
 
@@ -231,7 +258,7 @@ class VideoCallController extends GetxController {
 
   String _resolvedZegoUserId() {
     if (!_isGroupSessionCall) {
-      return _currentZegoUserId();
+      return _safeZegoId(_currentZegoUserId(), maxLength: 63);
     }
 
     if ((_runtimeGroupZegoUserId ?? '').trim().isEmpty) {
@@ -265,8 +292,10 @@ class VideoCallController extends GetxController {
 
   String _zegoUserName() {
     final name = Database.loginUserName.trim();
-    if (name.isNotEmpty) return name;
-    return _safeZegoId(_currentZegoUserId(), maxLength: 32);
+    if (name.isNotEmpty) {
+      return _safeZegoId(name, maxLength: 64);
+    }
+    return _safeZegoId(_currentZegoUserId(), maxLength: 64);
   }
 
   Future<void> startTimer() async {
@@ -357,25 +386,71 @@ class VideoCallController extends GetxController {
     // update();
   }
 
-  Future<void> createEngine() async {
-    final appId = int.tryParse(
-        Database.settingApiModel?.data?.zegoAppId?.toString() ?? '');
-    final appSign =
-        Database.settingApiModel?.data?.zegoAppSignIn?.toString() ?? '';
+  int? _parseZegoAppId(dynamic rawValue) {
+    if (rawValue == null) return null;
+    if (rawValue is int) return rawValue;
+    if (rawValue is num) return rawValue.toInt();
 
-    if (appId == null || appId <= 0 || appSign.isEmpty) {
-      Utils.showLog("Zego engine skipped: invalid app settings in video call.");
+    final value = rawValue.toString().trim();
+    if (value.isEmpty) return null;
+
+    return int.tryParse(value) ?? num.tryParse(value)?.toInt();
+  }
+
+  Future<void> _ensureZegoSettingsLoaded() async {
+    final settingData = Database.settingApiModel?.data;
+    if ((settingData?.zegoAppId ?? '').trim().isNotEmpty &&
+        (settingData?.zegoAppSignIn ?? '').trim().isNotEmpty) {
       return;
     }
+
+    final latestSettings = await SettingApi.callApi();
+    if (latestSettings != null) {
+      Database.settingApiModel = latestSettings;
+    }
+  }
+
+  String _readZegoRoomTokenFromArgs() {
+    final dynamic tokenFromArgs = args['zegoToken'] ??
+        args['roomToken'] ??
+        args['token'] ??
+        args['zego_room_token'];
+    return tokenFromArgs?.toString().trim() ?? '';
+  }
+
+  Future<bool> createEngine() async {
+    await _ensureZegoSettingsLoaded();
+
+    final appId =
+        _parseZegoAppId(Database.settingApiModel?.data?.zegoAppId?.toString());
+    final appSign =
+        (Database.settingApiModel?.data?.zegoAppSignIn?.toString() ?? '')
+            .trim();
+    zegoRoomToken = _readZegoRoomTokenFromArgs();
+
+    final hasToken = (zegoRoomToken ?? '').trim().isNotEmpty;
+    final hasAppSign = appSign.isNotEmpty;
+
+    if (appId == null || appId <= 0 || (!hasToken && !hasAppSign)) {
+      Utils.showLog(
+          "Zego engine skipped: invalid app settings in video call. appId=$appId hasAppSign=$hasAppSign hasToken=$hasToken");
+      return false;
+    }
+
+    final engineAppSign =
+        kIsWeb ? (hasToken ? null : appSign) : (hasAppSign ? appSign : null);
 
     try {
       await ZegoExpressEngine.createEngineWithProfile(ZegoEngineProfile(
         appId,
-        ZegoScenario.Default,
-        appSign: kIsWeb ? null : appSign,
+        ZegoScenario.StandardVideoCall,
+        appSign: engineAppSign,
       ));
+      return true;
     } catch (e) {
       Utils.showLog("Zego engine create (video call) skipped/failed: $e");
+      // Engine might already exist from app bootstrap; continue to loginRoom.
+      return true;
     }
   }
 
@@ -461,6 +536,12 @@ class VideoCallController extends GetxController {
           'onPublisherStateUpdate: streamID: $streamID, state: ${state.name}, errorCode: $errorCode, extendedData: $extendedData');
     };
 
+    ZegoExpressEngine.onPlayerStateUpdate =
+        (streamID, state, errorCode, extendedData) {
+      Utils.showLog(
+          'onPlayerStateUpdate: streamID: $streamID, state: ${state.name}, errorCode: $errorCode, extendedData: $extendedData');
+    };
+
     ///call auto cut when app kill one side call uncomment this
     // ZegoExpressEngine.onRoomUserUpdate =
     //     (roomID, updateType, List<ZegoUser> userList) {
@@ -507,6 +588,7 @@ class VideoCallController extends GetxController {
       }
     };
     ZegoExpressEngine.onPublisherStateUpdate = null;
+    ZegoExpressEngine.onPlayerStateUpdate = null;
   }
 
   Future<void> startPlayStream(ZegoStream stream) async {
@@ -574,6 +656,11 @@ class VideoCallController extends GetxController {
 
     ZegoRoomConfig roomConfig = ZegoRoomConfig.defaultConfig()
       ..isUserStatusNotify = true;
+    final token = (zegoRoomToken ?? '').trim();
+    if (token.isNotEmpty) {
+      roomConfig.token = token;
+      Utils.showLog('Using Zego room token (video call).');
+    }
 
     return ZegoExpressEngine.instance
         .loginRoom(roomID, user, config: roomConfig)

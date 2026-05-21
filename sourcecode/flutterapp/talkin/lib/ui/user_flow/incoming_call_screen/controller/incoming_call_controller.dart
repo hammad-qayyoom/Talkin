@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -247,7 +246,7 @@ class IncomingCallController extends GetxController
       await audioPlayer.setVolume(1.0);
 
       // Set audio context for ringtone (Android specific)
-      if (Platform.isAndroid) {
+      if (GetPlatform.isAndroid) {
         await audioPlayer.setAudioContext(
           AudioContext(
             android: AudioContextAndroid(

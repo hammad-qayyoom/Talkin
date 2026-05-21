@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:proximity_screen_lock/proximity_screen_lock.dart';
 import 'package:notisboard/services/permission_handler/permission_handler.dart';
 import 'package:notisboard/socket/socket_emit.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/setting_api.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/utils.dart';
@@ -39,6 +40,7 @@ class VoiceCallController extends GetxController {
   String? callType;
   String? callMode;
   String? callerRole;
+  String? zegoRoomToken;
 
   Timer? timer;
   DateTime? startTime;
@@ -93,7 +95,21 @@ class VoiceCallController extends GetxController {
       return;
     }
 
-    await createEngine();
+    final engineReady = await createEngine();
+    if (!engineReady) {
+      if (Get.context != null) {
+        Utils.showToast(
+          Get.context!,
+          'Unable to initialize call engine. Please try again.',
+        );
+      }
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (Get.currentRoute.isNotEmpty) {
+          Get.back();
+        }
+      });
+      return;
+    }
 
     ZegoExpressEngine.instance.muteMicrophone(isMicMute);
     ZegoExpressEngine.instance.setAudioRouteToSpeaker(isSpeakerOn);
@@ -102,6 +118,17 @@ class VoiceCallController extends GetxController {
     final loginRoomResult = await loginRoom();
     if (loginRoomResult.errorCode != 0) {
       Utils.showLog("Voice call login failed: ${loginRoomResult.errorCode}");
+      if (Get.context != null) {
+        Utils.showToast(
+          Get.context!,
+          'Call connection failed (${loginRoomResult.errorCode})',
+        );
+      }
+      Future.delayed(const Duration(milliseconds: 250), () {
+        if (Get.currentRoute.isNotEmpty) {
+          Get.back();
+        }
+      });
       return;
     }
 
@@ -190,7 +217,7 @@ class VoiceCallController extends GetxController {
 
   String _resolvedZegoUserId() {
     if (!_isGroupSessionCall) {
-      return _currentZegoUserId();
+      return _safeZegoId(_currentZegoUserId(), maxLength: 63);
     }
 
     if ((_runtimeGroupZegoUserId ?? '').trim().isEmpty) {
@@ -224,8 +251,10 @@ class VoiceCallController extends GetxController {
 
   String _zegoUserName() {
     final name = Database.loginUserName.trim();
-    if (name.isNotEmpty) return name;
-    return _safeZegoId(_currentZegoUserId(), maxLength: 32);
+    if (name.isNotEmpty) {
+      return _safeZegoId(name, maxLength: 64);
+    }
+    return _safeZegoId(_currentZegoUserId(), maxLength: 64);
   }
 
   void startTimer() {
@@ -292,26 +321,72 @@ class VoiceCallController extends GetxController {
     update([Constant.idSpeakerOpen, Constant.idVideoCall]);
   }
 
-  Future<void> createEngine() async {
-    log("Voice Call Create Engine");
-    final appId = int.tryParse(
-        Database.settingApiModel?.data?.zegoAppId?.toString() ?? '');
-    final appSign =
-        Database.settingApiModel?.data?.zegoAppSignIn?.toString() ?? '';
+  int? _parseZegoAppId(dynamic rawValue) {
+    if (rawValue == null) return null;
+    if (rawValue is int) return rawValue;
+    if (rawValue is num) return rawValue.toInt();
 
-    if (appId == null || appId <= 0 || appSign.isEmpty) {
-      log("Voice Call Create Engine skipped: invalid app settings.");
+    final value = rawValue.toString().trim();
+    if (value.isEmpty) return null;
+
+    return int.tryParse(value) ?? num.tryParse(value)?.toInt();
+  }
+
+  Future<void> _ensureZegoSettingsLoaded() async {
+    final settingData = Database.settingApiModel?.data;
+    if ((settingData?.zegoAppId ?? '').trim().isNotEmpty &&
+        (settingData?.zegoAppSignIn ?? '').trim().isNotEmpty) {
       return;
     }
+
+    final latestSettings = await SettingApi.callApi();
+    if (latestSettings != null) {
+      Database.settingApiModel = latestSettings;
+    }
+  }
+
+  String _readZegoRoomTokenFromArgs() {
+    final dynamic tokenFromArgs = args['zegoToken'] ??
+        args['roomToken'] ??
+        args['token'] ??
+        args['zego_room_token'];
+    return tokenFromArgs?.toString().trim() ?? '';
+  }
+
+  Future<bool> createEngine() async {
+    log("Voice Call Create Engine");
+    await _ensureZegoSettingsLoaded();
+
+    final appId =
+        _parseZegoAppId(Database.settingApiModel?.data?.zegoAppId?.toString());
+    final appSign =
+        (Database.settingApiModel?.data?.zegoAppSignIn?.toString() ?? '')
+            .trim();
+    zegoRoomToken = _readZegoRoomTokenFromArgs();
+
+    final hasToken = (zegoRoomToken ?? '').trim().isNotEmpty;
+    final hasAppSign = appSign.isNotEmpty;
+
+    if (appId == null || appId <= 0 || (!hasToken && !hasAppSign)) {
+      log("Voice Call Create Engine skipped: invalid app settings. "
+          "appId=$appId hasAppSign=$hasAppSign hasToken=$hasToken");
+      return false;
+    }
+
+    final engineAppSign =
+        kIsWeb ? (hasToken ? null : appSign) : (hasAppSign ? appSign : null);
 
     try {
       await ZegoExpressEngine.createEngineWithProfile(ZegoEngineProfile(
         appId,
-        ZegoScenario.Default,
-        appSign: kIsWeb ? null : appSign,
+        ZegoScenario.StandardVoiceCall,
+        appSign: engineAppSign,
       ));
+      return true;
     } catch (e) {
       log("Voice Call Create Engine skipped/failed: $e");
+      // Engine might already exist from app bootstrap; continue to loginRoom.
+      return true;
     }
   }
 
@@ -393,6 +468,11 @@ class VoiceCallController extends GetxController {
         (streamID, state, errorCode, extendedData) {
       log('onPublisherStateUpdate: streamID: $streamID, state: ${state.name}, errorCode: $errorCode, extendedData: $extendedData');
     };
+
+    ZegoExpressEngine.onPlayerStateUpdate =
+        (streamID, state, errorCode, extendedData) {
+      log('onPlayerStateUpdate: streamID: $streamID, state: ${state.name}, errorCode: $errorCode, extendedData: $extendedData');
+    };
   }
 
   void stopListenEvent() {
@@ -413,6 +493,7 @@ class VoiceCallController extends GetxController {
       }
     };
     ZegoExpressEngine.onPublisherStateUpdate = null;
+    ZegoExpressEngine.onPlayerStateUpdate = null;
   }
 
   Future<void> startPlayStream(String streamID, {String? userID}) async {
@@ -446,6 +527,11 @@ class VoiceCallController extends GetxController {
 
     ZegoRoomConfig roomConfig = ZegoRoomConfig.defaultConfig()
       ..isUserStatusNotify = true;
+    final token = (zegoRoomToken ?? '').trim();
+    if (token.isNotEmpty) {
+      roomConfig.token = token;
+      Utils.showLog('Using Zego room token (voice call).');
+    }
 
     return ZegoExpressEngine.instance
         .loginRoom(roomID, user, config: roomConfig)
