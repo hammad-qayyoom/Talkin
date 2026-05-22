@@ -322,10 +322,22 @@ class MyWalletController extends GetxController
     final gateway = (activeSubscription?.paymentGateway ?? '').trim();
     final platform = (activeSubscription?.purchasePlatform ?? '').trim();
     final hasCancelledRenewal = activeSubscription?.autoRenew == false;
+    final gatewayLower = gateway.toLowerCase();
+    final hasKnownGateway = gateway.isNotEmpty;
+    final gatewayPrefix = hasKnownGateway ? ' on $gateway' : '';
+    final expiryText = _activeSubscriptionExpiryText();
 
-    if (gateway.toLowerCase().contains('app store') || platform == 'ios') {
+    if (!GetPlatform.isIOS) {
       if (hasCancelledRenewal) {
-        return 'Your App Store subscription is cancelled and remains active until ${_formatSubscriptionDate(activeSubscription?.endsAt)}.';
+        return 'Your active subscription$gatewayPrefix is already cancelled and remains available until $expiryText. After it expires, subscription purchase will be available again.';
+      }
+
+      return 'You already have an active subscription$gatewayPrefix. It expires on $expiryText. After expiry, subscription purchase will be available again.';
+    }
+
+    if (gatewayLower.contains('app store') || platform == 'ios') {
+      if (hasCancelledRenewal) {
+        return 'Your App Store subscription is cancelled and remains active until $expiryText.';
       }
 
       return GetPlatform.isIOS
@@ -342,11 +354,36 @@ class MyWalletController extends GetxController
     return 'You already have an active subscription.';
   }
 
-  String _formatSubscriptionDate(DateTime? date) {
-    if (date == null) return 'the current billing period ends';
+  bool _isAlreadySubscribedResponse(PurchaseCoinPlan? response) {
+    if (response == null) return false;
+    if (response.duplicate == true) return true;
 
+    final message = (response.message ?? '').toLowerCase();
+    if (message.isEmpty) return false;
+
+    return message.contains('already active') ||
+        message.contains('already subscribed') ||
+        message.contains('already have an active subscription') ||
+        message.contains('subscription already') ||
+        message.contains('duplicate');
+  }
+
+  String _activeSubscriptionExpiryText() {
+    final date = activeSubscription?.endsAt;
+    if (date == null) {
+      return 'the end of the current billing cycle';
+    }
+
+    return _formatSubscriptionDateTime(date);
+  }
+
+  String _formatSubscriptionDateTime(DateTime date) {
     final localDate = date.toLocal();
-    return '${localDate.day.toString().padLeft(2, '0')}/${localDate.month.toString().padLeft(2, '0')}/${localDate.year}';
+    final hour = localDate.hour % 12 == 0 ? 12 : localDate.hour % 12;
+    final minute = localDate.minute.toString().padLeft(2, '0');
+    final meridiem = localDate.hour >= 12 ? 'PM' : 'AM';
+
+    return '${localDate.day.toString().padLeft(2, '0')}/${localDate.month.toString().padLeft(2, '0')}/${localDate.year} $hour:$minute $meridiem';
   }
 
   /// change payment method
@@ -693,10 +730,24 @@ class MyWalletController extends GetxController
       if (purchaseCoinPlan?.status == true) {
         await fetchCoinPlanList();
         await syncSessionCredits();
-        Utils.showToast(Get.context, "Subscription activated successfully");
+        final message = purchaseCoinPlan?.duplicate == true
+            ? activeSubscriptionMessage()
+            : "Subscription activated successfully";
+        Utils.showToast(Get.context, message);
         _closePaymentSelectorIfOpen();
+      } else if (_isAlreadySubscribedResponse(purchaseCoinPlan)) {
+        await fetchCoinPlanList();
+        await syncSessionCredits();
+        update([Constant.onChangePaymentMethod]);
+        Utils.showToast(Get.context, activeSubscriptionMessage());
       } else {
-        Utils.showToast(Get.context, EnumLocale.txtSomeThingWentWrong.name.tr);
+        final backendMessage = purchaseCoinPlan?.message?.trim();
+        Utils.showToast(
+          Get.context,
+          (backendMessage?.isNotEmpty == true)
+              ? backendMessage!
+              : EnumLocale.txtSomeThingWentWrong.name.tr,
+        );
       }
     } catch (e) {
       _closeBlockingLoader();

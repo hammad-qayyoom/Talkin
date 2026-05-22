@@ -54,6 +54,50 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
     return Database.loginListenerId.trim();
   }
 
+  String _readFirstNonEmptyString(
+    Map<String, dynamic> source,
+    List<String> keys,
+  ) {
+    String normalizeValue(dynamic raw) {
+      if (raw == null) {
+        return '';
+      }
+
+      if (raw is String) {
+        return raw.trim();
+      }
+
+      if (raw is num || raw is bool) {
+        return raw.toString().trim();
+      }
+
+      if (raw is Map<String, dynamic>) {
+        for (final nestedKey in const <String>[
+          '_id',
+          'id',
+          'userId',
+          'listenerId',
+          'legacyListenerId',
+        ]) {
+          final nestedValue = normalizeValue(raw[nestedKey]);
+          if (nestedValue.isNotEmpty) {
+            return nestedValue;
+          }
+        }
+      }
+
+      return '';
+    }
+
+    for (final key in keys) {
+      final value = normalizeValue(source[key]);
+      if (value.isNotEmpty) {
+        return value;
+      }
+    }
+    return '';
+  }
+
   Future<void> _fetchSessions() async {
     setState(() {
       _isLoading = true;
@@ -165,8 +209,8 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
       return;
     }
 
-    void emitCall() {
-      SocketEmit.emitCallOutgoingRinging(
+    Future<void> emitCall() async {
+      final isSent = await SocketEmit.emitCallOutgoingRinging(
         callerId: callerId,
         receiverId: sanitizedReceiverId,
         callType: normalizedCallType,
@@ -185,14 +229,18 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
         sessionId: sessionId,
         bookingId: bookingId,
       );
-      _fetchSessions();
+      if (isSent) {
+        _fetchSessions();
+      }
     }
 
     if (normalizedCallType == 'video') {
       PermissionHandler.onGetCameraPermission(
         onGranted: () {
           PermissionHandler.onGetMicrophonePermission(
-            onGranted: emitCall,
+            onGranted: () {
+              emitCall();
+            },
           );
         },
       );
@@ -200,7 +248,9 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
     }
 
     PermissionHandler.onGetMicrophonePermission(
-      onGranted: emitCall,
+      onGranted: () {
+        emitCall();
+      },
     );
   }
 
@@ -293,12 +343,37 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
 
     final bookingId =
         (firstBooking['bookingId'] ?? firstBooking['_id'] ?? '').toString();
-    final userId = (firstBooking['userId'] ?? '').toString();
-    final userName = (firstBooking['userName'] ?? 'User').toString();
-    final userProfilePic = (firstBooking['userProfilePic'] ?? '').toString();
+    final bookingUser = firstBooking['user'] is Map<String, dynamic>
+        ? firstBooking['user'] as Map<String, dynamic>
+        : const <String, dynamic>{};
+    final userId = _readFirstNonEmptyString(
+      firstBooking,
+      const <String>['userId', 'receiverId', 'memberId', '_id', 'id'],
+    );
+    final fallbackUserId = _readFirstNonEmptyString(
+      bookingUser,
+      const <String>['_id', 'id', 'userId'],
+    );
+    final resolvedUserId = userId.isNotEmpty ? userId : fallbackUserId;
+    final userName = (firstBooking['userName'] ??
+            firstBooking['name'] ??
+            bookingUser['displayName'] ??
+            bookingUser['fullName'] ??
+            bookingUser['name'] ??
+            '')
+        .toString()
+        .trim();
+    final userProfilePic = (firstBooking['userProfilePic'] ??
+            firstBooking['profilePic'] ??
+            bookingUser['profilePic'] ??
+            bookingUser['image'] ??
+            bookingUser['imageUrl'] ??
+            '')
+        .toString()
+        .trim();
     final sessionCallType = (session['callType'] ?? '').toString();
 
-    if (bookingId.isEmpty || userId.isEmpty) {
+    if (bookingId.isEmpty || resolvedUserId.isEmpty) {
       Utils.showToast(
           context, 'No confirmed user booking found for this session.');
       return;
@@ -323,8 +398,8 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
 
     await _triggerDirectSessionCall(
       callType: sessionCallType,
-      receiverId: userId,
-      receiverName: userName,
+      receiverId: resolvedUserId,
+      receiverName: userName.isEmpty ? 'User' : userName,
       receiverImage: userProfilePic,
       sessionId: sessionId,
       bookingId: bookingId,

@@ -115,7 +115,7 @@ class NotificationServices {
         onGranted: () {
           PermissionHandler.onGetMicrophonePermission(
             onGranted: () async {
-              SocketEmit.emitCallResponseProcessed(
+              await SocketEmit.emitCallResponseProcessed(
                 callerId: data['callerId']!,
                 receiverId: data['receiverId']!,
                 callId: data['callId']!,
@@ -138,7 +138,7 @@ class NotificationServices {
 
     if (receivedAction.buttonKeyPressed == 'DECLINE') {
       await AwesomeNotifications().dismiss(receivedAction.id!);
-      SocketEmit.emitCallResponseProcessed(
+      await SocketEmit.emitCallResponseProcessed(
         callerId: data['callerId']!,
         receiverId: data['receiverId']!,
         callId: data['callId']!,

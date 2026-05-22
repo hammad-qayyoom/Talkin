@@ -23,6 +23,8 @@ class MainScreenView extends StatelessWidget {
     return GetBuilder<MainScreenController>(
       builder: (controller) {
         final double bottomInset = MediaQuery.of(context).padding.bottom;
+        final bool isScreenBusy =
+            controller.isLoading || controller.isGuestContinueLoading;
 
         return GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -243,6 +245,13 @@ class MainScreenView extends StatelessWidget {
                       ],
                     ),
                   ),
+                  if (isScreenBusy)
+                    const Positioned.fill(
+                      child: ModalBarrier(
+                        dismissible: false,
+                        color: Colors.transparent,
+                      ),
+                    ),
                 ],
               ),
             ),

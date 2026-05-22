@@ -33,6 +33,100 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
         .trim();
   }
 
+  String _readFirstNonEmptyString(
+    Map<String, dynamic> source,
+    List<String> keys,
+  ) {
+    String normalizeValue(dynamic raw) {
+      if (raw == null) {
+        return '';
+      }
+
+      if (raw is String) {
+        return raw.trim();
+      }
+
+      if (raw is num || raw is bool) {
+        return raw.toString().trim();
+      }
+
+      if (raw is Map<String, dynamic>) {
+        for (final nestedKey in const <String>[
+          '_id',
+          'id',
+          'sessionId',
+          'channelName',
+          'channelId',
+          'roomId',
+          'roomID',
+          'callId',
+          'zegoRoomId',
+          'zegoToken',
+          'roomToken',
+          'token',
+          'zego_room_token',
+        ]) {
+          final nestedValue = normalizeValue(raw[nestedKey]);
+          if (nestedValue.isNotEmpty) {
+            return nestedValue;
+          }
+        }
+      }
+
+      return '';
+    }
+
+    for (final key in keys) {
+      final value = normalizeValue(source[key]);
+      if (value.isNotEmpty) {
+        return value;
+      }
+    }
+    return '';
+  }
+
+  String _resolveSessionId(Map<String, dynamic> session) {
+    return _readFirstNonEmptyString(
+      session,
+      const <String>['_id', 'sessionId', 'id'],
+    );
+  }
+
+  String _resolveGroupRoomId(
+    Map<String, dynamic> session, {
+    String? fallbackSessionId,
+  }) {
+    final roomId = _readFirstNonEmptyString(
+      session,
+      const <String>[
+        'channelName',
+        'channelId',
+        'roomId',
+        'roomID',
+        'callId',
+        'zegoRoomId',
+      ],
+    );
+
+    if (roomId.isNotEmpty) {
+      return roomId;
+    }
+
+    return (fallbackSessionId ?? '').trim();
+  }
+
+  String _resolveGroupRoomToken(Map<String, dynamic> session) {
+    return _readFirstNonEmptyString(
+      session,
+      const <String>[
+        'zegoToken',
+        'roomToken',
+        'token',
+        'zego_room_token',
+      ],
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -56,9 +150,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
       return;
     }
 
-    final fetchedSessions = response['data'] is List<dynamic>
-        ? response['data'] as List<dynamic>
-        : <dynamic>[];
+    final fetchedSessions = _extractGroupSessions(response['data']);
 
     setState(() {
       _sessions = fetchedSessions;
@@ -70,6 +162,106 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
           context,
           (response['message'] ?? 'Failed to fetch group sessions.')
               .toString());
+    }
+  }
+
+  List<dynamic> _extractGroupSessions(dynamic payload) {
+    if (payload is List<dynamic>) {
+      return payload
+          .map(_normalizeSessionMap)
+          .where((session) => session.isNotEmpty)
+          .toList();
+    }
+
+    if (payload is Map<String, dynamic>) {
+      const listKeys = <String>[
+        'sessions',
+        'items',
+        'docs',
+        'results',
+        'records',
+        'rows',
+        'list',
+        'data',
+      ];
+
+      for (final key in listKeys) {
+        final value = payload[key];
+        if (value is List<dynamic>) {
+          return value
+              .map(_normalizeSessionMap)
+              .where((session) => session.isNotEmpty)
+              .toList();
+        }
+
+        if (value is Map<String, dynamic>) {
+          final nestedSessions = _extractGroupSessions(value);
+          if (nestedSessions.isNotEmpty) {
+            return nestedSessions;
+          }
+        }
+      }
+
+      for (final value in payload.values) {
+        if (value is List<dynamic>) {
+          return value
+              .map(_normalizeSessionMap)
+              .where((session) => session.isNotEmpty)
+              .toList();
+        }
+      }
+    }
+
+    return <dynamic>[];
+  }
+
+  Map<String, dynamic> _normalizeSessionMap(dynamic rawSession) {
+    if (rawSession is! Map<String, dynamic>) {
+      return <String, dynamic>{};
+    }
+
+    if (rawSession['session'] is Map<String, dynamic>) {
+      return rawSession['session'] as Map<String, dynamic>;
+    }
+
+    if (rawSession['sessionId'] is Map<String, dynamic>) {
+      return rawSession['sessionId'] as Map<String, dynamic>;
+    }
+
+    return rawSession;
+  }
+
+  String _normalizeStatusValue(String rawStatus) {
+    final status = rawStatus.trim().toLowerCase();
+
+    switch (status) {
+      case 'upcoming':
+      case 'pending':
+      case 'booked':
+      case 'confirmed':
+      case 'created':
+      case 'not_started':
+      case 'not-started':
+      case 'ready':
+        return 'scheduled';
+      case 'active':
+      case 'ongoing':
+      case 'started':
+      case 'running':
+      case 'in_progress':
+      case 'in-progress':
+        return 'live';
+      case 'ended':
+      case 'finished':
+      case 'done':
+      case 'settled':
+      case 'closed':
+      case 'expired':
+        return 'completed';
+      case 'cancelled':
+        return 'canceled';
+      default:
+        return status;
     }
   }
 
@@ -125,10 +317,9 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
   }
 
   String _sessionStatus(Map<String, dynamic> session) {
-    return (session['sessionStatus'] ?? session['status'] ?? '')
-        .toString()
-        .trim()
-        .toLowerCase();
+    final rawStatus =
+        (session['sessionStatus'] ?? session['status'] ?? '').toString().trim();
+    return _normalizeStatusValue(rawStatus);
   }
 
   bool _isLiveStatus(String sessionStatus) {
@@ -238,12 +429,9 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
     final now = DateTime.now();
 
     return _sessions.whereType<Map<String, dynamic>>().where((session) {
-      final status = (session['sessionStatus'] ?? session['status'] ?? '')
-          .toString()
-          .trim()
-          .toLowerCase();
+      final status = _sessionStatus(session);
 
-      if (!['scheduled', 'live'].contains(status)) {
+      if (_isClosedStatus(status)) {
         return false;
       }
 
@@ -253,13 +441,26 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
         return false;
       }
 
-      return true;
+      return _isJoinableStatus(status);
     }).toList();
   }
 
   void _openGroupCallRoom(Map<String, dynamic> session, {String? bookingId}) {
-    final sessionId = (session['_id'] ?? '').toString().trim();
-    final roomId = (session['channelName'] ?? sessionId).toString().trim();
+    final sessionId = _resolveSessionId(session);
+    final roomId = _resolveGroupRoomId(
+      session,
+      fallbackSessionId: sessionId,
+    );
+    final roomToken = _resolveGroupRoomToken(session);
+
+    if (roomId.isEmpty) {
+      Utils.showToast(
+        context,
+        'Unable to access group session. Missing room details.',
+      );
+      return;
+    }
+
     final callType =
         (session['callType'] ?? 'audio').toString().trim().toLowerCase() ==
                 'video'
@@ -301,6 +502,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
         'isAccept': true,
         'callMode': 'group_session',
         'sessionId': sessionId,
+        if (roomToken.isNotEmpty) 'zegoToken': roomToken,
         if ((bookingId ?? '').trim().isNotEmpty) 'bookingId': bookingId,
       },
     );
@@ -493,8 +695,24 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
           ? accessData['session'] as Map<String, dynamic>
           : <String, dynamic>{};
 
+      final effectiveSession = <String, dynamic>{
+        ...session,
+        ...grantedSession,
+      };
+      for (final tokenKey in const <String>[
+        'zegoToken',
+        'roomToken',
+        'token',
+        'zego_room_token',
+      ]) {
+        final tokenValue = (accessData[tokenKey] ?? '').toString().trim();
+        if (tokenValue.isNotEmpty) {
+          effectiveSession[tokenKey] = tokenValue;
+        }
+      }
+
       _openGroupCallRoom(
-        grantedSession.isNotEmpty ? grantedSession : session,
+        effectiveSession,
         bookingId: bookingId,
       );
       return;
@@ -522,7 +740,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
   }
 
   Color _statusTextColor(String rawStatus) {
-    final status = rawStatus.trim().toLowerCase();
+    final status = _normalizeStatusValue(rawStatus);
     if (status == 'live') {
       return AppColors.redesignBrandRed;
     }
@@ -533,7 +751,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
   }
 
   Color _statusBackgroundColor(String rawStatus) {
-    final status = rawStatus.trim().toLowerCase();
+    final status = _normalizeStatusValue(rawStatus);
     if (status == 'live') {
       return AppColors.redesignAccentSoftBg;
     }

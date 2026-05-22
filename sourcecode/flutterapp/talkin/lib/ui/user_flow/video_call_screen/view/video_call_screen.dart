@@ -19,9 +19,10 @@ class _VideoCallScreenState extends State<VideoCallScreen>
   @override
   void initState() {
     super.initState();
-    controller = Get.isRegistered<VideoCallController>()
-        ? Get.find<VideoCallController>()
-        : Get.put<VideoCallController>(VideoCallController());
+    if (Get.isRegistered<VideoCallController>()) {
+      Get.delete<VideoCallController>(force: true);
+    }
+    controller = Get.put<VideoCallController>(VideoCallController());
     WidgetsBinding.instance.addObserver(this);
   }
 

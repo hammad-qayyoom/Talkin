@@ -39,6 +39,100 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
         .trim();
   }
 
+  String _readFirstNonEmptyString(
+    Map<String, dynamic> source,
+    List<String> keys,
+  ) {
+    String normalizeValue(dynamic raw) {
+      if (raw == null) {
+        return '';
+      }
+
+      if (raw is String) {
+        return raw.trim();
+      }
+
+      if (raw is num || raw is bool) {
+        return raw.toString().trim();
+      }
+
+      if (raw is Map<String, dynamic>) {
+        for (final nestedKey in const <String>[
+          '_id',
+          'id',
+          'sessionId',
+          'channelName',
+          'channelId',
+          'roomId',
+          'roomID',
+          'callId',
+          'zegoRoomId',
+          'zegoToken',
+          'roomToken',
+          'token',
+          'zego_room_token',
+        ]) {
+          final nestedValue = normalizeValue(raw[nestedKey]);
+          if (nestedValue.isNotEmpty) {
+            return nestedValue;
+          }
+        }
+      }
+
+      return '';
+    }
+
+    for (final key in keys) {
+      final value = normalizeValue(source[key]);
+      if (value.isNotEmpty) {
+        return value;
+      }
+    }
+    return '';
+  }
+
+  String _resolveSessionId(Map<String, dynamic> session) {
+    return _readFirstNonEmptyString(
+      session,
+      const <String>['_id', 'sessionId', 'id'],
+    );
+  }
+
+  String _resolveGroupRoomId(
+    Map<String, dynamic> session, {
+    String? fallbackSessionId,
+  }) {
+    final roomId = _readFirstNonEmptyString(
+      session,
+      const <String>[
+        'channelName',
+        'channelId',
+        'roomId',
+        'roomID',
+        'callId',
+        'zegoRoomId',
+      ],
+    );
+
+    if (roomId.isNotEmpty) {
+      return roomId;
+    }
+
+    return (fallbackSessionId ?? '').trim();
+  }
+
+  String _resolveGroupRoomToken(Map<String, dynamic> session) {
+    return _readFirstNonEmptyString(
+      session,
+      const <String>[
+        'zegoToken',
+        'roomToken',
+        'token',
+        'zego_room_token',
+      ],
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -63,9 +157,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
       return;
     }
 
-    final fetchedSessions = response['data'] is List<dynamic>
-        ? response['data'] as List<dynamic>
-        : <dynamic>[];
+    final fetchedSessions = _extractGroupSessions(response['data']);
 
     setState(() {
       _sessions = fetchedSessions;
@@ -80,20 +172,127 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
     }
   }
 
+  List<dynamic> _extractGroupSessions(dynamic payload) {
+    if (payload is List<dynamic>) {
+      return payload
+          .map(_normalizeSessionMap)
+          .where((session) => session.isNotEmpty)
+          .toList();
+    }
+
+    if (payload is Map<String, dynamic>) {
+      const listKeys = <String>[
+        'sessions',
+        'items',
+        'docs',
+        'results',
+        'records',
+        'rows',
+        'list',
+        'data',
+      ];
+
+      for (final key in listKeys) {
+        final value = payload[key];
+        if (value is List<dynamic>) {
+          return value
+              .map(_normalizeSessionMap)
+              .where((session) => session.isNotEmpty)
+              .toList();
+        }
+
+        if (value is Map<String, dynamic>) {
+          final nestedSessions = _extractGroupSessions(value);
+          if (nestedSessions.isNotEmpty) {
+            return nestedSessions;
+          }
+        }
+      }
+
+      for (final value in payload.values) {
+        if (value is List<dynamic>) {
+          return value
+              .map(_normalizeSessionMap)
+              .where((session) => session.isNotEmpty)
+              .toList();
+        }
+      }
+    }
+
+    return <dynamic>[];
+  }
+
+  Map<String, dynamic> _normalizeSessionMap(dynamic rawSession) {
+    if (rawSession is! Map<String, dynamic>) {
+      return <String, dynamic>{};
+    }
+
+    if (rawSession['session'] is Map<String, dynamic>) {
+      return rawSession['session'] as Map<String, dynamic>;
+    }
+
+    if (rawSession['sessionId'] is Map<String, dynamic>) {
+      return rawSession['sessionId'] as Map<String, dynamic>;
+    }
+
+    return rawSession;
+  }
+
+  String _normalizeStatusValue(String rawStatus) {
+    final status = rawStatus.trim().toLowerCase();
+
+    switch (status) {
+      case 'upcoming':
+      case 'pending':
+      case 'booked':
+      case 'confirmed':
+      case 'created':
+      case 'not_started':
+      case 'not-started':
+      case 'ready':
+        return 'scheduled';
+      case 'active':
+      case 'ongoing':
+      case 'started':
+      case 'running':
+      case 'in_progress':
+      case 'in-progress':
+        return 'live';
+      case 'ended':
+      case 'finished':
+      case 'done':
+      case 'settled':
+      case 'closed':
+      case 'expired':
+        return 'completed';
+      case 'cancelled':
+        return 'canceled';
+      default:
+        return status;
+    }
+  }
+
+  String _sessionStatus(Map<String, dynamic> session) {
+    final rawStatus =
+        (session['sessionStatus'] ?? session['status'] ?? '').toString().trim();
+    return _normalizeStatusValue(rawStatus);
+  }
+
+  bool _isCompletedStatus(String status) {
+    return status == 'completed' || status == 'canceled';
+  }
+
   List<Map<String, dynamic>> get _filteredSessions {
     final now = DateTime.now();
 
     return _sessions.whereType<Map<String, dynamic>>().where((session) {
-      final status = (session['sessionStatus'] ?? session['status'] ?? '')
-          .toString()
-          .trim()
-          .toLowerCase();
+      final status = _sessionStatus(session);
 
       final endAt =
           DateTime.tryParse((session['endAt'] ?? '').toString())?.toLocal();
 
       if (_view == 'completed') {
-        if (['completed', 'canceled'].contains(status)) {
+        if (_isCompletedStatus(status)) {
           return true;
         }
 
@@ -104,15 +303,15 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
         return false;
       }
 
-      if (['scheduled', 'live'].contains(status)) {
-        if (endAt == null) {
-          return true;
-        }
-
-        return endAt.isAfter(now);
+      if (_isCompletedStatus(status)) {
+        return false;
       }
 
-      return false;
+      if (endAt == null) {
+        return true;
+      }
+
+      return endAt.isAfter(now);
     }).toList();
   }
 
@@ -202,7 +401,23 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
     final route = callType == 'video'
         ? AppRoutes.videoCallScreen
         : AppRoutes.voiceCallScreen;
-    final roomId = (session['channelName'] ?? sessionId).toString().trim();
+    final roomId = _resolveGroupRoomId(
+      session,
+      fallbackSessionId: sessionId,
+    );
+    final roomToken = _resolveGroupRoomToken(session);
+    final resolvedSessionId = _resolveSessionId(session);
+    final effectiveSessionId =
+        resolvedSessionId.isNotEmpty ? resolvedSessionId : sessionId;
+
+    if (roomId.isEmpty) {
+      Utils.showToast(
+        context,
+        'Unable to go live. Missing room details.',
+      );
+      return;
+    }
+
     final sessionTitle = (session['title'] ?? 'Group Session').toString();
     final expertImage =
         (Database.fetchLoginUserProfileModel?.user?.profilePic ?? '')
@@ -228,7 +443,8 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
         'callerImage': expertImage,
         'isAccept': true,
         'callMode': 'group_session',
-        'sessionId': sessionId,
+        'sessionId': effectiveSessionId,
+        if (roomToken.isNotEmpty) 'zegoToken': roomToken,
       },
     );
 
@@ -282,6 +498,11 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
     );
 
     if (response['status'] == true) {
+      setState(() {
+        _view = 'upcoming';
+        _callTypeFilter = 'all';
+      });
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) {
           return;
@@ -445,14 +666,12 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
   }
 
   Color _statusBackground(String status) {
-    switch (status.trim().toLowerCase()) {
+    switch (_normalizeStatusValue(status)) {
       case 'completed':
         return AppColors.redesignStatusSuccessBg;
-      case 'cancelled':
       case 'canceled':
         return AppColors.redesignStatusDangerBg;
       case 'live':
-      case 'in-progress':
         return AppColors.redesignStatusInfoBg;
       case 'scheduled':
       default:
@@ -461,14 +680,12 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
   }
 
   Color _statusTextColor(String status) {
-    switch (status.trim().toLowerCase()) {
+    switch (_normalizeStatusValue(status)) {
       case 'completed':
         return AppColors.redesignStatusSuccessDark;
-      case 'cancelled':
       case 'canceled':
         return _brandRed;
       case 'live':
-      case 'in-progress':
         return AppColors.redesignStatusInfoText;
       case 'scheduled':
       default:
@@ -581,7 +798,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
     final sessionId = (session['_id'] ?? '').toString();
     final statusRaw =
         (session['sessionStatus'] ?? session['status'] ?? '').toString();
-    final status = statusRaw.toLowerCase();
+    final status = _sessionStatus(session);
     final statusLabel = _toTitleCase(statusRaw);
     final busy = _busySessionId == sessionId;
     final canCancel = ['scheduled', 'live'].contains(status);

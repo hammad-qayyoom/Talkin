@@ -29,9 +29,6 @@ class OutgoingAudioCallView extends StatelessWidget {
           final title = (logic.receiverName ?? '').trim().isEmpty
               ? 'Expert'
               : logic.receiverName!.trim();
-          final speakerLabel = logic.isSpeakerOn
-              ? EnumLocale.txtSpeaker.name.tr
-              : EnumLocale.txtEarpiece.name.tr;
 
           return SafeArea(
             child: LayoutBuilder(
@@ -40,6 +37,10 @@ class OutgoingAudioCallView extends StatelessWidget {
                 final horizontalPadding = isCompact ? 14.0 : 18.0;
                 final contentWidth = constraints.maxWidth > 560 ? 460.0 : 430.0;
                 final avatarSize = isCompact ? 88.0 : 102.0;
+                final controlSize = isCompact ? 38.0 : 42.0;
+                final dangerControlSize = isCompact ? 44.0 : 46.0;
+                final controlGap = isCompact ? 9.0 : 11.0;
+                final controlTrayMaxWidth = isCompact ? 250.0 : 282.0;
 
                 return Stack(
                   children: [
@@ -296,73 +297,80 @@ class OutgoingAudioCallView extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.fromLTRB(
+                          margin: EdgeInsets.fromLTRB(
                             horizontalPadding,
-                            14,
+                            0,
                             horizontalPadding,
-                            12,
+                            6,
                           ),
-                          decoration: BoxDecoration(
-                            color: _bottomPanel,
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(28),
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints:
+                                  BoxConstraints(maxWidth: controlTrayMaxWidth),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isCompact ? 6 : 7,
+                                  vertical: isCompact ? 6 : 7,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: _bottomPanel.withValues(alpha: 0.88),
+                                  borderRadius: BorderRadius.circular(22),
+                                  border: Border.all(
+                                    color:
+                                        AppColors.white.withValues(alpha: 0.14),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppColors.black
+                                          .withValues(alpha: 0.24),
+                                      blurRadius: 18,
+                                      offset: const Offset(0, 6),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    _CallControlButton(
+                                      iconData: logic.micMute
+                                          ? Icons.mic_off_rounded
+                                          : Icons.mic_none_rounded,
+                                      isActive: logic.micMute,
+                                      size: controlSize,
+                                      onTap: logic.toggleMicMute,
+                                    ),
+                                    SizedBox(width: controlGap),
+                                    _CallControlButton(
+                                      iconData: logic.isSpeakerOn
+                                          ? Icons.volume_up_rounded
+                                          : Icons.hearing_rounded,
+                                      isActive: logic.isSpeakerOn,
+                                      size: controlSize,
+                                      onTap: logic.toggleSpeaker,
+                                    ),
+                                    SizedBox(width: controlGap),
+                                    _CallControlButton(
+                                      iconData: Icons.call_end_rounded,
+                                      isDanger: true,
+                                      size: dangerControlSize,
+                                      onTap: () {
+                                        SocketEmit.emitCallerCallCut(
+                                          callerId: logic.callerId ?? '',
+                                          receiverId: logic.receiverId ?? '',
+                                          callId: logic.callId ?? '',
+                                          callType: logic.callType ?? '',
+                                          callMode: logic.callMode ?? '',
+                                          callerRole: logic.callerRole ?? '',
+                                          receiverRole:
+                                              logic.receiverRole ?? '',
+                                        );
+                                        Get.back();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.black.withValues(alpha: 0.18),
-                                blurRadius: 20,
-                                offset: const Offset(0, -8),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: _CallControlButton(
-                                  icon: logic.micMute
-                                      ? AppAsset.micMute
-                                      : AppAsset.microPhoneIcon,
-                                  label: EnumLocale.txtMute.name.tr,
-                                  value: logic.micMute
-                                      ? EnumLocale.txtOn.name.tr
-                                      : EnumLocale.txtOff.name.tr,
-                                  isActive: logic.micMute,
-                                  onTap: logic.toggleMicMute,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: _CallControlButton(
-                                  icon: logic.isSpeakerOn
-                                      ? AppAsset.speakerOn
-                                      : AppAsset.speakerOff,
-                                  label: speakerLabel,
-                                  value: EnumLocale.txtOn.name.tr,
-                                  isActive: logic.isSpeakerOn,
-                                  onTap: logic.toggleSpeaker,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: _CallControlButton(
-                                  icon: AppAsset.callCut,
-                                  label: EnumLocale.txtEndCall.name.tr,
-                                  isDanger: true,
-                                  onTap: () {
-                                    SocketEmit.emitCallerCallCut(
-                                      callerId: logic.callerId ?? '',
-                                      receiverId: logic.receiverId ?? '',
-                                      callId: logic.callId ?? '',
-                                      callType: logic.callType ?? '',
-                                      callMode: logic.callMode ?? '',
-                                      callerRole: logic.callerRole ?? '',
-                                      receiverRole: logic.receiverRole ?? '',
-                                    );
-                                    Get.back();
-                                  },
-                                ),
-                              ),
-                            ],
                           ),
                         ),
                       ],
@@ -378,84 +386,62 @@ class OutgoingAudioCallView extends StatelessWidget {
 
 class _CallControlButton extends StatelessWidget {
   const _CallControlButton({
-    required this.icon,
-    required this.label,
+    required this.iconData,
     required this.onTap,
-    this.value,
     this.isDanger = false,
     this.isActive = false,
+    this.size = 42,
   });
 
-  final String icon;
-  final String label;
-  final String? value;
+  final IconData iconData;
   final bool isDanger;
   final bool isActive;
+  final double size;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final iconSize = (size * 0.46).clamp(15.0, 20.0);
     final Color iconBackground = isDanger
         ? AppColors.redesignBrandRed
-        : (isActive ? AppColors.redesignAccentSoftBg : AppColors.white);
-    final Color borderColor = isDanger
-        ? AppColors.redesignBrandRed
         : (isActive
-            ? AppColors.redesignBrandRed.withValues(alpha: 0.55)
-            : AppColors.transparent);
-    final Color iconColor =
-        isDanger ? AppColors.white : AppColors.redesignBrandDark;
+            ? AppColors.redesignAccentSoftBg.withValues(alpha: 0.95)
+            : AppColors.black.withValues(alpha: 0.34));
+    final Color borderColor = isDanger
+        ? AppColors.redesignBrandRedDark
+        : (isActive
+            ? AppColors.redesignBrandRed.withValues(alpha: 0.45)
+            : AppColors.white.withValues(alpha: 0.16));
+    final Color iconColor = isDanger
+        ? AppColors.white
+        : (isActive ? AppColors.redesignBrandRed : AppColors.white);
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 1),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOut,
-              height: 56,
-              width: 56,
-              decoration: BoxDecoration(
-                color: iconBackground,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: borderColor, width: 1.4),
-              ),
-              child: Center(
-                child: Image.asset(
-                  icon,
-                  color: iconColor,
-                  height: 24,
-                  width: 24,
-                ),
-              ),
+      borderRadius: BorderRadius.circular(size / 2),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        height: size,
+        width: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: iconBackground,
+          border: Border.all(color: borderColor, width: 1.2),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: isDanger ? 0.22 : 0.17),
+              blurRadius: 9,
+              offset: const Offset(0, 3),
             ),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppFontStyle.fontStyleW600(
-                fontSize: 13,
-                fontColor: AppColors.white,
-              ),
-            ),
-            if ((value ?? '').trim().isNotEmpty)
-              Text(
-                value!,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppFontStyle.fontStyleW500(
-                  fontSize: 11,
-                  fontColor: AppColors.white.withValues(alpha: 0.75),
-                ),
-              ),
           ],
+        ),
+        child: Center(
+          child: Icon(
+            iconData,
+            color: iconColor,
+            size: iconSize,
+          ),
         ),
       ),
     );

@@ -229,55 +229,45 @@ class VoiceCallView1 extends StatelessWidget {
               final horizontalPadding = isCompact ? 14.0 : 18.0;
               final cardWidth = constraints.maxWidth > 560 ? 440.0 : 420.0;
               final avatarSize = isCompact ? 92.0 : 104.0;
+              final controlSize = isCompact ? 38.0 : 42.0;
+              final dangerControlSize = isCompact ? 44.0 : 46.0;
+              final controlGap = isCompact ? 8.0 : 10.0;
+              final controlTrayMaxWidth = isCompact ? 292.0 : 336.0;
 
               final actionItems = <Widget>[
                 GetBuilder<VoiceCallController>(
                   id: Constant.idMicMute,
                   builder: (logic) => buildControlButton(
-                    text: EnumLocale.txtMute.name.tr,
-                    value: logic.isMicMute
-                        ? EnumLocale.txtOn.name.tr
-                        : EnumLocale.txtOff.name.tr,
-                    icon: logic.isMicMute
-                        ? AppAsset.micMute
-                        : AppAsset.microPhoneIcon,
+                    iconData: logic.isMicMute
+                        ? Icons.mic_off_rounded
+                        : Icons.mic_none_rounded,
                     isActive: logic.isMicMute,
+                    size: controlSize,
                     onTap: controller.onMicMute,
                   ),
                 ),
                 GetBuilder<VoiceCallController>(
                   id: Constant.idSpeakerOpen,
                   builder: (logic) => buildControlButton(
-                    text: logic.isSpeakerOn
-                        ? EnumLocale.txtSpeaker.name.tr
-                        : EnumLocale.txtEarpiece.name.tr,
-                    value: logic.isSpeakerOn
-                        ? EnumLocale.txtOn.name.tr
-                        : EnumLocale.txtOff.name.tr,
-                    icon: logic.isSpeakerOn
-                        ? AppAsset.speakerOn
-                        : AppAsset.speakerOff,
+                    iconData: logic.isSpeakerOn
+                        ? Icons.volume_up_rounded
+                        : Icons.hearing_rounded,
                     isActive: logic.isSpeakerOn,
+                    size: controlSize,
                     onTap: controller.onSpeakerOn,
                   ),
                 ),
                 if (isGroupSession)
-                  buildControlButton(
-                    text: 'Group',
-                    value: 'Tools',
-                    icon: AppAsset.circleMoreIcon,
-                    onTap: () {
-                      _showGroupSessionActionsSheet(
-                        context,
-                        controller,
-                        expertMode: canManageUsers,
-                      );
-                    },
+                  _buildGroupToolsControlButton(
+                    context,
+                    controller,
+                    canManageUsers: canManageUsers,
+                    size: controlSize,
                   ),
                 buildControlButton(
-                  text: EnumLocale.txtEndCall.name.tr,
-                  icon: AppAsset.callCut,
+                  iconData: Icons.call_end_rounded,
                   isDanger: true,
+                  size: dangerControlSize,
                   onTap: controller.endCurrentCall,
                 ),
               ];
@@ -536,30 +526,47 @@ class VoiceCallView1 extends StatelessWidget {
                           horizontalPadding,
                           0,
                           horizontalPadding,
-                          0,
+                          6,
                         ),
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
-                        decoration: BoxDecoration(
-                          color: _panelDark.withValues(alpha: 0.96),
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(24),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.black.withValues(alpha: 0.20),
-                              blurRadius: 20,
-                              offset: const Offset(0, -8),
+                        child: Center(
+                          child: ConstrainedBox(
+                            constraints:
+                                BoxConstraints(maxWidth: controlTrayMaxWidth),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: isCompact ? 6 : 7,
+                                vertical: isCompact ? 6 : 7,
+                              ),
+                              decoration: BoxDecoration(
+                                color: _panelDark.withValues(alpha: 0.88),
+                                borderRadius: BorderRadius.circular(22),
+                                border: Border.all(
+                                  color:
+                                      AppColors.white.withValues(alpha: 0.14),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        AppColors.black.withValues(alpha: 0.24),
+                                    blurRadius: 18,
+                                    offset: const Offset(0, 6),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  for (var i = 0;
+                                      i < actionItems.length;
+                                      i++) ...[
+                                    actionItems[i],
+                                    if (i != actionItems.length - 1)
+                                      SizedBox(width: controlGap),
+                                  ],
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            for (var i = 0; i < actionItems.length; i++) ...[
-                              Expanded(child: actionItems[i]),
-                              if (i != actionItems.length - 1)
-                                const SizedBox(width: 6),
-                            ],
-                          ],
+                          ),
                         ),
                       ),
                     ],
@@ -999,75 +1006,115 @@ class VoiceCallView1 extends StatelessWidget {
     );
   }
 
-  Widget buildControlButton({
-    required String icon,
-    required String text,
-    String? value,
-    bool isDanger = false,
-    bool isActive = false,
-    VoidCallback? onTap,
+  Widget _buildGroupToolsControlButton(
+    BuildContext context,
+    VoiceCallController controller, {
+    required bool canManageUsers,
+    required double size,
   }) {
-    final Color iconBackground = isDanger
-        ? AppColors.redesignBrandRed
-        : (isActive ? AppColors.redesignAccentSoftBg : AppColors.white);
-    final Color borderColor = isDanger
-        ? AppColors.redesignBrandRed
-        : (isActive
-            ? AppColors.redesignBrandRed.withValues(alpha: 0.55)
-            : AppColors.transparent);
-    final Color iconColor =
-        isDanger ? AppColors.white : AppColors.redesignBrandDark;
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 1),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+    return GetBuilder<VoiceCallController>(
+      id: Constant.idVideoCall,
+      builder: (logic) {
+        return Stack(
+          clipBehavior: Clip.none,
           children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOut,
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                color: iconBackground,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: borderColor, width: 1.4),
-              ),
-              child: Center(
-                child: Image.asset(
-                  icon,
-                  color: iconColor,
-                  height: 20,
-                  width: 20,
-                ),
-              ),
+            buildControlButton(
+              iconData: Icons.forum_outlined,
+              size: size,
+              onTap: () {
+                _showGroupSessionActionsSheet(
+                  context,
+                  controller,
+                  expertMode: canManageUsers,
+                );
+              },
             ),
-            const SizedBox(height: 6),
-            Text(
-              text,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppFontStyle.fontStyleW600(
-                fontSize: 12,
-                fontColor: AppColors.white,
-              ),
-            ),
-            if ((value ?? '').trim().isNotEmpty)
-              Text(
-                value!,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppFontStyle.fontStyleW500(
-                  fontSize: 10,
-                  fontColor: AppColors.white.withValues(alpha: 0.75),
+            if (logic.unreadGroupChatCount > 0)
+              Positioned(
+                right: -2,
+                top: -2,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: _brandRed,
+                    borderRadius: BorderRadius.circular(999),
+                    border: Border.all(color: AppColors.white, width: 1),
+                  ),
+                  child: Text(
+                    logic.unreadGroupChatCount > 99
+                        ? '99+'
+                        : logic.unreadGroupChatCount.toString(),
+                    style: AppFontStyle.fontStyleW600(
+                      fontSize: 8,
+                      fontColor: AppColors.white,
+                    ),
+                  ),
                 ),
               ),
           ],
+        );
+      },
+    );
+  }
+
+  Widget buildControlButton({
+    String? iconAsset,
+    IconData? iconData,
+    bool isDanger = false,
+    bool isActive = false,
+    VoidCallback? onTap,
+    double size = 42,
+  }) {
+    assert(iconAsset != null || iconData != null);
+
+    final iconSize = (size * 0.46).clamp(15.0, 20.0);
+    final Color iconBackground = isDanger
+        ? AppColors.redesignBrandRed
+        : (isActive
+            ? AppColors.redesignAccentSoftBg.withValues(alpha: 0.95)
+            : AppColors.black.withValues(alpha: 0.34));
+    final Color borderColor = isDanger
+        ? AppColors.redesignBrandRedDark
+        : (isActive
+            ? AppColors.redesignBrandRed.withValues(alpha: 0.45)
+            : AppColors.white.withValues(alpha: 0.16));
+    final Color iconColor =
+        isDanger ? AppColors.white : (isActive ? _brandRed : AppColors.white);
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(size / 2),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        height: size,
+        width: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: iconBackground,
+          border: Border.all(color: borderColor, width: 1.2),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: isDanger ? 0.22 : 0.17),
+              blurRadius: 9,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Center(
+          child: iconData != null
+              ? Icon(
+                  iconData,
+                  color: iconColor,
+                  size: iconSize,
+                )
+              : Image.asset(
+                  iconAsset!,
+                  color: iconColor,
+                  height: iconSize,
+                  width: iconSize,
+                ),
         ),
       ),
     );

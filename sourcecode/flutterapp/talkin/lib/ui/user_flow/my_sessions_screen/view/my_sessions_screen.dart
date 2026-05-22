@@ -165,6 +165,129 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     return <String, dynamic>{};
   }
 
+  String _readFirstNonEmptyString(
+    Map<String, dynamic> source,
+    List<String> keys,
+  ) {
+    String normalizeValue(dynamic raw) {
+      if (raw == null) {
+        return '';
+      }
+
+      if (raw is String) {
+        return raw.trim();
+      }
+
+      if (raw is num || raw is bool) {
+        return raw.toString().trim();
+      }
+
+      if (raw is Map<String, dynamic>) {
+        for (final nestedKey in const <String>[
+          '_id',
+          'id',
+          'sessionId',
+          'channelName',
+          'channelId',
+          'roomId',
+          'roomID',
+          'callId',
+          'zegoRoomId',
+          'zegoToken',
+          'roomToken',
+          'token',
+          'zego_room_token',
+        ]) {
+          final nestedValue = normalizeValue(raw[nestedKey]);
+          if (nestedValue.isNotEmpty) {
+            return nestedValue;
+          }
+        }
+      }
+
+      return '';
+    }
+
+    for (final key in keys) {
+      final value = normalizeValue(source[key]);
+      if (value.isNotEmpty) {
+        return value;
+      }
+    }
+    return '';
+  }
+
+  String _resolveSessionId(Map<String, dynamic> session) {
+    return _readFirstNonEmptyString(
+      session,
+      const <String>['_id', 'sessionId', 'id'],
+    );
+  }
+
+  String _resolveGroupRoomId(
+    Map<String, dynamic> session, {
+    String? fallbackSessionId,
+  }) {
+    final roomId = _readFirstNonEmptyString(
+      session,
+      const <String>[
+        'channelName',
+        'channelId',
+        'roomId',
+        'roomID',
+        'callId',
+        'zegoRoomId',
+      ],
+    );
+
+    if (roomId.isNotEmpty) {
+      return roomId;
+    }
+
+    return (fallbackSessionId ?? '').trim();
+  }
+
+  String _resolveGroupRoomToken(Map<String, dynamic> session) {
+    return _readFirstNonEmptyString(
+      session,
+      const <String>[
+        'zegoToken',
+        'roomToken',
+        'token',
+        'zego_room_token',
+      ],
+    );
+  }
+
+  String _resolveListenerSocketId({
+    required Map<String, dynamic> session,
+    required Map<String, dynamic> expert,
+  }) {
+    final fromExpert = _readFirstNonEmptyString(
+      expert,
+      const <String>[
+        'legacyListenerId',
+        'listenerId',
+        '_id',
+        'id',
+        'userId',
+      ],
+    );
+    if (fromExpert.isNotEmpty) {
+      return fromExpert;
+    }
+
+    return _readFirstNonEmptyString(
+      session,
+      const <String>[
+        'legacyListenerId',
+        'listenerId',
+        'expertListenerId',
+        'expertId',
+      ],
+    );
+  }
+
   String _sessionStatus(Map<String, dynamic> session) {
     return (session['sessionStatus'] ?? session['status'] ?? '')
         .toString()
@@ -319,8 +442,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       return;
     }
 
-    void emitCall() {
-      SocketEmit.emitCallOutgoingRinging(
+    Future<void> emitCall() async {
+      final isSent = await SocketEmit.emitCallOutgoingRinging(
         callerId: callerId,
         receiverId: sanitizedReceiverId,
         callType: normalizedCallType,
@@ -336,14 +459,18 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
         sessionId: sessionId,
         bookingId: bookingId,
       );
-      _fetchSessions();
+      if (isSent) {
+        _fetchSessions();
+      }
     }
 
     if (normalizedCallType == 'video') {
       PermissionHandler.onGetCameraPermission(
         onGranted: () {
           PermissionHandler.onGetMicrophonePermission(
-            onGranted: emitCall,
+            onGranted: () {
+              emitCall();
+            },
           );
         },
       );
@@ -351,7 +478,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     }
 
     PermissionHandler.onGetMicrophonePermission(
-      onGranted: emitCall,
+      onGranted: () {
+        emitCall();
+      },
     );
   }
 
@@ -360,8 +489,12 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     required Map<String, dynamic> expert,
     String? bookingId,
   }) {
-    final sessionId = (session['_id'] ?? '').toString().trim();
-    final roomId = (session['channelName'] ?? sessionId).toString().trim();
+    final sessionId = _resolveSessionId(session);
+    final roomId = _resolveGroupRoomId(
+      session,
+      fallbackSessionId: sessionId,
+    );
+    final roomToken = _resolveGroupRoomToken(session);
     final callType =
         (session['callType'] ?? 'audio').toString().trim().toLowerCase() ==
                 'video'
@@ -421,6 +554,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
         'isAccept': true,
         'callMode': 'group_session',
         'sessionId': sessionId,
+        if (roomToken.isNotEmpty) 'zegoToken': roomToken,
         if ((bookingId ?? '').trim().isNotEmpty) 'bookingId': bookingId,
       },
     );
@@ -476,8 +610,21 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     final grantedSession = accessData['session'] is Map<String, dynamic>
         ? accessData['session'] as Map<String, dynamic>
         : <String, dynamic>{};
-    final effectiveSession =
-        grantedSession.isNotEmpty ? grantedSession : session;
+    final effectiveSession = <String, dynamic>{
+      ...session,
+      ...grantedSession,
+    };
+    for (final tokenKey in const <String>[
+      'zegoToken',
+      'roomToken',
+      'token',
+      'zego_room_token',
+    ]) {
+      final tokenValue = (accessData[tokenKey] ?? '').toString().trim();
+      if (tokenValue.isNotEmpty) {
+        effectiveSession[tokenKey] = tokenValue;
+      }
+    }
     final grantedExpert = grantedSession['expertId'] is Map<String, dynamic>
         ? grantedSession['expertId'] as Map<String, dynamic>
         : <String, dynamic>{};
@@ -496,7 +643,10 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       return;
     }
 
-    final listenerId = (effectiveExpert['legacyListenerId'] ?? '').toString();
+    final listenerId = _resolveListenerSocketId(
+      session: effectiveSession,
+      expert: effectiveExpert,
+    );
     if (listenerId.isEmpty) {
       Utils.showToast(
           context, 'Unable to start session. Expert is unavailable.');

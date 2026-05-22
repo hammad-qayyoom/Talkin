@@ -325,26 +325,27 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
     return width >= 760 ? 22.0 : 16.0;
   }
 
-  int _slotCrossAxisCountFor(double availableWidth) {
-    if (availableWidth >= 1120) return 4;
-    if (availableWidth >= 860) return 3;
-    if (availableWidth >= 520) return 2;
-    return 1;
+  int _slotCrossAxisCountFor({required bool isTablet}) {
+    return isTablet ? 4 : 2;
   }
 
-  double _slotAspectRatioFor(double availableWidth, int crossAxisCount) {
-    if (crossAxisCount == 1) return 4.8;
-    if (crossAxisCount == 2) {
-      return availableWidth >= 760 ? 2.7 : 2.35;
-    }
-    if (crossAxisCount == 3) return 2.1;
-    return 1.9;
+  double _slotAspectRatioFor({
+    required double availableWidth,
+    required bool isTablet,
+  }) {
+    if (isTablet) return 2.0;
+    return availableWidth >= 400 ? 2.2 : 2.0;
   }
 
-  SliverGridDelegate _buildSlotsGridDelegate(double availableWidth) {
-    final crossAxisCount = _slotCrossAxisCountFor(availableWidth);
-    final childAspectRatio =
-        _slotAspectRatioFor(availableWidth, crossAxisCount);
+  SliverGridDelegate _buildSlotsGridDelegate({
+    required double availableWidth,
+    required bool isTablet,
+  }) {
+    final crossAxisCount = _slotCrossAxisCountFor(isTablet: isTablet);
+    final childAspectRatio = _slotAspectRatioFor(
+      availableWidth: availableWidth,
+      isTablet: isTablet,
+    );
 
     return SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: crossAxisCount,
@@ -597,11 +598,15 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
     final availableWidth = (contentWidth - (horizontalInset * 2))
         .clamp(0.0, double.infinity)
         .toDouble();
+    final isTablet = contentWidth >= 760;
 
     return GridView.builder(
       padding: EdgeInsets.fromLTRB(horizontalInset, 8, horizontalInset, 10),
       itemCount: 8,
-      gridDelegate: _buildSlotsGridDelegate(availableWidth),
+      gridDelegate: _buildSlotsGridDelegate(
+        availableWidth: availableWidth,
+        isTablet: isTablet,
+      ),
       itemBuilder: (context, index) {
         return Container(
           decoration: BoxDecoration(
@@ -823,7 +828,9 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
                                         10),
                                     itemCount: _slots.length,
                                     gridDelegate: _buildSlotsGridDelegate(
-                                        slotAvailableWidth),
+                                      availableWidth: slotAvailableWidth,
+                                      isTablet: isTablet,
+                                    ),
                                     itemBuilder: (context, index) {
                                       final slot = (_slots[index]
                                               is Map<String, dynamic>)

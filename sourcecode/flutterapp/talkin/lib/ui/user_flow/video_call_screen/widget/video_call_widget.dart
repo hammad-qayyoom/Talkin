@@ -30,9 +30,11 @@ class VideoCallView1 extends StatelessWidget {
           builder: (logic) {
             final viewport = Size(Get.width, Get.height);
             final isCompactControls = viewport.width < 390;
-            final controlSize = isCompactControls ? 42.0 : 46.0;
-            final dangerControlSize = isCompactControls ? 46.0 : 48.0;
-            final controlBarPadding = isCompactControls ? 6.0 : 7.0;
+            final controlSize = isCompactControls ? 36.0 : 40.0;
+            final dangerControlSize = isCompactControls ? 42.0 : 44.0;
+            final controlBarPadding = isCompactControls ? 5.0 : 6.0;
+            final controlGap = isCompactControls ? 8.0 : 10.0;
+            final controlTrayMaxWidth = isCompactControls ? 328.0 : 368.0;
             logic.prepareSelfPreviewLayout(
               viewport,
               topPadding: 72,
@@ -150,64 +152,81 @@ class VideoCallView1 extends StatelessWidget {
                 Positioned(
                   left: 12,
                   right: 12,
-                  bottom: 16,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: controlBarPadding,
-                      vertical: controlBarPadding,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.black.withValues(alpha: 0.62),
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color: AppColors.white.withValues(alpha: 0.10),
+                  bottom: 18,
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints(maxWidth: controlTrayMaxWidth),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: controlBarPadding,
+                          vertical: controlBarPadding,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.black.withValues(alpha: 0.54),
+                          borderRadius: BorderRadius.circular(22),
+                          border: Border.all(
+                            color: AppColors.white.withValues(alpha: 0.12),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.black.withValues(alpha: 0.35),
+                              blurRadius: 16,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ControlButton(
+                              iconData: logic.micMute == true
+                                  ? Icons.mic_off_rounded
+                                  : Icons.mic_none_rounded,
+                              isActive: logic.micMute,
+                              size: controlSize,
+                              onTap: logic.onMicMute,
+                            ),
+                            SizedBox(width: controlGap),
+                            ControlButton(
+                              iconData: logic.isCameraOff == true
+                                  ? Icons.videocam_off_rounded
+                                  : Icons.videocam_outlined,
+                              isActive: logic.isCameraOff,
+                              size: controlSize,
+                              onTap: logic.onCameraOff,
+                            ),
+                            SizedBox(width: controlGap),
+                            ControlButton(
+                              iconData: Icons.flip_camera_android_rounded,
+                              size: controlSize,
+                              onTap: logic.onCameraTurn,
+                            ),
+                            SizedBox(width: controlGap),
+                            logic.isGroupSessionCall
+                                ? _buildGroupChatControlButton(
+                                    context,
+                                    logic,
+                                    size: controlSize,
+                                  )
+                                : ControlButton(
+                                    iconData: Icons.more_horiz_rounded,
+                                    size: controlSize,
+                                    onTap: () => _openMoreOptionsBottomSheet(
+                                      context,
+                                      logic,
+                                    ),
+                                  ),
+                            SizedBox(width: controlGap),
+                            ControlButton(
+                              iconData: Icons.call_end_rounded,
+                              isDanger: true,
+                              size: dangerControlSize,
+                              onTap: logic.endCurrentCall,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ControlButton(
-                          icon: logic.micMute == true
-                              ? AppAsset.micMute
-                              : AppAsset.microPhoneIcon,
-                          isActive: logic.micMute,
-                          size: controlSize,
-                          onTap: logic.onMicMute,
-                        ),
-                        ControlButton(
-                          icon: logic.isCameraOff == true
-                              ? AppAsset.videoMute
-                              : AppAsset.videoCallIcon,
-                          isActive: logic.isCameraOff,
-                          size: controlSize,
-                          onTap: logic.onCameraOff,
-                        ),
-                        ControlButton(
-                          icon: AppAsset.cameraFlipIcon,
-                          size: controlSize,
-                          onTap: logic.onCameraTurn,
-                        ),
-                        logic.isGroupSessionCall
-                            ? _buildGroupChatControlButton(
-                                context,
-                                logic,
-                                size: controlSize,
-                              )
-                            : ControlButton(
-                                icon: AppAsset.circleMoreIcon,
-                                size: controlSize,
-                                onTap: () => _openMoreOptionsBottomSheet(
-                                  context,
-                                  logic,
-                                ),
-                              ),
-                        ControlButton(
-                          icon: AppAsset.callCut,
-                          isDanger: true,
-                          size: dangerControlSize,
-                          onTap: logic.endCurrentCall,
-                        ),
-                      ],
                     ),
                   ),
                 ),
@@ -266,7 +285,7 @@ class VideoCallView1 extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         ControlButton(
-          icon: AppAsset.circleMoreIcon,
+          iconData: Icons.forum_outlined,
           size: size,
           onTap: () => _showGroupSessionActionsSheet(context, logic),
         ),
@@ -1478,7 +1497,8 @@ class VideoCallView1 extends StatelessWidget {
 }
 
 class ControlButton extends StatelessWidget {
-  final String icon;
+  final String? icon;
+  final IconData? iconData;
   final bool isDanger;
   final bool isActive;
   final Color? backgroundColor;
@@ -1488,29 +1508,34 @@ class ControlButton extends StatelessWidget {
 
   const ControlButton({
     super.key,
-    required this.icon,
+    this.icon,
+    this.iconData,
     this.isDanger = false,
     this.isActive = false,
     this.backgroundColor,
     this.iconColor,
     this.size = 50,
     this.onTap,
-  });
+  }) : assert(icon != null || iconData != null);
 
   @override
   Widget build(BuildContext context) {
-    final iconSize = (size * 0.40).clamp(15.0, 20.0);
+    final iconSize = (size * 0.46).clamp(15.0, 20.0);
     final resolvedBackground = backgroundColor ??
         (isDanger
             ? AppColors.redesignBrandRed
-            : (isActive ? AppColors.redesignAccentSoftBg : Colors.white));
-    final resolvedIconColor =
-        iconColor ?? (isDanger ? Colors.white : AppColors.redesignBrandDark);
+            : (isActive
+                ? AppColors.redesignAccentSoftBg.withValues(alpha: 0.94)
+                : AppColors.black.withValues(alpha: 0.36)));
+    final resolvedIconColor = iconColor ??
+        (isDanger
+            ? AppColors.white
+            : (isActive ? AppColors.redesignBrandRed : AppColors.white));
     final borderColor = isDanger
-        ? AppColors.redesignBrandRed
+        ? AppColors.redesignBrandRedDark
         : (isActive
             ? AppColors.redesignBrandRed.withValues(alpha: 0.5)
-            : AppColors.transparent);
+            : AppColors.white.withValues(alpha: 0.15));
 
     return InkWell(
       onTap: onTap,
@@ -1524,12 +1549,27 @@ class ControlButton extends StatelessWidget {
           shape: BoxShape.circle,
           color: resolvedBackground,
           border: Border.all(color: borderColor, width: 1.15),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: isDanger ? 0.20 : 0.16),
+              blurRadius: 9,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
-        child: Image.asset(
-          icon,
-          color: resolvedIconColor,
-          height: iconSize,
-          width: iconSize,
+        child: Center(
+          child: iconData != null
+              ? Icon(
+                  iconData,
+                  color: resolvedIconColor,
+                  size: iconSize,
+                )
+              : Image.asset(
+                  icon!,
+                  color: resolvedIconColor,
+                  height: iconSize,
+                  width: iconSize,
+                ),
         ),
       ),
     );

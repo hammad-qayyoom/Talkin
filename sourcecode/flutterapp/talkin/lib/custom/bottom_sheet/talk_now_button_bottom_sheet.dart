@@ -202,7 +202,7 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
         } else {
           PermissionHandler.onGetMicrophonePermission(
             onGranted: () async {
-              SocketEmit.emitCallOutgoingRinging(
+              await SocketEmit.emitCallOutgoingRinging(
                 callerId: callerId,
                 receiverId: receiverId,
                 callType: "audio",
@@ -306,7 +306,7 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
             onGranted: () {
               PermissionHandler.onGetMicrophonePermission(
                 onGranted: () async {
-                  SocketEmit.emitCallOutgoingRinging(
+                  await SocketEmit.emitCallOutgoingRinging(
                     callerId: callerId,
                     receiverId: receiverId,
                     callType: "video",

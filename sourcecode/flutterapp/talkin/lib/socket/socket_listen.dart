@@ -366,8 +366,10 @@ class SocketListen {
   static void handleCallOutgoingRinging(dynamic data) {
     Utils.showLog(
         "Socket Listen => callOutgoingRinging (error or status): $data");
-    // Get.back();
-    Utils.showToast(Get.context!, data['message']);
+    final message = data is Map
+        ? (data['message']?.toString() ?? 'Unable to start call right now.')
+        : data.toString();
+    Utils.showToast(Get.context, message);
   }
 
   /// receiver call cut listen this event
@@ -472,7 +474,10 @@ class SocketListen {
   /// when caller call then Invalid caller, receiver, or call history then listen this event
   static void handleCallResponseProcessed(dynamic data) {
     Utils.showLog("Socket Listen => callResponseProcessed event: $data");
-    Utils.showToast(Get.context!, data['message']);
+    final message = data is Map
+        ? (data['message']?.toString() ?? 'Call response processed.')
+        : data.toString();
+    Utils.showToast(Get.context, message);
   }
 
   /// if callId not match then listen also in callTimedOut ( to receiver )
@@ -625,13 +630,17 @@ class SocketListen {
             "Insufficient session credits for this call.")
         : data.toString();
 
-    Utils.showToast(Get.context!, errorMessage);
+    Utils.showToast(Get.context, errorMessage);
   }
 
   /// if Invalid callerRole or receiverRole  or Caller, Receiver, or CallHistory not found then listen also in coinDeductionError
   static void handleCallCoinsDeducted(dynamic data) {
     Utils.showLog("Socket Listen => callSessionCreditsDeducted: $data");
-    Utils.showToast(Get.context!, data['message']);
+    final message = data is Map
+        ? (data['message']?.toString() ??
+            'Session credits update could not be processed.')
+        : data.toString();
+    Utils.showToast(Get.context, message);
     if (Get.isRegistered<VideoCallController>()) {
       final videoCallController = Get.find<VideoCallController>();
 

@@ -448,7 +448,7 @@ class IncomingCallController extends GetxController
       // ✅ Simplified role check
       final isUserCaller = callerRole == "user";
 
-      SocketEmit.emitCallResponseProcessed(
+      await SocketEmit.emitCallResponseProcessed(
         callerId: callerId ?? '',
         receiverId: receiverId ?? '',
         callId: callId ?? '',
@@ -493,7 +493,7 @@ class IncomingCallController extends GetxController
 
       final isUserCaller = callerRole == "user";
 
-      SocketEmit.emitCallResponseProcessed(
+      await SocketEmit.emitCallResponseProcessed(
         callerId: callerId ?? '',
         receiverId: receiverId ?? '',
         callId: callId ?? '',

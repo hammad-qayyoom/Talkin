@@ -133,10 +133,10 @@ class Utils {
     messenger.hideCurrentSnackBar();
 
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final laneWidth = screenWidth >= 760 ? 980.0 : screenWidth;
+    final laneWidth = screenWidth >= 760 ? 860.0 : screenWidth;
     final sideInset =
         ((screenWidth - laneWidth) / 2).clamp(0.0, double.infinity).toDouble();
-    final bottomPadding = MediaQuery.of(context).padding.bottom + 12;
+    final bottomPadding = MediaQuery.of(context).padding.bottom + 8;
     final resolvedConfirmColor =
         confirmBackgroundColor ?? AppColors.redesignBrandDark;
     final resolvedAccent = resolvedConfirmColor == AppColors.redesignBrandDark
@@ -148,6 +148,7 @@ class Utils {
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        padding: EdgeInsets.zero,
         duration: duration,
         margin: EdgeInsets.fromLTRB(
           sideInset + 14,
@@ -156,16 +157,16 @@ class Utils {
           bottomPadding,
         ),
         content: Container(
-          padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+          padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(22),
             border: Border.all(color: AppColors.redesignSoftBorder),
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.11),
-                blurRadius: 22,
-                offset: const Offset(0, 12),
+                color: AppColors.black.withValues(alpha: 0.10),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
               ),
             ],
           ),
@@ -177,19 +178,19 @@ class Utils {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 50,
-                    width: 50,
+                    height: 40,
+                    width: 40,
                     decoration: BoxDecoration(
                       color: resolvedAccent.withValues(alpha: 0.13),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
                       icon,
-                      size: 26,
+                      size: 21,
                       color: resolvedAccent,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,21 +198,21 @@ class Utils {
                         Text(
                           title,
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 15,
                             fontWeight: FontWeight.w700,
                             color: AppColors.redesignBrandDark,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 3),
                         Text(
                           message,
-                          maxLines: 3,
+                          maxLines: 4,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 17,
+                            fontSize: 12,
                             fontWeight: FontWeight.w500,
                             color: AppColors.redesignMutedText,
-                            height: 1.3,
+                            height: 1.28,
                           ),
                         ),
                       ],
@@ -219,7 +220,7 @@ class Utils {
                   ),
                 ],
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Expanded(
@@ -228,10 +229,10 @@ class Utils {
                         messenger.hideCurrentSnackBar();
                       },
                       style: OutlinedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(56),
+                        minimumSize: const Size.fromHeight(42),
                         side: BorderSide(color: AppColors.redesignSoftBorder),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(14),
                         ),
                         foregroundColor: AppColors.redesignBrandDark,
                         backgroundColor: AppColors.white,
@@ -240,7 +241,7 @@ class Utils {
                       child: Text(
                         cancelText,
                         style: TextStyle(
-                          fontSize: 17,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: AppColors.redesignBrandDark,
                         ),
@@ -256,9 +257,9 @@ class Utils {
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
-                        minimumSize: const Size.fromHeight(56),
+                        minimumSize: const Size.fromHeight(42),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(14),
                         ),
                         backgroundColor: resolvedConfirmColor,
                         foregroundColor: AppColors.white,
@@ -267,7 +268,7 @@ class Utils {
                       child: Text(
                         confirmText,
                         style: const TextStyle(
-                          fontSize: 17,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -295,7 +296,11 @@ class Utils {
     final messenger = ScaffoldMessenger.of(context);
     messenger.hideCurrentSnackBar();
 
-    final bottomPadding = MediaQuery.of(context).padding.bottom + 12;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final laneWidth = screenWidth >= 760 ? 860.0 : screenWidth;
+    final sideInset =
+        ((screenWidth - laneWidth) / 2).clamp(0.0, double.infinity).toDouble();
+    final bottomPadding = MediaQuery.of(context).padding.bottom + 8;
     final resolvedAccent = accentColor ?? AppColors.redesignBrandRed;
 
     messenger.showSnackBar(
@@ -303,19 +308,25 @@ class Utils {
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        padding: EdgeInsets.zero,
         duration: duration,
-        margin: EdgeInsets.fromLTRB(14, 0, 14, bottomPadding),
+        margin: EdgeInsets.fromLTRB(
+          sideInset + 14,
+          0,
+          sideInset + 14,
+          bottomPadding,
+        ),
         content: Container(
-          padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+          padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(22),
             border: Border.all(color: AppColors.redesignSoftBorder),
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.11),
-                blurRadius: 22,
-                offset: const Offset(0, 12),
+                color: AppColors.black.withValues(alpha: 0.10),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
               ),
             ],
           ),
@@ -327,19 +338,19 @@ class Utils {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 50,
-                    width: 50,
+                    height: 40,
+                    width: 40,
                     decoration: BoxDecoration(
                       color: resolvedAccent.withValues(alpha: 0.14),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
                       icon,
-                      size: 26,
+                      size: 21,
                       color: resolvedAccent,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,21 +358,21 @@ class Utils {
                         Text(
                           title,
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 15,
                             fontWeight: FontWeight.w700,
                             color: AppColors.redesignBrandDark,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 3),
                         Text(
                           message,
-                          maxLines: 3,
+                          maxLines: 4,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 17,
+                            fontSize: 12,
                             fontWeight: FontWeight.w500,
                             color: AppColors.redesignMutedText,
-                            height: 1.3,
+                            height: 1.28,
                           ),
                         ),
                       ],
@@ -369,32 +380,83 @@ class Utils {
                   ),
                 ],
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 10),
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    messenger.hideCurrentSnackBar();
-                    onAction?.call();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    minimumSize: const Size.fromHeight(56),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    backgroundColor: resolvedAccent,
-                    foregroundColor: AppColors.white,
-                    padding: EdgeInsets.zero,
-                  ),
-                  child: Text(
-                    actionText,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
+                child: onAction == null
+                    ? ElevatedButton(
+                        onPressed: messenger.hideCurrentSnackBar,
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          minimumSize: const Size.fromHeight(40),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          backgroundColor: resolvedAccent,
+                          foregroundColor: AppColors.white,
+                          padding: EdgeInsets.zero,
+                        ),
+                        child: Text(
+                          actionText,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      )
+                    : Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: messenger.hideCurrentSnackBar,
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: const Size.fromHeight(40),
+                                side: BorderSide(
+                                    color: AppColors.redesignSoftBorder),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                foregroundColor: AppColors.redesignBrandDark,
+                                backgroundColor: AppColors.white,
+                                padding: EdgeInsets.zero,
+                              ),
+                              child: const Text(
+                                'Close',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                messenger.hideCurrentSnackBar();
+                                onAction.call();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                minimumSize: const Size.fromHeight(40),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                backgroundColor: resolvedAccent,
+                                foregroundColor: AppColors.white,
+                                padding: EdgeInsets.zero,
+                              ),
+                              child: Text(
+                                actionText,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
               ),
             ],
           ),

@@ -31,19 +31,30 @@ class PermissionHandler {
     try {
       PermissionStatus status = await Permission.camera.request();
 
-      if (status == PermissionStatus.denied) {
-        Utils.showToast(Get.context!, "Please allow camera permission.");
+      if (status == PermissionStatus.granted) {
+        log("Camera Permission Granted");
+        onGranted.call();
+        return;
+      }
+
+      if (status == PermissionStatus.denied ||
+          status == PermissionStatus.restricted) {
+        Utils.showToast(Get.context, "Please allow camera permission.");
         onDenied?.call();
-      } else if (status == PermissionStatus.permanentlyDenied) {
+      } else if (status == PermissionStatus.permanentlyDenied ||
+          status == PermissionStatus.limited) {
         Utils.showToast(
-            Get.context!, "Please allow camera permission in settings.");
+            Get.context, "Please allow camera permission in settings.");
         await openAppSettings();
         onDenied?.call();
       } else {
-        log("Camera Permission Granted");
-        onGranted.call();
+        onDenied?.call();
       }
     } catch (e) {
+      Utils.showToast(
+        Get.context,
+        "Camera permission check failed. Please try again.",
+      );
       onDenied?.call();
       log("Camera Permission Failed => $e");
     }
@@ -56,19 +67,30 @@ class PermissionHandler {
     try {
       PermissionStatus status = await Permission.microphone.request();
 
-      if (status == PermissionStatus.denied) {
-        Utils.showToast(Get.context!, "Please allow microphone permission.");
+      if (status == PermissionStatus.granted) {
+        log("microphone Permission Granted");
+        onGranted.call();
+        return;
+      }
+
+      if (status == PermissionStatus.denied ||
+          status == PermissionStatus.restricted) {
+        Utils.showToast(Get.context, "Please allow microphone permission.");
         onDenied?.call();
-      } else if (status == PermissionStatus.permanentlyDenied) {
+      } else if (status == PermissionStatus.permanentlyDenied ||
+          status == PermissionStatus.limited) {
         Utils.showToast(
-            Get.context!, "Please allow microphone permission in settings.");
+            Get.context, "Please allow microphone permission in settings.");
         await openAppSettings();
         onDenied?.call();
       } else {
-        log("microphone Permission Granted");
-        onGranted.call();
+        onDenied?.call();
       }
     } catch (e) {
+      Utils.showToast(
+        Get.context,
+        "Microphone permission check failed. Please try again.",
+      );
       onDenied?.call();
       log("microphone Permission Failed => $e");
     }

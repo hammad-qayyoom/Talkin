@@ -104,22 +104,15 @@ class MainScreenController extends GetxController {
   }
 
   void _stopLoginLoading() {
-    _dismissLoadingDialog();
     if (isLoading) {
       isLoading = false;
       update();
     }
   }
 
-  Future<void> _showLoginLoadingNow() async {
+  void _showLoginLoadingNow() {
     isLoading = true;
     update();
-    if (!(Get.isDialogOpen ?? false)) {
-      Get.dialog(const LoadingWidget(), barrierDismissible: false);
-    }
-
-    await Future<void>.delayed(Duration.zero);
-    await WidgetsBinding.instance.endOfFrame;
   }
 
   void _setGuestContinueLoading(bool value) {
@@ -636,7 +629,7 @@ class MainScreenController extends GetxController {
     }
 
     try {
-      await _showLoginLoadingNow();
+      _showLoginLoadingNow();
 
       Database.onSetDemoListener(false);
       FocusManager.instance.primaryFocus?.unfocus();

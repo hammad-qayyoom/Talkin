@@ -517,6 +517,8 @@ class PaymentOptionBottomSheet extends StatelessWidget {
               final paymentMethods = controller.availablePaymentMethods;
               final hasActiveSubscription = controller.hasActiveSubscription;
               final isRestoreProcessing = controller.isRestoreProcessing;
+              final showPrimaryActionButton =
+                  !hasActiveSubscription || GetPlatform.isIOS;
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -679,63 +681,55 @@ class PaymentOptionBottomSheet extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
-                    child: PrimaryAppButton(
-                      onTap: controller.isPaymentProcessing ||
-                              controller.isRestoreProcessing ||
-                              (!hasActiveSubscription && paymentMethods.isEmpty)
-                          ? null
-                          : () async {
-                              if (hasActiveSubscription) {
-                                if (GetPlatform.isIOS ||
-                                    (controller.activeSubscription
-                                                ?.paymentGateway ??
-                                            '')
-                                        .toLowerCase()
-                                        .contains('app store')) {
+                  if (showPrimaryActionButton)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+                      child: PrimaryAppButton(
+                        onTap: controller.isPaymentProcessing ||
+                                controller.isRestoreProcessing ||
+                                (!hasActiveSubscription &&
+                                    paymentMethods.isEmpty)
+                            ? null
+                            : () async {
+                                if (hasActiveSubscription) {
                                   await controller
                                       .openAppleManageSubscriptions();
-                                } else {
-                                  Utils.showToast(Get.context,
-                                      controller.activeSubscriptionMessage());
+                                  return;
                                 }
-                                return;
-                              }
 
-                              log('message ${controller.coinPlan[index].id}');
-                              log('message ${controller.selectedCoinPlan?.productId}');
-                              await controller.onClickPayNow(
-                                id: controller.coinPlan[index].id ?? '',
-                                amount: controller.coinPlan[index].price ?? 0,
-                                productKey:
-                                    controller.productKeyForSelectedPlan(),
-                              );
-                            },
-                      height: 52,
-                      borderRadius: 16,
-                      color: AppColors.redesignBrandRed,
-                      text: controller.isPaymentProcessing
-                          ? null
-                          : hasActiveSubscription
-                              ? 'Manage Subscription'
-                              : EnumLocale.txtPay.name.tr,
-                      textStyle: AppFontStyle.fontStyleW600(
-                        fontSize: 17,
-                        fontColor: AppColors.white,
+                                log('message ${controller.coinPlan[index].id}');
+                                log('message ${controller.selectedCoinPlan?.productId}');
+                                await controller.onClickPayNow(
+                                  id: controller.coinPlan[index].id ?? '',
+                                  amount: controller.coinPlan[index].price ?? 0,
+                                  productKey:
+                                      controller.productKeyForSelectedPlan(),
+                                );
+                              },
+                        height: 52,
+                        borderRadius: 16,
+                        color: AppColors.redesignBrandRed,
+                        text: controller.isPaymentProcessing
+                            ? null
+                            : hasActiveSubscription
+                                ? 'Manage Subscription'
+                                : EnumLocale.txtPay.name.tr,
+                        textStyle: AppFontStyle.fontStyleW600(
+                          fontSize: 17,
+                          fontColor: AppColors.white,
+                        ),
+                        child: controller.isPaymentProcessing
+                            ? const SizedBox(
+                                height: 22,
+                                width: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.4,
+                                  color: AppColors.white,
+                                ),
+                              )
+                            : null,
                       ),
-                      child: controller.isPaymentProcessing
-                          ? const SizedBox(
-                              height: 22,
-                              width: 22,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.4,
-                                color: AppColors.white,
-                              ),
-                            )
-                          : null,
                     ),
-                  ),
                 ],
               );
             },

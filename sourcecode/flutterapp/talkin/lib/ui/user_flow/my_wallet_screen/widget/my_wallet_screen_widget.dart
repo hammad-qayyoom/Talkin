@@ -114,6 +114,10 @@ class MyWalletScreenTopView extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isTablet = constraints.maxWidth >= 760;
+        final isCompact = constraints.maxWidth < 360;
+        final walletArtSize = isTablet ? 110.0 : (isCompact ? 78.0 : 88.0);
+        final headingFontSize = isTablet ? 28.0 : (isCompact ? 20.0 : 22.0);
+        final historyFontSize = isTablet ? 13.0 : (isCompact ? 10.5 : 12.0);
 
         return GetBuilder<MyWalletController>(
           id: Constant.idGetCoinPlan,
@@ -157,8 +161,10 @@ class MyWalletScreenTopView extends StatelessWidget {
                           ),
                           child: Text(
                             'Wallet Balance',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: AppFontStyle.fontStyleW700(
-                              fontSize: 11,
+                              fontSize: isCompact ? 10 : 11,
                               fontColor: AppColors.white,
                             ),
                           ),
@@ -166,8 +172,10 @@ class MyWalletScreenTopView extends StatelessWidget {
                         const SizedBox(height: 10),
                         Text(
                           'Current Session Credits',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: AppFontStyle.fontStyleW700(
-                            fontSize: isTablet ? 28 : 22,
+                            fontSize: headingFontSize,
                             fontColor: AppColors.white,
                           ),
                         ),
@@ -195,6 +203,10 @@ class MyWalletScreenTopView extends StatelessWidget {
                             },
                             borderRadius: BorderRadius.circular(12),
                             child: Container(
+                              width: double.infinity,
+                              constraints: BoxConstraints(
+                                minHeight: isTablet ? 38 : 34,
+                              ),
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 10,
                                 vertical: 8,
@@ -204,19 +216,23 @@ class MyWalletScreenTopView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Row(
-                                mainAxisSize: MainAxisSize.min,
+                                mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    'View Payment History',
-                                    style: AppFontStyle.fontStyleW700(
-                                      fontSize: isTablet ? 13 : 12,
-                                      fontColor: AppColors.redesignBrandDark,
+                                  Expanded(
+                                    child: Text(
+                                      'View Payment History',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppFontStyle.fontStyleW700(
+                                        fontSize: historyFontSize,
+                                        fontColor: AppColors.redesignBrandDark,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(width: 5),
                                   Icon(
                                     Icons.arrow_forward_ios_rounded,
-                                    size: 12,
+                                    size: isCompact ? 10 : 12,
                                     color: AppColors.redesignBrandDark,
                                   ),
                                 ],
@@ -229,8 +245,8 @@ class MyWalletScreenTopView extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Container(
-                    height: isTablet ? 110 : 88,
-                    width: isTablet ? 110 : 88,
+                    height: walletArtSize,
+                    width: walletArtSize,
                     decoration: BoxDecoration(
                       color: AppColors.white.withValues(alpha: 0.16),
                       borderRadius: BorderRadius.circular(20),

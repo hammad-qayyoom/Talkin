@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:notisboard/socket/socket_listen.dart';
 import 'package:notisboard/socket/socket_service.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/api/host_coin_api.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/model/listener_coin_model.dart';
@@ -12,6 +13,22 @@ import 'package:notisboard/utils/socket_params.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class SocketEmit {
+  static Future<bool> _ensureSocketReady() async {
+    final connected = await SocketService.ensureConnected();
+    if (!connected || socket == null || socket?.connected != true) {
+      Utils.showLog("Socket Not Connected!!");
+      if (Get.context != null) {
+        Utils.showToast(
+          Get.context,
+          "Connection issue. Please check internet and try again.",
+        );
+      }
+      return false;
+    }
+    SocketListen.registerListeners();
+    return true;
+  }
+
   static void sendMessage(Map<String, dynamic> message) {
     if (socket != null && socket?.connected == true) {
       socket?.emit(SocketEvents.sendMessage, message);
@@ -36,7 +53,7 @@ class SocketEmit {
   }
 
   /// private video & audio call button onTap first this event emit
-  static void emitCallOutgoingRinging({
+  static Future<bool> emitCallOutgoingRinging({
     required String callerId,
     required String receiverId,
     required String callType,
@@ -48,32 +65,34 @@ class SocketEmit {
     required String callerImage,
     String? sessionId,
     String? bookingId,
-  }) {
-    if (socket != null && socket?.connected == true) {
-      final data = {
-        SocketParams.callerId: callerId,
-        SocketParams.receiverId: receiverId,
-        SocketParams.callType: callType,
-        SocketParams.callerRole: callerRole,
-        SocketParams.receiverRole: receiverRole,
-        SocketParams.receiverName: receiverName,
-        SocketParams.receiverImage: receiverImage,
-        SocketParams.callerName: callerName,
-        SocketParams.callerImage: callerImage,
-        if ((sessionId ?? '').trim().isNotEmpty)
-          SocketParams.sessionId: sessionId,
-        if ((bookingId ?? '').trim().isNotEmpty)
-          SocketParams.bookingId: bookingId,
-      };
-      socket?.emit(SocketEvents.callOutgoingRinging, data);
-      Utils.showLog("Socket Emit => callOutgoingRinging: $data");
-    } else {
-      Utils.showLog("Socket Not Connected!!");
+  }) async {
+    final ready = await _ensureSocketReady();
+    if (!ready) {
+      return false;
     }
+
+    final data = {
+      SocketParams.callerId: callerId,
+      SocketParams.receiverId: receiverId,
+      SocketParams.callType: callType,
+      SocketParams.callerRole: callerRole,
+      SocketParams.receiverRole: receiverRole,
+      SocketParams.receiverName: receiverName,
+      SocketParams.receiverImage: receiverImage,
+      SocketParams.callerName: callerName,
+      SocketParams.callerImage: callerImage,
+      if ((sessionId ?? '').trim().isNotEmpty)
+        SocketParams.sessionId: sessionId,
+      if ((bookingId ?? '').trim().isNotEmpty)
+        SocketParams.bookingId: bookingId,
+    };
+    socket?.emit(SocketEvents.callOutgoingRinging, data);
+    Utils.showLog("Socket Emit => callOutgoingRinging: $data");
+    return true;
   }
 
   ///when caller accept call then this event  emit
-  static void emitCallResponseProcessed({
+  static Future<bool> emitCallResponseProcessed({
     required String callerId,
     required String receiverId,
     required String callId,
@@ -88,31 +107,33 @@ class SocketEmit {
     required String callerImage,
     String? sessionId,
     String? bookingId,
-  }) {
-    if (socket != null && socket!.connected) {
-      final data = {
-        SocketParams.callerId: callerId,
-        SocketParams.receiverId: receiverId,
-        SocketParams.callType: callType,
-        SocketParams.callerRole: callerRole,
-        SocketParams.receiverRole: receiverRole,
-        SocketParams.callId: callId,
-        SocketParams.receiverName: receiverName,
-        SocketParams.receiverImage: receiverImage,
-        SocketParams.callerName: callerName,
-        SocketParams.callerImage: callerImage,
-        SocketParams.isAccept: isAccept,
-        SocketParams.callMode: callMode,
-        if ((sessionId ?? '').trim().isNotEmpty)
-          SocketParams.sessionId: sessionId,
-        if ((bookingId ?? '').trim().isNotEmpty)
-          SocketParams.bookingId: bookingId,
-      };
-      socket!.emit(SocketEvents.callResponseProcessed, data);
-      Utils.showLog("Socket Emit => callResponseProcessed: $data");
-    } else {
-      Utils.showLog("Socket Not Connected!!");
+  }) async {
+    final ready = await _ensureSocketReady();
+    if (!ready) {
+      return false;
     }
+
+    final data = {
+      SocketParams.callerId: callerId,
+      SocketParams.receiverId: receiverId,
+      SocketParams.callType: callType,
+      SocketParams.callerRole: callerRole,
+      SocketParams.receiverRole: receiverRole,
+      SocketParams.callId: callId,
+      SocketParams.receiverName: receiverName,
+      SocketParams.receiverImage: receiverImage,
+      SocketParams.callerName: callerName,
+      SocketParams.callerImage: callerImage,
+      SocketParams.isAccept: isAccept,
+      SocketParams.callMode: callMode,
+      if ((sessionId ?? '').trim().isNotEmpty)
+        SocketParams.sessionId: sessionId,
+      if ((bookingId ?? '').trim().isNotEmpty)
+        SocketParams.bookingId: bookingId,
+    };
+    socket!.emit(SocketEvents.callResponseProcessed, data);
+    Utils.showLog("Socket Emit => callResponseProcessed: $data");
+    return true;
   }
 
   /// when caller cut call then this event emit
