@@ -58,7 +58,7 @@ Future<void> _initializePostLaunchServices() async {
   final fcmToken = await AppStartupHelper.runTask<String?>(
     "FCM token init",
     () => AppStartupHelper.getSafeFcmToken(),
-    timeout: const Duration(seconds: 5),
+    timeout: const Duration(seconds: 10),
   );
 
   Utils.showLog("Device Id => $identity");
@@ -73,7 +73,7 @@ Future<void> _initializePostLaunchServices() async {
   await AppStartupHelper.runTask<void>(
     "Notification services init",
     () => NotificationServices.init(),
-    timeout: const Duration(seconds: 5),
+    timeout: const Duration(seconds: 12),
   );
 
   await AppStartupHelper.runTask<void>(
@@ -125,6 +125,8 @@ void main() async {
     () => _initializeFirebaseApp(),
     timeout: const Duration(seconds: 8),
   );
+  NotificationServices.registerBackgroundHandler();
+
   await AppStartupHelper.runTask<void>(
     "Local storage initialize",
     () async {
@@ -155,6 +157,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WakelockPlus.enable();
+    currentAppLifecycleState =
+        WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed;
     WidgetsBinding.instance.addObserver(this);
   }
 

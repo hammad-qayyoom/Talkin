@@ -12,6 +12,55 @@ import 'package:notisboard/utils/firebse_access_token.dart';
 import 'package:notisboard/utils/guest_auth.dart';
 
 class FeedApi {
+  static bool _isSupportedImagePath(String path) {
+    final normalized = path.toLowerCase();
+    return normalized.endsWith('.jpg') ||
+        normalized.endsWith('.jpeg') ||
+        normalized.endsWith('.png') ||
+        normalized.endsWith('.gif') ||
+        normalized.endsWith('.webp') ||
+        normalized.endsWith('.heic');
+  }
+
+  static Map<String, dynamic> _decodeJsonMap({
+    required http.Response response,
+    required String fallbackMessage,
+  }) {
+    final contentType = (response.headers['content-type'] ?? '').toLowerCase();
+    final body = response.body;
+    final trimmedBody = body.trimLeft();
+
+    final looksLikeJson = contentType.contains('application/json') ||
+        contentType.contains('+json') ||
+        trimmedBody.startsWith('{') ||
+        trimmedBody.startsWith('[');
+
+    if (!looksLikeJson) {
+      return {
+        'status': false,
+        'message': '$fallbackMessage Server returned an unexpected response.',
+      };
+    }
+
+    try {
+      final decoded = json.decode(body);
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': '$fallbackMessage Invalid response format.',
+      };
+    } catch (e) {
+      debugPrint('Feed API parse error: $e');
+      return {
+        'status': false,
+        'message': '$fallbackMessage Response parsing failed.',
+      };
+    }
+  }
+
   static Future<Map<String, String>> _headers({
     bool allowGuest = false,
   }) async {
@@ -47,16 +96,25 @@ class FeedApi {
       );
 
       final response = await http.get(uri, headers: headers);
-      final decoded = json.decode(response.body);
+      final decoded = _decodeJsonMap(
+        response: response,
+        fallbackMessage: 'Failed to fetch feed posts.',
+      );
 
-      if (decoded is Map<String, dynamic>) {
-        return decoded;
+      if (response.statusCode >= 400 && decoded['status'] != true) {
+        final existingMessage = decoded['message'];
+        final normalizedMessage =
+            existingMessage is String && existingMessage.trim().isNotEmpty
+                ? existingMessage
+                : 'Failed to fetch feed posts.';
+        return {
+          ...decoded,
+          'status': false,
+          'message': '$normalizedMessage (HTTP ${response.statusCode})',
+        };
       }
 
-      return {
-        'status': false,
-        'message': 'Invalid feed response format.',
-      };
+      return decoded;
     } catch (e) {
       debugPrint('Feed fetch error: $e');
       return {
@@ -87,20 +145,29 @@ class FeedApi {
 
       if (mediaFile != null && await mediaFile.exists()) {
         final path = mediaFile.path.toLowerCase();
-        final isVideo = path.endsWith('.mp4') ||
-            path.endsWith('.mov') ||
-            path.endsWith('.mkv') ||
-            path.endsWith('.webm') ||
-            path.endsWith('.avi');
+        if (!_isSupportedImagePath(path)) {
+          return {
+            'status': false,
+            'message': 'Only image uploads are allowed.',
+          };
+        }
+
         final isPng = path.endsWith('.png');
         final isGif = path.endsWith('.gif');
+        final isWebp = path.endsWith('.webp');
 
         request.files.add(await http.MultipartFile.fromPath(
           'media',
           mediaFile.path,
           contentType: MediaType(
-            isVideo ? 'video' : 'image',
-            isVideo ? 'mp4' : (isPng ? 'png' : (isGif ? 'gif' : 'jpeg')),
+            'image',
+            isPng
+                ? 'png'
+                : (isGif
+                    ? 'gif'
+                    : (isWebp
+                        ? 'webp'
+                        : (path.endsWith('.heic') ? 'heic' : 'jpeg'))),
           ),
         ));
       }

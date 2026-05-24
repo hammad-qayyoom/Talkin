@@ -442,7 +442,6 @@ class _ComposerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brandRed = AppColors.redesignBrandRed;
-    final brandDark = AppColors.redesignBrandDark;
     final mutedText = AppColors.redesignMutedText;
     final softBorder = AppColors.redesignSoftBorder;
 
@@ -571,31 +570,7 @@ class _ComposerView extends StatelessWidget {
                           height: 190,
                           fit: BoxFit.cover,
                         )
-                      : Container(
-                          width: Get.width,
-                          height: 132,
-                          color: brandDark.withValues(alpha: 0.94),
-                          padding: const EdgeInsets.all(12),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.play_circle_fill_rounded,
-                                color: AppColors.white,
-                                size: 34,
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  'Video attached',
-                                  style: AppFontStyle.fontStyleW600(
-                                    fontSize: 14,
-                                    fontColor: AppColors.white,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      : const SizedBox.shrink(),
                   IconButton(
                     onPressed: controller.clearComposerMedia,
                     icon: const Icon(Icons.close_rounded),
@@ -619,16 +594,6 @@ class _ComposerView extends StatelessWidget {
                           : controller.pickImageFromGallery,
                       icon: Icons.image_outlined,
                       label: 'Image',
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _ComposerActionButton(
-                      onPressed: controller.isCreatingPost
-                          ? null
-                          : controller.pickVideoFromGallery,
-                      icon: Icons.videocam_outlined,
-                      label: 'Video',
                     ),
                   ),
                   const SizedBox(width: 10),

@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/main_screen/api/login_api.dart';
@@ -16,6 +14,7 @@ import 'package:notisboard/ui/user_flow/mobile_number_screen/controller/mobile_n
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/startup_helper.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class VerifyOtpController extends GetxController {
@@ -69,17 +68,11 @@ class VerifyOtpController extends GetxController {
   Future<void> verifyOtp() async {
     Database.onSetDemoListener(false);
 
-    String identity = "";
-    try {
-      identity = await MobileDeviceIdentifier().getDeviceId() ?? "";
-    } catch (_) {}
-    String fcmToken = "";
-    try {
-      fcmToken = await FirebaseMessaging.instance.getToken() ?? "";
-    } catch (_) {}
-    
-    Database.onSetFcmToken(fcmToken);
-    Database.onSetIdentity(identity);
+    final identity = await AppStartupHelper.getSafeDeviceId();
+    final fcmToken = await AppStartupHelper.getSafeFcmToken();
+
+    await Database.onSetFcmToken(fcmToken ?? "");
+    await Database.onSetIdentity(identity);
 
     log("Database.identity :: ${Database.identity}");
     log("Database.fcmToken :: ${Database.fcmToken}");
@@ -138,6 +131,7 @@ class VerifyOtpController extends GetxController {
           Database.onSetFillProfile(true);
 
           Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
+          await mainScreenController.syncPushTokenPostLogin();
 
           await mainScreenController.onGetProfile(
             loginUserId: userCredential.user!.uid,

@@ -11,6 +11,7 @@ import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/main_screen/api/get_firebase_custom_token_api.dart';
 import 'package:notisboard/ui/user_flow/main_screen/api/get_firebase_uid_by_device_u_uid_api.dart';
 import 'package:notisboard/ui/user_flow/main_screen/api/login_api.dart';
+import 'package:notisboard/services/notification_service/push_token_sync_api.dart';
 import 'package:notisboard/ui/user_flow/main_screen/model/get_firebase_custom_token_model.dart';
 import 'package:notisboard/ui/user_flow/main_screen/model/get_firebase_uid_by_device_u_uid_model.dart';
 import 'package:notisboard/ui/user_flow/main_screen/model/login_model.dart';
@@ -95,6 +96,15 @@ class MainScreenController extends GetxController {
 
     Utils.showLog("Device context identity => ${Database.identity}");
     Utils.showLog("Device context fcmToken => ${Database.fcmToken}");
+  }
+
+  Future<void> syncPushTokenPostLogin() async {
+    final fcmToken = await AppStartupHelper.getSafeFcmToken();
+    final resolvedToken = (fcmToken ?? '').trim();
+    if (resolvedToken.isEmpty) return;
+
+    await Database.onSetFcmToken(resolvedToken);
+    await PushTokenSyncApi.callApi(fcmToken: resolvedToken);
   }
 
   void _dismissLoadingDialog() {
@@ -250,6 +260,7 @@ class MainScreenController extends GetxController {
         Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
         Database.onSetSeenOnboarding(true);
         Database.onSetFillProfile(true);
+        await syncPushTokenPostLogin();
 
         await onGetProfile(loginUserId: userCredential.user!.uid, loginType: 5);
 
@@ -572,6 +583,7 @@ class MainScreenController extends GetxController {
       Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
       Database.onSetSeenOnboarding(true);
       Database.onSetFillProfile(true);
+      await syncPushTokenPostLogin();
 
       await onGetProfile(loginUserId: uid, loginType: 2);
 
@@ -716,6 +728,7 @@ class MainScreenController extends GetxController {
       Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
       Database.onSetSeenOnboarding(true);
       Database.onSetFillProfile(true);
+      await syncPushTokenPostLogin();
 
       if (loginModel?.signUp == true) {
         Database.onSetFillProfile(false);

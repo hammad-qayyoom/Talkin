@@ -1,14 +1,13 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 import 'package:notisboard/custom/custom_web_view/web_view_screen.dart';
 import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/services/notification_service/push_token_sync_api.dart';
 import 'package:notisboard/ui/user_flow/main_screen/api/login_api.dart';
 import 'package:notisboard/ui/user_flow/main_screen/model/login_model.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_login_user_profile_api.dart';
@@ -17,6 +16,7 @@ import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/firebse_access_token.dart';
+import 'package:notisboard/utils/startup_helper.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class RegistrationController extends GetxController {
@@ -249,21 +249,20 @@ class RegistrationController extends GetxController {
   var isBusy = false;
 
   Future<void> _prepareDeviceContext() async {
-    try {
-      final identity = await MobileDeviceIdentifier().getDeviceId();
-      Database.onSetIdentity(identity ?? "");
-    } catch (e) {
-      Utils.showLog("getDeviceId error: $e");
-      Database.onSetIdentity("");
-    }
+    final identity = await AppStartupHelper.getSafeDeviceId();
+    await Database.onSetIdentity(identity);
 
-    try {
-      final fcmToken = await FirebaseMessaging.instance.getToken();
-      Database.onSetFcmToken(fcmToken ?? "");
-    } catch (e) {
-      Utils.showLog("getFcmToken error: $e");
-      Database.onSetFcmToken("");
-    }
+    final fcmToken = await AppStartupHelper.getSafeFcmToken();
+    await Database.onSetFcmToken(fcmToken ?? "");
+  }
+
+  Future<void> _syncPushTokenPostLogin() async {
+    final fcmToken = await AppStartupHelper.getSafeFcmToken();
+    final resolvedToken = (fcmToken ?? '').trim();
+    if (resolvedToken.isEmpty) return;
+
+    await Database.onSetFcmToken(resolvedToken);
+    await PushTokenSyncApi.callApi(fcmToken: resolvedToken);
   }
 
   Future<void> _cleanupCreatedFirebaseUser(
@@ -286,6 +285,7 @@ class RegistrationController extends GetxController {
     Database.onSetFillProfile(true);
 
     Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
+    await _syncPushTokenPostLogin();
 
     await onGetProfile(
       loginUserId: userCredential.user!.uid,

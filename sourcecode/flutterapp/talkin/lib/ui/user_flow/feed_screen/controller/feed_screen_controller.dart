@@ -218,19 +218,6 @@ class FeedScreenController extends GetxController {
     update([Constant.idFeed]);
   }
 
-  Future<void> pickVideoFromGallery() async {
-    final picked = await picker.pickVideo(
-      source: ImageSource.gallery,
-      maxDuration: const Duration(minutes: 2),
-    );
-
-    if (picked == null) return;
-
-    selectedMediaFile = File(picked.path);
-    selectedMediaType = 'video';
-    update([Constant.idFeed]);
-  }
-
   void clearComposerMedia() {
     selectedMediaFile = null;
     selectedMediaType = 'none';

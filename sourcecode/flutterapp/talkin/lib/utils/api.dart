@@ -45,6 +45,7 @@ abstract class Api {
       "${baseUrl}api/user/notification/getNotificationHistory?";
   static const updateUserNotificationPermission =
       "${baseUrl}api/user/modifyNotificationPermission";
+  static const syncUserFcmToken = "${baseUrl}api/user/syncFcmToken";
 
   static const submitCallRate = "${baseUrl}api/user/rating/submitExpertReview?";
   static const searchChatUser =

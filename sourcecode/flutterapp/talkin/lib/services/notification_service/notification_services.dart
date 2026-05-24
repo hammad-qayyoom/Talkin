@@ -1,5 +1,6 @@
 library;
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -12,6 +13,7 @@ import 'package:notisboard/custom/dialog/app_restart_dialog.dart';
 import 'package:notisboard/main.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/services/permission_handler/permission_handler.dart';
+import 'package:notisboard/services/notification_service/push_token_sync_api.dart';
 import 'package:notisboard/socket/socket_emit.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/database.dart';
@@ -19,6 +21,115 @@ import 'package:notisboard/utils/utils.dart';
 
 class NotificationServices {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
+  static bool _isTokenSyncInitialized = false;
+  static bool _isBackgroundHandlerRegistered = false;
+  static StreamSubscription<String>? _tokenRefreshSubscription;
+  static String _lastSyncedToken = "";
+
+  static String _authorizationStatusLabel(AuthorizationStatus status) {
+    switch (status) {
+      case AuthorizationStatus.authorized:
+        return 'authorized';
+      case AuthorizationStatus.denied:
+        return 'denied';
+      case AuthorizationStatus.notDetermined:
+        return 'notDetermined';
+      case AuthorizationStatus.provisional:
+        return 'provisional';
+    }
+  }
+
+  static String _normalizeFcmToken(String? value) {
+    final token = (value ?? '').trim();
+    if (token.isEmpty || token.startsWith('pending_fcm_')) {
+      return '';
+    }
+    return token;
+  }
+
+  static Future<void> _storeAndSyncToken(String? value) async {
+    final normalizedToken = _normalizeFcmToken(value);
+    if (normalizedToken.isEmpty) return;
+
+    await Database.onSetFcmToken(normalizedToken);
+    if (_lastSyncedToken == normalizedToken) return;
+
+    final didSync = await PushTokenSyncApi.callApi(fcmToken: normalizedToken);
+    if (didSync) {
+      _lastSyncedToken = normalizedToken;
+    }
+  }
+
+  static Future<void> _syncCurrentTokenWithRetry() async {
+    const maxAttempts = 10;
+
+    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        if (GetPlatform.isIOS) {
+          final apnsToken = await messaging.getAPNSToken();
+          Utils.showLog("iOS APNS Token attempt $attempt => $apnsToken");
+          if ((apnsToken ?? '').trim().isEmpty) {
+            await Future<void>.delayed(const Duration(milliseconds: 500));
+            continue;
+          }
+        }
+
+        final fcmToken = await messaging.getToken();
+        Utils.showLog("FCM Token attempt $attempt => $fcmToken");
+
+        if (_normalizeFcmToken(fcmToken).isNotEmpty) {
+          await _storeAndSyncToken(fcmToken);
+          return;
+        }
+      } catch (error) {
+        Utils.showLog("FCM token attempt $attempt failed => $error");
+      }
+
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+    }
+  }
+
+  static Future<void> _initializeTokenSync() async {
+    if (_isTokenSyncInitialized) return;
+    _isTokenSyncInitialized = true;
+
+    await _syncCurrentTokenWithRetry();
+
+    _tokenRefreshSubscription?.cancel();
+    _tokenRefreshSubscription = messaging.onTokenRefresh.listen((token) async {
+      Utils.showLog("FCM token refreshed => $token");
+      await _storeAndSyncToken(token);
+    });
+  }
+
+  static void registerBackgroundHandler() {
+    if (_isBackgroundHandlerRegistered) return;
+    _isBackgroundHandlerRegistered = true;
+    FirebaseMessaging.onBackgroundMessage(backgroundNotification);
+  }
+
+  static AppLifecycleState _effectiveLifecycleState() {
+    return currentAppLifecycleState ??
+        WidgetsBinding.instance.lifecycleState ??
+        AppLifecycleState.resumed;
+  }
+
+  static bool _isChatScreenOpen() {
+    return Get.currentRoute == AppRoutes.personalChatScreen ||
+        Get.currentRoute == AppRoutes.hostPersonalChatScreen;
+  }
+
+  static bool _shouldSuppressForegroundNotification(RemoteMessage message) {
+    final type = message.data["type"];
+    if (type == "CHAT" && _isChatScreenOpen()) {
+      Utils.showLog(
+        "User is already on a chat screen. Suppressing notification.",
+      );
+      return true;
+    }
+
+    return false;
+  }
 
   static void _navigateWhenAppReady(Map<String, dynamic> data) {
     Future<void>(() async {
@@ -85,12 +196,34 @@ class NotificationServices {
       sound: true,
     );
 
-    await messaging.requestPermission(
+    final beforeSettings = await messaging.getNotificationSettings();
+    Utils.showLog(
+      "Notification permission before request => "
+      "${_authorizationStatusLabel(beforeSettings.authorizationStatus)}",
+    );
+
+    final permissionSettings = await messaging.requestPermission(
       alert: true,
       badge: true,
       sound: true,
-      criticalAlert: true,
+      criticalAlert: false,
+      provisional: false,
     );
+    Utils.showLog(
+      "Notification permission after request => "
+      "${_authorizationStatusLabel(permissionSettings.authorizationStatus)}",
+    );
+
+    if (GetPlatform.isIOS) {
+      try {
+        final apnsToken = await messaging.getAPNSToken();
+        Utils.showLog("APNS Token => $apnsToken");
+      } catch (error) {
+        Utils.showLog("APNS token fetch failed => $error");
+      }
+    }
+
+    await _initializeTokenSync();
   }
 
   @pragma('vm:entry-point')
@@ -229,12 +362,12 @@ class NotificationServices {
     Utils.showLog("show awesome notification AAA");
 
     final String type = message.data['type'] ?? '';
+    final lifecycleState = _effectiveLifecycleState();
     String channelKey = 'chat_channel';
     NotificationCategory category = NotificationCategory.Message;
     List<NotificationActionButton> actions = [];
 
-    if (currentAppLifecycleState != AppLifecycleState.resumed &&
-        type == 'callIncoming') {
+    if (type == 'callIncoming') {
       channelKey = 'call_channel';
       category = NotificationCategory.Call;
       actions = [
@@ -275,8 +408,10 @@ class NotificationServices {
         notificationLayout: NotificationLayout.Default,
         displayOnForeground: true,
         displayOnBackground: true,
-        wakeUpScreen: channelKey == 'call_channel',
-        fullScreenIntent: channelKey == 'call_channel',
+        wakeUpScreen: channelKey == 'call_channel' &&
+            lifecycleState != AppLifecycleState.resumed,
+        fullScreenIntent: channelKey == 'call_channel' &&
+            lifecycleState != AppLifecycleState.resumed,
         criticalAlert: channelKey == 'call_channel',
         autoDismissible: channelKey != 'call_channel',
         locked: channelKey == 'call_channel',
@@ -290,41 +425,42 @@ class NotificationServices {
   static Future<void> firebaseInit() async {
     Utils.showLog("notification firebase init");
 
-    FirebaseMessaging.onMessage.listen((message) {
+    FirebaseMessaging.onMessage.listen((message) async {
+      final lifecycleState = _effectiveLifecycleState();
       Utils.showLog(
-          "Notification service firebase init => $currentAppLifecycleState");
+        "Notification service firebase init => $lifecycleState",
+      );
       Utils.showLog("Notification AAA => ${message.data}");
       Utils.showLog("Notification => ${message.data["type"]}");
 
-      if (currentAppLifecycleState == AppLifecycleState.resumed) {
-        if ((Get.currentRoute == AppRoutes.personalChatScreen ||
-                Get.currentRoute == AppRoutes.hostPersonalChatScreen) &&
-            message.data["type"] == "CHAT") {
-          Utils.showLog(
-              "User is already on a chat screen. Suppressing notification.");
-        } else if (message.data['type'] == 'expert_verified') {
-          Get.dialog(
-            barrierDismissible: false,
-            barrierColor: AppColors.black.withValues(alpha: 0.8),
-            Dialog(
-              backgroundColor: AppColors.transparent,
-              shadowColor: Colors.transparent,
-              surfaceTintColor: Colors.transparent,
-              elevation: 0,
-              child: const AppRestartDialog(),
-            ),
-          );
-        } else if (message.data['type'] != "callIncoming") {
-          showAwesomeNotification(message);
-        }
-      } else if (currentAppLifecycleState == AppLifecycleState.paused) {
-        if (message.data['type'] != "callIncoming") {
-          showAwesomeNotification(message);
-        }
+      if (_shouldSuppressForegroundNotification(message)) {
+        return;
+      }
+
+      if (message.data['type'] == 'expert_verified') {
+        Get.dialog(
+          barrierDismissible: false,
+          barrierColor: AppColors.black.withValues(alpha: 0.8),
+          Dialog(
+            backgroundColor: AppColors.transparent,
+            shadowColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            child: const AppRestartDialog(),
+          ),
+        );
+        return;
+      }
+
+      await showAwesomeNotification(message);
+
+      if (message.data['type'] == "callIncoming" &&
+          lifecycleState == AppLifecycleState.resumed) {
+        _navigateWhenAppReady(message.data);
       }
     });
 
-    FirebaseMessaging.onBackgroundMessage(backgroundNotification);
+    registerBackgroundHandler();
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       Utils.showLog("App opened from notification: ${message.data}");

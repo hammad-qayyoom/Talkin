@@ -10,6 +10,19 @@ import 'package:notisboard/utils/utils.dart';
 class AppStartupHelper {
   static const String _fallbackIdentityKey = 'fallbackDeviceIdentity';
 
+  static String _authorizationStatusLabel(AuthorizationStatus status) {
+    switch (status) {
+      case AuthorizationStatus.authorized:
+        return 'authorized';
+      case AuthorizationStatus.denied:
+        return 'denied';
+      case AuthorizationStatus.notDetermined:
+        return 'notDetermined';
+      case AuthorizationStatus.provisional:
+        return 'provisional';
+    }
+  }
+
   static Future<T?> runTask<T>(
     String label,
     Future<T> Function() task, {
@@ -66,17 +79,29 @@ class AppStartupHelper {
     try {
       if (GetPlatform.isIOS) {
         // iOS often requires notification authorization before APNS/FCM token becomes available.
-        await FirebaseMessaging.instance.requestPermission(
+        final permissionSettings =
+            await FirebaseMessaging.instance.requestPermission(
           alert: true,
           badge: true,
           sound: true,
-          provisional: true,
+          provisional: false,
+        );
+        Utils.showLog(
+          "Startup iOS notification permission => "
+          "${_authorizationStatusLabel(permissionSettings.authorizationStatus)}",
         );
 
         for (int i = 0; i < 12; i++) {
-          final apnsToken = await FirebaseMessaging.instance
-              .getAPNSToken()
-              .timeout(const Duration(milliseconds: 400));
+          String? apnsToken;
+          try {
+            apnsToken = await FirebaseMessaging.instance
+                .getAPNSToken()
+                .timeout(const Duration(milliseconds: 400));
+          } catch (error) {
+            Utils.showLog(
+                "Startup APNS token attempt ${i + 1} failed => $error");
+          }
+          Utils.showLog("Startup APNS Token attempt ${i + 1} => $apnsToken");
           if ((apnsToken ?? '').isNotEmpty) {
             break;
           }
@@ -86,6 +111,7 @@ class AppStartupHelper {
 
       final token =
           await FirebaseMessaging.instance.getToken().timeout(timeout);
+      Utils.showLog("Startup FCM Token => $token");
       return (token ?? '').trim().isEmpty ? storedToken : token;
     } catch (error, stackTrace) {
       Utils.showLog("FCM token unavailable => $error");

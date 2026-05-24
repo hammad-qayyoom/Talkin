@@ -59,10 +59,7 @@ class LoginApi {
     };
     Utils.showLog("Login Api Headers :: $headers");
 
-    final resolvedIdentity = identity.trim();
-    final resolvedFcmToken = fcmToken.trim().isNotEmpty
-        ? fcmToken.trim()
-        : "pending_fcm_${resolvedIdentity.isNotEmpty ? resolvedIdentity : uid}";
+    final resolvedFcmToken = fcmToken.trim();
     Utils.showLog("Login Api Effective FCM Token :: $resolvedFcmToken");
 
     final compliancePayload = {
