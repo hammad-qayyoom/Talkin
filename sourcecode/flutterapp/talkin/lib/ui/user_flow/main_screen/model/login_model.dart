@@ -46,6 +46,8 @@ class User {
   final int? loginType;
   final String? firebaseId;
   final String? uniqueId;
+  final String? referralCode;
+  final String? referredByCode;
   final bool? isGuestAccount;
   final String? fcmToken;
   final bool? isBlock;
@@ -63,6 +65,8 @@ class User {
     this.loginType,
     this.firebaseId,
     this.uniqueId,
+    this.referralCode,
+    this.referredByCode,
     this.isGuestAccount,
     this.fcmToken,
     this.isBlock,
@@ -81,6 +85,8 @@ class User {
         loginType: json["loginType"],
         firebaseId: json["firebaseId"],
         uniqueId: json["uniqueId"],
+        referralCode: json["referralCode"],
+        referredByCode: json["referredByCode"],
         isGuestAccount: json["isGuestAccount"],
         fcmToken: json["fcmToken"],
         isBlock: json["isBlock"],
@@ -101,6 +107,8 @@ class User {
         "loginType": loginType,
         "firebaseId": firebaseId,
         "uniqueId": uniqueId,
+        "referralCode": referralCode,
+        "referredByCode": referredByCode,
         "isGuestAccount": isGuestAccount,
         "fcmToken": fcmToken,
         "isBlock": isBlock,

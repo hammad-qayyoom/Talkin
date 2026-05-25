@@ -130,6 +130,19 @@ class RegistrationAddInfoView extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 16),
+                _buildLabel('Referral code (optional)'),
+                const SizedBox(height: 8),
+                _buildTextField(
+                  controller: logic.referralCodeController,
+                  textInputAction: TextInputAction.next,
+                  hintText: 'Enter invite code',
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+                    LengthLimitingTextInputFormatter(16),
+                    UpperCaseTextFormatter(),
+                  ],
+                ),
+                const SizedBox(height: 16),
                 _buildLabel(EnumLocale.txtPassword.name.tr),
                 const SizedBox(height: 8),
                 _buildTextField(

@@ -158,6 +158,9 @@ const VerticalMenu = ({ scrollMenu }) => {
             <MenuItem href='/payout-requests' icon={<i className='tabler-cash-banknote' />}>
               Payout Request
             </MenuItem>
+            <MenuItem href='/referrals' icon={<i className='tabler-gift' />}>
+              Referrals
+            </MenuItem>
           </MenuSection>
 
           <MenuSection label='SETTINGS'>

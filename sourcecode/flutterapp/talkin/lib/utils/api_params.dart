@@ -19,6 +19,7 @@ class ApiParams {
   static const phoneNumber = "phoneNumber";
   static const faqCategory = "category";
   static const countryCode = "countryCode";
+  static const referralCode = "referralCode";
   static const country = "country";
   static const countryFlag = "countryFlag";
   static const newPassword = "newPassword";

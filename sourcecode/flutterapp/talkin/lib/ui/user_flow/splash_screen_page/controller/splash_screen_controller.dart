@@ -7,6 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:notisboard/custom/dialog/exit_app_dialog.dart';
 import 'package:notisboard/custom/dialog/force_update_dialog.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/services/biometric/biometric_auth_service.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/api/host_coin_api.dart';
 import 'package:notisboard/services/location/user_location_service.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
@@ -342,10 +343,31 @@ Future<void> splashScreen() async {
             Database.fetchLoginUserProfileModel?.status == true &&
                 Database.fetchLoginUserProfileModel?.user != null;
 
-        if (!hasValidProfile ||
+        final userNotFoundInBackend =
             Database.fetchLoginUserProfileModel?.message ==
-                "User not found in the database." ||
-            token == null) {
+                "User not found in the database.";
+
+        if (!hasValidProfile || token == null) {
+          if (Database.isLogin && !userNotFoundInBackend) {
+            // Keep existing signed-in state on transient startup failures
+            // (network/token refresh race) instead of forcing guest logout.
+            Utils.showLog(
+              "Startup profile/token unavailable temporarily; preserving login session.",
+            );
+
+            if (Database.isFillProfile == true) {
+              if (Database.fetchLoginUserProfileModel?.user?.isListener ==
+                  true) {
+                navigateFromSplash(AppRoutes.hostBottomBar);
+              } else {
+                navigateFromSplash(AppRoutes.bottomBar);
+              }
+            } else {
+              navigateFromSplash(AppRoutes.main);
+            }
+            return;
+          }
+
           Utils.showLog(
               "No valid login profile. Using limited guest browsing.");
           await enterLimitedGuestBrowsing();
@@ -355,6 +377,22 @@ Future<void> splashScreen() async {
           Utils.showLog("lllllllllllllllllllllllllllllllllllllll");
           if (Database.isLogin == true) {
             if (Database.isFillProfile == true) {
+              final shouldBiometricUnlock =
+                  await BiometricAuthService.shouldRequireUnlockOnStartup();
+              final nextRoute = Database
+                          .fetchLoginUserProfileModel?.user?.isListener ==
+                      true
+                  ? AppRoutes.hostBottomBar
+                  : AppRoutes.bottomBar;
+
+              if (shouldBiometricUnlock) {
+                navigateFromSplash(
+                  AppRoutes.biometricUnlockScreen,
+                  arguments: {'nextRoute': nextRoute},
+                );
+                return;
+              }
+
               if (Database.fetchLoginUserProfileModel?.user?.isListener ==
                   true) {
                 navigateFromSplash(AppRoutes.hostBottomBar);

@@ -8,6 +8,7 @@ import 'package:notisboard/custom/custom_web_view/web_view_screen.dart';
 import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
 import 'package:notisboard/custom/random_name/random_name.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/services/biometric/biometric_auth_service.dart';
 import 'package:notisboard/ui/user_flow/main_screen/api/get_firebase_custom_token_api.dart';
 import 'package:notisboard/ui/user_flow/main_screen/api/get_firebase_uid_by_device_u_uid_api.dart';
 import 'package:notisboard/ui/user_flow/main_screen/api/login_api.dart';
@@ -367,6 +368,13 @@ class MainScreenController extends GetxController {
           Utils.showLog(fetchListenerProfileModel?.message ?? "");
         }
         Database.fetchListenerProfileModel = fetchListenerProfileModel;
+      }
+
+      if (Database.isLogin) {
+        final biometricEnabled = await BiometricAuthService.isEnabled();
+        if (biometricEnabled) {
+          await BiometricAuthService.bindSessionForCurrentUser();
+        }
       }
     } else {
       Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);

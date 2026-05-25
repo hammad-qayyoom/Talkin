@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/services/biometric/biometric_auth_service.dart';
 import 'package:notisboard/socket/socket_service.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_login_user_profile_api.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/model/aap_configuration_model.dart';
@@ -275,6 +276,7 @@ class Database {
     final fcmTokenFirebase = fcmToken;
 
     await FirebaseAuth.instance.signOut();
+    await BiometricAuthService.clearAll();
     await localStorage.erase();
 
     log("logout app language $selectedLanguage");

@@ -1,226 +1,92 @@
 'use client'
 
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-import { secretKey, baseURL } from '@/config'
+import { baseURL, secretKey } from '@/config'
 
-const BASE_URL = baseURL
-
-// Helper to get auth headers
 const getAuthHeaders = () => {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('admin_token')
-    const uid = localStorage.getItem('uid')
+  if (typeof window === 'undefined') return {}
 
-    return {
-      'Content-Type': 'application/json',
-      key: secretKey,
-      Authorization: `Bearer ${token}`,
-      'x-admin-uid': uid
-    }
+  return {
+    'Content-Type': 'application/json',
+    key: secretKey,
+    Authorization: `Bearer ${localStorage.getItem('admin_token') || ''}`,
+    'x-admin-uid': localStorage.getItem('uid') || ''
   }
-
-  return {}
 }
 
-// Fetch all referral systems
-export const fetchReferralSystems = createAsyncThunk('referralSystem/fetchAll', async (_, thunkAPI) => {
-  try {
-    const response = await axios.get(`${BASE_URL}/api/admin/referralSystem/retrieveReferralSystems`, {
-      headers: getAuthHeaders()
-    })
+export const fetchReferralRecords = createAsyncThunk('referralSystem/fetchRecords', async params => {
+  const query = new URLSearchParams({
+    start: String(params?.page || 1),
+    limit: String(params?.pageSize || 20),
+    rewardStatus: params?.rewardStatus || 'All',
+    rewardTriggerType: params?.rewardTriggerType || 'All',
+    search: params?.search || ''
+  })
 
-    return response.data
-  } catch (error) {
-    const errorMsg = error.response?.data?.message || error.message
+  const response = await axios.get(`${baseURL}/api/admin/referral/list?${query.toString()}`, {
+    headers: getAuthHeaders()
+  })
 
-    toast.error(errorMsg)
-
-    return thunkAPI.rejectWithValue(errorMsg)
-  }
+  return response.data
 })
 
-// Create new referral system
-export const createReferralSystem = createAsyncThunk(
-  'referralSystem/create',
-  async ({ targetReferrals, rewardCoins }, thunkAPI) => {
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/api/admin/referralSystem/addReferralSystem?targetReferrals=${targetReferrals}&rewardCoins=${rewardCoins}`,
-        {},
-        { headers: getAuthHeaders() }
-      )
-
-      toast.success(response.data.message || 'Referral system created successfully')
-
-      return response.data
-    } catch (error) {
-      const errorMsg = error.response?.data?.message || error.message
-
-      toast.error(errorMsg)
-
-      return thunkAPI.rejectWithValue(errorMsg)
-    }
-  }
-)
-
-// Update referral system
-export const updateReferralSystem = createAsyncThunk(
-  'referralSystem/update',
-  async ({ targetReferrals, rewardCoins, referralId }, thunkAPI) => {
-    try {
-      const response = await axios.patch(
-        `${BASE_URL}/api/admin/referralSystem/modifyReferralSystem?targetReferrals=${targetReferrals}&rewardCoins=${rewardCoins}&referralId=${referralId}`,
-        {},
-        { headers: getAuthHeaders() }
-      )
-
-      toast.success(response.data.message || 'Referral system updated successfully')
-
-      return response.data
-    } catch (error) {
-      const errorMsg = error.response?.data?.message || error.message
-
-      toast.error(errorMsg)
-
-      return thunkAPI.rejectWithValue(errorMsg)
-    }
-  }
-)
-
-// Toggle referral system state
-export const toggleReferralSystem = createAsyncThunk('referralSystem/toggle', async (referralId, thunkAPI) => {
-  try {
+export const updateReferralRewardStatus = createAsyncThunk(
+  'referralSystem/updateRewardStatus',
+  async ({ referralId, rewardStatus, rejectionReason }) => {
     const response = await axios.patch(
-      `${BASE_URL}/api/admin/referralSystem/updateReferralSystemState?referralId=${referralId}`,
-      {},
+      `${baseURL}/api/admin/referral/updateRewardStatus?referralId=${referralId}`,
+      { rewardStatus, rejectionReason },
       { headers: getAuthHeaders() }
     )
 
-    toast.success(response.data.message || 'Referral system status updated successfully')
+    if (response.data?.status) {
+      toast.success(response.data.message || 'Referral reward updated')
+    } else {
+      toast.error(response.data?.message || 'Failed to update referral reward')
+    }
 
     return response.data
-  } catch (error) {
-    const errorMsg = error.response?.data?.message || error.message
-
-    toast.error(errorMsg)
-
-    return thunkAPI.rejectWithValue(errorMsg)
   }
-})
-
-// Delete referral system
-export const deleteReferralSystem = createAsyncThunk('referralSystem/delete', async (referralId, thunkAPI) => {
-  try {
-    const response = await axios.delete(
-      `${BASE_URL}/api/admin/referralSystem/removeReferralSystem?referralId=${referralId}`,
-      { headers: getAuthHeaders() }
-    )
-
-    toast.success(response.data.message || 'Referral system deleted successfully')
-
-    return { referralId, ...response.data }
-  } catch (error) {
-    const errorMsg = error.response?.data?.message || error.message
-
-    toast.error(errorMsg)
-
-    return thunkAPI.rejectWithValue(errorMsg)
-  }
-})
-
-const initialState = {
-  referralSystems: [],
-  initialLoading: true,
-  loading: false,
-  error: null
-}
+)
 
 const referralSystemSlice = createSlice({
   name: 'referralSystem',
-  initialState,
+  initialState: {
+    records: [],
+    total: 0,
+    loading: false,
+    error: null
+  },
   reducers: {},
   extraReducers: builder => {
     builder
-
-      // Fetch referral systems
-      .addCase(fetchReferralSystems.pending, state => {
-        state.initialLoading = true
+      .addCase(fetchReferralRecords.pending, state => {
+        state.loading = true
         state.error = null
       })
-      .addCase(fetchReferralSystems.fulfilled, (state, action) => {
-        state.initialLoading = false
+      .addCase(fetchReferralRecords.fulfilled, (state, action) => {
+        state.loading = false
 
-        if (action.payload.status) {
-          state.referralSystems = action.payload.data
+        if (action.payload?.status) {
+          state.records = action.payload.data || []
+          state.total = action.payload.total || 0
+        } else {
+          state.error = action.payload?.message || 'Failed to fetch referral records'
         }
       })
-      .addCase(fetchReferralSystems.rejected, (state, action) => {
-        state.initialLoading = false
-        state.error = action.payload
-      })
-
-      // Create referral system
-
-      .addCase(createReferralSystem.fulfilled, (state, action) => {
+      .addCase(fetchReferralRecords.rejected, (state, action) => {
         state.loading = false
-
-        if (action.payload.status) {
-          state.referralSystems.push(action.payload.data)
-        }
+        state.error = action.error?.message || 'Failed to fetch referral records'
       })
-      .addCase(createReferralSystem.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload
-      })
+      .addCase(updateReferralRewardStatus.fulfilled, (state, action) => {
+        if (!action.payload?.status) return
 
-      // Update referral system
-      .addCase(updateReferralSystem.fulfilled, (state, action) => {
-        state.loading = false
+        const updatedRecord = action.payload.data
 
-        if (action.payload.status) {
-          const updatedSystem = action.payload.data
-
-          state.referralSystems = state.referralSystems.map(system =>
-            system._id === updatedSystem._id ? updatedSystem : system
-          )
-        }
-      })
-      .addCase(updateReferralSystem.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload
-      })
-
-      // Toggle referral system
-      .addCase(toggleReferralSystem.fulfilled, (state, action) => {
-        if (action.payload.status) {
-          const updatedSystem = action.payload.data
-
-          state.referralSystems = state.referralSystems.map(system =>
-            system._id === updatedSystem._id ? updatedSystem : system
-          )
-        }
-      })
-      .addCase(toggleReferralSystem.rejected, (state, action) => {
-        state.error = action.payload
-      })
-
-      // Delete referral system
-      .addCase(deleteReferralSystem.pending, state => {
-        state.loading = true
-      })
-      .addCase(deleteReferralSystem.fulfilled, (state, action) => {
-        state.loading = false
-
-        if (action.payload.status) {
-          state.referralSystems = state.referralSystems.filter(system => system._id !== action.payload.referralId)
-        }
-      })
-      .addCase(deleteReferralSystem.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload
+        state.records = state.records.map(record => (record._id === updatedRecord._id ? updatedRecord : record))
       })
   }
 })

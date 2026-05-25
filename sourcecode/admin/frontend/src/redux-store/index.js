@@ -77,7 +77,7 @@ export const store = configureStore({
 
     // help: helpReducer,
     // reports: reportsReducer,
-    // referralSystem: referralSystemReducer,
+    referralSystem: referralSystemReducer,
     currency: currencyReducer,
 
     // agencyCommissionReducer,

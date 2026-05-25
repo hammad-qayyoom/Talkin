@@ -54,6 +54,8 @@ class User {
   String? identity;
   String? fcmToken;
   String? uniqueId;
+  String? referralCode;
+  String? referredByCode;
   String? firebaseId;
   String? authProvider;
   int? coins;
@@ -91,6 +93,8 @@ class User {
     this.identity,
     this.fcmToken,
     this.uniqueId,
+    this.referralCode,
+    this.referredByCode,
     this.firebaseId,
     this.authProvider,
     this.coins,
@@ -129,6 +133,8 @@ class User {
         identity: json["identity"],
         fcmToken: json["fcmToken"],
         uniqueId: json["uniqueId"],
+        referralCode: json["referralCode"],
+        referredByCode: json["referredByCode"],
         firebaseId: json["firebaseId"],
         authProvider: json["authProvider"],
         coins: json["coins"],
@@ -171,6 +177,8 @@ class User {
         "identity": identity,
         "fcmToken": fcmToken,
         "uniqueId": uniqueId,
+        "referralCode": referralCode,
+        "referredByCode": referredByCode,
         "firebaseId": firebaseId,
         "authProvider": authProvider,
         "coins": coins,

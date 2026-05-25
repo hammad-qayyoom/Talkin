@@ -27,6 +27,7 @@ class RegistrationController extends GetxController {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController referralCodeController = TextEditingController();
   TextEditingController birthDateController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
@@ -330,6 +331,7 @@ class RegistrationController extends GetxController {
       age: _calculateAge(birthDate),
       acceptTerms: true,
       acceptanceSource: "signup_email",
+      referralCode: referralCodeController.text.trim(),
     );
 
     if (loginModel?.status != true) {

@@ -30,6 +30,7 @@ class AppRoutes {
   static const String myWalletScreen = '/myWalletScreen';
   static const String coinHistoryScreen = '/coinHistoryScreen';
   static const String settingScreen = '/settingScreen';
+  static const String referralScreen = '/referralScreen';
   static const String helpCenterScreen = '/helpCenterScreen';
   static const String becomeHostScreen = '/becomeHostScreen';
   static const String appLanguageScreen = '/appLanguageScreen';
@@ -73,4 +74,5 @@ class AppRoutes {
   static const String hostAvailabilityScreen = '/hostAvailabilityScreen';
   static const String hostSessionsScreen = '/hostSessionsScreen';
   static const String hostGroupSessionsScreen = '/hostGroupSessionsScreen';
+  static const String biometricUnlockScreen = '/biometricUnlockScreen';
 }

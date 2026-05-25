@@ -46,6 +46,9 @@ abstract class Api {
   static const updateUserNotificationPermission =
       "${baseUrl}api/user/modifyNotificationPermission";
   static const syncUserFcmToken = "${baseUrl}api/user/syncFcmToken";
+  static const validateReferralCode =
+      "${baseUrl}api/user/validateReferralCode?";
+  static const referralSummary = "${baseUrl}api/user/getReferralSummary";
 
   static const submitCallRate = "${baseUrl}api/user/rating/submitExpertReview?";
   static const searchChatUser =

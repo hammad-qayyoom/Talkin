@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+import 'package:notisboard/services/biometric/biometric_auth_service.dart';
 import 'package:notisboard/ui/user_flow/setting_screen/api/delete_user_api.dart';
 import 'package:notisboard/ui/user_flow/setting_screen/api/user_notification_update_api.dart';
 import 'package:notisboard/ui/user_flow/setting_screen/model/delete_user_account_model.dart';
@@ -17,12 +18,58 @@ class SettingController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool isShowNotification =
       Database.fetchLoginUserProfileModel?.user?.isNotificationEnabled ?? false;
+  bool isBiometricEnabled = false;
   FetchLoginUserProfileModel? fetchLoginUserProfileModel;
   DeleteUserResponseModel? deleteUserModel;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _loadBiometricState();
+  }
+
+  Future<void> _loadBiometricState() async {
+    isBiometricEnabled = await BiometricAuthService.isEnabled();
+    update();
+  }
+
+  Future<void> onSwitchBiometric(bool value) async {
+    if (value) {
+      final supported = await BiometricAuthService.isBiometricSupported();
+      if (!supported) {
+        Utils.showToast(
+          Get.context,
+          'Biometric login is not available on this device',
+        );
+        return;
+      }
+
+      final authenticated = await BiometricAuthService.authenticate(
+        reason: 'Enable biometric login',
+      );
+      if (!authenticated) {
+        Utils.showToast(Get.context, 'Biometric authentication failed');
+        return;
+      }
+
+      await BiometricAuthService.setEnabled(true);
+      await BiometricAuthService.bindSessionForCurrentUser();
+      isBiometricEnabled = true;
+      Utils.showToast(Get.context, 'Biometric login enabled');
+      update();
+      return;
+    }
+
+    await BiometricAuthService.setEnabled(false);
+    isBiometricEnabled = false;
+    Utils.showToast(Get.context, 'Biometric login disabled');
+    update();
+  }
 
   /// log out
   Future<void> signOut() async {
     await _auth.signOut();
+    await BiometricAuthService.clearAll();
     Database.localStorage.erase();
     Database.onSetSelectedLanguage(Constant.languageEn);
     Database.onSetSelectedLanguageCountryCode(Constant.countryCodeEn);

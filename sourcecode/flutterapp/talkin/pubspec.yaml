@@ -100,6 +100,8 @@ dependencies:
   wakelock_plus: ^1.4.0
   package_info_plus: ^9.0.0
   in_app_review: ^2.0.10
+  local_auth: ^2.3.0
+  flutter_secure_storage: ^9.2.4
   incodes_payment: ^1.0.1
   audio_session: ^0.2.2
   flutter_audio_output: ^0.0.4

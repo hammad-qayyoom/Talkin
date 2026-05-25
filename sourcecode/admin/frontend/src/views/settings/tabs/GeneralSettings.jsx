@@ -147,6 +147,11 @@ const GeneralSettings = () => {
     groupSessionMinimumExpertTalkTimeMinutes: '',
     autoExpertBadgeEnabled: false,
     autoExpertBadgeSessionThreshold: 0,
+    isReferralProgramEnabled: false,
+    referralRewardTriggerType: 'subscription',
+    referralRewardAmount: 0,
+    referralRewardCurrency: 'credits',
+    referralLinkBaseUrl: 'https://notisboard.com/ref',
   })
 
   const [privateKeyJson, setPrivateKeyJson] = useState('')
@@ -200,6 +205,11 @@ const GeneralSettings = () => {
         groupSessionMinimumExpertTalkTimeMinutes: settings.groupSessionMinimumExpertTalkTimeMinutes ?? 10,
         autoExpertBadgeEnabled: settings.autoExpertBadgeEnabled ?? false,
         autoExpertBadgeSessionThreshold: settings.autoExpertBadgeSessionThreshold ?? 0,
+        isReferralProgramEnabled: settings.isReferralProgramEnabled ?? false,
+        referralRewardTriggerType: settings.referralRewardTriggerType || 'subscription',
+        referralRewardAmount: settings.referralRewardAmount ?? 0,
+        referralRewardCurrency: settings.referralRewardCurrency || 'credits',
+        referralLinkBaseUrl: settings.referralLinkBaseUrl || 'https://notisboard.com/ref',
         allowBecomeHostOption: settings.allowBecomeHostOption || false,
         isApplicationLive: settings.isApplicationLive || false,
         isDemoContentEnabled: settings.isDemoContentEnabled || false,
@@ -248,7 +258,8 @@ const GeneralSettings = () => {
         'groupVideoSessionCredits',
         'groupSessionCommissionPercent',
         'groupSessionMinimumExpertTalkTimeMinutes',
-        'autoExpertBadgeSessionThreshold'
+        'autoExpertBadgeSessionThreshold',
+        'referralRewardAmount'
       ].includes(field)
     ) {
       // Allow empty string or valid numbers
@@ -365,7 +376,8 @@ const GeneralSettings = () => {
     'groupVideoSessionCredits',
     'groupSessionCommissionPercent',
     'groupSessionMinimumExpertTalkTimeMinutes',
-    'autoExpertBadgeSessionThreshold'
+    'autoExpertBadgeSessionThreshold',
+    'referralRewardAmount'
   ]
 
   const getUpdatedFields = () => {
@@ -1064,6 +1076,92 @@ const GeneralSettings = () => {
                     </InputAdornment>
                   )
                 }}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+
+      <Card sx={{ mb: 4 }}>
+        <CardContent>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Box>
+              <Typography variant='subtitle1' sx={{ mb: 0.5, fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+                <i className='tabler-gift mr-2' />
+                Referral Program
+              </Typography>
+              <Typography variant='body2' color='text.secondary'>
+                Configure invite rewards and when referral credits should be approved.
+              </Typography>
+            </Box>
+          </Box>
+
+          <Divider sx={{ mb: 3 }} />
+
+          <Grid container spacing={3}>
+            <Grid item size={12}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.isReferralProgramEnabled)}
+                    onChange={event => handleFieldChange('isReferralProgramEnabled', event.target.checked)}
+                  />
+                }
+                label='Enable referral program'
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                select
+                label='Reward trigger'
+                value={formData.referralRewardTriggerType || 'subscription'}
+                onChange={e => handleFieldChange('referralRewardTriggerType', e.target.value)}
+                disabled={!Boolean(formData.isReferralProgramEnabled)}
+                helperText='Rewards are only approved after this trusted action.'
+              >
+                <MenuItem value='signup'>Successful signup</MenuItem>
+                <MenuItem value='subscription'>Successful subscription/payment</MenuItem>
+                <MenuItem value='completed_session'>First completed session</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='Reward amount'
+                value={formData.referralRewardAmount ?? ''}
+                onChange={e => handleFieldChange('referralRewardAmount', e.target.value)}
+                disabled={!Boolean(formData.isReferralProgramEnabled)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*', min: 0 },
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Typography variant='caption' color='text.secondary'>
+                        {formData.referralRewardCurrency || 'credits'}
+                      </Typography>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                label='Reward currency label'
+                value={formData.referralRewardCurrency || ''}
+                onChange={e => handleFieldChange('referralRewardCurrency', e.target.value)}
+                disabled={!Boolean(formData.isReferralProgramEnabled)}
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                label='Referral link base URL'
+                value={formData.referralLinkBaseUrl || ''}
+                onChange={e => handleFieldChange('referralLinkBaseUrl', e.target.value)}
+                disabled={!Boolean(formData.isReferralProgramEnabled)}
+                helperText='Example: https://notisboard.com/ref'
               />
             </Grid>
           </Grid>

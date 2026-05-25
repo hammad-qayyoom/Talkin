@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+import 'package:notisboard/services/biometric/biometric_auth_service.dart';
 import 'package:notisboard/ui/host_flow/host_setting_screen/api/delete_listener_api.dart';
 import 'package:notisboard/ui/host_flow/host_setting_screen/api/notification_update_api.dart';
 import 'package:notisboard/ui/host_flow/host_setting_screen/model/delete_listener_response_model.dart';
@@ -13,8 +14,53 @@ import 'package:notisboard/utils/utils.dart';
 class HostSettingController extends GetxController {
   bool isShowNotification =
       Database.fetchListenerProfileModel?.data?.isNotificationEnabled ?? false;
+  bool isBiometricEnabled = false;
   FetchListenerProfileModel? fetchListenerProfileModel;
   DeleteListenerResponseModel? deleteListenerResponseModel;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _loadBiometricState();
+  }
+
+  Future<void> _loadBiometricState() async {
+    isBiometricEnabled = await BiometricAuthService.isEnabled();
+    update();
+  }
+
+  Future<void> onSwitchBiometric(bool value) async {
+    if (value) {
+      final supported = await BiometricAuthService.isBiometricSupported();
+      if (!supported) {
+        Utils.showToast(
+          Get.context,
+          'Biometric login is not available on this device',
+        );
+        return;
+      }
+
+      final authenticated = await BiometricAuthService.authenticate(
+        reason: 'Enable biometric login',
+      );
+      if (!authenticated) {
+        Utils.showToast(Get.context, 'Biometric authentication failed');
+        return;
+      }
+
+      await BiometricAuthService.setEnabled(true);
+      await BiometricAuthService.bindSessionForCurrentUser();
+      isBiometricEnabled = true;
+      Utils.showToast(Get.context, 'Biometric login enabled');
+      update();
+      return;
+    }
+
+    await BiometricAuthService.setEnabled(false);
+    isBiometricEnabled = false;
+    Utils.showToast(Get.context, 'Biometric login disabled');
+    update();
+  }
 
   /// notification switch
   void onSwitchNotification(bool currentValue) async {

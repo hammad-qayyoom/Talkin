@@ -27,6 +27,7 @@ class LoginApi {
     String? confirmPassword,
     String? authToken,
     String? authUid,
+    String? referralCode,
   }) async {
     Utils.showLog("Login Api Calling...");
 
@@ -61,6 +62,7 @@ class LoginApi {
 
     final resolvedFcmToken = fcmToken.trim();
     Utils.showLog("Login Api Effective FCM Token :: $resolvedFcmToken");
+    final resolvedReferralCode = (referralCode ?? '').trim().toUpperCase();
 
     final compliancePayload = {
       if ((birthDate ?? '').trim().isNotEmpty) ApiParams.birthDate: birthDate,
@@ -87,6 +89,8 @@ class LoginApi {
                       ApiParams.password: password?.trim(),
                     ApiParams.confirmPassword: confirmPassword,
                     ApiParams.countryCode: countryCode,
+                    if (resolvedReferralCode.isNotEmpty)
+                      ApiParams.referralCode: resolvedReferralCode,
                   }
                 : {
                     ApiParams.loginType: loginType,
@@ -96,6 +100,8 @@ class LoginApi {
                     if ((password ?? '').trim().isNotEmpty)
                       ApiParams.password: password?.trim(),
                     ApiParams.countryCode: countryCode,
+                    if (resolvedReferralCode.isNotEmpty)
+                      ApiParams.referralCode: resolvedReferralCode,
                   },
           )
         : loginType == 3
@@ -106,6 +112,8 @@ class LoginApi {
                   ApiParams.identity: identity,
                   ApiParams.fcmToken: resolvedFcmToken,
                   ApiParams.countryCode: countryCode,
+                  if (resolvedReferralCode.isNotEmpty)
+                    ApiParams.referralCode: resolvedReferralCode,
                   ...compliancePayload,
                 },
               )
@@ -118,6 +126,8 @@ class LoginApi {
                   ApiParams.profilePic: profilePic,
                   ApiParams.fullName: userName,
                   ApiParams.countryCode: countryCode,
+                  if (resolvedReferralCode.isNotEmpty)
+                    ApiParams.referralCode: resolvedReferralCode,
                   ...compliancePayload,
                 },
               );

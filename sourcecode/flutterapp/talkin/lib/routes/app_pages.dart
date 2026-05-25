@@ -39,6 +39,7 @@ import 'package:notisboard/ui/user_flow/app_language_screen/binding/app_language
 import 'package:notisboard/ui/user_flow/app_language_screen/view/app_language_screen.dart';
 import 'package:notisboard/ui/user_flow/become_host_screen/binding/become_host_screen_binding.dart';
 import 'package:notisboard/ui/user_flow/become_host_screen/view/become_host_screen.dart';
+import 'package:notisboard/ui/user_flow/biometric_unlock_screen/view/biometric_unlock_screen_view.dart';
 import 'package:notisboard/ui/user_flow/bottom_bar/binding/bottom_bar_binding.dart';
 import 'package:notisboard/ui/user_flow/bottom_bar/view/bottom_bar_screen.dart';
 import 'package:notisboard/ui/user_flow/call_cut_screen/binding/call_cut_binding.dart';
@@ -98,6 +99,8 @@ import 'package:notisboard/ui/user_flow/profile_detail_screen/binding/profile_de
 import 'package:notisboard/ui/user_flow/profile_detail_screen/view/profile_detail_screen_view.dart';
 import 'package:notisboard/ui/user_flow/registration_screen/binding/registration_binding.dart';
 import 'package:notisboard/ui/user_flow/registration_screen/view/registration_screen.dart';
+import 'package:notisboard/ui/user_flow/referral_screen/controller/referral_controller.dart';
+import 'package:notisboard/ui/user_flow/referral_screen/view/referral_screen.dart';
 import 'package:notisboard/ui/user_flow/search_screen/binding/search_screen_binding.dart';
 import 'package:notisboard/ui/user_flow/search_screen/view/search_screen_view.dart';
 import 'package:notisboard/ui/user_flow/session_booking_screen/view/user_book_session_screen.dart';
@@ -141,6 +144,10 @@ class AppPages {
       name: AppRoutes.main,
       page: () => const MainScreen(),
       binding: MainScreenBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.biometricUnlockScreen,
+      page: () => const BiometricUnlockScreenView(),
     ),
     GetPage(
       name: AppRoutes.register,
@@ -260,6 +267,13 @@ class AppPages {
       name: AppRoutes.settingScreen,
       page: () => SettingScreen(),
       binding: SettingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.referralScreen,
+      page: () => const ReferralScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<ReferralController>(() => ReferralController());
+      }),
     ),
     GetPage(
       name: AppRoutes.helpCenterScreen,

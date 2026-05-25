@@ -162,6 +162,40 @@ class SettingView extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   _SettingsLane(
+                    iconAsset: AppAsset.quickLoginIcon,
+                    title: 'Face ID / Biometric Login',
+                    subtitle: 'Unlock your app with biometrics',
+                    isTablet: isTablet,
+                    onTap: () {
+                      controller.onSwitchBiometric(
+                        !controller.isBiometricEnabled,
+                      );
+                    },
+                    trailing: Transform.scale(
+                      scale: isTablet ? 0.9 : 0.84,
+                      child: CupertinoSwitch(
+                        value: controller.isBiometricEnabled,
+                        onChanged: (bool val) {
+                          controller.onSwitchBiometric(val);
+                        },
+                        activeTrackColor: AppColors.redesignBrandRed,
+                        inactiveTrackColor: AppColors.redesignSoftBorder,
+                        thumbColor: AppColors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  _SettingsLane(
+                    iconAsset: AppAsset.loginBonusIcon,
+                    title: 'Invite & Earn',
+                    subtitle: 'Share your referral code and track rewards',
+                    isTablet: isTablet,
+                    onTap: () {
+                      Get.toNamed(AppRoutes.referralScreen);
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  _SettingsLane(
                     iconAsset: AppAsset.settingAppLanguage,
                     title: EnumLocale.txtAPPLanguage.name.tr,
                     subtitle: 'Change your preferred app language',

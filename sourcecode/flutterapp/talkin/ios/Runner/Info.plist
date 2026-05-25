@@ -65,6 +65,8 @@
 	<string>Notisboard uses your location to show nearby experts and improve recommendations when you use the app.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Notisboard may use device motion to keep camera previews and video calls oriented correctly.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use Face ID to securely unlock your Notisboard account.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
