@@ -615,6 +615,7 @@ class FeedPostItem {
   final String authorName;
   final String authorNickName;
   final String authorProfilePic;
+  final bool isAuthorVerified;
 
   FeedPostItem({
     required this.id,
@@ -632,6 +633,7 @@ class FeedPostItem {
     required this.authorName,
     required this.authorNickName,
     required this.authorProfilePic,
+    required this.isAuthorVerified,
   });
 
   factory FeedPostItem.fromJson(Map<String, dynamic> json) {
@@ -669,6 +671,14 @@ class FeedPostItem {
 
     final resolvedAuthorProfile =
         hasExpert ? (expertImg.isNotEmpty ? expertImg : userImg) : userImg;
+    final normalizedVerified = () {
+      final dynamic rawValue =
+          hasExpert ? expert['isVerifiedBadge'] : user['isVerifiedBadge'];
+      if (rawValue is bool) return rawValue;
+      final value = rawValue?.toString().trim().toLowerCase() ?? '';
+      return value == 'true' || value == '1' || value == 'yes';
+    }();
+
     return FeedPostItem(
       id: (json['id'] ?? json['_id'] ?? '').toString(),
       userId: (json['userId'] ?? '').toString(),
@@ -686,6 +696,7 @@ class FeedPostItem {
       authorName: resolvedAuthorName,
       authorNickName: resolvedAuthorNick,
       authorProfilePic: resolvedAuthorProfile,
+      isAuthorVerified: normalizedVerified,
     );
   }
 
@@ -722,6 +733,7 @@ class FeedPostItem {
       authorName: authorName,
       authorNickName: authorNickName,
       authorProfilePic: authorProfilePic,
+      isAuthorVerified: isAuthorVerified,
     );
   }
 }

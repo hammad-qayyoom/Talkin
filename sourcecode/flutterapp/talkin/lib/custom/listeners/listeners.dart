@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/app_button/primary_app_button.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/enums.dart';
@@ -26,6 +27,7 @@ class CustomListeners extends StatelessWidget {
   final bool availableForPrivateAudioCall;
   final bool availableForPrivateVideoCall;
   final bool fake;
+  final bool isVerifiedBadge;
 
   const CustomListeners({
     super.key,
@@ -47,6 +49,7 @@ class CustomListeners extends StatelessWidget {
     required this.availableForPrivateAudioCall,
     required this.availableForPrivateVideoCall,
     required this.fake,
+    this.isVerifiedBadge = false,
   });
 
   Widget _fittedLabel({
@@ -108,13 +111,23 @@ class CustomListeners extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Flexible(
-                            child: Text(
-                              "$name $age",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: AppFontStyle.fontStyleW600(
-                                  fontSize: 14,
-                                  fontColor: AppColors.appDarkColor),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    "$name $age",
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: AppFontStyle.fontStyleW600(
+                                        fontSize: 14,
+                                        fontColor: AppColors.appDarkColor),
+                                  ),
+                                ),
+                                VerifiedBadge(
+                                  isVerified: isVerifiedBadge,
+                                  size: 16,
+                                ),
+                              ],
                             ),
                           ),
                           // SizedBox(width: 4),

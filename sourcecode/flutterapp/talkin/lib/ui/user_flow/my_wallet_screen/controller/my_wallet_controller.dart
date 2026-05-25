@@ -10,6 +10,7 @@ import 'package:notisboard/payment/api/purchase_coin_plan_api.dart';
 import 'package:notisboard/payment/in_app_purchase/iap_callback.dart';
 import 'package:notisboard/payment/in_app_purchase/in_app_purchase_helper.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/services/app_review/app_review_service.dart';
 import 'package:notisboard/ui/user_flow/all_listeners_screen/controller/all_listeners_controller.dart';
 import 'package:notisboard/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
 import 'package:notisboard/ui/user_flow/edit_profile_screen/controller/edit_profile_screen_controller.dart';
@@ -151,6 +152,12 @@ class MyWalletController extends GetxController
 
   void _markWalletStateChanged() {
     _walletStateChanged = true;
+  }
+
+  void _trackSubscriptionReviewPrompt() {
+    unawaited(
+      AppReviewService.trackPositiveAction(source: 'subscription_success'),
+    );
   }
 
   void _startApplePurchaseWait() {
@@ -672,6 +679,7 @@ class MyWalletController extends GetxController
             await syncSessionCredits();
 
             Utils.showToast(Get.context, "Subscription activated successfully");
+            _trackSubscriptionReviewPrompt();
             _closePaymentSelectorIfOpen();
           } else {
             Utils.showToast(
@@ -734,6 +742,9 @@ class MyWalletController extends GetxController
             ? activeSubscriptionMessage()
             : "Subscription activated successfully";
         Utils.showToast(Get.context, message);
+        if (purchaseCoinPlan?.duplicate != true) {
+          _trackSubscriptionReviewPrompt();
+        }
         _closePaymentSelectorIfOpen();
       } else if (_isAlreadySubscribedResponse(purchaseCoinPlan)) {
         await fetchCoinPlanList();
@@ -789,6 +800,7 @@ class MyWalletController extends GetxController
             await syncSessionCredits();
 
             Utils.showToast(Get.context, "Subscription activated successfully");
+            _trackSubscriptionReviewPrompt();
             _closePaymentSelectorIfOpen();
             Get.toNamed(AppRoutes.coinPurchaseScreen, arguments: {
               "date": purchaseCoinPlan?.historyRecord?.date,
@@ -907,6 +919,7 @@ class MyWalletController extends GetxController
             await syncSessionCredits();
 
             Utils.showToast(Get.context, "Subscription activated successfully");
+            _trackSubscriptionReviewPrompt();
             _closePaymentSelectorIfOpen();
           } else {
             Utils.showToast(
@@ -953,6 +966,7 @@ class MyWalletController extends GetxController
             await syncSessionCredits();
 
             Utils.showToast(Get.context, "Subscription activated successfully");
+            _trackSubscriptionReviewPrompt();
             _closePaymentSelectorIfOpen();
           } else {
             Utils.showToast(
@@ -999,6 +1013,7 @@ class MyWalletController extends GetxController
             await syncSessionCredits();
 
             Utils.showToast(Get.context, "Subscription activated successfully");
+            _trackSubscriptionReviewPrompt();
             _closePaymentSelectorIfOpen();
           } else {
             Utils.showToast(
@@ -1276,6 +1291,9 @@ class MyWalletController extends GetxController
                   ? "Subscription already active"
                   : "Subscription activated successfully",
         );
+        if (!isRestoreEvent && isSuccess?.duplicate != true) {
+          _trackSubscriptionReviewPrompt();
+        }
         _closePaymentSelectorIfOpen();
       } else {
         final message = isSuccess?.message?.trim();

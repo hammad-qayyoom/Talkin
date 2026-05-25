@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
 import 'package:notisboard/ui/user_flow/home_screen/shimmer/top_listener_shimmer.dart';
@@ -493,6 +494,7 @@ class _TopExpertCard extends StatelessWidget {
         ? 'Expert'
         : listener.name!.trim();
     final ageSuffix = listener.age == null ? '' : ', ${listener.age}';
+    final isVerified = listener.isVerifiedBadge == true;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -552,14 +554,23 @@ class _TopExpertCard extends StatelessWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              '$name$ageSuffix',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppFontStyle.fontStyleW700(
-                                fontSize: isTablet ? 20 : 18,
-                                fontColor: AppColors.redesignBrandDark,
-                              ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '$name$ageSuffix',
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppFontStyle.fontStyleW700(
+                                      fontSize: isTablet ? 20 : 18,
+                                      fontColor: AppColors.redesignBrandDark,
+                                    ),
+                                  ),
+                                ),
+                                VerifiedBadge(
+                                  isVerified: isVerified,
+                                ),
+                              ],
                             ),
                           ),
                           const SizedBox(width: 8),

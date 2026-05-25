@@ -58,6 +58,9 @@ class Data {
   bool? isAvailableForPrivateAudioCall;
   bool? isAvailableForPrivateVideoCall;
   bool? isAvailableForChat;
+  bool? isVerifiedBadge;
+  String? verifiedBadgeType;
+  DateTime? verifiedBadgeAt;
   bool? isNotificationEnabled;
   bool? isFake;
   List<String>? video;
@@ -82,6 +85,9 @@ class Data {
     this.isAvailableForPrivateAudioCall,
     this.isAvailableForPrivateVideoCall,
     this.isAvailableForChat,
+    this.isVerifiedBadge,
+    this.verifiedBadgeType,
+    this.verifiedBadgeAt,
     this.isNotificationEnabled,
     this.video,
     this.isFake,
@@ -109,6 +115,15 @@ class Data {
         .toList();
   }
 
+  static bool? _toBool(dynamic value) {
+    if (value == null) return null;
+    if (value is bool) return value;
+    final normalized = value.toString().trim().toLowerCase();
+    if (['true', '1', 'yes'].contains(normalized)) return true;
+    if (['false', '0', 'no'].contains(normalized)) return false;
+    return null;
+  }
+
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         id: _pickString(json, ["_id", "id", "listenerId", "expertId"]),
         name: _pickString(json, ["name", "fullName", "nickName"]),
@@ -130,6 +145,11 @@ class Data {
         isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],
         isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],
         isAvailableForChat: json["isAvailableForChat"],
+        isVerifiedBadge: _toBool(json["isVerifiedBadge"]) ?? false,
+        verifiedBadgeType: _pickString(json, ["verifiedBadgeType"]),
+        verifiedBadgeAt: DateTime.tryParse(
+          (json["verifiedBadgeAt"] ?? '').toString(),
+        )?.toLocal(),
         isNotificationEnabled: json["isNotificationEnabled"],
         video: _toStringList(json["video"]),
         isFake: json["isFake"],
@@ -160,6 +180,9 @@ class Data {
         "isAvailableForPrivateAudioCall": isAvailableForPrivateAudioCall,
         "isAvailableForPrivateVideoCall": isAvailableForPrivateVideoCall,
         "isAvailableForChat": isAvailableForChat,
+        "isVerifiedBadge": isVerifiedBadge,
+        "verifiedBadgeType": verifiedBadgeType,
+        "verifiedBadgeAt": verifiedBadgeAt?.toIso8601String(),
         "isNotificationEnabled": isNotificationEnabled,
         "video": video == null ? [] : List<dynamic>.from(video!.map((x) => x)),
         "isFake": isFake,

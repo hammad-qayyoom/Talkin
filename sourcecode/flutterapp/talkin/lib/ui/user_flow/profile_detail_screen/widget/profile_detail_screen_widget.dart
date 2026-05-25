@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/profile_detail_screen/controller/profile_detail_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/profile_detail_screen/model/listener_profile_response_model.dart';
@@ -314,6 +315,7 @@ class UserProfileInfoView extends StatelessWidget {
             .where((lang) => lang.trim().isNotEmpty)
             .join(', ');
         final rating = (data.rating ?? 0).toDouble();
+        final isVerified = data.isVerifiedBadge == true;
 
         Widget aboutSection() {
           return _buildSectionCard(
@@ -472,14 +474,24 @@ class UserProfileInfoView extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                '$name$ageLabel',
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppFontStyle.fontStyleW700(
-                                  fontSize: isTablet ? 22 : 18,
-                                  fontColor: AppColors.redesignBrandDark,
-                                ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      '$name$ageLabel',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppFontStyle.fontStyleW700(
+                                        fontSize: isTablet ? 22 : 18,
+                                        fontColor: AppColors.redesignBrandDark,
+                                      ),
+                                    ),
+                                  ),
+                                  VerifiedBadge(
+                                    isVerified: isVerified,
+                                    size: 19,
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 6),
                               Wrap(
@@ -951,6 +963,8 @@ class ProfileBottomButtonView extends StatelessWidget {
         'listenerId': controller.listenerProfileModel?.data?.id ?? '',
         'listenerName': controller.listenerProfileModel?.data?.name ?? '',
         'listenerImage': controller.listenerProfileModel?.data?.image ?? '',
+        'isVerifiedBadge':
+            controller.listenerProfileModel?.data?.isVerifiedBadge ?? false,
         'availableForPrivateAudioCall': controller
                 .listenerProfileModel?.data?.isAvailableForPrivateAudioCall ??
             false,

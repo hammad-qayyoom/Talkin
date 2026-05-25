@@ -211,11 +211,40 @@ export const blockListener = createAsyncThunk('expert/blockListener', async (lis
         headers: getAuthHeaders()
       }
     )
-    return response.data
+
+    
+return response.data
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || error.message)
   }
 })
+
+export const toggleExpertVerifiedBadge = createAsyncThunk(
+  'expert/toggleExpertVerifiedBadge',
+  async ({ listenerId, isVerified, verifiedBadgeType }, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(
+        `${BASE_URL}/api/admin/expert/updateVerifiedStatus`,
+        {
+          ...(isVerified !== undefined ? { isVerified } : {}),
+          ...(verifiedBadgeType ? { verifiedBadgeType } : {}),
+        },
+        {
+          headers: getAuthHeaders(),
+          params: { listenerId },
+        }
+      )
+
+      if (!response.data?.status) {
+        return rejectWithValue(response.data?.message || 'Failed to update expert verified badge')
+      }
+
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message)
+    }
+  }
+)
 
 const initialState = {
   listeners: [],
@@ -429,6 +458,37 @@ const listenerSlice = createSlice({
       .addCase(blockListener.rejected, (state, action) => {
         state.error = action.payload || 'Failed to block expert'
         toast.error(action.payload || 'Failed to block expert')
+      })
+      .addCase(toggleExpertVerifiedBadge.fulfilled, (state, action) => {
+        if (action.payload?.status) {
+          const updatedProfile = action.payload?.data || {}
+          const legacyListenerId = updatedProfile?.legacyListenerId?.toString?.() || ''
+          const expertProfileId = updatedProfile?._id?.toString?.() || ''
+
+          state.listeners = state.listeners.map(expert => {
+            const isTarget =
+              expert._id === legacyListenerId ||
+              expert.listenerId === legacyListenerId ||
+              expert.expertId === expertProfileId
+
+            if (!isTarget) return expert
+
+            return {
+              ...expert,
+              isVerifiedBadge: Boolean(updatedProfile.isVerifiedBadge),
+              verifiedBadgeType: updatedProfile.verifiedBadgeType || 'none',
+              verifiedBadgeAt: updatedProfile.verifiedBadgeAt || null,
+            }
+          })
+
+          toast.success(action.payload.message || 'Expert verified badge updated')
+        } else {
+          toast.error(action.payload?.message || 'Failed to update expert verified badge')
+        }
+      })
+      .addCase(toggleExpertVerifiedBadge.rejected, (state, action) => {
+        state.error = action.payload || 'Failed to update expert verified badge'
+        toast.error(action.payload || 'Failed to update expert verified badge')
       })
   }
 })

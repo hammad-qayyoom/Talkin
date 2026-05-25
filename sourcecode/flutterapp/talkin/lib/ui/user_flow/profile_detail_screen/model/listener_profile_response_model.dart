@@ -13,6 +13,15 @@ int? _parseInt(dynamic val) {
   return null;
 }
 
+bool? _parseBool(dynamic value) {
+  if (value == null) return null;
+  if (value is bool) return value;
+  final normalized = value.toString().trim().toLowerCase();
+  if (['true', '1', 'yes'].contains(normalized)) return true;
+  if (['false', '0', 'no'].contains(normalized)) return false;
+  return null;
+}
+
 String listenerProfileModelToJson(ListenerProfileModel data) =>
     json.encode(data.toJson());
 
@@ -63,6 +72,9 @@ class ListenerData {
   bool? isAvailableForPrivateAudioCall;
   bool? isAvailableForPrivateVideoCall;
   bool? isAvailableForChat;
+  bool? isVerifiedBadge;
+  String? verifiedBadgeType;
+  DateTime? verifiedBadgeAt;
   String? audio;
 
   ListenerData({
@@ -87,6 +99,9 @@ class ListenerData {
     this.isAvailableForPrivateAudioCall,
     this.isAvailableForPrivateVideoCall,
     this.isAvailableForChat,
+    this.isVerifiedBadge,
+    this.verifiedBadgeType,
+    this.verifiedBadgeAt,
     this.audio,
   });
 
@@ -138,6 +153,11 @@ class ListenerData {
                 json["isAvailableForPrivateVideoCall"]?.toString() == 'true',
         isAvailableForChat: json["isAvailableForChat"] == true ||
             json["isAvailableForChat"]?.toString() == 'true',
+        isVerifiedBadge: _parseBool(json["isVerifiedBadge"]) ?? false,
+        verifiedBadgeType: json["verifiedBadgeType"]?.toString(),
+        verifiedBadgeAt: DateTime.tryParse(
+          (json["verifiedBadgeAt"] ?? '').toString(),
+        )?.toLocal(),
         audio: json["audio"]?.toString(),
       );
 
@@ -163,6 +183,9 @@ class ListenerData {
         "isAvailableForPrivateAudioCall": isAvailableForPrivateAudioCall,
         "isAvailableForPrivateVideoCall": isAvailableForPrivateVideoCall,
         "isAvailableForChat": isAvailableForChat,
+        "isVerifiedBadge": isVerifiedBadge,
+        "verifiedBadgeType": verifiedBadgeType,
+        "verifiedBadgeAt": verifiedBadgeAt?.toIso8601String(),
         "audio": audio,
       };
 }

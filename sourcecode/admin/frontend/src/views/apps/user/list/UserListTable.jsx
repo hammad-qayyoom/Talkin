@@ -62,7 +62,8 @@ import {
   setPageSize,
   setSearchQuery,
   setUserData,
-  toggleUserBlockStatus
+  toggleUserBlockStatus,
+  toggleUserVerifiedBadge
 } from '@/redux-store/slices/user'
 import { getFormattedDate, getFullImageUrl } from '@/utils/commonfunctions'
 import tableStyles from '@core/styles/table.module.css'
@@ -477,8 +478,11 @@ const UserListTable = ({ breakpoint = 'lg' }) => {
             4: 'Email',
             5: 'Apple',
           }
+
           const type = row.original?.loginType
-          return (
+
+          
+return (
             <Chip
               size='small'
               label={loginTypeMap[type] ?? 'Unknown'}
@@ -528,7 +532,9 @@ const UserListTable = ({ breakpoint = 'lg' }) => {
         cell: ({ row }) => {
           const userId = row.original._id;
           const isProtected = protectedUserIds.includes(userId);
-          return (
+
+          
+return (
             <Switch
               id={`block-switch-${userId}`}
               checked={Boolean(row.original.isBlock)}
@@ -539,6 +545,45 @@ const UserListTable = ({ breakpoint = 'lg' }) => {
               }}
             />
           );
+        }
+      }),
+      columnHelper.accessor('isVerifiedBadge', {
+        header: () => <div className=''>Verified</div>,
+        cell: ({ row }) => {
+          const isVerified = Boolean(row.original.isVerifiedBadge)
+          const badgeType = String(row.original.verifiedBadgeType || 'none')
+
+          const badgeLabel = !isVerified
+            ? 'Unverified'
+            : badgeType === 'celebrity'
+              ? 'Celebrity'
+              : badgeType === 'auto_sessions'
+                ? 'Auto'
+                : 'Manual'
+
+          return (
+            <div className='flex items-center gap-2'>
+              <Switch
+                id={`verified-switch-${row.original._id}`}
+                checked={isVerified}
+                onChange={() =>
+                  dispatch(
+                    toggleUserVerifiedBadge({
+                      userId: row.original._id,
+                      isVerified: !isVerified,
+                      verifiedBadgeType: !isVerified ? 'celebrity' : 'none'
+                    })
+                  )
+                }
+              />
+              <Chip
+                size='small'
+                color={isVerified ? 'primary' : 'default'}
+                variant='tonal'
+                label={badgeLabel}
+              />
+            </div>
+          )
         }
       })
 
@@ -787,6 +832,7 @@ const UserListTable = ({ breakpoint = 'lg' }) => {
 
     // Update URL to remove all filter params
     const params = new URLSearchParams()
+
     params.set('page', '1')
     params.set('pageSize', searchParams.get('pageSize') || '10')
     router.replace(`${pathname}?${params.toString()}`, { scroll: false })

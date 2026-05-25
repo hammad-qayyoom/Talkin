@@ -41,6 +41,8 @@ import { Visibility } from '@mui/icons-material'
 
 import { toast } from 'react-toastify'
 
+import FilterAltOffIcon from '@mui/icons-material/FilterAltOff'
+
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
 import CustomAvatar from '@core/components/mui/Avatar'
@@ -51,7 +53,16 @@ import ListenerDialog from './ListenerDialog'
 import tableStyles from '@core/styles/table.module.css'
 
 // Actions
-import { blockListener, deleteListener, setDateRange, setPage, setPageSize, setSearchQuery, setSelectedListener } from '@/redux-store/slices/listener'
+import {
+  blockListener,
+  deleteListener,
+  setDateRange,
+  setPage,
+  setPageSize,
+  setSearchQuery,
+  setSelectedListener,
+  toggleExpertVerifiedBadge
+} from '@/redux-store/slices/listener'
 
 // Utils
 import Link from '@/components/Link'
@@ -62,7 +73,6 @@ import { getFullImageUrl } from '@/utils/commonfunctions'
 
 import { getInitials } from '@/utils/getInitials'
 import { handleCopy, truncateString } from '../../user/list/UserListTable'
-import FilterAltOffIcon from '@mui/icons-material/FilterAltOff'
 
 // Fuzzy filter for search functionality
 const fuzzyFilter = (row, columnId, value, addMeta) => {
@@ -89,6 +99,7 @@ const DebouncedInput = ({
   // 🔥 Parent value change → input sync (RESET works here)
   useEffect(() => {
     setInternalValue(value)
+
     if (value === '') {
       hasUserInteracted.current = false
     }
@@ -152,6 +163,7 @@ const ListenerListTable = () => {
   // States
   const [rowSelection, setRowSelection] = useState({})
   const [globalFilterValue, setGlobalFilterValue] = useState('')
+
   console.log("globalFilterValue", globalFilterValue);
 
   const [open, setOpen] = useState(false)
@@ -174,6 +186,7 @@ const ListenerListTable = () => {
 
   useEffect(() => {
     const searchFromURL = searchParams.get('search') || ''
+
     setGlobalFilterValue(searchFromURL)
     dispatch(setSearchQuery(searchFromURL))
   }, [searchParams, dispatch])
@@ -269,6 +282,7 @@ const ListenerListTable = () => {
   } else if (filterName === 'gender') {
     updates.gender = value === 'All' ? null : value
   }
+
   dispatch(setPage(1))
   updateUrlParams(updates)
   }
@@ -277,6 +291,7 @@ const ListenerListTable = () => {
     const params = searchParams
 
     return (
+
       // 🔍 Search
       globalFilterValue?.trim() ||
 
@@ -311,6 +326,7 @@ const ListenerListTable = () => {
     // URL reset (tab preserve)
     const params = new URLSearchParams()
     const tab = searchParams.get('tab')
+
     if (tab) params.set('tab', tab)
 
     router.replace(`${pathname}?${params.toString()}`, { scroll: false })
@@ -325,34 +341,66 @@ const ListenerListTable = () => {
       columnHelper.accessor('name', {
         header: () => <div className=''>Expert</div>,
         cell: ({ row }) => {
-          const { name, image, uniqueId, nickName,gender } = row.original
+          const { name, image, nickName, gender } = row.original
+          const isVerified = Boolean(row.original.isVerifiedBadge)
+          const isFakeExpert = Boolean(row.original.isFake)
+          const badgeType = String(row.original.verifiedBadgeType || 'none')
+
+          const badgeLabel = !isVerified
+            ? 'Unverified'
+            : badgeType === 'auto_sessions'
+              ? 'Auto'
+              : badgeType === 'celebrity'
+                ? 'Celebrity'
+                : 'Manual'
 
           return (
-            <Link
-              href={`/apps/listener/view?userId=${row?.original?._id}`}
-              className='flex items-center gap-4'
-              onClick={() => {
-                localStorage.setItem(
-                  'selectedListener',
-                  JSON.stringify({ ...row?.original, isFake: activeTab === 'fake' })
-                )
-                dispatch(setDateRange({ startDate: 'All', endDate: 'All' }))
-              }}
-            >
-              {getAvatar({ avatar: getFullImageUrl(image), fullName: name })}
-              <div className='flex flex-col'>
-                <div>
+            <div className='flex items-start gap-4 min-w-[260px]'>
+              <Link
+                href={`/apps/listener/view?userId=${row?.original?._id}`}
+                className='flex items-center gap-4 min-w-0 flex-1'
+                onClick={() => {
+                  localStorage.setItem(
+                    'selectedListener',
+                    JSON.stringify({ ...row?.original, isFake: activeTab === 'fake' })
+                  )
+                  dispatch(setDateRange({ startDate: 'All', endDate: 'All' }))
+                }}
+              >
+                {getAvatar({ avatar: getFullImageUrl(image), fullName: name })}
+                <div className='flex flex-col min-w-0'>
                   <Typography color='text.primary' className='font-medium'>
-                  {name || '-'}
-                {gender?.trim() && (
-  <Chip label={gender} size="small" sx={{marginLeft : 1}}/>
-)}
-                </Typography>
+                    {name || '-'}
+                    {gender?.trim() && (
+                      <Chip label={gender} size='small' sx={{ marginLeft: 1 }} />
+                    )}
+                  </Typography>
+                  <Typography variant='body2'>{nickName || '-'}</Typography>
                 </div>
-                {/* {nickName && <Chip color='info' variant='tonal' size='small' label={nickName} />} */}
-                <Typography variant='body2'>{nickName || '-'}</Typography>
+              </Link>
+              <div className='flex flex-col items-end gap-1'>
+                <Chip
+                  size='small'
+                  color={isVerified ? 'primary' : 'default'}
+                  variant='tonal'
+                  label={badgeLabel}
+                />
+                <Switch
+                  size='small'
+                  checked={isVerified}
+                  disabled={isFakeExpert}
+                  onChange={() =>
+                    dispatch(
+                      toggleExpertVerifiedBadge({
+                        listenerId: row.original._id,
+                        isVerified: !isVerified,
+                        verifiedBadgeType: !isVerified ? 'manual' : 'none'
+                      })
+                    )
+                  }
+                />
               </div>
-            </Link>
+            </div>
           )
         }
       }),
@@ -425,7 +473,6 @@ const ListenerListTable = () => {
           <Switch checked={row.original.isBlock} disabled={row.original._id === "691822c8ea0bbcd6eaa74bdc"} onChange={() => dispatch(blockListener(row.original._id))} />
         )
       }),
-
       columnHelper.accessor('action', {
         header: () => <div className=''>Action</div>,
         cell: ({ row }) => (
@@ -438,7 +485,8 @@ const ListenerListTable = () => {
               onClick={() => {
                 if (row.original._id === "691822c8ea0bbcd6eaa74bdc") {
                   toast.error("This expert cannot be deleted.");
-                  return;
+                  
+return;
                 }
 
                 handleDeleteListener(row.original._id); // ✅ Only call when allowed

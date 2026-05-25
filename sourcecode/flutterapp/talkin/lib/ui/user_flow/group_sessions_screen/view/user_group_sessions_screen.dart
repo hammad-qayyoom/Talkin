@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/auth_guard.dart';
@@ -283,6 +284,14 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
   int _toInt(dynamic value, int fallback) {
     final parsed = int.tryParse((value ?? '').toString());
     return parsed ?? fallback;
+  }
+
+  bool _toBool(dynamic value, {bool fallback = false}) {
+    if (value is bool) return value;
+    final normalized = (value ?? '').toString().trim().toLowerCase();
+    if (['true', '1', 'yes'].contains(normalized)) return true;
+    if (['false', '0', 'no'].contains(normalized)) return false;
+    return fallback;
   }
 
   bool _isJoinedByCurrentUser(Map<String, dynamic> session) {
@@ -1079,6 +1088,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
 
     final title = (session['title'] ?? 'Group Session').toString().trim();
     final expertName = (expert['displayName'] ?? 'Unknown').toString().trim();
+    final isVerifiedExpert = _toBool(expert['isVerifiedBadge']);
     final startDate = _formatDateTime((session['startAt'] ?? '').toString());
     final callType =
         ((session['callType'] ?? 'audio').toString()).trim().toUpperCase();
@@ -1142,14 +1152,24 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
               ),
               const SizedBox(width: 6),
               Expanded(
-                child: Text(
-                  'Expert: $expertName',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppFontStyle.fontStyleW500(
-                    fontSize: 13,
-                    fontColor: AppColors.redesignTextMeta,
-                  ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Expert: $expertName',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppFontStyle.fontStyleW500(
+                          fontSize: 13,
+                          fontColor: AppColors.redesignTextMeta,
+                        ),
+                      ),
+                    ),
+                    VerifiedBadge(
+                      isVerified: isVerifiedExpert,
+                      size: 16,
+                    ),
+                  ],
                 ),
               ),
             ],

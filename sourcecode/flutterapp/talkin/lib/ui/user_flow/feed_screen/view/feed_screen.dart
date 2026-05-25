@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:notisboard/custom/bottom_sheet/report_bottom_sheet.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
 import 'package:notisboard/custom/image/professional_cached_image.dart';
+import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/feed_screen/controller/feed_screen_controller.dart';
 import 'package:notisboard/utils/api.dart';
@@ -812,15 +813,24 @@ class _FeedPostCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              post.displayName,
-                              maxLines: 1,
-                              overflow: TextOverflow.fade,
-                              softWrap: false,
-                              style: AppFontStyle.fontStyleW700(
-                                fontSize: 17,
-                                fontColor: brandDark,
-                              ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    post.displayName,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.fade,
+                                    softWrap: false,
+                                    style: AppFontStyle.fontStyleW700(
+                                      fontSize: 17,
+                                      fontColor: brandDark,
+                                    ),
+                                  ),
+                                ),
+                                VerifiedBadge(
+                                  isVerified: post.isAuthorVerified,
+                                ),
+                              ],
                             ),
                             Text(
                               _relativeTime(post.createdAt),

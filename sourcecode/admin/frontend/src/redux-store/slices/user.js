@@ -77,6 +77,33 @@ export const toggleUserBlockStatus = createAsyncThunk('users/toggleUserBlock', a
   }
 })
 
+export const toggleUserVerifiedBadge = createAsyncThunk(
+  'users/toggleUserVerifiedBadge',
+  async ({ userId, isVerified, verifiedBadgeType }, thunkAPI) => {
+    try {
+      const response = await axios.patch(
+        `${baseURL}/api/admin/user/toggleUserVerifiedBadge`,
+        {
+          ...(isVerified !== undefined ? { isVerified } : {}),
+          ...(verifiedBadgeType ? { verifiedBadgeType } : {}),
+        },
+        {
+          headers: getAuthHeaders(),
+          params: { userId },
+        }
+      )
+
+      if (!response.data?.status) {
+        throw new Error(response.data?.message || 'Failed to update user verified badge')
+      }
+
+      return response.data
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || err.message)
+    }
+  }
+)
+
 export const fetchUserDetails = createAsyncThunk('user/listRegisteredUsers', async (userId, thunkAPI) => {
   try {
     const response = await axios.get(`${baseURL}/api/admin/user/listRegisteredUsers`, {
@@ -820,6 +847,29 @@ const userSlice = createSlice({
       })
       .addCase(toggleUserBlockStatus.rejected, (state, action) => {
         state.status = 'failed'
+      })
+      .addCase(toggleUserVerifiedBadge.fulfilled, (state, action) => {
+        if (action.payload?.status) {
+          const updatedUser = action.payload?.data || {}
+
+          state.user = state.user.map(user =>
+            user._id === updatedUser._id
+              ? {
+                  ...user,
+                  isVerifiedBadge: Boolean(updatedUser.isVerifiedBadge),
+                  verifiedBadgeType: updatedUser.verifiedBadgeType || 'none',
+                  verifiedBadgeAt: updatedUser.verifiedBadgeAt || null,
+                }
+              : user
+          )
+
+          toast.success(action.payload.message || 'User verified badge updated')
+          state.status = 'succeeded'
+        }
+      })
+      .addCase(toggleUserVerifiedBadge.rejected, (state, action) => {
+        state.status = 'failed'
+        toast.error(action.payload || 'Failed to update user verified badge')
       })
 
     // -------------------- MODAL HANDLERS --------------------

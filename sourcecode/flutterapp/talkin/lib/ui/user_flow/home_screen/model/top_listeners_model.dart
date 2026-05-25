@@ -67,6 +67,9 @@ class TopListeners {
   bool? isAvailableForPrivateAudioCall;
   bool? isAvailableForPrivateVideoCall;
   bool? isAvailableForChat;
+  bool? isVerifiedBadge;
+  String? verifiedBadgeType;
+  DateTime? verifiedBadgeAt;
   String? audio;
   bool hasLegacyListener;
 
@@ -95,6 +98,9 @@ class TopListeners {
     this.isAvailableForPrivateAudioCall,
     this.isAvailableForPrivateVideoCall,
     this.isAvailableForChat,
+    this.isVerifiedBadge,
+    this.verifiedBadgeType,
+    this.verifiedBadgeAt,
     this.audio,
     this.hasLegacyListener = true,
   });
@@ -267,6 +273,15 @@ class TopListeners {
     ]);
   }
 
+  static bool? _boolValue(dynamic value) {
+    if (value == null) return null;
+    if (value is bool) return value;
+    final normalized = value.toString().trim().toLowerCase();
+    if (['true', '1', 'yes'].contains(normalized)) return true;
+    if (['false', '0', 'no'].contains(normalized)) return false;
+    return null;
+  }
+
   factory TopListeners.fromJson(Map<String, dynamic> json) {
     final legacyListenerId = _firstNonEmptyString([
       json["listenerId"],
@@ -281,6 +296,22 @@ class TopListeners {
     ]);
     final hasLegacyListener =
         legacyListenerId != null || !json.containsKey("legacyListenerId");
+    final expert = _mapValue(json["expert"]);
+    final trustSignals = _mapValue(json["trustSignals"]);
+    final isVerified = _boolValue(
+          json["isVerifiedBadge"] ??
+              expert?["isVerifiedBadge"] ??
+              trustSignals?["isVerifiedBadge"],
+        ) ??
+        false;
+    final badgeType = _firstNonEmptyString([
+      json["verifiedBadgeType"],
+      expert?["verifiedBadgeType"],
+    ]);
+    final badgeAtString = _firstNonEmptyString([
+      json["verifiedBadgeAt"],
+      expert?["verifiedBadgeAt"],
+    ]);
 
     return TopListeners(
       latitude: () {
@@ -359,6 +390,11 @@ class TopListeners {
           (_hasSessionType(json["availabilityWindows"], "one_to_one_video") ||
               _positivePricing(json["pricing"], "oneToOneVideo")),
       isAvailableForChat: json["isAvailableForChat"],
+      isVerifiedBadge: isVerified,
+      verifiedBadgeType: badgeType ?? (isVerified ? 'manual' : 'none'),
+      verifiedBadgeAt: badgeAtString == null
+          ? null
+          : DateTime.tryParse(badgeAtString)?.toLocal(),
       audio: json["audio"],
       hasLegacyListener: hasLegacyListener,
     );
@@ -383,6 +419,7 @@ class TopListeners {
       if (resolvedExpertId.isNotEmpty) 'expertId': resolvedExpertId,
       'listenerName': name ?? '',
       'listenerImage': image ?? '',
+      'isVerifiedBadge': isVerifiedBadge ?? false,
       'availableForPrivateAudioCall': isAvailableForPrivateAudioCall ?? false,
       'availableForPrivateVideoCall': isAvailableForPrivateVideoCall ?? false,
       'ratePrivateAudioCall': ratePrivateAudioCall ?? 0,
@@ -420,6 +457,9 @@ class TopListeners {
         "isAvailableForPrivateAudioCall": isAvailableForPrivateAudioCall,
         "isAvailableForPrivateVideoCall": isAvailableForPrivateVideoCall,
         "isAvailableForChat": isAvailableForChat,
+        "isVerifiedBadge": isVerifiedBadge,
+        "verifiedBadgeType": verifiedBadgeType,
+        "verifiedBadgeAt": verifiedBadgeAt?.toIso8601String(),
         "audio": audio,
       };
 }

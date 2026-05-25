@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/services/app_review/app_review_service.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/auth_guard.dart';
@@ -38,6 +40,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
   String _expertId = '';
   String _listenerName = '';
   String _listenerImage = '';
+  bool _isVerifiedExpert = false;
   bool _isAudioServiceEnabled = true;
   bool _isVideoServiceEnabled = true;
 
@@ -95,6 +98,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
               '')
           .toString()
           .trim();
+      _isVerifiedExpert = _parseBoolFlag(arguments['isVerifiedBadge'], false);
 
       final hasAudioFlag =
           arguments.containsKey('availableForPrivateAudioCall');
@@ -265,6 +269,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
         (response['message'] ?? 'Session booking updated.').toString());
 
     if (response['status'] == true) {
+      await AppReviewService.trackPositiveAction(source: 'session_booking');
       Get.offNamed(AppRoutes.userMySessionsScreen);
     }
   }
@@ -446,14 +451,23 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  _listenerName.trim().isEmpty ? 'Expert' : _listenerName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppFontStyle.fontStyleW700(
-                    fontSize: 18,
-                    fontColor: AppColors.redesignBrandDark,
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _listenerName.trim().isEmpty ? 'Expert' : _listenerName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppFontStyle.fontStyleW700(
+                          fontSize: 18,
+                          fontColor: AppColors.redesignBrandDark,
+                        ),
+                      ),
+                    ),
+                    VerifiedBadge(
+                      isVerified: _isVerifiedExpert,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 2),
                 Text(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
@@ -121,6 +122,7 @@ class TopListenerWidget extends StatelessWidget {
         : listener.language!.first;
     final rating = listener.rating ?? 0;
     final name = listener.name ?? 'Expert';
+    final isVerified = listener.isVerifiedBadge == true;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -189,14 +191,23 @@ class TopListenerWidget extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(
-                                  child: Text(
-                                    name,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AppFontStyle.fontStyleW700(
-                                      fontSize: titleFontSize,
-                                      fontColor: _brandDark,
-                                    ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          name,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: AppFontStyle.fontStyleW700(
+                                            fontSize: titleFontSize,
+                                            fontColor: _brandDark,
+                                          ),
+                                        ),
+                                      ),
+                                      VerifiedBadge(
+                                        isVerified: isVerified,
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 const SizedBox(width: 8),

@@ -145,6 +145,8 @@ const GeneralSettings = () => {
     groupVideoSessionCredits: 1,
     groupSessionCommissionPercent: '',
     groupSessionMinimumExpertTalkTimeMinutes: '',
+    autoExpertBadgeEnabled: false,
+    autoExpertBadgeSessionThreshold: 0,
   })
 
   const [privateKeyJson, setPrivateKeyJson] = useState('')
@@ -196,6 +198,8 @@ const GeneralSettings = () => {
         groupVideoSessionCredits: settings.groupVideoSessionCredits ?? 1,
         groupSessionCommissionPercent: settings.groupSessionCommissionPercent ?? settings.sessionCommissionPercent ?? 0,
         groupSessionMinimumExpertTalkTimeMinutes: settings.groupSessionMinimumExpertTalkTimeMinutes ?? 10,
+        autoExpertBadgeEnabled: settings.autoExpertBadgeEnabled ?? false,
+        autoExpertBadgeSessionThreshold: settings.autoExpertBadgeSessionThreshold ?? 0,
         allowBecomeHostOption: settings.allowBecomeHostOption || false,
         isApplicationLive: settings.isApplicationLive || false,
         isDemoContentEnabled: settings.isDemoContentEnabled || false,
@@ -243,7 +247,8 @@ const GeneralSettings = () => {
         'groupAudioSessionCredits',
         'groupVideoSessionCredits',
         'groupSessionCommissionPercent',
-        'groupSessionMinimumExpertTalkTimeMinutes'
+        'groupSessionMinimumExpertTalkTimeMinutes',
+        'autoExpertBadgeSessionThreshold'
       ].includes(field)
     ) {
       // Allow empty string or valid numbers
@@ -359,7 +364,8 @@ const GeneralSettings = () => {
     'groupAudioSessionCredits',
     'groupVideoSessionCredits',
     'groupSessionCommissionPercent',
-    'groupSessionMinimumExpertTalkTimeMinutes'
+    'groupSessionMinimumExpertTalkTimeMinutes',
+    'autoExpertBadgeSessionThreshold'
   ]
 
   const getUpdatedFields = () => {
@@ -1006,6 +1012,54 @@ const GeneralSettings = () => {
                     <InputAdornment position='end'>
                       <Typography variant='caption' color='text.secondary'>
                         minutes
+                      </Typography>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+
+      <Card sx={{ mb: 4 }}>
+        <CardContent>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
+              <i className='tabler-badge mr-2' />
+              Expert Verification Badge
+            </Typography>
+          </Box>
+
+          <Divider sx={{ mb: 3 }} />
+
+          <Grid container spacing={3}>
+            <Grid item size={6}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.autoExpertBadgeEnabled)}
+                    onChange={event => handleFieldChange('autoExpertBadgeEnabled', event.target.checked)}
+                  />
+                }
+                label='Auto verify experts by completed sessions'
+              />
+            </Grid>
+
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='text'
+                label='Auto verify threshold (completed sessions)'
+                value={formData.autoExpertBadgeSessionThreshold ?? ''}
+                onChange={e => handleFieldChange('autoExpertBadgeSessionThreshold', e.target.value)}
+                disabled={!Boolean(formData.autoExpertBadgeEnabled)}
+                InputProps={{
+                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*', min: 0 },
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Typography variant='caption' color='text.secondary'>
+                        sessions
                       </Typography>
                     </InputAdornment>
                   )
