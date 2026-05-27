@@ -303,8 +303,6 @@ const GeneralSettings = () => {
   const isSessionCreditMode = String(formData.monetizationMode || '').trim().toLowerCase() === 'subscription_session_commission'
   const isGroupAudioFree = String(formData.groupAudioSessionPricingMode || '').trim().toLowerCase() === 'free'
   const isGroupVideoFree = String(formData.groupVideoSessionPricingMode || '').trim().toLowerCase() === 'free'
-  const callRateSectionTitle = isSessionCreditMode ? 'Call Credit Setting' : 'Call Rate Setting'
-  const privateRateSectionTitle = isSessionCreditMode ? 'Private Session Credits' : 'Private Rate'
   const privateAudioLabel = isSessionCreditMode ? 'Private Audio Credits' : 'Private Audio Rate'
   const privateVideoLabel = isSessionCreditMode ? 'Private Video Credits' : 'Private Video Rate'
   const privateRateUnitLabel = isSessionCreditMode ? 'credits/session' : 'coins/minute'
@@ -617,170 +615,6 @@ const GeneralSettings = () => {
             <Grid item size={6}>
               <TextField
                 fullWidth
-                select
-                label='Session Slot Duration (minutes)'
-                value={formData.sessionSlotDurationMinutes || 30}
-                onChange={e => handleFieldChange('sessionSlotDurationMinutes', e.target.value)}
-              >
-                {[15, 30, 45, 60, 90, 120, 180, 240].map(duration => (
-                  <MenuItem key={duration} value={duration}>
-                    {duration} minutes
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                select
-                label='Session Booking Timezone'
-                value={formData.sessionBookingTimezone || 'UTC'}
-                onChange={e => handleFieldChange('sessionBookingTimezone', e.target.value)}
-                helperText={`Availability and booking policy are anchored to this timezone. Showing ${timezoneOptions.length} supported timezones with UTC offsets.`}
-                SelectProps={{
-                  MenuProps: {
-                    PaperProps: {
-                      style: {
-                        maxHeight: 320
-                      }
-                    }
-                  }
-                }}
-              >
-                {timezoneOptions.map(timezoneOption => (
-                  <MenuItem key={timezoneOption.value} value={timezoneOption.value}>
-                    {timezoneOption.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item size={12}>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', columnGap: 4 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={Boolean(formData.requireActiveSubscriptionForSessionBooking)}
-                      onChange={e => handleFieldChange('requireActiveSubscriptionForSessionBooking', e.target.checked)}
-                    />
-                  }
-                  label='Require Active Subscription For Session Booking'
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={Boolean(formData.allowDirectPaidSessionBooking)}
-                      onChange={e => handleFieldChange('allowDirectPaidSessionBooking', e.target.checked)}
-                    />
-                  }
-                  label='Allow Direct Paid Session Booking'
-                />
-              </Box>
-            </Grid>
-            <Grid item size={12}>
-              <Typography variant='subtitle2' sx={{ mt: 1, mb: 1, fontWeight: 600 }}>
-                One-to-One Cancellation & Start Window Policy
-              </Typography>
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                type='text'
-                label='User Cancellation Time Limit (minutes before start)'
-                value={formData.sessionUserCancellationTimeLimitMinutes || ''}
-                onChange={e => handleFieldChange('sessionUserCancellationTimeLimitMinutes', e.target.value)}
-                InputProps={{
-                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
-                }}
-              />
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                type='text'
-                label='User Late Cancellation Refund (%)'
-                value={formData.sessionUserCancellationRefundPercent || ''}
-                onChange={e => handleFieldChange('sessionUserCancellationRefundPercent', e.target.value)}
-                InputProps={{
-                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <Typography variant='caption' color='text.secondary'>
-                        %
-                      </Typography>
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                type='text'
-                label='Expert Cancellation Penalty (%)'
-                value={formData.sessionExpertCancellationPenaltyPercent || ''}
-                onChange={e => handleFieldChange('sessionExpertCancellationPenaltyPercent', e.target.value)}
-                InputProps={{
-                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <Typography variant='caption' color='text.secondary'>
-                        %
-                      </Typography>
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Grid>
-            <Grid item size={6}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={Boolean(formData.sessionUserCancellationRefundCredits)}
-                    onChange={e => handleFieldChange('sessionUserCancellationRefundCredits', e.target.checked)}
-                  />
-                }
-                label='Restore Subscription Credits On Eligible User Cancellation'
-              />
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                type='text'
-                label='User Cancellation Refund Credits (count)'
-                value={formData.sessionUserCancellationRefundCreditsCount || ''}
-                onChange={e => handleFieldChange('sessionUserCancellationRefundCreditsCount', e.target.value)}
-                InputProps={{
-                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
-                }}
-              />
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                type='text'
-                label='Join Early Window (minutes)'
-                value={formData.sessionJoinEarlyWindowMinutes || ''}
-                onChange={e => handleFieldChange('sessionJoinEarlyWindowMinutes', e.target.value)}
-                InputProps={{
-                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
-                }}
-              />
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                type='text'
-                label='Join Late Window (minutes after end)'
-                value={formData.sessionJoinLateWindowMinutes || ''}
-                onChange={e => handleFieldChange('sessionJoinLateWindowMinutes', e.target.value)}
-                InputProps={{
-                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
-                }}
-              />
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
                 type='text'
                 label='Android App Version'
                 value={formData.androidAppVersion || ''}
@@ -828,10 +662,15 @@ const GeneralSettings = () => {
       <Card sx={{ mb: 4 }}>
         <CardContent>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-              <i className='tabler-settings mr-2' />
-              {callRateSectionTitle}
-            </Typography>
+            <Box>
+              <Typography variant='subtitle1' sx={{ mb: 0.5, fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+                <i className='tabler-calendar-stats mr-2' />
+                Session & Call Settings
+              </Typography>
+              <Typography variant='body2' color='text.secondary'>
+                Configure one-to-one calls and live group sessions from one place.
+              </Typography>
+            </Box>
             <HoverPopover
               popoverContent={
                 <>
@@ -864,15 +703,63 @@ const GeneralSettings = () => {
 
           <Divider sx={{ mb: 3 }} />
 
-          <Card className='w-full bg-transparent'>
-            <CardContent className=''>
-              <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-                <i className='tabler-settings mr-2' />
-                {privateRateSectionTitle}
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <Box
+              sx={{
+                p: 3,
+                border: theme => `1px solid ${theme.palette.divider}`,
+                borderRadius: 2,
+                bgcolor: 'background.default'
+              }}
+            >
+              <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+                <i className='tabler-user-check mr-2' />
+                One-to-One Call Setting
               </Typography>
               <Divider sx={{ mb: 3 }} />
-              <div className='flex gap-3 flex-col'>
-                <Grid item xs={12} md={12}>
+
+              <Grid container spacing={3}>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    select
+                    label='Session Slot Duration (minutes)'
+                    value={formData.sessionSlotDurationMinutes || 30}
+                    onChange={e => handleFieldChange('sessionSlotDurationMinutes', e.target.value)}
+                  >
+                    {[15, 30, 45, 60, 90, 120, 180, 240].map(duration => (
+                      <MenuItem key={duration} value={duration}>
+                        {duration} minutes
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    select
+                    label='Session Booking Timezone'
+                    value={formData.sessionBookingTimezone || 'UTC'}
+                    onChange={e => handleFieldChange('sessionBookingTimezone', e.target.value)}
+                    helperText={`Availability and booking policy are anchored to this timezone. Showing ${timezoneOptions.length} supported timezones with UTC offsets.`}
+                    SelectProps={{
+                      MenuProps: {
+                        PaperProps: {
+                          style: {
+                            maxHeight: 320
+                          }
+                        }
+                      }
+                    }}
+                  >
+                    {timezoneOptions.map(timezoneOption => (
+                      <MenuItem key={timezoneOption.value} value={timezoneOption.value}>
+                        {timezoneOption.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid item size={6}>
                   <TextField
                     fullWidth
                     type='text'
@@ -891,7 +778,7 @@ const GeneralSettings = () => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} md={12}>
+                <Grid item size={6}>
                   <TextField
                     fullWidth
                     type='text'
@@ -910,127 +797,272 @@ const GeneralSettings = () => {
                     }}
                   />
                 </Grid>
-              </div>
-            </CardContent>
-          </Card>
-        </CardContent>
-      </Card>
+                <Grid item size={12}>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', columnGap: 4, rowGap: 1 }}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={Boolean(formData.requireActiveSubscriptionForSessionBooking)}
+                          onChange={e => handleFieldChange('requireActiveSubscriptionForSessionBooking', e.target.checked)}
+                        />
+                      }
+                      label='Require Active Subscription For Session Booking'
+                    />
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={Boolean(formData.allowDirectPaidSessionBooking)}
+                          onChange={e => handleFieldChange('allowDirectPaidSessionBooking', e.target.checked)}
+                        />
+                      }
+                      label='Allow Direct Paid Session Booking'
+                    />
+                  </Box>
+                </Grid>
+                <Grid item size={12}>
+                  <Typography variant='subtitle2' sx={{ mt: 1, mb: 1, fontWeight: 600 }}>
+                    One-to-One Cancellation & Start Window Policy
+                  </Typography>
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='User Cancellation Time Limit (minutes before start)'
+                    value={formData.sessionUserCancellationTimeLimitMinutes || ''}
+                    onChange={e => handleFieldChange('sessionUserCancellationTimeLimitMinutes', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+                    }}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='User Late Cancellation Refund (%)'
+                    value={formData.sessionUserCancellationRefundPercent || ''}
+                    onChange={e => handleFieldChange('sessionUserCancellationRefundPercent', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography variant='caption' color='text.secondary'>
+                            %
+                          </Typography>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='Expert Cancellation Penalty (%)'
+                    value={formData.sessionExpertCancellationPenaltyPercent || ''}
+                    onChange={e => handleFieldChange('sessionExpertCancellationPenaltyPercent', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography variant='caption' color='text.secondary'>
+                            %
+                          </Typography>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={Boolean(formData.sessionUserCancellationRefundCredits)}
+                        onChange={e => handleFieldChange('sessionUserCancellationRefundCredits', e.target.checked)}
+                      />
+                    }
+                    label='Restore Subscription Credits On Eligible User Cancellation'
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='User Cancellation Refund Credits (count)'
+                    value={formData.sessionUserCancellationRefundCreditsCount || ''}
+                    onChange={e => handleFieldChange('sessionUserCancellationRefundCreditsCount', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+                    }}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='Join Early Window (minutes)'
+                    value={formData.sessionJoinEarlyWindowMinutes || ''}
+                    onChange={e => handleFieldChange('sessionJoinEarlyWindowMinutes', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+                    }}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='Join Late Window (minutes after end)'
+                    value={formData.sessionJoinLateWindowMinutes || ''}
+                    onChange={e => handleFieldChange('sessionJoinLateWindowMinutes', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+                    }}
+                  />
+                </Grid>
+	              </Grid>
+	            </Box>
 
-      <Card sx={{ mb: 4 }}>
-        <CardContent>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-              <i className='tabler-users-group mr-2' />
-              Live Group Session Setting
-            </Typography>
+	            <Box
+	              sx={{
+	                p: 3,
+	                border: theme => `1px solid ${theme.palette.divider}`,
+	                borderRadius: 2,
+	                bgcolor: 'background.default'
+	              }}
+	            >
+	              <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+	                <i className='tabler-clock-check mr-2' />
+	                Shared Session Completion Policy
+	              </Typography>
+	              <Divider sx={{ mb: 3 }} />
+
+	              <Grid container spacing={3}>
+	                <Grid item size={6}>
+	                  <TextField
+	                    fullWidth
+	                    type='text'
+	                    label='Minimum Expert Talk Time (All Sessions)'
+	                    helperText='Applies to both one-to-one and live group sessions. Changing this value affects both.'
+	                    value={formData.groupSessionMinimumExpertTalkTimeMinutes || ''}
+	                    onChange={e => handleFieldChange('groupSessionMinimumExpertTalkTimeMinutes', e.target.value)}
+	                    InputProps={{
+	                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+	                      endAdornment: (
+	                        <InputAdornment position='end'>
+	                          <Typography variant='caption' color='text.secondary'>
+	                            minutes
+	                          </Typography>
+	                        </InputAdornment>
+	                      )
+	                    }}
+	                  />
+	                </Grid>
+	              </Grid>
+	            </Box>
+
+	            <Box
+	              sx={{
+	                p: 3,
+                border: theme => `1px solid ${theme.palette.divider}`,
+                borderRadius: 2,
+                bgcolor: 'background.default'
+              }}
+            >
+              <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+                <i className='tabler-users-group mr-2' />
+                Live Group Session Setting
+              </Typography>
+              <Divider sx={{ mb: 3 }} />
+
+              <Grid container spacing={3}>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    select
+                    label='Group Audio Session Mode'
+                    value={formData.groupAudioSessionPricingMode || 'paid'}
+                    onChange={e => handleFieldChange('groupAudioSessionPricingMode', e.target.value)}
+                  >
+                    <MenuItem value='paid'>Paid (Session Credits)</MenuItem>
+                    <MenuItem value='free'>Free</MenuItem>
+                  </TextField>
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='Group Audio Session Credits'
+                    value={formData.groupAudioSessionCredits ?? ''}
+                    disabled={isGroupAudioFree}
+                    onChange={e => handleFieldChange('groupAudioSessionCredits', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography variant='caption' color='text.secondary'>
+                            credits
+                          </Typography>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    select
+                    label='Group Video Session Mode'
+                    value={formData.groupVideoSessionPricingMode || 'paid'}
+                    onChange={e => handleFieldChange('groupVideoSessionPricingMode', e.target.value)}
+                  >
+                    <MenuItem value='paid'>Paid (Session Credits)</MenuItem>
+                    <MenuItem value='free'>Free</MenuItem>
+                  </TextField>
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='Group Video Session Credits'
+                    value={formData.groupVideoSessionCredits ?? ''}
+                    disabled={isGroupVideoFree}
+                    onChange={e => handleFieldChange('groupVideoSessionCredits', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography variant='caption' color='text.secondary'>
+                            credits
+                          </Typography>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='Group Session Commission (%)'
+                    value={formData.groupSessionCommissionPercent || ''}
+                    onChange={e => handleFieldChange('groupSessionCommissionPercent', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography variant='caption' color='text.secondary'>
+                            %
+                          </Typography>
+                        </InputAdornment>
+                      )
+                    }}
+	                  />
+	                </Grid>
+	              </Grid>
+	            </Box>
           </Box>
-
-          <Divider sx={{ mb: 3 }} />
-
-          <Grid container spacing={3}>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                select
-                label='Group Audio Session Mode'
-                value={formData.groupAudioSessionPricingMode || 'paid'}
-                onChange={e => handleFieldChange('groupAudioSessionPricingMode', e.target.value)}
-              >
-                <MenuItem value='paid'>Paid (Session Credits)</MenuItem>
-                <MenuItem value='free'>Free</MenuItem>
-              </TextField>
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                type='text'
-                label='Group Audio Session Credits'
-                value={formData.groupAudioSessionCredits ?? ''}
-                disabled={isGroupAudioFree}
-                onChange={e => handleFieldChange('groupAudioSessionCredits', e.target.value)}
-                InputProps={{
-                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <Typography variant='caption' color='text.secondary'>
-                        credits
-                      </Typography>
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                select
-                label='Group Video Session Mode'
-                value={formData.groupVideoSessionPricingMode || 'paid'}
-                onChange={e => handleFieldChange('groupVideoSessionPricingMode', e.target.value)}
-              >
-                <MenuItem value='paid'>Paid (Session Credits)</MenuItem>
-                <MenuItem value='free'>Free</MenuItem>
-              </TextField>
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                type='text'
-                label='Group Video Session Credits'
-                value={formData.groupVideoSessionCredits ?? ''}
-                disabled={isGroupVideoFree}
-                onChange={e => handleFieldChange('groupVideoSessionCredits', e.target.value)}
-                InputProps={{
-                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <Typography variant='caption' color='text.secondary'>
-                        credits
-                      </Typography>
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                type='text'
-                label='Group Session Commission (%)'
-                value={formData.groupSessionCommissionPercent || ''}
-                onChange={e => handleFieldChange('groupSessionCommissionPercent', e.target.value)}
-                InputProps={{
-                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <Typography variant='caption' color='text.secondary'>
-                        %
-                      </Typography>
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Grid>
-            <Grid item size={6}>
-              <TextField
-                fullWidth
-                type='text'
-                label='Minimum Expert Talk Time (minutes)'
-                value={formData.groupSessionMinimumExpertTalkTimeMinutes || ''}
-                onChange={e => handleFieldChange('groupSessionMinimumExpertTalkTimeMinutes', e.target.value)}
-                InputProps={{
-                  inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <Typography variant='caption' color='text.secondary'>
-                        minutes
-                      </Typography>
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Grid>
-          </Grid>
         </CardContent>
       </Card>
 
