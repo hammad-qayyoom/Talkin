@@ -12,7 +12,28 @@
           "package_name": "com.notisboard.mobile"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "787587737004-1vsrr7ej6maigicegqam2ght5t7it58t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.notisboard.mobile",
+            "certificate_hash": "cddaea5dd9c3f8191eb5c584209339360c9a3cfc"
+          }
+        },
+        {
+          "client_id": "787587737004-u68oioaqpbt3tu6b1b29auo50ds5uo0q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.notisboard.mobile",
+            "certificate_hash": "78576b29973caa9d8ce84a483985932afbed3b9c"
+          }
+        },
+        {
+          "client_id": "787587737004-qun3bkoflh1dsdoh5f16h3onln9fh2vm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDoj1P6kzFrQsPpPYy8X2pUUQ636x8q6LI"
@@ -20,7 +41,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787587737004-qun3bkoflh1dsdoh5f16h3onln9fh2vm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "787587737004-81ectfs5u3utr84gq6fqveme9m0c3nnh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.notisboard.mobile"
+              }
+            }
+          ]
         }
       }
     }

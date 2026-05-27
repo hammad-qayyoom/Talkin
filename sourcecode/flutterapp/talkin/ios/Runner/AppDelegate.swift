@@ -9,7 +9,7 @@ import UserNotifications
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {e
+  ) -> Bool {
     if FirebaseApp.app() == nil {
       FirebaseApp.configure()
     }

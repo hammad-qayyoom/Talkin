@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:math' hide log;
 
+import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:notisboard/custom/custom_web_view/web_view_screen.dart';
 import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
@@ -31,6 +35,9 @@ class MainScreenController extends GetxController {
   bool isObscure = true;
   bool isLoading = false;
   bool isGuestContinueLoading = false;
+  bool isGoogleLoginLoading = false;
+  bool isAppleLoginLoading = false;
+  bool get isSocialLoginLoading => isGoogleLoginLoading || isAppleLoginLoading;
   String randomName = '';
   String randomImage = '';
   LoginModel? loginModel;
@@ -132,6 +139,18 @@ class MainScreenController extends GetxController {
     update();
   }
 
+  void _setGoogleLoginLoading(bool value) {
+    if (isGoogleLoginLoading == value) return;
+    isGoogleLoginLoading = value;
+    update();
+  }
+
+  void _setAppleLoginLoading(bool value) {
+    if (isAppleLoginLoading == value) return;
+    isAppleLoginLoading = value;
+    update();
+  }
+
   Future<void> _enterLimitedGuestBrowsing() async {
     await firebase_auth.FirebaseAuth.instance.signOut();
 
@@ -180,6 +199,11 @@ class MainScreenController extends GetxController {
         return _invalidEmailPasswordMessage();
       case 'network-request-failed':
         return "Please check your internet connection and try again.";
+      case 'account-exists-with-different-credential':
+        return "This email already exists with another login method. Please use that login method first.";
+      case 'missing-google-token':
+      case 'missing-apple-id-token':
+        return "Unable to verify this account. Please try again.";
       case 'too-many-requests':
         return "Too many login attempts. Please try again later.";
       case 'user-disabled':
@@ -211,90 +235,204 @@ class MainScreenController extends GetxController {
     return EnumLocale.txtSomeThingWentWrong.name.tr;
   }
 
-  //apple login
+  Future<void> onGoogleLogin() async {
+    if (isLoading || isGuestContinueLoading || isSocialLoginLoading) return;
+
+    _setGoogleLoginLoading(true);
+    Database.onSetDemoListener(false);
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    try {
+      await _refreshDeviceContext();
+
+      final result = await GoogleAuthentication.signInWithGoogle();
+      if (result == null) {
+        Utils.showLog("Google Sign-In cancelled by user.");
+        return;
+      }
+
+      await _completeSocialLogin(
+        result: result,
+        loginType: 1,
+        providerName: "Google",
+      );
+    } on firebase_auth.FirebaseAuthException catch (error) {
+      Utils.showToast(Get.context!, _firebaseSignInErrorMessage(error));
+      Utils.showLog("Google Firebase Sign-In Failed => $error");
+    } catch (error) {
+      Utils.showToast(Get.context!, "Google sign-in failed. Please try again.");
+      Utils.showLog("Google Sign-In Failed => $error");
+    } finally {
+      _setGoogleLoginLoading(false);
+    }
+  }
+
   Future<void> onAppleLogin() async {
-    Get.dialog(const LoadingWidget(),
-        barrierDismissible: false); // Start Loading...
+    if (isLoading || isGuestContinueLoading || isSocialLoginLoading) return;
 
-    await _refreshDeviceContext();
+    _setAppleLoginLoading(true);
+    Database.onSetDemoListener(false);
+    FocusManager.instance.primaryFocus?.unfocus();
 
-    firebase_auth.UserCredential? userCredential =
-        await AppleAuthentication.signInWithApple(); // Apple Login...
+    try {
+      await _refreshDeviceContext();
 
-    if (userCredential == null) {
-      _dismissLoadingDialog();
-      Utils.showToast(Get.context!, "Apple Login Failed.");
-      Utils.showLog("Apple Login Failed !! Credential missing");
+      final result = await AppleAuthentication.signInWithApple();
+      if (result == null) {
+        Utils.showLog("Apple Sign-In cancelled by user.");
+        return;
+      }
+
+      await _completeSocialLogin(
+        result: result,
+        loginType: 5,
+        providerName: "Apple",
+      );
+    } on firebase_auth.FirebaseAuthException catch (error) {
+      Utils.showToast(Get.context!, _appleSignInErrorMessage(error));
+      Utils.showLog("Apple Firebase Sign-In Failed => $error");
+    } catch (error) {
+      Utils.showToast(Get.context!, "Apple sign-in failed. Please try again.");
+      Utils.showLog("Apple Sign-In Failed => $error");
+    } finally {
+      _setAppleLoginLoading(false);
+    }
+  }
+
+  String _resolveSocialEmail({
+    required SocialAuthenticationResult result,
+    required String providerName,
+  }) {
+    final email = (result.email ?? result.userCredential.user?.email ?? "")
+        .trim()
+        .toLowerCase();
+
+    if (email.isNotEmpty) return email;
+
+    Utils.showLog("$providerName Sign-In email missing after Firebase login.");
+    return "";
+  }
+
+  String _appleSignInErrorMessage(firebase_auth.FirebaseAuthException error) {
+    switch (error.code) {
+      case 'invalid-credential':
+      case 'missing-apple-id-token':
+        return "Apple sign-in could not be verified. Please try again.";
+      case 'operation-not-allowed':
+        return "Apple sign-in is not enabled yet. Please contact support.";
+      case 'network-request-failed':
+        return "Please check your internet connection and try again.";
+      case 'account-exists-with-different-credential':
+        return "This email already exists with another login method. Please use that login method first.";
+      default:
+        return error.message?.trim().isNotEmpty == true
+            ? error.message!.trim()
+            : "Apple sign-in failed. Please try again.";
+    }
+  }
+
+  String _resolveSocialName(SocialAuthenticationResult result, String email) {
+    final name =
+        (result.displayName ?? result.userCredential.user?.displayName ?? "")
+            .trim();
+    if (name.isNotEmpty) return name;
+
+    if (email.contains('@')) {
+      final emailName = email.split('@').first.trim();
+      if (emailName.isNotEmpty) return emailName;
+    }
+
+    return randomName;
+  }
+
+  Future<void> _completeSocialLogin({
+    required SocialAuthenticationResult result,
+    required int loginType,
+    required String providerName,
+  }) async {
+    final firebaseUser = result.userCredential.user;
+    final uid = firebaseUser?.uid ?? "";
+    final token = await _getFreshAuthToken(firebaseUser);
+    final email = _resolveSocialEmail(
+      result: result,
+      providerName: providerName,
+    );
+
+    if (uid.isEmpty || (token ?? '').trim().isEmpty) {
+      Utils.showToast(Get.context!,
+          "Unable to verify your $providerName account. Please try again.");
       return;
     }
 
-    bool isNewUser = userCredential.additionalUserInfo?.isNewUser ?? true;
-    final appleEmail = (userCredential.additionalUserInfo?.profile?["email"] ??
-            userCredential.user?.email ??
-            "")
-        .toString();
+    if (email.isEmpty && providerName != "Apple") {
+      Utils.showToast(Get.context!,
+          "$providerName did not share an email. Please try again or use email login.");
+      return;
+    }
 
-    if (appleEmail.isNotEmpty) {
-      // Calling Sign Up Api...
+    final isNewUser = result.userCredential.additionalUserInfo?.isNewUser ??
+        result.isLikelyNewUser;
+    final displayName = _resolveSocialName(result, email);
+    final profilePic = (result.photoUrl ?? firebaseUser?.photoURL ?? "").trim();
 
-      // Apple often doesn't provide name, use email or random name
-      String displayName = appleEmail.split('@').first;
+    Utils.showLog(
+      "$providerName Sign-In success detected. loginType=$loginType uid=$uid email=$email isNewUser=$isNewUser",
+    );
 
-      loginModel = await LoginApi.callApi(
-        countryCode: Database.selectedCountryCode,
-        loginType: 5,
-        email: appleEmail,
-        identity: Database.identity,
-        fcmToken: Database.fcmToken,
-        userName: isNewUser ? displayName : null,
-        profilePic: isNewUser
-            ? Database.loginUserProfilePic.isEmpty
-                ? randomImage
-                : Database.loginUserProfilePic
-            : null,
-      );
+    loginModel = await LoginApi.callApi(
+      countryCode: Database.selectedCountryCode,
+      loginType: loginType,
+      email: email,
+      identity: Database.identity,
+      fcmToken: Database.fcmToken,
+      userName: isNewUser ? displayName : null,
+      profilePic: isNewUser
+          ? profilePic.isNotEmpty
+              ? profilePic
+              : randomImage
+          : null,
+      acceptTerms: true,
+      acceptanceSource: "${providerName.toLowerCase()}_social_login",
+      authToken: token,
+      authUid: uid,
+    ).timeout(const Duration(seconds: 15));
 
-      if (loginModel?.status == true) {
-        _dismissLoadingDialog();
-        Database.onSetIsLogin(true);
-        Database.onSetGuestMode(false);
-        Database.onSetLoginType(loginModel?.user?.loginType ?? 0);
-        Database.onSetSeenOnboarding(true);
-        Database.onSetFillProfile(true);
-        await syncPushTokenPostLogin();
+    if (loginModel?.status != true) {
+      Utils.showToast(
+          Get.context!, _normalizeBackendLoginError(loginModel?.message));
+      Utils.showLog("$providerName Login Api Calling Failed !!");
+      return;
+    }
 
-        await onGetProfile(loginUserId: userCredential.user!.uid, loginType: 5);
+    Database.onSetIsLogin(true);
+    Database.onSetGuestMode(false);
+    Database.onSetLoginType(loginModel?.user?.loginType ?? loginType);
+    Database.onSetSeenOnboarding(true);
+    Database.onSetFillProfile(true);
+    await syncPushTokenPostLogin();
 
-        if (loginModel?.signUp == true) {
-          Database.onSetFillProfile(false);
+    await onGetProfile(
+        loginUserId: uid, loginType: loginType, authToken: token);
 
-          Get.offAllNamed(AppRoutes.fillProfileScreen, arguments: [
-            Database.loginUserName,
-            Database.loginUserProfilePic,
-            Database.loginUserEmail,
-          ]);
-        } else {
-          Database.onSetFillProfile(true);
-          await onGetProfile(
-              loginUserId: userCredential.user!.uid, loginType: 5);
+    if (loginModel?.signUp == true) {
+      Database.onSetFillProfile(false);
+      Get.offAllNamed(AppRoutes.fillProfileScreen, arguments: [
+        Database.loginUserName.isNotEmpty
+            ? Database.loginUserName
+            : displayName,
+        Database.loginUserProfilePic.isNotEmpty
+            ? Database.loginUserProfilePic
+            : (profilePic.isNotEmpty ? profilePic : randomImage),
+        Database.loginUserEmail.isNotEmpty ? Database.loginUserEmail : email,
+      ]);
+      return;
+    }
 
-          if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
-            Get.offAllNamed(AppRoutes.hostBottomBar);
-          } else {
-            Get.offAllNamed(AppRoutes.bottomBar);
-          }
-        }
-      } else {
-        _dismissLoadingDialog();
-        Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
-        Utils.showLog("Login Api Calling Failed !!");
-      }
-
-      // Get.back();
+    Database.onSetFillProfile(true);
+    if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
+      Get.offAllNamed(AppRoutes.hostBottomBar);
     } else {
-      _dismissLoadingDialog();
-      Utils.showToast(Get.context!, "Apple Login Failed: No email found.");
-      Utils.showLog("Apple Login Failed !! Email missing in response");
+      Get.offAllNamed(AppRoutes.bottomBar);
     }
   }
 
@@ -790,28 +928,157 @@ class MainScreenController extends GetxController {
   }
 }
 
+class SocialAuthenticationResult {
+  const SocialAuthenticationResult({
+    required this.userCredential,
+    this.email,
+    this.displayName,
+    this.photoUrl,
+    this.isLikelyNewUser = false,
+  });
+
+  final firebase_auth.UserCredential userCredential;
+  final String? email;
+  final String? displayName;
+  final String? photoUrl;
+  final bool isLikelyNewUser;
+}
+
+class GoogleAuthentication {
+  static final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>['email', 'profile'],
+  );
+
+  static Future<SocialAuthenticationResult?> signInWithGoogle() async {
+    final googleUser = await _googleSignIn.signIn();
+    if (googleUser == null) {
+      return null;
+    }
+
+    final googleAuth = await googleUser.authentication;
+    if ((googleAuth.idToken ?? '').isEmpty &&
+        (googleAuth.accessToken ?? '').isEmpty) {
+      throw firebase_auth.FirebaseAuthException(
+        code: 'missing-google-token',
+        message: 'Google did not return a valid authentication token.',
+      );
+    }
+
+    final credential = firebase_auth.GoogleAuthProvider.credential(
+      idToken: googleAuth.idToken,
+      accessToken: googleAuth.accessToken,
+    );
+
+    final response = await firebase_auth.FirebaseAuth.instance
+        .signInWithCredential(credential);
+
+    Utils.showLog(
+      "Google Login isNewUser => ${response.additionalUserInfo?.isNewUser} Email => ${googleUser.email}",
+    );
+
+    return SocialAuthenticationResult(
+      userCredential: response,
+      email: googleUser.email,
+      displayName: googleUser.displayName,
+      photoUrl: googleUser.photoUrl,
+      isLikelyNewUser: response.additionalUserInfo?.isNewUser ?? false,
+    );
+  }
+}
+
 class AppleAuthentication {
-  static Future<firebase_auth.UserCredential?> signInWithApple() async {
+  static Future<SocialAuthenticationResult?> signInWithApple() async {
     try {
+      final rawNonce = _generateNonce();
+      final nonce = _sha256ofString(rawNonce);
+
       final appleCredential = await SignInWithApple.getAppleIDCredential(
-          scopes: [
-            AppleIDAuthorizationScopes.email,
-            AppleIDAuthorizationScopes.fullName
-          ]);
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: nonce,
+      );
+
+      final identityToken = appleCredential.identityToken;
+      if ((identityToken ?? '').isEmpty) {
+        throw firebase_auth.FirebaseAuthException(
+          code: 'missing-apple-id-token',
+          message: 'Apple did not return a valid identity token.',
+        );
+      }
+
       final oauthCredential = firebase_auth.OAuthProvider("apple.com")
           .credential(
-              idToken: appleCredential.identityToken,
-              accessToken: appleCredential.authorizationCode);
+        idToken: identityToken,
+        rawNonce: rawNonce,
+        accessToken: appleCredential.authorizationCode,
+      );
+
       final response = await firebase_auth.FirebaseAuth.instance
           .signInWithCredential(oauthCredential);
 
-      Utils.showLog(
-          "✅ Apple Login isNewUser => ${response.additionalUserInfo?.isNewUser} Email => ${response.additionalUserInfo?.profile?["email"] ?? ""}");
+      final fullName = [
+        appleCredential.givenName,
+        appleCredential.familyName,
+      ]
+          .where((value) => (value ?? '').trim().isNotEmpty)
+          .map((value) => value!.trim())
+          .join(' ')
+          .trim();
+      final tokenPayload = _decodeJwtPayload(identityToken ?? "");
+      final tokenEmail = (tokenPayload["email"] ?? "").toString().trim();
 
-      return response;
+      Utils.showLog(
+        "Apple Login isNewUser => ${response.additionalUserInfo?.isNewUser} Email => ${appleCredential.email ?? response.user?.email ?? tokenEmail}",
+      );
+
+      return SocialAuthenticationResult(
+        userCredential: response,
+        email: appleCredential.email ?? response.user?.email ?? tokenEmail,
+        displayName:
+            fullName.isNotEmpty ? fullName : response.user?.displayName,
+        photoUrl: response.user?.photoURL,
+        isLikelyNewUser: response.additionalUserInfo?.isNewUser ?? false,
+      );
+    } on SignInWithAppleAuthorizationException catch (error) {
+      if (error.code == AuthorizationErrorCode.canceled) {
+        return null;
+      }
+      Utils.showLog("Apple Login Authorization Error => $error");
+      rethrow;
     } catch (error) {
-      Utils.showLog("❌ Apple Login Error => $error");
+      Utils.showLog("Apple Login Error => $error");
+      rethrow;
     }
-    return null;
+  }
+
+  static String _generateNonce([int length = 32]) {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(
+      length,
+      (_) => charset[random.nextInt(charset.length)],
+    ).join();
+  }
+
+  static String _sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    return sha256.convert(bytes).toString();
+  }
+
+  static Map<String, dynamic> _decodeJwtPayload(String token) {
+    try {
+      final parts = token.split('.');
+      if (parts.length < 2) return {};
+
+      final payload = base64Url.normalize(parts[1]);
+      final decoded = utf8.decode(base64Url.decode(payload));
+      final jsonPayload = json.decode(decoded);
+      return jsonPayload is Map<String, dynamic> ? jsonPayload : {};
+    } catch (_) {
+      return {};
+    }
   }
 }

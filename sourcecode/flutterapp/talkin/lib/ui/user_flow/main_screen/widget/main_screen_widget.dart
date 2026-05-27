@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/notisboard_wordmark.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/main_screen/controller/main_screen_controller.dart';
+import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -23,8 +25,12 @@ class MainScreenView extends StatelessWidget {
     return GetBuilder<MainScreenController>(
       builder: (controller) {
         final double bottomInset = MediaQuery.of(context).padding.bottom;
-        final bool isScreenBusy =
-            controller.isLoading || controller.isGuestContinueLoading;
+        final bool isScreenBusy = controller.isLoading ||
+            controller.isGuestContinueLoading ||
+            controller.isSocialLoginLoading;
+        final bool showAppleButton =
+            defaultTargetPlatform == TargetPlatform.iOS ||
+                defaultTargetPlatform == TargetPlatform.macOS;
 
         return GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -234,6 +240,29 @@ class MainScreenView extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 14),
+                        if (showAppleButton) ...[
+                          _buildSocialButton(
+                            text: 'Continue with Apple',
+                            icon: Icons.apple_rounded,
+                            isLoading: controller.isAppleLoginLoading,
+                            onTap: controller.onAppleLogin,
+                          ),
+                          const SizedBox(height: 12),
+                          _buildSocialButton(
+                            text: 'Continue with Google',
+                            assetPath: AppAsset.googleIcon,
+                            isLoading: controller.isGoogleLoginLoading,
+                            onTap: controller.onGoogleLogin,
+                          ),
+                        ] else ...[
+                          _buildSocialButton(
+                            text: 'Continue with Google',
+                            assetPath: AppAsset.googleIcon,
+                            isLoading: controller.isGoogleLoginLoading,
+                            onTap: controller.onGoogleLogin,
+                          ),
+                        ],
+                        const SizedBox(height: 14),
                         _buildPrimaryButton(
                           text: 'Continue as Guest',
                           backgroundColor: _brandRed,
@@ -351,6 +380,62 @@ class MainScreenView extends StatelessWidget {
           style: AppFontStyle.fontStyleW600(
               fontSize: 17, fontColor: AppColors.white),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSocialButton({
+    required String text,
+    required VoidCallback onTap,
+    String? assetPath,
+    IconData? icon,
+    bool isLoading = false,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 54,
+      child: OutlinedButton(
+        onPressed: isLoading ? null : onTap,
+        style: OutlinedButton.styleFrom(
+          elevation: 0,
+          backgroundColor: _surfaceColor,
+          foregroundColor: _brandDark,
+          disabledForegroundColor: _mutedText,
+          side: BorderSide(color: _softBorder, width: 1.2),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        child: isLoading
+            ? SizedBox(
+                height: 18,
+                width: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: _brandDark,
+                ),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (assetPath != null)
+                    Image.asset(assetPath, height: 20, width: 20)
+                  else if (icon != null)
+                    Icon(icon, size: 22, color: _brandDark),
+                  const SizedBox(width: 10),
+                  Flexible(
+                    child: Text(
+                      text,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppFontStyle.fontStyleW600(
+                        fontSize: 17,
+                        fontColor: _brandDark,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/services/biometric/biometric_auth_service.dart';
 import 'package:notisboard/socket/socket_service.dart';
@@ -274,6 +275,12 @@ class Database {
   static Future<void> onLogOut() async {
     final identityDevice = identity;
     final fcmTokenFirebase = fcmToken;
+
+    try {
+      await GoogleSignIn().signOut();
+    } catch (error) {
+      Utils.showLog("Google sign-out skipped => $error");
+    }
 
     await FirebaseAuth.instance.signOut();
     await BiometricAuthService.clearAll();
