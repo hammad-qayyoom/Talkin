@@ -194,16 +194,6 @@ class HostSettingView extends StatelessWidget {
                       Get.toNamed(AppRoutes.referralScreen);
                     },
                   ),
-                  const SizedBox(height: 10),
-                  _SettingsLane(
-                    iconAsset: AppAsset.settingAppLanguage,
-                    title: EnumLocale.txtAPPLanguage.name.tr,
-                    subtitle: 'Change your preferred app language',
-                    isTablet: isTablet,
-                    onTap: () {
-                      Get.toNamed(AppRoutes.hostAppLanguageScreen);
-                    },
-                  ),
                   const SizedBox(height: 14),
                   _SectionLabel(
                     title: 'Account',

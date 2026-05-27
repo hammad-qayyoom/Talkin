@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/custom_chat_time/custom_format_chat_time.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -75,6 +76,7 @@ class ChatViewItem extends StatelessWidget {
   final String? lastMsg;
   final int index;
   final int unReadCount;
+  final bool isVerified;
   final void Function()? onTap;
 
   const ChatViewItem({
@@ -84,6 +86,7 @@ class ChatViewItem extends StatelessWidget {
     required this.index,
     this.onTap,
     required this.unReadCount,
+    this.isVerified = false,
     this.lastMsgTime,
     this.lastMsg,
   });
@@ -150,14 +153,27 @@ class ChatViewItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppFontStyle.fontStyleW700(
-                      fontSize: isTablet ? 20 : 16,
-                      fontColor: _brandDark,
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Text(
+                          name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppFontStyle.fontStyleW700(
+                            fontSize: isTablet ? 20 : 16,
+                            fontColor: _brandDark,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      VerifiedBadge(
+                        isVerified: isVerified,
+                        margin: EdgeInsets.zero,
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 5),
                   Text(

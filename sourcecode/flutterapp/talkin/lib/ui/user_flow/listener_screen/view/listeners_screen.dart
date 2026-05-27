@@ -452,8 +452,10 @@ class _ExpertCard extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: Row(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Expanded(
+                                      Flexible(
+                                        fit: FlexFit.loose,
                                         child: Text(
                                           name,
                                           maxLines: 2,
@@ -464,25 +466,11 @@ class _ExpertCard extends StatelessWidget {
                                           ),
                                         ),
                                       ),
+                                      const SizedBox(width: 5),
                                       VerifiedBadge(
                                         isVerified: isVerified,
                                       ),
                                     ],
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Container(
-                                  height: 32,
-                                  width: 32,
-                                  decoration: BoxDecoration(
-                                    color: _chipSurface,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: _softBorder),
-                                  ),
-                                  child: Icon(
-                                    Icons.arrow_outward_rounded,
-                                    size: 16,
-                                    color: _brandDark,
                                   ),
                                 ),
                               ],

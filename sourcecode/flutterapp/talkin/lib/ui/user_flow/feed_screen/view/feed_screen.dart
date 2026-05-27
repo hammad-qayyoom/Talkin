@@ -752,10 +752,6 @@ class _FeedPostCard extends StatelessWidget {
     final softBorder = AppColors.redesignSoftBorder;
     final chipSurface = AppColors.redesignSurfaceSoft;
 
-    final isMine = controller.isMyPost(post);
-    final showFollowButton = !isMine && post.expertId.trim().isNotEmpty;
-    final isFollowing = controller.isFollowingExpert(post.expertId);
-
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
       decoration: BoxDecoration(
@@ -814,8 +810,10 @@ class _FeedPostCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Expanded(
+                                Flexible(
+                                  fit: FlexFit.loose,
                                   child: Text(
                                     post.displayName,
                                     maxLines: 1,
@@ -827,6 +825,7 @@ class _FeedPostCard extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+                                const SizedBox(width: 5),
                                 VerifiedBadge(
                                   isVerified: post.isAuthorVerified,
                                 ),
@@ -846,40 +845,6 @@ class _FeedPostCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (showFollowButton)
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
-                    color: isFollowing
-                        ? AppColors.redesignBrandRed.withValues(alpha: 0.12)
-                        : chipSurface,
-                    border: Border.all(
-                      color: isFollowing
-                          ? AppColors.redesignBrandRed.withValues(alpha: 0.40)
-                          : softBorder,
-                    ),
-                  ),
-                  child: TextButton(
-                    onPressed: () => controller.toggleFollowForPost(post),
-                    style: TextButton.styleFrom(
-                      minimumSize: const Size(10, 32),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    child: Text(
-                      isFollowing ? 'Following' : 'Follow',
-                      style: AppFontStyle.fontStyleW600(
-                        fontSize: 11,
-                        fontColor: isFollowing
-                            ? AppColors.redesignBrandRed
-                            : brandDark,
-                      ),
-                    ),
-                  ),
-                ),
               InkWell(
                 onTap: () => _openPostActionSheet(
                   context: context,
@@ -1005,6 +970,7 @@ class _FeedPostCard extends StatelessWidget {
         'expertId': expertId,
         'name': post.displayName,
         'profilePic': post.authorProfilePic,
+        'isVerifiedBadge': post.isAuthorVerified,
       },
     );
   }

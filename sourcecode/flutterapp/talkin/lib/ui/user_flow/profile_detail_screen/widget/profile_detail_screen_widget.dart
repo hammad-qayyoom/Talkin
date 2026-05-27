@@ -475,8 +475,10 @@ class UserProfileInfoView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Expanded(
+                                  Flexible(
+                                    fit: FlexFit.loose,
                                     child: Text(
                                       '$name$ageLabel',
                                       maxLines: 2,
@@ -487,6 +489,7 @@ class UserProfileInfoView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
+                                  const SizedBox(width: 6),
                                   VerifiedBadge(
                                     isVerified: isVerified,
                                     size: 19,
@@ -580,18 +583,11 @@ class UserProfileInfoView extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 14),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _buildBadge(
-                          icon: Icons.monetization_on_rounded,
-                          label:
-                              '${data.totalCoins ?? 0} Session Credit${(data.totalCoins ?? 0) == 1 ? '' : 's'}',
-                          background: AppColors.redesignAccentSoftBg,
-                          textColor: AppColors.redesignCoinText,
-                        ),
-                        if (rating > 0)
+                    if (rating > 0) ...[
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
                           _buildBadge(
                             icon: Icons.star_rounded,
                             label: '${rating.toStringAsFixed(1)} Rating',
@@ -599,9 +595,10 @@ class UserProfileInfoView extends StatelessWidget {
                             textColor: AppColors.redesignBrandDark,
                             iconColor: AppColors.rateStarColor,
                           ),
-                      ],
-                    ),
-                    const SizedBox(height: 14),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                    ],
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton.icon(

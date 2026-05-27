@@ -293,6 +293,9 @@ class ChatScreen extends StatelessWidget {
                                       unReadCount: controller
                                               .chatList[index].unreadCount ??
                                           0,
+                                      isVerified: controller.chatList[index]
+                                              .isVerifiedBadge ==
+                                          true,
                                       lastMsgTime: controller
                                           .chatList[index].lastChatMessageTime
                                           .toString(),

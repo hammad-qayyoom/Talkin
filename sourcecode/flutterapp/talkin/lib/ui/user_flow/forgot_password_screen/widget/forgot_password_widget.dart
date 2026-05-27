@@ -1,216 +1,233 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notisboard/custom/app_bar/custom_app_bar.dart';
-import 'package:notisboard/custom/app_button/primary_app_button.dart';
-import 'package:notisboard/custom/text_field/custom_text_field.dart';
-import 'package:notisboard/custom/title/custom_title.dart';
 import 'package:notisboard/ui/user_flow/forgot_password_screen/controller/forgot_password_controller.dart';
-import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
 
-/// =================== Complete Registration App Bar =================== ///
 class ForgotPasswordAppBar extends StatelessWidget {
   const ForgotPasswordAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(120),
-      child: CustomAppBar(
-        title: EnumLocale.txtForgotPassword.name.tr,
-        showLeadingIcon: true,
-      ),
-    );
-  }
-}
-
-/// =================== Description =================== ///
-class ForgotPasswordDescriptionView extends StatelessWidget {
-  const ForgotPasswordDescriptionView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          EnumLocale.txtForgotYourPassword.name.tr,
-          // textAlign: TextAlign.center,
-          style: AppFontStyle.fontStyleW800(
-            fontSize: 32,
-            fontColor: AppColors.appColor,
-          ),
-        ).paddingOnly(bottom: 6),
-        Text(
-          EnumLocale.txtForgetPasswordDescription.name
-              .tr, // textAlign: TextAlign.center,
-          style: AppFontStyle.fontStyleW400(
-            height: 1.9,
-            fontSize: 12,
-            fontColor: AppColors.grey,
-          ),
-        ).paddingOnly(right: 30),
-      ],
-    );
-  }
-}
-
-/// =================== Complete Registration OTP =================== ///
-class ForgotPasswordView extends StatelessWidget {
-  const ForgotPasswordView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomTitle(
-      title: EnumLocale.txtEnterMailMobileNumber.name.tr,
-      method: GetBuilder<ForgotPasswordController>(
-        builder: (logic) {
-          return Form(
-            key: logic.formKey,
-            // child: IntlPhoneField(
-            //     flagsButtonPadding: const EdgeInsets.all(8),
-            //     flagsButtonMargin: const EdgeInsets.only(right: 13),
-            //     dropdownIconPosition: IconPosition.trailing,
-            //     controller: logic.numberController,
-            //     obscureText: false,
-            //     validator: (value) {
-            //       if (value == null) {
-            //         return EnumLocale.desEnterMobile.name.tr;
-            //       }
-            //       return null;
-            //     },
-            //     style: AppFontStyle.fontStyleW600(
-            //       fontSize: 12,
-            //       fontColor: AppColors.appColor,
-            //     ),
-            //     cursorColor: AppColors.appColor,
-            //     dropdownTextStyle: AppFontStyle.fontStyleW700(
-            //       fontSize: 16,
-            //       fontColor: AppColors.black,
-            //     ),
-            //     pickerDialogStyle: PickerDialogStyle(
-            //       countryCodeStyle: AppFontStyle.fontStyleW700(
-            //         fontSize: 13,
-            //         fontColor: AppColors.appColor,
-            //       ),
-            //       countryNameStyle: AppFontStyle.fontStyleW700(
-            //         fontSize: 13,
-            //         fontColor: AppColors.appColor,
-            //       ),
-            //       searchFieldCursorColor: AppColors.appColor,
-            //       searchFieldInputDecoration: InputDecoration(
-            //         hintStyle: AppFontStyle.fontStyleW400(
-            //           fontSize: 14,
-            //           fontColor: AppColors.grey,
-            //         ),
-            //         hintText: EnumLocale.txtSearchCountryCode.name.tr,
-            //       ),
-            //     ),
-            //     dropdownIcon: Icon(
-            //       Icons.arrow_drop_down_outlined,
-            //       color: AppColors.black,
-            //     ),
-            //     keyboardType: TextInputType.number,
-            //     showCountryFlag: false,
-            //     decoration: InputDecoration(
-            //       counterText: '',
-            //       hintStyle: AppFontStyle.fontStyleW600(
-            //         fontSize: 12,
-            //         fontColor: AppColors.white,
-            //       ),
-            //       enabledBorder: OutlineInputBorder(
-            //         borderRadius: BorderRadius.circular(12),
-            //         borderSide: BorderSide(color: AppColors.black),
-            //       ),
-            //       border: OutlineInputBorder(
-            //         borderRadius: BorderRadius.circular(12),
-            //         borderSide: BorderSide(color: AppColors.black),
-            //       ),
-            //       focusedBorder: OutlineInputBorder(
-            //         borderRadius: BorderRadius.circular(12),
-            //         borderSide: BorderSide(color: AppColors.black),
-            //       ),
-            //       filled: true,
-            //       fillColor: AppColors.white,
-            //       errorStyle: AppFontStyle.fontStyleW500(
-            //         fontSize: 8,
-            //         fontColor: AppColors.red,
-            //       ),
-            //       errorBorder: OutlineInputBorder(
-            //         borderRadius: BorderRadius.circular(12),
-            //         borderSide: BorderSide(color: AppColors.red),
-            //       ),
-            //       focusedErrorBorder: OutlineInputBorder(
-            //         borderRadius: BorderRadius.circular(12),
-            //         borderSide: BorderSide(color: AppColors.red),
-            //       ),
-            //       counterStyle: AppFontStyle.fontStyleW500(
-            //         fontSize: 9,
-            //         fontColor: AppColors.grey,
-            //       ),
-            //     ),
-            //     initialCountryCode: Database.selectedCountryCode,
-            //     onCountryChanged: (value) {
-            //       log("message================= ${value.code}");
-            //       Database.onSetSelectedCountryCode(value.code);
-            //       Database.getDialCode();
-            //
-            //       log("Database.selectedCountryCode message================= ${Database.selectedCountryCode}");
-            //     },
-            //     onChanged: (phone) {
-            //       logic.dialCode = phone.countryCode; // example: +91
-            //       logic.numberController.text = phone.number; // only number part
-            //     }),
-            child: CustomTextField(
-              filled: true,
-              // hintText: EnumLocale.txtAddYourNickName.name.tr,
-              controller: logic.emailController,
-              fillColor: AppColors.white,
-              cursorColor: AppColors.black,
-              fontColor: AppColors.black,
-              fontSize: 15,
-              textInputAction: TextInputAction.next,
-              // inputFormatters: [UpperCaseTextFormatter()],
+    return SizedBox(
+      height: 58,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: InkWell(
+              onTap: Get.back,
+              borderRadius: BorderRadius.circular(18),
+              child: Container(
+                height: 52,
+                width: 52,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: AppColors.redesignSoftBorder),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.black.withValues(alpha: 0.04),
+                      blurRadius: 18,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 22,
+                  color: AppColors.redesignBrandDark,
+                ),
+              ),
             ),
-          );
-        },
+          ),
+          Text(
+            EnumLocale.txtForgotPassword.name.tr,
+            style: AppFontStyle.fontStyleW700(
+              fontSize: 22,
+              fontColor: AppColors.redesignBrandDark,
+            ),
+          ),
+        ],
       ),
-    ).paddingOnly(top: 20);
+    );
   }
 }
 
-/// =================== Complete Registration Button =================== ///
-class ForgotPasswordButtonView extends StatelessWidget {
-  const ForgotPasswordButtonView({super.key});
+class ForgotPasswordCardView extends StatelessWidget {
+  const ForgotPasswordCardView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ForgotPasswordController>(
       builder: (logic) {
-        return Center(
-          child: PrimaryAppButton(
-            height: 50,
-            onTap: () {
-              // Get.toNamed(
-              //   AppRoutes.createNewPassScreen,
-              //   arguments: logic.emailController.text.trim(),
-              // );
-              // logic.sendOtp(context);
-              logic.onForgotPassword();
-            },
-            widget: Image.asset(
-              AppAsset.arrowUp,
-              height: 15,
-              width: 15,
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: AppColors.redesignSoftBorder),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.06),
+                blurRadius: 32,
+                offset: const Offset(0, 14),
+              ),
+            ],
+          ),
+          child: Form(
+            key: logic.formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 52,
+                  width: 52,
+                  decoration: BoxDecoration(
+                    color: AppColors.redesignBrandRed.withValues(alpha: 0.10),
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Icon(
+                    Icons.lock_reset_rounded,
+                    color: AppColors.redesignBrandRed,
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Text(
+                  EnumLocale.txtForgotYourPassword.name.tr,
+                  style: AppFontStyle.fontStyleW800(
+                    fontSize: 30,
+                    fontColor: AppColors.redesignBrandDark,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  EnumLocale.txtForgotPassDescription.name.tr,
+                  style: AppFontStyle.fontStyleW500(
+                    height: 1.5,
+                    fontSize: 14,
+                    fontColor: AppColors.redesignMutedText,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                _ForgotPasswordLabel(
+                  text: EnumLocale.txtEnterYourMail.name.tr,
+                ),
+                const SizedBox(height: 8),
+                _ForgotPasswordEmailField(controller: logic.emailController),
+                const SizedBox(height: 22),
+                _ForgotPasswordButton(onTap: logic.onForgotPassword),
+              ],
             ),
-            text: EnumLocale.txtVerify.name.tr,
-            textStyle: AppFontStyle.fontStyleW500(
-                fontSize: 16, fontColor: AppColors.white),
-          ).paddingOnly(bottom: 15, left: 20, right: 20),
+          ),
         );
       },
+    );
+  }
+}
+
+class _ForgotPasswordLabel extends StatelessWidget {
+  const _ForgotPasswordLabel({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: AppFontStyle.fontStyleW700(
+        fontSize: 15,
+        fontColor: AppColors.redesignBrandDark,
+      ),
+    );
+  }
+}
+
+class _ForgotPasswordEmailField extends StatelessWidget {
+  const _ForgotPasswordEmailField({required this.controller});
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.done,
+      cursorColor: AppColors.redesignBrandDark,
+      style: AppFontStyle.fontStyleW600(
+        fontSize: 15,
+        fontColor: AppColors.redesignBrandDark,
+      ),
+      decoration: InputDecoration(
+        hintText: 'Email address',
+        hintStyle: AppFontStyle.fontStyleW500(
+          fontSize: 15,
+          fontColor: AppColors.redesignMutedText,
+        ),
+        prefixIcon: Icon(
+          Icons.mail_outline_rounded,
+          color: AppColors.redesignMutedText,
+          size: 24,
+        ),
+        filled: true,
+        fillColor: AppColors.redesignSurfaceInput,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: AppColors.redesignSoftBorder),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide:
+              BorderSide(color: AppColors.redesignBrandDark, width: 1.2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: AppColors.redesignBrandRed),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: AppColors.redesignBrandRed),
+        ),
+      ),
+    );
+  }
+}
+
+class _ForgotPasswordButton extends StatelessWidget {
+  const _ForgotPasswordButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton.icon(
+        onPressed: onTap,
+        icon: const Icon(Icons.north_east_rounded, size: 22),
+        label: Text(
+          EnumLocale.txtVerify.name.tr,
+          style: AppFontStyle.fontStyleW700(
+            fontSize: 17,
+            fontColor: AppColors.white,
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          backgroundColor: AppColors.redesignBrandDark,
+          foregroundColor: AppColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+        ),
+      ),
     );
   }
 }

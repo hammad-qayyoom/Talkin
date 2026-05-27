@@ -60,6 +60,7 @@ class ChatList {
   bool? isAvailableForPrivateAudioCall;
   bool? isAvailableForPrivateVideoCall;
   bool? isAvailableForChat;
+  bool? isVerifiedBadge;
 
   ChatList({
     this.id,
@@ -81,31 +82,56 @@ class ChatList {
     this.isAvailableForPrivateAudioCall,
     this.isAvailableForPrivateVideoCall,
     this.isAvailableForChat,
+    this.isVerifiedBadge,
   });
 
-  factory ChatList.fromJson(Map<String, dynamic> json) => ChatList(
-        id: json["_id"],
-        receiverId: json["receiverId"],
-        name: json["name"],
-        image: json["image"],
-        isOnline: json["isOnline"],
-        ratePrivateVideoCall: json["ratePrivateVideoCall"],
-        ratePrivateAudioCall: json["ratePrivateAudioCall"],
-        video: json["video"],
-        isFake: json["isFake"],
-        chatTopicId: json["chatTopicId"],
-        senderId: json["senderId"],
-        messageType: json["messageType"],
-        message: json["message"],
-        lastChatMessageTime: json["lastChatMessageTime"] == null
-            ? null
-            : DateTime.parse(json["lastChatMessageTime"]),
-        unreadCount: json["unreadCount"],
-        time: json["time"],
-        isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],
-        isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],
-        isAvailableForChat: json["isAvailableForChat"],
-      );
+  factory ChatList.fromJson(Map<String, dynamic> json) {
+    final expert = _mapValue(json["expert"]);
+    final listener = _mapValue(json["listener"]);
+    final receiver = _mapValue(json["receiver"]);
+    final receiverUser = _mapValue(json["receiverUser"]);
+    final receiverData = _mapValue(json["receiverData"]);
+    final chatUser = _mapValue(json["chatUser"]);
+    final user = _mapValue(json["user"]);
+
+    return ChatList(
+      id: json["_id"],
+      receiverId: json["receiverId"],
+      name: json["name"],
+      image: json["image"],
+      isOnline: json["isOnline"],
+      ratePrivateVideoCall: json["ratePrivateVideoCall"],
+      ratePrivateAudioCall: json["ratePrivateAudioCall"],
+      video: json["video"],
+      isFake: json["isFake"],
+      chatTopicId: json["chatTopicId"],
+      senderId: json["senderId"],
+      messageType: json["messageType"],
+      message: json["message"],
+      lastChatMessageTime: json["lastChatMessageTime"] == null
+          ? null
+          : DateTime.parse(json["lastChatMessageTime"]),
+      unreadCount: json["unreadCount"],
+      time: json["time"],
+      isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],
+      isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],
+      isAvailableForChat: json["isAvailableForChat"],
+      isVerifiedBadge: _isVerifiedFromSources([
+        json,
+        expert,
+        listener,
+        receiver,
+        receiverUser,
+        receiverData,
+        chatUser,
+        user,
+        _mapValue(json["trustSignals"]),
+        _mapValue(expert?["trustSignals"]),
+        _mapValue(listener?["trustSignals"]),
+        _mapValue(receiver?["trustSignals"]),
+      ]),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -127,5 +153,46 @@ class ChatList {
         "isAvailableForPrivateAudioCall": isAvailableForPrivateAudioCall,
         "isAvailableForPrivateVideoCall": isAvailableForPrivateVideoCall,
         "isAvailableForChat": isAvailableForChat,
+        "isVerifiedBadge": isVerifiedBadge,
       };
+
+  static bool? _parseBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    if (value is String) {
+      final normalized = value.trim().toLowerCase();
+      if (normalized == 'true' || normalized == '1') return true;
+      if (normalized == 'false' || normalized == '0') return false;
+    }
+    return null;
+  }
+
+  static Map<String, dynamic>? _mapValue(dynamic value) {
+    if (value is Map<String, dynamic>) return value;
+    if (value is Map) {
+      return value.map((key, value) => MapEntry(key.toString(), value));
+    }
+    return null;
+  }
+
+  static bool _isVerifiedFromSources(List<Map<String, dynamic>?> sources) {
+    for (final source in sources) {
+      if (source == null) continue;
+
+      final parsed = _parseBool(
+        source["isVerifiedBadge"] ??
+            source["verifiedBadge"] ??
+            source["isVerified"] ??
+            source["verified"],
+      );
+      if (parsed != null) return parsed;
+
+      final badgeType = (source["verifiedBadgeType"] ?? '').toString().trim();
+      if (badgeType.isNotEmpty && badgeType.toLowerCase() != 'none') {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }

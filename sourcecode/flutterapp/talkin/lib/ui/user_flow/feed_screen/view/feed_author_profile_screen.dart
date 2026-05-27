@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/image/professional_cached_image.dart';
+import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/ui/user_flow/feed_screen/api/feed_api.dart';
 import 'package:notisboard/ui/user_flow/feed_screen/controller/feed_screen_controller.dart';
 import 'package:notisboard/utils/api.dart';
@@ -34,6 +35,7 @@ class _FeedAuthorProfileScreenState extends State<FeedAuthorProfileScreen> {
   String _expertId = '';
   String _displayName = '';
   String _profileImage = '';
+  bool _isVerifiedBadge = false;
 
   bool get _isExpert => _expertId.trim().isNotEmpty;
 
@@ -60,6 +62,18 @@ class _FeedAuthorProfileScreenState extends State<FeedAuthorProfileScreen> {
     _expertId = (args['expertId'] ?? '').toString().trim();
     _displayName = (args['name'] ?? '').toString().trim();
     _profileImage = (args['profilePic'] ?? '').toString().trim();
+    _isVerifiedBadge = _parseBool(args['isVerifiedBadge']) ?? false;
+  }
+
+  bool? _parseBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    if (value is String) {
+      final normalized = value.trim().toLowerCase();
+      if (['true', '1', 'yes'].contains(normalized)) return true;
+      if (['false', '0', 'no'].contains(normalized)) return false;
+    }
+    return null;
   }
 
   void _onScroll() {
@@ -146,6 +160,7 @@ class _FeedAuthorProfileScreenState extends State<FeedAuthorProfileScreen> {
         if (_profileImage.trim().isEmpty) {
           _profileImage = first.authorProfilePic;
         }
+        _isVerifiedBadge = _isVerifiedBadge || first.isAuthorVerified;
       }
 
       final total = int.tryParse((response['total'] ?? 0).toString()) ?? 0;
@@ -191,6 +206,7 @@ class _FeedAuthorProfileScreenState extends State<FeedAuthorProfileScreen> {
                 child: _ProfileHeader(
                   profileImage: _profileImage,
                   displayName: _displayName,
+                  isVerified: _isVerifiedBadge,
                   roleLabel: _isExpert ? 'Expert' : 'User',
                   postsCount: _posts.length,
                   mediaCount: mediaPostsCount,
@@ -292,6 +308,7 @@ class _ProfileHeader extends StatelessWidget {
   const _ProfileHeader({
     required this.profileImage,
     required this.displayName,
+    required this.isVerified,
     required this.roleLabel,
     required this.postsCount,
     required this.mediaCount,
@@ -300,6 +317,7 @@ class _ProfileHeader extends StatelessWidget {
 
   final String profileImage;
   final String displayName;
+  final bool isVerified;
   final String roleLabel;
   final int postsCount;
   final int mediaCount;
@@ -412,12 +430,28 @@ class _ProfileHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  resolvedName,
-                  style: AppFontStyle.fontStyleW700(
-                    fontSize: 21,
-                    fontColor: AppColors.black,
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: Text(
+                        resolvedName,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppFontStyle.fontStyleW700(
+                          fontSize: 21,
+                          fontColor: AppColors.black,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    VerifiedBadge(
+                      isVerified: isVerified,
+                      size: 20,
+                      margin: EdgeInsets.zero,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 4),
                 Text(

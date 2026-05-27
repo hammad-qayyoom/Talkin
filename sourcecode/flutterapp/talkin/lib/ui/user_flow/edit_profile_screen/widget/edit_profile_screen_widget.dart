@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:notisboard/custom/app_button/primary_app_button.dart';
+import 'package:notisboard/custom/country_code_picker/app_country_code_picker_style.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
 import 'package:notisboard/custom/custom_select_gender_bottom_sheet/custom_select_gender_bottom_sheet.dart';
 import 'package:notisboard/custom/text_field/custom_text_field.dart';
@@ -595,24 +595,7 @@ class EditProfileEditInfoView extends StatelessWidget {
                         fontSize: 14,
                         fontColor: AppColors.redesignBrandDark,
                       ),
-                      pickerDialogStyle: PickerDialogStyle(
-                        countryCodeStyle: AppFontStyle.fontStyleW700(
-                          fontSize: 13,
-                          fontColor: AppColors.redesignBrandDark,
-                        ),
-                        countryNameStyle: AppFontStyle.fontStyleW700(
-                          fontSize: 13,
-                          fontColor: AppColors.redesignBrandDark,
-                        ),
-                        searchFieldCursorColor: AppColors.redesignBrandDark,
-                        searchFieldInputDecoration: InputDecoration(
-                          hintStyle: AppFontStyle.fontStyleW400(
-                            fontSize: 14,
-                            fontColor: AppColors.redesignMutedText,
-                          ),
-                          hintText: EnumLocale.txtSearchCountryCode.name.tr,
-                        ),
-                      ),
+                      pickerDialogStyle: appCountryCodePickerStyle(context),
                       dropdownIcon: Icon(
                         Icons.keyboard_arrow_down_rounded,
                         color: AppColors.redesignMutedText,
