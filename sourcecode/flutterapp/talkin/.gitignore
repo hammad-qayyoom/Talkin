@@ -29,9 +29,14 @@ migrate_working_dir/
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
+.firebase/
+.tmp_home/
 .pub-cache/
 .pub/
 /build/
+firebase-debug.log
+devtools_options.yaml
+test_artifacts/
 
 # Symbolication related
 app.*.symbols

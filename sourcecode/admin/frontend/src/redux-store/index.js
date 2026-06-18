@@ -43,6 +43,7 @@ import growthSpotlightReducer from '@/redux-store/slices/growthSpotlight'
 
 // Listener slice is intentionally mounted at `expert` key for Phase-1 compatibility.
 import listenerReducer from '@/redux-store/slices/listener'
+import manualVerificationReducer from '@/redux-store/slices/manualVerification'
 
 export const store = configureStore({
   reducer: {
@@ -92,7 +93,8 @@ export const store = configureStore({
     // gameHistory: gameHistoryReducer,
     paymentOptions: paymentOptionsReducer,
     growthSpotlight: growthSpotlightReducer,
-    expert: listenerReducer
+    expert: listenerReducer,
+    manualVerification: manualVerificationReducer
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false })
 })

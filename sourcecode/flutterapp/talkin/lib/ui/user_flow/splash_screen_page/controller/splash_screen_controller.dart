@@ -356,8 +356,10 @@ Future<void> splashScreen() async {
             );
 
             if (Database.isFillProfile == true) {
-              if (Database.fetchLoginUserProfileModel?.user?.isListener ==
-                  true) {
+              final isHostMode = Database.isListener;
+              final isVerifiedExpert = Database.fetchLoginUserProfileModel?.user?.isListener == true;
+              
+              if (isHostMode || isVerifiedExpert) {
                 navigateFromSplash(AppRoutes.hostBottomBar);
               } else {
                 navigateFromSplash(AppRoutes.bottomBar);
@@ -379,9 +381,9 @@ Future<void> splashScreen() async {
             if (Database.isFillProfile == true) {
               final shouldBiometricUnlock =
                   await BiometricAuthService.shouldRequireUnlockOnStartup();
-              final nextRoute = Database
-                          .fetchLoginUserProfileModel?.user?.isListener ==
-                      true
+              final isHostMode = Database.isListener;
+              final isVerifiedExpert = Database.fetchLoginUserProfileModel?.user?.isListener == true;
+              final nextRoute = (isHostMode || isVerifiedExpert)
                   ? AppRoutes.hostBottomBar
                   : AppRoutes.bottomBar;
 
@@ -392,9 +394,7 @@ Future<void> splashScreen() async {
                 );
                 return;
               }
-
-              if (Database.fetchLoginUserProfileModel?.user?.isListener ==
-                  true) {
+              if (isHostMode || isVerifiedExpert) {
                 navigateFromSplash(AppRoutes.hostBottomBar);
               } else {
                 navigateFromSplash(AppRoutes.bottomBar);

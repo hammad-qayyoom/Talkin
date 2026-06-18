@@ -114,6 +114,12 @@ abstract class Api {
   static const subscriptionUserList =
       "${baseUrl}api/v2/subscriptions/users/list?";
 
+  // >>>>> >>>>> Expert Manual Verification <<<<< <<<<<
+  static const expertVerificationSubmit =
+      "${baseUrl}api/v2/experts/verification/submit";
+  static const expertVerificationStatus =
+      "${baseUrl}api/v2/experts/verification/status";
+
   // >>>>> >>>>>  Listener  Api <<<<< <<<<<
 
   static const loginListenerProfile =

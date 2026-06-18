@@ -1,1 +1,23 @@
 sourcecode/admin/backend
+
+# OS and editor noise
+.DS_Store
+**/.DS_Store
+
+# Generated dependencies/build outputs
+node_modules/
+.next/
+build/
+.dart_tool/
+.firebase/
+.tmp_home/
+
+# Local docs, debug output, and temporary files
+Documentation/
+How To Use/
+support.html
+result.json
+firebase-debug.log
+*.log
+.tmp/
+sourcecode/phases/

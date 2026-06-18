@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { Chip, Switch } from '@mui/material'
+import { Button, Chip, CircularProgress, Switch } from '@mui/material'
 
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -12,6 +12,8 @@ import Typography from '@mui/material/Typography'
 import { getFormattedDate } from '@/utils/commonfunctions'
 import { baseURL } from '@/config'
 import { handleCopy, truncateString } from '@/views/apps/user/list/UserListTable'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const AboutOverview = ({ data }) => {
   // const { userDetails } = useSelector(state => state.userReducer)
@@ -464,6 +466,102 @@ const AboutOverview = ({ data }) => {
                   <p>{userDetails?.experience || 'No experience provided.'}</p>
                 </div>
               )}
+            </CardContent>
+          </Card>
+
+          <Card className='mt-4'>
+            <CardContent className='flex flex-col gap-6'>
+              <div className='flex flex-col gap-4'>
+                <Typography className='uppercase' variant='body2' color='text.disabled'>
+                  Verification Badge
+                </Typography>
+
+                <div className='flex items-center gap-2'>
+                  <i className='tabler-badge' />
+                  <div className='flex items-center flex-wrap gap-2'>
+                    <Typography className='font-medium'>Verified :</Typography>
+                    <Chip
+                      label={userDetails?.isVerifiedBadge ? 'Yes' : 'No'}
+                      color={userDetails?.isVerifiedBadge ? 'success' : 'default'}
+                      variant='tonal'
+                      size='small'
+                    />
+                  </div>
+                </div>
+
+                <div className='flex items-center gap-2'>
+                  <i className='tabler-id' />
+                  <div className='flex items-center flex-wrap gap-2'>
+                    <Typography className='font-medium'>Badge Type :</Typography>
+                    <Chip
+                      label={userDetails?.verifiedBadgeType || 'none'}
+                      color={userDetails?.verifiedBadgeType === 'auto_sessions' ? 'info'
+                        : userDetails?.verifiedBadgeType === 'manual' ? 'primary'
+                        : userDetails?.verifiedBadgeType === 'celebrity' ? 'secondary'
+                        : 'default'}
+                      variant='tonal'
+                      size='small'
+                    />
+                  </div>
+                </div>
+
+                {userDetails?.verifiedBadgeAt && (
+                  <div className='flex items-center gap-2'>
+                    <i className='tabler-calendar' />
+                    <div className='flex items-center flex-wrap gap-2'>
+                      <Typography className='font-medium'>Verified At :</Typography>
+                      <Typography>{getFormattedDate(userDetails?.verifiedBadgeAt)}</Typography>
+                    </div>
+                  </div>
+                )}
+
+                {userDetails?.isVerifiedBadge && (
+                  <div className='mt-3'>
+                    <Button
+                      variant='contained'
+                      color='warning'
+                      size='small'
+                      startIcon={<i className='tabler-shield-off' />}
+                      onClick={async () => {
+                        const confirmed = window.confirm(
+                          'Are you sure you want to revoke the verification badge? This will reset all manual verification data as well.'
+                        )
+                        if (!confirmed) return
+
+                        try {
+                          const token = localStorage.getItem('admin_token')
+                          const uid = localStorage.getItem('uid')
+                          const secretKey = 'Eb6ek8wbjlrR3fiK36IXsUw'
+
+                          const response = await axios.patch(
+                            `${baseURL}/api/admin/manualVerification/revoke`,
+                            { expertId: userDetails?._id },
+                            {
+                              headers: {
+                                'Content-Type': 'application/json',
+                                key: secretKey,
+                                Authorization: `Bearer ${token}`,
+                                'x-admin-uid': uid
+                              }
+                            }
+                          )
+
+                          if (response.data?.status) {
+                            toast.success('Verification badge revoked')
+                            window.location.reload()
+                          } else {
+                            toast.error(response.data?.message || 'Failed to revoke')
+                          }
+                        } catch (error) {
+                          toast.error('Failed to revoke verification badge')
+                        }
+                      }}
+                    >
+                      Revoke Blue Tick
+                    </Button>
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
 

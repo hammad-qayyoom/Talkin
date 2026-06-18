@@ -30,6 +30,8 @@ import 'package:notisboard/ui/host_flow/host_setting_screen/binding/host_setting
 import 'package:notisboard/ui/host_flow/host_setting_screen/view/host_setting_view.dart';
 import 'package:notisboard/ui/host_flow/host_withdraw_coin_screen/binding/host_withdraw_coin_binding.dart';
 import 'package:notisboard/ui/host_flow/host_withdraw_coin_screen/view/host_withdraw_coin_view.dart';
+import 'package:notisboard/ui/host_flow/manual_verification_screen/binding/manual_verification_binding.dart';
+import 'package:notisboard/ui/host_flow/manual_verification_screen/view/manual_verification_screen.dart';
 import 'package:notisboard/ui/host_flow/user_detail_profile_screen/view/user_profile_detail_screen.dart';
 import 'package:notisboard/ui/user_flow/all_listeners_screen/binding/all_listeners_binding.dart';
 import 'package:notisboard/ui/user_flow/all_listeners_screen/view/all_listeners_screen.dart';
@@ -459,6 +461,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.hostGroupSessionsScreen,
       page: () => const HostGroupSessionsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.manualVerificationScreen,
+      page: () => const ManualVerificationScreen(),
+      binding: ManualVerificationBinding(),
     ),
   ];
 }

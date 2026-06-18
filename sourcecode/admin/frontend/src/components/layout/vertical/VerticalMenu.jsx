@@ -111,6 +111,9 @@ const VerticalMenu = ({ scrollMenu }) => {
             <MenuItem href='/listener/request' icon={<i className='tabler-user-scan' />}>
               Expert Request
             </MenuItem>
+            <MenuItem href='/apps/manual-verification' icon={<i className='tabler-badge' />}>
+              Verification
+            </MenuItem>
             <MenuItem href='/sessions' icon={<i className='tabler-calendar-time' />}>
               Sessions
             </MenuItem>
@@ -134,6 +137,15 @@ const VerticalMenu = ({ scrollMenu }) => {
             </MenuItem>
             <MenuItem href='/feed/reported' icon={<i className='tabler-flag-3' />}>
               Reported Feed Posts
+            </MenuItem>
+          </MenuSection>
+
+          <MenuSection label='COMMUNICATIONS'>
+            <MenuItem href='/email-marketing' icon={<i className='tabler-mail' />}>
+              Email Marketing
+            </MenuItem>
+            <MenuItem href='/email-accounts' icon={<i className='tabler-mail-cog' />}>
+              Email Accounts
             </MenuItem>
           </MenuSection>
 

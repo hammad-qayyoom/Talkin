@@ -89,6 +89,9 @@ const HorizontalMenu = () => {
           <MenuItem href='/listener/request' icon={<i className='tabler-user-scan' />}>
             Expert Request
           </MenuItem>
+          <MenuItem href='/apps/manual-verification' icon={<i className='tabler-badge' />}>
+            Verification
+          </MenuItem>
         </SubMenu>
 
         {/* CONTENT*/}

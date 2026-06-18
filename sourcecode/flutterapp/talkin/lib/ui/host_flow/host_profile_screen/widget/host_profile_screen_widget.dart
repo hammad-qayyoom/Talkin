@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notisboard/custom/app_button/primary_app_button.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
+import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/host_flow/host_profile_screen/controller/host_profile_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
@@ -155,6 +157,15 @@ class HostProfileTopView extends StatelessWidget {
                                         ),
                                       ),
                                     ),
+                                    VerifiedBadge(
+                                      isVerified: Database
+                                              .fetchListenerProfileModel
+                                              ?.data
+                                              ?.isVerifiedBadge ==
+                                          true,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 8),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 8,
@@ -407,6 +418,14 @@ class HostProfileOptionsView extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         _SectionTitle(
+                          title: 'Verification',
+                          subtitle: 'Blue tick badge status and application',
+                          isTablet: isTablet,
+                        ),
+                        const SizedBox(height: 10),
+                        _VerificationCard(),
+                        const SizedBox(height: 16),
+                        _SectionTitle(
                           title: 'Account & More',
                           subtitle: 'Account tools and privacy controls',
                           isTablet: isTablet,
@@ -429,6 +448,106 @@ class HostProfileOptionsView extends StatelessWidget {
             },
           );
         },
+      ),
+    );
+  }
+}
+
+class _VerificationCard extends StatelessWidget {
+  const _VerificationCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final isVerifiedBadge =
+        Database.fetchListenerProfileModel?.data?.isVerifiedBadge == true;
+    final badgeType =
+        Database.fetchListenerProfileModel?.data?.verifiedBadgeType ?? 'none';
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.redesignSoftBorder),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: isVerifiedBadge
+                      ? AppColors.blue.withValues(alpha: 0.12)
+                      : AppColors.redesignBrandRed.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.redesignSoftBorder),
+                ),
+                child: Icon(
+                  isVerifiedBadge
+                      ? Icons.verified_rounded
+                      : Icons.verified_user_outlined,
+                  size: 22,
+                  color: isVerifiedBadge
+                      ? AppColors.blue
+                      : AppColors.redesignBrandRed,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isVerifiedBadge ? 'Blue Tick Verified' : 'Blue Tick',
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: 14,
+                        fontColor: AppColors.redesignBrandDark,
+                      ),
+                    ),
+                    Text(
+                      isVerifiedBadge
+                          ? badgeType == 'auto_sessions'
+                              ? 'Earned through sessions'
+                              : 'Manually verified'
+                          : 'Apply for manual verification',
+                      style: AppFontStyle.fontStyleW500(
+                        fontSize: 11,
+                        fontColor: AppColors.redesignMutedText,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 14,
+                color: AppColors.redesignMutedText,
+              ),
+            ],
+          ),
+          if (!isVerifiedBadge) ...[
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: PrimaryAppButton(
+                onTap: () {
+                  Get.toNamed(AppRoutes.manualVerificationScreen);
+                },
+                height: 40,
+                color: AppColors.redesignBrandRed,
+                borderColor: AppColors.redesignBrandRed,
+                text: 'Apply for Blue Tick',
+                textStyle: AppFontStyle.fontStyleW600(
+                  fontSize: 13,
+                  fontColor: AppColors.white,
+                ),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }

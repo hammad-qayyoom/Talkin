@@ -75,4 +75,5 @@ class AppRoutes {
   static const String hostSessionsScreen = '/hostSessionsScreen';
   static const String hostGroupSessionsScreen = '/hostGroupSessionsScreen';
   static const String biometricUnlockScreen = '/biometricUnlockScreen';
+  static const String manualVerificationScreen = '/manualVerificationScreen';
 }

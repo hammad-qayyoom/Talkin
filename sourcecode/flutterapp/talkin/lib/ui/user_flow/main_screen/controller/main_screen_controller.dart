@@ -430,6 +430,7 @@ class MainScreenController extends GetxController {
 
     Database.onSetFillProfile(true);
     if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
+      Database.onSetIsListener(true);
       Get.offAllNamed(AppRoutes.hostBottomBar);
     } else {
       Get.offAllNamed(AppRoutes.bottomBar);
@@ -581,8 +582,10 @@ class MainScreenController extends GetxController {
   //       // route bottom bar
   //       // Get.toNamed(AppRoutes.bottomBar);
   //       if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
+  //         Database.onSetIsListener(true);
   //         Get.toNamed(AppRoutes.hostBottomBar);
   //       } else {
+  //         Database.onSetIsListener(false);
   //         Get.toNamed(AppRoutes.bottomBar);
   //       }
   //     }
@@ -756,8 +759,10 @@ class MainScreenController extends GetxController {
         // Get.toNamed(AppRoutes.bottomBar);
         _dismissLoadingDialog();
         if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
+          Database.onSetIsListener(true);
           Get.offAllNamed(AppRoutes.hostBottomBar);
         } else {
+          Database.onSetIsListener(false);
           Get.offAllNamed(AppRoutes.bottomBar);
         }
       }
@@ -896,9 +901,11 @@ class MainScreenController extends GetxController {
         );
         // Get.toNamed(AppRoutes.bottomBar);
         if (Database.fetchLoginUserProfileModel?.user?.isListener == true) {
+          Database.onSetIsListener(true);
           _stopLoginLoading();
           Get.offAllNamed(AppRoutes.hostBottomBar);
         } else {
+          Database.onSetIsListener(false);
           _stopLoginLoading();
           Get.offAllNamed(AppRoutes.bottomBar);
         }
