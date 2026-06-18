@@ -7,6 +7,7 @@ import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
 import 'package:notisboard/custom/image/professional_cached_image.dart';
 import 'package:notisboard/custom/switch/switch.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/controller/host_home_screen_controller.dart';
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/app_asset.dart';
@@ -125,14 +126,26 @@ class HostTopHomeView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    displayName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppFontStyle.fontStyleW700(
-                      fontSize: nameFontSize,
-                      fontColor: _brandDark,
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          displayName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppFontStyle.fontStyleW700(
+                            fontSize: nameFontSize,
+                            fontColor: _brandDark,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      VerifiedBadge(
+                        isVerified: Database.fetchListenerProfileModel?.data?.isVerifiedBadge == true,
+                        size: nameFontSize * 0.9,
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   GetBuilder<HostHomeScreenController>(
@@ -833,6 +846,9 @@ class PermissionView extends StatelessWidget {
                       'isAvailableForPrivateAudioCall',
                     );
                   },
+                  onEditCoin: () {
+                    controller.showEditPriceDialog('audio');
+                  },
                 );
               },
             );
@@ -854,6 +870,9 @@ class PermissionView extends StatelessWidget {
                       val,
                       'isAvailableForPrivateVideoCall',
                     );
+                  },
+                  onEditCoin: () {
+                    controller.showEditPriceDialog('video');
                   },
                 );
               },
@@ -963,6 +982,7 @@ class CustomSwitchView extends StatelessWidget {
   final bool coinShow;
   final String? callCoin;
   final IconData iconData;
+  final VoidCallback? onEditCoin;
 
   const CustomSwitchView({
     super.key,
@@ -973,6 +993,7 @@ class CustomSwitchView extends StatelessWidget {
     required this.iconData,
     this.callCoin,
     this.subtitle,
+    this.onEditCoin,
   });
 
   static final Color _brandRed = AppColors.redesignBrandRed;
@@ -1041,31 +1062,42 @@ class CustomSwitchView extends StatelessWidget {
                 ],
                 if (coinShow) ...[
                   const SizedBox(height: 8),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: AppColors.redesignSurfaceNeutralAlt,
-                      borderRadius: BorderRadius.circular(999),
-                      border: Border.all(color: AppColors.redesignSoftBorder),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset(
-                          AppAsset.starCoin,
-                          height: 15,
-                          width: 15,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          '$safeCoin/session',
-                          style: AppFontStyle.fontStyleW700(
-                            fontSize: 12,
-                            fontColor: AppColors.redesignCoinText,
+                  GestureDetector(
+                    onTap: onEditCoin,
+                    child: Container(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: AppColors.redesignSurfaceNeutralAlt,
+                        borderRadius: BorderRadius.circular(999),
+                        border: Border.all(color: AppColors.redesignSoftBorder),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                            AppAsset.starCoin,
+                            height: 15,
+                            width: 15,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 6),
+                          Text(
+                            '$safeCoin/session',
+                            style: AppFontStyle.fontStyleW700(
+                              fontSize: 12,
+                              fontColor: AppColors.redesignCoinText,
+                            ),
+                          ),
+                          if (onEditCoin != null) ...[
+                            const SizedBox(width: 6),
+                            Icon(
+                              Icons.edit_rounded,
+                              size: 14,
+                              color: AppColors.redesignMutedText,
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
                   ),
                 ],

@@ -146,24 +146,27 @@ class HostProfileTopView extends StatelessWidget {
                                 Row(
                                   children: [
                                     Expanded(
-                                      child: Text(
-                                        displayName,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: AppFontStyle.fontStyleW700(
-                                          fontSize: isTablet ? 21 : 17,
-                                          fontColor:
-                                              AppColors.redesignBrandDark,
-                                        ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              displayName,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: AppFontStyle.fontStyleW700(
+                                                fontSize: isTablet ? 21 : 17,
+                                                fontColor: AppColors.redesignBrandDark,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 4),
+                                          VerifiedBadge(
+                                            isVerified: Database.fetchListenerProfileModel?.data?.isVerifiedBadge == true,
+                                            size: 20,
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    VerifiedBadge(
-                                      isVerified: Database
-                                              .fetchListenerProfileModel
-                                              ?.data
-                                              ?.isVerifiedBadge ==
-                                          true,
-                                      size: 20,
                                     ),
                                     const SizedBox(width: 8),
                                     Container(

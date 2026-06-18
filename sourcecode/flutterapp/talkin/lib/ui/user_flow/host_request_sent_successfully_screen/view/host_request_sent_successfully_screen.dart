@@ -29,7 +29,7 @@ class HostRequestSentSuccessfullyScreen
             },
             onTap: () {
               if (controller.listenersRequestCheckModel?.data?.status == 2) {
-                Database.onSetIsListeners(true);
+                Database.onSetIsListener(true);
                 log("Database.isListeners :: ${Database.isListeners}");
                 Get.offAllNamed(AppRoutes.splashScreenPage);
               } else {
