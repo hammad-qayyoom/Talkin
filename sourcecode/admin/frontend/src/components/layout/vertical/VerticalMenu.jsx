@@ -64,7 +64,7 @@ const VerticalMenu = ({ scrollMenu }) => {
   }
 
   const showUserBlock = [can('users'), can('experts'), can('expertRequests'), can('manualVerification'), can('sessions')].some(Boolean)
-  const showContentBlock = [can('faq'), can('categories'), can('identityProofs'), can('growthSpotlight'), can('feedPosts'), can('reportedFeedPosts')].some(Boolean)
+  const showContentBlock = [can('faq'), can('categories'), can('identityProofs'), can('growthSpotlight'), can('feedPosts'), can('reportedFeedPosts'), can('blog')].some(Boolean)
   const showCommunicationBlock = [can('emailMarketing'), can('emailAccounts')].some(Boolean)
   const showSubscriptionBlock = [can('subscriptionPlans'), can('subscriptionHistory')].some(Boolean)
   const showFinancialBlock = [can('paymentOptions'), can('payoutRequests'), can('referrals')].some(Boolean)
@@ -132,6 +132,11 @@ const VerticalMenu = ({ scrollMenu }) => {
 
           {showContentBlock && (
             <MenuSection label='CONTENT'>
+              {can('blog') && (
+                <MenuItem href='/blog-management' icon={<i className='tabler-article' />}>
+                  Blog / News
+                </MenuItem>
+              )}
               {can('faq') && (
                 <MenuItem href='/faq' icon={<i className='tabler-device-ipad-question' />}>
                   FAQ

@@ -253,7 +253,8 @@ const pageLinks = [
   { href: '/privacy-policy', label: 'Privacy Policy' },
   { href: '/terms-of-use', label: 'Terms' },
   { href: '/delete-account', label: 'Delete Account' },
-  { href: '/support', label: 'Support' }
+  { href: '/support', label: 'Support' },
+  { href: '/blog', label: 'Blog' }
 ]
 
 const PublicationPage = ({ type }) => {

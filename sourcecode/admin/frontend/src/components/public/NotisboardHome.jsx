@@ -77,7 +77,8 @@ const navItems = [
   { label: 'Features', href: '#features' },
   { label: 'Experts', href: '#experts' },
   { label: 'Safety', href: '#safety' },
-  { label: 'FAQ', href: '#faq' }
+  { label: 'FAQ', href: '#faq' },
+  { label: 'Blog', href: '/blog' }
 ]
 
 const Brand = () => (
