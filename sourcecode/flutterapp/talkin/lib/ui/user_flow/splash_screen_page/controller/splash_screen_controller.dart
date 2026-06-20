@@ -170,6 +170,7 @@ class SplashScreenController extends GetxController {
         final listenerUserId = fetchListenerProfileModel?.data?.id ?? '';
         if (listenerUserId.isNotEmpty) {
           Database.onSetLoginUserId(listenerUserId);
+          Database.onSetLoginListenerId(listenerUserId);
         }
         if (fetchListenerProfileModel?.status == false) {
           Utils.showLog(fetchListenerProfileModel?.message ?? "");
@@ -298,6 +299,7 @@ Future<void> splashScreen() async {
       await Database.onSetSeenOnboarding(true);
       await Database.onSetLoginUserFirebaseId("");
       await Database.onSetLoginUserId("");
+      await Database.onSetLoginListenerId("");
       await Database.onSetLoginUserName("");
       await Database.onSetLoginUserNickName("");
       await Database.onSetLoginUserEmail("");

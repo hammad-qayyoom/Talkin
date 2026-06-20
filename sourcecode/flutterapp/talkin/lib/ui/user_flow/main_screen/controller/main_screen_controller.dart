@@ -162,6 +162,7 @@ class MainScreenController extends GetxController {
     await Database.onSetSeenOnboarding(true);
     await Database.onSetLoginUserFirebaseId("");
     await Database.onSetLoginUserId("");
+    await Database.onSetLoginListenerId("");
     await Database.onSetLoginUserName("");
     await Database.onSetLoginUserNickName("");
     await Database.onSetLoginUserEmail("");
@@ -503,6 +504,7 @@ class MainScreenController extends GetxController {
               Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
         );
         Database.onSetLoginUserId(fetchListenerProfileModel!.data!.id!);
+        Database.onSetLoginListenerId(fetchListenerProfileModel!.data!.id!);
         if (fetchListenerProfileModel?.status == false) {
           Utils.showLog(fetchListenerProfileModel?.message ?? "");
         }

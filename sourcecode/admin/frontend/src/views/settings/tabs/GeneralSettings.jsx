@@ -117,7 +117,9 @@ const GeneralSettings = () => {
     agoraAppCertificate: '',
     isDummyData: false,
     videoCallRatePrivate: '',
+    maxVideoCallRatePrivate: '',
     audioCallRatePrivate: '',
+    maxAudioCallRatePrivate: '',
     dailyLoginBonusCoins: '',
     isDemoContentEnabled: '',
     isApplicationLive: '',
@@ -181,7 +183,9 @@ const GeneralSettings = () => {
         zegoAppSignIn: settings.zegoAppSignIn || '',
         isDummyData: settings.isDummyData || false,
         videoCallRatePrivate: settings.videoCallRatePrivate || 0,
+        maxVideoCallRatePrivate: settings.maxVideoCallRatePrivate || 0,
         audioCallRatePrivate: settings.audioCallRatePrivate || 0,
+        maxAudioCallRatePrivate: settings.maxAudioCallRatePrivate || 0,
         dailyLoginBonusCoins: settings.dailyLoginBonusCoins || 0,
         adminCommissionPercent: settings.adminCommissionPercent || 0,
         sessionCommissionPercent: settings.sessionCommissionPercent || 0,
@@ -303,8 +307,10 @@ const GeneralSettings = () => {
   const isSessionCreditMode = String(formData.monetizationMode || '').trim().toLowerCase() === 'subscription_session_commission'
   const isGroupAudioFree = String(formData.groupAudioSessionPricingMode || '').trim().toLowerCase() === 'free'
   const isGroupVideoFree = String(formData.groupVideoSessionPricingMode || '').trim().toLowerCase() === 'free'
-  const privateAudioLabel = isSessionCreditMode ? 'Private Audio Credits' : 'Private Audio Rate'
-  const privateVideoLabel = isSessionCreditMode ? 'Private Video Credits' : 'Private Video Rate'
+  const privateAudioLabel = isSessionCreditMode ? 'Min Private Audio Credits' : 'Min Private Audio Rate'
+  const maxPrivateAudioLabel = isSessionCreditMode ? 'Max Private Audio Credits' : 'Max Private Audio Rate'
+  const privateVideoLabel = isSessionCreditMode ? 'Min Private Video Credits' : 'Min Private Video Rate'
+  const maxPrivateVideoLabel = isSessionCreditMode ? 'Max Private Video Credits' : 'Max Private Video Rate'
   const privateRateUnitLabel = isSessionCreditMode ? 'credits/session' : 'coins/minute'
 
   const timezoneOptions = useMemo(() => {
@@ -359,7 +365,9 @@ const GeneralSettings = () => {
     'minCoinsToCashOut',
     'minCoinsForPayout',
     'videoCallRatePrivate',
+    'maxVideoCallRatePrivate',
     'audioCallRatePrivate',
+    'maxAudioCallRatePrivate',
     'dailyLoginBonusCoins',
     'adminCommissionPercent',
     'sessionCommissionPercent',
@@ -782,9 +790,47 @@ const GeneralSettings = () => {
                   <TextField
                     fullWidth
                     type='text'
+                    label={maxPrivateAudioLabel}
+                    value={formData.maxAudioCallRatePrivate || ''}
+                    onChange={e => handleFieldChange('maxAudioCallRatePrivate', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography variant='caption' color='text.secondary'>
+                            {privateRateUnitLabel}
+                          </Typography>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    type='text'
                     label={privateVideoLabel}
                     value={formData.videoCallRatePrivate || ''}
                     onChange={e => handleFieldChange('videoCallRatePrivate', e.target.value)}
+                    InputProps={{
+                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography variant='caption' color='text.secondary'>
+                            {privateRateUnitLabel}
+                          </Typography>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+                <Grid item size={6}>
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label={maxPrivateVideoLabel}
+                    value={formData.maxVideoCallRatePrivate || ''}
+                    onChange={e => handleFieldChange('maxVideoCallRatePrivate', e.target.value)}
                     InputProps={{
                       inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
                       endAdornment: (

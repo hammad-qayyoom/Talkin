@@ -62,7 +62,9 @@ class Data {
   final int? minimumCoinsForConversion;
   final int? minimumCoinsForPayout;
   final int? videoCallRatePrivate;
+  final int? maxVideoCallRatePrivate;
   final int? audioCallRatePrivate;
+  final int? maxAudioCallRatePrivate;
   final PrivateKey? privateKey;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -122,7 +124,9 @@ class Data {
     this.minimumCoinsForConversion,
     this.minimumCoinsForPayout,
     this.videoCallRatePrivate,
+    this.maxVideoCallRatePrivate,
     this.audioCallRatePrivate,
+    this.maxAudioCallRatePrivate,
     this.privateKey,
     this.createdAt,
     this.updatedAt,
@@ -185,7 +189,9 @@ class Data {
         minimumCoinsForConversion: json["minimumCoinsForConversion"],
         minimumCoinsForPayout: json["minimumCoinsForPayout"],
         videoCallRatePrivate: json["videoCallRatePrivate"],
+        maxVideoCallRatePrivate: json["maxVideoCallRatePrivate"],
         audioCallRatePrivate: json["audioCallRatePrivate"],
+        maxAudioCallRatePrivate: json["maxAudioCallRatePrivate"],
         privateKey: json["privateKey"] == null
             ? null
             : PrivateKey.fromJson(json["privateKey"]),
@@ -252,7 +258,9 @@ class Data {
         "minimumCoinsForConversion": minimumCoinsForConversion,
         "minimumCoinsForPayout": minimumCoinsForPayout,
         "videoCallRatePrivate": videoCallRatePrivate,
+        "maxVideoCallRatePrivate": maxVideoCallRatePrivate,
         "audioCallRatePrivate": audioCallRatePrivate,
+        "maxAudioCallRatePrivate": maxAudioCallRatePrivate,
         "privateKey": privateKey?.toJson(),
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),

@@ -26,7 +26,7 @@ class HostListenerProfileUpdateApi {
       var request = http.MultipartRequest(
         'PATCH',
         Uri.parse(
-            "${Api.listenerEditProfile}${ApiParams.listenerId}=$listenerId"),
+            "${Api.listenerEditProfile}${ApiParams.expertId}=$listenerId"),
       );
       Utils.showLog("Listener Edit Profile Api URL => ${request.url}");
 
@@ -38,17 +38,15 @@ class HostListenerProfileUpdateApi {
       };
       Utils.showLog("Listener Edit Profile Api Headers => $headers");
 
-      request.fields.addAll({
-        ApiParams.selfIntro: selfIntro ?? '',
-        ApiParams.name: name ?? "",
-        ApiParams.nickName: nickName ?? "",
-        ApiParams.language: language ?? '',
-        ApiParams.talkTopics: talkTopics ?? '',
-        'categoryIds': categoryIds ?? '',
-        ApiParams.ratePrivateAudioCall: ratePrivateAudioCall ?? '',
-        ApiParams.ratePrivateVideoCall: ratePrivateVideoCall ?? '',
-        ApiParams.image: image ?? ''
-      });
+      if ((selfIntro ?? '').isNotEmpty) request.fields[ApiParams.selfIntro] = selfIntro!;
+      if ((name ?? '').isNotEmpty) request.fields[ApiParams.name] = name!;
+      if ((nickName ?? '').isNotEmpty) request.fields[ApiParams.nickName] = nickName!;
+      if ((language ?? '').isNotEmpty) request.fields[ApiParams.language] = language!;
+      if ((talkTopics ?? '').isNotEmpty) request.fields[ApiParams.talkTopics] = talkTopics!;
+      if ((categoryIds ?? '').isNotEmpty) request.fields['categoryIds'] = categoryIds!;
+      if ((ratePrivateAudioCall ?? '').isNotEmpty) request.fields[ApiParams.ratePrivateAudioCall] = ratePrivateAudioCall!;
+      if ((ratePrivateVideoCall ?? '').isNotEmpty) request.fields[ApiParams.ratePrivateVideoCall] = ratePrivateVideoCall!;
+      if ((image ?? '').isNotEmpty) request.fields[ApiParams.image] = image!;
 
       if (image != null) {
         request.files

@@ -18,6 +18,9 @@ import 'package:notisboard/utils/enums.dart' show EnumLocale;
 import 'package:flutter/material.dart';
 import 'package:notisboard/ui/host_flow/host_listeners_detail_screen/api/host_listener_profile_update_api.dart';
 import 'package:notisboard/utils/utils.dart';
+import 'package:notisboard/utils/app_color.dart';
+import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/app_asset.dart';
 
 class HostHomeScreenController extends GetxController {
   // bool isChatPermission = Database.fetchListenerProfileModel?.data?.isAvailableForChat ?? false;
@@ -55,7 +58,12 @@ class HostHomeScreenController extends GetxController {
       return fromListenerProfile;
     }
 
-    return Database.loginListenerId.trim();
+    final fromLoginListener = Database.loginListenerId.trim();
+    if (fromLoginListener.isNotEmpty) {
+      return fromLoginListener;
+    }
+
+    return Database.loginUserId.trim();
   }
 
   @override
@@ -266,5 +274,176 @@ class HostHomeScreenController extends GetxController {
 
     currentIndex = index;
     update();
+  }
+
+  void showEditPriceDialog(String type) {
+    final TextEditingController priceController = TextEditingController();
+    String title = type == 'audio' ? 'Edit Audio Call Price' : 'Edit Video Call Price';
+    String currentValue = type == 'audio'
+        ? (Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall?.toString() ?? '0')
+        : (Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall?.toString() ?? '0');
+    
+    // Compute listenerId once — try all sources
+    final String expertId = _listenerId;
+    Utils.showLog("showEditPriceDialog: expertId = $expertId");
+    
+    priceController.text = currentValue;
+
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        child: SingleChildScrollView(
+          child: Container(
+            width: 330,
+            padding: const EdgeInsets.all(20),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  AppAsset.starCoin,
+                  height: 60,
+                  width: 60,
+                ),
+                15.height,
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: AppFontStyle.fontStyleW700(
+                      fontColor: AppColors.black, fontSize: 22),
+                ),
+                8.height,
+                Text(
+                  'Set your required session credits\nfor this call type.',
+                  textAlign: TextAlign.center,
+                  style: AppFontStyle.fontStyleW500(
+                      fontColor: AppColors.grey, fontSize: 14),
+                ).paddingOnly(left: 7, right: 7),
+                20.height,
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.lightGrey),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                  child: TextField(
+                    controller: priceController,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    style: AppFontStyle.fontStyleW700(
+                        fontColor: AppColors.black, fontSize: 20),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "0",
+                    ),
+                  ),
+                ),
+                25.height,
+                GestureDetector(
+                  onTap: () async {
+                    final newPrice = int.tryParse(priceController.text.trim()) ?? 0;
+                    
+                    final minAudio = Database.settingApiModel?.data?.audioCallRatePrivate ?? 0;
+                    final maxAudio = Database.settingApiModel?.data?.maxAudioCallRatePrivate ?? 0;
+                    final minVideo = Database.settingApiModel?.data?.videoCallRatePrivate ?? 0;
+                    final maxVideo = Database.settingApiModel?.data?.maxVideoCallRatePrivate ?? 0;
+                    
+                    if (type == 'audio') {
+                      if (newPrice < minAudio) {
+                        Utils.showToast(Get.context!, 'Price cannot be less than $minAudio credits.');
+                        return;
+                      }
+                      if (maxAudio > 0 && newPrice > maxAudio) {
+                        Utils.showToast(Get.context!, 'Price cannot exceed $maxAudio credits.');
+                        return;
+                      }
+                    } else {
+                      if (newPrice < minVideo) {
+                        Utils.showToast(Get.context!, 'Price cannot be less than $minVideo credits.');
+                        return;
+                      }
+                      if (maxVideo > 0 && newPrice > maxVideo) {
+                        Utils.showToast(Get.context!, 'Price cannot exceed $maxVideo credits.');
+                        return;
+                      }
+                    }
+
+                    Get.back();
+                    Utils.showToast(Get.context!, 'Updating price...');
+                    
+                    final data = Database.fetchListenerProfileModel?.data;
+                    Utils.showLog("DEBUG: using expertId = $expertId, data?.id = ${data?.id}");
+
+                    final response = await HostListenerProfileUpdateApi.callApi(
+                      listenerId: expertId.isNotEmpty ? expertId : null,
+                      name: '',
+                      nickName: '',
+                      image: null, 
+                      selfIntro: '',
+                      language: '',
+                      talkTopics: '',
+                      categoryIds: '',
+                      ratePrivateAudioCall: type == 'audio' ? newPrice.toString() : '',
+                      ratePrivateVideoCall: type == 'video' ? newPrice.toString() : '',
+                    );
+                  
+                    if (response?.status == true) {
+                      if (type == 'audio') {
+                        Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall = newPrice;
+                      } else {
+                        Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall = newPrice;
+                      }
+                      update();
+                      Utils.showToast(Get.context!, 'Price updated successfully!');
+                    } else {
+                      Utils.showToast(Get.context!, response?.message ?? 'Failed to update price.');
+                    }
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 45,
+                    width: Get.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.appColor,
+                    ),
+                    child: Text(
+                      "Save",
+                      style: AppFontStyle.fontStyleW600(
+                          fontColor: AppColors.white, fontSize: 16),
+                    ),
+                  ),
+                ),
+                10.height,
+                GestureDetector(
+                  onTap: () => Get.back(),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 45,
+                    width: Get.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.lightGrey,
+                    ),
+                    child: Text(
+                      EnumLocale.txtCancel.name.tr,
+                      style: AppFontStyle.fontStyleW600(
+                          fontColor: AppColors.appColor, fontSize: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
