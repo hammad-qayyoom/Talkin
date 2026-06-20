@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
@@ -8,24 +8,18 @@ import { signOut as firebaseSignOut } from 'firebase/auth'
 
 import { useTheme } from '@mui/material/styles'
 
-// Third-party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 import { useDispatch } from 'react-redux'
 
-// Component Imports
 import { Menu, MenuItem, MenuSection } from '@menu/vertical-menu'
-
-// Hook Imports
 import useVerticalNav from '@menu/hooks/useVerticalNav'
-
-// Styled Component Imports
 import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNavExpandIcon'
 
-// Style Imports
 import ConfirmationDialog from '@/components/dialogs/confirmation-dialog'
 import { auth } from '@/libs/firebase'
 import { logoutAdmin } from '@/redux-store/slices/admin'
+import { getStoredAdmin, hasModeratorPermission, isOwnerAdmin } from '@/config/moderatorPermissions'
 import menuItemStyles from '@core/styles/vertical/menuItemStyles'
 import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
 
@@ -36,41 +30,47 @@ const RenderExpandIcon = ({ open, transitionDuration }) => (
 )
 
 const VerticalMenu = ({ scrollMenu }) => {
-  // Hooks
   const theme = useTheme()
   const verticalNavOptions = useVerticalNav()
   const dispatch = useDispatch()
   const router = useRouter()
+  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [admin, setAdmin] = useState(null)
 
-  // Vars
   const { isBreakpointReached, transitionDuration } = verticalNavOptions
   const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
 
-  const [confirmOpen, setConfirmOpen] = useState(false)
+  useEffect(() => {
+    setAdmin(getStoredAdmin())
+  }, [])
+
+  const can = permissionKey => hasModeratorPermission(admin, permissionKey)
 
   const handleUserLogout = async () => {
     try {
-      // Sign out from Firebase
       await firebaseSignOut(auth)
 
-      // Clear localStorage
       localStorage.removeItem('uid')
       localStorage.removeItem('admin_token')
       localStorage.removeItem('user')
 
-      // Update Redux store
       dispatch(logoutAdmin())
 
       setConfirmOpen(false)
-      router.push('/')
+      router.push('/login')
     } catch (error) {
       console.error('Logout error:', error)
     }
   }
 
+  const showUserBlock = [can('users'), can('experts'), can('expertRequests'), can('manualVerification'), can('sessions')].some(Boolean)
+  const showContentBlock = [can('faq'), can('categories'), can('identityProofs'), can('growthSpotlight'), can('feedPosts'), can('reportedFeedPosts')].some(Boolean)
+  const showCommunicationBlock = [can('emailMarketing'), can('emailAccounts')].some(Boolean)
+  const showSubscriptionBlock = [can('subscriptionPlans'), can('subscriptionHistory')].some(Boolean)
+  const showFinancialBlock = [can('paymentOptions'), can('payoutRequests'), can('referrals')].some(Boolean)
+
   return (
     <>
-      {/* Custom scrollbar instead of browser scroll, remove if you want browser scroll only */}
       <ScrollWrapper
         {...(isBreakpointReached
           ? {
@@ -82,8 +82,6 @@ const VerticalMenu = ({ scrollMenu }) => {
               onScrollY: container => scrollMenu(container, true)
             })}
       >
-        {/* Incase you also want to scroll NavHeader to scroll with Vertical Menu, remove NavHeader from above and paste it below this comment */}
-        {/* Vertical Menu */}
         <Menu
           popoutMenuOffset={{ mainAxis: 23 }}
           menuItemStyles={menuItemStyles(verticalNavOptions, theme)}
@@ -91,97 +89,153 @@ const VerticalMenu = ({ scrollMenu }) => {
           renderExpandedMenuItemIcon={{ icon: <i className='tabler-circle text-xs' /> }}
           menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
         >
-          {/* Dashboard */}
-          <MenuItem href='/dashboard' icon={<i className='tabler-smart-home' />}>
-            Dashboard
-          </MenuItem>
+          {can('dashboard') && (
+            <MenuItem href='/dashboard' icon={<i className='tabler-smart-home' />}>
+              Dashboard
+            </MenuItem>
+          )}
 
-          <MenuSection label='USER MANAGEMENT'>
-            <MenuItem href='/apps/user' icon={<i className='tabler-user' />} exactMatch={false} activeUrl='/apps/user'>
-              User
-            </MenuItem>
-            <MenuItem
-              href='/apps/listener'
-              icon={<i className='tabler-user-star' />}
-              exactMatch={false}
-              activeUrl='/apps/listener'
-            >
-              Expert
-            </MenuItem>
-            <MenuItem href='/listener/request' icon={<i className='tabler-user-scan' />}>
-              Expert Request
-            </MenuItem>
-            <MenuItem href='/apps/manual-verification' icon={<i className='tabler-badge' />}>
-              Verification
-            </MenuItem>
-            <MenuItem href='/sessions' icon={<i className='tabler-calendar-time' />}>
-              Sessions
-            </MenuItem>
-          </MenuSection>
+          {showUserBlock && (
+            <MenuSection label='USER MANAGEMENT'>
+              {can('users') && (
+                <MenuItem href='/apps/user' icon={<i className='tabler-user' />} exactMatch={false} activeUrl='/apps/user'>
+                  User
+                </MenuItem>
+              )}
+              {can('experts') && (
+                <MenuItem
+                  href='/apps/listener'
+                  icon={<i className='tabler-user-star' />}
+                  exactMatch={false}
+                  activeUrl='/apps/listener'
+                >
+                  Expert
+                </MenuItem>
+              )}
+              {can('expertRequests') && (
+                <MenuItem href='/listener/request' icon={<i className='tabler-user-scan' />}>
+                  Expert Request
+                </MenuItem>
+              )}
+              {can('manualVerification') && (
+                <MenuItem href='/apps/manual-verification' icon={<i className='tabler-badge' />}>
+                  Verification
+                </MenuItem>
+              )}
+              {can('sessions') && (
+                <MenuItem href='/sessions' icon={<i className='tabler-calendar-time' />}>
+                  Sessions
+                </MenuItem>
+              )}
+            </MenuSection>
+          )}
 
-          <MenuSection label='CONTENT'>
-            <MenuItem href='/faq' icon={<i className='tabler-device-ipad-question' />}>
-              FAQ
-            </MenuItem>
-            <MenuItem href='/talk-topics' icon={<i className='tabler-message-circle' />}>
-              Category
-            </MenuItem>
-            <MenuItem href='/identity-proofs' icon={<i className='tabler-id' />}>
-              Identity Proof
-            </MenuItem>
-            <MenuItem href='/growth-spotlight' icon={<i className='tabler-photo' />}>
-              Growth Spotlight
-            </MenuItem>
-            <MenuItem href='/feed/posts' icon={<i className='tabler-news' />}>
-              Feed Posts
-            </MenuItem>
-            <MenuItem href='/feed/reported' icon={<i className='tabler-flag-3' />}>
-              Reported Feed Posts
-            </MenuItem>
-          </MenuSection>
+          {showContentBlock && (
+            <MenuSection label='CONTENT'>
+              {can('faq') && (
+                <MenuItem href='/faq' icon={<i className='tabler-device-ipad-question' />}>
+                  FAQ
+                </MenuItem>
+              )}
+              {can('categories') && (
+                <MenuItem href='/talk-topics' icon={<i className='tabler-message-circle' />}>
+                  Category
+                </MenuItem>
+              )}
+              {can('identityProofs') && (
+                <MenuItem href='/identity-proofs' icon={<i className='tabler-id' />}>
+                  Identity Proof
+                </MenuItem>
+              )}
+              {can('growthSpotlight') && (
+                <MenuItem href='/growth-spotlight' icon={<i className='tabler-photo' />}>
+                  Growth Spotlight
+                </MenuItem>
+              )}
+              {can('feedPosts') && (
+                <MenuItem href='/feed/posts' icon={<i className='tabler-news' />}>
+                  Feed Posts
+                </MenuItem>
+              )}
+              {can('reportedFeedPosts') && (
+                <MenuItem href='/feed/reported' icon={<i className='tabler-flag-3' />}>
+                  Reported Feed Posts
+                </MenuItem>
+              )}
+            </MenuSection>
+          )}
 
-          <MenuSection label='COMMUNICATIONS'>
-            <MenuItem href='/email-marketing' icon={<i className='tabler-mail' />}>
-              Email Marketing
-            </MenuItem>
-            <MenuItem href='/email-accounts' icon={<i className='tabler-mail-cog' />}>
-              Email Accounts
-            </MenuItem>
-          </MenuSection>
+          {showCommunicationBlock && (
+            <MenuSection label='COMMUNICATIONS'>
+              {can('emailMarketing') && (
+                <MenuItem href='/email-marketing' icon={<i className='tabler-mail' />}>
+                  Email Marketing
+                </MenuItem>
+              )}
+              {can('emailAccounts') && (
+                <MenuItem href='/email-accounts' icon={<i className='tabler-mail-cog' />}>
+                  Email Accounts
+                </MenuItem>
+              )}
+            </MenuSection>
+          )}
 
-          <MenuSection label='SUBSCRIPTION'>
-            <MenuItem href='/coin-plans' icon={<i className='tabler-coins' />}>
-              Subscription Plans
-            </MenuItem>
-            <MenuItem
-              href='/coin-plan-history'
-              exactMatch={false}
-              activeUrl='/coin-plan-history'
-              icon={<i className='tabler-history' />}
-            >
-              Subscription History
-            </MenuItem>
-          </MenuSection>
+          {showSubscriptionBlock && (
+            <MenuSection label='SUBSCRIPTION'>
+              {can('subscriptionPlans') && (
+                <MenuItem href='/coin-plans' icon={<i className='tabler-coins' />}>
+                  Subscription Plans
+                </MenuItem>
+              )}
+              {can('subscriptionHistory') && (
+                <MenuItem
+                  href='/coin-plan-history'
+                  exactMatch={false}
+                  activeUrl='/coin-plan-history'
+                  icon={<i className='tabler-history' />}
+                >
+                  Subscription History
+                </MenuItem>
+              )}
+            </MenuSection>
+          )}
 
-          <MenuSection label='FINANCIAL'>
-            <MenuItem href='/payment-options' icon={<i className='tabler-cash' />}>
-              Payment Options
-            </MenuItem>
-            <MenuItem href='/payout-requests' icon={<i className='tabler-cash-banknote' />}>
-              Payout Request
-            </MenuItem>
-            <MenuItem href='/referrals' icon={<i className='tabler-gift' />}>
-              Referrals
-            </MenuItem>
-          </MenuSection>
+          {showFinancialBlock && (
+            <MenuSection label='FINANCIAL'>
+              {can('paymentOptions') && (
+                <MenuItem href='/payment-options' icon={<i className='tabler-cash' />}>
+                  Payment Options
+                </MenuItem>
+              )}
+              {can('payoutRequests') && (
+                <MenuItem href='/payout-requests' icon={<i className='tabler-cash-banknote' />}>
+                  Payout Request
+                </MenuItem>
+              )}
+              {can('referrals') && (
+                <MenuItem href='/referrals' icon={<i className='tabler-gift' />}>
+                  Referrals
+                </MenuItem>
+              )}
+            </MenuSection>
+          )}
 
           <MenuSection label='SETTINGS'>
-            <MenuItem href='/settings' icon={<i className='tabler-settings' />}>
-              Settings
-            </MenuItem>
-            <MenuItem href='/profile' icon={<i className='tabler-user-circle' />}>
-              Profile
-            </MenuItem>
+            {can('settings') && (
+              <MenuItem href='/settings' icon={<i className='tabler-settings' />}>
+                Settings
+              </MenuItem>
+            )}
+            {can('profile') && (
+              <MenuItem href='/profile' icon={<i className='tabler-user-circle' />}>
+                Profile
+              </MenuItem>
+            )}
+            {isOwnerAdmin(admin) && (
+              <MenuItem href='/moderators' icon={<i className='tabler-shield-lock' />}>
+                Moderators
+              </MenuItem>
+            )}
             <MenuItem onClick={() => setConfirmOpen(true)} icon={<i className='tabler-logout' />}>
               Logout
             </MenuItem>

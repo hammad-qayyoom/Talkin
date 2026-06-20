@@ -44,7 +44,8 @@ import themeConfig from '@configs/themeConfig'
 // Hooks
 import { useImageVariant } from '@core/hooks/useImageVariant'
 import { useSettings } from '@core/hooks/useSettings'
-import { loginAdmin } from '@/redux-store/slices/admin'
+import { loginAdmin, loginModerator } from '@/redux-store/slices/admin'
+import { canAccessPath, getFirstAllowedPath, getStoredAdmin } from '@/config/moderatorPermissions'
 
 
 
@@ -177,10 +178,11 @@ const LoginV2 = ({ mode }) => {
             const token = await user.getIdToken(true)
 
             if (token === storedToken) {
-              // Valid token, redirect to dashboard
-              const redirectURL = searchParams.get('redirectTo') ?? '/dashboard'
+              const storedAdmin = getStoredAdmin()
+              const redirectURL = searchParams.get('redirectTo')
+              const fallbackURL = getFirstAllowedPath(storedAdmin)
 
-              router.replace(redirectURL)
+              router.replace(redirectURL && canAccessPath(storedAdmin, redirectURL) ? redirectURL : fallbackURL)
 
               return
             }
@@ -259,17 +261,26 @@ const LoginV2 = ({ mode }) => {
       }
 
       try {
-        // Backend authentication
-        const response = await dispatch(
-          loginAdmin({
+      // Backend authentication
+      let response = await dispatch(
+        loginAdmin({
+          email: credentials.email,
+          password: credentials.password
+        })
+      )
+
+      if (!response.payload || !response.payload.status) {
+        response = await dispatch(
+          loginModerator({
             email: credentials.email,
             password: credentials.password
           })
         )
+      }
 
-        if (!response.payload || !response.payload.status) {
-          throw new Error('Authentication failed on server')
-        }
+      if (!response.payload || !response.payload.status) {
+        throw new Error(response.payload?.message || 'Authentication failed on server')
+      }
 
         // Success! Store credentials
         localStorage.setItem('uid', uid)
@@ -291,10 +302,10 @@ const LoginV2 = ({ mode }) => {
 
         toast.success('Login successful!')
 
-        // Redirect to dashboard
-        const redirectURL = searchParams.get('redirectTo') ?? '/dashboard'
+        const redirectURL = searchParams.get('redirectTo')
+        const fallbackURL = getFirstAllowedPath(response.payload.admin)
 
-        router.replace(redirectURL)
+        router.replace(redirectURL && canAccessPath(response.payload.admin, redirectURL) ? redirectURL : fallbackURL)
       } catch (backendError) {
         console.log('Backend Login Error:', backendError)
 

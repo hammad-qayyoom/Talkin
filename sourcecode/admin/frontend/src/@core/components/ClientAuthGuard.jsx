@@ -2,64 +2,66 @@
 
 import { useEffect, useState } from 'react'
 
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { onAuthStateChanged } from 'firebase/auth'
 
 import { CircularProgress } from '@mui/material'
 
-import axios from 'axios'
-
 import { auth } from '@/libs/firebase'
-import { baseURL } from '@/config'
+import { initTokenRefresh } from '@/utils/token-refresh-middleware'
+import { isRememberMeEnabled } from '@/utils/firebase-auth'
+import { canAccessPath, getFirstAllowedPath, getStoredAdmin } from '@/config/moderatorPermissions'
+
+const AUTH_PATHS = ['/', '/login', '/register', '/forgot-password']
+
+const isResetPath = pathname => pathname.startsWith('/reset-password')
 
 const ClientAuthGuard = ({ children }) => {
   const router = useRouter()
+  const pathname = usePathname()
   const [loading, setLoading] = useState(true)
-  const [authenticated, setAuthenticated] = useState(false);
-
-  //  const checkLogin = async ()=>{
-  //   const  response  = await axios.get(`${baseURL}/api/admin/login`);
-
-  //   if(response.data.login){
-  //      router.replace('/login')
-  //   }else{
-  //      router.replace('/register')
-  //   }
-  // }
+  const [authenticated, setAuthenticated] = useState(false)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
-      const isAuthPath =
-        window.location.pathname === '/' ||
-
-        window.location.pathname === '/login' ||
-        window.location.pathname === '/register' ||
-        window.location.pathname === '/forgot-password' ||
-        window.location.pathname.startsWith('/reset-password')
+      const currentPath = pathname || window.location.pathname
+      const isAuthPath = AUTH_PATHS.includes(currentPath) || isResetPath(currentPath)
 
       if (user) {
-        // User is authenticated
-        if (isAuthPath) {
-          // Redirect to dashboard if trying to access auth pages while logged in
-          console.log('Dashboard')
-          
-          // router.replace('/dashboard')
+        const storedAdmin = getStoredAdmin()
 
-        } else {
-          // Allow access to protected pages
-          setAuthenticated(true)
+        if (isAuthPath) {
+          router.replace(getFirstAllowedPath(storedAdmin))
+
+          return
+        }
+
+        if (!storedAdmin) {
+          router.replace('/login')
+
+          return
+        }
+
+        if (!canAccessPath(storedAdmin, currentPath)) {
+          router.replace(getFirstAllowedPath(storedAdmin))
+
+          return
+        }
+
+        setAuthenticated(true)
+
+        if (isRememberMeEnabled()) {
+          initTokenRefresh()
         }
       } else {
-        // User is not authenticated
         if (!isAuthPath) {
-          // Redirect to login if trying to access protected pages
-          router.replace('/')
-          // checkLogin()
-        } else {
-          // Allow access to auth pages
-          setAuthenticated(true)
+          router.replace('/login')
+
+          return
         }
+
+        setAuthenticated(true)
       }
 
       setTimeout(() => {
@@ -68,7 +70,7 @@ const ClientAuthGuard = ({ children }) => {
     })
 
     return () => unsubscribe()
-  }, [router])
+  }, [pathname, router])
 
   if (loading) {
     return (

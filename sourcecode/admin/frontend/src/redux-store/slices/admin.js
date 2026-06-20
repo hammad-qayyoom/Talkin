@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 import { secretKey, baseURL } from '@/config'
+import { normalizeAdminSession } from '@/config/moderatorPermissions'
 
 const getAuthHeaders = () => {
   if (typeof window !== 'undefined') {
@@ -36,6 +37,27 @@ export const loginAdmin = createAsyncThunk(
     } catch (err) {
       // Improved error handling
       const errorMessage = err.response?.data?.message || err.message || 'Login failed'
+
+      return rejectWithValue(errorMessage)
+    }
+  }
+)
+
+export const loginModerator = createAsyncThunk(
+  'api/admin/moderator/authenticate',
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${baseURL}/api/admin/moderator/authenticate`,
+        { email, password },
+        {
+          headers: getAuthHeaders()
+        }
+      )
+
+      return response.data
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || err.message || 'Moderator login failed'
 
       return rejectWithValue(errorMessage)
     }
@@ -243,16 +265,35 @@ const adminSlice = createSlice({
 
         // Store user data in localStorage
         if (typeof window !== 'undefined' && action.payload && action.payload.admin) {
-          const user = {
-            name: action.payload.admin.name,
-            email: action.payload.admin.email,
-            image: action.payload.admin.image
-          }
+          const user = normalizeAdminSession(action.payload.admin)
 
           localStorage.setItem('user', JSON.stringify(user))
         }
       })
       .addCase(loginAdmin.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+        state.loginStatus = 'failed'
+      })
+
+      // Login Moderator
+      .addCase(loginModerator.pending, state => {
+        state.loading = true
+        state.error = null
+        state.loginStatus = 'pending'
+      })
+      .addCase(loginModerator.fulfilled, (state, action) => {
+        state.loading = false
+        state.user = action.payload
+        state.loginStatus = 'success'
+
+        if (typeof window !== 'undefined' && action.payload && action.payload.admin) {
+          const user = normalizeAdminSession(action.payload.admin)
+
+          localStorage.setItem('user', JSON.stringify(user))
+        }
+      })
+      .addCase(loginModerator.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
         state.loginStatus = 'failed'
