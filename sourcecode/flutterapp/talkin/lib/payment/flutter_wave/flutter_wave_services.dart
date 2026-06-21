@@ -1,3 +1,5 @@
+import 'package:notisboard/utils/enums.dart';
+import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
@@ -25,7 +27,7 @@ class FlutterWaveService {
       amount: amount,
       customer: customer,
       paymentOptions: "ussd, card, barter, pay attitude",
-      customization: Customization(title: "Heart Haven"),
+      customization: Customization(title: EnumLocale.txtHeartHaven.name.tr),
       isTestMode: true,
     );
 

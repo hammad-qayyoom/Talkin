@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
@@ -86,7 +87,7 @@ class AuthGuard {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            'Login required',
+                            EnumLocale.txtLoginRequired.name.tr,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AppFontStyle.fontStyleW700(
@@ -124,7 +125,7 @@ class AuthGuard {
                               padding: const EdgeInsets.symmetric(vertical: 12),
                             ),
                             child: Text(
-                              'Not now',
+                              EnumLocale.txtNotNow.name.tr,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppFontStyle.fontStyleW600(
@@ -151,7 +152,7 @@ class AuthGuard {
                               padding: const EdgeInsets.symmetric(vertical: 12),
                             ),
                             child: Text(
-                              'Login',
+                              EnumLocale.txtLogin.name.tr,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppFontStyle.fontStyleW600(

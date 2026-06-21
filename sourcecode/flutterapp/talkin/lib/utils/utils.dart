@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:clipboard/clipboard.dart';
 
 import 'app_color.dart';
+import 'package:notisboard/utils/enums.dart';
 
 class Utils {
   static const sandboxVerifyReceiptUrl = false;
@@ -420,8 +421,8 @@ class Utils {
                                 backgroundColor: AppColors.white,
                                 padding: EdgeInsets.zero,
                               ),
-                              child: const Text(
-                                'Close',
+                              child: Text(
+                                EnumLocale.txtClose.name.tr,
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,

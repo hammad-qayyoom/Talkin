@@ -34,7 +34,7 @@ class FillProfileScreenAppBar extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Complete your details to personalize your account.',
+            EnumLocale.txtCompleteYourDetailsToPersonalizeYourAccount.name.tr,
             style: AppFontStyle.fontStyleW500(
               fontSize: 13,
               fontColor: AppColors.redesignMutedText,
@@ -169,7 +169,7 @@ class FillProfileImageView extends StatelessWidget {
                     : CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Profile Photo',
+                    EnumLocale.txtProfilePhoto.name.tr,
                     style: AppFontStyle.fontStyleW700(
                       fontSize: 17,
                       fontColor: AppColors.redesignBrandDark,
@@ -177,7 +177,7 @@ class FillProfileImageView extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Visible on your profile and session requests.',
+                    EnumLocale.txtVisibleOnYourProfileAndSessionRequests.name.tr,
                     textAlign: isNarrow ? TextAlign.center : TextAlign.start,
                     style: AppFontStyle.fontStyleW500(
                       fontSize: 12,
@@ -331,7 +331,7 @@ class FillProfileEditInfoView extends StatelessWidget {
             children: [
               _SectionCard(
                 icon: Icons.person_outline_rounded,
-                title: 'Basic Information',
+                title: EnumLocale.txtBasicInformation.name.tr,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -415,7 +415,7 @@ class FillProfileEditInfoView extends StatelessWidget {
               const SizedBox(height: 12),
               _SectionCard(
                 icon: Icons.phone_iphone_rounded,
-                title: 'Contact Information',
+                title: EnumLocale.txtContactInformation.name.tr,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

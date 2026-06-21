@@ -1,3 +1,5 @@
+import 'package:notisboard/utils/enums.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -241,7 +243,7 @@ class _PolicyHeroBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Understand how your information is protected.',
+                  EnumLocale.txtUnderstandHowYourInformationIsProtected.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: 12,
                     fontColor: AppColors.white.withValues(alpha: 0.9),

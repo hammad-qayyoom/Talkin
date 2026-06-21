@@ -163,7 +163,7 @@ class _ForgotPasswordEmailField extends StatelessWidget {
         fontColor: AppColors.redesignBrandDark,
       ),
       decoration: InputDecoration(
-        hintText: 'Email address',
+        hintText: EnumLocale.txtEmailAddress.name.tr,
         hintStyle: AppFontStyle.fontStyleW500(
           fontSize: 15,
           fontColor: AppColors.redesignMutedText,

@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'dart:developer';
 
 import 'package:carousel_slider/carousel_options.dart';
@@ -321,7 +322,7 @@ class HostHomeScreenController extends GetxController {
                 ),
                 8.height,
                 Text(
-                  'Set your required session credits\nfor this call type.',
+                  EnumLocale.txtSetYourRequiredSessionCreditsNforThisCallType.name.tr,
                   textAlign: TextAlign.center,
                   style: AppFontStyle.fontStyleW500(
                       fontColor: AppColors.grey, fontSize: 14),
@@ -415,7 +416,7 @@ class HostHomeScreenController extends GetxController {
                       color: AppColors.appColor,
                     ),
                     child: Text(
-                      "Save",
+                      EnumLocale.txtSave.name.tr,
                       style: AppFontStyle.fontStyleW600(
                           fontColor: AppColors.white, fontSize: 16),
                     ),

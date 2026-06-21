@@ -35,7 +35,7 @@ import 'package:notisboard/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PaymentMethodOption {
-  const PaymentMethodOption({
+  PaymentMethodOption({
     required this.id,
     required this.title,
     required this.image,
@@ -449,10 +449,10 @@ class MyWalletController extends GetxController
           settings == null || settings.isAppleInAppPurchaseEnabled != false;
 
       return isAppleIapEnabled
-          ? const [
+          ? [
               PaymentMethodOption(
                 id: paymentInAppPurchase,
-                title: 'App Store',
+                title: EnumLocale.txtAppStore.name.tr,
                 image: AppAsset.appStoreImage,
                 width: 50,
                 height: 26,
@@ -464,9 +464,9 @@ class MyWalletController extends GetxController
     if (settings == null) {
       return GetPlatform.isAndroid
           ? [
-              const PaymentMethodOption(
+              PaymentMethodOption(
                 id: paymentInAppPurchase,
-                title: 'Google Play',
+                title: EnumLocale.txtGooglePlay.name.tr,
                 image: AppAsset.googleIcon,
                 width: 50,
                 height: 26,
@@ -482,9 +482,9 @@ class MyWalletController extends GetxController
       ios: settings.isStripeIosEnabled,
       fallback: settings.isStripeEnabled,
     )) {
-      methods.add(const PaymentMethodOption(
+      methods.add(PaymentMethodOption(
         id: paymentStripe,
-        title: 'Stripe',
+        title: EnumLocale.txtStripe.name.tr,
         image: AppAsset.stripe,
         width: 52,
         height: 26,
@@ -496,9 +496,9 @@ class MyWalletController extends GetxController
       ios: settings.isRazorpayIosEnabled,
       fallback: settings.isRazorpayEnabled,
     )) {
-      methods.add(const PaymentMethodOption(
+      methods.add(PaymentMethodOption(
         id: paymentRazorpay,
-        title: 'Razorpay',
+        title: EnumLocale.txtRazorpay.name.tr,
         image: AppAsset.razorpay,
         width: 54,
         height: 28,
@@ -510,9 +510,9 @@ class MyWalletController extends GetxController
       ios: settings.isFlutterwaveIosEnabled,
       fallback: settings.isFlutterwaveEnabled,
     )) {
-      methods.add(const PaymentMethodOption(
+      methods.add(PaymentMethodOption(
         id: paymentFlutterWave,
-        title: 'Flutterwave',
+        title: EnumLocale.txtFlutterwave.name.tr,
         image: AppAsset.flutterWave,
         width: 54,
         height: 28,
@@ -523,9 +523,9 @@ class MyWalletController extends GetxController
       android: settings.isPaystackAndroidEnabled,
       ios: settings.isPaystackIosEnabled,
     )) {
-      methods.add(const PaymentMethodOption(
+      methods.add(PaymentMethodOption(
         id: paymentPayStack,
-        title: 'Paystack',
+        title: EnumLocale.txtPaystack.name.tr,
         image: AppAsset.payStackImage,
         width: 52,
         height: 28,
@@ -536,9 +536,9 @@ class MyWalletController extends GetxController
       android: settings.isCashfreeAndroidEnabled,
       ios: settings.isCashfreeIosEnabled,
     )) {
-      methods.add(const PaymentMethodOption(
+      methods.add(PaymentMethodOption(
         id: paymentCashFree,
-        title: 'Cashfree',
+        title: EnumLocale.txtCashfree.name.tr,
         image: AppAsset.cashFreeImage,
         width: 54,
         height: 28,
@@ -549,9 +549,9 @@ class MyWalletController extends GetxController
       android: settings.isPaypalAndroidEnabled,
       ios: settings.isPaypalIosEnabled,
     )) {
-      methods.add(const PaymentMethodOption(
+      methods.add(PaymentMethodOption(
         id: paymentPayPal,
-        title: 'PayPal',
+        title: EnumLocale.txtPaypal.name.tr,
         image: AppAsset.payPalImage,
         width: 52,
         height: 28,
@@ -565,7 +565,7 @@ class MyWalletController extends GetxController
     )) {
       methods.add(PaymentMethodOption(
         id: paymentInAppPurchase,
-        title: 'Google Play',
+        title: EnumLocale.txtGooglePlay.name.tr,
         image: AppAsset.googleIcon,
         width: 50,
         height: 26,

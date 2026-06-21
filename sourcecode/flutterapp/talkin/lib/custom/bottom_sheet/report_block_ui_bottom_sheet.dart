@@ -222,7 +222,7 @@ void showMoreOptionsBottomSheet({
                     _MoreOptionTile(
                       icon: Icons.block_rounded,
                       title: EnumLocale.txtBlock.name.tr,
-                      subtitle: 'Prevent messages and calls from this chat',
+                      subtitle: EnumLocale.txtPreventMessagesAndCallsFromThisChat.name.tr,
                       iconColor: AppColors.redesignSheetBlockIcon,
                       iconBackground: AppColors.redesignSheetBlockBg,
                       onTap: () {
@@ -234,7 +234,7 @@ void showMoreOptionsBottomSheet({
                     _MoreOptionTile(
                       icon: Icons.report_gmailerrorred_rounded,
                       title: EnumLocale.txtReport.name.tr,
-                      subtitle: 'Report this conversation for review',
+                      subtitle: EnumLocale.txtReportThisConversationForReview.name.tr,
                       iconColor: AppColors.redesignSheetReportIcon,
                       iconBackground: AppColors.redesignSheetReportBg,
                       onTap: () {

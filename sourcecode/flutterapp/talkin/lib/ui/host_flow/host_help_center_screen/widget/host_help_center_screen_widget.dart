@@ -43,7 +43,7 @@ class HostHelpCenterAppBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Support, issue reporting and FAQs',
+                  EnumLocale.txtSupportIssueReportingAndFaqs.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: isTablet ? 12 : 11,
                     fontColor: AppColors.redesignMutedText,
@@ -208,7 +208,7 @@ class HostHelpCenterView extends GetView<HostHelpCenterScreenController> {
                                 borderRadius: BorderRadius.circular(999),
                               ),
                               child: Text(
-                                'Support Desk',
+                                EnumLocale.txtSupportDesk.name.tr,
                                 style: AppFontStyle.fontStyleW700(
                                   fontSize: 11,
                                   fontColor: AppColors.white,
@@ -309,7 +309,7 @@ class HostHelpCenterView extends GetView<HostHelpCenterScreenController> {
                                 ),
                                 const SizedBox(height: 3),
                                 Text(
-                                  'Send us a detailed support request by email.',
+                                  EnumLocale.txtSendUsADetailedSupportRequestByEmail.name.tr,
                                   style: AppFontStyle.fontStyleW500(
                                     fontSize: 11,
                                     fontColor: AppColors.redesignMutedText,
@@ -350,7 +350,7 @@ class HostHelpCenterView extends GetView<HostHelpCenterScreenController> {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  'Quick answers before you submit your request',
+                  EnumLocale.txtQuickAnswersBeforeYouSubmitYourRequest.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: isTablet ? 13 : 11,
                     fontColor: AppColors.redesignMutedText,
@@ -376,7 +376,7 @@ class HostHelpCenterView extends GetView<HostHelpCenterScreenController> {
                           ),
                         ),
                         child: Text(
-                          'No FAQs available right now.',
+                          EnumLocale.txtNoFaqsAvailableRightNow.name.tr,
                           style: AppFontStyle.fontStyleW500(
                             fontSize: 12,
                             fontColor: AppColors.redesignMutedText,

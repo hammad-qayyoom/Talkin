@@ -168,7 +168,7 @@ class _TalkAboutBottomSheetState extends State<TalkAboutBottomSheet> {
                         child: controller.talkTopic.isEmpty
                             ? Center(
                                 child: Text(
-                                  'No topics available',
+                                  EnumLocale.txtNoTopicsAvailable.name.tr,
                                   style: AppFontStyle.fontStyleW500(
                                     fontSize: 13,
                                     fontColor: _mutedText,

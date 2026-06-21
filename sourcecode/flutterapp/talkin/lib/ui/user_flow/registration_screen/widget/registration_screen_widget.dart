@@ -87,13 +87,13 @@ class RegistrationAddInfoView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Create your account',
+                  EnumLocale.txtCreateYourAccount.name.tr,
                   style: AppFontStyle.fontStyleW700(
                       fontSize: 22, fontColor: _brandDark),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Simple details now, profile setup right after signup.',
+                  EnumLocale.txtSimpleDetailsNowProfileSetupRightAfterSignup.name.tr,
                   style: AppFontStyle.fontStyleW500(
                       fontSize: 13, fontColor: _mutedText),
                 ),
@@ -103,7 +103,7 @@ class RegistrationAddInfoView extends StatelessWidget {
                 _buildTextField(
                   controller: logic.nameController,
                   textInputAction: TextInputAction.next,
-                  hintText: 'Full name',
+                  hintText: EnumLocale.txtFullName.name.tr,
                   inputFormatters: [UpperCaseTextFormatter()],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -119,7 +119,7 @@ class RegistrationAddInfoView extends StatelessWidget {
                   controller: logic.emailController,
                   textInputAction: TextInputAction.next,
                   textInputType: TextInputType.emailAddress,
-                  hintText: 'Email address',
+                  hintText: EnumLocale.txtEmailAddress.name.tr,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return EnumLocale.desEnterEmail.name.tr;
@@ -135,7 +135,7 @@ class RegistrationAddInfoView extends StatelessWidget {
                 _buildTextField(
                   controller: logic.referralCodeController,
                   textInputAction: TextInputAction.next,
-                  hintText: 'Enter invite code',
+                  hintText: EnumLocale.txtEnterInviteCode.name.tr,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
                     LengthLimitingTextInputFormatter(16),
@@ -148,7 +148,7 @@ class RegistrationAddInfoView extends StatelessWidget {
                 _buildTextField(
                   controller: logic.passwordController,
                   textInputAction: TextInputAction.next,
-                  hintText: 'Password',
+                  hintText: EnumLocale.txtPassword.name.tr,
                   obscureText: logic.isObscure,
                   suffixIcon: IconButton(
                     onPressed: logic.onClickObscure,
@@ -184,7 +184,7 @@ class RegistrationAddInfoView extends StatelessWidget {
                 _buildTextField(
                   controller: logic.confirmPassController,
                   textInputAction: TextInputAction.done,
-                  hintText: 'Confirm password',
+                  hintText: EnumLocale.txtConfirmPassword.name.tr,
                   obscureText: logic.isObscure1,
                   suffixIcon: IconButton(
                     onPressed: logic.onClickObscure1,

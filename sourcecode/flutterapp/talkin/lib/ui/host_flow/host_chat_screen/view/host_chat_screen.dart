@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/dialog/exit_app_dialog.dart';
@@ -106,7 +107,7 @@ class HostChatScreen extends StatelessWidget {
                                           ),
                                           const SizedBox(height: 14),
                                           Text(
-                                            'No chats yet',
+                                            EnumLocale.txtNoChatsYet.name.tr,
                                             style: AppFontStyle.fontStyleW700(
                                               fontSize: 18,
                                               fontColor:
@@ -115,7 +116,7 @@ class HostChatScreen extends StatelessWidget {
                                           ),
                                           const SizedBox(height: 6),
                                           Text(
-                                            'Your conversations with users will appear here.',
+                                            EnumLocale.txtYourConversationsWithUsersWillAppearHere.name.tr,
                                             textAlign: TextAlign.center,
                                             style: AppFontStyle.fontStyleW500(
                                               fontSize: 13,

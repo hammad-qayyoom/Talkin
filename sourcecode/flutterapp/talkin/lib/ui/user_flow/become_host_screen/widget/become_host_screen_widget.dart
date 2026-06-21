@@ -42,7 +42,7 @@ class BecomeHostScreenAppBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Verification, status and FAQs',
+                  EnumLocale.txtVerificationStatusAndFaqs.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: isTablet ? 12 : 11,
                     fontColor: AppColors.redesignMutedText,
@@ -226,7 +226,7 @@ class BecomeHostScreenView extends GetView<BecomeHostScreenController> {
                                 borderRadius: BorderRadius.circular(999),
                               ),
                               child: Text(
-                                'Expert Program',
+                                EnumLocale.txtExpertProgram.name.tr,
                                 style: AppFontStyle.fontStyleW700(
                                   fontSize: 11,
                                   fontColor: AppColors.white,
@@ -419,7 +419,7 @@ class BecomeHostScreenView extends GetView<BecomeHostScreenController> {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  'Quick answers before you submit your request',
+                  EnumLocale.txtQuickAnswersBeforeYouSubmitYourRequest.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: isTablet ? 13 : 11,
                     fontColor: AppColors.redesignMutedText,
@@ -445,7 +445,7 @@ class BecomeHostScreenView extends GetView<BecomeHostScreenController> {
                           ),
                         ),
                         child: Text(
-                          'No FAQs available right now.',
+                          EnumLocale.txtNoFaqsAvailableRightNow.name.tr,
                           style: AppFontStyle.fontStyleW500(
                             fontSize: 12,
                             fontColor: AppColors.redesignMutedText,

@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -235,7 +236,7 @@ class _FeedListView extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'No posts yet',
+                        EnumLocale.txtNoPostsYet.name.tr,
                         style: AppFontStyle.fontStyleW700(
                           fontSize: 15,
                           fontColor: AppColors.black,
@@ -243,7 +244,7 @@ class _FeedListView extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Be the first to share something with your community.',
+                        EnumLocale.txtBeTheFirstToShareSomethingWithYourCommunity.name.tr,
                         textAlign: TextAlign.center,
                         style: AppFontStyle.fontStyleW500(
                           fontSize: 12,
@@ -518,7 +519,7 @@ class _ComposerView extends StatelessWidget {
                   maxLines: 1,
                   minLines: 1,
                   decoration: InputDecoration(
-                    hintText: "What's on your mind?",
+                    hintText: EnumLocale.txtWhatSOnYourMind.name.tr,
                     hintStyle: AppFontStyle.fontStyleW500(
                       fontSize: 14,
                       fontColor: mutedText,
@@ -723,7 +724,7 @@ class _PostPrimaryButton extends StatelessWidget {
                 ),
               )
             : Text(
-                'Post',
+                EnumLocale.txtPost.name.tr,
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 14,
                   fontColor: AppColors.white,
@@ -996,7 +997,7 @@ class _FeedPostCard extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.edit_outlined, color: brandDark),
                   title: Text(
-                    'Edit post',
+                    EnumLocale.txtEditPost.name.tr,
                     style: AppFontStyle.fontStyleW600(
                       fontSize: 14,
                       fontColor: AppColors.black,
@@ -1019,7 +1020,7 @@ class _FeedPostCard extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.delete_outline, color: AppColors.red),
                   title: Text(
-                    'Delete post',
+                    EnumLocale.txtDeletePost.name.tr,
                     style: AppFontStyle.fontStyleW600(
                       fontSize: 14,
                       fontColor: AppColors.black,
@@ -1033,7 +1034,7 @@ class _FeedPostCard extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.flag_outlined, color: AppColors.darkGrey),
                 title: Text(
-                  'Report post',
+                  EnumLocale.txtReportPost.name.tr,
                   style: AppFontStyle.fontStyleW600(
                     fontSize: 14,
                     fontColor: AppColors.black,
@@ -1116,7 +1117,7 @@ class _FeedPostCard extends StatelessWidget {
                 ),
               ),
               Text(
-                'Comments',
+                EnumLocale.txtComments.name.tr,
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 17,
                   fontColor: brandDark,
@@ -1144,7 +1145,7 @@ class _FeedPostCard extends StatelessWidget {
                     if (comments.isEmpty) {
                       return Center(
                         child: Text(
-                          'No comments yet.',
+                          EnumLocale.txtNoCommentsYet.name.tr,
                           style: AppFontStyle.fontStyleW500(
                             fontSize: 13,
                             fontColor: mutedText,
@@ -1192,7 +1193,9 @@ class _FeedPostCard extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: Text(
-                                  'Replying to ${commentController.replyingToUserName}',
+                                  EnumLocale.txtReplyingToUser.name.trParams({
+                                    'userName': commentController.replyingToUserName ?? '',
+                                  }),
                                   style: AppFontStyle.fontStyleW600(
                                     fontSize: 11,
                                     fontColor: brandRed,
@@ -1234,7 +1237,7 @@ class _FeedPostCard extends StatelessWidget {
                                     horizontal: 6,
                                     vertical: 10,
                                   ),
-                                  hintText: 'Write a comment',
+                                  hintText: EnumLocale.txtWriteAComment.name.tr,
                                   hintStyle: AppFontStyle.fontStyleW500(
                                     fontSize: 13,
                                     fontColor: mutedText,
@@ -1536,7 +1539,7 @@ class _CommentTile extends StatelessWidget {
                           InkWell(
                             onTap: () => onReply(comment),
                             child: Text(
-                              'Reply',
+                              EnumLocale.txtReply.name.tr,
                               style: AppFontStyle.fontStyleW600(
                                 fontSize: 11,
                                 fontColor: brandRed,
@@ -1777,7 +1780,7 @@ class _PostVideoPlayerState extends State<_PostVideoPlayer> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Tap to retry',
+                    EnumLocale.txtTapToRetry.name.tr,
                     style: AppFontStyle.fontStyleW600(
                       fontSize: 12,
                       fontColor: AppColors.white,
@@ -2218,7 +2221,7 @@ class _EditPostSheetContentState extends State<_EditPostSheetContent> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Edit post',
+              EnumLocale.txtEditPost.name.tr,
               style: AppFontStyle.fontStyleW700(
                 fontSize: 16,
                 fontColor: AppColors.black,
@@ -2231,7 +2234,7 @@ class _EditPostSheetContentState extends State<_EditPostSheetContent> {
               minLines: 3,
               maxLength: 4000,
               decoration: InputDecoration(
-                hintText: "What's on your mind?",
+                hintText: EnumLocale.txtWhatSOnYourMind.name.tr,
                 hintStyle: AppFontStyle.fontStyleW500(
                   fontSize: 13,
                   fontColor: AppColors.grey,
@@ -2255,7 +2258,7 @@ class _EditPostSheetContentState extends State<_EditPostSheetContent> {
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () => Get.back(),
-                    child: const Text('Cancel'),
+                    child: Text(EnumLocale.txtCancel.name.tr),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -2264,7 +2267,7 @@ class _EditPostSheetContentState extends State<_EditPostSheetContent> {
                     onPressed: () {
                       Get.back(result: textController.text);
                     },
-                    child: const Text('Save'),
+                    child: Text(EnumLocale.txtSave.name.tr),
                   ),
                 ),
               ],

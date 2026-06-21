@@ -46,7 +46,7 @@ class EditProfileScreenAppBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Manage your account details',
+                  EnumLocale.txtManageYourAccountDetails.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: 12,
                     fontColor: AppColors.redesignMutedText,
@@ -218,7 +218,7 @@ class EditProfileImageView extends StatelessWidget {
                     : CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Profile Photo',
+                    EnumLocale.txtProfilePhoto.name.tr,
                     style: AppFontStyle.fontStyleW700(
                       fontSize: 17,
                       fontColor: AppColors.redesignBrandDark,
@@ -226,7 +226,7 @@ class EditProfileImageView extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Visible on your profile and session requests.',
+                    EnumLocale.txtVisibleOnYourProfileAndSessionRequests.name.tr,
                     textAlign: isNarrow ? TextAlign.center : TextAlign.start,
                     style: AppFontStyle.fontStyleW500(
                       fontSize: 12,
@@ -380,7 +380,7 @@ class EditProfileEditInfoView extends StatelessWidget {
             children: [
               _SectionCard(
                 icon: Icons.person_outline_rounded,
-                title: 'Basic Information',
+                title: EnumLocale.txtBasicInformation.name.tr,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -447,7 +447,7 @@ class EditProfileEditInfoView extends StatelessWidget {
                       _sectionLabel('Confirm Password'),
                       CustomTextField(
                         filled: true,
-                        hintText: 'Re-enter password',
+                        hintText: EnumLocale.txtReEnterPassword.name.tr,
                         controller: logic.confirmPasswordCnt,
                         obscureText: true,
                         borderColor: AppColors.redesignSoftBorder,
@@ -495,7 +495,7 @@ class EditProfileEditInfoView extends StatelessWidget {
               const SizedBox(height: 12),
               _SectionCard(
                 icon: Icons.phone_iphone_rounded,
-                title: 'Contact Information',
+                title: EnumLocale.txtContactInformation.name.tr,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

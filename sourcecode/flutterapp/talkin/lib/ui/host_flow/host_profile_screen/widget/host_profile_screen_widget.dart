@@ -184,7 +184,7 @@ class HostProfileTopView extends StatelessWidget {
                                         ),
                                       ),
                                       child: Text(
-                                        'Expert',
+                                        EnumLocale.txtListener.name.tr,
                                         style: AppFontStyle.fontStyleW600(
                                           fontSize: 10,
                                           fontColor:
@@ -234,7 +234,7 @@ class HostProfileTopView extends StatelessWidget {
                           Expanded(
                             child: _ProfileActionButton(
                               icon: Icons.dynamic_feed_rounded,
-                              title: 'My Posts',
+                              title: EnumLocale.txtMyPosts.name.tr,
                               isPrimary: false,
                               onTap: () {
                                 final isListener = Database
@@ -274,7 +274,7 @@ class HostProfileTopView extends StatelessWidget {
                           Expanded(
                             child: _ProfileActionButton(
                               icon: Icons.edit_outlined,
-                              title: 'Edit Expert',
+                              title: EnumLocale.txtEditExpert.name.tr,
                               isPrimary: true,
                               onTap: () {
                                 Get.toNamed(AppRoutes.hostListenersDetailScreen)
@@ -367,8 +367,8 @@ class HostProfileOptionsView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _SectionTitle(
-                          title: 'Quick Access',
-                          subtitle: 'Shortcuts for your daily actions',
+                          title: EnumLocale.txtQuickAccess.name.tr,
+                          subtitle: EnumLocale.txtShortcutsForYourDailyActions.name.tr,
                           isTablet: isTablet,
                         ),
                         const SizedBox(height: 10),
@@ -388,7 +388,7 @@ class HostProfileOptionsView extends StatelessWidget {
                               Expanded(
                                 child: _QuickActionTile(
                                   icon: AppAsset.calendar,
-                                  title: 'Availability',
+                                  title: EnumLocale.txtAvailability.name.tr,
                                   onTap: () {
                                     Get.toNamed(
                                       AppRoutes.hostAvailabilityScreen,
@@ -421,16 +421,16 @@ class HostProfileOptionsView extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         _SectionTitle(
-                          title: 'Verification',
-                          subtitle: 'Blue tick badge status and application',
+                          title: EnumLocale.txtVerification.name.tr,
+                          subtitle: EnumLocale.txtBlueTickBadgeStatusAndApplication.name.tr,
                           isTablet: isTablet,
                         ),
                         const SizedBox(height: 10),
                         _VerificationCard(),
                         const SizedBox(height: 16),
                         _SectionTitle(
-                          title: 'Account & More',
-                          subtitle: 'Account tools and privacy controls',
+                          title: EnumLocale.txtAccountMore.name.tr,
+                          subtitle: EnumLocale.txtAccountToolsAndPrivacyControls.name.tr,
                           isTablet: isTablet,
                         ),
                         const SizedBox(height: 10),
@@ -583,7 +583,7 @@ class _IdChip extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'ID $id',
+                'ID @id'.trParams({'id': id}),
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 11,
                   fontColor: AppColors.redesignBrandRed,

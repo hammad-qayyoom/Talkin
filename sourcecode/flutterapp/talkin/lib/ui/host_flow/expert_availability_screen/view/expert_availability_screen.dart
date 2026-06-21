@@ -1,3 +1,5 @@
+import 'package:notisboard/utils/enums.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -391,7 +393,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
                 ),
                 const SizedBox(height: 14),
                 Text(
-                  'Select Day',
+                  EnumLocale.txtSelectDay.name.tr,
                   style: AppFontStyle.fontStyleW700(
                     fontSize: 16,
                     fontColor: AppColors.redesignBrandDark,
@@ -505,7 +507,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
             children: [
               Expanded(
                 child: Text(
-                  'Create Slot',
+                  EnumLocale.txtCreateSlot.name.tr,
                   style: AppFontStyle.fontStyleW700(
                     fontSize: 16,
                     fontColor: AppColors.redesignBrandDark,
@@ -559,7 +561,9 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Day: ${_dayLabel(_selectedDay)}',
+                        EnumLocale.txtDayLabel.name.trParams({
+                          'day': _dayLabel(_selectedDay),
+                        }),
                         style: AppFontStyle.fontStyleW600(
                           fontSize: 13,
                           fontColor: AppColors.redesignBrandDark,
@@ -578,7 +582,9 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Service Type: ${_serviceTypeLabel()}',
+            EnumLocale.txtServiceTypeLabel.name.trParams({
+              'serviceType': _serviceTypeLabel(),
+            }),
             style: AppFontStyle.fontStyleW500(
               fontSize: 11,
               fontColor: AppColors.redesignMutedText,
@@ -586,7 +592,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
           ),
           const SizedBox(height: 3),
           Text(
-            'Slot duration: $_configuredSlotDurationMinutes min  |  Timezone: $_configuredBookingTimezone',
+            'Slot duration: @_configuredSlotDurationMinutes min  |  Timezone: @_configuredBookingTimezone'.trParams({'_configuredSlotDurationMinutes': _configuredSlotDurationMinutes.toString(), '_configuredBookingTimezone': _configuredBookingTimezone}),
             style: AppFontStyle.fontStyleW500(
               fontSize: 11,
               fontColor: AppColors.redesignMutedText,
@@ -656,7 +662,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
               onPressed: _addSlot,
               icon: const Icon(Icons.add_circle_outline_rounded, size: 16),
               label: Text(
-                'Add Slot',
+                EnumLocale.txtAddSlot.name.tr,
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 13,
                   fontColor: AppColors.white,
@@ -699,7 +705,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'No availability slots yet.',
+                EnumLocale.txtNoAvailabilitySlotsYet.name.tr,
                 textAlign: TextAlign.center,
                 style: AppFontStyle.fontStyleW600(
                   fontSize: 13,
@@ -708,7 +714,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
               ),
               const SizedBox(height: 4),
               Text(
-                'Create your first slot using the section above.',
+                EnumLocale.txtCreateYourFirstSlotUsingTheSectionAbove.name.tr,
                 textAlign: TextAlign.center,
                 style: AppFontStyle.fontStyleW500(
                   fontSize: 11,
@@ -773,7 +779,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$start - $end',
+                  '@start - @end'.trParams({'start': start, 'end': end}),
                   style: AppFontStyle.fontStyleW700(
                     fontSize: 14,
                     fontColor: AppColors.redesignBrandDark,
@@ -781,7 +787,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  '$duration min  |  $timezone',
+                  '@duration min  |  @timezone'.trParams({'duration': duration.toString(), 'timezone': timezone}),
                   style: AppFontStyle.fontStyleW500(
                     fontSize: 11,
                     fontColor: AppColors.redesignMutedText,
@@ -843,7 +849,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
             children: [
               Expanded(
                 child: Text(
-                  'Scheduled Slots',
+                  EnumLocale.txtScheduledSlots.name.tr,
                   style: AppFontStyle.fontStyleW700(
                     fontSize: 16,
                     fontColor: AppColors.redesignBrandDark,
@@ -861,7 +867,9 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
                   border: Border.all(color: AppColors.redesignSoftBorder),
                 ),
                 child: Text(
-                  '${_slots.length} slots',
+                  EnumLocale.txtSlotsCount.name.trParams({
+                    'count': '${_slots.length}',
+                  }),
                   style: AppFontStyle.fontStyleW600(
                     fontSize: 10,
                     fontColor: AppColors.redesignMutedText,
@@ -933,7 +941,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
                           ),
                           Expanded(
                             child: Text(
-                              'Manage Availability',
+                              EnumLocale.txtManageAvailability.name.tr,
                               textAlign: TextAlign.center,
                               style: AppFontStyle.fontStyleW700(
                                 fontSize: isTablet ? 24 : 18,
@@ -1040,7 +1048,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
                           ),
                         )
                       : Text(
-                          'Save Availability',
+                          EnumLocale.txtSaveAvailability.name.tr,
                           style: AppFontStyle.fontStyleW700(
                             fontSize: 14,
                             fontColor: AppColors.white,

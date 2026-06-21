@@ -98,7 +98,7 @@ class ShareAppBottomSheet extends StatelessWidget {
                     fontSize: 12, fontColor: AppColors.black),
                 maxLines: 3,
                 decoration: InputDecoration(
-                  hintText: "Write your review here...",
+                  hintText: EnumLocale.txtWriteYourReviewHere.name.tr,
                   hintStyle: AppFontStyle.fontStyleW500(
                       fontSize: 12,
                       fontColor: AppColors.darkGrey.withValues(alpha: 0.3)),

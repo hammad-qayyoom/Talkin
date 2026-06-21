@@ -45,7 +45,7 @@ class HostSettingScreenAppBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Privacy, language and account controls',
+                  EnumLocale.txtPrivacyLanguageAndAccountControls.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: isTablet ? 12 : 11,
                     fontColor: AppColors.redesignMutedText,
@@ -133,14 +133,14 @@ class HostSettingView extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   _SectionLabel(
-                    title: 'Preferences',
+                    title: EnumLocale.txtPreferences.name.tr,
                     isTablet: isTablet,
                   ),
                   const SizedBox(height: 8),
                   _SettingsLane(
                     iconAsset: AppAsset.notification,
                     title: EnumLocale.txtNotification.name.tr,
-                    subtitle: 'Get alerts for calls and updates',
+                    subtitle: EnumLocale.txtGetAlertsForCallsAndUpdates.name.tr,
                     isTablet: isTablet,
                     onTap: () {
                       controller.onSwitchNotification(
@@ -163,8 +163,8 @@ class HostSettingView extends StatelessWidget {
                   const SizedBox(height: 10),
                   _SettingsLane(
                     iconAsset: AppAsset.quickLoginIcon,
-                    title: 'Face ID / Biometric Login',
-                    subtitle: 'Unlock your app with biometrics',
+                    title: EnumLocale.txtFaceIdBiometricLogin.name.tr,
+                    subtitle: EnumLocale.txtUnlockYourAppWithBiometrics.name.tr,
                     isTablet: isTablet,
                     onTap: () {
                       controller.onSwitchBiometric(
@@ -187,8 +187,8 @@ class HostSettingView extends StatelessWidget {
                   const SizedBox(height: 10),
                   _SettingsLane(
                     iconAsset: AppAsset.loginBonusIcon,
-                    title: 'Invite & Earn',
-                    subtitle: 'Share your referral code and track rewards',
+                    title: EnumLocale.txtInviteEarn.name.tr,
+                    subtitle: EnumLocale.txtShareYourReferralCodeAndTrackRewards.name.tr,
                     isTablet: isTablet,
                     onTap: () {
                       Get.toNamed(AppRoutes.referralScreen);
@@ -196,14 +196,14 @@ class HostSettingView extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   _SectionLabel(
-                    title: 'Account',
+                    title: EnumLocale.txtAccount.name.tr,
                     isTablet: isTablet,
                   ),
                   const SizedBox(height: 8),
                   _SettingsLane(
                     iconAsset: AppAsset.logOut,
                     title: EnumLocale.txtLogoutApp.name.tr,
-                    subtitle: 'Sign out from this device',
+                    subtitle: EnumLocale.txtSignOutFromThisDevice.name.tr,
                     isTablet: isTablet,
                     onTap: () {
                       Utils.showConfirmationSnackBar(
@@ -225,7 +225,7 @@ class HostSettingView extends StatelessWidget {
                     _SettingsLane(
                       iconAsset: AppAsset.delete,
                       title: EnumLocale.txtDeleteAccount.name.tr,
-                      subtitle: 'Permanently remove your account data',
+                      subtitle: EnumLocale.txtPermanentlyRemoveYourAccountData.name.tr,
                       isTablet: isTablet,
                       isDestructive: true,
                       onTap: () {
@@ -334,7 +334,7 @@ class _SettingsControlCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
-                  'Control Hub',
+                  EnumLocale.txtControlHub.name.tr,
                   style: AppFontStyle.fontStyleW700(
                     fontSize: isTablet ? 12 : 11,
                     fontColor: AppColors.white,

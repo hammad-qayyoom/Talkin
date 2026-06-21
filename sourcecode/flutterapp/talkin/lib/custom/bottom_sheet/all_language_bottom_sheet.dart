@@ -61,7 +61,7 @@ class _AllLanguageBottomSheetState extends State<AllLanguageBottomSheet> {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          "Done",
+                          EnumLocale.txtDone.name.tr,
                           style: AppFontStyle.fontStyleW500(
                               fontSize: 14, fontColor: AppColors.onBoardingTxt),
                         ),

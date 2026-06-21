@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -77,7 +78,7 @@ class AppReviewService {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Enjoying Notisboard?',
+                EnumLocale.txtEnjoyingNotisboard.name.tr,
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 20,
                   fontColor: AppColors.redesignBrandDark,
@@ -85,7 +86,7 @@ class AppReviewService {
               ),
               const SizedBox(height: 8),
               Text(
-                'Please take a moment to rate us. Your feedback helps us improve.',
+                EnumLocale.txtPleaseTakeAMomentToRateUsYourFeedbackHelpsUsImprove.name.tr,
                 style: AppFontStyle.fontStyleW500(
                   fontSize: 14,
                   fontColor: AppColors.redesignMutedText,
@@ -130,7 +131,7 @@ class AppReviewService {
                     await _requestNativeOrFallback();
                   },
                   child: Text(
-                    'Rate Now',
+                    EnumLocale.txtRateNow.name.tr,
                     style: AppFontStyle.fontStyleW600(
                       fontSize: 15,
                       fontColor: AppColors.white,

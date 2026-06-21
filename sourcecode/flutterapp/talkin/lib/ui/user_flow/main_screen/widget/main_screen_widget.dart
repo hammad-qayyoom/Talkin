@@ -80,7 +80,7 @@ class MainScreenView extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          "Welcome back",
+                          EnumLocale.txtWelcomeBack.name.tr,
                           style: AppFontStyle.fontStyleW700(
                             fontSize: 30,
                             fontColor: _brandDark,
@@ -88,7 +88,7 @@ class MainScreenView extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          "Browse experts freely, or log in to book sessions and manage your account.",
+                          EnumLocale.txtBrowseExpertsFreelyOrLogInToBookSessionsAndManageYourAccount.name.tr,
                           style: AppFontStyle.fontStyleW500(
                             fontSize: 14,
                             fontColor: _mutedText,
@@ -116,7 +116,7 @@ class MainScreenView extends StatelessWidget {
                               const SizedBox(height: 8),
                               _buildTextField(
                                 controller: controller.emailController,
-                                hintText: 'Email address',
+                                hintText: EnumLocale.txtEmailAddress.name.tr,
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
                                 prefixIcon: Icon(
@@ -130,7 +130,7 @@ class MainScreenView extends StatelessWidget {
                               const SizedBox(height: 8),
                               _buildTextField(
                                 controller: controller.passwordController,
-                                hintText: 'Password',
+                                hintText: EnumLocale.txtPassword.name.tr,
                                 textInputAction: TextInputAction.done,
                                 obscureText: controller.isObscure,
                                 prefixIcon: Icon(
@@ -227,7 +227,7 @@ class MainScreenView extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12),
                               child: Text(
-                                "or",
+                                EnumLocale.txtOr.name.tr,
                                 style: AppFontStyle.fontStyleW500(
                                   fontSize: 12,
                                   fontColor: _mutedText,

@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -149,7 +150,7 @@ class SplashScreenView extends GetView<SplashScreenController> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    "Fast, private conversations with experts you trust.",
+                                    EnumLocale.txtFastPrivateConversationsWithExpertsYouTrust.name.tr,
                                     textAlign: TextAlign.center,
                                     style: AppFontStyle.fontStyleW500(
                                       fontSize: isTablet ? 16 : 15,
@@ -180,7 +181,7 @@ class SplashScreenView extends GetView<SplashScreenController> {
                               ),
                               const SizedBox(width: 10),
                               Text(
-                                "Setting things up...",
+                                EnumLocale.txtSettingThingsUp.name.tr,
                                 style: AppFontStyle.fontStyleW600(
                                   fontSize: 14,
                                   fontColor: _brandDark,

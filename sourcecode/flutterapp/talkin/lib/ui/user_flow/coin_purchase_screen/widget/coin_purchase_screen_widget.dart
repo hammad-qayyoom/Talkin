@@ -29,7 +29,7 @@ class CoinPurchaseTopView extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              "Subscription payment completed successfully",
+              EnumLocale.txtSubscriptionPaymentCompletedSuccessfully.name.tr,
               style: AppFontStyle.fontStyleW700(
                 fontSize: 18,
                 fontColor: Colors.white,
@@ -65,12 +65,15 @@ class CoinPurchaseView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Subscription Amount",
+                      EnumLocale.txtSubscriptionAmount.name.tr,
                       style: AppFontStyle.fontStyleW500(
                           fontSize: 16, fontColor: Colors.black),
                     ),
                     Text(
-                      "${Database.settingApiModel?.data?.currency?.symbol}${controller.amountPaid ?? 0}",
+                      EnumLocale.txtPriceWithCurrency.name.trParams({
+                        'currency': Database.settingApiModel?.data?.currency?.symbol ?? '',
+                        'price': '${controller.amountPaid ?? 0}',
+                      }),
                       style: AppFontStyle.fontStyleW800(
                           fontSize: 20, fontColor: Colors.black),
                     ),

@@ -215,7 +215,7 @@ class ChatScreenAppBar extends StatelessWidget {
                     if (controller.isBookedSessionWindowEnded) {
                       Utils.showInfoSnackBar(
                         context,
-                        title: 'Session ended',
+                        title: EnumLocale.txtSessionEnded.name.tr,
                         message:
                             'Session slot time is completed. Call is no longer allowed.',
                         icon: Icons.schedule_rounded,
@@ -378,7 +378,7 @@ class PersonalChatBottomView extends StatelessWidget {
                             onTap: () {
                               Utils.showInfoSnackBar(
                                 Get.context!,
-                                title: 'Voice note',
+                                title: EnumLocale.txtVoiceNote.name.tr,
                                 message: EnumLocale
                                     .txtLongPressToEnableAudioRecording.name.tr,
                                 icon: Icons.mic_rounded,
@@ -428,7 +428,7 @@ class PersonalChatBottomView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    hintText: "Write a message...",
+                    hintText: EnumLocale.txtWriteAMessage.name.tr,
                     hintStyle: AppFontStyle.fontStyleW500(
                       fontSize: 15,
                       fontColor: _chatMutedText,

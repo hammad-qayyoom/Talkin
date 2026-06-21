@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
@@ -619,11 +620,11 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
       showDragHandle: true,
       builder: (context) {
         return SafeArea(
-          child: participants.isEmpty
-              ? const SizedBox(
-                  height: 180,
-                  child: Center(child: Text('No participants yet.')),
-                )
+                  child: participants.isEmpty
+                      ? SizedBox(
+                          height: 180,
+                          child: Center(child: Text(EnumLocale.txtNoParticipantsYet.name.tr)),
+                        )
               : ListView.separated(
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
@@ -640,7 +641,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
 
                     return ListTile(
                       title: Text(name),
-                      subtitle: Text('Status: $status'),
+                      subtitle: Text('Status: @status'.trParams({'status': status})),
                     );
                   },
                   separatorBuilder: (_, __) => const Divider(height: 1),
@@ -824,7 +825,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
         ),
         icon: const Icon(Icons.groups_2_outlined, size: 16),
         label: Text(
-          'Participants',
+          EnumLocale.txtParticipants.name.tr,
           style: AppFontStyle.fontStyleW600(
             fontSize: 12,
             fontColor: _brandDark,
@@ -897,7 +898,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
               )
             : const Icon(Icons.task_alt_rounded, size: 16),
         label: Text(
-          'End & Settle',
+          EnumLocale.txtEndSettle.name.tr,
           style: AppFontStyle.fontStyleW600(
             fontSize: 12,
             fontColor: AppColors.white,
@@ -921,7 +922,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
         ),
         icon: const Icon(Icons.close_rounded, size: 16),
         label: Text(
-          'Cancel',
+          EnumLocale.txtCancel.name.tr,
           style: AppFontStyle.fontStyleW600(
             fontSize: 12,
             fontColor: _brandRedDark,
@@ -1003,7 +1004,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
             children: [
               Expanded(
                 child: Text(
-                  'Price: $priceLabel',
+                  'Price: @priceLabel'.trParams({'priceLabel': priceLabel}),
                   style: AppFontStyle.fontStyleW600(
                     fontSize: 11,
                     fontColor: isFree
@@ -1013,7 +1014,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
                 ),
               ),
               Text(
-                'Seats: $availableSeats',
+                'Seats: @availableSeats'.trParams({'availableSeats': availableSeats.toString()}),
                 style: AppFontStyle.fontStyleW500(
                   fontSize: 11,
                   fontColor: _mutedText,
@@ -1089,7 +1090,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                'No group sessions found',
+                EnumLocale.txtNoGroupSessionsFound.name.tr,
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 14,
                   fontColor: _brandDark,
@@ -1180,7 +1181,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
         scrolledUnderElevation: 0,
         backgroundColor: _screenBackground,
         title: Text(
-          'Group Sessions',
+          EnumLocale.txtGroupSessions.name.tr,
           style: AppFontStyle.fontStyleW700(
             fontSize: isTabletAppBar ? 22 : 16,
             fontColor: _brandDark,
@@ -1214,7 +1215,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
                       size: 16,
                     ),
               label: Text(
-                'Create',
+                EnumLocale.txtCreate.name.tr,
                 style: AppFontStyle.fontStyleW600(
                   fontSize: 12,
                   fontColor: AppColors.white,
@@ -1296,7 +1297,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Group Session Desk',
+                                        EnumLocale.txtGroupSessionDesk.name.tr,
                                         style: AppFontStyle.fontStyleW700(
                                           fontSize: isTablet ? 14 : 13,
                                           fontColor: AppColors.white,
@@ -1332,7 +1333,9 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
                                   child: Column(
                                     children: [
                                       Text(
-                                        '${_filteredSessions.length}',
+                                        EnumLocale.txtSessionCount.name.trParams({
+                                          'count': '${_filteredSessions.length}',
+                                        }),
                                         style: AppFontStyle.fontStyleW700(
                                           fontSize: isTablet ? 15 : 13,
                                           fontColor: AppColors.white,
@@ -1340,8 +1343,8 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
                                       ),
                                       Text(
                                         _view == 'upcoming'
-                                            ? 'Upcoming'
-                                            : 'Done',
+                                            ? EnumLocale.txtUpcoming.name.tr
+                                            : EnumLocale.txtDone.name.tr,
                                         style: AppFontStyle.fontStyleW500(
                                           fontSize: 8,
                                           fontColor: AppColors.white
@@ -1619,7 +1622,7 @@ class _CreateGroupSessionDialogState extends State<_CreateGroupSessionDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Create Group Session',
+                            EnumLocale.txtCreateGroupSession.name.tr,
                             style: AppFontStyle.fontStyleW700(
                               fontSize: 20,
                               fontColor: AppColors.redesignBrandDark,
@@ -1627,7 +1630,7 @@ class _CreateGroupSessionDialogState extends State<_CreateGroupSessionDialog> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Set title, type, duration and start time',
+                            EnumLocale.txtSetTitleTypeDurationAndStartTime.name.tr,
                             style: AppFontStyle.fontStyleW500(
                               fontSize: 11,
                               fontColor: AppColors.redesignMutedText,
@@ -1665,14 +1668,14 @@ class _CreateGroupSessionDialogState extends State<_CreateGroupSessionDialog> {
                   initialValue: _selectedCallType,
                   isExpanded: true,
                   decoration: _inputDecoration('Select type'),
-                  items: const [
+                  items: [
                     DropdownMenuItem(
                       value: 'audio',
-                      child: Text('Audio'),
+                      child: Text(EnumLocale.txtAudio.name.tr),
                     ),
                     DropdownMenuItem(
                       value: 'video',
-                      child: Text('Video'),
+                      child: Text(EnumLocale.txtVideo.name.tr),
                     ),
                   ],
                   onChanged: (value) {
@@ -1757,7 +1760,7 @@ class _CreateGroupSessionDialogState extends State<_CreateGroupSessionDialog> {
                             ),
                           ),
                           child: Text(
-                            'Cancel',
+                            EnumLocale.txtCancel.name.tr,
                             style: AppFontStyle.fontStyleW600(
                               fontSize: 14,
                               fontColor: AppColors.redesignBrandRedDark,
@@ -1781,7 +1784,7 @@ class _CreateGroupSessionDialogState extends State<_CreateGroupSessionDialog> {
                             ),
                           ),
                           child: Text(
-                            'Create',
+                            EnumLocale.txtCreate.name.tr,
                             style: AppFontStyle.fontStyleW600(
                               fontSize: 14,
                               fontColor: AppColors.white,

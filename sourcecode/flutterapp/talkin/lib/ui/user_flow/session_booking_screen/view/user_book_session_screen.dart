@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
@@ -391,7 +392,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Book Session',
+                      EnumLocale.txtBookSession.name.tr,
                       style: AppFontStyle.fontStyleW700(
                         fontSize: isTablet ? 22 : 20,
                         fontColor: AppColors.redesignBrandDark,
@@ -399,7 +400,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Pick a time that works for you',
+                      EnumLocale.txtPickATimeThatWorksForYou.name.tr,
                       style: AppFontStyle.fontStyleW500(
                         fontSize: 11,
                         fontColor: AppColors.redesignMutedText,
@@ -647,7 +648,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
         ),
         const SizedBox(height: 12),
         Text(
-          'No slots available',
+          EnumLocale.txtNoSlotsAvailable.name.tr,
           textAlign: TextAlign.center,
           style: AppFontStyle.fontStyleW700(
             fontSize: 20,
@@ -656,7 +657,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
         ),
         const SizedBox(height: 6),
         Text(
-          'Please choose another date to view available time slots.',
+          EnumLocale.txtPleaseChooseAnotherDateToViewAvailableTimeSlots.name.tr,
           textAlign: TextAlign.center,
           style: AppFontStyle.fontStyleW500(
             fontSize: 12,
@@ -723,7 +724,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
                                 ),
                               )
                             : Text(
-                                'Confirm Booking',
+                                EnumLocale.txtConfirmBooking.name.tr,
                                 style: AppFontStyle.fontStyleW700(
                                   fontSize: 17,
                                   fontColor: _canConfirmBooking
@@ -792,7 +793,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'Expert is currently unavailable for Audio/Video sessions.',
+                              EnumLocale.txtExpertIsCurrentlyUnavailableForAudioVideoSessions.name.tr,
                               style: AppFontStyle.fontStyleW500(
                                 fontSize: 12,
                                 fontColor: AppColors.redesignMutedText,
@@ -817,7 +818,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Times are shown in your local timezone. Booking policy timezone: $_bookingTimezone.',
+                            'Times are shown in your local timezone. Booking policy timezone: @_bookingTimezone.'.trParams({'_bookingTimezone': _bookingTimezone}),
                             style: AppFontStyle.fontStyleW500(
                               fontSize: 11,
                               fontColor: AppColors.redesignMutedText,

@@ -163,7 +163,7 @@ class TopListenersViewAllView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$total Top Experts',
+                  '@total Top Experts'.trParams({'total': total.toString()}),
                   style: AppFontStyle.fontStyleW700(
                     fontSize: isTablet ? 16 : 14,
                     fontColor: AppColors.white,
@@ -171,7 +171,7 @@ class TopListenersViewAllView extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Discover and book sessions quickly',
+                  EnumLocale.txtDiscoverAndBookSessionsQuickly.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: isTablet ? 12 : 11,
                     fontColor: AppColors.white.withValues(alpha: 0.9),
@@ -216,7 +216,7 @@ class TopListenersViewAllView extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               Text(
-                'No experts found',
+                EnumLocale.txtNoExpertsFound.name.tr,
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 18,
                   fontColor: AppColors.redesignBrandDark,
@@ -224,7 +224,7 @@ class TopListenersViewAllView extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                'Top experts will appear here once available.',
+                EnumLocale.txtTopExpertsWillAppearHereOnceAvailable.name.tr,
                 textAlign: TextAlign.center,
                 style: AppFontStyle.fontStyleW500(
                   fontSize: 13,
@@ -558,7 +558,7 @@ class _TopExpertCard extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    '$name$ageSuffix',
+                                    '@name@ageSuffix'.trParams({'name': name, 'ageSuffix': ageSuffix}),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: AppFontStyle.fontStyleW700(

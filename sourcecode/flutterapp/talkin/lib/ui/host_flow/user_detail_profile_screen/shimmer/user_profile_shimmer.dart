@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -89,7 +90,7 @@ class UserProfileShimmer extends StatelessWidget {
           12.height,
 
           // Personal Details section
-          _sectionTitle(title: "Personal Details :"),
+          _sectionTitle(title: EnumLocale.txtPersonalDetails.name.tr),
           _detailRow(),
           _detailRow(),
           _detailRow(),

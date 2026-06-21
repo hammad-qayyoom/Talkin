@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/app_button/primary_app_button.dart';
@@ -45,7 +46,7 @@ class ManualVerificationAppBar extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  'Blue Tick Verification',
+                  EnumLocale.txtBlueTickVerification.name.tr,
                   style: AppFontStyle.fontStyleW700(
                     fontSize: screenWidth >= 760 ? 28 : 20,
                     fontColor: AppColors.redesignBrandDark,
@@ -97,7 +98,7 @@ class ManualVerificationBody extends StatelessWidget {
                     color: AppColors.redesignBrandRed,
                     borderColor: AppColors.redesignBrandRed,
                     child: Text(
-                      'Retry',
+                      EnumLocale.txtRetry.name.tr,
                       style: AppFontStyle.fontStyleW600(
                         fontSize: 13,
                         fontColor: AppColors.white,
@@ -175,7 +176,7 @@ class _AutoVerificationSection extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'Automatic Blue Tick',
+                  EnumLocale.txtAutomaticBlueTick.name.tr,
                   style: AppFontStyle.fontStyleW700(
                     fontSize: 16,
                     fontColor: AppColors.redesignBrandDark,
@@ -191,7 +192,7 @@ class _AutoVerificationSection extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
-                    'Earned',
+                    EnumLocale.txtEarned.name.tr,
                     style: AppFontStyle.fontStyleW600(
                       fontSize: 11,
                       fontColor: AppColors.white,
@@ -203,7 +204,7 @@ class _AutoVerificationSection extends StatelessWidget {
           const SizedBox(height: 12),
           if (!isEnabled)
             Text(
-              'Automatic verification is currently disabled by admin.',
+              EnumLocale.txtAutomaticVerificationIsCurrentlyDisabledByAdmin.name.tr,
               style: AppFontStyle.fontStyleW500(
                 fontSize: 13,
                 fontColor: AppColors.redesignMutedText,
@@ -211,7 +212,7 @@ class _AutoVerificationSection extends StatelessWidget {
             )
           else ...[
             Text(
-              'Complete $threshold sessions to get the blue tick automatically. You have completed $completed sessions so far.',
+              'Complete @threshold sessions to get the blue tick automatically. You have completed @completed sessions so far.'.trParams({'threshold': '$threshold', 'completed': '$completed'}),
               style: AppFontStyle.fontStyleW500(
                 fontSize: 13,
                 fontColor: AppColors.redesignMutedText,
@@ -228,7 +229,13 @@ class _AutoVerificationSection extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '$sessionsRemaining more session${sessionsRemaining == 1 ? '' : 's'} needed',
+                sessionsRemaining == 1
+                    ? EnumLocale.txtSessionsRemainingSingular.name.trParams({
+                        'sessionsRemaining': '$sessionsRemaining',
+                      })
+                    : EnumLocale.txtSessionsRemainingPlural.name.trParams({
+                        'sessionsRemaining': '$sessionsRemaining',
+                      }),
                 style: AppFontStyle.fontStyleW600(
                   fontSize: 12,
                   fontColor: AppColors.redesignMutedText,
@@ -291,7 +298,7 @@ class _ManualVerificationSection extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'Manual Blue Tick',
+                  EnumLocale.txtManualBlueTick.name.tr,
                   style: AppFontStyle.fontStyleW700(
                     fontSize: 16,
                     fontColor: AppColors.redesignBrandDark,
@@ -306,7 +313,7 @@ class _ManualVerificationSection extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
-                    'Under Review',
+                    EnumLocale.txtUnderReview.name.tr,
                     style: AppFontStyle.fontStyleW600(
                       fontSize: 11,
                       fontColor: AppColors.white,
@@ -321,7 +328,7 @@ class _ManualVerificationSection extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
-                    'Verified',
+                    EnumLocale.txtVerified.name.tr,
                     style: AppFontStyle.fontStyleW600(
                       fontSize: 11,
                       fontColor: AppColors.white,
@@ -336,7 +343,7 @@ class _ManualVerificationSection extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
-                    'Rejected',
+                    EnumLocale.txtRejected.name.tr,
                     style: AppFontStyle.fontStyleW600(
                       fontSize: 11,
                       fontColor: AppColors.white,
@@ -348,7 +355,7 @@ class _ManualVerificationSection extends StatelessWidget {
           const SizedBox(height: 12),
           if (isNotApplied) ...[
             Text(
-              'Celebrities and public figures can apply for a blue tick by submitting evidence documents. Admin will review and approve manually.',
+              EnumLocale.txtCelebritiesAndPublicFiguresCanApplyForABlueTickBySubmittingE.name.tr,
               style: AppFontStyle.fontStyleW500(
                 fontSize: 13,
                 fontColor: AppColors.redesignMutedText,
@@ -382,7 +389,7 @@ class _ManualVerificationSection extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      'Your verification request is under review. Admin will respond within a few days.',
+                      EnumLocale.txtYourVerificationRequestIsUnderReviewAdminWillRespondWithinAF.name.tr,
                       style: AppFontStyle.fontStyleW500(
                         fontSize: 13,
                         fontColor: AppColors.redesignBrandDark,
@@ -415,7 +422,7 @@ class _ManualVerificationSection extends StatelessWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          'Your verification was rejected.',
+                          EnumLocale.txtYourVerificationWasRejected.name.tr,
                           style: AppFontStyle.fontStyleW600(
                             fontSize: 14,
                             fontColor: AppColors.redesignBrandDark,
@@ -427,7 +434,9 @@ class _ManualVerificationSection extends StatelessWidget {
                   if ((statusData?.manualVerificationRejectionReason ?? '').isNotEmpty) ...[
                     const SizedBox(height: 8),
                     Text(
-                      'Reason: ${statusData!.manualVerificationRejectionReason}',
+                      EnumLocale.txtReasonWithDetail.name.trParams({
+                        'reason': statusData!.manualVerificationRejectionReason,
+                      }),
                       style: AppFontStyle.fontStyleW500(
                         fontSize: 13,
                         fontColor: AppColors.redesignMutedText,
@@ -436,7 +445,7 @@ class _ManualVerificationSection extends StatelessWidget {
                   ],
                   const SizedBox(height: 12),
                   Text(
-                    'You can submit new documents for re-verification.',
+                    EnumLocale.txtYouCanSubmitNewDocumentsForReVerification.name.tr,
                     style: AppFontStyle.fontStyleW500(
                       fontSize: 12,
                       fontColor: AppColors.redesignMutedText,
@@ -469,7 +478,7 @@ class _ManualVerificationSection extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      'You are verified with a manual blue tick.',
+                      EnumLocale.txtYouAreVerifiedWithAManualBlueTick.name.tr,
                       style: AppFontStyle.fontStyleW500(
                         fontSize: 13,
                         fontColor: AppColors.redesignBrandDark,
@@ -496,7 +505,7 @@ class _DocumentUploadSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Upload Documents (PDF, JPG, PNG)',
+          EnumLocale.txtUploadDocumentsPdfJpgPng.name.tr,
           style: AppFontStyle.fontStyleW600(
             fontSize: 13,
             fontColor: AppColors.redesignBrandDark,
@@ -504,7 +513,9 @@ class _DocumentUploadSection extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          'Up to ${ManualVerificationController.maxFiles} files. You are sharing this with the admin for review purposes.',
+          EnumLocale.txtMaxFilesDescription.name.trParams({
+            'maxFiles': '${ManualVerificationController.maxFiles}',
+          }),
           style: AppFontStyle.fontStyleW500(
             fontSize: 11,
             fontColor: AppColors.redesignMutedText,
@@ -566,7 +577,7 @@ class _DocumentUploadSection extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Tap to select files',
+                    EnumLocale.txtTapToSelectFiles.name.tr,
                     style: AppFontStyle.fontStyleW500(
                       fontSize: 13,
                       fontColor: AppColors.redesignMutedText,
@@ -605,7 +616,7 @@ class _SubmitButton extends StatelessWidget {
                   ),
                 )
               : Text(
-                  'Submit for Review',
+                  EnumLocale.txtSubmitForReview.name.tr,
                   style: AppFontStyle.fontStyleW600(
                     fontSize: 15,
                     fontColor: AppColors.white,

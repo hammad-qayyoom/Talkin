@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -250,7 +251,7 @@ class _FeedAuthorProfileScreenState extends State<FeedAuthorProfileScreen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            'No posts to show',
+                            EnumLocale.txtNoPostsToShow.name.tr,
                             style: AppFontStyle.fontStyleW700(
                               fontSize: 15,
                               fontColor: AppColors.black,
@@ -258,7 +259,7 @@ class _FeedAuthorProfileScreenState extends State<FeedAuthorProfileScreen> {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            'This profile has not posted anything yet.',
+                            EnumLocale.txtThisProfileHasNotPostedAnythingYet.name.tr,
                             textAlign: TextAlign.center,
                             style: AppFontStyle.fontStyleW500(
                               fontSize: 12,
@@ -455,7 +456,7 @@ class _ProfileHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Community timeline',
+                  EnumLocale.txtCommunityTimeline.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: 12,
                     fontColor: AppColors.grey,
@@ -466,21 +467,21 @@ class _ProfileHeader extends StatelessWidget {
                   children: [
                     Expanded(
                       child: _HeaderStatTile(
-                        title: 'Posts',
+                        title: EnumLocale.txtPosts.name.tr,
                         value: '$postsCount',
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: _HeaderStatTile(
-                        title: 'Media',
+                        title: EnumLocale.txtMedia.name.tr,
                         value: '$mediaCount',
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: _HeaderStatTile(
-                        title: 'Engagement',
+                        title: EnumLocale.txtEngagement.name.tr,
                         value: '$engagementCount',
                       ),
                     ),
@@ -680,7 +681,7 @@ class _SmallCountPill extends StatelessWidget {
           Icon(icon, size: 15, color: iconColor),
           const SizedBox(width: 5),
           Text(
-            '$count',
+            '@count'.trParams({'count': '$count'}),
             style: AppFontStyle.fontStyleW600(
               fontSize: 12,
               fontColor: AppColors.appColor,

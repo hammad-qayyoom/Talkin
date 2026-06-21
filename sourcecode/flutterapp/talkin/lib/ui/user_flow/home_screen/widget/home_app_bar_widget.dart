@@ -12,6 +12,7 @@ import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/font_style.dart';
 import 'package:notisboard/utils/utils.dart';
+import 'package:notisboard/utils/enums.dart';
 
 class HomeAppBarWidget extends StatelessWidget {
   HomeAppBarWidget({super.key});
@@ -396,7 +397,9 @@ class HomeAppBarWidget extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     child: Text(
-                                      'ID ${Database.fetchLoginUserProfileModel?.user?.uniqueId ?? ''}',
+                                      EnumLocale.txtIdWithUniqueId.name.trParams({
+                                        'uniqueId': Database.fetchLoginUserProfileModel?.user?.uniqueId ?? '',
+                                      }),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: AppFontStyle.fontStyleW600(

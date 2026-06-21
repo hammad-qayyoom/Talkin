@@ -23,7 +23,7 @@ class CoinPlanWidget extends GetView<MyWalletController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Choose a Subscription Plan',
+          EnumLocale.txtChooseASubscriptionPlan.name.tr,
           style: AppFontStyle.fontStyleW700(
             fontSize: 18,
             fontColor: AppColors.redesignBrandDark,
@@ -31,7 +31,7 @@ class CoinPlanWidget extends GetView<MyWalletController> {
         ),
         const SizedBox(height: 3),
         Text(
-          'Select a plan and continue to secure checkout',
+          EnumLocale.txtSelectAPlanAndContinueToSecureCheckout.name.tr,
           style: AppFontStyle.fontStyleW500(
             fontSize: 11,
             fontColor: AppColors.redesignMutedText,
@@ -307,7 +307,7 @@ class AppleSubscriptionDisclosureCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            '$credits session credits. Auto-renews until cancelled in App Store subscriptions.',
+            '@credits session credits. Auto-renews until cancelled in App Store subscriptions.'.trParams({'credits': '$credits'}),
             style: AppFontStyle.fontStyleW600(
               fontSize: 11,
               fontColor: AppColors.redesignMutedText,
@@ -415,7 +415,7 @@ class CoinPlanTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '$credits session credits',
+                      '@credits session credits'.trParams({'credits': '$credits'}),
                       style: AppFontStyle.fontStyleW600(
                         fontSize: 11,
                         fontColor: AppColors.redesignMutedText,
@@ -433,7 +433,7 @@ class CoinPlanTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Text(
-                          'Active',
+                          EnumLocale.txtActive.name.tr,
                           style: AppFontStyle.fontStyleW700(
                             fontSize: 9,
                             fontColor: AppColors.redesignBrandRed,
@@ -594,7 +594,7 @@ class PaymentOptionBottomSheet extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(14),
                               ),
                               child: Text(
-                                'No payment method is enabled',
+                                EnumLocale.txtNoPaymentMethodIsEnabled.name.tr,
                                 style: AppFontStyle.fontStyleW600(
                                   fontSize: 13,
                                   fontColor: AppColors.redesignMutedText,

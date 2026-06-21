@@ -56,7 +56,7 @@ class RecentListeners extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "$name ,$age",
+                        "@name ,@age".trParams({'name': name, 'age': age}),
                         style: AppFontStyle.fontStyleW600(
                             fontSize: 14, fontColor: AppColors.appDarkColor),
                       ).paddingOnly(bottom: 6),

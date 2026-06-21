@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -186,7 +187,7 @@ class HostTopHomeView extends StatelessWidget {
                             children: [
                               Flexible(
                                 child: Text(
-                                  'ID $uniqueId',
+                                  'ID @uniqueId'.trParams({'uniqueId': uniqueId}),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppFontStyle.fontStyleW600(
@@ -412,7 +413,7 @@ class HostImageView extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    '$rate/session',
+                    '@rate/session'.trParams({'rate': rate}),
                     style: AppFontStyle.fontStyleW700(
                       fontSize: isCompact ? 11 : 12,
                       fontColor: AppColors.white,
@@ -515,7 +516,7 @@ class HostImageView extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'Expert Dashboard',
+                              EnumLocale.txtExpertDashboard.name.tr,
                               style: AppFontStyle.fontStyleW600(
                                 fontSize: 11,
                                 fontColor: AppColors.white,
@@ -602,7 +603,7 @@ class HostImageView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Growth Spotlight',
+                          EnumLocale.txtGrowthSpotlight.name.tr,
                           style: AppFontStyle.fontStyleW700(
                             fontSize: isTablet ? 18 : 16,
                             fontColor: _brandDark,
@@ -639,7 +640,7 @@ class HostImageView extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 14),
                               child: Text(
-                                'No growth spotlight available right now.',
+                                EnumLocale.txtNoGrowthSpotlightAvailableRightNow.name.tr,
                                 textAlign: TextAlign.center,
                                 style: AppFontStyle.fontStyleW500(
                                   fontSize: isTablet ? 14 : 12,
@@ -833,7 +834,7 @@ class PermissionView extends StatelessWidget {
                 return CustomSwitchView(
                   iconData: Icons.call_rounded,
                   text: 'Accept Audio Calls',
-                  subtitle: 'Receive private audio session requests',
+                  subtitle: EnumLocale.txtReceivePrivateAudioSessionRequests.name.tr,
                   callCoin: Database
                           .fetchListenerProfileModel?.data?.ratePrivateAudioCall
                           .toString() ??
@@ -858,7 +859,7 @@ class PermissionView extends StatelessWidget {
                 return CustomSwitchView(
                   iconData: Icons.videocam_rounded,
                   text: 'Accept Video Calls',
-                  subtitle: 'Receive private video session requests',
+                  subtitle: EnumLocale.txtReceivePrivateVideoSessionRequests.name.tr,
                   callCoin: Database
                           .fetchListenerProfileModel?.data?.ratePrivateVideoCall
                           .toString() ??
@@ -1082,7 +1083,7 @@ class CustomSwitchView extends StatelessWidget {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            '$safeCoin/session',
+                            '@safeCoin/session'.trParams({'safeCoin': safeCoin}),
                             style: AppFontStyle.fontStyleW700(
                               fontSize: 12,
                               fontColor: AppColors.redesignCoinText,

@@ -56,7 +56,7 @@ class FakeVoiceCallView extends StatelessWidget {
           children: [
             Icon(Icons.lock, color: AppColors.appColor, size: 15),
             Text(
-              "End-to-end encrypted",
+              EnumLocale.txtEndToEndEncrypted.name.tr,
               textAlign: TextAlign.center,
               style: AppFontStyle.fontStyleW500(
                 fontSize: 13,

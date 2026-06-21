@@ -195,7 +195,7 @@ class CallingScreenItem extends StatelessWidget {
                     width: 18,
                   ),
                   Text(
-                    'Book Session',
+                    EnumLocale.txtBookSession.name.tr,
                     style: AppFontStyle.fontStyleW600(
                         fontSize: 11, fontColor: AppColors.white),
                   ).paddingOnly(left: 6)

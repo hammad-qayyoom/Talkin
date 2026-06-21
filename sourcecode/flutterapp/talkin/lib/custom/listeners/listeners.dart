@@ -115,7 +115,7 @@ class CustomListeners extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    "$name $age",
+                                    "@name @age".trParams({'name': name, 'age': age ?? ''}),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     style: AppFontStyle.fontStyleW600(
@@ -274,7 +274,7 @@ class CustomListeners extends StatelessWidget {
                               width: 19,
                             ).paddingOnly(right: 8),
                             Text(
-                              'Book Session',
+                              EnumLocale.txtBookSession.name.tr,
                               maxLines: 1,
                               softWrap: false,
                               style: AppFontStyle.fontStyleW600(

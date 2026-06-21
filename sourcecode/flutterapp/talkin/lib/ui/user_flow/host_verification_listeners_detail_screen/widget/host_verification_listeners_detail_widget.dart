@@ -50,7 +50,7 @@ class HostVerificationListenersDetailAppBar extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Expert profile and topic setup',
+                      EnumLocale.txtExpertProfileAndTopicSetup.name.tr,
                       style: AppFontStyle.fontStyleW500(
                         fontSize: 12,
                         fontColor: AppColors.redesignMutedText,
@@ -144,7 +144,7 @@ class HostVerificationListenersDetailView extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      'Complete profile details to appear in expert discovery.',
+                      EnumLocale.txtCompleteProfileDetailsToAppearInExpertDiscovery.name.tr,
                       style: AppFontStyle.fontStyleW600(
                         fontSize: 13,
                         fontColor: AppColors.white,
@@ -308,7 +308,7 @@ class HostVerificationListenersDetailView extends StatelessWidget {
                         border: Border.all(color: AppColors.redesignSoftBorder),
                       ),
                       child: Text(
-                        'No languages selected yet.',
+                        EnumLocale.txtNoLanguagesSelectedYet.name.tr,
                         style: AppFontStyle.fontStyleW500(
                           fontSize: 13,
                           fontColor: AppColors.redesignMutedText,
@@ -348,7 +348,7 @@ class HostVerificationListenersDetailView extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             _SectionCard(
-              title: '${EnumLocale.txtTalkAbout.name.tr} :-',
+              title: EnumLocale.txtTalkAboutDashColon.name.tr,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -374,7 +374,7 @@ class HostVerificationListenersDetailView extends StatelessWidget {
                         border: Border.all(color: AppColors.redesignSoftBorder),
                       ),
                       child: Text(
-                        'No topics available right now.',
+                        EnumLocale.txtNoTopicsAvailableRightNow.name.tr,
                         style: AppFontStyle.fontStyleW500(
                           fontSize: 13,
                           fontColor: AppColors.redesignMutedText,

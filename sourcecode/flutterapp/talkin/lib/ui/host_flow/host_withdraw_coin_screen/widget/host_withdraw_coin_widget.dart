@@ -39,7 +39,7 @@ class HostWithdrawCoinAppBar extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                'Transfer your session credits to cash',
+                EnumLocale.txtTransferYourSessionCreditsToCash.name.tr,
                 style: AppFontStyle.fontStyleW500(
                   fontSize: isTablet ? 12 : 11,
                   fontColor: AppColors.redesignMutedText,
@@ -163,7 +163,7 @@ class HostWithdrawCoinTopView extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Ready to Request',
+                      EnumLocale.txtReadyToRequest.name.tr,
                       style: AppFontStyle.fontStyleW700(
                         fontSize: isTablet ? 27 : 21,
                         fontColor: AppColors.white,
@@ -215,7 +215,7 @@ class HostWithdrawCoinTopView extends StatelessWidget {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              '$conversionCredit Session Credit = $currencySymbol 1.00',
+                              '@conversionCredit Session Credit = @currencySymbol 1.00'.trParams({'conversionCredit': conversionCredit, 'currencySymbol': currencySymbol}),
                               style: AppFontStyle.fontStyleW600(
                                 fontSize: 12,
                                 fontColor: AppColors.white,
@@ -285,7 +285,7 @@ class HostWithdrawCoinView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const _SectionChip(title: 'Reward Details'),
+            _SectionChip(title: EnumLocale.txtRewardDetails.name.tr),
             const SizedBox(height: 8),
             Text(
               EnumLocale.txtListenerWithdrawDescription.name.tr,
@@ -306,7 +306,7 @@ class HostWithdrawCoinView extends StatelessWidget {
               ),
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
-                hintText: 'Enter Session Credit',
+                hintText: EnumLocale.txtEnterSessionCredit.name.tr,
                 hintStyle: AppFontStyle.fontStyleW500(
                   fontSize: 13,
                   fontColor: AppColors.redesignMutedText,
@@ -334,7 +334,9 @@ class HostWithdrawCoinView extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 12),
                 child: Text(
-                  '${EnumLocale.txtMinimumWithdrawCoin.name.tr}$minimumPayout',
+                  EnumLocale.txtMinimumWithdrawCoinWithPayout.name.trParams({
+                    'minimumPayout': minimumPayout.toString(),
+                  }),
                   style: AppFontStyle.fontStyleW600(
                     fontSize: 11,
                     fontColor: AppColors.redesignBrandRed,
@@ -706,7 +708,9 @@ class WithdrawDetailsItemUi extends StatelessWidget {
                 borderRadius: BorderRadius.circular(14),
                 borderSide: BorderSide(color: AppColors.redesignBrandRed),
               ),
-              hintText: "Enter your ${title.toLowerCase()}...",
+              hintText: EnumLocale.txtEnterYourField.name.trParams({
+                'field': title.toLowerCase(),
+              }),
               hintStyle: AppFontStyle.fontStyleW500(
                 fontColor: AppColors.redesignMutedText,
                 fontSize: 12,

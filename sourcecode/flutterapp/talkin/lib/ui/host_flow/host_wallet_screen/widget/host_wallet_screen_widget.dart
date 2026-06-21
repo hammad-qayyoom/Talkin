@@ -35,7 +35,7 @@ class HostWalletScreenAppBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Track earned credits and reward requests',
+                  EnumLocale.txtTrackEarnedCreditsAndRewardRequests.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: isTablet ? 12 : 11,
                     fontColor: AppColors.redesignMutedText,
@@ -125,7 +125,7 @@ class HostWalletScreenTopView extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Session Credit Balance',
+                      EnumLocale.txtSessionCreditBalance.name.tr,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: AppFontStyle.fontStyleW700(
@@ -257,7 +257,7 @@ class WithdrawCoinView extends StatelessWidget {
               borderRadius: BorderRadius.circular(999),
             ),
             child: Text(
-              'Rewards',
+              EnumLocale.txtRewards.name.tr,
               style: AppFontStyle.fontStyleW600(
                 fontSize: 10,
                 fontColor: AppColors.redesignMutedText,
@@ -314,7 +314,7 @@ class WithdrawCoinView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Conversion Rate',
+                        EnumLocale.txtConversionRate.name.tr,
                         style: AppFontStyle.fontStyleW600(
                           fontSize: 10,
                           fontColor: AppColors.redesignMutedText,
@@ -322,7 +322,7 @@ class WithdrawCoinView extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '$conversionCredit Session Credit = $currencySymbol 1.00',
+                        '@conversionCredit Session Credit = @currencySymbol 1.00'.trParams({'conversionCredit': conversionCredit, 'currencySymbol': currencySymbol}),
                         style: AppFontStyle.fontStyleW700(
                           fontSize: 13,
                           fontColor: AppColors.redesignBrandDark,
@@ -419,7 +419,7 @@ class BottomView extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Fast reviews, secure sessions and a trusted community.',
+                EnumLocale.txtFastReviewsSecureSessionsAndATrustedCommunity.name.tr,
                 style: AppFontStyle.fontStyleW500(
                   fontSize: 11,
                   fontColor: AppColors.redesignMutedText,

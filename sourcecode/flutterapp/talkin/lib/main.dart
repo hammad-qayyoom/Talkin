@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'dart:async';
 import 'dart:developer';
 
@@ -191,7 +192,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     Utils.showLog("MY Current Routes => ${Get.currentRoute}");
     return GetMaterialApp(
-      title: 'Notisboard',
+      title: EnumLocale.txtAppName.name.tr,
       debugShowCheckedModeBanner: false,
       locale: const Locale("en"),
       builder: (context, child) {

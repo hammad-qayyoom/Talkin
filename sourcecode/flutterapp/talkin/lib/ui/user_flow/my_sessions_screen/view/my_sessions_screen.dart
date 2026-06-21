@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -886,7 +887,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  'Review $expertName',
+                                  'Review @expertName'.trParams({'expertName': expertName}),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppFontStyle.fontStyleW700(
@@ -908,7 +909,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'How was your session experience?',
+                            EnumLocale.txtHowWasYourSessionExperience.name.tr,
                             style: AppFontStyle.fontStyleW500(
                               fontSize: 12,
                               fontColor: _mutedText,
@@ -945,7 +946,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                             maxLines: 5,
                             textInputAction: TextInputAction.done,
                             decoration: InputDecoration(
-                              hintText: 'Write your review here...',
+                              hintText: EnumLocale.txtWriteYourReviewHere.name.tr,
                               hintStyle: AppFontStyle.fontStyleW500(
                                 fontSize: 12,
                                 fontColor: _mutedText,
@@ -1114,8 +1115,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       barrierDismissible: false,
       builder: (dialogContext) {
         return AlertDialog(
-          title: const Text(
-            'Review Submitted',
+          title: Text(
+            EnumLocale.txtReviewSubmitted.name.tr,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           content: Text(dialogMessage),
@@ -1128,7 +1129,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                   backgroundColor: _brandRed,
                   foregroundColor: AppColors.white,
                 ),
-                child: const Text('Close'),
+                child: Text(EnumLocale.txtClose.name.tr),
               ),
             ),
           ],
@@ -1560,7 +1561,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                       icon: const Icon(Icons.check_circle_outline_rounded,
                           size: 16),
                       label: Text(
-                        'Review Submitted',
+                        EnumLocale.txtReviewSubmitted.name.tr,
                         style: AppFontStyle.fontStyleW600(
                           fontSize: 13,
                           fontColor: AppColors.redesignStatusSuccessDark,
@@ -1587,7 +1588,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                         size: 16,
                       ),
                       label: Text(
-                        'Give Review',
+                        EnumLocale.txtGiveReview.name.tr,
                         style: AppFontStyle.fontStyleW600(
                           fontSize: 13,
                           fontColor: AppColors.white,
@@ -1676,7 +1677,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                'No sessions found',
+                EnumLocale.txtNoSessionsFound.name.tr,
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 15,
                   fontColor: _brandDark,
@@ -1832,7 +1833,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                               if (canPop) const SizedBox(width: 10),
                               Expanded(
                                 child: Text(
-                                  'My Sessions',
+                                  EnumLocale.txtMySessions.name.tr,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppFontStyle.fontStyleW700(
@@ -1894,7 +1895,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Session Center',
+                                        EnumLocale.txtSessionCenter.name.tr,
                                         style: AppFontStyle.fontStyleW700(
                                           fontSize: isTablet ? 15 : 14,
                                           fontColor: AppColors.white,
@@ -1930,7 +1931,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                   child: Column(
                                     children: [
                                       Text(
-                                        '${_sessions.length}',
+                                        EnumLocale.txtSessionCount.name.trParams({
+                                          'count': '${_sessions.length}',
+                                        }),
                                         style: AppFontStyle.fontStyleW700(
                                           fontSize: isTablet ? 16 : 14,
                                           fontColor: AppColors.white,
@@ -1938,8 +1941,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                       ),
                                       Text(
                                         _view == 'upcoming'
-                                            ? 'Upcoming'
-                                            : 'Done',
+                                            ? EnumLocale.txtUpcoming.name.tr
+                                            : EnumLocale.txtDone.name.tr,
                                         style: AppFontStyle.fontStyleW500(
                                           fontSize: 9,
                                           fontColor: AppColors.white

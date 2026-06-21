@@ -568,7 +568,9 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "${item.coin ?? ''}",
+                                        EnumLocale.txtSessionCount.name.trParams({
+                                          'count': '${item.coin ?? 0}',
+                                        }),
                                         style: AppFontStyle.fontStyleW800(
                                           fontSize: 18,
                                           fontColor: AppColors.red,
@@ -590,7 +592,10 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "${Database.settingApiModel?.data?.currency?.symbol}${item.amount ?? ''}",
+                                        EnumLocale.txtPriceWithCurrency.name.trParams({
+                                          'currency': Database.settingApiModel?.data?.currency?.symbol ?? '',
+                                          'price': '${item.amount ?? 0}',
+                                        }),
                                         style: AppFontStyle.fontStyleW700(
                                           fontSize: 12,
                                           fontColor: AppColors.black,
@@ -724,7 +729,7 @@ class HostCoinHistoryScreenTabBarScreen extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "${EnumLocale.txtStatus.name.tr} :",
+                                          EnumLocale.txtStatusColon.name.tr,
                                           style: AppFontStyle.fontStyleW600(
                                             fontSize: 12,
                                             fontColor: AppColors.profileText,

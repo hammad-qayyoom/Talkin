@@ -251,7 +251,7 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
                     Image.asset(AppAsset.dimondCoin, height: 14)
                         .paddingOnly(right: 4),
                     Text(
-                      "$audioCallRatePrivate / Session",
+                      "@audioCallRatePrivate / Session".trParams({'audioCallRatePrivate': audioCallRatePrivate}),
                       style: AppFontStyle.fontStyleW600(
                           fontSize: 12, fontColor: AppColors.white),
                     ),
@@ -355,7 +355,7 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
                     Image.asset(AppAsset.dimondCoin, height: 14)
                         .paddingOnly(right: 4),
                     Text(
-                      "$videoCallRatePrivate / Session",
+                      "@videoCallRatePrivate / Session".trParams({'videoCallRatePrivate': videoCallRatePrivate}),
                       style: AppFontStyle.fontStyleW600(
                           fontSize: 12, fontColor: AppColors.white),
                     ),

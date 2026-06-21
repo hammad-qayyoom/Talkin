@@ -118,7 +118,7 @@ class OutgoingAudioCallView extends StatelessWidget {
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
-                                      'Secure',
+                                      EnumLocale.txtSecure.name.tr,
                                       style: AppFontStyle.fontStyleW600(
                                         fontSize: 9,
                                         fontColor: _brandDark,

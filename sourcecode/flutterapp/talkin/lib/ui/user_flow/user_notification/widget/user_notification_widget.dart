@@ -49,7 +49,7 @@ class UserNotificationAppBar extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Updates about sessions and account activity',
+                      EnumLocale.txtUpdatesAboutSessionsAndAccountActivity.name.tr,
                       style: AppFontStyle.fontStyleW500(
                         fontSize: 12,
                         fontColor: AppColors.redesignMutedText,
@@ -227,7 +227,7 @@ class UserNotificationView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$totalCount Notifications',
+                  '@totalCount Notifications'.trParams({'totalCount': '$totalCount'}),
                   style: AppFontStyle.fontStyleW700(
                     fontSize: 14,
                     fontColor: AppColors.white,
@@ -235,7 +235,7 @@ class UserNotificationView extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Recent updates and alerts',
+                  EnumLocale.txtRecentUpdatesAndAlerts.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: 12,
                     fontColor: AppColors.white.withValues(alpha: 0.9),
@@ -364,7 +364,7 @@ class UserNotificationView extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'No Notifications',
+                    EnumLocale.txtNoNotifications.name.tr,
                     textAlign: TextAlign.center,
                     style: AppFontStyle.fontStyleW700(
                       fontSize: 20,
@@ -373,7 +373,7 @@ class UserNotificationView extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Your latest session and account updates will appear here.',
+                    EnumLocale.txtYourLatestSessionAndAccountUpdatesWillAppearHere.name.tr,
                     textAlign: TextAlign.center,
                     style: AppFontStyle.fontStyleW500(
                       fontSize: 12,

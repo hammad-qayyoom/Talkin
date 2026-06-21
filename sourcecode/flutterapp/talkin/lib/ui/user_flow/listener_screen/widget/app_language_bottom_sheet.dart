@@ -197,7 +197,7 @@ class _AppLanguageBottomSheetState extends State<AppLanguageBottomSheet> {
                         child: filteredLanguages.isEmpty
                             ? Center(
                                 child: Text(
-                                  'No language found',
+                                  EnumLocale.txtNoLanguageFound.name.tr,
                                   style: AppFontStyle.fontStyleW500(
                                     fontSize: 13,
                                     fontColor: _mutedText,

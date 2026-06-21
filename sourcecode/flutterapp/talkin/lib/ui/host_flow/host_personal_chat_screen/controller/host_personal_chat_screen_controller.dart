@@ -191,7 +191,7 @@ class HostPersonalChatScreenController extends GetxController {
     if (containsDangerousScript(message)) {
       Utils.showInfoSnackBar(
         Get.context!,
-        title: 'Message blocked',
+        title: EnumLocale.txtMessageBlocked.name.tr,
         message: 'Script tags are not allowed in the message.',
         icon: Icons.error_outline_rounded,
         accentColor: AppColors.redesignBrandRedDeep,
@@ -205,7 +205,7 @@ class HostPersonalChatScreenController extends GetxController {
     if (message.length > 1000) {
       Utils.showInfoSnackBar(
         Get.context!,
-        title: 'Message too long',
+        title: EnumLocale.txtMessageTooLong.name.tr,
         message: 'Max 1000 characters are allowed.',
         icon: Icons.notes_rounded,
       );
@@ -283,7 +283,7 @@ class HostPersonalChatScreenController extends GetxController {
     if (pickedImage == null || receiverId == null) {
       Utils.showInfoSnackBar(
         Get.context!,
-        title: 'Image not ready',
+        title: EnumLocale.txtImageNotReady.name.tr,
         message: 'No image selected or receiver is missing.',
         icon: Icons.image_not_supported_outlined,
       );
@@ -339,7 +339,7 @@ class HostPersonalChatScreenController extends GetxController {
       } else {
         Utils.showInfoSnackBar(
           Get.context!,
-          title: 'Send failed',
+          title: EnumLocale.txtSendFailed.name.tr,
           message: 'Failed to send image.',
           icon: Icons.error_outline_rounded,
           accentColor: AppColors.redesignBrandRedDeep,
@@ -348,7 +348,7 @@ class HostPersonalChatScreenController extends GetxController {
     } catch (e) {
       Utils.showInfoSnackBar(
         Get.context!,
-        title: 'Send failed',
+        title: EnumLocale.txtSendFailed.name.tr,
         message: 'Error sending image: $e',
         icon: Icons.error_outline_rounded,
         accentColor: AppColors.redesignBrandRedDeep,
@@ -408,7 +408,7 @@ class HostPersonalChatScreenController extends GetxController {
       if (request == PermissionStatus.denied) {
         Utils.showInfoSnackBar(
           Get.context!,
-          title: 'Permission required',
+          title: EnumLocale.txtPermissionRequired.name.tr,
           message: EnumLocale.txtPleaseAllowPermission.name.tr,
           icon: Icons.mic_off_outlined,
           accentColor: AppColors.redesignBrandRedDeep,

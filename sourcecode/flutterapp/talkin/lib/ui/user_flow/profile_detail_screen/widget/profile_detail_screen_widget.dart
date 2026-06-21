@@ -320,7 +320,7 @@ class UserProfileInfoView extends StatelessWidget {
         Widget aboutSection() {
           return _buildSectionCard(
             icon: Icons.person_outline_rounded,
-            title: 'Self Intro',
+            title: EnumLocale.txtSelfIntro.name.tr,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -344,7 +344,11 @@ class UserProfileInfoView extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        '${EnumLocale.txtLanguage.name.tr} : ${languages.isEmpty ? 'Unknown' : languages}',
+                        EnumLocale.txtLanguageWithValue.name.trParams({
+                          'value': languages.isEmpty
+                              ? EnumLocale.txtUnknown.name.tr
+                              : languages,
+                        }),
                         style: AppFontStyle.fontStyleW600(
                           fontSize: 14,
                           fontColor: AppColors.redesignBrandDark,
@@ -392,19 +396,19 @@ class UserProfileInfoView extends StatelessWidget {
         Widget pricingSection() {
           return _buildSectionCard(
             icon: Icons.payments_outlined,
-            title: 'Session Pricing',
+            title: EnumLocale.txtSessionPricing.name.tr,
             child: Row(
               children: [
                 Expanded(
                   child: _buildPriceTile(
-                    title: 'Audio',
+                    title: EnumLocale.txtAudio.name.tr,
                     value: '${data.ratePrivateAudioCall ?? 0} credits',
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: _buildPriceTile(
-                    title: 'Video',
+                    title: EnumLocale.txtVideo.name.tr,
                     value: '${data.ratePrivateVideoCall ?? 0} credits',
                   ),
                 ),
@@ -480,7 +484,7 @@ class UserProfileInfoView extends StatelessWidget {
                                   Flexible(
                                     fit: FlexFit.loose,
                                     child: Text(
-                                      '$name$ageLabel',
+                                      '@name@ageLabel'.trParams({'name': name, 'ageLabel': ageLabel}),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: AppFontStyle.fontStyleW700(
@@ -558,7 +562,7 @@ class UserProfileInfoView extends StatelessWidget {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Text(
-                                              'ID: $uniqueId',
+                                              'ID: @uniqueId'.trParams({'uniqueId': uniqueId}),
                                               style: AppFontStyle.fontStyleW600(
                                                 fontSize: 11,
                                                 fontColor:
@@ -605,7 +609,7 @@ class UserProfileInfoView extends StatelessWidget {
                         onPressed: () => _openPosts(controller),
                         icon: const Icon(Icons.dynamic_feed_rounded, size: 18),
                         label: Text(
-                          'View Posts',
+                          EnumLocale.txtViewPosts.name.tr,
                           style: AppFontStyle.fontStyleW600(
                             fontSize: 13,
                             fontColor: AppColors.redesignBrandDark,
@@ -1045,7 +1049,7 @@ class ProfileBottomButtonView extends StatelessWidget {
                           : null,
                       icon: const Icon(Icons.calendar_month_rounded, size: 20),
                       label: Text(
-                        'Book Session',
+                        EnumLocale.txtBookSession.name.tr,
                         style: AppFontStyle.fontStyleW600(
                           fontSize: 15,
                           fontColor: AppColors.white,

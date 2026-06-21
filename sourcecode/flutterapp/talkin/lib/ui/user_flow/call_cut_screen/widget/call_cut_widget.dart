@@ -40,7 +40,7 @@ class CallCutView extends StatelessWidget {
                 onSelect: controller.listenerServiceSelect,
               ),
               _buildQuestionCard(
-                title: "Add $receiverName to your Favourite Experts?",
+                title: "Add @receiverName to your Favourite Experts?".trParams({'receiverName': receiverName}),
                 selectedValue: controller.favListener,
                 onSelect: controller.favListenerSelect,
               ),
@@ -80,7 +80,11 @@ class CallCutView extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              "${EnumLocale.txtCompleteTrailCall.name.tr} $receiverName ${EnumLocale.txtCompleteTrailCall1.name.tr}",
+              EnumLocale.txtCompleteTrailCallWithName.name.trParams({
+                'completeTrailCall': EnumLocale.txtCompleteTrailCall.name.tr,
+                'receiverName': receiverName,
+                'completeTrailCall1': EnumLocale.txtCompleteTrailCall1.name.tr,
+              }),
               style: AppFontStyle.fontStyleW700(
                 fontSize: 15,
                 fontColor: AppColors.white,
@@ -148,7 +152,7 @@ class CallCutView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Expert",
+                      EnumLocale.txtListener.name.tr,
                       style: AppFontStyle.fontStyleW500(
                         fontSize: 12,
                         fontColor: _mutedText,

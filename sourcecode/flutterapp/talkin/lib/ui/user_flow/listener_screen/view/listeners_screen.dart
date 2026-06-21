@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/dialog/exit_app_dialog.dart';
@@ -51,7 +52,7 @@ class ListenersScreen extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               Text(
-                'No experts found',
+                EnumLocale.txtNoExpertsFound.name.tr,
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 18,
                   fontColor: _brandDark,
@@ -59,7 +60,7 @@ class ListenersScreen extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                'Try another language or talk topic filter.',
+                EnumLocale.txtTryAnotherLanguageOrTalkTopicFilter.name.tr,
                 textAlign: TextAlign.center,
                 style: AppFontStyle.fontStyleW500(
                   fontSize: 13,

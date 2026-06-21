@@ -43,7 +43,7 @@ class MyWalletScreenAppBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Credits, plans and payment history',
+                  EnumLocale.txtCreditsPlansAndPaymentHistory.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: isTablet ? 12 : 11,
                     fontColor: AppColors.redesignMutedText,
@@ -160,7 +160,7 @@ class MyWalletScreenTopView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(999),
                           ),
                           child: Text(
-                            'Wallet Balance',
+                            EnumLocale.txtWalletBalance.name.tr,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AppFontStyle.fontStyleW700(
@@ -171,7 +171,7 @@ class MyWalletScreenTopView extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'Current Session Credits',
+                          EnumLocale.txtCurrentSessionCredits.name.tr,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: AppFontStyle.fontStyleW700(
@@ -220,7 +220,7 @@ class MyWalletScreenTopView extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      'View Payment History',
+                                      EnumLocale.txtViewPaymentHistory.name.tr,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: AppFontStyle.fontStyleW700(
@@ -299,7 +299,7 @@ class WalletGuideView extends StatelessWidget {
               borderRadius: BorderRadius.circular(999),
             ),
             child: Text(
-              'How It Works',
+              EnumLocale.txtHowItWorks.name.tr,
               style: AppFontStyle.fontStyleW600(
                 fontSize: 10,
                 fontColor: AppColors.redesignMutedText,
@@ -308,7 +308,7 @@ class WalletGuideView extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Subscription Guide',
+            EnumLocale.txtSubscriptionGuide.name.tr,
             style: AppFontStyle.fontStyleW700(
               fontSize: 17,
               fontColor: AppColors.redesignBrandDark,
@@ -316,7 +316,7 @@ class WalletGuideView extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Pick a subscription plan to unlock session credits. Paid sessions are booked only after successful payment, and each booking is recorded in your payment history.',
+            EnumLocale.txtPickASubscriptionPlanToUnlockSessionCreditsPaidSessionsAreBo.name.tr,
             style: AppFontStyle.fontStyleW500(
               fontSize: 11,
               fontColor: AppColors.redesignMutedText,

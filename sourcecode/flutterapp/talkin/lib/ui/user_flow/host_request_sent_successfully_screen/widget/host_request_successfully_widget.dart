@@ -30,13 +30,13 @@ class _RequestStatusVisual {
 
 _RequestStatusVisual _resolveStatusVisual(int? status) {
   if (status == 2) {
-    return const _RequestStatusVisual(
+    return _RequestStatusVisual(
       label: 'Approved',
       badgeBackground: Color(0xFFE6F6ED),
       badgeText: Color(0xFF0F8C3D),
       heroTitle: 'Expert Request Approved',
       heroSubtitle:
-          'Your expert profile has been approved and is now active in the app.',
+          EnumLocale.txtYourExpertProfileHasBeenApprovedAndIsNowActiveInTheApp.name.tr,
       heroGradient: [
         Color(0xFF1C9C4D),
         Color(0xFF0F7A3A),
@@ -51,7 +51,7 @@ _RequestStatusVisual _resolveStatusVisual(int? status) {
       badgeText: AppColors.white,
       heroTitle: 'Expert Request Needs Updates',
       heroSubtitle:
-          'Please review the feedback below, update your details, and submit again.',
+          EnumLocale.txtPleaseReviewTheFeedbackBelowUpdateYourDetailsAndSubmitAgain.name.tr,
       heroGradient: [
         AppColors.redesignBrandDark,
         AppColors.redesignBrandDarkAlt,
@@ -65,7 +65,7 @@ _RequestStatusVisual _resolveStatusVisual(int? status) {
     badgeText: AppColors.redesignMutedText,
     heroTitle: 'Expert Request Sent Successfully',
     heroSubtitle:
-        'Our team is reviewing your details and will update you soon.',
+        EnumLocale.txtOurTeamIsReviewingYourDetailsAndWillUpdateYouSoon.name.tr,
     heroGradient: [
       AppColors.redesignBrandRed,
       AppColors.redesignBrandRedDeep,
@@ -245,7 +245,7 @@ class TopView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Expert Verification',
+                          EnumLocale.txtListenerVerification.name.tr,
                           style: AppFontStyle.fontStyleW600(
                             fontSize: 13,
                             fontColor: AppColors.white.withValues(alpha: 0.9),
@@ -415,39 +415,39 @@ class InfoView extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 InfoTile(
-                  title: '${EnumLocale.txtRequestID.name.tr} :',
+                  title: EnumLocale.txtRequestIDColon.name.tr,
                   data: data?.uniqueId ?? '',
                 ),
                 InfoTile(
-                  title: '${EnumLocale.txtListenersName.name.tr} :',
+                  title: EnumLocale.txtListenersNameColon.name.tr,
                   data: data?.name ?? '',
                 ),
                 InfoTile(
-                  title: '${EnumLocale.txtMailId.name.tr} :',
+                  title: EnumLocale.txtMailIdColon.name.tr,
                   data: data?.email ?? '',
                 ),
                 InfoTile(
-                  title: '${EnumLocale.txtAddress.name.tr} :',
+                  title: EnumLocale.txtAddressColon.name.tr,
                   data: data?.location ?? '',
                 ),
                 InfoTile(
-                  title: '${EnumLocale.txtRequestDate.name.tr} :',
+                  title: EnumLocale.txtRequestDateColon.name.tr,
                   data: dateTimeParts['date'] ?? '',
                 ),
                 InfoTile(
-                  title: '${EnumLocale.txtRequestTime.name.tr} :',
+                  title: EnumLocale.txtRequestTimeColon.name.tr,
                   data: dateTimeParts['time'] ?? '',
                 ),
                 if ((data?.status ?? 0) == 3 &&
                     (data?.reason ?? '').trim().isNotEmpty) ...[
                   _DetailPanel(
-                    title: '${EnumLocale.txtReason.name.tr} :',
+                    title: EnumLocale.txtReasonColon.name.tr,
                     value: data?.reason ?? '',
                   ),
                   const SizedBox(height: 12),
                 ],
                 _DetailPanel(
-                  title: '${EnumLocale.txtIntroduction.name.tr} :',
+                  title: EnumLocale.txtIntroductionColon.name.tr,
                   value: data?.selfIntro ?? '',
                 ),
               ],

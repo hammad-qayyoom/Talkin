@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
@@ -482,7 +483,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Session Center',
+                        EnumLocale.txtSessionCenter.name.tr,
                         style: AppFontStyle.fontStyleW700(
                           fontSize: isTablet ? 14 : 13,
                           fontColor: AppColors.white,
@@ -512,14 +513,18 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                   child: Column(
                     children: [
                       Text(
-                        '${_sessions.length}',
+                        EnumLocale.txtSessionCount.name.trParams({
+                          'count': '${_sessions.length}',
+                        }),
                         style: AppFontStyle.fontStyleW700(
                           fontSize: isTablet ? 15 : 13,
                           fontColor: AppColors.white,
                         ),
                       ),
                       Text(
-                        _view == 'upcoming' ? 'Upcoming' : 'Done',
+                        _view == 'upcoming'
+                            ? EnumLocale.txtUpcoming.name.tr
+                            : EnumLocale.txtDone.name.tr,
                         style: AppFontStyle.fontStyleW500(
                           fontSize: 8,
                           fontColor: AppColors.white.withValues(alpha: 0.9),
@@ -567,7 +572,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                     ),
                     icon: const Icon(Icons.groups_rounded, size: 16),
                     label: Text(
-                      'Open Group Sessions',
+                      EnumLocale.txtOpenGroupSessions.name.tr,
                       style: AppFontStyle.fontStyleW600(
                         fontSize: 12,
                         fontColor: AppColors.white,
@@ -601,7 +606,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Group Sessions Hub',
+                                  EnumLocale.txtGroupSessionsHub.name.tr,
                                   style: AppFontStyle.fontStyleW700(
                                     fontSize: 13,
                                     fontColor: _brandDark,
@@ -609,7 +614,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  'Manage live rooms and participants from one place.',
+                                  EnumLocale.txtManageLiveRoomsAndParticipantsFromOnePlace.name.tr,
                                   style: AppFontStyle.fontStyleW500(
                                     fontSize: 10,
                                     fontColor: _mutedText,
@@ -650,7 +655,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Group Sessions Hub',
+                                  EnumLocale.txtGroupSessionsHub.name.tr,
                                   style: AppFontStyle.fontStyleW700(
                                     fontSize: 13,
                                     fontColor: _brandDark,
@@ -658,7 +663,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  'Manage live rooms and participants from one place.',
+                                  EnumLocale.txtManageLiveRoomsAndParticipantsFromOnePlace.name.tr,
                                   style: AppFontStyle.fontStyleW500(
                                     fontSize: 10,
                                     fontColor: _mutedText,
@@ -802,7 +807,9 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
           ),
           const SizedBox(height: 6),
           Text(
-            'Confirmed Bookings: ${(session['confirmedBookings'] ?? 0).toString()}',
+            EnumLocale.txtConfirmedBookingsCount.name.trParams({
+              'count': (session['confirmedBookings'] ?? 0).toString(),
+            }),
             style: AppFontStyle.fontStyleW500(
               fontSize: 10,
               fontColor: _mutedText,
@@ -998,7 +1005,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                'No sessions found',
+                EnumLocale.txtNoSessionsFound.name.tr,
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 14,
                   fontColor: _brandDark,
@@ -1110,7 +1117,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'My Sessions',
+                          EnumLocale.txtMySessions.name.tr,
                           style: AppFontStyle.fontStyleW700(
                             fontSize: isTablet ? 22 : 16,
                             fontColor: _brandDark,

@@ -171,7 +171,7 @@ class AppNotLiveDialog extends StatelessWidget {
               // ),
             ),
             Text(
-              "Your app is under maintenance.",
+              EnumLocale.txtYourAppIsUnderMaintenance.name.tr,
               textAlign: TextAlign.center,
               style: AppFontStyle.fontStyleW500(
                 fontSize: 19,

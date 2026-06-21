@@ -89,7 +89,10 @@ class UserProfileInfoView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${controller.userProfileModel?.user?.fullName} ,${controller.userProfileModel?.user?.age}",
+                          EnumLocale.txtNameAndAge.name.trParams({
+                            'name': controller.userProfileModel?.user?.fullName ?? '',
+                            'age': '${controller.userProfileModel?.user?.age ?? ''}',
+                          }),
                           style: AppFontStyle.fontStyleW700(
                               fontSize: 16, fontColor: AppColors.black),
                         ).paddingOnly(bottom: 8),
@@ -129,7 +132,7 @@ class UserProfileInfoView extends StatelessWidget {
                                           ).paddingAll(1.8),
                                         ).paddingOnly(right: 4),
                                         Text(
-                                          "offline",
+                                          EnumLocale.txtOffline.name.tr,
                                           style: AppFontStyle.fontStyleW500(
                                               fontSize: 10,
                                               fontColor:
@@ -171,7 +174,7 @@ class UserProfileInfoView extends StatelessWidget {
                                           ).paddingAll(1.8),
                                         ).paddingOnly(right: 4),
                                         Text(
-                                          "online",
+                                          EnumLocale.txtOnline.name.tr,
                                           style: AppFontStyle.fontStyleW500(
                                               fontSize: 10,
                                               fontColor: AppColors.white),
@@ -198,7 +201,9 @@ class UserProfileInfoView extends StatelessWidget {
                                     SizedBox(
                                       // width: Get.width * 0.15,
                                       child: Text(
-                                              "ID: ${controller.userProfileModel?.user?.uniqueId}",
+                                              EnumLocale.txtIdWithUniqueId.name.trParams({
+                                                'uniqueId': controller.userProfileModel?.user?.uniqueId ?? '',
+                                              }),
                                               overflow: TextOverflow.ellipsis,
                                               style: AppFontStyle.fontStyleW600(
                                                   fontSize: 10,
@@ -291,7 +296,7 @@ class UserProfileInfoView extends StatelessWidget {
               //     children: [
               //       Image.asset(AppAsset.languageIcon, height: 20, width: 20).paddingOnly(right: 8),
               //       Text(
-              //         "${EnumLocale.txtLanguage.name.tr} : ",
+              //         EnumLocale.txtLanguageColon.name.tr,
               //         style: AppFontStyle.fontStyleW500(
               //           fontSize: 14,
               //           fontColor: AppColors.profileLanguage,
@@ -330,7 +335,7 @@ class UserProfileInfoView extends StatelessWidget {
                         Image.asset(AppAsset.birthIcon, height: 20, width: 20)
                             .paddingOnly(right: 8),
                         Text(
-                          "${EnumLocale.txtDateOfBirth.name.tr} : ",
+                          EnumLocale.txtDateOfBirthColon.name.tr,
                           style: AppFontStyle.fontStyleW500(
                             fontSize: 14,
                             fontColor: AppColors.profileLanguage,
@@ -350,7 +355,7 @@ class UserProfileInfoView extends StatelessWidget {
                         Image.asset(AppAsset.genderIcon, height: 20, width: 20)
                             .paddingOnly(right: 8),
                         Text(
-                          '${EnumLocale.txtGender.name.tr} : ',
+                          EnumLocale.txtGenderColon.name.tr,
                           style: AppFontStyle.fontStyleW500(
                             fontSize: 14,
                             fontColor: AppColors.profileLanguage,
@@ -370,7 +375,7 @@ class UserProfileInfoView extends StatelessWidget {
                         Image.asset(AppAsset.countryIcon, height: 20, width: 20)
                             .paddingOnly(right: 8),
                         Text(
-                          '${EnumLocale.txtCountry.name.tr} : ',
+                          EnumLocale.txtCountryColon.name.tr,
                           style: AppFontStyle.fontStyleW500(
                             fontSize: 14,
                             fontColor: AppColors.profileLanguage,
@@ -390,7 +395,7 @@ class UserProfileInfoView extends StatelessWidget {
                         Image.asset(AppAsset.emailIcon, height: 20, width: 20)
                             .paddingOnly(right: 8),
                         Text(
-                          "${EnumLocale.txtMailId.name.tr} : ",
+                          EnumLocale.txtMailIdColon.name.tr,
                           style: AppFontStyle.fontStyleW500(
                             fontSize: 14,
                             fontColor: AppColors.profileLanguage,

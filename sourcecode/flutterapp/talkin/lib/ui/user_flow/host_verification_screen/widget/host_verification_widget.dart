@@ -157,7 +157,7 @@ class HostVerificationUploadImageView extends StatelessWidget {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'Upload clear images for faster approval.',
+                        EnumLocale.txtUploadClearImagesForFasterApproval.name.tr,
                         style: AppFontStyle.fontStyleW600(
                           fontSize: 13,
                           fontColor: AppColors.white,
@@ -311,7 +311,7 @@ class _IdentityProofDropdown extends StatelessWidget {
                   ? Padding(
                       padding: const EdgeInsets.all(12),
                       child: Text(
-                        'No identity proofs available.',
+                        EnumLocale.txtNoIdentityProofsAvailable.name.tr,
                         style: AppFontStyle.fontStyleW500(
                           fontSize: 13,
                           fontColor: AppColors.redesignMutedText,

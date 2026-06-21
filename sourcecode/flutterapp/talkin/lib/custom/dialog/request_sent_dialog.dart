@@ -65,7 +65,7 @@ class RequestSentDialog extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    'Expert Application Received',
+                    EnumLocale.txtExpertApplicationReceived.name.tr,
                     style: AppFontStyle.fontStyleW700(
                       fontSize: 13,
                       fontColor: AppColors.white,

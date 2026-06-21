@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
@@ -63,7 +64,7 @@ class _BiometricUnlockScreenViewState extends State<BiometricUnlockScreenView> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Authenticate to continue',
+                  EnumLocale.txtAuthenticateToContinue.name.tr,
                   style: AppFontStyle.fontStyleW700(
                     fontSize: 22,
                     fontColor: AppColors.redesignBrandDark,
@@ -71,7 +72,7 @@ class _BiometricUnlockScreenViewState extends State<BiometricUnlockScreenView> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Use Face ID / Touch ID / Fingerprint to unlock your account.',
+                  EnumLocale.txtUseFaceIdTouchIdFingerprintToUnlockYourAccount.name.tr,
                   textAlign: TextAlign.center,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: 14,
@@ -95,7 +96,7 @@ class _BiometricUnlockScreenViewState extends State<BiometricUnlockScreenView> {
                 TextButton(
                   onPressed: () => Get.offAllNamed(AppRoutes.main),
                   child: Text(
-                    'Login Normally',
+                    EnumLocale.txtLoginNormally.name.tr,
                     style: AppFontStyle.fontStyleW600(
                       fontSize: 14,
                       fontColor: AppColors.redesignBrandRed,

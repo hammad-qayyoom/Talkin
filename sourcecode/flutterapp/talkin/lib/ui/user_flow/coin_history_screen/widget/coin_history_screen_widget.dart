@@ -48,7 +48,7 @@ class CoinHistoryScreenAppBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Payments and session credits timeline',
+                  EnumLocale.txtPaymentsAndSessionCreditsTimeline.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: isTablet ? 12 : 11,
                     fontColor: AppColors.redesignMutedText,
@@ -174,7 +174,7 @@ class CoinHistoryScreenTabBar extends GetView<CoinHistoryScreenController> {
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
-                        'Smart Ledger',
+                        EnumLocale.txtSmartLedger.name.tr,
                         style: AppFontStyle.fontStyleW700(
                           fontSize: 11,
                           fontColor: AppColors.white,
@@ -183,7 +183,7 @@ class CoinHistoryScreenTabBar extends GetView<CoinHistoryScreenController> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Track all payment and credit activity in one clean timeline.',
+                      EnumLocale.txtTrackAllPaymentAndCreditActivityInOneCleanTimeline.name.tr,
                       style: AppFontStyle.fontStyleW500(
                         fontSize: 12,
                         fontColor: AppColors.white.withValues(alpha: 0.92),
@@ -446,7 +446,7 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'No History Found',
+              EnumLocale.txtNoHistoryFound.name.tr,
               style: AppFontStyle.fontStyleW700(
                 fontSize: 28,
                 fontColor: AppColors.redesignMutedText,
@@ -548,14 +548,20 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                '+${item.userCoin ?? 0} ${EnumLocale.txtCoin.name.tr}',
+                EnumLocale.txtPlusUserCoin.name.trParams({
+                  'userCoin': '${item.userCoin ?? 0}',
+                  'coin': EnumLocale.txtCoin.name.tr,
+                }),
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 12,
                   fontColor: AppColors.redesignStatusSuccessDark,
                 ),
               ),
               Text(
-                '$currency${item.price ?? 0}',
+                EnumLocale.txtPriceWithCurrency.name.trParams({
+                  'currency': currency,
+                  'price': '${item.price ?? 0}',
+                }),
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 14,
                   fontColor: AppColors.redesignCoinText,
@@ -667,7 +673,10 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            '${isIncome ? '+' : '-'} ${item.userCoin ?? 0}',
+            EnumLocale.txtCoinWithSign.name.trParams({
+              'sign': isIncome ? '+' : '-',
+              'coin': '${item.userCoin ?? 0}',
+            }),
             style: AppFontStyle.fontStyleW700(
               fontSize: 18,
               fontColor: isIncome
@@ -703,7 +712,7 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
                     const SizedBox(height: 70),
                     _emptyView(
                       subtitle:
-                          'Your payment history will appear here once you purchase credits.',
+                          EnumLocale.txtYourPaymentHistoryWillAppearHereOnceYouPurchaseCredits.name.tr,
                     ),
                   ],
                 ),
@@ -767,7 +776,7 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
                   const SizedBox(height: 70),
                   _emptyView(
                     subtitle:
-                        'Your session credit ledger will appear here after activity.',
+                        EnumLocale.txtYourSessionCreditLedgerWillAppearHereAfterActivity.name.tr,
                   ),
                 ],
               ),

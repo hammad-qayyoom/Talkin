@@ -220,7 +220,7 @@ class HostUserProfileInfoView extends StatelessWidget {
                   width: 20,
                 ),
                 Text(
-                  '${EnumLocale.txtLanguage.name.tr} : ',
+                  EnumLocale.txtLanguageColon.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: 14,
                     fontColor: AppColors.profileLanguage,

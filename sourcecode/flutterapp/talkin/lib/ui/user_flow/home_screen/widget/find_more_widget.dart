@@ -271,7 +271,7 @@ class FindMoreWidget extends StatelessWidget {
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              'All categories',
+                              EnumLocale.txtAllCategories.name.tr,
                               style: AppFontStyle.fontStyleW700(
                                 fontSize: isTablet ? 24 : 20,
                                 fontColor: _brandDark,
@@ -631,7 +631,7 @@ class FindMoreWidget extends StatelessWidget {
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
-                                'Group Sessions',
+                                EnumLocale.txtGroupSessions.name.tr,
                                 maxLines: 1,
                                 softWrap: false,
                                 style: AppFontStyle.fontStyleW600(
@@ -711,7 +711,7 @@ class FindMoreWidget extends StatelessWidget {
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  'Group Sessions',
+                                  EnumLocale.txtGroupSessions.name.tr,
                                   maxLines: 1,
                                   softWrap: false,
                                   style: AppFontStyle.fontStyleW600(
@@ -736,7 +736,7 @@ class FindMoreWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Browse categories',
+                  EnumLocale.txtBrowseCategories.name.tr,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppFontStyle.fontStyleW700(

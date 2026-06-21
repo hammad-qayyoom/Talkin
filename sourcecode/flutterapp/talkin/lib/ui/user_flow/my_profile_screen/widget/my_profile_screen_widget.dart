@@ -168,7 +168,7 @@ class MyProfileTopView extends StatelessWidget {
                                       ),
                                     ),
                                     child: Text(
-                                      'Profile',
+                                      EnumLocale.txtProfile.name.tr,
                                       style: AppFontStyle.fontStyleW600(
                                         fontSize: 10,
                                         fontColor: AppColors.redesignMutedText,
@@ -217,7 +217,7 @@ class MyProfileTopView extends StatelessWidget {
                         Expanded(
                           child: _ProfileActionButton(
                             icon: Icons.dynamic_feed_rounded,
-                            title: 'My Posts',
+                            title: EnumLocale.txtMyPosts.name.tr,
                             isPrimary: false,
                             onTap: () {
                               Get.toNamed(
@@ -318,7 +318,7 @@ class _IdChip extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'ID $id',
+                'ID @id'.trParams({'id': id}),
                 style: AppFontStyle.fontStyleW700(
                   fontSize: 12,
                   fontColor: AppColors.redesignBrandRed,
@@ -464,8 +464,8 @@ class ProfileOptionsView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _SectionTitle(
-                        title: 'Quick Access',
-                        subtitle: 'Shortcuts for your daily actions',
+                        title: EnumLocale.txtQuickAccess.name.tr,
+                        subtitle: EnumLocale.txtShortcutsForYourDailyActions.name.tr,
                         isTablet: isTablet,
                       ),
                       const SizedBox(height: 10),
@@ -523,8 +523,8 @@ class ProfileOptionsView extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       _SectionTitle(
-                        title: 'Account & More',
-                        subtitle: 'Account tools and privacy controls',
+                        title: EnumLocale.txtAccountMore.name.tr,
+                        subtitle: EnumLocale.txtAccountToolsAndPrivacyControls.name.tr,
                         isTablet: isTablet,
                       ),
                       const SizedBox(height: 10),

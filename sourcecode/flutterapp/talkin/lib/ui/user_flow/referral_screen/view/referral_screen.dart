@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -89,7 +90,7 @@ class _Header extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Invite & Earn',
+                  EnumLocale.txtInviteEarn.name.tr,
                   style: AppFontStyle.fontStyleW700(
                     fontSize: 26,
                     fontColor: AppColors.redesignBrandDark,
@@ -97,7 +98,7 @@ class _Header extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Share Notisboard and track referral rewards',
+                  EnumLocale.txtShareNotisboardAndTrackReferralRewards.name.tr,
                   style: AppFontStyle.fontStyleW500(
                     fontSize: 12,
                     fontColor: AppColors.redesignMutedText,
@@ -136,7 +137,7 @@ class _ReferralContent extends GetView<ReferralController> {
             children: [
               Expanded(
                 child: _StatCard(
-                  title: 'Referrals',
+                  title: EnumLocale.txtReferrals.name.tr,
                   value: summary.totalReferrals.toString(),
                   icon: Icons.people_alt_rounded,
                 ),
@@ -144,7 +145,7 @@ class _ReferralContent extends GetView<ReferralController> {
               const SizedBox(width: 10),
               Expanded(
                 child: _StatCard(
-                  title: 'Approved',
+                  title: EnumLocale.txtApproved.name.tr,
                   value: controller.formatReward(
                     summary.approvedRewards,
                     rewardSettings.currency,
@@ -159,7 +160,7 @@ class _ReferralContent extends GetView<ReferralController> {
             children: [
               Expanded(
                 child: _StatCard(
-                  title: 'Pending',
+                  title: EnumLocale.txtPending.name.tr,
                   value: controller.formatReward(
                     summary.pendingRewards,
                     rewardSettings.currency,
@@ -170,7 +171,7 @@ class _ReferralContent extends GetView<ReferralController> {
               const SizedBox(width: 10),
               Expanded(
                 child: _StatCard(
-                  title: 'Paid',
+                  title: EnumLocale.txtPaid.name.tr,
                   value: controller.formatReward(
                     summary.paidRewards,
                     rewardSettings.currency,
@@ -184,7 +185,7 @@ class _ReferralContent extends GetView<ReferralController> {
           _RuleCard(settings: rewardSettings),
           const SizedBox(height: 16),
           Text(
-            'Referral Activity',
+            EnumLocale.txtReferralActivity.name.tr,
             style: AppFontStyle.fontStyleW700(
               fontSize: 18,
               fontColor: AppColors.redesignBrandDark,
@@ -253,7 +254,7 @@ class _HeroCard extends GetView<ReferralController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Your referral code',
+                      EnumLocale.txtYourReferralCode.name.tr,
                       style: AppFontStyle.fontStyleW600(
                         fontSize: 13,
                         fontColor: AppColors.white.withValues(alpha: 0.82),
@@ -485,7 +486,7 @@ class _RuleCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Reward rule',
+                  EnumLocale.txtRewardRule.name.tr,
                   style: AppFontStyle.fontStyleW700(
                     fontSize: 15,
                     fontColor: AppColors.redesignBrandDark,
@@ -493,7 +494,11 @@ class _RuleCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Earn $reward ${settings.currency} $_triggerLabel.',
+                  EnumLocale.txtEarnReward.name.trParams({
+                    'reward': reward,
+                    'currency': settings.currency,
+                    'triggerLabel': _triggerLabel,
+                  }),
                   style: AppFontStyle.fontStyleW500(
                     fontSize: 12,
                     fontColor: AppColors.redesignMutedText,
@@ -635,7 +640,7 @@ class _EmptyRecords extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'No referrals yet',
+            EnumLocale.txtNoReferralsYet.name.tr,
             style: AppFontStyle.fontStyleW700(
               fontSize: 17,
               fontColor: AppColors.redesignBrandDark,
@@ -643,7 +648,7 @@ class _EmptyRecords extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            'Share your code with friends. Referral activity will appear here.',
+            EnumLocale.txtShareYourCodeWithFriendsReferralActivityWillAppearHere.name.tr,
             textAlign: TextAlign.center,
             style: AppFontStyle.fontStyleW500(
               fontSize: 12,
@@ -693,7 +698,7 @@ class _ErrorState extends GetView<ReferralController> {
                 borderRadius: BorderRadius.circular(14),
               ),
             ),
-            child: const Text('Retry'),
+            child: Text(EnumLocale.txtRetry.name.tr),
           ),
         ],
       ),

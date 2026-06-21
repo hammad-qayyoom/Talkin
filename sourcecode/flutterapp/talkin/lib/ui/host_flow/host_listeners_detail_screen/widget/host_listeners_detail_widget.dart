@@ -63,7 +63,7 @@ class HostListenersDetailTopView extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              'Choose where to pick your profile photo from',
+              EnumLocale.txtChooseWhereToPickYourProfilePhotoFrom.name.tr,
               style: AppFontStyle.fontStyleW500(
                 fontSize: 12,
                 fontColor: _mutedText,
@@ -140,7 +140,7 @@ class HostListenersDetailTopView extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        'Edit Expert',
+                        EnumLocale.txtEditExpert.name.tr,
                         textAlign: TextAlign.center,
                         style: AppFontStyle.fontStyleW700(
                           fontSize: isTablet ? 20 : 17,
@@ -227,7 +227,7 @@ class HostListenersDetailTopView extends StatelessWidget {
                                   border: Border.all(color: _softBorder),
                                 ),
                                 child: Text(
-                                  'Expert',
+                                  EnumLocale.txtListener.name.tr,
                                   style: AppFontStyle.fontStyleW600(
                                     fontSize: 10,
                                     fontColor: _mutedText,
@@ -327,7 +327,7 @@ class HostListenersDetailView extends StatelessWidget {
                     .replaceAll(':-', '')
                     .trim(),
                 subtitle:
-                    'This information appears on your public expert card.',
+                    EnumLocale.txtThisInformationAppearsOnYourPublicExpertCard.name.tr,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -364,7 +364,7 @@ class HostListenersDetailView extends StatelessWidget {
                 title: EnumLocale.txtTalkLanguages.name.tr
                     .replaceAll(':-', '')
                     .trim(),
-                subtitle: 'Pick languages you can confidently speak in calls.',
+                subtitle: EnumLocale.txtPickLanguagesYouCanConfidentlySpeakInCalls.name.tr,
                 trailing: TextButton(
                   onPressed: () {
                     Get.bottomSheet(
@@ -388,7 +388,7 @@ class HostListenersDetailView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Selected',
+                          EnumLocale.txtSelected.name.tr,
                           style: AppFontStyle.fontStyleW600(
                             fontSize: 12,
                             fontColor: _mutedText,
@@ -408,7 +408,7 @@ class HostListenersDetailView extends StatelessWidget {
                               border: Border.all(color: _softBorder),
                             ),
                             child: Text(
-                              'No language selected yet',
+                              EnumLocale.txtNoLanguageSelectedYet.name.tr,
                               style: AppFontStyle.fontStyleW500(
                                 fontSize: 12,
                                 fontColor: _mutedText,
@@ -429,7 +429,7 @@ class HostListenersDetailView extends StatelessWidget {
                           ),
                         const SizedBox(height: 12),
                         Text(
-                          'Quick Select',
+                          EnumLocale.txtQuickSelect.name.tr,
                           style: AppFontStyle.fontStyleW600(
                             fontSize: 13,
                             fontColor: _brandDark,
@@ -456,7 +456,7 @@ class HostListenersDetailView extends StatelessWidget {
               _SectionCard(
                 title:
                     EnumLocale.txtTalkAbout.name.tr.replaceAll(':-', '').trim(),
-                subtitle: 'Choose categories where you provide the best value.',
+                subtitle: EnumLocale.txtChooseCategoriesWhereYouProvideTheBestValue.name.tr,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -485,7 +485,7 @@ class HostListenersDetailView extends StatelessWidget {
                               border: Border.all(color: _softBorder),
                             ),
                             child: Text(
-                              'No topics found',
+                              EnumLocale.txtNoTopicsFound.name.tr,
                               style: AppFontStyle.fontStyleW500(
                                 fontSize: 12,
                                 fontColor: _mutedText,
@@ -676,7 +676,7 @@ class AllLanguageBottomSheet extends StatelessWidget {
                   TextButton(
                     onPressed: () => Get.back(),
                     child: Text(
-                      'Done',
+                      EnumLocale.txtDone.name.tr,
                       style: AppFontStyle.fontStyleW700(
                         fontSize: 13,
                         fontColor: AppColors.redesignBrandRed,
@@ -687,7 +687,7 @@ class AllLanguageBottomSheet extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Tap to select one or multiple languages',
+                EnumLocale.txtTapToSelectOneOrMultipleLanguages.name.tr,
                 style: AppFontStyle.fontStyleW500(
                   fontSize: 12,
                   fontColor: AppColors.redesignMutedText,

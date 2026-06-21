@@ -601,7 +601,7 @@ class VoiceCallView1 extends StatelessWidget {
               children: [
                 ListTile(
                   leading: const Icon(Icons.chat_bubble_outline),
-                  title: const Text('Live Chat'),
+                  title: Text(EnumLocale.txtLiveChat.name.tr),
                   trailing: GetBuilder<VoiceCallController>(
                     id: Constant.idVideoCall,
                     builder: (logic) {
@@ -698,7 +698,7 @@ class VoiceCallView1 extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                'Live Session Chat',
+                                EnumLocale.txtLiveSessionChat.name.tr,
                                 style: AppFontStyle.fontStyleW700(
                                   fontSize: 16,
                                   fontColor: AppColors.black,
@@ -717,7 +717,7 @@ class VoiceCallView1 extends StatelessWidget {
                         child: chatMessages.isEmpty
                             ? Center(
                                 child: Text(
-                                  'No messages yet',
+                                  EnumLocale.txtNoMessagesYet.name.tr,
                                   style: AppFontStyle.fontStyleW500(
                                     fontSize: 13,
                                     fontColor:
@@ -752,7 +752,7 @@ class VoiceCallView1 extends StatelessWidget {
                                   logic.sendGroupChatMessage(value);
                                 },
                                 decoration: InputDecoration(
-                                  hintText: 'Type a message...',
+                                  hintText: EnumLocale.txtTypeAMessage.name.tr,
                                   contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 12,
                                     vertical: 10,
@@ -881,7 +881,7 @@ class VoiceCallView1 extends StatelessWidget {
                 const SizedBox(height: 10),
                 if (participants.isEmpty)
                   Text(
-                    'No active users to manage',
+                    EnumLocale.txtNoActiveUsersToManage.name.tr,
                     style: AppFontStyle.fontStyleW500(
                       fontSize: 13,
                       fontColor: AppColors.black.withValues(alpha: 0.7),

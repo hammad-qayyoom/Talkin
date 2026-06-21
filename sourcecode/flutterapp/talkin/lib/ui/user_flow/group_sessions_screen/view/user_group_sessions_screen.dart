@@ -1,3 +1,4 @@
+import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
@@ -804,7 +805,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Group Sessions',
+                          EnumLocale.txtGroupSessions.name.tr,
                           style: AppFontStyle.fontStyleW700(
                             fontSize: 20,
                             fontColor: AppColors.redesignBrandDark,
@@ -812,7 +813,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'Join live conversations with experts',
+                          EnumLocale.txtJoinLiveConversationsWithExperts.name.tr,
                           style: AppFontStyle.fontStyleW500(
                             fontSize: 11,
                             fontColor: AppColors.redesignMutedText,
@@ -860,7 +861,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '$totalSessions Active Sessions',
+                            '@totalSessions Active Sessions'.trParams({'totalSessions': totalSessions.toString()}),
                             style: AppFontStyle.fontStyleW700(
                               fontSize: 13,
                               fontColor: AppColors.white,
@@ -868,7 +869,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Filter: $selectedTypeLabel',
+                            'Filter: @selectedTypeLabel'.trParams({'selectedTypeLabel': selectedTypeLabel}),
                             style: AppFontStyle.fontStyleW500(
                               fontSize: 11,
                               fontColor: AppColors.white.withValues(alpha: 0.9),
@@ -1049,7 +1050,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
         ),
         const SizedBox(height: 12),
         Text(
-          'No active sessions',
+          EnumLocale.txtNoActiveSessions.name.tr,
           textAlign: TextAlign.center,
           style: AppFontStyle.fontStyleW700(
             fontSize: 20,
@@ -1058,7 +1059,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
         ),
         const SizedBox(height: 6),
         Text(
-          'New group sessions will appear here once experts schedule them.',
+          EnumLocale.txtNewGroupSessionsWillAppearHereOnceExpertsScheduleThem.name.tr,
           textAlign: TextAlign.center,
           style: AppFontStyle.fontStyleW500(
             fontSize: 13,
@@ -1156,7 +1157,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
                   children: [
                     Expanded(
                       child: Text(
-                        'Expert: $expertName',
+                        'Expert: @expertName'.trParams({'expertName': expertName}),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: AppFontStyle.fontStyleW500(
@@ -1185,7 +1186,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  'Start: $startDate',
+                  'Start: @startDate'.trParams({'startDate': startDate}),
                   style: AppFontStyle.fontStyleW500(
                     fontSize: 13,
                     fontColor: AppColors.redesignTextMeta,
@@ -1307,7 +1308,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  'Access Session',
+                                  EnumLocale.txtAccessSession.name.tr,
                                   maxLines: 1,
                                   softWrap: false,
                                   style: AppFontStyle.fontStyleW700(
@@ -1349,7 +1350,7 @@ class _UserGroupSessionsScreenState extends State<UserGroupSessionsScreen> {
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  'Leave',
+                                  EnumLocale.txtLeave.name.tr,
                                   maxLines: 1,
                                   softWrap: false,
                                   style: AppFontStyle.fontStyleW700(

@@ -1,3 +1,5 @@
+import 'package:notisboard/utils/enums.dart';
+import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -130,7 +132,7 @@ class _ForceUpdateDialogState extends State<ForceUpdateDialog>
                             color: AppColors.primary, size: 16),
                         const SizedBox(width: 6),
                         Text(
-                          "New Version",
+                          EnumLocale.txtNewVersion.name.tr,
                           style: AppFontStyle.fontStyleW600(
                             fontSize: 13,
                             fontColor: AppColors.primary,
@@ -144,7 +146,7 @@ class _ForceUpdateDialogState extends State<ForceUpdateDialog>
 
                   // Title
                   Text(
-                    "Update Required",
+                    EnumLocale.txtUpdateRequired.name.tr,
                     style: AppFontStyle.fontStyleW700(
                       fontSize: 24,
                       fontColor: AppColors.black,
@@ -156,7 +158,7 @@ class _ForceUpdateDialogState extends State<ForceUpdateDialog>
 
                   // Description
                   Text(
-                    "Please update to the latest version to continue using the app with new features and improvements.",
+                    EnumLocale.txtPleaseUpdateToTheLatestVersionToContinueUsingTheAppWithNewFe.name.tr,
                     style: AppFontStyle.fontStyleW400(
                       fontSize: 14,
                       fontColor: AppColors.black.withValues(alpha: 0.65),
@@ -197,7 +199,7 @@ class _ForceUpdateDialogState extends State<ForceUpdateDialog>
                               color: Colors.white, size: 22),
                           const SizedBox(width: 10),
                           Text(
-                            "Update Now",
+                            EnumLocale.txtUpdateNow.name.tr,
                             style: AppFontStyle.fontStyleW700(
                                 fontColor: Colors.white, fontSize: 16),
                           ),
@@ -213,7 +215,7 @@ class _ForceUpdateDialogState extends State<ForceUpdateDialog>
 
                   // Footer
                   Text(
-                    "This update is required to continue",
+                    EnumLocale.txtThisUpdateIsRequiredToContinue.name.tr,
                     style: AppFontStyle.fontStyleW500(
                       fontColor: AppColors.black.withValues(alpha: 0.5),
                       fontSize: 12,
