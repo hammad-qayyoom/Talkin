@@ -30,6 +30,7 @@ class AppRoutes {
   static const String myWalletScreen = '/myWalletScreen';
   static const String coinHistoryScreen = '/coinHistoryScreen';
   static const String settingScreen = '/settingScreen';
+  static const String deleteAccountOtpScreen = '/deleteAccountOtpScreen';
   static const String referralScreen = '/referralScreen';
   static const String helpCenterScreen = '/helpCenterScreen';
   static const String becomeHostScreen = '/becomeHostScreen';

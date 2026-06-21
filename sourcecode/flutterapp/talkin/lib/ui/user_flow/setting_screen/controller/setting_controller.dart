@@ -1,10 +1,11 @@
+import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/setting_screen/api/request_delete_otp_api.dart';
 import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
 import 'package:notisboard/services/biometric/biometric_auth_service.dart';
-import 'package:notisboard/ui/user_flow/setting_screen/api/delete_user_api.dart';
 import 'package:notisboard/ui/user_flow/setting_screen/api/user_notification_update_api.dart';
 import 'package:notisboard/ui/user_flow/setting_screen/model/delete_user_account_model.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_login_user_profile_api.dart';
@@ -113,14 +114,15 @@ class SettingController extends GetxController {
     Get.dialog(const LoadingWidget(),
         barrierDismissible: false); // Start Loading...
 
-    deleteUserModel = await DeleteUserApi.callApi();
+    final response = await RequestDeleteOtpApi.callApi();
 
     Get.back(); // Stop Loading...
 
-    if (deleteUserModel?.status ?? false) {
-      Database.onLogOut();
-      Utils.showLog(
-          deleteUserModel?.message ?? "User account deleted successfully.");
+    if (response != null && response.status == true) {
+      Utils.showToast(Get.context!, response.message ?? "OTP sent to your email");
+      Get.toNamed(AppRoutes.deleteAccountOtpScreen);
+    } else {
+      Utils.showToast(Get.context!, response?.message ?? "Failed to request OTP");
     }
   }
 

@@ -138,6 +138,16 @@ class SettingView extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   _SettingsLane(
+                    iconAsset: AppAsset.languageIcon,
+                    title: EnumLocale.txtAPPLanguage.name.tr,
+                    subtitle: EnumLocale.txtSelectLanguageForApp.name.tr,
+                    isTablet: isTablet,
+                    onTap: () {
+                      Get.toNamed(AppRoutes.appLanguageScreen);
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  _SettingsLane(
                     iconAsset: AppAsset.notification,
                     title: EnumLocale.txtNotification.name.tr,
                     subtitle: EnumLocale.txtGetAlertsForCallsAndUpdates.name.tr,

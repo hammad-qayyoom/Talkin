@@ -1,3 +1,5 @@
+import 'package:notisboard/ui/user_flow/setting_screen/api/request_delete_otp_api.dart';
+import 'package:notisboard/routes/app_routes.dart';
 import 'dart:ui';
 
 import 'package:get/get.dart';
@@ -100,14 +102,15 @@ class HostSettingController extends GetxController {
     Get.dialog(const LoadingWidget(),
         barrierDismissible: false); // Start Loading...
 
-    deleteListenerResponseModel = await DeleteListenerApi.callApi();
+    final response = await RequestDeleteOtpApi.callApi();
 
     Get.back(); // Stop Loading...
 
-    if (deleteListenerResponseModel?.status ?? false) {
-      Database.onLogOut();
-      Utils.showLog(deleteListenerResponseModel?.message ??
-          "User account deleted successfully.");
+    if (response != null && response.status == true) {
+      Utils.showToast(Get.context!, response.message ?? "OTP sent to your email");
+      Get.toNamed(AppRoutes.deleteAccountOtpScreen);
+    } else {
+      Utils.showToast(Get.context!, response?.message ?? "Failed to request OTP");
     }
   }
 

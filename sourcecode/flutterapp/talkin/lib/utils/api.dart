@@ -56,6 +56,8 @@ abstract class Api {
   static const notificationClear =
       "${baseUrl}api/user/notification/clearNotifications";
   static const deleteUserAccount = "${baseUrl}api/user/deleteSelfAccount";
+  static const requestDeleteAccountOTP = "${baseUrl}api/user/requestDeleteAccountOTP";
+  static const verifyDeleteAccountOTP = "${baseUrl}api/user/verifyDeleteAccountOTP";
   static const listenerReviewApi =
       "${baseUrl}api/user/rating/fetchExpertReviews?";
   static const appConfigurationApi =

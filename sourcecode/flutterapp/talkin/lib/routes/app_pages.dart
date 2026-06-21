@@ -1,3 +1,5 @@
+import 'package:notisboard/ui/user_flow/delete_account_otp_screen/view/delete_account_otp_screen.dart';
+import 'package:notisboard/ui/user_flow/delete_account_otp_screen/binding/delete_account_otp_binding.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/host_flow/host_app_language_screen/binding/host_app_language_screen_binding.dart';
@@ -125,6 +127,12 @@ import 'package:notisboard/ui/user_flow/voice_call_screen/view/voice_call_screen
 
 class AppPages {
   static List<GetPage> list = [
+    GetPage(
+      name: AppRoutes.deleteAccountOtpScreen,
+      page: () => DeleteAccountOtpScreen(),
+      binding: DeleteAccountOtpBinding(),
+    ),
+
     GetPage(
       name: AppRoutes.splashScreenPage,
       // page: () => MyApp(),
