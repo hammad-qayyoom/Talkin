@@ -652,8 +652,6 @@ class MyWalletController extends GetxController
   Future<void> onClickFlutterWave(num amount, String id) async {
     Utils.showLog("Flutter Wave Payment Working....");
     try {
-      Get.dialog(const LoadingWidget(),
-          barrierDismissible: false); // Start Loading...
       await flutterWave(
         // context: Get.context,
         amount: amount,
@@ -772,8 +770,6 @@ class MyWalletController extends GetxController
     Utils.showLog("Razorpay Payment Working....");
 
     try {
-      Get.dialog(const LoadingWidget(),
-          barrierDismissible: false); // Start Loading...
       await razorPay(
         amount: amount,
         // razorKey: Database.settingApiModel?.data?.razorpayKeySecret ?? '',
@@ -892,8 +888,6 @@ class MyWalletController extends GetxController
   Future<void> onClickCashFree(num amount, String id) async {
     Utils.showLog("cash free Payment Working....");
     try {
-      Get.dialog(const LoadingWidget(),
-          barrierDismissible: false); // Start Loading...
       await cashFree(
         // context: Get.context,
         amount: amount,
@@ -939,8 +933,6 @@ class MyWalletController extends GetxController
   Future<void> onClickPayPal(num amount, String id) async {
     Utils.showLog("pay pal Payment Working....");
     try {
-      Get.dialog(const LoadingWidget(),
-          barrierDismissible: false); // Start Loading...
       await payPal(
         // context: Get.context,
         amount: amount,
@@ -986,8 +978,6 @@ class MyWalletController extends GetxController
   Future<void> onClickPayStack(num amount, String id) async {
     Utils.showLog("pay stack Payment Working....");
     try {
-      Get.dialog(const LoadingWidget(),
-          barrierDismissible: false); // Start Loading...
       await payStack(
         // context: Get.context,
         amount: amount,

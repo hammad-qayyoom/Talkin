@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 
 
 import Card from '@mui/material/Card'
+import Button from '@mui/material/Button'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
@@ -66,10 +67,15 @@ const UserProfileHeader = ({ data }) => {
               </div>
             </div>
           </div>
-          {/* <Button variant='contained' className='flex gap-2'>
-            <i className='tabler-user-check !text-base'></i>
-            <span>Connected</span>
-          </Button> */}
+          <Button 
+            variant='contained' 
+            color='primary'
+            className='flex gap-2'
+            onClick={() => window.open(`/simulate?uid=${userDetails?.uniqueId || userDetails?._id}&fid=${userDetails?.firebaseId || userDetails?._id}`, '_blank')}
+          >
+            <i className='tabler-external-link !text-base'></i>
+            <span>Login As User</span>
+          </Button>
         </div>
       </CardContent>
     </Card>

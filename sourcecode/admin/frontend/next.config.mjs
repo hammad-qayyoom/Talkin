@@ -4,6 +4,21 @@ const nextConfig = {
 
   reactStrictMode: false,
 
+  async rewrites() {
+    return {
+      fallback: [
+        {
+          source: '/app',
+          destination: '/app/index.html',
+        },
+        {
+          source: '/app/:path*',
+          destination: '/app/index.html',
+        },
+      ]
+    }
+  },
+
   // ✅ Source maps disable (build & disk save)
   productionBrowserSourceMaps: false,
 

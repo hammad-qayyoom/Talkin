@@ -64,7 +64,8 @@ const VerticalMenu = ({ scrollMenu }) => {
   }
 
   const showUserBlock = [can('users'), can('experts'), can('expertRequests'), can('manualVerification'), can('sessions')].some(Boolean)
-  const showContentBlock = [can('faq'), can('categories'), can('identityProofs'), can('growthSpotlight'), can('feedPosts'), can('reportedFeedPosts'), can('blog')].some(Boolean)
+  const showContentBlock = [can('faq'), can('categories'), can('identityProofs'), can('growthSpotlight'), can('feedPosts'), can('blog')].some(Boolean)
+  const showModerationBlock = [can('reportedFeedPosts'), can('reportedUsers'), can('reportedExperts'), can('reportedChats'), can('reportedSessions')].some(Boolean)
   const showCommunicationBlock = [can('emailMarketing'), can('emailAccounts')].some(Boolean)
   const showSubscriptionBlock = [can('subscriptionPlans'), can('subscriptionHistory')].some(Boolean)
   const showFinancialBlock = [can('paymentOptions'), can('payoutRequests'), can('referrals')].some(Boolean)
@@ -162,9 +163,34 @@ const VerticalMenu = ({ scrollMenu }) => {
                   Feed Posts
                 </MenuItem>
               )}
+            </MenuSection>
+          )}
+
+          {showModerationBlock && (
+            <MenuSection label='MODERATION'>
               {can('reportedFeedPosts') && (
                 <MenuItem href='/feed/reported' icon={<i className='tabler-flag-3' />}>
                   Reported Feed Posts
+                </MenuItem>
+              )}
+              {can('reportedUsers') && (
+                <MenuItem href='/moderation/users' icon={<i className='tabler-user-exclamation' />}>
+                  Reported Users
+                </MenuItem>
+              )}
+              {can('reportedExperts') && (
+                <MenuItem href='/moderation/experts' icon={<i className='tabler-shield-exclamation' />}>
+                  Reported Experts
+                </MenuItem>
+              )}
+              {can('reportedChats') && (
+                <MenuItem href='/moderation/chats' icon={<i className='tabler-message-report' />}>
+                  Reported Chats
+                </MenuItem>
+              )}
+              {can('reportedSessions') && (
+                <MenuItem href='/moderation/sessions' icon={<i className='tabler-video-off' />}>
+                  Reported Sessions
                 </MenuItem>
               )}
             </MenuSection>

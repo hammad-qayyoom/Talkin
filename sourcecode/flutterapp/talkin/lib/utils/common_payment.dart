@@ -270,9 +270,16 @@ Future<void> payPal({
     final paypalClientId = Database.settingApiModel?.data?.paypalClientId;
     final secretKey = Database.settingApiModel?.data?.paypalSecretKey;
     final context = _currentContext();
+    
     if (context == null) {
       Utils.showLog("PayPal payment skipped: context unavailable.");
       _showPaymentFailedToast();
+      return;
+    }
+
+    if (paypalClientId == null || paypalClientId.isEmpty || secretKey == null || secretKey.isEmpty) {
+      Utils.showLog("PayPal keys are missing. Aborting payment.");
+      Utils.showToast(context, "PayPal is not configured correctly.");
       return;
     }
 
@@ -283,11 +290,11 @@ Future<void> payPal({
       transactions: [
         {
           "amount": {
-            "total": amount.toString(),
+            "total": amount.toStringAsFixed(2),
             "currency": currency,
             "details": {
-              "subtotal": amount.toString(),
-              "shipping": '0',
+              "subtotal": amount.toStringAsFixed(2),
+              "shipping": '0.00',
               "shipping_discount": 0
             },
           },
@@ -297,13 +304,14 @@ Future<void> payPal({
               {
                 "name": "Subscription Plan",
                 "quantity": 1,
-                "price": amount.toString(),
+                "price": amount.toStringAsFixed(2),
                 "currency": currency,
               },
             ],
           },
         },
       ],
+      sandboxMode: false,
       onPaymentSuccess: onPaymentSuccess,
       onPaymentFailure: _showPaymentFailedToast,
     );

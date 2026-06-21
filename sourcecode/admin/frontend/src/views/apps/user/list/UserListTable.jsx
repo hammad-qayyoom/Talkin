@@ -631,6 +631,15 @@ return (
             >
               <i className='tabler-coins text-textSecondary' />
             </IconButton>
+            <Tooltip title="Login As User">
+              <IconButton
+                onClick={() => {
+                  window.open(`/simulate?uid=${row.original.uniqueId || row.original._id}&fid=${row.original.firebaseId || row.original._id}`, '_blank')
+                }}
+              >
+                <i className='tabler-external-link text-textSecondary' />
+              </IconButton>
+            </Tooltip>
           </div>
         ),
         enableSorting: false

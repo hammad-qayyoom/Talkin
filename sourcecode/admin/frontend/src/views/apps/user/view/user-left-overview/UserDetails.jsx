@@ -87,6 +87,14 @@ const UserDetails = ({ userDetails }) => {
                 variant='tonal'
               />
             </div>
+            <Button
+              variant='contained'
+              color='primary'
+              onClick={() => window.open(`/simulate?uid=${userDetails?.uniqueId || userDetails?._id}&fid=${userDetails?.firebaseId || userDetails?._id}`, '_blank')}
+              startIcon={<i className='tabler-external-link' />}
+            >
+              Login As User
+            </Button>
             <div className='flex items-center justify-evenly flex-wrap gap-4'>
               {!userDetails?.isFake && (
                 <>

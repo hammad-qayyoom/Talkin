@@ -25,6 +25,7 @@ import TableRow from '@mui/material/TableRow'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
 
 import CustomTextField from '@/@core/components/mui/TextField'
 import { baseURL } from '@/config'
@@ -161,6 +162,7 @@ const EmailMarketing = () => {
   const [historyLoading, setHistoryLoading] = useState(false)
   const [history, setHistory] = useState([])
   const [result, setResult] = useState(null)
+  const [attachment, setAttachment] = useState(null)
 
   const recipientState = useMemo(() => normalizeRecipients(form.recipients), [form.recipients])
   const senderState = useMemo(() => normalizeFromLocalPart(form.fromLocalPart), [form.fromLocalPart])
@@ -317,20 +319,33 @@ const EmailMarketing = () => {
     setResult(null)
 
     try {
-      const payload = {
-        audienceMode,
-        recipients: audienceMode === 'custom' ? recipientState.recipients : [],
-        selectedUserIds: audienceMode === 'selected' ? selectedUsers.map(item => item.id) : [],
-        selectedExpertIds: audienceMode === 'selected' ? selectedExperts.map(item => item.id) : [],
-        fromLocalPart: senderState.localPart,
-        fromName: form.fromName.trim() || 'Notisboard',
-        replyTo: form.replyTo.trim(),
-        subject: form.subject.trim(),
-        message: form.message.trim()
+      const payload = new FormData()
+      payload.append('audienceMode', audienceMode)
+      payload.append('fromLocalPart', senderState.localPart)
+      payload.append('fromName', form.fromName.trim() || 'Notisboard')
+      payload.append('replyTo', form.replyTo.trim())
+      payload.append('subject', form.subject.trim())
+      payload.append('message', form.message.trim())
+
+      if (audienceMode === 'custom' && recipientState.recipients.length > 0) {
+        payload.append('recipients', recipientState.recipients.join(','))
+      }
+      if (audienceMode === 'selected' && selectedUsers.length > 0) {
+        payload.append('selectedUserIds', selectedUsers.map(item => item.id).join(','))
+      }
+      if (audienceMode === 'selected' && selectedExperts.length > 0) {
+        payload.append('selectedExpertIds', selectedExperts.map(item => item.id).join(','))
+      }
+
+      if (attachment) {
+        payload.append('image', attachment)
       }
 
       const response = await axios.post(`${baseURL}/api/admin/emailMarketing/send`, payload, {
-        headers: getAuthHeaders()
+        headers: {
+          ...getAuthHeaders(),
+          'Content-Type': 'multipart/form-data'
+        }
       })
 
       setResult(response.data)
@@ -358,6 +373,17 @@ const EmailMarketing = () => {
     setSelectedUsers([])
     setSelectedExperts([])
     setResult(null)
+    setAttachment(null)
+  }
+
+  const handleFileChange = event => {
+    if (event.target.files && event.target.files.length > 0) {
+      setAttachment(event.target.files[0])
+    }
+  }
+
+  const handleClearFile = () => {
+    setAttachment(null)
   }
 
   return (
@@ -553,6 +579,26 @@ const EmailMarketing = () => {
                   helperText={`${Math.max(0, remainingMessage)} characters left`}
                 />
 
+                <Box className='flex flex-col gap-2'>
+                  <Typography variant='caption' color='text.secondary'>
+                    Image Attachment (Optional)
+                  </Typography>
+                  <Box className='flex items-center gap-3'>
+                    <Button variant='tonal' component='label' startIcon={<i className='tabler-upload' />}>
+                      Upload Image
+                      <input type='file' hidden accept='image/*' onChange={handleFileChange} />
+                    </Button>
+                    {attachment && (
+                      <Chip
+                        label={attachment.name}
+                        onDelete={handleClearFile}
+                        deleteIcon={<i className='tabler-x' />}
+                        variant='outlined'
+                      />
+                    )}
+                  </Box>
+                </Box>
+
                 <Box className='flex flex-wrap gap-3 justify-end'>
                   <Button variant='tonal' color='secondary' type='button' onClick={handleReset} disabled={loading}>
                     Reset
@@ -618,6 +664,16 @@ const EmailMarketing = () => {
                     {form.message.trim() || '-'}
                   </Typography>
                 </Box>
+                {attachment && (
+                  <Box>
+                    <Typography variant='caption' color='text.secondary'>
+                      Attachment
+                    </Typography>
+                    <Typography variant='body2' sx={{ overflowWrap: 'anywhere' }}>
+                      <i className='tabler-photo text-lg align-middle me-1' /> {attachment.name}
+                    </Typography>
+                  </Box>
+                )}
               </Box>
 
               {result ? (
