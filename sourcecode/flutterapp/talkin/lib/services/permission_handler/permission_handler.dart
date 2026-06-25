@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class PermissionHandler {
@@ -43,9 +45,7 @@ class PermissionHandler {
         onDenied?.call();
       } else if (status == PermissionStatus.permanentlyDenied ||
           status == PermissionStatus.limited) {
-        Utils.showToast(
-            Get.context, "Please allow camera permission in settings.");
-        await openAppSettings();
+        _showSettingsDialog("Camera permission is required. Please enable it in App Settings.");
         onDenied?.call();
       } else {
         onDenied?.call();
@@ -79,9 +79,7 @@ class PermissionHandler {
         onDenied?.call();
       } else if (status == PermissionStatus.permanentlyDenied ||
           status == PermissionStatus.limited) {
-        Utils.showToast(
-            Get.context, "Please allow microphone permission in settings.");
-        await openAppSettings();
+        _showSettingsDialog("Microphone permission is required. Please enable it in App Settings.");
         onDenied?.call();
       } else {
         onDenied?.call();
@@ -112,5 +110,22 @@ class PermissionHandler {
         Permission.storage.request();
       }
     });
+  }
+
+  static void _showSettingsDialog(String message) {
+    if (Get.context == null) return;
+    Get.defaultDialog(
+      title: "Permission Required",
+      middleText: message,
+      textConfirm: "Open Settings",
+      textCancel: "Cancel",
+      confirmTextColor: Colors.white,
+      buttonColor: AppColors.primary,
+      onConfirm: () {
+        Get.back();
+        openAppSettings();
+      },
+      onCancel: () {},
+    );
   }
 }
