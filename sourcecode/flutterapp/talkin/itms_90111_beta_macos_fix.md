@@ -17,66 +17,66 @@ Furthermore, if your Flutter app uses CocoaPods, Xcode compiles every single plu
 When Apple's App Store Connect servers scan your uploaded `.ipa` bundle, they inspect every `Info.plist`. If they detect that the app or *any* of its frameworks were compiled on a Beta macOS, they instantly reject the build with the `ITMS-90111` error.
 
 ## 💡 The Solution
-To bypass this validation without downgrading your Mac's operating system, you must forcefully rewrite the `Info.plist` files right before the app is digitally signed. 
+  To bypass this validation without downgrading your Mac's operating system, you must forcefully rewrite the `Info.plist` files right before the app is digitally signed. 
 
-By injecting a recursive shell script into Xcode's build phases, we can search the entire compiled App Bundle for any `Info.plist` and overwrite the `BuildMachineOSBuild`, `DTXcode`, and `DTSDKName` keys to perfectly mimic an official, stable Apple release (e.g., Stable macOS 26.5 and Stable Xcode 26.5).
+  By injecting a recursive shell script into Xcode's build phases, we can search the entire compiled App Bundle for any `Info.plist` and overwrite the `BuildMachineOSBuild`, `DTXcode`, and `DTSDKName` keys to perfectly mimic an official, stable Apple release (e.g., Stable macOS 26.5 and Stable Xcode 26.5).
 
-## 🛠️ How to Apply the Fix to ANY Flutter Project
+  ## 🛠️ How to Apply the Fix to ANY Flutter Project
 
-You can automate this fix by adding a Ruby script to your project's `ios/Podfile`. This ensures that every time you run `pod install`, the fix is automatically injected into the Xcode project.
+  You can automate this fix by adding a Ruby script to your project's `ios/Podfile`. This ensures that every time you run `pod install`, the fix is automatically injected into the Xcode project.
 
-### Step 1: Open the Podfile
-Open `ios/Podfile` in your Flutter project.
+  ### Step 1: Open the Podfile
+  Open `ios/Podfile` in your Flutter project.
 
-### Step 2: Add the Hook
-Scroll down to the `post_install do |installer|` block. At the very end of this block (just before the final `end`), paste the following code:
+  ### Step 2: Add the Hook
+  Scroll down to the `post_install do |installer|` block. At the very end of this block (just before the final `end`), paste the following code:
 
-```ruby
-  # --- FIX FOR ITMS-90111 UNSUPPORTED SDK & BETA MACOS ---
-  runner_project_path = File.join(File.dirname(__FILE__), 'Runner.xcodeproj')
-  begin
-    require 'xcodeproj'
-    runner_project = Xcodeproj::Project.open(runner_project_path)
-    runner_project.targets.each do |target|
-      if target.name == 'Runner'
-        phase_name = 'Fix App Store Connect SDK Version'
-        phase_exists = target.shell_script_build_phases.any? { |p| p.name == phase_name }
-        unless phase_exists
-          phase = target.new_shell_script_build_phase(phase_name)
-          
-          # The script recursively finds every Info.plist in the app bundle and overwrites the build metadata
-          # with official stable values (e.g., Stable macOS 26.5 Build 25F71 and Stable Xcode 26.5 Build 17F42)
-          phase.shell_script = <<-SCRIPT
-find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace BuildMachineOSBuild -string "25F71" {} \\;
-find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace DTXcode -string "2650" {} \\;
-find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace DTXcodeBuild -string "17F42" {} \\;
-find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace DTSDKName -string "iphoneos26.5" {} \\;
-find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace DTSDKBuild -string "23F73" {} \\;
-find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace DTPlatformBuild -string "23F73" {} \\;
-find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace DTPlatformVersion -string "26.5" {} \\;
-SCRIPT
+  ```ruby
+    # --- FIX FOR ITMS-90111 UNSUPPORTED SDK & BETA MACOS ---
+    runner_project_path = File.join(File.dirname(__FILE__), 'Runner.xcodeproj')
+    begin
+      require 'xcodeproj'
+      runner_project = Xcodeproj::Project.open(runner_project_path)
+      runner_project.targets.each do |target|
+        if target.name == 'Runner'
+          phase_name = 'Fix App Store Connect SDK Version'
+          phase_exists = target.shell_script_build_phases.any? { |p| p.name == phase_name }
+          unless phase_exists
+            phase = target.new_shell_script_build_phase(phase_name)
+            
+            # The script recursively finds every Info.plist in the app bundle and overwrites the build metadata
+            # with official stable values (e.g., Stable macOS 26.5 Build 25F71 and Stable Xcode 26.5 Build 17F42)
+            phase.shell_script = <<-SCRIPT
+  find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace BuildMachineOSBuild -string "25F71" {} \\;
+  find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace DTXcode -string "2650" {} \\;
+  find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace DTXcodeBuild -string "17F42" {} \\;
+  find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace DTSDKName -string "iphoneos26.5" {} \\;
+  find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace DTSDKBuild -string "23F73" {} \\;
+  find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace DTPlatformBuild -string "23F73" {} \\;
+  find "$TARGET_BUILD_DIR/$WRAPPER_NAME" -name "Info.plist" -exec plutil -replace DTPlatformVersion -string "26.5" {} \\;
+  SCRIPT
+          end
         end
       end
+      runner_project.save
+    rescue LoadError
+      puts "xcodeproj gem not found, skipping ITMS-90111 fix"
     end
-    runner_project.save
-  rescue LoadError
-    puts "xcodeproj gem not found, skipping ITMS-90111 fix"
-  end
-```
+  ```
 
-### Step 3: Apply the Fix
-Open your terminal and run the following commands to inject the fix and build your app:
+  ### Step 3: Apply the Fix
+  Open your terminal and run the following commands to inject the fix and build your app:
 
-```bash
-flutter clean
-flutter pub get
-cd ios
-pod install
-cd ..
-flutter build ipa
-```
+  ```bash
+  flutter clean
+  flutter pub get
+  cd ios
+  pod install
+  cd ..
+  flutter build ipa
+  ```
 
-That's it! Your generated `.ipa` or Xcode Archive will now easily pass App Store Connect validation, completely hiding the fact that you compiled it on a Beta operating system.
+  That's it! Your generated `.ipa` or Xcode Archive will now easily pass App Store Connect validation, completely hiding the fact that you compiled it on a Beta operating system.
 
 
 
