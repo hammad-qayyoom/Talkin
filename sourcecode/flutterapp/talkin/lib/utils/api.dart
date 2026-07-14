@@ -115,6 +115,15 @@ abstract class Api {
       "${baseUrl}api/v2/moderation/reports/create";
   static const subscriptionUserList =
       "${baseUrl}api/v2/subscriptions/users/list?";
+  
+  static const recordingSubscriptionCheckEligibility =
+      "${baseUrl}api/v2/recording-subscription/checkEligibility?";
+  static const recordingSubscriptionPurchase =
+      "${baseUrl}api/v2/recording-subscription/purchase";
+  static const recordingSubscriptionStatus =
+      "${baseUrl}api/v2/recording-subscription/status?";
+  static const recordingSubscriptionMyRecordings =
+      "${baseUrl}api/v2/recording-subscription/myRecordings?";
 
   // >>>>> >>>>> Expert Manual Verification <<<<< <<<<<
   static const expertVerificationSubmit =

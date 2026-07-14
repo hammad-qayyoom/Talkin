@@ -38,4 +38,14 @@ class SocketEvents {
   /// coin cut call
   static const callCoinsDeducted = "callCoinsDeducted";
   static const notEnoughCoins = "notEnoughCoins";
+
+  /// Session Recording Consent Negotiation
+  static const requestRecordingConsent = "requestRecordingConsent";
+  static const recordingConsentResponse = "recordingConsentResponse";
+  static const recordingConsentDenied = "recordingConsentDenied";
+  static const recordingStarted = "recordingStarted";
+  static const recordingStopped = "recordingStopped";
+  static const reportRecordingComplete = "reportRecordingComplete";
+  static const recordingSaved = "recordingSaved";
+  static const recordingEligibilityError = "recordingEligibilityError";
 }
