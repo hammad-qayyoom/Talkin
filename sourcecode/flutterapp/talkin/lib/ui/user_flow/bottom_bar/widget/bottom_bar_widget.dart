@@ -18,6 +18,8 @@ class BottomBarView extends StatelessWidget {
         final double bottomInset = MediaQuery.paddingOf(context).bottom;
         final double barHeight = (bottomInset > 0 ? 94 : 80) + bottomInset;
 
+        final int currentIndex = logic.selectIndex >= 0 && logic.selectIndex < 6 ? logic.selectIndex : 0;
+
         return Container(
           height: barHeight,
           decoration: BoxDecoration(
@@ -40,14 +42,14 @@ class BottomBarView extends StatelessWidget {
             maxHeight: double.infinity,
             maxWidth: double.infinity,
             child: SalomonBottomBar(
-              currentIndex: logic.selectIndex,
+              currentIndex: currentIndex,
               onTap: (value) async {
                 logic.onClick(value);
               },
               curve: Curves.easeInOut,
               margin: EdgeInsets.only(
-                left: 10,
-                right: 10,
+                left: 6,
+                right: 6,
                 top: 10,
                 bottom: bottomInset > 0 ? 8 : 6,
               ),
@@ -55,7 +57,7 @@ class BottomBarView extends StatelessWidget {
               items: [
                 bottomBarItemView(
                   index: 0,
-                  selectIndex: logic.selectIndex,
+                  selectIndex: currentIndex,
                   image: AppAsset.homeFilled,
                   label: EnumLocale.txtHome.name.tr,
                   selectedColor: AppColors.redesignBrandRed,
@@ -63,7 +65,7 @@ class BottomBarView extends StatelessWidget {
                 ),
                 bottomBarIconItemView(
                   index: 1,
-                  selectIndex: logic.selectIndex,
+                  selectIndex: currentIndex,
                   icon: Icons.dynamic_feed_rounded,
                   label: 'Feed',
                   selectedColor: AppColors.redesignBrandRed,
@@ -71,7 +73,7 @@ class BottomBarView extends StatelessWidget {
                 ),
                 bottomBarItemView(
                   index: 2,
-                  selectIndex: logic.selectIndex,
+                  selectIndex: currentIndex,
                   image: AppAsset.listener,
                   label: EnumLocale.txtListener.name.tr,
                   selectedColor: AppColors.redesignBrandRed,
@@ -79,15 +81,23 @@ class BottomBarView extends StatelessWidget {
                 ),
                 bottomBarItemView(
                   index: 3,
-                  selectIndex: logic.selectIndex,
+                  selectIndex: currentIndex,
                   image: AppAsset.chat,
                   label: EnumLocale.txtChat.name.tr,
                   selectedColor: AppColors.redesignBrandRed,
                   unselectedColor: AppColors.redesignBottomBarUnselected,
                 ),
-                bottomBarItemView(
+                bottomBarIconItemView(
                   index: 4,
-                  selectIndex: logic.selectIndex,
+                  selectIndex: currentIndex,
+                  icon: Icons.newspaper_rounded,
+                  label: 'Blog',
+                  selectedColor: AppColors.redesignBrandRed,
+                  unselectedColor: AppColors.redesignBottomBarUnselected,
+                ),
+                bottomBarItemView(
+                  index: 5,
+                  selectIndex: currentIndex,
                   image: AppAsset.calendar,
                   label: 'Sessions',
                   selectedColor: AppColors.redesignBrandRed,

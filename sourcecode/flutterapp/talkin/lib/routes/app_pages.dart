@@ -2,6 +2,9 @@ import 'package:notisboard/ui/user_flow/delete_account_otp_screen/view/delete_ac
 import 'package:notisboard/ui/user_flow/delete_account_otp_screen/binding/delete_account_otp_binding.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/common/blog_news/binding/blog_news_binding.dart';
+import 'package:notisboard/ui/common/blog_news/view/blog_news_detail_screen.dart';
+import 'package:notisboard/ui/common/blog_news/view/blog_news_list_screen.dart';
 import 'package:notisboard/ui/host_flow/host_app_language_screen/binding/host_app_language_screen_binding.dart';
 import 'package:notisboard/ui/host_flow/host_app_language_screen/view/host_app_language_screen.dart';
 import 'package:notisboard/ui/host_flow/expert_availability_screen/view/expert_availability_screen.dart';
@@ -474,6 +477,16 @@ class AppPages {
       name: AppRoutes.manualVerificationScreen,
       page: () => const ManualVerificationScreen(),
       binding: ManualVerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.blogNewsListScreen,
+      page: () => const BlogNewsListScreen(),
+      binding: BlogNewsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.blogNewsDetailScreen,
+      page: () => const BlogNewsDetailScreen(),
+      binding: BlogNewsBinding(),
     ),
   ];
 }

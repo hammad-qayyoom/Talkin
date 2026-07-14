@@ -17,7 +17,7 @@ class HostBottomBarView extends StatelessWidget {
       builder: (logic) {
         final double bottomInset = MediaQuery.paddingOf(context).bottom;
         final double barHeight = (bottomInset > 0 ? 94 : 80) + bottomInset;
-        final int currentIndex = logic.selectIndex >= 0 && logic.selectIndex < 5
+        final int currentIndex = logic.selectIndex >= 0 && logic.selectIndex < 6
             ? logic.selectIndex
             : 0;
 
@@ -48,8 +48,8 @@ class HostBottomBarView extends StatelessWidget {
               },
               curve: Curves.easeInOut,
               margin: EdgeInsets.only(
-                left: 10,
-                right: 10,
+                left: 6,
+                right: 6,
                 top: 10,
                 bottom: bottomInset > 0 ? 8 : 6,
               ),
@@ -79,8 +79,14 @@ class HostBottomBarView extends StatelessWidget {
                   image: AppAsset.chat,
                   label: EnumLocale.txtChat.name.tr,
                 ),
-                bottomBarItemView(
+                bottomBarIconItemView(
                   index: 4,
+                  selectIndex: currentIndex,
+                  icon: Icons.newspaper_rounded,
+                  label: 'Blog',
+                ),
+                bottomBarItemView(
+                  index: 5,
                   selectIndex: currentIndex,
                   image: AppAsset.walletIcon,
                   label: EnumLocale.txtWallet.name.tr,

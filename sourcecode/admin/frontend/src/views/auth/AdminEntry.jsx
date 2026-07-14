@@ -13,12 +13,17 @@ const AdminEntry = () => {
   const [loading, setLoading] = useState(true)
 
   const checkLogin = async () => {
-    const response = await axios.get(`${baseURL}/api/admin/login`)
+    try {
+      const response = await axios.get(`${baseURL}/api/admin/login`)
 
-    if (response.data.login) {
-      setLogin(true)
-      setLoading(false)
-    } else {
+      if (response.data.login) {
+        setLogin(true)
+        setLoading(false)
+      } else {
+        setLogin(false)
+        setLoading(false)
+      }
+    } catch (error) {
       setLogin(false)
       setLoading(false)
     }

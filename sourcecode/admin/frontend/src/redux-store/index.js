@@ -40,6 +40,7 @@ import payoutRequestsReducer from '@/redux-store/slices/payoutRequests'
 import gameHistoryReducer from '@/redux-store/slices/gameHistory'
 import paymentOptionsReducer from '@/redux-store/slices/paymentOptions'
 import growthSpotlightReducer from '@/redux-store/slices/growthSpotlight'
+import userGrowthSpotlightReducer from '@/redux-store/slices/userGrowthSpotlight'
 import blogReducer from '@/redux-store/slices/blog'
 
 // Listener slice is intentionally mounted at `expert` key for Phase-1 compatibility.
@@ -94,6 +95,7 @@ export const store = configureStore({
     // gameHistory: gameHistoryReducer,
     paymentOptions: paymentOptionsReducer,
     growthSpotlight: growthSpotlightReducer,
+    userGrowthSpotlight: userGrowthSpotlightReducer,
     blog: blogReducer,
     expert: listenerReducer,
     manualVerification: manualVerificationReducer

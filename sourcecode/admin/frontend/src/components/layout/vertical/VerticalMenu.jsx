@@ -154,9 +154,14 @@ const VerticalMenu = ({ scrollMenu }) => {
                 </MenuItem>
               )}
               {can('growthSpotlight') && (
-                <MenuItem href='/growth-spotlight' icon={<i className='tabler-photo' />}>
-                  Growth Spotlight
-                </MenuItem>
+                <>
+                  <MenuItem href='/growth-spotlight' icon={<i className='tabler-photo-star' />}>
+                    Expert Spotlight
+                  </MenuItem>
+                  <MenuItem href='/user-growth-spotlight' icon={<i className='tabler-photo' />}>
+                    User Spotlight
+                  </MenuItem>
+                </>
               )}
               {can('feedPosts') && (
                 <MenuItem href='/feed/posts' icon={<i className='tabler-news' />}>

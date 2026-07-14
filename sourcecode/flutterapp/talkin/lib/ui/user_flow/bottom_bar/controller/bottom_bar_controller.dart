@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:notisboard/socket/socket_listen.dart';
 import 'package:notisboard/socket/socket_service.dart';
+import 'package:notisboard/ui/common/blog_news/view/blog_news_list_screen.dart';
 import 'package:notisboard/ui/user_flow/chat_screen/view/chat_screen.dart';
 import 'package:notisboard/ui/user_flow/feed_screen/view/feed_screen.dart';
 import 'package:notisboard/ui/user_flow/home_screen/view/home_screen.dart';
@@ -79,12 +80,13 @@ class BottomBarController extends GetxController {
     FeedScreen(controllerTag: 'bottomFeed'),
     ListenersScreen(),
     ChatScreen(),
+    const BlogNewsListScreen(isBottomTab: true),
     UserMySessionsScreen(),
   ];
 
   onClick(value) async {
     if (value != null) {
-      if (AuthGuard.isGuest && (value == 3 || value == 4)) {
+      if (AuthGuard.isGuest && (value == 3 || value == 5)) {
         AuthGuard.showLoginPrompt(
           message:
               'Chats and your sessions need an account. You can keep browsing experts without logging in.',

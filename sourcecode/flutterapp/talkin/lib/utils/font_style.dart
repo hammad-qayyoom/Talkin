@@ -52,10 +52,12 @@ class AppFontStyle {
     required Color fontColor,
     TextDecoration? textDecoration,
     Color? decorationColor,
+    double? height,
   }) {
     return GoogleFonts.poppins(
       fontSize: fontSize,
       color: fontColor,
+      height: height,
       fontWeight: FontWeight.w600,
       decoration: textDecoration,
       decorationColor: decorationColor,
@@ -67,10 +69,12 @@ class AppFontStyle {
     required Color fontColor,
     TextDecoration? textDecoration,
     Color? decorationColor,
+    double? height,
   }) {
     return GoogleFonts.poppins(
       fontSize: fontSize,
       color: fontColor,
+      height: height,
       fontWeight: FontWeight.w700,
       decoration: textDecoration,
       decorationColor: decorationColor,

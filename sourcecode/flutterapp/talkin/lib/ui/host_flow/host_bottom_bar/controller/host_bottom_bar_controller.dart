@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:notisboard/socket/socket_listen.dart';
 import 'package:notisboard/socket/socket_service.dart';
+import 'package:notisboard/ui/common/blog_news/view/blog_news_list_screen.dart';
 import 'package:notisboard/ui/host_flow/host_chat_screen/view/host_chat_screen.dart';
 import 'package:notisboard/ui/host_flow/expert_sessions_screen/view/expert_sessions_screen.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/view/host_home_screen.dart';
@@ -44,13 +45,8 @@ class HostBottomBarController extends GetxController {
     const ExpertSessionsScreen(),
     const FeedScreen(controllerTag: 'hostFeed'),
     HostChatScreen(),
+    const BlogNewsListScreen(isBottomTab: true),
     HostWalletScreen(),
-    // ChatScreen(),
-    // CallingScreen(),
-    // const AppointmentScreen(),
-    // const ChatScreen(),
-    // const FavoriteAgencyScreen(),
-    // const ProfileScreen(),
   ];
   Future<void> createEngine() async {
     final appIdText =

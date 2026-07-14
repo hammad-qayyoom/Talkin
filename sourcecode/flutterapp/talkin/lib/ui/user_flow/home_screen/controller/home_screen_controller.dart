@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/services/location/user_location_service.dart';
+import 'package:notisboard/ui/host_flow/host_home_screen/model/growth_spotlight_model.dart';
 import 'package:notisboard/ui/user_flow/home_screen/api/top_listeners_api.dart';
 import 'package:notisboard/ui/user_flow/home_screen/api/user_coin_api.dart';
+import 'package:notisboard/ui/user_flow/home_screen/api/user_growth_spotlight_api.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/user_coin_model.dart';
 import 'package:notisboard/ui/user_flow/host_verification_screen/api/talk_topic_api.dart';
@@ -32,6 +34,11 @@ class HomeScreenController extends GetxController {
   bool isCoinLoading = false;
   bool _didRequestHomeLocation = false;
 
+  GrowthSpotlightModel? userSpotlightModel;
+  List<GrowthSpotlightData> userSpotlightItems = [];
+  bool isSpotlightLoading = false;
+  int currentSpotlightIndex = 0;
+
   @override
   void onInit() {
     TopListenersApi.startPagination = 0;
@@ -39,6 +46,7 @@ class HomeScreenController extends GetxController {
     log("Enter home screen controller");
     loadHomeCategories();
     getTopListeners();
+    getUserSpotlight();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       requestHomeLocationAfterFirstFrame();
     });
@@ -98,6 +106,24 @@ class HomeScreenController extends GetxController {
     scrollController.addListener(onTopListenersPagination);
 
     log("Enter In Home screen startPagination ${TopListenersApi.startPagination} ");
+  }
+
+  void onSpotlightPageChanged(int index, dynamic reason) {
+    currentSpotlightIndex = index;
+    update(['userSpotlight']);
+  }
+
+  Future<void> getUserSpotlight() async {
+    isSpotlightLoading = true;
+    update(['userSpotlight']);
+
+    try {
+      userSpotlightModel = await UserGrowthSpotlightApi.callApi();
+      userSpotlightItems = userSpotlightModel?.data ?? [];
+    } finally {
+      isSpotlightLoading = false;
+      update(['userSpotlight']);
+    }
   }
 
   Future<void> loadHomeCategories() async {
@@ -214,5 +240,6 @@ class HomeScreenController extends GetxController {
     update([Constant.idCoinUpdate]);
 
     await getTopListeners();
+    await getUserSpotlight();
   }
 }

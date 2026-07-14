@@ -1872,84 +1872,130 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                 ),
                               ],
                             ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Column(
                               children: [
-                                Container(
-                                  height: isTablet ? 40 : 36,
-                                  width: isTablet ? 40 : 36,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Icon(
-                                    Icons.calendar_month_rounded,
-                                    color: _brandRed,
-                                    size: isTablet ? 22 : 20,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        EnumLocale.txtSessionCenter.name.tr,
-                                        style: AppFontStyle.fontStyleW700(
-                                          fontSize: isTablet ? 15 : 14,
-                                          fontColor: AppColors.white,
-                                        ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: isTablet ? 40 : 36,
+                                      width: isTablet ? 40 : 36,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.white,
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
-                                      const SizedBox(height: 3),
-                                      Text(
-                                        heroSubtitle,
-                                        style: AppFontStyle.fontStyleW500(
-                                          fontSize: isTablet ? 12 : 11,
-                                          fontColor: AppColors.white
-                                              .withValues(alpha: 0.88),
-                                        ),
+                                      child: Icon(
+                                        Icons.calendar_month_rounded,
+                                        color: _brandRed,
+                                        size: isTablet ? 22 : 20,
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 7,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color:
-                                        AppColors.white.withValues(alpha: 0.2),
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color: AppColors.white
-                                          .withValues(alpha: 0.35),
                                     ),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        EnumLocale.txtSessionCount.name.trParams({
-                                          'count': '${_sessions.length}',
-                                        }),
-                                        style: AppFontStyle.fontStyleW700(
-                                          fontSize: isTablet ? 16 : 14,
-                                          fontColor: AppColors.white,
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            EnumLocale.txtSessionCenter.name.tr,
+                                            style: AppFontStyle.fontStyleW700(
+                                              fontSize: isTablet ? 15 : 14,
+                                              fontColor: AppColors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 3),
+                                          Text(
+                                            heroSubtitle,
+                                            style: AppFontStyle.fontStyleW500(
+                                              fontSize: isTablet ? 12 : 11,
+                                              fontColor: AppColors.white
+                                                  .withValues(alpha: 0.88),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 7,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            AppColors.white.withValues(alpha: 0.2),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: AppColors.white
+                                              .withValues(alpha: 0.35),
                                         ),
                                       ),
-                                      Text(
-                                        _view == 'upcoming'
-                                            ? EnumLocale.txtUpcoming.name.tr
-                                            : EnumLocale.txtDone.name.tr,
-                                        style: AppFontStyle.fontStyleW500(
-                                          fontSize: 9,
-                                          fontColor: AppColors.white
-                                              .withValues(alpha: 0.9),
-                                        ),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            EnumLocale.txtSessionCount.name.trParams({
+                                              'count': '${_sessions.length}',
+                                            }),
+                                            style: AppFontStyle.fontStyleW700(
+                                              fontSize: isTablet ? 16 : 14,
+                                              fontColor: AppColors.white,
+                                            ),
+                                          ),
+                                          Text(
+                                            _view == 'upcoming'
+                                                ? EnumLocale.txtUpcoming.name.tr
+                                                : EnumLocale.txtDone.name.tr,
+                                            style: AppFontStyle.fontStyleW500(
+                                              fontSize: 9,
+                                              fontColor: AppColors.white
+                                                  .withValues(alpha: 0.9),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: isTablet ? 46.0 : 42.0,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Get.toNamed(AppRoutes.userGroupSessionsScreen);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      backgroundColor: AppColors.white,
+                                      foregroundColor: _brandRedDark,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.groups_rounded,
+                                          size: isTablet ? 20 : 18,
+                                          color: _brandRedDark,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          EnumLocale.txtGroupSessions.name.tr,
+                                          style: AppFontStyle.fontStyleW700(
+                                            fontSize: isTablet ? 14 : 13,
+                                            fontColor: _brandDark,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Icon(
+                                          Icons.arrow_forward_rounded,
+                                          size: isTablet ? 16 : 14,
+                                          color: _brandDark,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],

@@ -160,6 +160,8 @@ abstract class Api {
   static const userProfileApi = "${baseUrl}api/expert/getProfileByUserId?";
   static const listenerGrowthSpotlight =
       "${baseUrl}api/expert/growthSpotlight/retrieveGrowthSpotlights";
+  static const userGrowthSpotlight =
+      "${baseUrl}api/user/growthSpotlight/retrieveGrowthSpotlights";
 
   static const ipApi = "http://ip-api.com/json";
 
@@ -167,4 +169,8 @@ abstract class Api {
 
   static const fetchCoinPlan =
       "${baseUrl}api/user/coinplan/getAvailableCoinPackage";
+
+  // >>>>> >>>>> Blog & News Api <<<<< <<<<<
+  static const getPublicBlogs = "${baseUrl}api/blog/posts?";
+  static const getPublicBlogBySlug = "${baseUrl}api/blog/posts/";
 }

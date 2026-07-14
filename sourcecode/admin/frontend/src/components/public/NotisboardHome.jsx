@@ -5,13 +5,13 @@ const storeLinks = [
     label: 'Google Play',
     icon: 'tabler-brand-google-play',
     text: 'Android app',
-    href: '#download'
+    href: 'https://play.google.com/store/apps/details?id=com.notisboard.mobile'
   },
   {
     label: 'App Store',
     icon: 'tabler-brand-apple',
     text: 'iPhone app',
-    href: '#download'
+    href: 'https://apps.apple.com/us/app/notisboard/id6763775810'
   }
 ]
 
@@ -93,7 +93,7 @@ const Brand = () => (
 )
 
 const StoreButton = ({ item }) => (
-  <a className={styles.storeButton} href={item.href}>
+  <a className={styles.storeButton} href={item.href} target='_blank' rel='noopener noreferrer'>
     <span className={item.icon} aria-hidden='true' />
     <span>
       <strong>{item.label}</strong>
