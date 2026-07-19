@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/image/professional_cached_image.dart';
-import 'package:notisboard/custom/notisboard_wordmark.dart';
-import 'package:notisboard/routes/app_routes.dart';
-import 'package:notisboard/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
 import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
 import 'package:notisboard/ui/user_flow/home_screen/widget/user_growth_spotlight_widget.dart';
 import 'package:notisboard/utils/api.dart';
-import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
-import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -19,7 +14,6 @@ class FindMoreWidget extends StatelessWidget {
   const FindMoreWidget({super.key});
 
   static final Color _brandRed = AppColors.redesignBrandRed;
-  static final Color _brandRedDark = AppColors.redesignBrandRedDeep;
   static final Color _brandDark = AppColors.redesignBrandDark;
   static final Color _neutralText = AppColors.redesignMutedText;
   static final Color _neutralBorder = AppColors.redesignSoftBorder;
@@ -65,35 +59,9 @@ class FindMoreWidget extends StatelessWidget {
     return label.isEmpty ? 'Category' : label;
   }
 
-  void _openExpertsTab(HomeScreenController homeController) {
-    if (Get.isRegistered<BottomBarController>()) {
-      Get.find<BottomBarController>().onClick(2);
-      return;
-    }
 
-    Get.toNamed(
-      AppRoutes.allListeners,
-      arguments: {
-        'categoryId': homeController.selectedCategoryId,
-      },
-    );
-  }
 
-  bool get _shouldOfferSubscriptionCheckout =>
-      GetPlatform.isIOS && AuthGuard.isGuest;
 
-  void _openPrimaryHeroAction(HomeScreenController homeController) {
-    if (_shouldOfferSubscriptionCheckout) {
-      Get.toNamed(AppRoutes.myWalletScreen)?.then((_) {
-        if (Get.isRegistered<HomeScreenController>()) {
-          Get.find<HomeScreenController>().onRefresh();
-        }
-      });
-      return;
-    }
-
-    _openExpertsTab(homeController);
-  }
 
   Widget _buildCategoryIcon({
     required bool isSelected,

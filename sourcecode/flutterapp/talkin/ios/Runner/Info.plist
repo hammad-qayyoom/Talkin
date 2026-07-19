@@ -57,6 +57,8 @@
 	<string>Notisboard uses the camera for profile photos, verification uploads, and video calls.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Notisboard uses the microphone for voice messages and audio or video calls.</string>
+	<key>NSScreenCaptureUsageDescription</key>
+	<string>Notisboard records consultation sessions so you can review them later. Your screen and audio will be captured during the recording.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Notisboard lets you choose photos or videos for your profile, chats, feed posts, and verification uploads.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -87,6 +89,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
+		<string>audio</string>
 	</array>
 	<key>CFBundleURLTypes</key>
 	<array>

@@ -10,6 +10,7 @@ import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 
 /// =================== Video Call View =================== ///
@@ -45,6 +46,48 @@ class VoiceCallView extends StatelessWidget {
             height: Get.height,
             width: Get.width,
             child: const SizedBox(), // Empty child just to apply blur
+          ),
+          // Recording badge
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 12,
+            left: 0,
+            right: 0,
+            child: GetBuilder<VoiceCallController>(
+              id: Constant.idVideoCall,
+              builder: (logic) {
+                if (!logic.isRecordingActive) return const SizedBox.shrink();
+                return Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withValues(alpha: 0.85),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          "This call is being recorded",
+                          style: AppFontStyle.fontStyleW600(
+                            fontSize: 12,
+                            fontColor: AppColors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
           GetBuilder<VoiceCallController>(
             id: Constant.idVideoCall,
@@ -264,6 +307,26 @@ class VoiceCallView1 extends StatelessWidget {
                     canManageUsers: canManageUsers,
                     size: controlSize,
                   ),
+                GetBuilder<VoiceCallController>(
+                  id: Constant.idVideoCall,
+                  builder: (logic) {
+                    // if (!logic.isRecordingEligible) return const SizedBox.shrink(); // Assuming eligibility is checked and handled
+                    return buildControlButton(
+                      iconData: logic.isRecordingActive ? Icons.stop_circle_outlined : Icons.radio_button_checked,
+                      isActive: logic.isRecordingActive,
+                      onTap: () {
+                        if (logic.isRecordingActive) {
+                          logic.stopRecording();
+                        } else if (!logic.isRecordingConsentPending) {
+                          logic.requestRecording();
+                        } else {
+                          Utils.showToast(context, "Waiting for other person's consent...");
+                        }
+                      },
+                      size: controlSize,
+                    );
+                  },
+                ),
                 buildControlButton(
                   iconData: Icons.call_end_rounded,
                   isDanger: true,
@@ -310,6 +373,32 @@ class VoiceCallView1 extends StatelessWidget {
                   ),
                   Column(
                     children: [
+                      GetBuilder<VoiceCallController>(
+                        id: Constant.idVideoCall,
+                        builder: (logic) {
+                          if (!logic.isRecordingActive) return const SizedBox.shrink();
+                          return Container(
+                            width: double.infinity,
+                            color: Colors.red.withValues(alpha: 0.9),
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.circle, color: Colors.white, size: 8),
+                                const SizedBox(width: 6),
+                                Text(
+                                  "REC • This call is being recorded",
+                                  style: AppFontStyle.fontStyleW600(
+                                    fontSize: 11,
+                                    fontColor: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(
                           horizontalPadding,

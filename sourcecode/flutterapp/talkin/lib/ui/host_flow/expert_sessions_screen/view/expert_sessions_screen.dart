@@ -5,6 +5,7 @@ import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/services/permission_handler/permission_handler.dart';
 import 'package:notisboard/socket/socket_emit.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
+import 'package:notisboard/ui/common/recording_subscription/view/my_recordings_screen.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -680,6 +681,51 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                   ],
                 );
               },
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(11),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: _softBorder),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.black.withValues(alpha: 0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: SizedBox(
+              height: 42,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const MyRecordingsScreen(),
+                    ),
+                  );
+                },
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: _softBorder),
+                  foregroundColor: _brandDark,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                icon: const Icon(Icons.cloud_rounded, size: 16),
+                label: Text(
+                  "My Recordings",
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 12,
+                    fontColor: _brandDark,
+                  ),
+                ),
+              ),
             ),
           ),
         ],

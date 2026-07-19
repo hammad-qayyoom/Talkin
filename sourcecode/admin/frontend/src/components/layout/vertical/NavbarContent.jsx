@@ -38,6 +38,7 @@ const routeTitleMap = {
   '/email-marketing': 'Email Marketing',
   '/email-accounts': 'Email Accounts',
   '/coin-plans': 'Subscription Plans',
+  '/recording-plans': 'Recording Storage Plans',
   '/coin-plan-history': 'Subscription History',
   '/payment-options': 'Payment Options',
   '/payout-requests': 'Payout Requests',

@@ -79,6 +79,16 @@ class SocketListen {
     socket?.off(SocketEvents.notEnoughCoins);
     socket?.off(SocketEvents.callCoinsDeducted);
     socket?.off(SocketEvents.callCutData);
+    
+    // Recording
+    socket?.off(SocketEvents.requestRecordingConsent);
+    socket?.off(SocketEvents.recordingConsentResponse);
+    socket?.off(SocketEvents.recordingConsentDenied);
+    socket?.off(SocketEvents.recordingStarted);
+    socket?.off(SocketEvents.recordingStopped);
+    socket?.off(SocketEvents.reportRecordingComplete);
+    socket?.off(SocketEvents.recordingSaved);
+    socket?.off(SocketEvents.recordingEligibilityError);
 
     socket?.on(SocketEvents.sendMessage, handleSendMessage);
     socket?.on(SocketEvents.markMessageSeen, handleMarkMessageSeen);
@@ -95,6 +105,16 @@ class SocketListen {
     socket?.on(SocketEvents.notEnoughCoins, handleNotEnoughCoins);
     socket?.on(SocketEvents.callCoinsDeducted, handleCallCoinsDeducted);
     socket?.on(SocketEvents.callCutData, handleCallCutData);
+
+    // Recording
+    socket?.on(SocketEvents.requestRecordingConsent, handleRequestRecordingConsent);
+    socket?.on(SocketEvents.recordingConsentResponse, handleRecordingConsentResponse);
+    socket?.on(SocketEvents.recordingConsentDenied, handleRecordingConsentDenied);
+    socket?.on(SocketEvents.recordingStarted, handleRecordingStarted);
+    socket?.on(SocketEvents.recordingStopped, handleRecordingStopped);
+    socket?.on(SocketEvents.reportRecordingComplete, handleReportRecordingComplete);
+    socket?.on(SocketEvents.recordingSaved, handleRecordingSaved);
+    socket?.on(SocketEvents.recordingEligibilityError, handleRecordingEligibilityError);
 
     _listenersAttached = true;
     Utils.showLog("Socket listeners attached successfully.");
@@ -533,13 +553,15 @@ class SocketListen {
     ListenerCoinModel? listenerCoinModel;
     Utils.showLog("Socket Listen => callTerminated event: $data");
     _reportSessionCallOutcomeIfNeeded(data, outcome: 'connected');
-    VoiceCallController? controller;
+    VoiceCallController? voiceController;
+    VideoCallController? videoController;
     if (Get.currentRoute == AppRoutes.voiceCallScreen) {
       if (Get.isRegistered<VoiceCallController>()) {
-        controller = Get.find<VoiceCallController>();
-      } else {
-        controller = Get.put(VoiceCallController());
-        log("⚠️ VoiceCallController not registered, skipping cleanup.");
+        voiceController = Get.find<VoiceCallController>();
+      }
+    } else if (Get.currentRoute == AppRoutes.videoCallScreen) {
+      if (Get.isRegistered<VideoCallController>()) {
+        videoController = Get.find<VideoCallController>();
       }
     }
     final callerRole = data['callerRole'];
@@ -547,13 +569,30 @@ class SocketListen {
     // ✅ First, properly cleanup proximity sensor and screen lock
     try {
       await ProximityScreenLock.setActive(false);
-      // ✅ Force screen to turn ON if it was locked by proximity
-      controller?.isProximitySupported = false;
-      controller?.isObjectNear = false;
-      controller?.userEnabledSpeaker = false;
-      log("✅ Proximity sensor deactivated and screen unlocked  userEnabledSpeaker = ${controller?.userEnabledSpeaker} isObjectNear = ${controller?.isObjectNear} isProximitySupported = ${controller?.isProximitySupported}");
+      voiceController?.isProximitySupported = false;
+      voiceController?.isObjectNear = false;
+      voiceController?.userEnabledSpeaker = false;
+      log("✅ Proximity sensor deactivated and screen unlocked");
     } catch (e) {
       log("❌ Error deactivating proximity sensor: $e");
+    }
+
+    // ✅ Stop recording and upload BEFORE navigating away
+    if (voiceController != null && voiceController.isRecordingActive) {
+      try {
+        await voiceController.stopRecordingAndUpload();
+        log("✅ Voice recording stopped and uploaded from handleCallTerminated");
+      } catch (e) {
+        log("❌ Error stopping voice recording in handleCallTerminated: $e");
+      }
+    }
+    if (videoController != null && videoController.isRecordingActive) {
+      try {
+        await videoController.stopRecordingAndUpload();
+        log("✅ Video recording stopped and uploaded from handleCallTerminated");
+      } catch (e) {
+        log("❌ Error stopping video recording in handleCallTerminated: $e");
+      }
     }
 
     if (Get.currentRoute == AppRoutes.videoCallScreen ||
@@ -671,6 +710,85 @@ class SocketListen {
       Get.find<CallCutController>().setCallCutData(data);
     } catch (e, st) {
       Utils.showLog("❌ Error in handleCallCutData: $e\n$st");
+    }
+  }
+
+  static void handleRequestRecordingConsent(dynamic data) {
+    Utils.showLog("Socket Listen => handleRequestRecordingConsent: $data");
+    if (Get.isRegistered<VoiceCallController>()) {
+      Get.find<VoiceCallController>().onRequestRecordingConsent(data);
+    }
+    if (Get.isRegistered<VideoCallController>()) {
+      Get.find<VideoCallController>().onRequestRecordingConsent(data);
+    }
+  }
+
+  static void handleRecordingConsentResponse(dynamic data) {
+    Utils.showLog("Socket Listen => handleRecordingConsentResponse: $data");
+    if (Get.isRegistered<VoiceCallController>()) {
+      Get.find<VoiceCallController>().onRecordingConsentResponse(data);
+    }
+    if (Get.isRegistered<VideoCallController>()) {
+      Get.find<VideoCallController>().onRecordingConsentResponse(data);
+    }
+  }
+
+  static void handleRecordingConsentDenied(dynamic data) {
+    Utils.showLog("Socket Listen => handleRecordingConsentDenied: $data");
+    if (Get.isRegistered<VoiceCallController>()) {
+      Get.find<VoiceCallController>().onRecordingConsentResponse({'isAccepted': false, ...?data});
+    }
+    if (Get.isRegistered<VideoCallController>()) {
+      Get.find<VideoCallController>().onRecordingConsentResponse({'isAccepted': false, ...?data});
+    }
+  }
+
+  static void handleRecordingStarted(dynamic data) {
+    Utils.showLog("Socket Listen => handleRecordingStarted: $data");
+    if (Get.isRegistered<VoiceCallController>()) {
+      Get.find<VoiceCallController>().onRecordingStarted(data);
+    }
+    if (Get.isRegistered<VideoCallController>()) {
+      Get.find<VideoCallController>().onRecordingStarted(data);
+    }
+  }
+
+  static void handleRecordingStopped(dynamic data) {
+    Utils.showLog("Socket Listen => handleRecordingStopped: $data");
+    if (Get.isRegistered<VoiceCallController>()) {
+      Get.find<VoiceCallController>().onRecordingStopped(data);
+    }
+    if (Get.isRegistered<VideoCallController>()) {
+      Get.find<VideoCallController>().onRecordingStopped(data);
+    }
+  }
+
+  static void handleReportRecordingComplete(dynamic data) {
+    Utils.showLog("Socket Listen => handleReportRecordingComplete: $data");
+  }
+
+  static void handleRecordingSaved(dynamic data) {
+    Utils.showLog("Socket Listen => handleRecordingSaved: $data");
+    if (Get.context != null) {
+      Utils.showToast(Get.context!, "Recording saved successfully.");
+    }
+  }
+
+  static void handleRecordingEligibilityError(dynamic data) {
+    Utils.showLog("Socket Listen => handleRecordingEligibilityError: $data");
+    final message = data?['message'] ?? "Recording is not available. Both participants need an active subscription.";
+    if (Get.context != null) {
+      Utils.showToast(Get.context!, message);
+    }
+    if (Get.isRegistered<VoiceCallController>()) {
+      final ctrl = Get.find<VoiceCallController>();
+      ctrl.isRecordingConsentPending = false;
+      ctrl.update([Constant.idVideoCall]);
+    }
+    if (Get.isRegistered<VideoCallController>()) {
+      final ctrl = Get.find<VideoCallController>();
+      ctrl.isRecordingConsentPending = false;
+      ctrl.update([Constant.idVideoCall]);
     }
   }
 }

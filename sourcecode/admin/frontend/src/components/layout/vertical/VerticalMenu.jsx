@@ -67,7 +67,7 @@ const VerticalMenu = ({ scrollMenu }) => {
   const showContentBlock = [can('faq'), can('categories'), can('identityProofs'), can('growthSpotlight'), can('feedPosts'), can('blog')].some(Boolean)
   const showModerationBlock = [can('reportedFeedPosts'), can('reportedUsers'), can('reportedExperts'), can('reportedChats'), can('reportedSessions')].some(Boolean)
   const showCommunicationBlock = [can('emailMarketing'), can('emailAccounts')].some(Boolean)
-  const showSubscriptionBlock = [can('subscriptionPlans'), can('subscriptionHistory')].some(Boolean)
+  const showSubscriptionBlock = [can('subscriptionPlans'), can('recordingStoragePlans'), can('subscriptionHistory')].some(Boolean)
   const showFinancialBlock = [can('paymentOptions'), can('payoutRequests'), can('referrals')].some(Boolean)
 
   return (
@@ -221,6 +221,11 @@ const VerticalMenu = ({ scrollMenu }) => {
               {can('subscriptionPlans') && (
                 <MenuItem href='/coin-plans' icon={<i className='tabler-coins' />}>
                   Subscription Plans
+                </MenuItem>
+              )}
+              {can('recordingStoragePlans') && (
+                <MenuItem href='/recording-plans' icon={<i className='tabler-cloud' />}>
+                  Recording Storage Plans
                 </MenuItem>
               )}
               {can('subscriptionHistory') && (

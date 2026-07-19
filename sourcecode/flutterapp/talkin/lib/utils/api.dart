@@ -116,6 +116,8 @@ abstract class Api {
   static const subscriptionUserList =
       "${baseUrl}api/v2/subscriptions/users/list?";
   
+  static const recordingSubscriptionPlans =
+      "${baseUrl}api/v2/recording-subscription/plans";
   static const recordingSubscriptionCheckEligibility =
       "${baseUrl}api/v2/recording-subscription/checkEligibility?";
   static const recordingSubscriptionPurchase =
@@ -124,6 +126,10 @@ abstract class Api {
       "${baseUrl}api/v2/recording-subscription/status?";
   static const recordingSubscriptionMyRecordings =
       "${baseUrl}api/v2/recording-subscription/myRecordings?";
+  static const recordingSubscriptionUpload =
+      "${baseUrl}api/v2/recording-subscription/upload";
+  static const recordingSubscriptionDelete =
+      "${baseUrl}api/v2/recording-subscription/delete";
 
   // >>>>> >>>>> Expert Manual Verification <<<<< <<<<<
   static const expertVerificationSubmit =

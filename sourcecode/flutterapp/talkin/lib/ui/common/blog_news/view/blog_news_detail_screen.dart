@@ -62,10 +62,9 @@ class _BlogNewsDetailScreenState extends State<BlogNewsDetailScreen> {
 
   void _shareArticle(BlogNewsItem? item) {
     if (item == null) return;
-    final title = item.title ?? 'Notisboard Blog & News';
     final slug = item.slug ?? item.id ?? '';
     final shareUrl = '${Api.baseUrl}blog/$slug';
-    Share.share('$title - Read more on Notisboard:\n$shareUrl');
+    Share.share(shareUrl);
   }
 
   @override

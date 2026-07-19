@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
 import 'package:notisboard/services/biometric/biometric_auth_service.dart';
-import 'package:notisboard/ui/host_flow/host_setting_screen/api/delete_listener_api.dart';
 import 'package:notisboard/ui/host_flow/host_setting_screen/api/notification_update_api.dart';
 import 'package:notisboard/ui/host_flow/host_setting_screen/model/delete_listener_response_model.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';

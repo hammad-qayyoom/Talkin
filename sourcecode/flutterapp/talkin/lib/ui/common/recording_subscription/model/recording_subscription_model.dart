@@ -1,3 +1,50 @@
+class RecordingStoragePlanModel {
+  final String? id;
+  final String? name;
+  final String? slug;
+  final String? description;
+  final String? appleProductId;
+  final String? googleProductId;
+  final num? price;
+  final String? currency;
+  final String? billingCycle;
+  final int? storageDays;
+  final List<String>? features;
+  final bool isPopular;
+
+  RecordingStoragePlanModel({
+    this.id,
+    this.name,
+    this.slug,
+    this.description,
+    this.appleProductId,
+    this.googleProductId,
+    this.price,
+    this.currency,
+    this.billingCycle,
+    this.storageDays,
+    this.features,
+    this.isPopular = false,
+  });
+
+  factory RecordingStoragePlanModel.fromJson(Map<String, dynamic> json) {
+    return RecordingStoragePlanModel(
+      id: json['_id']?.toString(),
+      name: json['name']?.toString(),
+      slug: json['slug']?.toString(),
+      description: json['description']?.toString(),
+      appleProductId: json['appleProductId']?.toString(),
+      googleProductId: json['googleProductId']?.toString(),
+      price: json['price'] as num?,
+      currency: json['currency']?.toString(),
+      billingCycle: json['billingCycle']?.toString(),
+      storageDays: json['storageDays'] as int?,
+      features: json['features'] != null ? List<String>.from(json['features']) : null,
+      isPopular: json['isPopular'] ?? false,
+    );
+  }
+}
+
 class RecordingSubscriptionModel {
   final String? id;
   final String? userId;

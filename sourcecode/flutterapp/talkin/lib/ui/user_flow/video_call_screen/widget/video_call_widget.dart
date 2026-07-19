@@ -11,6 +11,7 @@ import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/utils.dart';
 
 /// =================== Video Call View =================== ///
 class VideoCallView1 extends StatelessWidget {
@@ -67,8 +68,34 @@ class VideoCallView1 extends StatelessWidget {
                   ),
                 ),
                 _buildSelfPreviewOverlay(logic, viewport),
+                if (logic.isRecordingActive)
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      width: double.infinity,
+                      color: Colors.red.withValues(alpha: 0.9),
+                      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 4, bottom: 4),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.circle, color: Colors.white, size: 8),
+                          const SizedBox(width: 6),
+                          Text(
+                            "REC • This call is being recorded",
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 11,
+                              fontColor: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 Positioned(
-                  top: 44,
+                  top: logic.isRecordingActive ? MediaQuery.of(context).padding.top + 34 : 44,
                   left: 12,
                   right: 12,
                   child: Row(
@@ -202,6 +229,21 @@ class VideoCallView1 extends StatelessWidget {
                               iconData: Icons.flip_camera_android_rounded,
                               size: controlSize,
                               onTap: logic.onCameraTurn,
+                            ),
+                            SizedBox(width: controlGap),
+                            ControlButton(
+                              iconData: logic.isRecordingActive ? Icons.stop_circle_outlined : Icons.radio_button_checked,
+                              isActive: logic.isRecordingActive,
+                              onTap: () {
+                                if (logic.isRecordingActive) {
+                                  logic.stopRecording();
+                                } else if (!logic.isRecordingConsentPending) {
+                                  logic.requestRecording();
+                                } else {
+                                  Utils.showToast(context, "Waiting for other person's consent...");
+                                }
+                              },
+                              size: controlSize,
                             ),
                             SizedBox(width: controlGap),
                             logic.isGroupSessionCall

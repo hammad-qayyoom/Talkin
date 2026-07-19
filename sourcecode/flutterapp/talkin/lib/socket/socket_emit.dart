@@ -265,4 +265,91 @@ class SocketEmit {
       Utils.showLog("Socket Not Connected!!");
     }
   }
+
+  /// Recording mutual consent events
+  static void emitRequestRecordingConsent({
+    required String callId,
+    required String callerId,
+    required String receiverId,
+  }) {
+    if (socket != null && socket?.connected == true) {
+      final data = {
+        'callId': callId,
+        'callerId': callerId,
+        'receiverId': receiverId,
+        'requesterId': Database.loginUserId,
+      };
+      socket?.emit(SocketEvents.requestRecordingConsent, data);
+      Utils.showLog("Socket Emit => requestRecordingConsent: $data");
+    } else {
+      Utils.showLog("Socket Not Connected!!");
+    }
+  }
+
+  static void emitRecordingConsentResponse({
+    required String callId,
+    required String callerId,
+    required String receiverId,
+    required bool isAccepted,
+  }) {
+    if (socket != null && socket?.connected == true) {
+      final data = {
+        'callId': callId,
+        'callerId': callerId,
+        'receiverId': receiverId,
+        'responderId': Database.loginUserId,
+        'isAccepted': isAccepted,
+      };
+      socket?.emit(SocketEvents.recordingConsentResponse, data);
+      Utils.showLog("Socket Emit => recordingConsentResponse: $data");
+    } else {
+      Utils.showLog("Socket Not Connected!!");
+    }
+  }
+
+  static void emitStopRecording({
+    required String callId,
+    required String callerId,
+    required String receiverId,
+  }) {
+    if (socket != null && socket?.connected == true) {
+      final data = {
+        'callId': callId,
+        'callerId': callerId,
+        'receiverId': receiverId,
+      };
+      socket?.emit(SocketEvents.recordingStopped, data);
+      Utils.showLog("Socket Emit => recordingStopped: $data");
+    } else {
+      Utils.showLog("Socket Not Connected!!");
+    }
+  }
+
+  static void emitReportRecordingComplete({
+    required String callId,
+    required String userId,
+    required String expertId,
+    required String callType,
+    required String cloudStorageUrl,
+    int fileSizeBytes = 0,
+    int durationSeconds = 0,
+    String? bookingId,
+  }) {
+    if (socket != null && socket?.connected == true) {
+      final data = {
+        'callId': callId,
+        'userId': userId,
+        'expertId': expertId,
+        'callType': callType,
+        'cloudStorageUrl': cloudStorageUrl,
+        'fileSizeBytes': fileSizeBytes,
+        'durationSeconds': durationSeconds,
+        if (bookingId != null && bookingId.isNotEmpty) 'bookingId': bookingId,
+      };
+      socket?.emit(SocketEvents.reportRecordingComplete, data);
+      Utils.showLog("Socket Emit => reportRecordingComplete: $data");
+    } else {
+      Utils.showLog("Socket Not Connected!!");
+    }
+  }
 }

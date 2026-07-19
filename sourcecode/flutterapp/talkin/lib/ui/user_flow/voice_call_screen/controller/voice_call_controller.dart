@@ -1,17 +1,23 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:proximity_screen_lock/proximity_screen_lock.dart';
+import 'package:notisboard/custom/dialog/recording_consent_dialog.dart';
 import 'package:notisboard/services/permission_handler/permission_handler.dart';
+import 'package:notisboard/services/recording_upload_queue.dart';
 import 'package:notisboard/socket/socket_emit.dart';
+import 'package:notisboard/ui/common/recording_subscription/api/recording_subscription_api.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/setting_api.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/utils.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:record/record.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 
@@ -80,6 +86,15 @@ class VoiceCallController extends GetxController {
   int unreadGroupChatCount = 0;
   bool isGroupChatSheetOpen = false;
 
+  // Recording Consent States
+  bool isRecordingEligible = false;
+  bool isRecordingActive = false;
+  bool isRecordingConsentPending = false;
+  bool _hasReportedRecording = false;
+  DateTime? recordingStartTime;
+  AudioRecorder? _audioRecorder;
+  String? _recordingFilePath;
+
   @override
   void onInit() async {
     super.onInit();
@@ -87,6 +102,8 @@ class VoiceCallController extends GetxController {
 
     args = Get.arguments as Map<String, dynamic>;
     getDataFromArgs();
+    
+    _checkRecordingEligibility();
 
     final hasMicPermission = await _requestMicrophonePermission();
     if (!hasMicPermission) {
@@ -935,7 +952,7 @@ class VoiceCallController extends GetxController {
     update([Constant.idVideoCall, Constant.idMicMute]);
   }
 
-  void endCurrentCall() {
+  Future<void> endCurrentCall() async {
     if (_isGroupSessionCall) {
       if (Get.isOverlaysOpen) {
         Get.back();
@@ -943,6 +960,11 @@ class VoiceCallController extends GetxController {
         Get.back();
       }
       return;
+    }
+
+    if (isRecordingActive) {
+      await _stopLocalRecording();
+      await _reportRecordingComplete();
     }
 
     SocketEmit.emitCallTerminated(
@@ -962,6 +984,17 @@ class VoiceCallController extends GetxController {
     log("endCallDueToBackground");
     endCurrentCall();
     // Get.back(); // or navigate to a call ended screen
+  }
+
+  Future<void> stopRecordingAndUpload() async {
+    if (!isRecordingActive) return;
+    isRecordingActive = false;
+    isRecordingConsentPending = false;
+    final recordedSeconds = recordingDurationSeconds;
+    recordingStartTime = null;
+    update([Constant.idVideoCall]);
+    await _stopLocalRecording();
+    await _reportRecordingComplete(recordedSeconds);
   }
 
   senseProximity() async {
@@ -1057,6 +1090,222 @@ class VoiceCallController extends GetxController {
       log("✅ Proximity cleanup completed");
     } catch (e) {
       log("❌ Error cleaning up proximity sensor: $e");
+    }
+  }
+
+  Future<void> _checkRecordingEligibility() async {
+    final expertId = (callerRole == "user") ? receiverId : callerId;
+    if (expertId == null) return;
+
+    final res = await RecordingSubscriptionApi.checkEligibility(expertId);
+    if (res != null) {
+      isRecordingEligible = res.eligible;
+      update([Constant.idVideoCall]);
+    }
+  }
+
+  void requestRecording() {
+    if (Get.context != null) {
+      RecordingConsentDialog.show(
+        context: Get.context!,
+        title: "Start Recording",
+        description: "Do you want to start recording this call? Both participants must consent.",
+        confirmText: "Yes, Start Recording",
+        cancelText: "Cancel",
+        icon: Icons.mic_rounded,
+        onConfirm: () {
+          Get.back();
+          isRecordingConsentPending = true;
+
+          update([Constant.idVideoCall]);
+          SocketEmit.emitRequestRecordingConsent(
+            callId: callId ?? '',
+            callerId: callerId ?? '',
+            receiverId: receiverId ?? '',
+          );
+        },
+        onCancel: () => Get.back(),
+      );
+    }
+  }
+
+  void onRequestRecordingConsent(dynamic data) {
+    Utils.showLog("onRequestRecordingConsent called with data: $data");
+    final dataCallId = data['callId']?.toString() ?? '';
+    final dataRequesterId = data['requesterId']?.toString() ?? '';
+    
+    // Skip if we are the requester
+    if (dataRequesterId == Database.loginUserId) {
+      Utils.showLog("Skipping consent popup - we are the requester");
+      return;
+    }
+    
+    // Match by callId or by being a participant in this call
+    if (dataCallId.isNotEmpty && callId != null && callId!.isNotEmpty && dataCallId != callId) {
+      Utils.showLog("CallId mismatch: server=$dataCallId local=$callId");
+      return;
+    }
+    
+    if (Get.context != null) {
+      RecordingConsentDialog.show(
+        context: Get.context!,
+        title: "Recording Request",
+        description: "The other person wants to record this call. Do you consent?",
+        confirmText: "Allow",
+        cancelText: "Decline",
+        icon: Icons.mic_rounded,
+        onConfirm: () {
+          Get.back();
+          SocketEmit.emitRecordingConsentResponse(
+            callId: callId ?? '',
+            callerId: callerId ?? '',
+            receiverId: receiverId ?? '',
+            isAccepted: true,
+          );
+        },
+        onCancel: () {
+          Get.back();
+          SocketEmit.emitRecordingConsentResponse(
+            callId: callId ?? '',
+            callerId: callerId ?? '',
+            receiverId: receiverId ?? '',
+            isAccepted: false,
+          );
+        },
+      );
+    }
+  }
+
+  void onRecordingConsentResponse(dynamic data) {
+    Utils.showLog("onRecordingConsentResponse called with data: $data");
+    isRecordingConsentPending = false;
+    update([Constant.idVideoCall]);
+
+    if (data['isAccepted'] == true) {
+      Utils.showToast(Get.context, "Recording consent accepted. Recording started.");
+      _beginRecording();
+    } else {
+
+      Utils.showToast(Get.context, "Recording consent denied.");
+    }
+  }
+
+  void _beginRecording() {
+    isRecordingActive = true;
+    isRecordingConsentPending = false;
+    recordingStartTime = DateTime.now();
+    update([Constant.idVideoCall]);
+    _startLocalRecording();
+  }
+
+  Future<void> stopRecording() async {
+    if (isRecordingActive) {
+      isRecordingActive = false;
+      final recordedSeconds = recordingDurationSeconds;
+      recordingStartTime = null;
+      update([Constant.idVideoCall]);
+      await _stopLocalRecording();
+      await _reportRecordingComplete(recordedSeconds);
+    }
+    SocketEmit.emitStopRecording(
+      callId: callId ?? '',
+      callerId: callerId ?? '',
+      receiverId: receiverId ?? '',
+    );
+  }
+
+  void onRecordingStarted(dynamic data) {
+    Utils.showLog("onRecordingStarted called with data: $data");
+    if (!isRecordingActive) {
+      _beginRecording();
+    }
+  }
+
+  Future<void> onRecordingStopped(dynamic data) async {
+    Utils.showLog("onRecordingStopped called with data: $data");
+    if (!isRecordingActive) return;
+    isRecordingActive = false;
+    isRecordingConsentPending = false;
+    final recordedSeconds = recordingDurationSeconds;
+    recordingStartTime = null;
+    update([Constant.idVideoCall]);
+    await _stopLocalRecording();
+    await _reportRecordingComplete(recordedSeconds);
+  }
+
+  int get recordingDurationSeconds {
+    if (recordingStartTime == null) return 0;
+    return DateTime.now().difference(recordingStartTime!).inSeconds;
+  }
+
+  Future<void> _startLocalRecording() async {
+    try {
+      _audioRecorder = AudioRecorder();
+      final hasPermission = await _audioRecorder!.hasPermission();
+      if (!hasPermission) {
+        Utils.showLog("Audio recording permission denied");
+        if (Get.context != null) {
+          Utils.showToast(Get.context!, "Microphone permission is required for recording");
+        }
+        return;
+      }
+      final dir = await getApplicationDocumentsDirectory();
+      _recordingFilePath = '${dir.path}/call_${DateTime.now().millisecondsSinceEpoch}.m4a';
+      await _audioRecorder!.start(const RecordConfig(), path: _recordingFilePath!);
+      Utils.showLog("Local audio recording started successfully");
+    } catch (e) {
+      Utils.showLog("Error starting recording: $e");
+      if (Get.context != null) {
+        Utils.showToast(Get.context!, "Failed to start recording: ${e.toString().length > 80 ? e.toString().substring(0, 80) : e.toString()}");
+      }
+    }
+  }
+
+  Future<void> _stopLocalRecording() async {
+    if (_audioRecorder == null) return;
+    try {
+      _recordingFilePath = await _audioRecorder!.stop();
+      Utils.showLog("Local audio recording stopped. File: $_recordingFilePath");
+    } catch (e) {
+      Utils.showLog("Error stopping recording: $e");
+    } finally {
+      _audioRecorder = null;
+    }
+  }
+
+  Future<void> _reportRecordingComplete([int durationSec = 0]) async {
+    if (_hasReportedRecording) return;
+    _hasReportedRecording = true;
+    final actualUserId = (callerRole == "user") ? callerId : receiverId;
+    final actualExpertId = (callerRole == "user") ? receiverId : callerId;
+    if (callId == null || callId!.isEmpty) return;
+    if (actualUserId == null || actualUserId.isEmpty) return;
+    if (actualExpertId == null || actualExpertId.isEmpty) return;
+    final dur = durationSec > 0 ? durationSec : recordingDurationSeconds;
+
+    // Enqueue to persistent upload queue — survives app closure
+    if (_recordingFilePath != null && File(_recordingFilePath!).existsSync()) {
+      RecordingUploadQueue.instance.enqueue(
+        filePath: _recordingFilePath!,
+        callId: callId!,
+        userId: actualUserId,
+        expertId: actualExpertId,
+        callType: callType ?? 'audio',
+        durationSeconds: dur,
+      );
+      Utils.showLog("Recording queued for background upload: call $callId");
+    } else {
+      Utils.showLog("Recording file not found, skipping queue: $_recordingFilePath");
+      // Still report with empty URL so server knows
+      SocketEmit.emitReportRecordingComplete(
+        callId: callId!,
+        userId: actualUserId,
+        expertId: actualExpertId,
+        callType: callType ?? 'audio',
+        cloudStorageUrl: '',
+        fileSizeBytes: 0,
+        durationSeconds: dur,
+      );
     }
   }
 }

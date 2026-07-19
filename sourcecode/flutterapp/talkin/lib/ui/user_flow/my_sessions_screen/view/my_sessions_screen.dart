@@ -10,6 +10,7 @@ import 'package:notisboard/services/permission_handler/permission_handler.dart';
 import 'package:notisboard/socket/socket_emit.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
 import 'package:notisboard/ui/user_flow/call_cut_screen/api/submit_call_rate_api.dart';
+import 'package:notisboard/ui/common/recording_subscription/view/my_recordings_screen.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -1993,6 +1994,52 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                           Icons.arrow_forward_rounded,
                                           size: isTablet ? 16 : 14,
                                           color: _brandDark,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: isTablet ? 46.0 : 42.0,
+                                  child: OutlinedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => const MyRecordingsScreen(),
+                                        ),
+                                      );
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      side: BorderSide(color: AppColors.white.withValues(alpha: 0.5)),
+                                      foregroundColor: AppColors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.cloud_rounded,
+                                          size: isTablet ? 20 : 18,
+                                          color: AppColors.white,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          "My Recordings",
+                                          style: AppFontStyle.fontStyleW700(
+                                            fontSize: isTablet ? 14 : 13,
+                                            fontColor: AppColors.white,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Icon(
+                                          Icons.arrow_forward_rounded,
+                                          size: isTablet ? 16 : 14,
+                                          color: AppColors.white,
                                         ),
                                       ],
                                     ),

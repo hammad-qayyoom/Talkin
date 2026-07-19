@@ -55,7 +55,7 @@ class BlogNewsListScreen extends StatelessWidget {
     final isTablet = width >= 760;
     final maxContentWidth = width >= 1100 ? 980.0 : width;
 
-    final BlogNewsController _controller = Get.isRegistered<BlogNewsController>()
+    final BlogNewsController controller = Get.isRegistered<BlogNewsController>()
         ? Get.find<BlogNewsController>()
         : Get.put(BlogNewsController());
 
@@ -126,7 +126,7 @@ class BlogNewsListScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
                     GetBuilder<BlogNewsController>(
-                      init: _controller,
+                      init: controller,
                       id: Constant.idBlogNewsList,
                       builder: (controller) {
                         return Container(
@@ -188,7 +188,7 @@ class BlogNewsListScreen extends StatelessWidget {
               ),
               Expanded(
                 child: GetBuilder<BlogNewsController>(
-                  init: _controller,
+                  init: controller,
                   id: Constant.idBlogNewsList,
                   builder: (controller) {
                     if (controller.isLoading) {

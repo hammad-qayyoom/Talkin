@@ -8,6 +8,7 @@ import 'package:notisboard/custom/dialog/exit_app_dialog.dart';
 import 'package:notisboard/custom/dialog/force_update_dialog.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/services/biometric/biometric_auth_service.dart';
+import 'package:notisboard/services/recording_upload_queue.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/api/host_coin_api.dart';
 import 'package:notisboard/services/location/user_location_service.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
@@ -179,6 +180,11 @@ class SplashScreenController extends GetxController {
       }
 
       await syncInitialBalances();
+
+      // Retry any pending recording uploads from previous session
+      if (Database.isLogin) {
+        RecordingUploadQueue.instance.retryPendingUploads();
+      }
 
       ipApiResponseModel = await _guardedSplashTask<IpApiResponseModel>(
         "IP location fetch",

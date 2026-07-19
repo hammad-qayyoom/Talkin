@@ -57,6 +57,11 @@ const defaultSuggestions = [
         icon: 'tabler-coins'
       },
       {
+        label: 'Recording Storage Plans',
+        href: '/recording-plans',
+        icon: 'tabler-cloud'
+      },
+      {
         label: 'Subscription History',
         href: '/coin-plan-history',
         icon: 'tabler-history'

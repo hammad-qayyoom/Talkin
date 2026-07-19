@@ -1118,48 +1118,6 @@ const GeneralSettings = () => {
         </CardContent>
       </Card>
 
-      {/* Recording Storage Policy */}
-      <Card sx={{ mb: 4 }}>
-        <CardContent>
-          <Typography variant='subtitle1' sx={{ mb: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-            <i className='tabler-clock-hour-4 mr-2' />
-            Recording Storage Policy
-          </Typography>
-          <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
-            Configure how long consultation recordings are retained on the server before automatic deletion, and when users receive a reminder before deletion occurs.
-          </Typography>
-          <Divider sx={{ mb: 3 }} />
-          <Grid container spacing={4}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label='Storage Deletion (days)'
-                placeholder='14'
-                value={formData.recordingStorageDeletionDays ?? 14}
-                onChange={e => handleFieldChange('recordingStorageDeletionDays', e.target.value)}
-                InputProps={{
-                  inputProps: { min: 1 }
-                }}
-                helperText='Number of days to keep recordings on the server before automatic deletion'
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label='Reminder Before Deletion (days)'
-                placeholder='2'
-                value={formData.recordingStorageReminderDaysBeforeDeletion ?? 2}
-                onChange={e => handleFieldChange('recordingStorageReminderDaysBeforeDeletion', e.target.value)}
-                InputProps={{
-                  inputProps: { min: 1 }
-                }}
-                helperText='Send users a reminder this many days before their recording is deleted'
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
       <Card sx={{ mb: 4 }}>
         <CardContent>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -1629,6 +1587,48 @@ const GeneralSettings = () => {
               label='Application Live'
             />
           </Box>
+        </CardContent>
+      </Card>
+
+      {/* Recording Storage Policy */}
+      <Card sx={{ mb: 4 }}>
+        <CardContent>
+          <Typography variant='subtitle1' sx={{ mb: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
+            <i className='tabler-clock-hour-4 mr-2' />
+            Recording Storage Policy
+          </Typography>
+          <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>
+            Configure how long consultation recordings are retained on the server before automatic deletion, and when users receive a reminder before deletion occurs.
+          </Typography>
+          <Divider sx={{ mb: 3 }} />
+          <Grid container spacing={4}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label='Storage Deletion (days)'
+                placeholder='14'
+                value={formData.recordingStorageDeletionDays ?? 14}
+                onChange={e => handleFieldChange('recordingStorageDeletionDays', e.target.value)}
+                InputProps={{
+                  inputProps: { min: 1 }
+                }}
+                helperText='Number of days to keep recordings on the server before automatic deletion'
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label='Reminder Before Deletion (days)'
+                placeholder='2'
+                value={formData.recordingStorageReminderDaysBeforeDeletion ?? 2}
+                onChange={e => handleFieldChange('recordingStorageReminderDaysBeforeDeletion', e.target.value)}
+                InputProps={{
+                inputProps: { min: 1 }
+              }}
+                helperText='Send users a reminder this many days before their recording is deleted'
+              />
+            </Grid>
+          </Grid>
         </CardContent>
       </Card>
 

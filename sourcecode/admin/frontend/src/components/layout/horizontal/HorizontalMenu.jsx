@@ -113,6 +113,9 @@ const HorizontalMenu = () => {
           <MenuItem href='/coin-plans' icon={<i className='tabler-coins' />}>
             Subscription Plan
           </MenuItem>
+          <MenuItem href='/recording-plans' icon={<i className='tabler-cloud' />}>
+            Recording Storage Plans
+          </MenuItem>
           <MenuItem
             href='/coin-plan-history'
             exactMatch={false}
