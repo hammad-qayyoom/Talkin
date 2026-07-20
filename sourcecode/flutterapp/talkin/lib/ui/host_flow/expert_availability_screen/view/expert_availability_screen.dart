@@ -27,6 +27,9 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
 
   List<Map<String, dynamic>> _slots = [];
 
+  bool get _hasOnlineMode => _isAudioServiceEnabled || _isVideoServiceEnabled;
+  bool get _hasBothModes => _isInPersonServiceEnabled && _hasOnlineMode;
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +37,14 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
     if (args != null && args is Map && args['scheduleMode'] != null) {
       _selectedScheduleMode = args['scheduleMode'].toString();
     }
+
+    // Auto-select the only available mode
+    if (_selectedScheduleMode == 'online' && !_hasOnlineMode && _isInPersonServiceEnabled) {
+      _selectedScheduleMode = 'in_person';
+    } else if (_selectedScheduleMode == 'in_person' && !_isInPersonServiceEnabled && _hasOnlineMode) {
+      _selectedScheduleMode = 'online';
+    }
+
     _loadAvailability();
   }
 
@@ -568,32 +579,55 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
             ),
           ),
           const SizedBox(height: 14),
-          if (_isInPersonServiceEnabled && (_isAudioServiceEnabled || _isVideoServiceEnabled)) ...[
-            SizedBox(
-              width: double.infinity,
-              child: CupertinoSlidingSegmentedControl<String>(
-                groupValue: _selectedScheduleMode,
-                children: const {
-                  'online': Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    child: Text('Audio / Video', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                  ),
-                  'in_person': Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    child: Text('In-Person', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                  ),
-                },
-                backgroundColor: AppColors.redesignSurfaceNeutralAlt,
-                thumbColor: AppColors.white,
-                onValueChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _selectedScheduleMode = value;
-                    });
-                  }
-                },
+          if (_hasBothModes || _isInPersonServiceEnabled) ...[
+            if (_hasBothModes)
+              SizedBox(
+                width: double.infinity,
+                child: CupertinoSlidingSegmentedControl<String>(
+                  groupValue: _selectedScheduleMode,
+                  children: const {
+                    'online': Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Text('Audio / Video', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                    ),
+                    'in_person': Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Text('In-Person', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                    ),
+                  },
+                  backgroundColor: AppColors.redesignSurfaceNeutralAlt,
+                  thumbColor: AppColors.white,
+                  onValueChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedScheduleMode = value;
+                      });
+                    }
+                  },
+                ),
+              )
+            else if (_isInPersonServiceEnabled && !_hasOnlineMode) ...[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.redesignAccentSoftBg,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.redesignBrandRed.withValues(alpha: 0.2)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.location_on_rounded, size: 16, color: AppColors.redesignBrandRed),
+                    const SizedBox(width: 6),
+                    Text(
+                      'In-Person Consultation',
+                      style: AppFontStyle.fontStyleW700(fontSize: 13, fontColor: AppColors.redesignBrandRed),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
             const SizedBox(height: 16),
           ],
           Row(

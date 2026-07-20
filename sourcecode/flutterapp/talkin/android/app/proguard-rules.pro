@@ -15,3 +15,6 @@
 -keep class com.google.gson.** { *; }
 -keepattributes Signature
 -keepattributes *Annotation*
+
+# Awesome Notifications
+-keep class me.carda.awesome_notifications.** { *; }

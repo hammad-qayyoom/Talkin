@@ -146,6 +146,11 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
       if (_isInPersonEnabled && !_isAudioServiceEnabled && !_isVideoServiceEnabled) {
         _consultationMode = 'in_person';
       }
+
+      // Default to online if in-person is not enabled
+      if (!_isInPersonEnabled && _consultationMode == 'in_person') {
+        _consultationMode = 'online';
+      }
     }
 
     _selectedDate = DateTime(
@@ -889,6 +894,30 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
                                     value: 'online', label: 'Online'),
                                 _buildCallTypeChip(
                                     value: 'in_person', label: 'In-Person'),
+                              ],
+                            ),
+                          ),
+                        ),
+                      if (_isInPersonEnabled && !_isAudioServiceEnabled && !_isVideoServiceEnabled)
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(horizontalInset, 8, horizontalInset, 0),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF1F8E9),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: const Color(0xFFC5E1A5)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.location_on_rounded, size: 16, color: const Color(0xFF2E7D32)),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'In-Person Consultation',
+                                  style: AppFontStyle.fontStyleW700(fontSize: 13, fontColor: const Color(0xFF2E7D32)),
+                                ),
                               ],
                             ),
                           ),
