@@ -16,6 +16,7 @@ class TopListenersApi {
     required String searchString,
     String? categoryId,
     UserLocationData? userLocation,
+    String? consultationMode,
   }) {
     final normalizedSearch = searchString.trim().isEmpty ? "All" : searchString;
 
@@ -30,6 +31,8 @@ class TopListenersApi {
         if (userLocation != null) 'lng': userLocation.longitude.toString(),
         if (userLocation != null) 'sortBy': 'distance',
         if (userLocation != null) 'sortOrder': 'asc',
+        if (consultationMode != null && consultationMode.isNotEmpty)
+          'consultationMode': consultationMode,
       },
     );
   }
@@ -37,6 +40,7 @@ class TopListenersApi {
   static Uri _topListenersUri({
     required String searchString,
     String? categoryId,
+    String? consultationMode,
   }) {
     return Uri.parse(Api.topListeners).replace(
       queryParameters: {
@@ -45,6 +49,8 @@ class TopListenersApi {
         ApiParams.searchString: searchString,
         if (categoryId != null && categoryId.isNotEmpty)
           ApiParams.categoryId: categoryId,
+        if (consultationMode != null && consultationMode.isNotEmpty)
+          'consultationMode': consultationMode,
       },
     );
   }
@@ -104,6 +110,7 @@ class TopListenersApi {
     String token = '',
     String uid = '',
     String? categoryId,
+    String? consultationMode,
   }) async {
     Utils.showLog("Top Listeners Api Calling...");
 
@@ -114,9 +121,13 @@ class TopListenersApi {
       searchString: searchString,
       categoryId: categoryId,
       userLocation: userLocation,
+      consultationMode: consultationMode,
     );
-    final topUri =
-        _topListenersUri(searchString: searchString, categoryId: categoryId);
+    final topUri = _topListenersUri(
+      searchString: searchString, 
+      categoryId: categoryId,
+      consultationMode: consultationMode,
+    );
     final hasLocation = userLocation != null;
     final primaryUri = hasLocation ? discoverUri : topUri;
     final fallbackUri = hasLocation ? topUri : discoverUri;

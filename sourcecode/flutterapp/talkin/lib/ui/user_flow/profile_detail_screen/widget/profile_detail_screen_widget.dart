@@ -317,6 +317,18 @@ class UserProfileInfoView extends StatelessWidget {
         final rating = (data.rating ?? 0).toDouble();
         final isVerified = data.isVerifiedBadge == true;
 
+        // In-Person Consultation fields
+        final consultationModes = data.consultationModes;
+        final isOnlineEnabled = consultationModes?['online'] != false;
+        final isInPersonEnabled = consultationModes?['inPerson'] == true &&
+            data.isAvailableForInPersonSession == true;
+        final clinicDetails = data.clinicDetails;
+        final clinicName = (clinicDetails?['clinicName'] ?? '').toString().trim();
+        final clinicCity = (clinicDetails?['address']?['city'] ?? '').toString().trim();
+        final inPersonPricing = data.inPersonPricing;
+        final inPersonPrice = data.rateInPersonSession ?? inPersonPricing?['oneToOneSession'] ?? 0;
+        final inPersonCurrency = (inPersonPricing?['currency'] ?? 'USD').toString();
+
         Widget aboutSection() {
           return _buildSectionCard(
             icon: Icons.person_outline_rounded,
@@ -397,21 +409,32 @@ class UserProfileInfoView extends StatelessWidget {
           return _buildSectionCard(
             icon: Icons.payments_outlined,
             title: EnumLocale.txtSessionPricing.name.tr,
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: _buildPriceTile(
-                    title: EnumLocale.txtAudio.name.tr,
-                    value: '${data.ratePrivateAudioCall ?? 0} credits',
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildPriceTile(
+                        title: EnumLocale.txtAudio.name.tr,
+                        value: '${data.ratePrivateAudioCall ?? 0} credits',
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _buildPriceTile(
+                        title: EnumLocale.txtVideo.name.tr,
+                        value: '${data.ratePrivateVideoCall ?? 0} credits',
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _buildPriceTile(
-                    title: EnumLocale.txtVideo.name.tr,
-                    value: '${data.ratePrivateVideoCall ?? 0} credits',
+                if (isInPersonEnabled && inPersonPrice > 0) ...[
+                  const SizedBox(height: 10),
+                  _buildPriceTile(
+                    title: 'In-Person Session',
+                    value: '$inPersonPrice $inPersonCurrency',
                   ),
-                ),
+                ],
               ],
             ),
           );
@@ -599,9 +622,70 @@ class UserProfileInfoView extends StatelessWidget {
                             textColor: AppColors.redesignBrandDark,
                             iconColor: AppColors.rateStarColor,
                           ),
+                          if (isOnlineEnabled)
+                            _buildBadge(
+                              icon: Icons.videocam_rounded,
+                              label: 'Online',
+                              background: AppColors.redesignAccentSoftBg,
+                              textColor: AppColors.redesignBrandRed,
+                              iconColor: AppColors.redesignBrandRed,
+                            ),
+                          if (isInPersonEnabled)
+                            _buildBadge(
+                              icon: Icons.location_on_rounded,
+                              label: 'In-Person',
+                              background: const Color(0xFFE8F5E9),
+                              textColor: const Color(0xFF2E7D32),
+                              iconColor: const Color(0xFF2E7D32),
+                            ),
                         ],
                       ),
                       const SizedBox(height: 14),
+                    ],
+                    if (isInPersonEnabled && clinicName.isNotEmpty) ...[
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF1F8E9),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFFC5E1A5),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.local_hospital_rounded,
+                              size: 18,
+                              color: const Color(0xFF2E7D32),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    clinicName,
+                                    style: AppFontStyle.fontStyleW600(
+                                      fontSize: 12,
+                                      fontColor: const Color(0xFF2E7D32),
+                                    ),
+                                  ),
+                                  if (clinicCity.isNotEmpty)
+                                    Text(
+                                      clinicCity,
+                                      style: AppFontStyle.fontStyleW500(
+                                        fontSize: 10,
+                                        fontColor: const Color(0xFF558B2F),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
                     ],
                     SizedBox(
                       width: double.infinity,
@@ -976,6 +1060,10 @@ class ProfileBottomButtonView extends StatelessWidget {
             controller.listenerProfileModel?.data?.ratePrivateAudioCall ?? 0,
         'ratePrivateVideoCall':
             controller.listenerProfileModel?.data?.ratePrivateVideoCall ?? 0,
+        'isAvailableForInPersonSession': controller
+            .listenerProfileModel?.data?.isAvailableForInPersonSession,
+        'consultationModes': controller.listenerProfileModel?.data?.consultationModes,
+        'clinicDetails': controller.listenerProfileModel?.data?.clinicDetails,
       },
     );
   }

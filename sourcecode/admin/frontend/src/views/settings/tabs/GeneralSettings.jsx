@@ -134,6 +134,9 @@ const GeneralSettings = () => {
     allowDirectPaidSessionBooking: true,
     sessionSlotDurationMinutes: 30,
     sessionBookingTimezone: 'UTC',
+    inPersonSessionRatePrivate: '',
+    maxInPersonSessionRatePrivate: '',
+    inPersonSessionSlotDurationMinutes: 30,
     sessionUserCancellationTimeLimitMinutes: '',
     sessionUserCancellationRefundPercent: '',
     sessionUserCancellationRefundCredits: true,
@@ -196,6 +199,9 @@ const GeneralSettings = () => {
         allowDirectPaidSessionBooking: settings.allowDirectPaidSessionBooking !== false,
         sessionSlotDurationMinutes: settings.sessionSlotDurationMinutes ?? 30,
         sessionBookingTimezone: settings.sessionBookingTimezone || 'UTC',
+        inPersonSessionRatePrivate: settings.inPersonSessionRatePrivate ?? '',
+        maxInPersonSessionRatePrivate: settings.maxInPersonSessionRatePrivate ?? '',
+        inPersonSessionSlotDurationMinutes: settings.inPersonSessionSlotDurationMinutes ?? 30,
         sessionUserCancellationTimeLimitMinutes: settings.sessionUserCancellationTimeLimitMinutes ?? 60,
         sessionUserCancellationRefundPercent: settings.sessionUserCancellationRefundPercent ?? 100,
         sessionUserCancellationRefundCredits: settings.sessionUserCancellationRefundCredits !== false,
@@ -256,6 +262,7 @@ const GeneralSettings = () => {
         'adminCommissionPercent',
         'sessionCommissionPercent',
         'sessionSlotDurationMinutes',
+        'inPersonSessionSlotDurationMinutes',
         'sessionUserCancellationTimeLimitMinutes',
         'sessionUserCancellationRefundPercent',
         'sessionUserCancellationRefundCreditsCount',
@@ -267,7 +274,9 @@ const GeneralSettings = () => {
         'groupSessionCommissionPercent',
         'groupSessionMinimumExpertTalkTimeMinutes',
         'autoExpertBadgeSessionThreshold',
-        'referralRewardAmount'
+        'referralRewardAmount',
+        'inPersonSessionRatePrivate',
+        'maxInPersonSessionRatePrivate'
       ].includes(field)
     ) {
       // Allow empty string or valid numbers
@@ -387,7 +396,11 @@ const GeneralSettings = () => {
     'groupSessionCommissionPercent',
     'groupSessionMinimumExpertTalkTimeMinutes',
     'autoExpertBadgeSessionThreshold',
-    'referralRewardAmount',
+    'inPersonSessionRatePrivate',
+    'maxInPersonSessionRatePrivate',
+    'inPersonSessionSlotDurationMinutes',
+    'inPersonSessionCommissionPercent',
+    'inPersonConsultationEnabled',
     'recordingStorageDeletionDays',
     'recordingStorageReminderDaysBeforeDeletion',
   ]
@@ -973,6 +986,107 @@ const GeneralSettings = () => {
                     }}
                   />
                 </Grid>
+	              </Grid>
+	            </Box>
+
+	            <Box
+	              sx={{
+	                p: 3,
+	                border: theme => `1px solid ${theme.palette.divider}`,
+	                borderRadius: 2,
+	                bgcolor: 'background.default'
+	              }}
+	            >
+	              <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+	                <i className='tabler-building-hospital mr-2' />
+	                In-Person Session Setting
+	              </Typography>
+	              <Divider sx={{ mb: 3 }} />
+
+	              <Grid container spacing={3}>
+	                <Grid item size={6}>
+	                  <TextField
+	                    fullWidth
+	                    select
+	                    label='In-Person Session Slot Duration (minutes)'
+	                    value={formData.inPersonSessionSlotDurationMinutes || 30}
+	                    onChange={e => handleFieldChange('inPersonSessionSlotDurationMinutes', e.target.value)}
+	                  >
+	                    {[15, 30, 45, 60, 90, 120, 180, 240].map(duration => (
+	                      <MenuItem key={duration} value={duration}>
+	                        {duration} minutes
+	                      </MenuItem>
+	                    ))}
+	                  </TextField>
+	                </Grid>
+                  <Grid item size={6}>
+                    <TextField
+                      fullWidth
+                      type='text'
+                      label='In-Person Session Commission (%)'
+                      value={formData.inPersonSessionCommissionPercent || ''}
+                      onChange={e => handleFieldChange('inPersonSessionCommissionPercent', e.target.value)}
+                      InputProps={{
+                        inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <Typography variant='caption' color='text.secondary'>
+                              %
+                            </Typography>
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </Grid>
+                  <Grid item size={12}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={Boolean(formData.inPersonConsultationEnabled)}
+                          onChange={e => handleFieldChange('inPersonConsultationEnabled', e.target.checked)}
+                        />
+                      }
+                      label='Enable In-Person Consultation Feature Platform-Wide'
+                    />
+                  </Grid>
+	                <Grid item size={6}>
+	                  <TextField
+	                    fullWidth
+	                    type='text'
+	                    label={isSessionCreditMode ? 'Min In-Person Session Credits' : 'Min In-Person Session Rate'}
+	                    value={formData.inPersonSessionRatePrivate || ''}
+	                    onChange={e => handleFieldChange('inPersonSessionRatePrivate', e.target.value)}
+	                    InputProps={{
+	                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+	                      endAdornment: (
+	                        <InputAdornment position='end'>
+	                          <Typography variant='caption' color='text.secondary'>
+	                            {privateRateUnitLabel}
+	                          </Typography>
+	                        </InputAdornment>
+	                      )
+	                    }}
+	                  />
+	                </Grid>
+	                <Grid item size={6}>
+	                  <TextField
+	                    fullWidth
+	                    type='text'
+	                    label={isSessionCreditMode ? 'Max In-Person Session Credits' : 'Max In-Person Session Rate'}
+	                    value={formData.maxInPersonSessionRatePrivate || ''}
+	                    onChange={e => handleFieldChange('maxInPersonSessionRatePrivate', e.target.value)}
+	                    InputProps={{
+	                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+	                      endAdornment: (
+	                        <InputAdornment position='end'>
+	                          <Typography variant='caption' color='text.secondary'>
+	                            {privateRateUnitLabel}
+	                          </Typography>
+	                        </InputAdornment>
+	                      )
+	                    }}
+	                  />
+	                </Grid>
 	              </Grid>
 	            </Box>
 

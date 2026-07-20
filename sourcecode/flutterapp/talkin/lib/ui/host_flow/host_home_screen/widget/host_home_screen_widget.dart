@@ -879,12 +879,43 @@ class PermissionView extends StatelessWidget {
               },
             );
 
+            final inPersonCard = GetBuilder<HostHomeScreenController>(
+              builder: (controller) {
+                return CustomSwitchView(
+                  iconData: Icons.location_on_rounded,
+                  text: 'Accept In-Person Sessions',
+                  subtitle: 'Let users book in-person sessions at your clinic',
+                  callCoin: Database
+                          .fetchListenerProfileModel?.data?.rateInPersonSession
+                          .toString() ??
+                      '0',
+                  coinShow: true,
+                  value: controller.isAvailableForInPersonSession,
+                  onChanged: (val) {
+                    controller.permissionSwitch(
+                      val,
+                      'isAvailableForInPersonSession',
+                    );
+                  },
+                  onEditCoin: () {
+                    controller.showEditPriceDialog('in_person');
+                  },
+                );
+              },
+            );
+
             if (isTablet) {
-              return Row(
+              return Column(
                 children: [
-                  Expanded(child: audioCard),
-                  const SizedBox(width: 12),
-                  Expanded(child: videoCard),
+                  Row(
+                    children: [
+                      Expanded(child: audioCard),
+                      const SizedBox(width: 12),
+                      Expanded(child: videoCard),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  inPersonCard,
                 ],
               );
             }
@@ -894,6 +925,8 @@ class PermissionView extends StatelessWidget {
                 audioCard,
                 const SizedBox(height: 12),
                 videoCard,
+                const SizedBox(height: 12),
+                inPersonCard,
               ],
             );
           },

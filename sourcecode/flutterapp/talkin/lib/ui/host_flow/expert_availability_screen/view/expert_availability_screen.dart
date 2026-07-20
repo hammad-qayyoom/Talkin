@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +17,9 @@ class ExpertAvailabilityScreen extends StatefulWidget {
 }
 
 class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool _isSaving = false;
+  String _selectedScheduleMode = 'online'; // 'online' or 'in_person'
 
   int _selectedDay = DateTime.now().weekday % 7;
   TimeOfDay _selectedStart = const TimeOfDay(hour: 9, minute: 0);
@@ -28,6 +30,10 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
   @override
   void initState() {
     super.initState();
+    final args = Get.arguments;
+    if (args != null && args is Map && args['scheduleMode'] != null) {
+      _selectedScheduleMode = args['scheduleMode'].toString();
+    }
     _loadAvailability();
   }
 
@@ -59,8 +65,28 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
           .fetchListenerProfileModel?.data?.isAvailableForPrivateVideoCall !=
       false;
 
+  bool get _isInPersonServiceEnabled =>
+      Database
+          .fetchListenerProfileModel?.data?.isAvailableForInPersonSession !=
+      false;
+
   int get _configuredSlotDurationMinutes {
     final raw = Database.settingApiModel?.data?.sessionSlotDurationMinutes;
+    final parsed = int.tryParse((raw ?? 30).toString()) ?? 30;
+
+    if (parsed < 10) {
+      return 30;
+    }
+
+    if (parsed > 240) {
+      return 240;
+    }
+
+    return parsed;
+  }
+
+  int get _configuredInPersonSlotDurationMinutes {
+    final raw = Database.settingApiModel?.data?.inPersonSessionSlotDurationMinutes;
     final parsed = int.tryParse((raw ?? 30).toString()) ?? 30;
 
     if (parsed < 10) {
@@ -124,6 +150,12 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
     final mergedSlots = <String, Map<String, dynamic>>{};
 
     for (final slot in data.whereType<Map<String, dynamic>>()) {
+      final slotConsultationMode = (slot['consultationMode'] ?? 'online').toString();
+      final isSlotInPerson = slotConsultationMode == 'in_person';
+
+      if (_selectedScheduleMode == 'online' && isSlotInPerson) continue;
+      if (_selectedScheduleMode == 'in_person' && !isSlotInPerson) continue;
+
       final key = _buildNormalizedSlotKey(slot);
       final existing = mergedSlots[key] ??
           {
@@ -134,9 +166,9 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
             'endMinutes':
                 int.tryParse((slot['endMinutes'] ?? '0').toString()) ?? 0,
             'slotDurationMinutes': int.tryParse((slot['slotDurationMinutes'] ??
-                        _configuredSlotDurationMinutes)
+                        (_selectedScheduleMode == 'in_person' ? _configuredInPersonSlotDurationMinutes : _configuredSlotDurationMinutes))
                     .toString()) ??
-                _configuredSlotDurationMinutes,
+                (_selectedScheduleMode == 'in_person' ? _configuredInPersonSlotDurationMinutes : _configuredSlotDurationMinutes),
             'timezone':
                 (slot['timezone'] ?? _configuredBookingTimezone).toString(),
             'isActive': true,
@@ -185,10 +217,10 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
   }
 
   Future<void> _addSlot() async {
-    if (!_isAudioServiceEnabled && !_isVideoServiceEnabled) {
+    if (!_isAudioServiceEnabled && !_isVideoServiceEnabled && !_isInPersonServiceEnabled) {
       Utils.showToast(
         context,
-        'Enable Audio or Video from home screen before adding slots.',
+        'Enable Audio, Video, or In-Person from home screen before adding slots.',
       );
       return;
     }
@@ -205,7 +237,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
       'dayOfWeek': _selectedDay,
       'startMinutes': startMinutes,
       'endMinutes': endMinutes,
-      'slotDurationMinutes': _configuredSlotDurationMinutes,
+      'slotDurationMinutes': _selectedScheduleMode == 'in_person' ? _configuredInPersonSlotDurationMinutes : _configuredSlotDurationMinutes,
       'timezone': _configuredBookingTimezone,
       'isActive': true,
     };
@@ -233,10 +265,10 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
   }
 
   Future<void> _saveAvailability() async {
-    if (!_isAudioServiceEnabled && !_isVideoServiceEnabled) {
+    if (!_isAudioServiceEnabled && !_isVideoServiceEnabled && !_isInPersonServiceEnabled) {
       Utils.showToast(
         context,
-        'Enable Audio or Video from home screen before saving availability.',
+        'Enable Audio, Video, or In-Person from home screen before saving availability.',
       );
       return;
     }
@@ -248,26 +280,59 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
 
     final payloadSlots = <Map<String, dynamic>>[];
 
-    for (final slot in _slots) {
-      if (_isAudioServiceEnabled) {
-        payloadSlots.add({
-          ...slot,
-          'sessionType': 'one_to_one',
-          'callType': 'audio',
-        });
-      }
+    // When saving, we need to preserve the slots from the OTHER schedule mode.
+    // The backend `setExpertAvailability` expects the FULL list of slots for the expert.
+    // So we fetch the current availability, filter out the slots for the CURRENT mode,
+    // and replace them with `_slots`.
+    final existingResponse = await SessionBookingService.getExpertAvailability(
+      listenerId: _listenerId.isEmpty ? null : _listenerId,
+    );
+    final allExistingData = existingResponse['data'] as List<dynamic>? ?? [];
 
-      if (_isVideoServiceEnabled) {
-        payloadSlots.add({
-          ...slot,
-          'sessionType': 'one_to_one',
-          'callType': 'video',
-        });
+    for (final existingSlot in allExistingData.whereType<Map<String, dynamic>>()) {
+      final slotConsultationMode = (existingSlot['consultationMode'] ?? 'online').toString();
+      final isSlotInPerson = slotConsultationMode == 'in_person';
+
+      // Keep slots that belong to the OTHER schedule mode
+      if (_selectedScheduleMode == 'online' && isSlotInPerson) {
+        payloadSlots.add(existingSlot);
+      } else if (_selectedScheduleMode == 'in_person' && !isSlotInPerson) {
+        payloadSlots.add(existingSlot);
       }
     }
 
-    if (payloadSlots.isEmpty) {
-      Utils.showToast(context, 'No valid service type available for slots.');
+    for (final slot in _slots) {
+      if (_selectedScheduleMode == 'online') {
+        if (_isAudioServiceEnabled) {
+          payloadSlots.add({
+            ...slot,
+            'sessionType': 'one_to_one',
+            'callType': 'audio',
+          });
+        }
+
+        if (_isVideoServiceEnabled) {
+          payloadSlots.add({
+            ...slot,
+            'sessionType': 'one_to_one',
+            'callType': 'video',
+          });
+        }
+      } else if (_selectedScheduleMode == 'in_person') {
+        if (_isInPersonServiceEnabled) {
+          payloadSlots.add({
+            ...slot,
+            'sessionType': 'one_to_one',
+            'callType': 'audio',
+            'consultationMode': 'in_person',
+            'slotDurationMinutes': _configuredInPersonSlotDurationMinutes,
+          });
+        }
+      }
+    }
+
+    if (payloadSlots.isEmpty && _slots.isNotEmpty) {
+      Utils.showToast(context, 'No valid service type enabled for the selected mode.');
       return;
     }
 
@@ -502,7 +567,35 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 14),
+          if (_isInPersonServiceEnabled && (_isAudioServiceEnabled || _isVideoServiceEnabled)) ...[
+            SizedBox(
+              width: double.infinity,
+              child: CupertinoSlidingSegmentedControl<String>(
+                groupValue: _selectedScheduleMode,
+                children: const {
+                  'online': Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: Text('Audio / Video', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                  ),
+                  'in_person': Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: Text('In-Person', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                  ),
+                },
+                backgroundColor: AppColors.redesignSurfaceNeutralAlt,
+                thumbColor: AppColors.white,
+                onValueChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      _selectedScheduleMode = value;
+                    });
+                  }
+                },
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
           Row(
             children: [
               Expanded(
@@ -583,7 +676,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
           const SizedBox(height: 8),
           Text(
             EnumLocale.txtServiceTypeLabel.name.trParams({
-              'serviceType': _serviceTypeLabel(),
+              'serviceType': _selectedScheduleMode == 'in_person' ? 'In-Person Consultation' : _serviceTypeLabel(),
             }),
             style: AppFontStyle.fontStyleW500(
               fontSize: 11,
@@ -592,7 +685,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
           ),
           const SizedBox(height: 3),
           Text(
-            'Slot duration: @_configuredSlotDurationMinutes min  |  Timezone: @_configuredBookingTimezone'.trParams({'_configuredSlotDurationMinutes': _configuredSlotDurationMinutes.toString(), '_configuredBookingTimezone': _configuredBookingTimezone}),
+            'Slot duration: @_configuredSlotDurationMinutes min  |  Timezone: @_configuredBookingTimezone'.trParams({'_configuredSlotDurationMinutes': (_selectedScheduleMode == 'in_person' ? _configuredInPersonSlotDurationMinutes : _configuredSlotDurationMinutes).toString(), '_configuredBookingTimezone': _configuredBookingTimezone}),
             style: AppFontStyle.fontStyleW500(
               fontSize: 11,
               fontColor: AppColors.redesignMutedText,

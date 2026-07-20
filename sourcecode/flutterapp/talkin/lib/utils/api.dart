@@ -137,6 +137,12 @@ abstract class Api {
   static const expertVerificationStatus =
       "${baseUrl}api/v2/experts/verification/status";
 
+  // >>>>> >>>>> In-Person Consultation <<<<< <<<<<
+  static const expertClinic = "${baseUrl}api/v2/experts/clinic/";
+  static const sessionNavigation = "${baseUrl}api/v2/sessions/navigation/";
+  static const sessionMarkArrival = "${baseUrl}api/v2/sessions/";
+  static const sessionMarkCompleted = "${baseUrl}api/v2/sessions/";
+
   // >>>>> >>>>>  Listener  Api <<<<< <<<<<
 
   static const loginListenerProfile =

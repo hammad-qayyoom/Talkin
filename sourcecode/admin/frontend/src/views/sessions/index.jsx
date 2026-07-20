@@ -17,6 +17,9 @@ import TableRow from '@mui/material/TableRow'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import MenuItem from '@mui/material/MenuItem'
+import Chip from '@mui/material/Chip'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
 
 import CustomTextField from '@/@core/components/mui/TextField'
 import ConfirmationDialog from '@/components/dialogs/confirmation-dialog'
@@ -29,6 +32,12 @@ const statusOptions = [
   { value: 'live', label: 'Live' },
   { value: 'completed', label: 'Completed' },
   { value: 'canceled', label: 'Canceled' }
+]
+
+const consultationModeOptions = [
+  { value: 'all', label: 'All Modes' },
+  { value: 'online', label: 'Online' },
+  { value: 'in_person', label: 'In-Person' }
 ]
 
 const formatDateTime = value => {
@@ -53,6 +62,7 @@ const formatDateTime = value => {
 
 const SessionsView = () => {
   const [status, setStatus] = useState('all')
+  const [consultationMode, setConsultationMode] = useState('all')
   const [loading, setLoading] = useState(false)
   const [sessions, setSessions] = useState([])
   const [confirmOpen, setConfirmOpen] = useState(false)
@@ -69,7 +79,8 @@ const SessionsView = () => {
           includeGroup: true,
           start: 1,
           limit: 200,
-          status
+          status,
+          ...(consultationMode !== 'all' && { consultationMode })
         }
       })
 
@@ -80,7 +91,7 @@ const SessionsView = () => {
     } finally {
       setLoading(false)
     }
-  }, [status])
+  }, [status, consultationMode])
 
   useEffect(() => {
     fetchSessions()
@@ -125,14 +136,28 @@ const SessionsView = () => {
       </Box>
 
       <Card>
-        <Stack direction='row' justifyContent='space-between' alignItems='center' className='p-6'>
-          <CustomTextField select value={status} onChange={event => setStatus(event.target.value)} className='w-[180px]'>
-            {statusOptions.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 6, pt: 2 }}>
+          <Tabs
+            value={consultationMode}
+            onChange={(event, newValue) => setConsultationMode(newValue)}
+            aria-label='consultation mode tabs'
+          >
+            {consultationModeOptions.map(option => (
+              <Tab key={option.value} label={option.label} value={option.value} />
             ))}
-          </CustomTextField>
+          </Tabs>
+        </Box>
+
+        <Stack direction='row' justifyContent='space-between' alignItems='center' className='p-6 pt-4'>
+          <Stack direction='row' spacing={2}>
+            <CustomTextField select value={status} onChange={event => setStatus(event.target.value)} className='w-[180px]'>
+              {statusOptions.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </CustomTextField>
+          </Stack>
           <Button variant='outlined' onClick={fetchSessions}>
             Refresh
           </Button>
@@ -148,6 +173,7 @@ const SessionsView = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>Title</TableCell>
+                  <TableCell>Mode</TableCell>
                   <TableCell>Type</TableCell>
                   <TableCell>Call Type</TableCell>
                   <TableCell>User</TableCell>
@@ -161,7 +187,7 @@ const SessionsView = () => {
               <TableBody>
                 {rows.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={9} align='center'>
+                    <TableCell colSpan={10} align='center'>
                       No sessions found.
                     </TableCell>
                   </TableRow>
@@ -172,8 +198,16 @@ const SessionsView = () => {
                     return (
                       <TableRow key={session._id}>
                         <TableCell>{session?.title || '-'}</TableCell>
+                        <TableCell>
+                          <Chip
+                            label={session?.consultationMode === 'in_person' ? 'In-Person' : 'Online'}
+                            color={session?.consultationMode === 'in_person' ? 'secondary' : 'primary'}
+                            size='small'
+                            variant='outlined'
+                          />
+                        </TableCell>
                         <TableCell>{session?.sessionType || '-'}</TableCell>
-                        <TableCell>{session?.callType || '-'}</TableCell>
+                        <TableCell>{session?.consultationMode === 'in_person' ? 'N/A' : (session?.callType || '-')}</TableCell>
                         <TableCell>{session?.participantUserName || '-'}</TableCell>
                         <TableCell>{session?.totalTalkDurationLabel || '0m 0s'}</TableCell>
                         <TableCell>{formatDateTime(session?.startAt)}</TableCell>

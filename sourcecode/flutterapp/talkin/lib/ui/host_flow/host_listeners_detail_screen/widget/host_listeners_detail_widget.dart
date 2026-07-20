@@ -534,8 +534,162 @@ class HostListenersDetailView extends StatelessWidget {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 12),
+                    _RateInputTile(
+                      title: 'In-Person Session Rate',
+                      controller: controller.rateInPersonSessionCnt,
+                    ),
                   ],
                 ),
+              ),
+              const SizedBox(height: 6),
+              // Clinic Details Section
+              GetBuilder<HostListenersDetailController>(
+                builder: (controller) {
+                  return _SectionCard(
+                    title: 'Clinic Details',
+                    subtitle: 'For in-person sessions at your clinic location',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _FieldLabel(title: 'Clinic Name'),
+                        const SizedBox(height: 7),
+                        _ModernInputField(
+                          controller: controller.clinicNameCnt,
+                          hint: 'Enter your clinic name',
+                          textInputAction: TextInputAction.next,
+                        ),
+                        const SizedBox(height: 16),
+                        _FieldLabel(title: 'Address'),
+                        const SizedBox(height: 7),
+                        _ModernInputField(
+                          controller: controller.clinicAddressCnt,
+                          hint: 'Full address',
+                          textInputAction: TextInputAction.next,
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _FieldLabel(title: 'City'),
+                                  const SizedBox(height: 7),
+                                  _ModernInputField(
+                                    controller: controller.clinicCityCnt,
+                                    hint: 'City',
+                                    textInputAction: TextInputAction.next,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _FieldLabel(title: 'State'),
+                                  const SizedBox(height: 7),
+                                  _ModernInputField(
+                                    controller: controller.clinicStateCnt,
+                                    hint: 'State',
+                                    textInputAction: TextInputAction.next,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _FieldLabel(title: 'Country'),
+                                  const SizedBox(height: 7),
+                                  _ModernInputField(
+                                    controller: controller.clinicCountryCnt,
+                                    hint: 'Country',
+                                    textInputAction: TextInputAction.next,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _FieldLabel(title: 'Postal Code'),
+                                  const SizedBox(height: 7),
+                                  _ModernInputField(
+                                    controller: controller.clinicPostalCodeCnt,
+                                    hint: 'Postal code',
+                                    textInputAction: TextInputAction.next,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        _FieldLabel(title: 'Floor / Suite'),
+                        const SizedBox(height: 7),
+                        _ModernInputField(
+                          controller: controller.clinicFloorSuiteCnt,
+                          hint: 'e.g. Suite 201, 2nd Floor',
+                          textInputAction: TextInputAction.next,
+                        ),
+                        const SizedBox(height: 16),
+                        _FieldLabel(title: 'Nearby Landmark'),
+                        const SizedBox(height: 7),
+                        _ModernInputField(
+                          controller: controller.clinicLandmarkCnt,
+                          hint: 'e.g. Near City Hospital',
+                          textInputAction: TextInputAction.next,
+                        ),
+                        const SizedBox(height: 16),
+                        _FieldLabel(title: 'Parking Info'),
+                        const SizedBox(height: 7),
+                        _ModernInputField(
+                          controller: controller.clinicParkingInfoCnt,
+                          hint: 'e.g. Free parking available in basement',
+                          textInputAction: TextInputAction.next,
+                        ),
+                        const SizedBox(height: 16),
+                        _FieldLabel(title: 'Contact Phone'),
+                        const SizedBox(height: 7),
+                        _ModernInputField(
+                          controller: controller.clinicContactPhoneCnt,
+                          hint: 'Clinic phone number',
+                          textInputAction: TextInputAction.next,
+                          textInputType: TextInputType.phone,
+                        ),
+                        const SizedBox(height: 16),
+                        _FieldLabel(title: 'Contact Email'),
+                        const SizedBox(height: 7),
+                        _ModernInputField(
+                          controller: controller.clinicContactEmailCnt,
+                          hint: 'Clinic email',
+                          textInputAction: TextInputAction.next,
+                          textInputType: TextInputType.emailAddress,
+                        ),
+                        const SizedBox(height: 16),
+                        _FieldLabel(title: 'Consultation Instructions'),
+                        const SizedBox(height: 7),
+                        _ModernInputField(
+                          controller: controller.clinicInstructionsCnt,
+                          hint: 'Any special instructions for visitors',
+                          textInputAction: TextInputAction.done,
+                          maxLines: 3,
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 6),
             ],

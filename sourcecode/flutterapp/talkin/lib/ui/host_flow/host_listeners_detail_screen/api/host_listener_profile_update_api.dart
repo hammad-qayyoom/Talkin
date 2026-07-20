@@ -16,9 +16,13 @@ class HostListenerProfileUpdateApi {
     required String? image,
     required String? ratePrivateVideoCall,
     required String? ratePrivateAudioCall,
+    required String? rateInPersonSession,
     required String? language,
     required String? talkTopics,
     required String? categoryIds,
+    String? consultationModes,
+    String? inPersonPricing,
+    String? clinicDetails,
   }) async {
     Utils.showLog("Listener Edit Profile Api Calling...");
 
@@ -46,6 +50,10 @@ class HostListenerProfileUpdateApi {
       if ((categoryIds ?? '').isNotEmpty) request.fields['categoryIds'] = categoryIds!;
       if ((ratePrivateAudioCall ?? '').isNotEmpty) request.fields[ApiParams.ratePrivateAudioCall] = ratePrivateAudioCall!;
       if ((ratePrivateVideoCall ?? '').isNotEmpty) request.fields[ApiParams.ratePrivateVideoCall] = ratePrivateVideoCall!;
+      if ((rateInPersonSession ?? '').isNotEmpty) request.fields['rateInPersonSession'] = rateInPersonSession!;
+      if ((consultationModes ?? '').isNotEmpty) request.fields['consultationModes'] = consultationModes!;
+      if ((inPersonPricing ?? '').isNotEmpty) request.fields['inPersonPricing'] = inPersonPricing!;
+      if ((clinicDetails ?? '').isNotEmpty) request.fields['clinicDetails'] = clinicDetails!;
       if ((image ?? '').isNotEmpty) request.fields[ApiParams.image] = image!;
 
       if (image != null) {

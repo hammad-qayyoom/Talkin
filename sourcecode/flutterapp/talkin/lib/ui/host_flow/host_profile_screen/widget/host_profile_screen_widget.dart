@@ -385,17 +385,94 @@ class HostProfileOptionsView extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              Expanded(
-                                child: _QuickActionTile(
-                                  icon: AppAsset.calendar,
-                                  title: EnumLocale.txtAvailability.name.tr,
-                                  onTap: () {
-                                    Get.toNamed(
-                                      AppRoutes.hostAvailabilityScreen,
-                                    );
-                                  },
+                                Expanded(
+                                  child: _QuickActionTile(
+                                    icon: AppAsset.calendar,
+                                    title: EnumLocale.txtAvailability.name.tr,
+                                    onTap: () {
+                                      final isAudioEnabled = Database.fetchListenerProfileModel?.data?.isAvailableForPrivateAudioCall != false;
+                                      final isVideoEnabled = Database.fetchListenerProfileModel?.data?.isAvailableForPrivateVideoCall != false;
+                                      final isInPersonEnabled = Database.fetchListenerProfileModel?.data?.isAvailableForInPersonSession != false;
+
+                                      if (isInPersonEnabled && (isAudioEnabled || isVideoEnabled)) {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          backgroundColor: AppColors.white,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                                          ),
+                                          builder: (context) {
+                                            return SafeArea(
+                                              top: false,
+                                              child: Padding(
+                                                padding: EdgeInsets.fromLTRB(16, 24, 16, MediaQuery.of(context).padding.bottom + 24),
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      'Manage Availability',
+                                                      style: AppFontStyle.fontStyleW700(fontSize: 18, fontColor: AppColors.redesignBrandDark),
+                                                    ),
+                                                    const SizedBox(height: 8),
+                                                    Text(
+                                                      'Which availability would you like to manage?',
+                                                      style: AppFontStyle.fontStyleW500(fontSize: 14, fontColor: AppColors.redesignMutedText),
+                                                    ),
+                                                    const SizedBox(height: 24),
+                                                    SizedBox(
+                                                      width: double.infinity,
+                                                      child: ElevatedButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                          Get.toNamed(AppRoutes.hostAvailabilityScreen, arguments: {'scheduleMode': 'online'});
+                                                        },
+                                                        style: ElevatedButton.styleFrom(
+                                                          elevation: 0,
+                                                          backgroundColor: AppColors.redesignSurfaceNeutralAlt,
+                                                          padding: const EdgeInsets.symmetric(vertical: 16),
+                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                                        ),
+                                                        child: Text(
+                                                          'Online (Audio / Video)',
+                                                          style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: AppColors.redesignBrandDark),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 12),
+                                                    SizedBox(
+                                                      width: double.infinity,
+                                                      child: ElevatedButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                          Get.toNamed(AppRoutes.hostAvailabilityScreen, arguments: {'scheduleMode': 'in_person'});
+                                                        },
+                                                        style: ElevatedButton.styleFrom(
+                                                          elevation: 0,
+                                                          backgroundColor: AppColors.redesignSurfaceNeutralAlt,
+                                                          padding: const EdgeInsets.symmetric(vertical: 16),
+                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                                        ),
+                                                        child: Text(
+                                                          'In-Person Consultation',
+                                                          style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: AppColors.redesignBrandDark),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      } else {
+                                        Get.toNamed(
+                                          AppRoutes.hostAvailabilityScreen,
+                                          arguments: {'scheduleMode': isInPersonEnabled ? 'in_person' : 'online'},
+                                        );
+                                      }
+                                    },
+                                  ),
                                 ),
-                              ),
                               _QuickDivider(),
                               Expanded(
                                 child: _QuickActionTile(

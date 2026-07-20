@@ -299,6 +299,21 @@ const ListenerListTable = () => {
           </div>
         )
       }),
+      columnHelper.accessor('consultationModes', {
+        header: () => <div className='text-center'>Modes</div>,
+        cell: ({ row }) => {
+          const modes = row.original.consultationModes
+          const isOnline = modes?.online !== false
+          const isInPerson = modes?.inPerson === true
+
+          return (
+            <div className='flex justify-center gap-1 flex-wrap'>
+              {isOnline && <Chip label='Online' size='small' color='primary' variant='outlined' />}
+              {isInPerson && <Chip label='In-Person' size='small' color='secondary' variant='outlined' />}
+            </div>
+          )
+        }
+      }),
       columnHelper.accessor('callCount', {
         header: () => <div className='text-center'>Call Count</div>,
         cell: ({ row }) => (

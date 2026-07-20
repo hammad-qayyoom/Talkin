@@ -77,6 +77,14 @@ class ListenerData {
   DateTime? verifiedBadgeAt;
   String? audio;
 
+  // In-Person Consultation fields
+  final Map<String, dynamic>? consultationModes;
+  final Map<String, dynamic>? inPersonPricing;
+  final Map<String, dynamic>? clinicDetails;
+
+  bool? isAvailableForInPersonSession;
+  int? rateInPersonSession;
+
   ListenerData({
     this.id,
     this.name,
@@ -103,6 +111,11 @@ class ListenerData {
     this.verifiedBadgeType,
     this.verifiedBadgeAt,
     this.audio,
+    this.consultationModes,
+    this.inPersonPricing,
+    this.clinicDetails,
+    this.isAvailableForInPersonSession,
+    this.rateInPersonSession,
   });
 
   factory ListenerData.fromJson(Map<String, dynamic> json) => ListenerData(
@@ -151,6 +164,9 @@ class ListenerData {
         isAvailableForPrivateVideoCall:
             json["isAvailableForPrivateVideoCall"] == true ||
                 json["isAvailableForPrivateVideoCall"]?.toString() == 'true',
+        isAvailableForInPersonSession:
+            json["isAvailableForInPersonSession"] == true ||
+                json["isAvailableForInPersonSession"]?.toString() == 'true',
         isAvailableForChat: json["isAvailableForChat"] == true ||
             json["isAvailableForChat"]?.toString() == 'true',
         isVerifiedBadge: _parseBool(json["isVerifiedBadge"]) ?? false,
@@ -159,6 +175,16 @@ class ListenerData {
           (json["verifiedBadgeAt"] ?? '').toString(),
         )?.toLocal(),
         audio: json["audio"]?.toString(),
+        consultationModes: json["consultationModes"] is Map
+            ? Map<String, dynamic>.from(json["consultationModes"])
+            : null,
+        inPersonPricing: json["inPersonPricing"] is Map
+            ? Map<String, dynamic>.from(json["inPersonPricing"])
+            : null,
+        clinicDetails: json["clinicDetails"] is Map
+            ? Map<String, dynamic>.from(json["clinicDetails"])
+            : null,
+        rateInPersonSession: _parseInt(json["rateInPersonSession"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -187,5 +213,10 @@ class ListenerData {
         "verifiedBadgeType": verifiedBadgeType,
         "verifiedBadgeAt": verifiedBadgeAt?.toIso8601String(),
         "audio": audio,
+        "consultationModes": consultationModes,
+        "inPersonPricing": inPersonPricing,
+        "clinicDetails": clinicDetails,
+        "isAvailableForInPersonSession": isAvailableForInPersonSession,
+        "rateInPersonSession": rateInPersonSession,
       };
 }

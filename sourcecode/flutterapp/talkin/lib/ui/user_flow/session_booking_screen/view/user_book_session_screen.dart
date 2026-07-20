@@ -31,6 +31,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
   bool _isLoading = false;
   bool _isBooking = false;
   String _callType = 'audio';
+  String _consultationMode = 'online';
   DateTime _selectedDate = DateTime.now();
   List<dynamic> _slots = [];
   Map<String, dynamic>? _selectedSlot;
@@ -44,6 +45,8 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
   bool _isVerifiedExpert = false;
   bool _isAudioServiceEnabled = true;
   bool _isVideoServiceEnabled = true;
+  bool _isInPersonEnabled = false;
+  Map<String, dynamic>? _clinicDetails;
 
   bool _parseBoolFlag(dynamic value, bool fallback) {
     if (value == null) {
@@ -124,6 +127,25 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
         _isAudioServiceEnabled = true;
         _isVideoServiceEnabled = true;
       }
+
+      // Parse in-person consultation support
+      final consultationModes = arguments['consultationModes'];
+      final isAvailableForInPersonSession =
+          _parseBoolFlag(arguments['isAvailableForInPersonSession'], true);
+      if (consultationModes is Map<String, dynamic>) {
+        _isInPersonEnabled = consultationModes['inPerson'] == true &&
+            isAvailableForInPersonSession;
+      }
+
+      final clinicDetails = arguments['clinicDetails'];
+      if (clinicDetails is Map<String, dynamic>) {
+        _clinicDetails = clinicDetails;
+      }
+
+      // Default to in-person if only in-person is enabled
+      if (_isInPersonEnabled && !_isAudioServiceEnabled && !_isVideoServiceEnabled) {
+        _consultationMode = 'in_person';
+      }
     }
 
     _selectedDate = DateTime(
@@ -140,7 +162,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
       return;
     }
 
-    final selectedTypeEnabled =
+    final selectedTypeEnabled = _consultationMode == 'in_person' ||
         (_callType == 'audio' && _isAudioServiceEnabled) ||
             (_callType == 'video' && _isVideoServiceEnabled);
 
@@ -161,9 +183,10 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
       listenerId: _listenerId.isEmpty ? null : _listenerId,
       expertId: _expertId.isEmpty ? null : _expertId,
       date: _selectedDate,
-      callType: _callType,
+      callType: _consultationMode == 'in_person' ? 'audio' : _callType,
       clientTimezoneOffsetMinutes: DateTime.now().timeZoneOffset.inMinutes,
       includeBooked: true,
+      consultationMode: _consultationMode,
     );
 
     final data = response['data'];
@@ -202,7 +225,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
       return;
     }
 
-    final selectedTypeEnabled =
+    final selectedTypeEnabled = _consultationMode == 'in_person' ||
         (_callType == 'audio' && _isAudioServiceEnabled) ||
             (_callType == 'video' && _isVideoServiceEnabled);
 
@@ -251,11 +274,12 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
       userId: userId,
       listenerId: _listenerId.isEmpty ? null : _listenerId,
       expertId: _expertId.isEmpty ? null : _expertId,
-      callType: _callType,
+      callType: _consultationMode == 'in_person' ? 'audio' : _callType,
       slotStartAt: parsedStartAt,
       slotDurationMinutes: slotDurationMinutes,
       bookingTimezone: _bookingTimezone,
       clientTimezoneOffsetMinutes: DateTime.now().timeZoneOffset.inMinutes,
+      consultationMode: _consultationMode,
     );
 
     if (!mounted) {
@@ -492,7 +516,8 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
     required String value,
     required String label,
   }) {
-    final bool isSelected = _callType == value;
+    final bool isSelected = _consultationMode == value ||
+        (_consultationMode == 'online' && (value == 'audio' || value == 'video') && _callType == value);
 
     return Padding(
       padding: const EdgeInsets.only(right: 8),
@@ -506,7 +531,14 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
             }
 
             setState(() {
-              _callType = value;
+              if (value == 'online' || value == 'in_person') {
+                _consultationMode = value;
+                if (value == 'in_person') {
+                  _callType = 'audio';
+                }
+              } else {
+                _callType = value;
+              }
             });
             _fetchSlots();
           },
@@ -557,6 +589,83 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildClinicInfoCard({required double horizontalInset}) {
+    final clinicName = (_clinicDetails?['clinicName'] ?? '').toString().trim();
+    final address = _clinicDetails?['address'];
+    final city = (address?['city'] ?? '').toString().trim();
+    final state = (address?['state'] ?? '').toString().trim();
+    final country = (address?['country'] ?? '').toString().trim();
+    final fullAddress = [city, state, country].where((s) => s.isNotEmpty).join(', ');
+    final instructions = (_clinicDetails?['consultationInstructions'] ?? '').toString().trim();
+
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.fromLTRB(horizontalInset, 8, horizontalInset, 0),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF1F8E9),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFC5E1A5)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.local_hospital_rounded,
+                size: 18,
+                color: const Color(0xFF2E7D32),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  clinicName.isNotEmpty ? clinicName : 'Clinic Location',
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: 14,
+                    fontColor: const Color(0xFF2E7D32),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (fullAddress.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                Icon(
+                  Icons.location_on_outlined,
+                  size: 14,
+                  color: const Color(0xFF558B2F),
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    fullAddress,
+                    style: AppFontStyle.fontStyleW500(
+                      fontSize: 12,
+                      fontColor: const Color(0xFF558B2F),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+          if (instructions.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Text(
+              instructions,
+              style: AppFontStyle.fontStyleW500(
+                fontSize: 11,
+                fontColor: const Color(0xFF689F38),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
@@ -768,25 +877,44 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
                         isTablet: isTablet,
                       ),
                       _buildExpertCard(horizontalInset: horizontalInset),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            horizontalInset, 12, horizontalInset, 0),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          child: Row(
-                            children: [
-                              if (_isAudioServiceEnabled)
+                      if (_isInPersonEnabled && (_isAudioServiceEnabled || _isVideoServiceEnabled))
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(horizontalInset, 8, horizontalInset, 0),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            child: Row(
+                              children: [
                                 _buildCallTypeChip(
-                                    value: 'audio', label: 'Audio'),
-                              if (_isVideoServiceEnabled)
+                                    value: 'online', label: 'Online'),
                                 _buildCallTypeChip(
-                                    value: 'video', label: 'Video'),
-                            ],
+                                    value: 'in_person', label: 'In-Person'),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      if (!_isAudioServiceEnabled && !_isVideoServiceEnabled)
+                      if (_consultationMode == 'in_person' && _clinicDetails != null)
+                        _buildClinicInfoCard(horizontalInset: horizontalInset),
+                      if (_consultationMode == 'online')
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              horizontalInset, 12, horizontalInset, 0),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            child: Row(
+                              children: [
+                                if (_isAudioServiceEnabled)
+                                  _buildCallTypeChip(
+                                      value: 'audio', label: 'Audio'),
+                                if (_isVideoServiceEnabled)
+                                  _buildCallTypeChip(
+                                      value: 'video', label: 'Video'),
+                              ],
+                            ),
+                          ),
+                        ),
+                      if (!_isAudioServiceEnabled && !_isVideoServiceEnabled && !_isInPersonEnabled)
                         Padding(
                           padding: EdgeInsets.fromLTRB(
                               horizontalInset, 8, horizontalInset, 0),

@@ -128,6 +128,11 @@ const VerticalMenu = ({ scrollMenu }) => {
                   Sessions
                 </MenuItem>
               )}
+              {can('clinicManagement') && (
+                <MenuItem href='/clinic-management' icon={<i className='tabler-stethoscope' />}>
+                  Clinic Management
+                </MenuItem>
+              )}
             </MenuSection>
           )}
 

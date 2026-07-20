@@ -568,7 +568,116 @@ class FindMoreWidget extends StatelessWidget {
           },
         ),
         const SizedBox(height: 16),
+        // Consultation Mode Filter
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalInset),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Consultation Mode',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW700(
+                    fontSize: isTabletScreen ? 18 : 14,
+                    fontColor: _brandDark,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        GetBuilder<HomeScreenController>(
+          id: Constant.idGetListener,
+          builder: (controller) {
+            final selectedMode = controller.selectedConsultationMode;
+            return SizedBox(
+              height: 40,
+              child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: horizontalInset),
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  _buildModeChip(
+                    label: 'All',
+                    isSelected: selectedMode == null,
+                    onTap: () => controller.selectConsultationMode(null),
+                    isTablet: isTabletScreen,
+                  ),
+                  const SizedBox(width: 8),
+                  _buildModeChip(
+                    label: 'Online',
+                    icon: Icons.videocam_rounded,
+                    isSelected: selectedMode == 'online',
+                    onTap: () => controller.selectConsultationMode('online'),
+                    isTablet: isTabletScreen,
+                  ),
+                  const SizedBox(width: 8),
+                  _buildModeChip(
+                    label: 'In-Person',
+                    icon: Icons.location_on_rounded,
+                    isSelected: selectedMode == 'in_person',
+                    onTap: () => controller.selectConsultationMode('in_person'),
+                    isTablet: isTabletScreen,
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 16),
       ],
+    );
+  }
+
+  Widget _buildModeChip({
+    required String label,
+    IconData? icon,
+    required bool isSelected,
+    required VoidCallback onTap,
+    bool isTablet = false,
+  }) {
+    return Material(
+      color: AppColors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: EdgeInsets.symmetric(
+            horizontal: isTablet ? 16 : 14,
+            vertical: isTablet ? 10 : 8,
+          ),
+          decoration: BoxDecoration(
+            color: isSelected ? _brandDark : AppColors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: isSelected ? _brandDark : _neutralBorder,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (icon != null) ...[
+                Icon(
+                  icon,
+                  size: 16,
+                  color: isSelected ? AppColors.white : _brandDark,
+                ),
+                const SizedBox(width: 6),
+              ],
+              Text(
+                label,
+                style: AppFontStyle.fontStyleW600(
+                  fontSize: isTablet ? 13 : 12,
+                  fontColor: isSelected ? AppColors.white : _brandDark,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

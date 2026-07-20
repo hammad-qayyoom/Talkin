@@ -65,6 +65,8 @@ class Data {
   final int? maxVideoCallRatePrivate;
   final int? audioCallRatePrivate;
   final int? maxAudioCallRatePrivate;
+  final int? inPersonSessionRatePrivate;
+  final int? maxInPersonSessionRatePrivate;
   final PrivateKey? privateKey;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -95,6 +97,7 @@ class Data {
   final String? iosAppLink;
   final String? iosAppVersion;
   final int? sessionSlotDurationMinutes;
+  final int? inPersonSessionSlotDurationMinutes;
   final String? sessionBookingTimezone;
 
   Data({
@@ -127,6 +130,8 @@ class Data {
     this.maxVideoCallRatePrivate,
     this.audioCallRatePrivate,
     this.maxAudioCallRatePrivate,
+    this.inPersonSessionRatePrivate,
+    this.maxInPersonSessionRatePrivate,
     this.privateKey,
     this.createdAt,
     this.updatedAt,
@@ -157,6 +162,7 @@ class Data {
     this.iosAppLink,
     this.iosAppVersion,
     this.sessionSlotDurationMinutes,
+    this.inPersonSessionSlotDurationMinutes,
     this.sessionBookingTimezone,
   });
 
@@ -192,6 +198,8 @@ class Data {
         maxVideoCallRatePrivate: json["maxVideoCallRatePrivate"],
         audioCallRatePrivate: json["audioCallRatePrivate"],
         maxAudioCallRatePrivate: json["maxAudioCallRatePrivate"],
+        inPersonSessionRatePrivate: json["inPersonSessionRatePrivate"],
+        maxInPersonSessionRatePrivate: json["maxInPersonSessionRatePrivate"],
         privateKey: json["privateKey"] == null
             ? null
             : PrivateKey.fromJson(json["privateKey"]),
@@ -228,6 +236,7 @@ class Data {
         iosAppLink: json["iosAppLink"],
         iosAppVersion: json["iosAppVersion"],
         sessionSlotDurationMinutes: json["sessionSlotDurationMinutes"],
+        inPersonSessionSlotDurationMinutes: json["inPersonSessionSlotDurationMinutes"],
         sessionBookingTimezone: json["sessionBookingTimezone"],
       );
 
@@ -261,6 +270,8 @@ class Data {
         "maxVideoCallRatePrivate": maxVideoCallRatePrivate,
         "audioCallRatePrivate": audioCallRatePrivate,
         "maxAudioCallRatePrivate": maxAudioCallRatePrivate,
+        "inPersonSessionRatePrivate": inPersonSessionRatePrivate,
+        "maxInPersonSessionRatePrivate": maxInPersonSessionRatePrivate,
         "privateKey": privateKey?.toJson(),
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
@@ -291,6 +302,7 @@ class Data {
         "iosAppLink": iosAppLink,
         "iosAppVersion": iosAppVersion,
         "sessionSlotDurationMinutes": sessionSlotDurationMinutes,
+        "inPersonSessionSlotDurationMinutes": inPersonSessionSlotDurationMinutes,
         "sessionBookingTimezone": sessionBookingTimezone,
       };
 }

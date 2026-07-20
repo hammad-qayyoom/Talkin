@@ -28,6 +28,7 @@ class HomeScreenController extends GetxController {
   ScrollController scrollController = ScrollController();
   List<TalkTopic> homeCategories = [];
   String? selectedCategoryId;
+  String? selectedConsultationMode;
   bool isCategoryLoading = false;
   UserCoinModel? userCoinModel;
   bool isToastVisible = false;
@@ -158,6 +159,22 @@ class HomeScreenController extends GetxController {
     await getTopListeners();
   }
 
+  Future<void> selectConsultationMode(String? mode) async {
+    final normalized = (mode ?? '').trim();
+    final nextMode = normalized.isEmpty ? null : normalized;
+
+    if (selectedConsultationMode == nextMode) {
+      return;
+    }
+
+    selectedConsultationMode = nextMode;
+    TopListenersApi.startPagination = 0;
+    topListeners.clear();
+    update([Constant.idGetListener]);
+
+    await getTopListeners();
+  }
+
   Future<void> getTopListeners({
     bool reset = false,
     bool preserveExistingOnEmpty = false,
@@ -179,6 +196,7 @@ class HomeScreenController extends GetxController {
         uid: uid,
         searchString: "All",
         categoryId: selectedCategoryId,
+        consultationMode: selectedConsultationMode,
       );
 
       final nextListeners = topListenersModel?.data ?? [];
@@ -216,6 +234,7 @@ class HomeScreenController extends GetxController {
         uid: uid,
         searchString: "All",
         categoryId: selectedCategoryId,
+        consultationMode: selectedConsultationMode,
       );
       topListeners.addAll(topListenersModel?.data ?? []);
       await ExpertProximitySorter.sortNearestFirst(topListeners);

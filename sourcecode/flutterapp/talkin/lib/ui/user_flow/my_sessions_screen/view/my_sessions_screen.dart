@@ -1,11 +1,13 @@
 import 'package:notisboard/utils/enums.dart';
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:notisboard/services/permission_handler/permission_handler.dart';
 import 'package:notisboard/socket/socket_emit.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
@@ -25,6 +27,7 @@ class UserMySessionsScreen extends StatefulWidget {
 
 class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
   String _view = 'upcoming';
+  String _modeFilter = 'all';
   bool _isLoading = false;
   List<dynamic> _sessions = [];
   Timer? _autoRefreshTimer;
@@ -715,6 +718,47 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     }
   }
 
+  Future<void> _openNavigation(Map<String, dynamic> item) async {
+    final bookingId = (item['_id'] ?? '').toString();
+    if (bookingId.isEmpty) {
+      Utils.showToast(context, 'Unable to get navigation details.');
+      return;
+    }
+
+    final response = await SessionBookingService.getBookingNavigation(
+      bookingId: bookingId,
+    );
+
+    if (!mounted) return;
+
+    if (response['status'] == true) {
+      final data = response['data'];
+      final googleMapsUrl = (data?['googleMaps'] ?? '').toString();
+      final appleMapsUrl = (data?['appleMaps'] ?? '').toString();
+
+      String? url;
+      if (Platform.isIOS && appleMapsUrl.isNotEmpty) {
+        url = appleMapsUrl;
+      } else if (googleMapsUrl.isNotEmpty) {
+        url = googleMapsUrl;
+      } else if (appleMapsUrl.isNotEmpty) {
+        url = appleMapsUrl;
+      }
+
+      if (url != null && await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      } else {
+        if (!mounted) return;
+        Utils.showToast(context, 'Navigation URL not available.');
+      }
+    } else {
+      Utils.showToast(
+        context,
+        (response['message'] ?? 'Failed to get navigation.').toString(),
+      );
+    }
+  }
+
   String _extractListenerId(Map<String, dynamic> expert) {
     final candidates = [
       (expert['legacyListenerId'] ?? '').toString().trim(),
@@ -1176,6 +1220,51 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     );
   }
 
+  Widget _buildModeFilterChip(String value, String label, IconData icon) {
+    final selected = value == _modeFilter;
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 6),
+      child: GestureDetector(
+        onTap: () {
+          if (_modeFilter == value) return;
+          setState(() {
+            _modeFilter = value;
+          });
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(999),
+            color: selected ? _brandDark : AppColors.white,
+            border: Border.all(
+              color: selected ? _brandDark : _softBorder,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 13,
+                color: selected ? AppColors.white : _mutedText,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                label,
+                style: AppFontStyle.fontStyleW600(
+                  fontSize: 11,
+                  fontColor: selected ? AppColors.white : _mutedText,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildMetaChip({required IconData icon, required String text}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
@@ -1285,8 +1374,11 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     final expert = _extractExpert(session);
 
     final callTypeRaw = (session['callType'] ?? '').toString().trim();
-    final callTypeLabel =
-        callTypeRaw.isEmpty ? 'Unknown' : callTypeRaw.toUpperCase();
+    final consultationModeRaw = (item['consultationMode'] ?? session['consultationMode'] ?? '').toString().trim();
+    final isInPersonSession = consultationModeRaw == 'in_person';
+    final callTypeLabel = isInPersonSession
+        ? 'IN-PERSON'
+        : (callTypeRaw.isEmpty ? 'Unknown' : callTypeRaw.toUpperCase());
     final status = _sessionStatus(session);
     final statusLower = status;
     final statusLabel = _toTitleCase(status);
@@ -1316,6 +1408,18 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     final expertName = (expert['displayName'] ?? 'Unknown').toString();
     final startAt = _formatDateTime((session['startAt'] ?? '').toString());
     final isNarrowActionLayout = cardWidth < 430;
+
+    // In-Person consultation fields
+    final consultationMode = (item['consultationMode'] ?? session['consultationMode'] ?? 'online').toString().trim();
+    final isInPerson = consultationMode == 'in_person';
+    final clinicSnapshot = isInPerson ? (item['inPersonDetails']?['clinicSnapshot'] ?? {}) : null;
+    final clinicName = (clinicSnapshot?['clinicName'] ?? '').toString().trim();
+    final clinicAddress = clinicSnapshot?['address'];
+    final clinicCity = (clinicAddress?['city'] ?? '').toString().trim();
+    final clinicFullAddress = [clinicAddress?['street'], clinicCity, clinicAddress?['state']]
+        .where((s) => s != null && s.toString().trim().isNotEmpty)
+        .map((s) => s.toString().trim())
+        .join(', ');
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -1385,14 +1489,92 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                 text: startAt,
               ),
               _buildMetaChip(
-                icon: callTypeRaw.toLowerCase() == 'video'
-                    ? Icons.videocam_outlined
-                    : Icons.call_outlined,
+                icon: isInPersonSession
+                    ? Icons.location_on_rounded
+                    : (callTypeRaw.toLowerCase() == 'video'
+                        ? Icons.videocam_outlined
+                        : Icons.call_outlined),
                 text: callTypeLabel,
+              ),
+              _buildMetaChip(
+                icon: isInPerson ? Icons.location_on_rounded : Icons.videocam_rounded,
+                text: isInPerson ? 'In-Person' : 'Online',
               ),
             ],
           ),
+          if (isInPerson && clinicName.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF1F8E9),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: const Color(0xFFC5E1A5)),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.local_hospital_rounded,
+                    size: 14,
+                    color: const Color(0xFF2E7D32),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          clinicName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppFontStyle.fontStyleW600(
+                            fontSize: 11,
+                            fontColor: const Color(0xFF2E7D32),
+                          ),
+                        ),
+                        if (clinicFullAddress.isNotEmpty)
+                          Text(
+                            clinicFullAddress,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppFontStyle.fontStyleW500(
+                              fontSize: 10,
+                              fontColor: const Color(0xFF558B2F),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
           if (showStartSession) ...[
+            if (isInPerson && clinicName.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                height: 42,
+                child: OutlinedButton.icon(
+                  onPressed: () => _openNavigation(item),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: const Color(0xFF2E7D32).withValues(alpha: 0.5)),
+                    foregroundColor: const Color(0xFF2E7D32),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  icon: const Icon(Icons.directions_rounded, size: 16),
+                  label: Text(
+                    'Navigate to Clinic',
+                    style: AppFontStyle.fontStyleW600(
+                      fontSize: 13,
+                      fontColor: const Color(0xFF2E7D32),
+                    ),
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: 12),
             if (isNarrowActionLayout)
               Column(
@@ -1603,6 +1785,19 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     );
   }
 
+  List<dynamic> get _filteredSessions {
+    if (_modeFilter == 'all') return _sessions;
+    return _sessions.where((rawItem) {
+      if (rawItem is! Map<String, dynamic>) return false;
+      final session = _extractSession(rawItem);
+      final consultationMode = (rawItem['consultationMode'] ?? session['consultationMode'] ?? 'online').toString().trim();
+      final callType = (rawItem['callType'] ?? session['callType'] ?? 'audio').toString().trim();
+      if (_modeFilter == 'in_person') return consultationMode == 'in_person';
+      if (_modeFilter == 'online') return consultationMode != 'in_person';
+      return true;
+    }).toList();
+  }
+
   Widget _buildSessionsList({
     required double horizontalInset,
   }) {
@@ -1655,7 +1850,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       );
     }
 
-    if (_sessions.isEmpty) {
+    if (_filteredSessions.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -1730,7 +1925,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                 EdgeInsets.fromLTRB(horizontalInset, 6, horizontalInset, 20),
             children: [
               if (columns == 1)
-                ..._sessions.map((rawItem) {
+                ..._filteredSessions.map((rawItem) {
                   final item = rawItem is Map<String, dynamic>
                       ? rawItem
                       : <String, dynamic>{};
@@ -1747,7 +1942,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                 Wrap(
                   spacing: spacing,
                   runSpacing: spacing,
-                  children: _sessions.map((rawItem) {
+                  children: _filteredSessions.map((rawItem) {
                     final item = rawItem is Map<String, dynamic>
                         ? rawItem
                         : <String, dynamic>{};
@@ -1935,7 +2130,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                         children: [
                                           Text(
                                             EnumLocale.txtSessionCount.name.trParams({
-                                              'count': '${_sessions.length}',
+                                              'count': '${_filteredSessions.length}',
                                             }),
                                             style: AppFontStyle.fontStyleW700(
                                               fontSize: isTablet ? 16 : 14,
@@ -2068,6 +2263,25 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                 _buildSegment('upcoming', 'Upcoming'),
                                 const SizedBox(width: 6),
                                 _buildSegment('completed', 'Completed'),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalInset,
+                            6,
+                            horizontalInset,
+                            6,
+                          ),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            child: Row(
+                              children: [
+                                _buildModeFilterChip('all', 'All', Icons.filter_list_rounded),
+                                _buildModeFilterChip('online', 'Audio/Video', Icons.headset_rounded),
+                                _buildModeFilterChip('in_person', 'In-Person', Icons.location_on_rounded),
                               ],
                             ),
                           ),

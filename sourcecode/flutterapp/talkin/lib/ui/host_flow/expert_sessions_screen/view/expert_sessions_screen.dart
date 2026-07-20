@@ -20,6 +20,7 @@ class ExpertSessionsScreen extends StatefulWidget {
 
 class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
   String _view = 'upcoming';
+  String _modeFilter = 'all';
   bool _isLoading = false;
   List<dynamic> _sessions = [];
   String? _cancellingSessionId;
@@ -98,6 +99,21 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
       }
     }
     return '';
+  }
+
+  List<dynamic> get _filteredSessions {
+    if (_modeFilter == 'all') return _sessions;
+    return _sessions.where((item) {
+      final session = item is Map<String, dynamic> ? item : <String, dynamic>{};
+      final rawItem = item is Map<String, dynamic> ? item : <String, dynamic>{};
+      
+      final consultationMode = (rawItem['consultationMode'] ?? session['consultationMode'] ?? 'online').toString().trim();
+      final callType = (rawItem['callType'] ?? session['callType'] ?? 'audio').toString().trim();
+      
+      if (_modeFilter == 'in_person') return consultationMode == 'in_person';
+      if (_modeFilter == 'online') return consultationMode != 'in_person';
+      return true;
+    }).toList();
   }
 
   Future<void> _fetchSessions() async {
@@ -763,8 +779,12 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
     final showStartControl = _view == 'upcoming';
     final isCancellingThis = _cancellingSessionId == sessionId;
     final callTypeRaw = (session['callType'] ?? '').toString().trim();
-    final callTypeLabel =
-        callTypeRaw.isEmpty ? 'Unknown' : callTypeRaw.toUpperCase();
+    final consultationModeRaw = (session['consultationMode'] ?? '').toString().trim();
+    final isInPersonSession = consultationModeRaw == 'in_person';
+
+    final callTypeLabel = isInPersonSession
+        ? 'IN-PERSON'
+        : (callTypeRaw.isEmpty ? 'Unknown' : callTypeRaw.toUpperCase());
     final startAt = _formatDateTime((session['startAt'] ?? '').toString());
     final isNarrowActionLayout = cardWidth < 430;
 
@@ -840,9 +860,11 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                 text: startAt,
               ),
               _buildMetaChip(
-                icon: callTypeRaw.toLowerCase() == 'video'
-                    ? Icons.videocam_outlined
-                    : Icons.call_outlined,
+                icon: isInPersonSession
+                    ? Icons.location_on_rounded
+                    : (callTypeRaw.toLowerCase() == 'video'
+                        ? Icons.videocam_outlined
+                        : Icons.call_outlined),
                 text: callTypeLabel,
               ),
               _buildMetaChip(
@@ -1028,7 +1050,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
       );
     }
 
-    if (_sessions.isEmpty) {
+    if (_filteredSessions.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -1100,7 +1122,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                 EdgeInsets.fromLTRB(horizontalInset, 4, horizontalInset, 18),
             children: [
               if (columns == 1)
-                ..._sessions.map((rawSession) {
+                ..._filteredSessions.map((rawSession) {
                   final session = rawSession is Map<String, dynamic>
                       ? rawSession
                       : <String, dynamic>{};
@@ -1117,7 +1139,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                 Wrap(
                   spacing: spacing,
                   runSpacing: spacing,
-                  children: _sessions.map((rawSession) {
+                  children: _filteredSessions.map((rawSession) {
                     final session = rawSession is Map<String, dynamic>
                         ? rawSession
                         : <String, dynamic>{};
@@ -1134,6 +1156,51 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildModeFilterChip(String value, String label, IconData icon) {
+    final selected = value == _modeFilter;
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 6),
+      child: GestureDetector(
+        onTap: () {
+          if (_modeFilter == value) return;
+          setState(() {
+            _modeFilter = value;
+          });
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(999),
+            color: selected ? _brandDark : AppColors.white,
+            border: Border.all(
+              color: selected ? _brandDark : _softBorder,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 13,
+                color: selected ? AppColors.white : _mutedText,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                label,
+                style: AppFontStyle.fontStyleW600(
+                  fontSize: 12,
+                  fontColor: selected ? AppColors.white : _brandDark,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -1220,6 +1287,25 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                                 _buildSegment('upcoming', 'Upcoming'),
                                 const SizedBox(width: 6),
                                 _buildSegment('completed', 'Completed'),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalInset,
+                            0,
+                            horizontalInset,
+                            12,
+                          ),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            child: Row(
+                              children: [
+                                _buildModeFilterChip('all', 'All', Icons.filter_list_rounded),
+                                _buildModeFilterChip('online', 'Audio/Video', Icons.headset_rounded),
+                                _buildModeFilterChip('in_person', 'In-Person', Icons.location_on_rounded),
                               ],
                             ),
                           ),

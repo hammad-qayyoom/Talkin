@@ -57,7 +57,12 @@ class Data {
   num? currentCoinBalance;
   bool? isAvailableForPrivateAudioCall;
   bool? isAvailableForPrivateVideoCall;
+  bool? isAvailableForInPersonSession;
   bool? isAvailableForChat;
+  num? rateInPersonSession;
+  Map<String, dynamic>? consultationModes;
+  Map<String, dynamic>? inPersonPricing;
+  Map<String, dynamic>? clinicDetails;
   bool? isVerifiedBadge;
   String? verifiedBadgeType;
   DateTime? verifiedBadgeAt;
@@ -84,7 +89,12 @@ class Data {
     this.currentCoinBalance,
     this.isAvailableForPrivateAudioCall,
     this.isAvailableForPrivateVideoCall,
+    this.isAvailableForInPersonSession,
     this.isAvailableForChat,
+    this.rateInPersonSession,
+    this.consultationModes,
+    this.inPersonPricing,
+    this.clinicDetails,
     this.isVerifiedBadge,
     this.verifiedBadgeType,
     this.verifiedBadgeAt,
@@ -144,7 +154,12 @@ class Data {
         currentCoinBalance: json["currentCoinBalance"],
         isAvailableForPrivateAudioCall: json["isAvailableForPrivateAudioCall"],
         isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"],
+        isAvailableForInPersonSession: json["isAvailableForInPersonSession"],
         isAvailableForChat: json["isAvailableForChat"],
+        rateInPersonSession: json["rateInPersonSession"],
+        consultationModes: json["consultationModes"] is Map ? Map<String, dynamic>.from(json["consultationModes"]) : null,
+        inPersonPricing: json["inPersonPricing"] is Map ? Map<String, dynamic>.from(json["inPersonPricing"]) : null,
+        clinicDetails: json["clinicDetails"] is Map ? Map<String, dynamic>.from(json["clinicDetails"]) : null,
         isVerifiedBadge: _toBool(json["isVerifiedBadge"]) ?? false,
         verifiedBadgeType: _pickString(json, ["verifiedBadgeType"]),
         verifiedBadgeAt: DateTime.tryParse(

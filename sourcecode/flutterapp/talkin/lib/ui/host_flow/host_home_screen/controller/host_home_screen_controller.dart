@@ -31,6 +31,9 @@ class HostHomeScreenController extends GetxController {
   bool isAvailableForPrivateVideoCall = Database
           .fetchListenerProfileModel?.data?.isAvailableForPrivateVideoCall ??
       false;
+  bool isAvailableForInPersonSession = Database
+          .fetchListenerProfileModel?.data?.isAvailableForInPersonSession ??
+      false;
   bool isToastVisible = false;
   UpdateExpertCallStatusModel? updateExpertCallStatusModel;
   bool isCoinLoading = false;
@@ -98,6 +101,9 @@ class HostHomeScreenController extends GetxController {
           isAvailableForPrivateVideoCall =
               fetchListenerProfileModel?.data?.isAvailableForPrivateVideoCall ??
                   isAvailableForPrivateVideoCall;
+          isAvailableForInPersonSession =
+              fetchListenerProfileModel?.data?.isAvailableForInPersonSession ??
+                  isAvailableForInPersonSession;
         }
       }
 
@@ -204,6 +210,8 @@ class HostHomeScreenController extends GetxController {
       isAvailableForPrivateVideoCall = currentValue;
     } else if (status == "isAvailableForPrivateAudioCall") {
       isAvailableForPrivateAudioCall = currentValue;
+    } else if (status == "isAvailableForInPersonSession") {
+      isAvailableForInPersonSession = currentValue;
     }
 
     log("isPermission = currentValue=============================$isAvailableForPrivateAudioCall");
@@ -241,14 +249,26 @@ class HostHomeScreenController extends GetxController {
               EnumLocale.txtListenerDisableForPrivateAudioCall.name.tr,
               toastLength: Toast.LENGTH_SHORT);
         }
+      } else if (status == "isAvailableForInPersonSession") {
+        isAvailableForInPersonSession = currentValue;
+        if (currentValue == true) {
+          Utils.showToast(Get.context!,
+              'You are now available for in-person sessions',
+              toastLength: Toast.LENGTH_SHORT);
+        } else {
+          Utils.showToast(Get.context!,
+              'You are no longer available for in-person sessions',
+              toastLength: Toast.LENGTH_SHORT);
+        }
       }
     } else {
       // Failure, revert to previous value
-      // isPermission = !currentValue;
       if (status == "isAvailableForPrivateVideoCall") {
         isAvailableForPrivateVideoCall = !currentValue;
       } else if (status == "isAvailableForPrivateAudioCall") {
         isAvailableForPrivateAudioCall = !currentValue;
+      } else if (status == "isAvailableForInPersonSession") {
+        isAvailableForInPersonSession = !currentValue;
       }
     }
     fetchListenerProfileModel =
@@ -261,6 +281,8 @@ class HostHomeScreenController extends GetxController {
         isAvailableForPrivateVideoCall;
     fetchListenerProfileModel?.data?.isAvailableForPrivateAudioCall =
         isAvailableForPrivateAudioCall;
+    fetchListenerProfileModel?.data?.isAvailableForInPersonSession =
+        isAvailableForInPersonSession;
 
     update();
   }
@@ -279,10 +301,19 @@ class HostHomeScreenController extends GetxController {
 
   void showEditPriceDialog(String type) {
     final TextEditingController priceController = TextEditingController();
-    String title = type == 'audio' ? 'Edit Audio Call Price' : 'Edit Video Call Price';
-    String currentValue = type == 'audio'
-        ? (Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall?.toString() ?? '0')
-        : (Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall?.toString() ?? '0');
+    String title;
+    String currentValue;
+    
+    if (type == 'audio') {
+      title = 'Edit Audio Call Price';
+      currentValue = Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall?.toString() ?? '0';
+    } else if (type == 'video') {
+      title = 'Edit Video Call Price';
+      currentValue = Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall?.toString() ?? '0';
+    } else {
+      title = 'Edit In-Person Session Price';
+      currentValue = Database.fetchListenerProfileModel?.data?.rateInPersonSession?.toString() ?? '0';
+    }
     
     // Compute listenerId once — try all sources
     final String expertId = _listenerId;
@@ -355,6 +386,8 @@ class HostHomeScreenController extends GetxController {
                     final maxAudio = Database.settingApiModel?.data?.maxAudioCallRatePrivate ?? 0;
                     final minVideo = Database.settingApiModel?.data?.videoCallRatePrivate ?? 0;
                     final maxVideo = Database.settingApiModel?.data?.maxVideoCallRatePrivate ?? 0;
+                    final minInPerson = Database.settingApiModel?.data?.inPersonSessionRatePrivate ?? 0;
+                    final maxInPerson = Database.settingApiModel?.data?.maxInPersonSessionRatePrivate ?? 0;
                     
                     if (type == 'audio') {
                       if (newPrice < minAudio) {
@@ -365,13 +398,22 @@ class HostHomeScreenController extends GetxController {
                         Utils.showToast(Get.context!, 'Price cannot exceed $maxAudio credits.');
                         return;
                       }
-                    } else {
+                    } else if (type == 'video') {
                       if (newPrice < minVideo) {
                         Utils.showToast(Get.context!, 'Price cannot be less than $minVideo credits.');
                         return;
                       }
                       if (maxVideo > 0 && newPrice > maxVideo) {
                         Utils.showToast(Get.context!, 'Price cannot exceed $maxVideo credits.');
+                        return;
+                      }
+                    } else {
+                      if (newPrice < minInPerson) {
+                        Utils.showToast(Get.context!, 'Price cannot be less than $minInPerson credits.');
+                        return;
+                      }
+                      if (maxInPerson > 0 && newPrice > maxInPerson) {
+                        Utils.showToast(Get.context!, 'Price cannot exceed $maxInPerson credits.');
                         return;
                       }
                     }
@@ -393,13 +435,16 @@ class HostHomeScreenController extends GetxController {
                       categoryIds: '',
                       ratePrivateAudioCall: type == 'audio' ? newPrice.toString() : '',
                       ratePrivateVideoCall: type == 'video' ? newPrice.toString() : '',
+                      rateInPersonSession: type == 'in_person' ? newPrice.toString() : '',
                     );
                   
                     if (response?.status == true) {
                       if (type == 'audio') {
                         Database.fetchListenerProfileModel?.data?.ratePrivateAudioCall = newPrice;
-                      } else {
+                      } else if (type == 'video') {
                         Database.fetchListenerProfileModel?.data?.ratePrivateVideoCall = newPrice;
+                      } else {
+                        Database.fetchListenerProfileModel?.data?.rateInPersonSession = newPrice;
                       }
                       update();
                       Utils.showToast(Get.context!, 'Price updated successfully!');

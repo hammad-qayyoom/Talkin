@@ -24,6 +24,19 @@ class HostListenersDetailController extends GetxController {
   TextEditingController introCnt = TextEditingController();
   TextEditingController ratePrivateVideoCallCnt = TextEditingController();
   TextEditingController ratePrivateAudioCallCnt = TextEditingController();
+  TextEditingController rateInPersonSessionCnt = TextEditingController();
+  TextEditingController clinicNameCnt = TextEditingController();
+  TextEditingController clinicAddressCnt = TextEditingController();
+  TextEditingController clinicCityCnt = TextEditingController();
+  TextEditingController clinicStateCnt = TextEditingController();
+  TextEditingController clinicCountryCnt = TextEditingController();
+  TextEditingController clinicPostalCodeCnt = TextEditingController();
+  TextEditingController clinicFloorSuiteCnt = TextEditingController();
+  TextEditingController clinicLandmarkCnt = TextEditingController();
+  TextEditingController clinicParkingInfoCnt = TextEditingController();
+  TextEditingController clinicContactPhoneCnt = TextEditingController();
+  TextEditingController clinicContactEmailCnt = TextEditingController();
+  TextEditingController clinicInstructionsCnt = TextEditingController();
   int selectedTopic = 0;
   List<String> allLanguages = [];
   List<String> selectedLanguages = [];
@@ -55,6 +68,28 @@ class HostListenersDetailController extends GetxController {
             .fetchListenerProfileModel?.data?.ratePrivateVideoCall
             .toString() ??
         '';
+    rateInPersonSessionCnt.text = Database
+            .fetchListenerProfileModel?.data?.rateInPersonSession
+            .toString() ??
+        '';
+    
+    // Load clinic details
+    final clinicDetails = Database.fetchListenerProfileModel?.data?.clinicDetails;
+    if (clinicDetails != null) {
+      final address = clinicDetails['address'];
+      clinicNameCnt.text = clinicDetails['clinicName']?.toString() ?? '';
+      clinicAddressCnt.text = address?['full']?.toString() ?? address?['street']?.toString() ?? '';
+      clinicCityCnt.text = address?['city']?.toString() ?? '';
+      clinicStateCnt.text = address?['state']?.toString() ?? '';
+      clinicCountryCnt.text = address?['country']?.toString() ?? '';
+      clinicPostalCodeCnt.text = address?['postalCode']?.toString() ?? '';
+      clinicFloorSuiteCnt.text = clinicDetails['floorSuite']?.toString() ?? '';
+      clinicLandmarkCnt.text = clinicDetails['landmark']?.toString() ?? '';
+      clinicParkingInfoCnt.text = clinicDetails['parkingInfo']?.toString() ?? '';
+      clinicContactPhoneCnt.text = clinicDetails['contactPhone']?.toString() ?? '';
+      clinicContactEmailCnt.text = clinicDetails['contactEmail']?.toString() ?? '';
+      clinicInstructionsCnt.text = clinicDetails['consultationInstructions']?.toString() ?? '';
+    }
     profilePic = Database.fetchListenerProfileModel?.data?.image;
 
     final savedLanguages = Database.fetchListenerProfileModel?.data?.language;
@@ -194,6 +229,44 @@ class HostListenersDetailController extends GetxController {
     Utils.showLog(
         "Click On Save Profile => ${Database.fetchListenerProfileModel?.data?.id}");
 
+    final newAudioPrice = int.tryParse(ratePrivateAudioCallCnt.text.trim()) ?? 0;
+    final newVideoPrice = int.tryParse(ratePrivateVideoCallCnt.text.trim()) ?? 0;
+    final newInPersonPrice = int.tryParse(rateInPersonSessionCnt.text.trim()) ?? 0;
+
+    final minAudio = Database.settingApiModel?.data?.audioCallRatePrivate ?? 0;
+    final maxAudio = Database.settingApiModel?.data?.maxAudioCallRatePrivate ?? 0;
+    final minVideo = Database.settingApiModel?.data?.videoCallRatePrivate ?? 0;
+    final maxVideo = Database.settingApiModel?.data?.maxVideoCallRatePrivate ?? 0;
+    final minInPerson = Database.settingApiModel?.data?.inPersonSessionRatePrivate ?? 0;
+    final maxInPerson = Database.settingApiModel?.data?.maxInPersonSessionRatePrivate ?? 0;
+
+    if (newAudioPrice < minAudio) {
+      Utils.showToast(Get.context!, 'Audio price cannot be less than $minAudio credits.');
+      return;
+    }
+    if (maxAudio > 0 && newAudioPrice > maxAudio) {
+      Utils.showToast(Get.context!, 'Audio price cannot exceed $maxAudio credits.');
+      return;
+    }
+
+    if (newVideoPrice < minVideo) {
+      Utils.showToast(Get.context!, 'Video price cannot be less than $minVideo credits.');
+      return;
+    }
+    if (maxVideo > 0 && newVideoPrice > maxVideo) {
+      Utils.showToast(Get.context!, 'Video price cannot exceed $maxVideo credits.');
+      return;
+    }
+
+    if (newInPersonPrice < minInPerson) {
+      Utils.showToast(Get.context!, 'In-Person price cannot be less than $minInPerson credits.');
+      return;
+    }
+    if (maxInPerson > 0 && newInPersonPrice > maxInPerson) {
+      Utils.showToast(Get.context!, 'In-Person price cannot exceed $maxInPerson credits.');
+      return;
+    }
+
     Get.dialog(const LoadingWidget(),
         barrierDismissible: false); // Start Loading...
 
@@ -230,6 +303,37 @@ class HostListenersDetailController extends GetxController {
     String categoryIds =
         selectedCategoryIds.isNotEmpty ? selectedCategoryIds.join(',') : '';
 
+    // Build clinic details JSON
+    final clinicDetailsMap = {
+      'clinicName': clinicNameCnt.text.trim(),
+      'address': {
+        'full': clinicAddressCnt.text.trim(),
+        'street': clinicAddressCnt.text.trim(),
+        'city': clinicCityCnt.text.trim(),
+        'state': clinicStateCnt.text.trim(),
+        'country': clinicCountryCnt.text.trim(),
+        'postalCode': clinicPostalCodeCnt.text.trim(),
+      },
+      'floorSuite': clinicFloorSuiteCnt.text.trim(),
+      'landmark': clinicLandmarkCnt.text.trim(),
+      'parkingInfo': clinicParkingInfoCnt.text.trim(),
+      'contactPhone': clinicContactPhoneCnt.text.trim(),
+      'contactEmail': clinicContactEmailCnt.text.trim(),
+      'consultationInstructions': clinicInstructionsCnt.text.trim(),
+    };
+
+    // Build consultation modes JSON
+    final consultationModesMap = {
+      'online': true,
+      'inPerson': rateInPersonSessionCnt.text.trim().isNotEmpty,
+    };
+
+    // Build in-person pricing JSON
+    final inPersonPricingMap = {
+      'currency': 'USD',
+      'oneToOneSession': int.tryParse(rateInPersonSessionCnt.text.trim()) ?? 0,
+    };
+
     hostListenerProfileUpdateModel = await HostListenerProfileUpdateApi.callApi(
       name: nameCnt.text,
       nickName: nickNameCnt.text,
@@ -239,8 +343,12 @@ class HostListenersDetailController extends GetxController {
       selfIntro: introCnt.text,
       ratePrivateAudioCall: ratePrivateAudioCallCnt.text,
       ratePrivateVideoCall: ratePrivateVideoCallCnt.text,
+      rateInPersonSession: rateInPersonSessionCnt.text,
       talkTopics: talkTopics,
       categoryIds: categoryIds,
+      consultationModes: jsonEncode(consultationModesMap),
+      inPersonPricing: jsonEncode(inPersonPricingMap),
+      clinicDetails: jsonEncode(clinicDetailsMap),
     );
 
     if (hostListenerProfileUpdateModel?.status == true) {

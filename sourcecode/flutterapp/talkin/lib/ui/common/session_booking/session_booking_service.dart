@@ -56,6 +56,7 @@ class SessionBookingService {
     required String callType,
     int? clientTimezoneOffsetMinutes,
     bool includeBooked = false,
+    String? consultationMode,
   }) async {
     try {
       final normalizedListenerId = (listenerId ?? '').trim();
@@ -74,17 +75,24 @@ class SessionBookingService {
       final headers = await _headers(allowGuest: true);
       final dateValue =
           '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+      final queryParameters = <String, String>{
+        if (normalizedListenerId.isNotEmpty)
+          'listenerId': normalizedListenerId,
+        if (normalizedExpertId.isNotEmpty) 'expertId': normalizedExpertId,
+        'date': dateValue,
+        'callType': callType.toLowerCase(),
+        'clientTimezoneOffsetMinutes':
+            effectiveClientTimezoneOffsetMinutes.toString(),
+        if (includeBooked) 'includeBooked': 'true',
+      };
+
+      final normalizedConsultationMode = (consultationMode ?? '').trim();
+      if (normalizedConsultationMode.isNotEmpty) {
+        queryParameters['consultationMode'] = normalizedConsultationMode;
+      }
+
       final uri = Uri.parse(Api.sessionGetAvailableSlots).replace(
-        queryParameters: {
-          if (normalizedListenerId.isNotEmpty)
-            'listenerId': normalizedListenerId,
-          if (normalizedExpertId.isNotEmpty) 'expertId': normalizedExpertId,
-          'date': dateValue,
-          'callType': callType.toLowerCase(),
-          'clientTimezoneOffsetMinutes':
-              effectiveClientTimezoneOffsetMinutes.toString(),
-          if (includeBooked) 'includeBooked': 'true',
-        },
+        queryParameters: queryParameters,
       );
 
       final response = await http.get(uri, headers: headers);
@@ -396,6 +404,7 @@ class SessionBookingService {
     required int slotDurationMinutes,
     String? bookingTimezone,
     int? clientTimezoneOffsetMinutes,
+    String? consultationMode,
   }) async {
     try {
       final headers = await _headers();
@@ -405,22 +414,29 @@ class SessionBookingService {
           clientTimezoneOffsetMinutes ??
               DateTime.now().timeZoneOffset.inMinutes;
 
+      final body = <String, dynamic>{
+        'userId': userId,
+        if ((listenerId ?? '').trim().isNotEmpty) 'listenerId': listenerId,
+        if ((expertId ?? '').trim().isNotEmpty) 'expertId': expertId,
+        'callType': callType,
+        'slotStartAt': start.toIso8601String(),
+        'slotEndAt': end.toIso8601String(),
+        'slotDurationMinutes': slotDurationMinutes,
+        if ((bookingTimezone ?? '').trim().isNotEmpty)
+          'timezone': bookingTimezone,
+        'clientTimezoneOffsetMinutes': effectiveClientTimezoneOffsetMinutes,
+        'bookingType': 'subscription_credit',
+      };
+
+      final normalizedConsultationMode = (consultationMode ?? '').trim();
+      if (normalizedConsultationMode.isNotEmpty) {
+        body['consultationMode'] = normalizedConsultationMode;
+      }
+
       final response = await http.post(
         Uri.parse(Api.sessionBookSession),
         headers: headers,
-        body: json.encode({
-          'userId': userId,
-          if ((listenerId ?? '').trim().isNotEmpty) 'listenerId': listenerId,
-          if ((expertId ?? '').trim().isNotEmpty) 'expertId': expertId,
-          'callType': callType,
-          'slotStartAt': start.toIso8601String(),
-          'slotEndAt': end.toIso8601String(),
-          'slotDurationMinutes': slotDurationMinutes,
-          if ((bookingTimezone ?? '').trim().isNotEmpty)
-            'timezone': bookingTimezone,
-          'clientTimezoneOffsetMinutes': effectiveClientTimezoneOffsetMinutes,
-          'bookingType': 'subscription_credit',
-        }),
+        body: json.encode(body),
       );
 
       final decoded = json.decode(response.body);
@@ -680,19 +696,27 @@ class SessionBookingService {
     String? listenerId,
     String? expertId,
     required List<Map<String, dynamic>> slots,
+    String? consultationMode,
   }) async {
     try {
       final headers = await _headers();
+      final body = <String, dynamic>{
+        if ((listenerId ?? '').trim().isNotEmpty) 'listenerId': listenerId,
+        if ((expertId ?? '').trim().isNotEmpty) 'expertId': expertId,
+        'clientTimezoneOffsetMinutes':
+            DateTime.now().timeZoneOffset.inMinutes,
+        'slots': slots,
+      };
+
+      final normalizedConsultationMode = (consultationMode ?? '').trim();
+      if (normalizedConsultationMode.isNotEmpty) {
+        body['consultationMode'] = normalizedConsultationMode;
+      }
+
       final response = await http.post(
         Uri.parse(Api.expertSetAvailability),
         headers: headers,
-        body: json.encode({
-          if ((listenerId ?? '').trim().isNotEmpty) 'listenerId': listenerId,
-          if ((expertId ?? '').trim().isNotEmpty) 'expertId': expertId,
-          'clientTimezoneOffsetMinutes':
-              DateTime.now().timeZoneOffset.inMinutes,
-          'slots': slots,
-        }),
+        body: json.encode(body),
       );
       final decoded = json.decode(response.body);
 
@@ -708,6 +732,112 @@ class SessionBookingService {
       return {
         'status': false,
         'message': 'Failed to update availability.',
+      };
+    }
+  }
+
+  // >>>>> >>>>> In-Person Consultation Methods <<<<< <<<<<
+
+  static Future<Map<String, dynamic>> getExpertClinic({
+    required String expertId,
+  }) async {
+    try {
+      final headers = await _headers(allowGuest: true);
+      final uri = Uri.parse('${Api.expertClinic}$expertId');
+
+      final response = await http.get(uri, headers: headers);
+      final decoded = json.decode(response.body);
+
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid expert clinic response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to fetch expert clinic details.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> getBookingNavigation({
+    required String bookingId,
+  }) async {
+    try {
+      final headers = await _headers();
+      final uri = Uri.parse('${Api.sessionNavigation}$bookingId');
+
+      final response = await http.get(uri, headers: headers);
+      final decoded = json.decode(response.body);
+
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid navigation response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to fetch navigation details.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> markArrival({
+    required String bookingId,
+  }) async {
+    try {
+      final headers = await _headers();
+      final uri = Uri.parse('${Api.sessionMarkArrival}$bookingId/arrive');
+
+      final response = await http.post(uri, headers: headers);
+      final decoded = json.decode(response.body);
+
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid mark arrival response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to mark arrival.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> markSessionCompleted({
+    required String bookingId,
+  }) async {
+    try {
+      final headers = await _headers();
+      final uri = Uri.parse('${Api.sessionMarkCompleted}$bookingId/complete');
+
+      final response = await http.post(uri, headers: headers);
+      final decoded = json.decode(response.body);
+
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid mark completed response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to mark session as completed.',
       };
     }
   }
