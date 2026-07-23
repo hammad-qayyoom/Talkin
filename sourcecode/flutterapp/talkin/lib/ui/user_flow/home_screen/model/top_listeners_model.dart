@@ -66,6 +66,9 @@ class TopListeners {
   List<String>? categoryIds;
   bool? isAvailableForPrivateAudioCall;
   bool? isAvailableForPrivateVideoCall;
+  bool? isAvailableForInPersonSession;
+  Map<String, dynamic>? consultationModes;
+  Map<String, dynamic>? clinicDetails;
   bool? isAvailableForChat;
   bool? isVerifiedBadge;
   String? verifiedBadgeType;
@@ -97,6 +100,10 @@ class TopListeners {
     this.categoryIds,
     this.isAvailableForPrivateAudioCall,
     this.isAvailableForPrivateVideoCall,
+    this.isAvailableForInPersonSession,
+    this.consultationModes,
+    this.clinicDetails,
+
     this.isAvailableForChat,
     this.isVerifiedBadge,
     this.verifiedBadgeType,
@@ -389,6 +396,17 @@ class TopListeners {
       isAvailableForPrivateVideoCall: json["isAvailableForPrivateVideoCall"] ??
           (_hasSessionType(json["availabilityWindows"], "one_to_one_video") ||
               _positivePricing(json["pricing"], "oneToOneVideo")),
+      isAvailableForInPersonSession: json["isAvailableForInPersonSession"] == true ||
+          json["isAvailableForInPersonSession"]?.toString() == 'true' ||
+          (json["legacyListenerId"] is Map && json["legacyListenerId"]["isAvailableForInPersonSession"] == true) ||
+          (json["legacyListenerId"] is Map && json["legacyListenerId"]["isAvailableForInPersonSession"]?.toString() == 'true'),
+      consultationModes: json["consultationModes"] is Map
+          ? Map<String, dynamic>.from(json["consultationModes"])
+          : null,
+      clinicDetails: json["clinicDetails"] is Map
+          ? Map<String, dynamic>.from(json["clinicDetails"])
+          : null,
+
       isAvailableForChat: json["isAvailableForChat"],
       isVerifiedBadge: isVerified,
       verifiedBadgeType: badgeType ?? (isVerified ? 'manual' : 'none'),
@@ -424,6 +442,9 @@ class TopListeners {
       'availableForPrivateVideoCall': isAvailableForPrivateVideoCall ?? false,
       'ratePrivateAudioCall': ratePrivateAudioCall ?? 0,
       'ratePrivateVideoCall': ratePrivateVideoCall ?? 0,
+      'isAvailableForInPersonSession': isAvailableForInPersonSession ?? false,
+      'consultationModes': consultationModes,
+      'clinicDetails': clinicDetails,
     };
   }
 

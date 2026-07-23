@@ -142,6 +142,9 @@ abstract class Api {
   static const sessionNavigation = "${baseUrl}api/v2/sessions/navigation/";
   static const sessionMarkArrival = "${baseUrl}api/v2/sessions/";
   static const sessionMarkCompleted = "${baseUrl}api/v2/sessions/";
+  static const sessionRequestPhysical = "${baseUrl}api/v2/sessions/";
+  static const sessionAcceptPhysical = "${baseUrl}api/v2/sessions/";
+  static const sessionVerifyComplete = "${baseUrl}api/v2/sessions/";
 
   // >>>>> >>>>>  Listener  Api <<<<< <<<<<
 

@@ -108,7 +108,6 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
       final rawItem = item is Map<String, dynamic> ? item : <String, dynamic>{};
       
       final consultationMode = (rawItem['consultationMode'] ?? session['consultationMode'] ?? 'online').toString().trim();
-      final callType = (rawItem['callType'] ?? session['callType'] ?? 'audio').toString().trim();
       
       if (_modeFilter == 'in_person') return consultationMode == 'in_person';
       if (_modeFilter == 'online') return consultationMode != 'in_person';
@@ -350,6 +349,10 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
       return;
     }
 
+    final consultationMode =
+        (session['consultationMode'] ?? 'online').toString().trim();
+    final isInPerson = consultationMode == 'in_person';
+
     final bookings = session['bookings'] is List<dynamic>
         ? session['bookings'] as List<dynamic>
         : const <dynamic>[];
@@ -397,6 +400,23 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
       return;
     }
 
+    if (isInPerson) {
+      final acceptResponse = await SessionBookingService.acceptPhysicalSession(
+        bookingId: bookingId,
+      );
+      if (!mounted) return;
+      if (acceptResponse['status'] == true) {
+        Utils.showToast(context, 'Physical session accepted and is now active.');
+        _fetchSessions();
+      } else {
+        Utils.showToast(
+          context,
+          (acceptResponse['message'] ?? 'Unable to accept session.').toString(),
+        );
+      }
+      return;
+    }
+
     final accessResponse = await SessionBookingService.getSessionAccess(
       sessionId: sessionId,
       bookingId: bookingId,
@@ -422,6 +442,47 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
       sessionId: sessionId,
       bookingId: bookingId,
     );
+  }
+
+  Future<void> _onEndSession(Map<String, dynamic> session) async {
+    final sessionId = (session['_id'] ?? '').toString();
+    if (sessionId.isEmpty) {
+      Utils.showToast(context, 'Unable to end session. Missing session id.');
+      return;
+    }
+
+    final bookings = session['bookings'] is List<dynamic>
+        ? session['bookings'] as List<dynamic>
+        : const <dynamic>[];
+
+    final firstBooking =
+        bookings.isNotEmpty && bookings.first is Map<String, dynamic>
+            ? bookings.first as Map<String, dynamic>
+            : <String, dynamic>{};
+
+    final bookingId =
+        (firstBooking['bookingId'] ?? firstBooking['_id'] ?? '').toString();
+
+    if (bookingId.isEmpty) {
+      Utils.showToast(context, 'No booking found for this session.');
+      return;
+    }
+
+    final response = await SessionBookingService.markSessionCompleted(
+      bookingId: bookingId,
+    );
+
+    if (!mounted) return;
+
+    if (response['status'] == true) {
+      Utils.showToast(context, 'Session completed. Credits have been released to the expert.');
+      _fetchSessions();
+    } else {
+      Utils.showToast(
+        context,
+        (response['message'] ?? 'Failed to end session.').toString(),
+      );
+    }
   }
 
   Widget _buildMetaChip({required IconData icon, required String text}) {
@@ -773,14 +834,24 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
     final sessionStatusLabel = _toTitleCase(rawSessionStatus);
 
     final canCancel = _view == 'upcoming' && sessionStatusLower != 'canceled';
-    final canStartSession = _view == 'upcoming' &&
-        bookingStatusLower == 'confirmed' &&
-        !['completed', 'canceled', 'cancelled'].contains(sessionStatusLower);
-    final showStartControl = _view == 'upcoming';
-    final isCancellingThis = _cancellingSessionId == sessionId;
     final callTypeRaw = (session['callType'] ?? '').toString().trim();
     final consultationModeRaw = (session['consultationMode'] ?? '').toString().trim();
     final isInPersonSession = consultationModeRaw == 'in_person';
+    final isLiveSession = ['live', 'active', 'ongoing', 'started'].contains(sessionStatusLower);
+    final isRequestedSession = sessionStatusLower == 'requested';
+    final isPendingVerification = sessionStatusLower == 'pending_verification';
+    final canStartSession = _view == 'upcoming' &&
+        bookingStatusLower == 'confirmed' &&
+        !['completed', 'canceled', 'cancelled'].contains(sessionStatusLower);
+    final canAcceptPhysical = _view == 'upcoming' &&
+        isInPersonSession &&
+        isRequestedSession;
+    final canEndInPersonSession = _view == 'upcoming' &&
+        isInPersonSession &&
+        isLiveSession &&
+        !['completed', 'canceled', 'cancelled'].contains(sessionStatusLower);
+    final showStartControl = _view == 'upcoming';
+    final isCancellingThis = _cancellingSessionId == sessionId;
 
     final callTypeLabel = isInPersonSession
         ? 'IN-PERSON'
@@ -790,7 +861,13 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
 
     final startLabel = bookingStatusLower != 'confirmed'
         ? 'Awaiting Confirmation'
-        : 'Start Session';
+        : isPendingVerification
+            ? 'Awaiting Verification'
+            : canAcceptPhysical
+                ? 'Accept Session'
+                : isInPersonSession && isLiveSession
+                    ? 'End Session'
+                    : 'Start Session';
 
     return Container(
       padding: const EdgeInsets.all(11),
@@ -893,23 +970,35 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                       width: double.infinity,
                       height: 42,
                       child: ElevatedButton.icon(
-                        onPressed: canStartSession
+                        onPressed: canAcceptPhysical
                             ? () => _onStartSession(session)
-                            : null,
+                            : canEndInPersonSession
+                                ? () => _onEndSession(session)
+                                : canStartSession
+                                    ? () => _onStartSession(session)
+                                    : null,
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
                           disabledBackgroundColor: AppColors.redesignSoftBorder,
                           disabledForegroundColor: _mutedText,
-                          backgroundColor: _brandDark,
+                          backgroundColor: canEndInPersonSession
+                              ? const Color(0xFFE65100)
+                              : canAcceptPhysical
+                                  ? const Color(0xFF2E7D32)
+                                  : _brandDark,
                           foregroundColor: AppColors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         icon: Icon(
-                          canStartSession
-                              ? Icons.play_circle_outline_rounded
-                              : Icons.schedule_rounded,
+                          canEndInPersonSession
+                              ? Icons.stop_circle_outlined
+                              : canAcceptPhysical
+                                  ? Icons.check_circle_outline_rounded
+                                  : canStartSession
+                                      ? Icons.play_circle_outline_rounded
+                                      : Icons.schedule_rounded,
                           size: 16,
                         ),
                         label: Text(
@@ -917,7 +1006,7 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                           style: AppFontStyle.fontStyleW600(
                             fontSize: 12,
                             fontColor:
-                                canStartSession ? AppColors.white : _mutedText,
+                                (canStartSession || canEndInPersonSession || canAcceptPhysical) ? AppColors.white : _mutedText,
                           ),
                         ),
                       ),
@@ -967,31 +1056,43 @@ class _ExpertSessionsScreenState extends State<ExpertSessionsScreen> {
                       child: SizedBox(
                         height: 42,
                         child: ElevatedButton.icon(
-                          onPressed: canStartSession
+                          onPressed: canAcceptPhysical
                               ? () => _onStartSession(session)
-                              : null,
+                              : canEndInPersonSession
+                                  ? () => _onEndSession(session)
+                                  : canStartSession
+                                      ? () => _onStartSession(session)
+                                      : null,
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             disabledBackgroundColor:
                                 AppColors.redesignSoftBorder,
                             disabledForegroundColor: _mutedText,
-                            backgroundColor: _brandDark,
+                            backgroundColor: canEndInPersonSession
+                                ? const Color(0xFFE65100)
+                                : canAcceptPhysical
+                                    ? const Color(0xFF2E7D32)
+                                    : _brandDark,
                             foregroundColor: AppColors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           icon: Icon(
-                            canStartSession
-                                ? Icons.play_circle_outline_rounded
-                                : Icons.schedule_rounded,
+                            canEndInPersonSession
+                                ? Icons.stop_circle_outlined
+                                : canAcceptPhysical
+                                    ? Icons.check_circle_outline_rounded
+                                    : canStartSession
+                                        ? Icons.play_circle_outline_rounded
+                                        : Icons.schedule_rounded,
                             size: 16,
                           ),
                           label: Text(
                             startLabel,
                             style: AppFontStyle.fontStyleW600(
                               fontSize: 12,
-                              fontColor: canStartSession
+                              fontColor: (canStartSession || canEndInPersonSession || canAcceptPhysical)
                                   ? AppColors.white
                                   : _mutedText,
                             ),

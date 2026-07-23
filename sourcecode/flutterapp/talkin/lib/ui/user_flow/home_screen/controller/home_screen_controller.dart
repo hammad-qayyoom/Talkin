@@ -199,7 +199,39 @@ class HomeScreenController extends GetxController {
         consultationMode: selectedConsultationMode,
       );
 
-      final nextListeners = topListenersModel?.data ?? [];
+      var nextListeners = List<TopListeners>.from(topListenersModel?.data ?? []);
+
+      // If filtering by in_person returned empty results, retry without the filter
+      // because the backend may not support consultationMode filtering yet.
+      if (selectedConsultationMode == 'in_person' && nextListeners.isEmpty) {
+        topListenersModel = await TopListenersApi.callApi(
+          token: token,
+          uid: uid,
+          searchString: "All",
+          categoryId: selectedCategoryId,
+          consultationMode: null,
+        );
+        nextListeners = List<TopListeners>.from(topListenersModel?.data ?? []);
+      }
+
+      // Client-side filter: only keep experts that actually have in-person enabled
+      if (selectedConsultationMode == 'in_person' && nextListeners.isNotEmpty) {
+        final filtered = nextListeners.where((expert) {
+          final consultationModes = expert.consultationModes;
+          final inPersonEnabled = consultationModes?['inPerson'] == true;
+          final isAvailable = expert.isAvailableForInPersonSession == true;
+          // If the API returned the fields, use them for filtering
+          if (consultationModes != null || expert.isAvailableForInPersonSession != null) {
+            return inPersonEnabled && isAvailable;
+          }
+          // If API didn't return the fields, show the expert (can't filter client-side)
+          return true;
+        }).toList();
+        if (filtered.isNotEmpty) {
+          nextListeners = filtered;
+        }
+        // If filtering removed everyone, show unfiltered results
+      }
       if (reset) {
         topListeners.clear();
         if (nextListeners.isNotEmpty ||
@@ -236,7 +268,22 @@ class HomeScreenController extends GetxController {
         categoryId: selectedCategoryId,
         consultationMode: selectedConsultationMode,
       );
-      topListeners.addAll(topListenersModel?.data ?? []);
+
+      var paginationListeners = List<TopListeners>.from(topListenersModel?.data ?? []);
+
+      // Same fallback: if in_person filter returned empty, retry without filter
+      if (selectedConsultationMode == 'in_person' && paginationListeners.isEmpty) {
+        topListenersModel = await TopListenersApi.callApi(
+          token: token,
+          uid: uid,
+          searchString: "All",
+          categoryId: selectedCategoryId,
+          consultationMode: null,
+        );
+        paginationListeners = List<TopListeners>.from(topListenersModel?.data ?? []);
+      }
+
+      topListeners.addAll(paginationListeners);
       await ExpertProximitySorter.sortNearestFirst(topListeners);
 
       isPaginationLoading = false;

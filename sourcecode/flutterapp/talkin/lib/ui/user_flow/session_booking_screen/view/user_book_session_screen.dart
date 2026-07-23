@@ -131,10 +131,18 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
       // Parse in-person consultation support
       final consultationModes = arguments['consultationModes'];
       final isAvailableForInPersonSession =
-          _parseBoolFlag(arguments['isAvailableForInPersonSession'], true);
-      if (consultationModes is Map<String, dynamic>) {
-        _isInPersonEnabled = consultationModes['inPerson'] == true &&
-            isAvailableForInPersonSession;
+          _parseBoolFlag(arguments['isAvailableForInPersonSession'], false);
+
+      // Enable in-person if either consultationModes says inPerson or the flag is set
+      if (consultationModes is Map<String, dynamic> && consultationModes['inPerson'] == true) {
+        _isInPersonEnabled = true;
+      } else if (isAvailableForInPersonSession) {
+        _isInPersonEnabled = true;
+      }
+
+      // Platform-level gate: hide in-person if admin has disabled it
+      if (_isInPersonEnabled && Database.settingApiModel?.data?.inPersonConsultationEnabled == false) {
+        _isInPersonEnabled = false;
       }
 
       final clinicDetails = arguments['clinicDetails'];
@@ -188,7 +196,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
       listenerId: _listenerId.isEmpty ? null : _listenerId,
       expertId: _expertId.isEmpty ? null : _expertId,
       date: _selectedDate,
-      callType: _consultationMode == 'in_person' ? 'audio' : _callType,
+      callType: _consultationMode == 'in_person' ? 'in_person' : _callType,
       clientTimezoneOffsetMinutes: DateTime.now().timeZoneOffset.inMinutes,
       includeBooked: true,
       consultationMode: _consultationMode,
@@ -279,7 +287,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
       userId: userId,
       listenerId: _listenerId.isEmpty ? null : _listenerId,
       expertId: _expertId.isEmpty ? null : _expertId,
-      callType: _consultationMode == 'in_person' ? 'audio' : _callType,
+      callType: _consultationMode == 'in_person' ? 'in_person' : _callType,
       slotStartAt: parsedStartAt,
       slotDurationMinutes: slotDurationMinutes,
       bookingTimezone: _bookingTimezone,

@@ -657,18 +657,21 @@ class SessionBookingService {
   static Future<Map<String, dynamic>> getExpertAvailability({
     String? listenerId,
     String? expertId,
+    String? consultationMode,
   }) async {
     try {
       final headers = await _headers();
       final normalizedListenerId = (listenerId ?? '').trim();
       final normalizedExpertId = (expertId ?? '').trim();
-      final clientTimezoneOffsetMinutes =
-          DateTime.now().timeZoneOffset.inMinutes;
       final queryParameters = <String, String>{
         if (normalizedListenerId.isNotEmpty) 'listenerId': normalizedListenerId,
         if (normalizedExpertId.isNotEmpty) 'expertId': normalizedExpertId,
-        'clientTimezoneOffsetMinutes': clientTimezoneOffsetMinutes.toString(),
       };
+
+      final normalizedConsultationMode = (consultationMode ?? '').trim();
+      if (normalizedConsultationMode.isNotEmpty) {
+        queryParameters['consultationMode'] = normalizedConsultationMode;
+      }
 
       final uri = Uri.parse(Api.expertGetAvailability).replace(
         queryParameters: queryParameters.isEmpty ? null : queryParameters,
@@ -700,17 +703,29 @@ class SessionBookingService {
   }) async {
     try {
       final headers = await _headers();
+      final normalizedConsultationMode = (consultationMode ?? '').trim();
+
       final body = <String, dynamic>{
         if ((listenerId ?? '').trim().isNotEmpty) 'listenerId': listenerId,
         if ((expertId ?? '').trim().isNotEmpty) 'expertId': expertId,
-        'clientTimezoneOffsetMinutes':
-            DateTime.now().timeZoneOffset.inMinutes,
         'slots': slots,
       };
 
-      final normalizedConsultationMode = (consultationMode ?? '').trim();
+      // Send consultationMode at top level
       if (normalizedConsultationMode.isNotEmpty) {
         body['consultationMode'] = normalizedConsultationMode;
+      }
+
+      // Also ensure each slot has consultationMode set
+      if (normalizedConsultationMode.isNotEmpty) {
+        body['slots'] = slots.map((slot) {
+          final slotCopy = Map<String, dynamic>.from(slot);
+          if (!slotCopy.containsKey('consultationMode') ||
+              (slotCopy['consultationMode'] ?? '').toString().trim().isEmpty) {
+            slotCopy['consultationMode'] = normalizedConsultationMode;
+          }
+          return slotCopy;
+        }).toList();
       }
 
       final response = await http.post(
@@ -838,6 +853,84 @@ class SessionBookingService {
       return {
         'status': false,
         'message': 'Failed to mark session as completed.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> requestPhysicalSession({
+    required String bookingId,
+  }) async {
+    try {
+      final headers = await _headers();
+      final uri = Uri.parse('${Api.sessionRequestPhysical}$bookingId/request-physical');
+
+      final response = await http.post(uri, headers: headers);
+      final decoded = json.decode(response.body);
+
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid request physical session response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to request physical session.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> acceptPhysicalSession({
+    required String bookingId,
+  }) async {
+    try {
+      final headers = await _headers();
+      final uri = Uri.parse('${Api.sessionAcceptPhysical}$bookingId/accept-physical');
+
+      final response = await http.post(uri, headers: headers);
+      final decoded = json.decode(response.body);
+
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid accept physical session response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to accept physical session.',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> verifySessionCompletion({
+    required String bookingId,
+  }) async {
+    try {
+      final headers = await _headers();
+      final uri = Uri.parse('${Api.sessionVerifyComplete}$bookingId/verify-complete');
+
+      final response = await http.post(uri, headers: headers);
+      final decoded = json.decode(response.body);
+
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return {
+        'status': false,
+        'message': 'Invalid verify session completion response format.',
+      };
+    } catch (_) {
+      return {
+        'status': false,
+        'message': 'Failed to verify session completion.',
       };
     }
   }

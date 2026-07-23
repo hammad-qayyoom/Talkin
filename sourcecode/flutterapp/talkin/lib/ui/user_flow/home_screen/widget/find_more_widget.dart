@@ -9,6 +9,7 @@ import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/database.dart';
 
 class FindMoreWidget extends StatelessWidget {
   const FindMoreWidget({super.key});
@@ -614,13 +615,15 @@ class FindMoreWidget extends StatelessWidget {
                     isTablet: isTabletScreen,
                   ),
                   const SizedBox(width: 8),
-                  _buildModeChip(
-                    label: 'In-Person',
-                    icon: Icons.location_on_rounded,
-                    isSelected: selectedMode == 'in_person',
-                    onTap: () => controller.selectConsultationMode('in_person'),
-                    isTablet: isTabletScreen,
-                  ),
+                  if (Database.settingApiModel?.data?.inPersonConsultationEnabled !=
+                      false)
+                    _buildModeChip(
+                      label: 'In-Person',
+                      icon: Icons.location_on_rounded,
+                      isSelected: selectedMode == 'in_person',
+                      onTap: () => controller.selectConsultationMode('in_person'),
+                      isTablet: isTabletScreen,
+                    ),
                 ],
               ),
             );

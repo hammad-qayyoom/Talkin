@@ -1,4 +1,5 @@
 import 'package:notisboard/utils/enums.dart';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:carousel_slider/carousel_options.dart';
@@ -436,6 +437,18 @@ class HostHomeScreenController extends GetxController {
                       ratePrivateAudioCall: type == 'audio' ? newPrice.toString() : '',
                       ratePrivateVideoCall: type == 'video' ? newPrice.toString() : '',
                       rateInPersonSession: type == 'in_person' ? newPrice.toString() : '',
+                      consultationModes: type == 'in_person'
+                          ? jsonEncode({
+                              'online': true,
+                              'inPerson': true,
+                            })
+                          : '',
+                      inPersonPricing: type == 'in_person'
+                          ? jsonEncode({
+                              'currency': 'USD',
+                              'oneToOneSession': newPrice,
+                            })
+                          : '',
                     );
                   
                     if (response?.status == true) {

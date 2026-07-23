@@ -1087,6 +1087,163 @@ const GeneralSettings = () => {
 	                    }}
 	                  />
 	                </Grid>
+
+	                <Grid item size={12}>
+	                  <Typography variant='subtitle2' sx={{ mt: 2, mb: 1, fontWeight: 600 }}>
+	                    In-Person Cancellation & Start Window Policy
+	                  </Typography>
+	                </Grid>
+	                <Grid item size={6}>
+	                  <TextField
+	                    fullWidth
+	                    type='text'
+	                    label='In-Person User Cancellation Time Limit (minutes before start)'
+	                    value={formData.inPersonCancellationTimeLimitMinutes || ''}
+	                    onChange={e => handleFieldChange('inPersonCancellationTimeLimitMinutes', e.target.value)}
+	                    InputProps={{
+	                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+	                    }}
+	                  />
+	                </Grid>
+	                <Grid item size={6}>
+	                  <TextField
+	                    fullWidth
+	                    type='text'
+	                    label='In-Person User Late Cancellation Refund (%)'
+	                    value={formData.inPersonCancellationRefundPercent || ''}
+	                    onChange={e => handleFieldChange('inPersonCancellationRefundPercent', e.target.value)}
+	                    InputProps={{
+	                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+	                      endAdornment: (
+	                        <InputAdornment position='end'>
+	                          <Typography variant='caption' color='text.secondary'>
+	                            %
+	                          </Typography>
+	                        </InputAdornment>
+	                      )
+	                    }}
+	                  />
+	                </Grid>
+	                <Grid item size={6}>
+	                  <TextField
+	                    fullWidth
+	                    type='text'
+	                    label='In-Person Expert Cancellation Penalty (%)'
+	                    value={formData.inPersonExpertCancellationPenaltyPercent || ''}
+	                    onChange={e => handleFieldChange('inPersonExpertCancellationPenaltyPercent', e.target.value)}
+	                    InputProps={{
+	                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
+	                      endAdornment: (
+	                        <InputAdornment position='end'>
+	                          <Typography variant='caption' color='text.secondary'>
+	                            %
+	                          </Typography>
+	                        </InputAdornment>
+	                      )
+	                    }}
+	                  />
+	                </Grid>
+	                <Grid item size={6}>
+	                  <FormControlLabel
+	                    control={
+	                      <Switch
+	                        checked={Boolean(formData.inPersonCancellationRefundCredits)}
+	                        onChange={e => handleFieldChange('inPersonCancellationRefundCredits', e.target.checked)}
+	                      />
+	                    }
+	                    label='Restore Subscription Credits On Eligible In-Person User Cancellation'
+	                  />
+	                </Grid>
+	                <Grid item size={6}>
+	                  <TextField
+	                    fullWidth
+	                    type='text'
+	                    label='In-Person User Cancellation Refund Credits (count)'
+	                    value={formData.inPersonCancellationRefundCreditsCount || ''}
+	                    onChange={e => handleFieldChange('inPersonCancellationRefundCreditsCount', e.target.value)}
+	                    InputProps={{
+	                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+	                    }}
+	                  />
+	                </Grid>
+	                <Grid item size={6}>
+	                  <TextField
+	                    fullWidth
+	                    type='text'
+	                    label='In-Person Join Early Window (minutes)'
+	                    value={formData.inPersonJoinEarlyWindowMinutes || ''}
+	                    onChange={e => handleFieldChange('inPersonJoinEarlyWindowMinutes', e.target.value)}
+	                    InputProps={{
+	                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+	                    }}
+	                  />
+	                </Grid>
+	                <Grid item size={6}>
+	                  <TextField
+	                    fullWidth
+	                    type='text'
+	                    label='In-Person Join Late Window (minutes after end)'
+	                    value={formData.inPersonJoinLateWindowMinutes || ''}
+	                    onChange={e => handleFieldChange('inPersonJoinLateWindowMinutes', e.target.value)}
+	                    InputProps={{
+	                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+	                    }}
+	                  />
+	                </Grid>
+
+	                <Grid item size={12}>
+	                  <Typography variant='subtitle2' sx={{ mt: 2, mb: 1, fontWeight: 600 }}>
+	                    In-Person Auto-Completion & Session Timeout
+	                  </Typography>
+	                </Grid>
+	                <Grid item size={6}>
+	                  <FormControlLabel
+	                    control={
+	                      <Switch
+	                        checked={formData.inPersonAutoCompleteEnabled !== false}
+	                        onChange={e => handleFieldChange('inPersonAutoCompleteEnabled', e.target.checked)}
+	                      />
+	                    }
+	                    label='Enable Auto-Completion for In-Person No-Shows'
+	                  />
+	                </Grid>
+	                <Grid item size={6}>
+	                  <TextField
+	                    fullWidth
+	                    type='text'
+	                    label='Auto-Complete After Session End (minutes)'
+	                    value={formData.inPersonAutoCompleteAfterEndMinutes ?? 30}
+	                    onChange={e => handleFieldChange('inPersonAutoCompleteAfterEndMinutes', e.target.value)}
+	                    InputProps={{
+	                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+	                    }}
+	                    helperText='Minutes after session end time before auto-completing'
+	                  />
+	                </Grid>
+	                <Grid item size={6}>
+	                  <FormControlLabel
+	                    control={
+	                      <Switch
+	                        checked={formData.inPersonAutoCompleteReleaseExpertPayment !== false}
+	                        onChange={e => handleFieldChange('inPersonAutoCompleteReleaseExpertPayment', e.target.checked)}
+	                      />
+	                    }
+	                    label='Release Expert Payment on Auto-Completion'
+	                  />
+	                </Grid>
+	                <Grid item size={6}>
+	                  <TextField
+	                    fullWidth
+	                    type='text'
+	                    label='Expert Accept Timeout (minutes)'
+	                    value={formData.inPersonExpertAcceptTimeoutMinutes ?? 15}
+	                    onChange={e => handleFieldChange('inPersonExpertAcceptTimeoutMinutes', e.target.value)}
+	                    InputProps={{
+	                      inputProps: { inputMode: 'numeric', pattern: '[0-9]*' }
+	                    }}
+	                    helperText='Minutes to wait for expert to accept before auto-cancel'
+	                  />
+	                </Grid>
 	              </Grid>
 	            </Box>
 

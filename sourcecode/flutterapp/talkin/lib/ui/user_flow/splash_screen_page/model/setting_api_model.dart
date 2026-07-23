@@ -98,6 +98,18 @@ class Data {
   final String? iosAppVersion;
   final int? sessionSlotDurationMinutes;
   final int? inPersonSessionSlotDurationMinutes;
+  final bool? inPersonConsultationEnabled;
+  final int? inPersonCancellationTimeLimitMinutes;
+  final int? inPersonCancellationRefundPercent;
+  final bool? inPersonCancellationRefundCredits;
+  final int? inPersonCancellationRefundCreditsCount;
+  final int? inPersonExpertCancellationPenaltyPercent;
+  final int? inPersonJoinEarlyWindowMinutes;
+  final int? inPersonJoinLateWindowMinutes;
+  final bool? inPersonAutoCompleteEnabled;
+  final int? inPersonAutoCompleteAfterEndMinutes;
+  final bool? inPersonAutoCompleteReleaseExpertPayment;
+  final int? inPersonExpertAcceptTimeoutMinutes;
   final String? sessionBookingTimezone;
 
   Data({
@@ -163,6 +175,18 @@ class Data {
     this.iosAppVersion,
     this.sessionSlotDurationMinutes,
     this.inPersonSessionSlotDurationMinutes,
+    this.inPersonConsultationEnabled,
+    this.inPersonCancellationTimeLimitMinutes,
+    this.inPersonCancellationRefundPercent,
+    this.inPersonCancellationRefundCredits,
+    this.inPersonCancellationRefundCreditsCount,
+    this.inPersonExpertCancellationPenaltyPercent,
+    this.inPersonJoinEarlyWindowMinutes,
+    this.inPersonJoinLateWindowMinutes,
+    this.inPersonAutoCompleteEnabled,
+    this.inPersonAutoCompleteAfterEndMinutes,
+    this.inPersonAutoCompleteReleaseExpertPayment,
+    this.inPersonExpertAcceptTimeoutMinutes,
     this.sessionBookingTimezone,
   });
 
@@ -237,6 +261,18 @@ class Data {
         iosAppVersion: json["iosAppVersion"],
         sessionSlotDurationMinutes: json["sessionSlotDurationMinutes"],
         inPersonSessionSlotDurationMinutes: json["inPersonSessionSlotDurationMinutes"],
+        inPersonConsultationEnabled: json["inPersonConsultationEnabled"],
+        inPersonCancellationTimeLimitMinutes: json["inPersonCancellationTimeLimitMinutes"],
+        inPersonCancellationRefundPercent: json["inPersonCancellationRefundPercent"],
+        inPersonCancellationRefundCredits: json["inPersonCancellationRefundCredits"],
+        inPersonCancellationRefundCreditsCount: json["inPersonCancellationRefundCreditsCount"],
+        inPersonExpertCancellationPenaltyPercent: json["inPersonExpertCancellationPenaltyPercent"],
+        inPersonJoinEarlyWindowMinutes: json["inPersonJoinEarlyWindowMinutes"],
+        inPersonJoinLateWindowMinutes: json["inPersonJoinLateWindowMinutes"],
+        inPersonAutoCompleteEnabled: json["inPersonAutoCompleteEnabled"],
+        inPersonAutoCompleteAfterEndMinutes: json["inPersonAutoCompleteAfterEndMinutes"],
+        inPersonAutoCompleteReleaseExpertPayment: json["inPersonAutoCompleteReleaseExpertPayment"],
+        inPersonExpertAcceptTimeoutMinutes: json["inPersonExpertAcceptTimeoutMinutes"],
         sessionBookingTimezone: json["sessionBookingTimezone"],
       );
 
@@ -303,6 +339,18 @@ class Data {
         "iosAppVersion": iosAppVersion,
         "sessionSlotDurationMinutes": sessionSlotDurationMinutes,
         "inPersonSessionSlotDurationMinutes": inPersonSessionSlotDurationMinutes,
+        "inPersonConsultationEnabled": inPersonConsultationEnabled,
+        "inPersonCancellationTimeLimitMinutes": inPersonCancellationTimeLimitMinutes,
+        "inPersonCancellationRefundPercent": inPersonCancellationRefundPercent,
+        "inPersonCancellationRefundCredits": inPersonCancellationRefundCredits,
+        "inPersonCancellationRefundCreditsCount": inPersonCancellationRefundCreditsCount,
+        "inPersonExpertCancellationPenaltyPercent": inPersonExpertCancellationPenaltyPercent,
+        "inPersonJoinEarlyWindowMinutes": inPersonJoinEarlyWindowMinutes,
+        "inPersonJoinLateWindowMinutes": inPersonJoinLateWindowMinutes,
+        "inPersonAutoCompleteEnabled": inPersonAutoCompleteEnabled,
+        "inPersonAutoCompleteAfterEndMinutes": inPersonAutoCompleteAfterEndMinutes,
+        "inPersonAutoCompleteReleaseExpertPayment": inPersonAutoCompleteReleaseExpertPayment,
+        "inPersonExpertAcceptTimeoutMinutes": inPersonExpertAcceptTimeoutMinutes,
         "sessionBookingTimezone": sessionBookingTimezone,
       };
 }

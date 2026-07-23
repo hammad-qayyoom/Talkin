@@ -36,9 +36,6 @@ class HostListenerProfileUpdateApi {
 
       var headers = {
         ApiParams.key: Api.secretKey,
-        // ApiParams.authToken: 'Bearer $token',
-        ApiParams.contentType: 'application/json',
-        // ApiParams.authUid: uid
       };
       Utils.showLog("Listener Edit Profile Api Headers => $headers");
 

@@ -904,6 +904,10 @@ class PermissionView extends StatelessWidget {
               },
             );
 
+            final isPlatformInPersonEnabled =
+                Database.settingApiModel?.data?.inPersonConsultationEnabled !=
+                    false;
+
             if (isTablet) {
               return Column(
                 children: [
@@ -914,8 +918,10 @@ class PermissionView extends StatelessWidget {
                       Expanded(child: videoCard),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  inPersonCard,
+                  if (isPlatformInPersonEnabled) ...[
+                    const SizedBox(height: 12),
+                    inPersonCard,
+                  ],
                 ],
               );
             }
@@ -925,8 +931,10 @@ class PermissionView extends StatelessWidget {
                 audioCard,
                 const SizedBox(height: 12),
                 videoCard,
-                const SizedBox(height: 12),
-                inPersonCard,
+                if (isPlatformInPersonEnabled) ...[
+                  const SizedBox(height: 12),
+                  inPersonCard,
+                ],
               ],
             );
           },

@@ -79,7 +79,8 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
   bool get _isInPersonServiceEnabled =>
       Database
           .fetchListenerProfileModel?.data?.isAvailableForInPersonSession !=
-      false;
+      false &&
+      Database.settingApiModel?.data?.inPersonConsultationEnabled != false;
 
   int get _configuredSlotDurationMinutes {
     final raw = Database.settingApiModel?.data?.sessionSlotDurationMinutes;
@@ -155,6 +156,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
 
     final response = await SessionBookingService.getExpertAvailability(
       listenerId: _listenerId.isEmpty ? null : _listenerId,
+      consultationMode: _selectedScheduleMode,
     );
     final data = response['data'] as List<dynamic>? ?? [];
 
@@ -319,6 +321,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
             ...slot,
             'sessionType': 'one_to_one',
             'callType': 'audio',
+            'consultationMode': 'online',
           });
         }
 
@@ -327,6 +330,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
             ...slot,
             'sessionType': 'one_to_one',
             'callType': 'video',
+            'consultationMode': 'online',
           });
         }
       } else if (_selectedScheduleMode == 'in_person') {
@@ -334,7 +338,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
           payloadSlots.add({
             ...slot,
             'sessionType': 'one_to_one',
-            'callType': 'audio',
+            'callType': 'in_person',
             'consultationMode': 'in_person',
             'slotDurationMinutes': _configuredInPersonSlotDurationMinutes,
           });
@@ -354,6 +358,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
     final response = await SessionBookingService.setExpertAvailability(
       listenerId: _listenerId.isEmpty ? null : _listenerId,
       slots: payloadSlots,
+      consultationMode: _selectedScheduleMode,
     );
 
     if (!mounted) {
@@ -602,6 +607,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
                       setState(() {
                         _selectedScheduleMode = value;
                       });
+                      _loadAvailability();
                     }
                   },
                 ),

@@ -1,13 +1,11 @@
 import 'package:notisboard/utils/enums.dart';
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:notisboard/services/permission_handler/permission_handler.dart';
 import 'package:notisboard/socket/socket_emit.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
@@ -344,9 +342,17 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     required bool isGroupSession,
     required bool isConfirmedBooking,
     required String sessionStatus,
+    required bool isInPerson,
   }) {
+    if (isInPerson) {
+      if (sessionStatus == 'requested') return 'Awaiting Expert';
+      if (sessionStatus == 'live') return 'Session Active';
+      if (sessionStatus == 'pending_verification') return 'Verify & Complete';
+      if (sessionStatus == 'completed') return 'Completed';
+    }
+
     if (canStart) {
-      return 'Start Session';
+      return isInPerson ? 'Start Physical Session' : 'Start Session';
     }
 
     if (!isConfirmedBooking) {
@@ -565,6 +571,33 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     );
   }
 
+  Future<void> _onVerifyCompletion(
+    Map<String, dynamic> item,
+    Map<String, dynamic> session,
+  ) async {
+    final bookingId = (item['_id'] ?? '').toString();
+    if (bookingId.isEmpty) {
+      Utils.showToast(context, 'Unable to verify session. Booking id is missing.');
+      return;
+    }
+
+    final response = await SessionBookingService.verifySessionCompletion(
+      bookingId: bookingId,
+    );
+
+    if (!mounted) return;
+
+    if (response['status'] == true) {
+      Utils.showToast(context, 'Session verified and completed. Credits released to expert.');
+      _fetchSessions();
+    } else {
+      Utils.showToast(
+        context,
+        (response['message'] ?? 'Failed to verify session.').toString(),
+      );
+    }
+  }
+
   Future<void> _onStartSessionTap(
     Map<String, dynamic> booking,
     Map<String, dynamic> session,
@@ -592,6 +625,29 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     }
 
     final bookingId = (booking['_id'] ?? '').toString();
+    final consultationMode =
+        (booking['consultationMode'] ?? session['consultationMode'] ?? 'online')
+            .toString()
+            .trim();
+    final isInPerson = consultationMode == 'in_person';
+
+    if (isInPerson) {
+      final arrivalResponse = await SessionBookingService.requestPhysicalSession(
+        bookingId: bookingId,
+      );
+      if (!mounted) return;
+      if (arrivalResponse['status'] == true) {
+        Utils.showToast(context, 'Physical session request sent. Waiting for expert to accept.');
+        _fetchSessions();
+      } else {
+        Utils.showToast(
+          context,
+          (arrivalResponse['message'] ?? 'Failed to send request.').toString(),
+        );
+      }
+      return;
+    }
+
     final accessResponse = await SessionBookingService.getSessionAccess(
       sessionId: sessionId,
       bookingId: bookingId,
@@ -715,47 +771,6 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
 
     if (response['status'] == true) {
       _fetchSessions();
-    }
-  }
-
-  Future<void> _openNavigation(Map<String, dynamic> item) async {
-    final bookingId = (item['_id'] ?? '').toString();
-    if (bookingId.isEmpty) {
-      Utils.showToast(context, 'Unable to get navigation details.');
-      return;
-    }
-
-    final response = await SessionBookingService.getBookingNavigation(
-      bookingId: bookingId,
-    );
-
-    if (!mounted) return;
-
-    if (response['status'] == true) {
-      final data = response['data'];
-      final googleMapsUrl = (data?['googleMaps'] ?? '').toString();
-      final appleMapsUrl = (data?['appleMaps'] ?? '').toString();
-
-      String? url;
-      if (Platform.isIOS && appleMapsUrl.isNotEmpty) {
-        url = appleMapsUrl;
-      } else if (googleMapsUrl.isNotEmpty) {
-        url = googleMapsUrl;
-      } else if (appleMapsUrl.isNotEmpty) {
-        url = appleMapsUrl;
-      }
-
-      if (url != null && await canLaunchUrl(Uri.parse(url))) {
-        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-      } else {
-        if (!mounted) return;
-        Utils.showToast(context, 'Navigation URL not available.');
-      }
-    } else {
-      Utils.showToast(
-        context,
-        (response['message'] ?? 'Failed to get navigation.').toString(),
-      );
     }
   }
 
@@ -1290,6 +1305,27 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     );
   }
 
+  Widget _buildClinicDetailRow(IconData icon, String text) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 13, color: const Color(0xFF43A047)),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            text,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: AppFontStyle.fontStyleW500(
+              fontSize: 11,
+              fontColor: const Color(0xFF2E7D32),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildLoadingCard({double bottomMargin = 12}) {
     return Container(
       margin: EdgeInsets.only(bottom: bottomMargin),
@@ -1395,6 +1431,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       isGroupSession: isGroupSession,
       isConfirmedBooking: isConfirmedBooking,
       sessionStatus: statusLower,
+      isInPerson: isInPersonSession,
     );
     final showStartSession = _view == 'upcoming';
     final showReviewAction = _view == 'completed' && isCompletedSession;
@@ -1412,14 +1449,27 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     // In-Person consultation fields
     final consultationMode = (item['consultationMode'] ?? session['consultationMode'] ?? 'online').toString().trim();
     final isInPerson = consultationMode == 'in_person';
-    final clinicSnapshot = isInPerson ? (item['inPersonDetails']?['clinicSnapshot'] ?? {}) : null;
-    final clinicName = (clinicSnapshot?['clinicName'] ?? '').toString().trim();
-    final clinicAddress = clinicSnapshot?['address'];
+    final inPersonDetails = session['inPersonDetails'] is Map<String, dynamic> ? session['inPersonDetails'] as Map<String, dynamic> : <String, dynamic>{};
+    final clinicSnapshot = inPersonDetails['clinicSnapshot'] is Map<String, dynamic> ? inPersonDetails['clinicSnapshot'] as Map<String, dynamic> : <String, dynamic>{};
+    final clinicName = (clinicSnapshot['clinicName'] ?? '').toString().trim();
+    final clinicAddress = clinicSnapshot['address'];
+    final clinicStreet = (clinicAddress?['street'] ?? '').toString().trim();
     final clinicCity = (clinicAddress?['city'] ?? '').toString().trim();
-    final clinicFullAddress = [clinicAddress?['street'], clinicCity, clinicAddress?['state']]
-        .where((s) => s != null && s.toString().trim().isNotEmpty)
-        .map((s) => s.toString().trim())
+    final clinicState = (clinicAddress?['state'] ?? '').toString().trim();
+    final clinicCountry = (clinicAddress?['country'] ?? '').toString().trim();
+    final clinicPostalCode = (clinicAddress?['postalCode'] ?? '').toString().trim();
+    final clinicFullAddress = [clinicStreet, clinicCity, clinicState, clinicCountry]
+        .where((s) => s.trim().isNotEmpty)
         .join(', ');
+    final clinicFloorSuite = (clinicSnapshot['floorSuite'] ?? '').toString().trim();
+    final clinicLandmark = (clinicSnapshot['landmark'] ?? '').toString().trim();
+    final clinicParkingInfo = (clinicSnapshot['parkingInfo'] ?? '').toString().trim();
+    final clinicContactPhone = (clinicSnapshot['contactPhone'] ?? '').toString().trim();
+    final clinicContactEmail = (clinicSnapshot['contactEmail'] ?? '').toString().trim();
+    final clinicInstructions = (clinicSnapshot['consultationInstructions'] ?? '').toString().trim();
+    final arrivalStatus = (item['arrivalStatus'] ?? '').toString().trim().toLowerCase();
+    final hasCheckedIn = arrivalStatus == 'arrived';
+    final isLive = ['live', 'active', 'ongoing', 'started'].contains(statusLower);
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -1503,116 +1553,268 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
             ],
           ),
           if (isInPerson && clinicName.isNotEmpty) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             Container(
-              padding: const EdgeInsets.all(8),
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFF1F8E9),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFFC5E1A5)),
+                color: const Color(0xFFE8F5E9),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFA5D6A7)),
               ),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    Icons.local_hospital_rounded,
-                    size: 14,
-                    color: const Color(0xFF2E7D32),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          clinicName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppFontStyle.fontStyleW600(
-                            fontSize: 11,
-                            fontColor: const Color(0xFF2E7D32),
-                          ),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2E7D32).withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        if (clinicFullAddress.isNotEmpty)
-                          Text(
-                            clinicFullAddress,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppFontStyle.fontStyleW500(
-                              fontSize: 10,
-                              fontColor: const Color(0xFF558B2F),
+                        child: const Icon(
+                          Icons.local_hospital_rounded,
+                          size: 16,
+                          color: Color(0xFF2E7D32),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              clinicName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: 13,
+                                fontColor: const Color(0xFF2E7D32),
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              expertName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW500(
+                                fontSize: 11,
+                                fontColor: const Color(0xFF558B2F),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (clinicFullAddress.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    _buildClinicDetailRow(Icons.place_rounded, clinicFullAddress),
+                  ],
+                  if (clinicPostalCode.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    _buildClinicDetailRow(Icons.markunread_mailbox_rounded, 'Postal Code: $clinicPostalCode'),
+                  ],
+                  if (clinicFloorSuite.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    _buildClinicDetailRow(Icons.layers_rounded, 'Floor / Suite: $clinicFloorSuite'),
+                  ],
+                  if (clinicLandmark.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    _buildClinicDetailRow(Icons.signpost_rounded, 'Landmark: $clinicLandmark'),
+                  ],
+                  if (clinicParkingInfo.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    _buildClinicDetailRow(Icons.local_parking_rounded, 'Parking: $clinicParkingInfo'),
+                  ],
+                  if (clinicContactPhone.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    _buildClinicDetailRow(Icons.phone_rounded, clinicContactPhone),
+                  ],
+                  if (clinicContactEmail.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    _buildClinicDetailRow(Icons.email_rounded, clinicContactEmail),
+                  ],
+                  if (clinicInstructions.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2E7D32).withValues(alpha: 0.06),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(Icons.info_outline_rounded, size: 13, color: Color(0xFF558B2F)),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              clinicInstructions,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW500(
+                                fontSize: 11,
+                                fontColor: const Color(0xFF558B2F),
+                              ),
                             ),
                           ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             ),
           ],
           if (showStartSession) ...[
-            if (isInPerson && clinicName.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                height: 42,
-                child: OutlinedButton.icon(
-                  onPressed: () => _openNavigation(item),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: const Color(0xFF2E7D32).withValues(alpha: 0.5)),
-                    foregroundColor: const Color(0xFF2E7D32),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  icon: const Icon(Icons.directions_rounded, size: 16),
-                  label: Text(
-                    'Navigate to Clinic',
-                    style: AppFontStyle.fontStyleW600(
-                      fontSize: 13,
-                      fontColor: const Color(0xFF2E7D32),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-            const SizedBox(height: 12),
+            if (isInPerson) const SizedBox(height: 12),
             if (isNarrowActionLayout)
               Column(
                 children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 42,
-                    child: ElevatedButton.icon(
-                      onPressed: () =>
-                          _onStartSessionTap(item, session, expert),
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        disabledBackgroundColor: AppColors.redesignSoftBorder,
-                        disabledForegroundColor: _mutedText,
-                        backgroundColor: canStart
-                            ? _brandDark
-                            : AppColors.redesignSoftBorder,
-                        foregroundColor:
-                            canStart ? AppColors.white : _mutedText,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                  if (isInPerson && statusLower == 'requested')
+                    SizedBox(
+                      width: double.infinity,
+                      height: 42,
+                      child: OutlinedButton.icon(
+                        onPressed: null,
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: const Color(0xFFFFA726).withValues(alpha: 0.5)),
+                          foregroundColor: const Color(0xFFE65100),
+                          disabledBackgroundColor: const Color(0xFFFFF3E0),
+                          disabledForegroundColor: const Color(0xFFE65100),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        icon: const Icon(Icons.hourglass_top_rounded, size: 16),
+                        label: Text(
+                          'Awaiting Expert',
+                          style: AppFontStyle.fontStyleW600(
+                            fontSize: 13,
+                            fontColor: const Color(0xFFE65100),
+                          ),
                         ),
                       ),
-                      icon: Icon(
-                        canStart
-                            ? Icons.play_circle_outline_rounded
-                            : Icons.schedule_rounded,
-                        size: 16,
+                    )
+                  else if (isInPerson && hasCheckedIn)
+                    SizedBox(
+                      width: double.infinity,
+                      height: 42,
+                      child: OutlinedButton.icon(
+                        onPressed: null,
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: const Color(0xFF2E7D32).withValues(alpha: 0.5)),
+                          foregroundColor: const Color(0xFF2E7D32),
+                          disabledBackgroundColor: const Color(0xFFE8F5E9),
+                          disabledForegroundColor: const Color(0xFF2E7D32),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        icon: const Icon(Icons.check_circle_outline_rounded, size: 16),
+                        label: Text(
+                          isLive ? 'Session In Progress' : 'Checked In',
+                          style: AppFontStyle.fontStyleW600(
+                            fontSize: 13,
+                            fontColor: const Color(0xFF2E7D32),
+                          ),
+                        ),
                       ),
-                      label: Text(
-                        startButtonLabel,
-                        style: AppFontStyle.fontStyleW600(
-                          fontSize: 13,
-                          fontColor: canStart ? AppColors.white : _mutedText,
+                    )
+                  else if (isInPerson && statusLower == 'pending_verification')
+                    SizedBox(
+                      width: double.infinity,
+                      height: 42,
+                      child: ElevatedButton.icon(
+                        onPressed: () => _onVerifyCompletion(item, session),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: const Color(0xFF2E7D32),
+                          foregroundColor: AppColors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        icon: const Icon(Icons.verified_rounded, size: 16),
+                        label: Text(
+                          'Verify & Complete',
+                          style: AppFontStyle.fontStyleW600(
+                            fontSize: 13,
+                            fontColor: AppColors.white,
+                          ),
+                        ),
+                      ),
+                    )
+                  else if (!isInPerson && isLive)
+                    SizedBox(
+                      width: double.infinity,
+                      height: 42,
+                      child: ElevatedButton.icon(
+                        onPressed: () =>
+                            _onStartSessionTap(item, session, expert),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: const Color(0xFF1565C0),
+                          foregroundColor: AppColors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        icon: Icon(
+                          callTypeRaw.toLowerCase() == 'video'
+                              ? Icons.videocam_outlined
+                              : Icons.call_outlined,
+                          size: 16,
+                        ),
+                        label: Text(
+                          callTypeRaw.toLowerCase() == 'video'
+                              ? 'Join Video Call'
+                              : 'Join Audio Call',
+                          style: AppFontStyle.fontStyleW600(
+                            fontSize: 13,
+                            fontColor: AppColors.white,
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    SizedBox(
+                      width: double.infinity,
+                      height: 42,
+                      child: ElevatedButton.icon(
+                        onPressed: () =>
+                            _onStartSessionTap(item, session, expert),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          disabledBackgroundColor: AppColors.redesignSoftBorder,
+                          disabledForegroundColor: _mutedText,
+                          backgroundColor: canStart
+                              ? _brandDark
+                              : AppColors.redesignSoftBorder,
+                          foregroundColor:
+                              canStart ? AppColors.white : _mutedText,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        icon: Icon(
+                          canStart
+                              ? (isInPerson ? Icons.location_on_outlined : Icons.play_circle_outline_rounded)
+                              : Icons.schedule_rounded,
+                          size: 16,
+                        ),
+                        label: Text(
+                          startButtonLabel,
+                          style: AppFontStyle.fontStyleW600(
+                            fontSize: 13,
+                            fontColor: canStart ? AppColors.white : _mutedText,
+                          ),
                         ),
                       ),
                     ),
-                  ),
                   const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
@@ -1651,41 +1853,152 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
             else
               Row(
                 children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 42,
-                      child: ElevatedButton.icon(
-                        onPressed: () =>
-                            _onStartSessionTap(item, session, expert),
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          disabledBackgroundColor: AppColors.redesignSoftBorder,
-                          disabledForegroundColor: _mutedText,
-                          backgroundColor: canStart
-                              ? _brandDark
-                              : AppColors.redesignSoftBorder,
-                          foregroundColor:
-                              canStart ? AppColors.white : _mutedText,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                  if (isInPerson && statusLower == 'requested')
+                    Expanded(
+                      child: SizedBox(
+                        height: 42,
+                        child: OutlinedButton.icon(
+                          onPressed: null,
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: const Color(0xFFFFA726).withValues(alpha: 0.5)),
+                            foregroundColor: const Color(0xFFE65100),
+                            disabledBackgroundColor: const Color(0xFFFFF3E0),
+                            disabledForegroundColor: const Color(0xFFE65100),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: const Icon(Icons.hourglass_top_rounded, size: 16),
+                          label: Text(
+                            'Awaiting Expert',
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 13,
+                              fontColor: const Color(0xFFE65100),
+                            ),
                           ),
                         ),
-                        icon: Icon(
-                          canStart
-                              ? Icons.play_circle_outline_rounded
-                              : Icons.schedule_rounded,
-                          size: 16,
+                      ),
+                    )
+                  else if (isInPerson && hasCheckedIn)
+                    Expanded(
+                      child: SizedBox(
+                        height: 42,
+                        child: OutlinedButton.icon(
+                          onPressed: null,
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: const Color(0xFF2E7D32).withValues(alpha: 0.5)),
+                            foregroundColor: const Color(0xFF2E7D32),
+                            disabledBackgroundColor: const Color(0xFFE8F5E9),
+                            disabledForegroundColor: const Color(0xFF2E7D32),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: const Icon(Icons.check_circle_outline_rounded, size: 16),
+                          label: Text(
+                            isLive ? 'Session In Progress' : 'Checked In',
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 13,
+                              fontColor: const Color(0xFF2E7D32),
+                            ),
+                          ),
                         ),
-                        label: Text(
-                          startButtonLabel,
-                          style: AppFontStyle.fontStyleW600(
-                            fontSize: 13,
-                            fontColor: canStart ? AppColors.white : _mutedText,
+                      ),
+                    )
+                  else if (isInPerson && statusLower == 'pending_verification')
+                    Expanded(
+                      child: SizedBox(
+                        height: 42,
+                        child: ElevatedButton.icon(
+                          onPressed: () => _onVerifyCompletion(item, session),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: const Color(0xFF2E7D32),
+                            foregroundColor: AppColors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: const Icon(Icons.verified_rounded, size: 16),
+                          label: Text(
+                            'Verify & Complete',
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 13,
+                              fontColor: AppColors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  else if (!isInPerson && isLive)
+                    Expanded(
+                      child: SizedBox(
+                        height: 42,
+                        child: ElevatedButton.icon(
+                          onPressed: () =>
+                              _onStartSessionTap(item, session, expert),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: const Color(0xFF1565C0),
+                            foregroundColor: AppColors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: Icon(
+                            callTypeRaw.toLowerCase() == 'video'
+                                ? Icons.videocam_outlined
+                                : Icons.call_outlined,
+                            size: 16,
+                          ),
+                          label: Text(
+                            callTypeRaw.toLowerCase() == 'video'
+                                ? 'Join Video Call'
+                                : 'Join Audio Call',
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 13,
+                              fontColor: AppColors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    Expanded(
+                      child: SizedBox(
+                        height: 42,
+                        child: ElevatedButton.icon(
+                          onPressed: () =>
+                              _onStartSessionTap(item, session, expert),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            disabledBackgroundColor: AppColors.redesignSoftBorder,
+                            disabledForegroundColor: _mutedText,
+                            backgroundColor: canStart
+                                ? _brandDark
+                                : AppColors.redesignSoftBorder,
+                            foregroundColor:
+                                canStart ? AppColors.white : _mutedText,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: Icon(
+                            canStart
+                                ? (isInPerson ? Icons.location_on_outlined : Icons.play_circle_outline_rounded)
+                                : Icons.schedule_rounded,
+                            size: 16,
+                          ),
+                          label: Text(
+                            startButtonLabel,
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 13,
+                              fontColor: canStart ? AppColors.white : _mutedText,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: SizedBox(
@@ -1791,7 +2104,6 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       if (rawItem is! Map<String, dynamic>) return false;
       final session = _extractSession(rawItem);
       final consultationMode = (rawItem['consultationMode'] ?? session['consultationMode'] ?? 'online').toString().trim();
-      final callType = (rawItem['callType'] ?? session['callType'] ?? 'audio').toString().trim();
       if (_modeFilter == 'in_person') return consultationMode == 'in_person';
       if (_modeFilter == 'online') return consultationMode != 'in_person';
       return true;

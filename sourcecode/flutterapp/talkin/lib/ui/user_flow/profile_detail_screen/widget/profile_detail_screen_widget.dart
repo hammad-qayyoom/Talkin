@@ -12,6 +12,7 @@ import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class TopImageView extends StatelessWidget {
@@ -321,12 +322,15 @@ class UserProfileInfoView extends StatelessWidget {
         final consultationModes = data.consultationModes;
         final isOnlineEnabled = consultationModes?['online'] != false;
         final isInPersonEnabled = consultationModes?['inPerson'] == true &&
-            data.isAvailableForInPersonSession == true;
+            data.isAvailableForInPersonSession == true &&
+            Database.settingApiModel?.data?.inPersonConsultationEnabled != false;
         final clinicDetails = data.clinicDetails;
         final clinicName = (clinicDetails?['clinicName'] ?? '').toString().trim();
         final clinicCity = (clinicDetails?['address']?['city'] ?? '').toString().trim();
         final inPersonPricing = data.inPersonPricing;
-        final inPersonPrice = data.rateInPersonSession ?? inPersonPricing?['oneToOneSession'] ?? 0;
+        final inPersonPricingFromMap = inPersonPricing?['oneToOneSession'];
+        final inPersonPriceRaw = data.rateInPersonSession ?? inPersonPricingFromMap;
+        final inPersonPrice = inPersonPriceRaw is num ? inPersonPriceRaw.toInt() : int.tryParse('${inPersonPriceRaw ?? 0}') ?? 0;
         final inPersonCurrency = (inPersonPricing?['currency'] ?? 'USD').toString();
 
         Widget aboutSection() {
