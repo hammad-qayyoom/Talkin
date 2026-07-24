@@ -39,6 +39,7 @@ const routeTitleMap = {
   '/email-accounts': 'Email Accounts',
   '/coin-plans': 'Subscription Plans',
   '/recording-plans': 'Recording Storage Plans',
+  '/boost-plans': 'Boost Plans',
   '/coin-plan-history': 'Subscription History',
   '/payment-options': 'Payment Options',
   '/payout-requests': 'Payout Requests',

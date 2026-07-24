@@ -1321,3 +1321,90 @@ class HostStatisticsCard extends StatelessWidget {
     );
   }
 }
+
+class HostBoostCtaCard extends StatelessWidget {
+  const HostBoostCtaCard({super.key});
+
+  static final Color _brandRed = AppColors.redesignBrandRed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<HostHomeScreenController>(
+      id: Constant.idCoinUpdate,
+      builder: (controller) {
+        return GestureDetector(
+          onTap: () => Get.toNamed(AppRoutes.hostBoostScreen),
+          child: Container(
+            width: double.infinity,
+            margin: const EdgeInsets.only(top: 18),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  _brandRed,
+                  _brandRed.withValues(alpha: 0.85),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: _brandRed.withValues(alpha: 0.25),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: AppColors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.rocket_launch_rounded,
+                    color: AppColors.white,
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Boost Your Profile',
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'Increase visibility & attract more bookings',
+                        style: TextStyle(
+                          color: AppColors.white.withValues(alpha: 0.85),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: AppColors.white.withValues(alpha: 0.8),
+                  size: 16,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

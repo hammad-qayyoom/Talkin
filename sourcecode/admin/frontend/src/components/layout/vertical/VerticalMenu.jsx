@@ -233,6 +233,11 @@ const VerticalMenu = ({ scrollMenu }) => {
                   Recording Storage Plans
                 </MenuItem>
               )}
+              {can('experts') && (
+                <MenuItem href='/boost-plans' icon={<i className='tabler-lightning' />}>
+                  Boost Plans
+                </MenuItem>
+              )}
               {can('subscriptionHistory') && (
                 <MenuItem
                   href='/coin-plan-history'

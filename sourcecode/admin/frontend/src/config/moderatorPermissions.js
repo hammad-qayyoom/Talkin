@@ -65,6 +65,7 @@ const ROUTE_PERMISSIONS = [
   { prefix: '/coin-plans', permission: 'subscriptionPlans' },
   { prefix: '/coin-plan-history', permission: 'subscriptionHistory' },
   { prefix: '/recording-plans', permission: 'recordingStoragePlans' },
+  { prefix: '/boost-plans', permission: 'experts' },
   { prefix: '/payment-options', permission: 'paymentOptions' },
   { prefix: '/payout-requests', permission: 'payoutRequests' },
   { prefix: '/referrals', permission: 'referrals' },

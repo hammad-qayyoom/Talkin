@@ -43,6 +43,7 @@ import growthSpotlightReducer from '@/redux-store/slices/growthSpotlight'
 import userGrowthSpotlightReducer from '@/redux-store/slices/userGrowthSpotlight'
 import blogReducer from '@/redux-store/slices/blog'
 import recordingPlansReducer from '@/redux-store/slices/recordingPlans'
+import boostPlansReducer from '@/redux-store/slices/boostPlans'
 
 // Listener slice is intentionally mounted at `expert` key for Phase-1 compatibility.
 import listenerReducer from '@/redux-store/slices/listener'
@@ -100,7 +101,8 @@ export const store = configureStore({
     blog: blogReducer,
     expert: listenerReducer,
     manualVerification: manualVerificationReducer,
-    recordingPlans: recordingPlansReducer
+    recordingPlans: recordingPlansReducer,
+    boostPlans: boostPlansReducer
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false })
 })

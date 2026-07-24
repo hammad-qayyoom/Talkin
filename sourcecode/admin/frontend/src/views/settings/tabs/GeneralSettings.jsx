@@ -159,6 +159,10 @@ const GeneralSettings = () => {
     referralLinkBaseUrl: 'https://notisboard.com/ref',
     recordingStorageDeletionDays: 14,
     recordingStorageReminderDaysBeforeDeletion: 2,
+    boostingEnabled: false,
+    boostMaxConcurrentBoosts: 1,
+    boostMaxMultiplierCap: 3.0,
+    boostImpressionTrackingEnabled: true,
   })
 
   const [privateKeyJson, setPrivateKeyJson] = useState('')
@@ -231,6 +235,10 @@ const GeneralSettings = () => {
         iosAppLink: settings.iosAppLink || 'https://iosapplink.com',
         recordingStorageDeletionDays: settings.recordingStorageDeletionDays ?? 14,
         recordingStorageReminderDaysBeforeDeletion: settings.recordingStorageReminderDaysBeforeDeletion ?? 2,
+        boostingEnabled: settings.boostingEnabled ?? false,
+        boostMaxConcurrentBoosts: settings.boostMaxConcurrentBoosts ?? 1,
+        boostMaxMultiplierCap: settings.boostMaxMultiplierCap ?? 3.0,
+        boostImpressionTrackingEnabled: settings.boostImpressionTrackingEnabled ?? true,
       }
 
       setFormData(newData)
@@ -276,7 +284,9 @@ const GeneralSettings = () => {
         'autoExpertBadgeSessionThreshold',
         'referralRewardAmount',
         'inPersonSessionRatePrivate',
-        'maxInPersonSessionRatePrivate'
+        'maxInPersonSessionRatePrivate',
+        'boostMaxConcurrentBoosts',
+        'boostMaxMultiplierCap'
       ].includes(field)
     ) {
       // Allow empty string or valid numbers
@@ -1473,6 +1483,71 @@ const GeneralSettings = () => {
                     </InputAdornment>
                   )
                 }}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+
+      <Card sx={{ mb: 4 }}>
+        <CardContent>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Box>
+              <Typography variant='subtitle1' sx={{ mb: 0.5, fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+                <i className='tabler-lightning mr-2' />
+                Expert Profile Boosting
+              </Typography>
+              <Typography variant='body2' color='text.secondary'>
+                Configure profile boosting settings for experts.
+              </Typography>
+            </Box>
+          </Box>
+
+          <Divider sx={{ mb: 3 }} />
+
+          <Grid container spacing={3}>
+            <Grid item size={12}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.boostingEnabled)}
+                    onChange={e => handleFieldChange('boostingEnabled', e.target.checked)}
+                  />
+                }
+                label='Enable Expert Profile Boosting'
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='number'
+                label='Max Concurrent Boosts per Expert'
+                value={formData.boostMaxConcurrentBoosts ?? 1}
+                onChange={e => handleFieldChange('boostMaxConcurrentBoosts', e.target.value)}
+                disabled={!Boolean(formData.boostingEnabled)}
+                inputProps={{ min: 1, max: 5 }}
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                type='number'
+                label='Maximum Visibility Multiplier Cap'
+                value={formData.boostMaxMultiplierCap ?? 3.0}
+                onChange={e => handleFieldChange('boostMaxMultiplierCap', e.target.value)}
+                disabled={!Boolean(formData.boostingEnabled)}
+                inputProps={{ min: 1.0, max: 10.0, step: 0.1 }}
+              />
+            </Grid>
+            <Grid item size={12}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.boostImpressionTrackingEnabled)}
+                    onChange={e => handleFieldChange('boostImpressionTrackingEnabled', e.target.checked)}
+                  />
+                }
+                label='Enable Impression & Analytics Tracking'
               />
             </Grid>
           </Grid>

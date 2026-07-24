@@ -7,6 +7,7 @@ import 'package:notisboard/ui/common/blog_news/view/blog_news_detail_screen.dart
 import 'package:notisboard/ui/common/blog_news/view/blog_news_list_screen.dart';
 import 'package:notisboard/ui/host_flow/host_app_language_screen/binding/host_app_language_screen_binding.dart';
 import 'package:notisboard/ui/host_flow/host_app_language_screen/view/host_app_language_screen.dart';
+import 'package:notisboard/ui/host_flow/host_boost_screen/view/host_boost_screen.dart';
 import 'package:notisboard/ui/host_flow/expert_availability_screen/view/expert_availability_screen.dart';
 import 'package:notisboard/ui/host_flow/expert_sessions_screen/view/expert_sessions_screen.dart';
 import 'package:notisboard/ui/host_flow/group_sessions_screen/view/host_group_sessions_screen.dart';
@@ -477,6 +478,10 @@ class AppPages {
       name: AppRoutes.manualVerificationScreen,
       page: () => const ManualVerificationScreen(),
       binding: ManualVerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.hostBoostScreen,
+      page: () => const HostBoostScreen(),
     ),
     GetPage(
       name: AppRoutes.blogNewsListScreen,
