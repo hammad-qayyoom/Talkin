@@ -263,6 +263,11 @@ const VerticalMenu = ({ scrollMenu }) => {
                   Payout Request
                 </MenuItem>
               )}
+              {can('tipAnalytics') && (
+                <MenuItem href='/tipping/analytics' icon={<i className='tabler-heart' />}>
+                  Tip Analytics
+                </MenuItem>
+              )}
               {can('referrals') && (
                 <MenuItem href='/referrals' icon={<i className='tabler-gift' />}>
                   Referrals

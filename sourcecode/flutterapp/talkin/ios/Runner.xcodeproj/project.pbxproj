@@ -7,17 +7,84 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		016DE7A112F7F16A548A23C4 /* lengbai.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 59488F8BA8A0B46DBDE35206 /* lengbai.bundle */; };
+		026567139E3F2B3298EE762D /* coloredcontactsdir_darknight_black.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A5F4914A0ABA2474F52A27DE /* coloredcontactsdir_darknight_black.bundle */; };
+		03078525D5DD8268632539E8 /* Cozily.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9468517F2D1754354671F960 /* Cozily.bundle */; };
+		03DCA71858C029A27D409967 /* Sweet.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 986D98B3CAF49DF53A91263F /* Sweet.bundle */; };
+		0402B91F66EAFC4BBA10399B /* lipstickdir_velvet_red.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 714CC41C823C983600B67BF3 /* lipstickdir_velvet_red.bundle */; };
+		08A2EBA1DFCBEBDB397BB8C9 /* RosyResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 042012D2EDA44FEE38FF0AB6 /* RosyResources.bundle */; };
+		0F99B6BBA02F3F3F12B0EA79 /* pendantAnimal.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7AC21BA2B55EB5D1913D0DCC /* pendantAnimal.bundle */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
+		16E253D6B3EE383D4EFCAEAC /* fenbai.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DF02A91D18C159E9A559873B /* fenbai.bundle */; };
+		1991CD8086EE4BC83808A1E2 /* blusherdir_milk_orange.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DDBBF996B6B04D77CB8C6DA4 /* blusherdir_milk_orange.bundle */; };
+		1D87C38E781D7E817F59BC2F /* makeupdir_pure_and_sexy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 65621F2BA87A0FBD425D921C /* makeupdir_pure_and_sexy.bundle */; };
+		239B7085BB063DAF7D4E8231 /* lipstickdir_bean_paste_pink.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 31677A25C1B0DF0D7D104B6C /* lipstickdir_bean_paste_pink.bundle */; };
+		279D776D8078604A62DFC8D5 /* blusherdir_apricot_pink.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5A496978B393B2DA7774A4EB /* blusherdir_apricot_pink.bundle */; };
+		2ED2C4FA142583DD93529342 /* ClarityResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 203AA6349029F1BE3B3980C7 /* ClarityResources.bundle */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
+		3749DEA3AC95534D1AE67022 /* SegmentationModel.model in Resources */ = {isa = PBXBuildFile; fileRef = 3FE490C8959FB1FA01E4CAB9 /* SegmentationModel.model */; };
+		381665F02499A6A10A63F0A0 /* eyeshadowdir_vitality_orange.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 40B831AFBD9C253DDD25049B /* eyeshadowdir_vitality_orange.bundle */; };
+		39E4A90F73B22B9E0B1BE5DC /* eyelashesdir_curl.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D6FFF861413206A96266A914 /* eyelashesdir_curl.bundle */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		3B4C29B40311A516AEBC452B /* meihei.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 91075B425F8B44327FB9091D /* meihei.bundle */; };
+		3CBC3F4805859B5C22B8A295 /* FaceDetectionModel.model in Resources */ = {isa = PBXBuildFile; fileRef = 04A4B6B0BE4D12ACE3861C0F /* FaceDetectionModel.model */; };
+		3F6A1CB4D14D96D8BEF1BBC0 /* pendantDive.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0631AEB26CB8F351853418EB /* pendantDive.bundle */; };
+		401514BF9A8C3019E0D1F67B /* blusherdir_sweet_orange.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8E307A76159BF1C11C1D9741 /* blusherdir_sweet_orange.bundle */; };
+		431E53C0D7AA54B59CE98575 /* blusherdir_peach.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 008CB9159E0FCF4DECA1C649 /* blusherdir_peach.bundle */; };
+		438484B37495B5B57A47A98B /* coloredcontactsdir_polar_lights_brown.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 762EBB8AF61A228F4939C042 /* coloredcontactsdir_polar_lights_brown.bundle */; };
+		494C43904E60194066F5E79F /* makeupdir_cutie_and_cool.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B074EDEB046ED55E122EFDE9 /* makeupdir_cutie_and_cool.bundle */; };
+		4A2D518AF5A85C9918C8C4E6 /* lipstickdir_rust_red.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D43A2A40BB6EBBAC28AFFB3D /* lipstickdir_rust_red.bundle */; };
+		4A874F3BB8E002B834D459DD /* TeethWhiteningResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 56041B64DFD2D957CE846069 /* TeethWhiteningResources.bundle */; };
 		4BF6E7CA99DB92D7203D56F5 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 674D207EA70F1BF698B7E7C5 /* Pods_Runner.framework */; };
+		4F74A99FA528247F19816B46 /* pendantDeer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC1526F8A4D3A065407D0E55 /* pendantDeer.bundle */; };
+		5702CC2802ADC0C1F47C6532 /* Fresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9815F3D8018BB531D7E8C5DD /* Fresh.bundle */; };
+		5770A407A97A88F9254AED62 /* Film-like.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E62636DF1095AEC062C4BD49 /* Film-like.bundle */; };
+		5CE9529665724E8BB0097B6F /* PendantResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2FC57D95C2B4B13ADF0B1AFD /* PendantResources.bundle */; };
+		5CF346B1F16EC90547EAB16A /* blusherdir_slightly_drunk.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E5972CA9F7261CEC83225CC8 /* blusherdir_slightly_drunk.bundle */; };
+		5FF2616C3699B14E8376D933 /* Creamy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 19993ADF9DCE67438FF1B159 /* Creamy.bundle */; };
+		61ED2861586EA4ECD4B9BB1D /* eyelashesdir_slender.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1C52E0B90917F0C82A9BCACF /* eyelashesdir_slender.bundle */; };
 		63B0582C2E09333B00DEFA83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63B0582B2E09333B00DEFA83 /* GoogleService-Info.plist */; };
+		68D24C40A5F98452663D25D9 /* makeupdir_vulnerable_and_innocenteyes.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B1DBFF7DEE61F1C009F5CD40 /* makeupdir_vulnerable_and_innocenteyes.bundle */; };
+		697426380A6B9700B099EAEB /* pendantFacefilm.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E0D9FEDAF55DBC30DAB171A8 /* pendantFacefilm.bundle */; };
+		6C0515F62F2E90389224604C /* pendantWatermelon.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3823E5A946CFE5B700C9022E /* pendantWatermelon.bundle */; };
+		6C175D94FBF34F1626810378 /* eyeshadowdir_tea_brown.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5A9C327520A2B5F7A3441003 /* eyeshadowdir_tea_brown.bundle */; };
+		6D47AE72F672E2F655E65CFC /* eyeshadowdir_mist_pink.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 17DC187FCF9387AEF86AC5BB /* eyeshadowdir_mist_pink.bundle */; };
+		6DE8C951EC3B73113BCF469C /* coloredcontactsdir_mystery_brown_green.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 018659B753CEBC91D485CF93 /* coloredcontactsdir_mystery_brown_green.bundle */; };
+		71206EE76D4C801E843A1C90 /* eyelashesdir_natural.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C0AD738A20550993C6DE153C /* eyelashesdir_natural.bundle */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		7884E8682EC3CC0700C636F2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7884E8672EC3CC0400C636F2 /* SceneDelegate.swift */; };
+		7C033D1B0898B734250FD6E8 /* Cool.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D1B14CEBD08373656C61F223 /* Cool.bundle */; };
+		839AE37D76B878B39F7AFB77 /* Autumn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 524FBF459313D709825F6E1B /* Autumn.bundle */; };
+		897E587EFC8BD483D2A657C3 /* makeupdir_flawless.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3ACB721C471A896180134D79 /* makeupdir_flawless.bundle */; };
+		8B270DD32E3E9212880236CB /* eyelinerdir_natural.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 98A5704FA5A20B2A6A871FCE /* eyelinerdir_natural.bundle */; };
+		8C1C33B1BB4F0F1A7F515BD2 /* pendantClown.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ADD9386C81ADE4F9ED9E171F /* pendantClown.bundle */; };
+		8F20409EB0A53135E2AFFBEA /* pendantCat.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B20EB4713747B3F1834AEED5 /* pendantCat.bundle */; };
+		95AB6F0960B2614906BE40A3 /* eyeshadowdir_shimmer_pink.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 80FF06F4A285F445DDC5A9C5 /* eyeshadowdir_shimmer_pink.bundle */; };
+		967FAFF28893C71EDE33EA59 /* eyelinerdir_pretty.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0D59FCB17F36388621E8F213 /* eyelinerdir_pretty.bundle */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		AF3D9DCED48C380CECF3A0F1 /* nuanbai.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 95E1B45AB17BDC8CED11054F /* nuanbai.bundle */; };
+		B166B243AF986252BB54B73A /* Brighten.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6B6BDDFEB8D923D6F16CBACA /* Brighten.bundle */; };
+		BE72C7B5DAB8AAB712FEED0A /* lipstickdir_sweet_orange.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8C10174098B115274C1723F8 /* lipstickdir_sweet_orange.bundle */; };
 		C35AEF6B6E1F87198DCC0C31 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842503737F70EF0D43AC8198 /* Pods_RunnerTests.framework */; };
+		C7E18F6F9A04817A6A4FAD3A /* lipstickdir_coral.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9595FCD329DA26BD2D8EB009 /* lipstickdir_coral.bundle */; };
+		C8C4990E8FC1190B965BF2B9 /* xiaomai.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8D8503A59BC839E3EB7FB705 /* xiaomai.bundle */; };
+		CD22D5A935CD25FC223C2DD7 /* eyelashesdir_bushy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1FD072765ACC1735E7F5AAC2 /* eyelashesdir_bushy.bundle */; };
+		CEC3BC74A8A657F30D96FD2B /* makeupdir_milky_eyes.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FF6CE318309E59FE16CDC650 /* makeupdir_milky_eyes.bundle */; };
+		E64D565F2C4A778D082BBF08 /* FaceWhiteningResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8BD4F64C0C2C051895EC30DC /* FaceWhiteningResources.bundle */; };
+		E656878DC62FE938986E6928 /* eyelinerdir_scheming.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E8820944B8716949980D75A5 /* eyelinerdir_scheming.bundle */; };
+		E66B96938122F101611F1561 /* eyelinerdir_wildcat.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B79CB9CE4423D0808FB19FD /* eyelinerdir_wildcat.bundle */; };
+		E6E4E21E95F908A83C261D9E /* Sunset.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2CA6C92591F9BDE41C85D9D6 /* Sunset.bundle */; };
+		E7FBCF8AE6299795ABD1EB33 /* pendantBaby.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AA109DCF501799F4545DD822 /* pendantBaby.bundle */; };
+		E9FDAC23332B9CDFC64B3CD0 /* coloredcontactsdir_chocolate_brown.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BDE4C1F87CF9A6478B487726 /* coloredcontactsdir_chocolate_brown.bundle */; };
+		EA3346965DC21DD49226CBFF /* pendantGirl.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D15D4A41B573704C8ECE947A /* pendantGirl.bundle */; };
+		ECB2CDC8D9A40C872CADFF97 /* Night.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4840216D80CB7E09E60D7680 /* Night.bundle */; };
+		ED5BA7FF1ABC05877F3E9ED8 /* eyeshadowdir_mocha_brown.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84381C0505181EEB41EBAE21 /* eyeshadowdir_mocha_brown.bundle */; };
+		EF01E178BE75171808278640 /* eyelinerdir_temperament.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E1DE2045AD40B0ED0AFA5100 /* eyelinerdir_temperament.bundle */; };
+		F4E5F59C943955EA43042849 /* coloredcontactsdir_starry_blue.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 548727A71AFBA4CA17992193 /* coloredcontactsdir_starry_blue.bundle */; };
+		F729776C2238C839CBE34EEB /* eyelashesdir_tender.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 77F62197C6FDF9AA26C0DC66 /* eyelashesdir_tender.bundle */; };
+		FD2B77CFB8C5FEE32B5ADE1E /* CommonResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9B64A114F090412C7A974B24 /* CommonResources.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,23 +111,65 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		008CB9159E0FCF4DECA1C649 /* blusherdir_peach.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = blusherdir_peach.bundle; sourceTree = "<group>"; };
+		018659B753CEBC91D485CF93 /* coloredcontactsdir_mystery_brown_green.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = coloredcontactsdir_mystery_brown_green.bundle; sourceTree = "<group>"; };
+		042012D2EDA44FEE38FF0AB6 /* RosyResources.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = RosyResources.bundle; sourceTree = "<group>"; };
+		04A4B6B0BE4D12ACE3861C0F /* FaceDetectionModel.model */ = {isa = PBXFileReference; includeInIndex = 1; path = FaceDetectionModel.model; sourceTree = "<group>"; };
+		0631AEB26CB8F351853418EB /* pendantDive.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantDive.bundle; sourceTree = "<group>"; };
+		0D59FCB17F36388621E8F213 /* eyelinerdir_pretty.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelinerdir_pretty.bundle; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		17DC187FCF9387AEF86AC5BB /* eyeshadowdir_mist_pink.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyeshadowdir_mist_pink.bundle; sourceTree = "<group>"; };
+		19993ADF9DCE67438FF1B159 /* Creamy.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Creamy.bundle; sourceTree = "<group>"; };
+		1C52E0B90917F0C82A9BCACF /* eyelashesdir_slender.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelashesdir_slender.bundle; sourceTree = "<group>"; };
+		1FD072765ACC1735E7F5AAC2 /* eyelashesdir_bushy.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelashesdir_bushy.bundle; sourceTree = "<group>"; };
+		203AA6349029F1BE3B3980C7 /* ClarityResources.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = ClarityResources.bundle; sourceTree = "<group>"; };
 		26BAEF1448D5914707D511D5 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
+		2CA6C92591F9BDE41C85D9D6 /* Sunset.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Sunset.bundle; sourceTree = "<group>"; };
+		2FC57D95C2B4B13ADF0B1AFD /* PendantResources.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = PendantResources.bundle; sourceTree = "<group>"; };
+		31677A25C1B0DF0D7D104B6C /* lipstickdir_bean_paste_pink.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = lipstickdir_bean_paste_pink.bundle; sourceTree = "<group>"; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3823E5A946CFE5B700C9022E /* pendantWatermelon.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantWatermelon.bundle; sourceTree = "<group>"; };
+		3ACB721C471A896180134D79 /* makeupdir_flawless.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = makeupdir_flawless.bundle; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
+		3FE490C8959FB1FA01E4CAB9 /* SegmentationModel.model */ = {isa = PBXFileReference; includeInIndex = 1; path = SegmentationModel.model; sourceTree = "<group>"; };
+		40B831AFBD9C253DDD25049B /* eyeshadowdir_vitality_orange.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyeshadowdir_vitality_orange.bundle; sourceTree = "<group>"; };
+		4840216D80CB7E09E60D7680 /* Night.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Night.bundle; sourceTree = "<group>"; };
+		524FBF459313D709825F6E1B /* Autumn.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Autumn.bundle; sourceTree = "<group>"; };
+		548727A71AFBA4CA17992193 /* coloredcontactsdir_starry_blue.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = coloredcontactsdir_starry_blue.bundle; sourceTree = "<group>"; };
+		56041B64DFD2D957CE846069 /* TeethWhiteningResources.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = TeethWhiteningResources.bundle; sourceTree = "<group>"; };
+		59488F8BA8A0B46DBDE35206 /* lengbai.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = lengbai.bundle; sourceTree = "<group>"; };
+		5A496978B393B2DA7774A4EB /* blusherdir_apricot_pink.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = blusherdir_apricot_pink.bundle; sourceTree = "<group>"; };
+		5A9C327520A2B5F7A3441003 /* eyeshadowdir_tea_brown.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyeshadowdir_tea_brown.bundle; sourceTree = "<group>"; };
 		63B0582A2E0932D400DEFA83 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		63B0582B2E09333B00DEFA83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		65621F2BA87A0FBD425D921C /* makeupdir_pure_and_sexy.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = makeupdir_pure_and_sexy.bundle; sourceTree = "<group>"; };
 		674D207EA70F1BF698B7E7C5 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A7EA36920F6834A552AAAA8 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		6B6BDDFEB8D923D6F16CBACA /* Brighten.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Brighten.bundle; sourceTree = "<group>"; };
+		714CC41C823C983600B67BF3 /* lipstickdir_velvet_red.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = lipstickdir_velvet_red.bundle; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		762EBB8AF61A228F4939C042 /* coloredcontactsdir_polar_lights_brown.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = coloredcontactsdir_polar_lights_brown.bundle; sourceTree = "<group>"; };
+		77F62197C6FDF9AA26C0DC66 /* eyelashesdir_tender.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelashesdir_tender.bundle; sourceTree = "<group>"; };
 		7884E8672EC3CC0400C636F2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		7AC21BA2B55EB5D1913D0DCC /* pendantAnimal.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantAnimal.bundle; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
 		7AFA3C8F1D35360C0083082E /* Profile.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Profile.xcconfig; path = Flutter/Profile.xcconfig; sourceTree = "<group>"; };
 		80CF3043C98DC1E37F3CC482 /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
+		80FF06F4A285F445DDC5A9C5 /* eyeshadowdir_shimmer_pink.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyeshadowdir_shimmer_pink.bundle; sourceTree = "<group>"; };
 		842503737F70EF0D43AC8198 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		84381C0505181EEB41EBAE21 /* eyeshadowdir_mocha_brown.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyeshadowdir_mocha_brown.bundle; sourceTree = "<group>"; };
+		8B79CB9CE4423D0808FB19FD /* eyelinerdir_wildcat.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelinerdir_wildcat.bundle; sourceTree = "<group>"; };
+		8BD4F64C0C2C051895EC30DC /* FaceWhiteningResources.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = FaceWhiteningResources.bundle; sourceTree = "<group>"; };
+		8C10174098B115274C1723F8 /* lipstickdir_sweet_orange.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = lipstickdir_sweet_orange.bundle; sourceTree = "<group>"; };
+		8D8503A59BC839E3EB7FB705 /* xiaomai.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = xiaomai.bundle; sourceTree = "<group>"; };
+		8E307A76159BF1C11C1D9741 /* blusherdir_sweet_orange.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = blusherdir_sweet_orange.bundle; sourceTree = "<group>"; };
+		91075B425F8B44327FB9091D /* meihei.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = meihei.bundle; sourceTree = "<group>"; };
+		9468517F2D1754354671F960 /* Cozily.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Cozily.bundle; sourceTree = "<group>"; };
+		9595FCD329DA26BD2D8EB009 /* lipstickdir_coral.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = lipstickdir_coral.bundle; sourceTree = "<group>"; };
+		95E1B45AB17BDC8CED11054F /* nuanbai.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = nuanbai.bundle; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,9 +177,34 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9815F3D8018BB531D7E8C5DD /* Fresh.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Fresh.bundle; sourceTree = "<group>"; };
+		986D98B3CAF49DF53A91263F /* Sweet.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Sweet.bundle; sourceTree = "<group>"; };
+		98A5704FA5A20B2A6A871FCE /* eyelinerdir_natural.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelinerdir_natural.bundle; sourceTree = "<group>"; };
+		9B64A114F090412C7A974B24 /* CommonResources.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = CommonResources.bundle; sourceTree = "<group>"; };
+		A5F4914A0ABA2474F52A27DE /* coloredcontactsdir_darknight_black.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = coloredcontactsdir_darknight_black.bundle; sourceTree = "<group>"; };
 		A7D527D97F7F4FF5B0B0AD42 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		AA109DCF501799F4545DD822 /* pendantBaby.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantBaby.bundle; sourceTree = "<group>"; };
+		ADD9386C81ADE4F9ED9E171F /* pendantClown.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantClown.bundle; sourceTree = "<group>"; };
+		B074EDEB046ED55E122EFDE9 /* makeupdir_cutie_and_cool.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = makeupdir_cutie_and_cool.bundle; sourceTree = "<group>"; };
+		B1DBFF7DEE61F1C009F5CD40 /* makeupdir_vulnerable_and_innocenteyes.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = makeupdir_vulnerable_and_innocenteyes.bundle; sourceTree = "<group>"; };
+		B20EB4713747B3F1834AEED5 /* pendantCat.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantCat.bundle; sourceTree = "<group>"; };
 		B5093F53CBCAF34EEF2667F0 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		BDE4C1F87CF9A6478B487726 /* coloredcontactsdir_chocolate_brown.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = coloredcontactsdir_chocolate_brown.bundle; sourceTree = "<group>"; };
+		C0AD738A20550993C6DE153C /* eyelashesdir_natural.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelashesdir_natural.bundle; sourceTree = "<group>"; };
 		CD43979C770882B5D744DCEC /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		D15D4A41B573704C8ECE947A /* pendantGirl.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantGirl.bundle; sourceTree = "<group>"; };
+		D1B14CEBD08373656C61F223 /* Cool.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Cool.bundle; sourceTree = "<group>"; };
+		D43A2A40BB6EBBAC28AFFB3D /* lipstickdir_rust_red.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = lipstickdir_rust_red.bundle; sourceTree = "<group>"; };
+		D6FFF861413206A96266A914 /* eyelashesdir_curl.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelashesdir_curl.bundle; sourceTree = "<group>"; };
+		DDBBF996B6B04D77CB8C6DA4 /* blusherdir_milk_orange.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = blusherdir_milk_orange.bundle; sourceTree = "<group>"; };
+		DF02A91D18C159E9A559873B /* fenbai.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = fenbai.bundle; sourceTree = "<group>"; };
+		E0D9FEDAF55DBC30DAB171A8 /* pendantFacefilm.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantFacefilm.bundle; sourceTree = "<group>"; };
+		E1DE2045AD40B0ED0AFA5100 /* eyelinerdir_temperament.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelinerdir_temperament.bundle; sourceTree = "<group>"; };
+		E5972CA9F7261CEC83225CC8 /* blusherdir_slightly_drunk.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = blusherdir_slightly_drunk.bundle; sourceTree = "<group>"; };
+		E62636DF1095AEC062C4BD49 /* Film-like.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = "Film-like.bundle"; sourceTree = "<group>"; };
+		E8820944B8716949980D75A5 /* eyelinerdir_scheming.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelinerdir_scheming.bundle; sourceTree = "<group>"; };
+		EC1526F8A4D3A065407D0E55 /* pendantDeer.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantDeer.bundle; sourceTree = "<group>"; };
+		FF6CE318309E59FE16CDC650 /* makeupdir_milky_eyes.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = makeupdir_milky_eyes.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,12 +227,61 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		23073ACEA5C57F48FC490086 /* eyelashesdir */ = {
+			isa = PBXGroup;
+			children = (
+				D6FFF861413206A96266A914 /* eyelashesdir_curl.bundle */,
+				1C52E0B90917F0C82A9BCACF /* eyelashesdir_slender.bundle */,
+				C0AD738A20550993C6DE153C /* eyelashesdir_natural.bundle */,
+				1FD072765ACC1735E7F5AAC2 /* eyelashesdir_bushy.bundle */,
+				77F62197C6FDF9AA26C0DC66 /* eyelashesdir_tender.bundle */,
+			);
+			name = eyelashesdir;
+			path = eyelashesdir;
+			sourceTree = "<group>";
+		};
 		331C8082294A63A400263BE5 /* RunnerTests */ = {
 			isa = PBXGroup;
 			children = (
 				331C807B294A618700263BE5 /* RunnerTests.swift */,
 			);
 			path = RunnerTests;
+			sourceTree = "<group>";
+		};
+		349DE5B3E3D1876B88C60FB1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				04A4B6B0BE4D12ACE3861C0F /* FaceDetectionModel.model */,
+				3FE490C8959FB1FA01E4CAB9 /* SegmentationModel.model */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		6AD42AF35F47355FE60F93D8 /* eyelinerdir */ = {
+			isa = PBXGroup;
+			children = (
+				E1DE2045AD40B0ED0AFA5100 /* eyelinerdir_temperament.bundle */,
+				8B79CB9CE4423D0808FB19FD /* eyelinerdir_wildcat.bundle */,
+				98A5704FA5A20B2A6A871FCE /* eyelinerdir_natural.bundle */,
+				E8820944B8716949980D75A5 /* eyelinerdir_scheming.bundle */,
+				0D59FCB17F36388621E8F213 /* eyelinerdir_pretty.bundle */,
+			);
+			name = eyelinerdir;
+			path = eyelinerdir;
+			sourceTree = "<group>";
+		};
+		70AEF4F67CF4A63BEB41C449 /* MakeupResources */ = {
+			isa = PBXGroup;
+			children = (
+				BB5F9219D597228A5224A72B /* lipstickdir */,
+				DD38C5E0D1793D1F7C12CB3C /* eyeshadowdir */,
+				956F8F0D161476FBB2B4F058 /* makeupdir */,
+				9495D8EEB54A649FF7DA67DB /* coloredcontactsdir */,
+				23073ACEA5C57F48FC490086 /* eyelashesdir */,
+				6AD42AF35F47355FE60F93D8 /* eyelinerdir */,
+				D6056FFC4AA39F0F407C4F24 /* blusherdir */,
+			);
+			name = MakeupResources;
 			sourceTree = "<group>";
 		};
 		7197EA6BF9C89C8C7F7AB644 /* Pods */ = {
@@ -114,6 +297,32 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		9495D8EEB54A649FF7DA67DB /* coloredcontactsdir */ = {
+			isa = PBXGroup;
+			children = (
+				BDE4C1F87CF9A6478B487726 /* coloredcontactsdir_chocolate_brown.bundle */,
+				762EBB8AF61A228F4939C042 /* coloredcontactsdir_polar_lights_brown.bundle */,
+				018659B753CEBC91D485CF93 /* coloredcontactsdir_mystery_brown_green.bundle */,
+				548727A71AFBA4CA17992193 /* coloredcontactsdir_starry_blue.bundle */,
+				A5F4914A0ABA2474F52A27DE /* coloredcontactsdir_darknight_black.bundle */,
+			);
+			name = coloredcontactsdir;
+			path = coloredcontactsdir;
+			sourceTree = "<group>";
+		};
+		956F8F0D161476FBB2B4F058 /* makeupdir */ = {
+			isa = PBXGroup;
+			children = (
+				3ACB721C471A896180134D79 /* makeupdir_flawless.bundle */,
+				B074EDEB046ED55E122EFDE9 /* makeupdir_cutie_and_cool.bundle */,
+				65621F2BA87A0FBD425D921C /* makeupdir_pure_and_sexy.bundle */,
+				FF6CE318309E59FE16CDC650 /* makeupdir_milky_eyes.bundle */,
+				B1DBFF7DEE61F1C009F5CD40 /* makeupdir_vulnerable_and_innocenteyes.bundle */,
+			);
+			name = makeupdir;
+			path = makeupdir;
+			sourceTree = "<group>";
+		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
 			isa = PBXGroup;
 			children = (
@@ -124,6 +333,23 @@
 				9740EEB31CF90195004384FC /* Generated.xcconfig */,
 			);
 			name = Flutter;
+			sourceTree = "<group>";
+		};
+		977988EB62D8A80471B89A9D /* ColorfulStyleResources */ = {
+			isa = PBXGroup;
+			children = (
+				E62636DF1095AEC062C4BD49 /* Film-like.bundle */,
+				4840216D80CB7E09E60D7680 /* Night.bundle */,
+				524FBF459313D709825F6E1B /* Autumn.bundle */,
+				6B6BDDFEB8D923D6F16CBACA /* Brighten.bundle */,
+				2CA6C92591F9BDE41C85D9D6 /* Sunset.bundle */,
+				D1B14CEBD08373656C61F223 /* Cool.bundle */,
+				9815F3D8018BB531D7E8C5DD /* Fresh.bundle */,
+				986D98B3CAF49DF53A91263F /* Sweet.bundle */,
+				9468517F2D1754354671F960 /* Cozily.bundle */,
+				19993ADF9DCE67438FF1B159 /* Creamy.bundle */,
+			);
+			name = ColorfulStyleResources;
 			sourceTree = "<group>";
 		};
 		97C146E51CF9000F007C117D = {
@@ -161,8 +387,27 @@
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				7884E8672EC3CC0400C636F2 /* SceneDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
+				349DE5B3E3D1876B88C60FB1 /* Models */,
+				C7CAF9B64A3F1E7DCEFBF588 /* Resources */,
+				9AE5FE002782BFDA8FB0EF50 /* Pendants */,
 			);
 			path = Runner;
+			sourceTree = "<group>";
+		};
+		9AE5FE002782BFDA8FB0EF50 /* Pendants */ = {
+			isa = PBXGroup;
+			children = (
+				B20EB4713747B3F1834AEED5 /* pendantCat.bundle */,
+				3823E5A946CFE5B700C9022E /* pendantWatermelon.bundle */,
+				D15D4A41B573704C8ECE947A /* pendantGirl.bundle */,
+				E0D9FEDAF55DBC30DAB171A8 /* pendantFacefilm.bundle */,
+				AA109DCF501799F4545DD822 /* pendantBaby.bundle */,
+				0631AEB26CB8F351853418EB /* pendantDive.bundle */,
+				EC1526F8A4D3A065407D0E55 /* pendantDeer.bundle */,
+				ADD9386C81ADE4F9ED9E171F /* pendantClown.bundle */,
+				7AC21BA2B55EB5D1913D0DCC /* pendantAnimal.bundle */,
+			);
+			name = Pendants;
 			sourceTree = "<group>";
 		};
 		B90E47BE2F3DC9E2E7DD9CED /* Frameworks */ = {
@@ -172,6 +417,74 @@
 				842503737F70EF0D43AC8198 /* Pods_RunnerTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BB5F9219D597228A5224A72B /* lipstickdir */ = {
+			isa = PBXGroup;
+			children = (
+				D43A2A40BB6EBBAC28AFFB3D /* lipstickdir_rust_red.bundle */,
+				31677A25C1B0DF0D7D104B6C /* lipstickdir_bean_paste_pink.bundle */,
+				9595FCD329DA26BD2D8EB009 /* lipstickdir_coral.bundle */,
+				8C10174098B115274C1723F8 /* lipstickdir_sweet_orange.bundle */,
+				714CC41C823C983600B67BF3 /* lipstickdir_velvet_red.bundle */,
+			);
+			name = lipstickdir;
+			path = lipstickdir;
+			sourceTree = "<group>";
+		};
+		C7CAF9B64A3F1E7DCEFBF588 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8BD4F64C0C2C051895EC30DC /* FaceWhiteningResources.bundle */,
+				56041B64DFD2D957CE846069 /* TeethWhiteningResources.bundle */,
+				042012D2EDA44FEE38FF0AB6 /* RosyResources.bundle */,
+				9B64A114F090412C7A974B24 /* CommonResources.bundle */,
+				203AA6349029F1BE3B3980C7 /* ClarityResources.bundle */,
+				2FC57D95C2B4B13ADF0B1AFD /* PendantResources.bundle */,
+				977988EB62D8A80471B89A9D /* ColorfulStyleResources */,
+				70AEF4F67CF4A63BEB41C449 /* MakeupResources */,
+				F2AAAE24938884BA4F73A528 /* SkinColorResources */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		D6056FFC4AA39F0F407C4F24 /* blusherdir */ = {
+			isa = PBXGroup;
+			children = (
+				8E307A76159BF1C11C1D9741 /* blusherdir_sweet_orange.bundle */,
+				E5972CA9F7261CEC83225CC8 /* blusherdir_slightly_drunk.bundle */,
+				5A496978B393B2DA7774A4EB /* blusherdir_apricot_pink.bundle */,
+				DDBBF996B6B04D77CB8C6DA4 /* blusherdir_milk_orange.bundle */,
+				008CB9159E0FCF4DECA1C649 /* blusherdir_peach.bundle */,
+			);
+			name = blusherdir;
+			path = blusherdir;
+			sourceTree = "<group>";
+		};
+		DD38C5E0D1793D1F7C12CB3C /* eyeshadowdir */ = {
+			isa = PBXGroup;
+			children = (
+				40B831AFBD9C253DDD25049B /* eyeshadowdir_vitality_orange.bundle */,
+				80FF06F4A285F445DDC5A9C5 /* eyeshadowdir_shimmer_pink.bundle */,
+				17DC187FCF9387AEF86AC5BB /* eyeshadowdir_mist_pink.bundle */,
+				84381C0505181EEB41EBAE21 /* eyeshadowdir_mocha_brown.bundle */,
+				5A9C327520A2B5F7A3441003 /* eyeshadowdir_tea_brown.bundle */,
+			);
+			name = eyeshadowdir;
+			path = eyeshadowdir;
+			sourceTree = "<group>";
+		};
+		F2AAAE24938884BA4F73A528 /* SkinColorResources */ = {
+			isa = PBXGroup;
+			children = (
+				DF02A91D18C159E9A559873B /* fenbai.bundle */,
+				91075B425F8B44327FB9091D /* meihei.bundle */,
+				8D8503A59BC839E3EB7FB705 /* xiaomai.bundle */,
+				59488F8BA8A0B46DBDE35206 /* lengbai.bundle */,
+				95E1B45AB17BDC8CED11054F /* nuanbai.bundle */,
+			);
+			name = SkinColorResources;
+			path = SkinColorResources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -288,6 +601,73 @@
 				63B0582C2E09333B00DEFA83 /* GoogleService-Info.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				3CBC3F4805859B5C22B8A295 /* FaceDetectionModel.model in Resources */,
+				3749DEA3AC95534D1AE67022 /* SegmentationModel.model in Resources */,
+				E64D565F2C4A778D082BBF08 /* FaceWhiteningResources.bundle in Resources */,
+				4A874F3BB8E002B834D459DD /* TeethWhiteningResources.bundle in Resources */,
+				08A2EBA1DFCBEBDB397BB8C9 /* RosyResources.bundle in Resources */,
+				FD2B77CFB8C5FEE32B5ADE1E /* CommonResources.bundle in Resources */,
+				2ED2C4FA142583DD93529342 /* ClarityResources.bundle in Resources */,
+				5CE9529665724E8BB0097B6F /* PendantResources.bundle in Resources */,
+				5770A407A97A88F9254AED62 /* Film-like.bundle in Resources */,
+				ECB2CDC8D9A40C872CADFF97 /* Night.bundle in Resources */,
+				839AE37D76B878B39F7AFB77 /* Autumn.bundle in Resources */,
+				B166B243AF986252BB54B73A /* Brighten.bundle in Resources */,
+				E6E4E21E95F908A83C261D9E /* Sunset.bundle in Resources */,
+				7C033D1B0898B734250FD6E8 /* Cool.bundle in Resources */,
+				5702CC2802ADC0C1F47C6532 /* Fresh.bundle in Resources */,
+				03DCA71858C029A27D409967 /* Sweet.bundle in Resources */,
+				03078525D5DD8268632539E8 /* Cozily.bundle in Resources */,
+				5FF2616C3699B14E8376D933 /* Creamy.bundle in Resources */,
+				16E253D6B3EE383D4EFCAEAC /* fenbai.bundle in Resources */,
+				3B4C29B40311A516AEBC452B /* meihei.bundle in Resources */,
+				C8C4990E8FC1190B965BF2B9 /* xiaomai.bundle in Resources */,
+				016DE7A112F7F16A548A23C4 /* lengbai.bundle in Resources */,
+				AF3D9DCED48C380CECF3A0F1 /* nuanbai.bundle in Resources */,
+				4A2D518AF5A85C9918C8C4E6 /* lipstickdir_rust_red.bundle in Resources */,
+				239B7085BB063DAF7D4E8231 /* lipstickdir_bean_paste_pink.bundle in Resources */,
+				C7E18F6F9A04817A6A4FAD3A /* lipstickdir_coral.bundle in Resources */,
+				BE72C7B5DAB8AAB712FEED0A /* lipstickdir_sweet_orange.bundle in Resources */,
+				0402B91F66EAFC4BBA10399B /* lipstickdir_velvet_red.bundle in Resources */,
+				381665F02499A6A10A63F0A0 /* eyeshadowdir_vitality_orange.bundle in Resources */,
+				95AB6F0960B2614906BE40A3 /* eyeshadowdir_shimmer_pink.bundle in Resources */,
+				6D47AE72F672E2F655E65CFC /* eyeshadowdir_mist_pink.bundle in Resources */,
+				ED5BA7FF1ABC05877F3E9ED8 /* eyeshadowdir_mocha_brown.bundle in Resources */,
+				6C175D94FBF34F1626810378 /* eyeshadowdir_tea_brown.bundle in Resources */,
+				897E587EFC8BD483D2A657C3 /* makeupdir_flawless.bundle in Resources */,
+				494C43904E60194066F5E79F /* makeupdir_cutie_and_cool.bundle in Resources */,
+				1D87C38E781D7E817F59BC2F /* makeupdir_pure_and_sexy.bundle in Resources */,
+				CEC3BC74A8A657F30D96FD2B /* makeupdir_milky_eyes.bundle in Resources */,
+				68D24C40A5F98452663D25D9 /* makeupdir_vulnerable_and_innocenteyes.bundle in Resources */,
+				E9FDAC23332B9CDFC64B3CD0 /* coloredcontactsdir_chocolate_brown.bundle in Resources */,
+				438484B37495B5B57A47A98B /* coloredcontactsdir_polar_lights_brown.bundle in Resources */,
+				6DE8C951EC3B73113BCF469C /* coloredcontactsdir_mystery_brown_green.bundle in Resources */,
+				F4E5F59C943955EA43042849 /* coloredcontactsdir_starry_blue.bundle in Resources */,
+				026567139E3F2B3298EE762D /* coloredcontactsdir_darknight_black.bundle in Resources */,
+				39E4A90F73B22B9E0B1BE5DC /* eyelashesdir_curl.bundle in Resources */,
+				61ED2861586EA4ECD4B9BB1D /* eyelashesdir_slender.bundle in Resources */,
+				71206EE76D4C801E843A1C90 /* eyelashesdir_natural.bundle in Resources */,
+				CD22D5A935CD25FC223C2DD7 /* eyelashesdir_bushy.bundle in Resources */,
+				F729776C2238C839CBE34EEB /* eyelashesdir_tender.bundle in Resources */,
+				EF01E178BE75171808278640 /* eyelinerdir_temperament.bundle in Resources */,
+				E66B96938122F101611F1561 /* eyelinerdir_wildcat.bundle in Resources */,
+				8B270DD32E3E9212880236CB /* eyelinerdir_natural.bundle in Resources */,
+				E656878DC62FE938986E6928 /* eyelinerdir_scheming.bundle in Resources */,
+				967FAFF28893C71EDE33EA59 /* eyelinerdir_pretty.bundle in Resources */,
+				401514BF9A8C3019E0D1F67B /* blusherdir_sweet_orange.bundle in Resources */,
+				5CF346B1F16EC90547EAB16A /* blusherdir_slightly_drunk.bundle in Resources */,
+				279D776D8078604A62DFC8D5 /* blusherdir_apricot_pink.bundle in Resources */,
+				1991CD8086EE4BC83808A1E2 /* blusherdir_milk_orange.bundle in Resources */,
+				431E53C0D7AA54B59CE98575 /* blusherdir_peach.bundle in Resources */,
+				8F20409EB0A53135E2AFFBEA /* pendantCat.bundle in Resources */,
+				6C0515F62F2E90389224604C /* pendantWatermelon.bundle in Resources */,
+				EA3346965DC21DD49226CBFF /* pendantGirl.bundle in Resources */,
+				697426380A6B9700B099EAEB /* pendantFacefilm.bundle in Resources */,
+				E7FBCF8AE6299795ABD1EB33 /* pendantBaby.bundle in Resources */,
+				3F6A1CB4D14D96D8BEF1BBC0 /* pendantDive.bundle in Resources */,
+				4F74A99FA528247F19816B46 /* pendantDeer.bundle in Resources */,
+				8C1C33B1BB4F0F1A7F515BD2 /* pendantClown.bundle in Resources */,
+				0F99B6BBA02F3F3F12B0EA79 /* pendantAnimal.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

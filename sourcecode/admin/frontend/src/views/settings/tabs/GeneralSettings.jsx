@@ -14,6 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Divider from '@mui/material/Divider'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import MenuItem from '@mui/material/MenuItem'
 import Switch from '@mui/material/Switch'
@@ -25,6 +26,7 @@ import { toast } from 'react-toastify'
 import { toggleSetting, updateSettings } from '@/redux-store/slices/settings'
 import HoverPopover from '@/common/HoverPopover'
 import { toolTipData } from '@/settingTooltip'
+import axios from 'axios'
 
 const getTimezoneOffsetMinutes = (timezone, referenceDate = new Date()) => {
   try {
@@ -163,6 +165,25 @@ const GeneralSettings = () => {
     boostMaxConcurrentBoosts: 1,
     boostMaxMultiplierCap: 3.0,
     boostImpressionTrackingEnabled: true,
+    liveTranslationEnabled: false,
+    liveTranslationAudioEnabled: true,
+    liveTranslationVideoEnabled: true,
+    liveTranslationProvider: 'azure',
+    azureSpeechKey: '',
+    azureSpeechRegion: '',
+    liveTranslationDefaultSourceLang: 'en',
+    liveTranslationDefaultTargetLang: 'ar',
+    liveTranslationDailyQuotaMinutes: 1000,
+    liveTranslationMonthlyQuotaMinutes: 30000,
+    liveTranslationMaxConcurrentSessions: 50,
+    anonymousVideoCallingEnabled: false,
+    anonymousVideoCallingVideoEnabled: true,
+    anonymousVideoCallingAudioEnabled: false,
+    anonymousVideoCallingAllowMasks: true,
+    anonymousVideoCallingAllowFilters: true,
+    anonymousVideoCallingAllowBeauty: true,
+    anonymousVideoCallingAllowBackgroundBlur: true,
+    anonymousVideoCallingEnabledCategories: [],
   })
 
   const [privateKeyJson, setPrivateKeyJson] = useState('')
@@ -190,6 +211,7 @@ const GeneralSettings = () => {
         watermarkIcon: settings.watermarkIcon || '',
         zegoAppId: settings.zegoAppId || '',
         zegoAppSignIn: settings.zegoAppSignIn || '',
+        zegoEffectsAppSign: settings.zegoEffectsAppSign || '',
         isDummyData: settings.isDummyData || false,
         videoCallRatePrivate: settings.videoCallRatePrivate || 0,
         maxVideoCallRatePrivate: settings.maxVideoCallRatePrivate || 0,
@@ -286,7 +308,10 @@ const GeneralSettings = () => {
         'inPersonSessionRatePrivate',
         'maxInPersonSessionRatePrivate',
         'boostMaxConcurrentBoosts',
-        'boostMaxMultiplierCap'
+        'boostMaxMultiplierCap',
+        'liveTranslationDailyQuotaMinutes',
+        'liveTranslationMonthlyQuotaMinutes',
+        'liveTranslationMaxConcurrentSessions'
       ].includes(field)
     ) {
       // Allow empty string or valid numbers
@@ -1697,6 +1722,17 @@ const GeneralSettings = () => {
                 onChange={e => handleFieldChange('zegoAppSignIn', e.target.value)}
               />
             </Grid>
+            <Grid item size={12}>
+              <TextField
+                fullWidth
+                label='Zego Effects App Sign (for AR Masks & Filters)'
+                type='password'
+                value={formData.zegoEffectsAppSign || ''}
+                onChange={e => handleFieldChange('zegoEffectsAppSign', e.target.value)}
+                helperText='Required for Anonymous Mode AR masks, filters, and beauty effects. Get from ZEGO Console → Effects SDK. If empty, falls back to Zego App SignIn.'
+                placeholder='Leave empty to use Zego App SignIn (may not work for Effects SDK)'
+              />
+            </Grid>
           </Grid>
         </CardContent>
       </Card>
@@ -1779,6 +1815,271 @@ const GeneralSettings = () => {
           </Grid>
         </CardContent>
       </Card>
+
+      <Card sx={{ mb: 4 }}>
+        <CardContent>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Box>
+              <Typography variant='subtitle1' sx={{ mb: 0.5, fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+                <i className='tabler-translate mr-2' />
+                Live Translation & Subtitles
+              </Typography>
+              <Typography variant='body2' color='text.secondary'>
+                Configure real-time AI speech translation for voice and video calls.
+              </Typography>
+            </Box>
+          </Box>
+
+          <Divider sx={{ mb: 3 }} />
+
+          <Grid container spacing={3}>
+            <Grid item size={12}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.liveTranslationEnabled)}
+                    onChange={e => handleFieldChange('liveTranslationEnabled', e.target.checked)}
+                  />
+                }
+                label='Enable Live Translation'
+              />
+            </Grid>
+            <Grid item size={6}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.liveTranslationAudioEnabled)}
+                    onChange={e => handleFieldChange('liveTranslationAudioEnabled', e.target.checked)}
+                    disabled={!Boolean(formData.liveTranslationEnabled)}
+                  />
+                }
+                label='Enable for Audio Calls'
+              />
+            </Grid>
+            <Grid item size={6}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.liveTranslationVideoEnabled)}
+                    onChange={e => handleFieldChange('liveTranslationVideoEnabled', e.target.checked)}
+                    disabled={!Boolean(formData.liveTranslationEnabled)}
+                  />
+                }
+                label='Enable for Video Calls'
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                label='Translation Provider'
+                value='Azure Speech Translation'
+                disabled
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                label='Azure Speech Region'
+                value={formData.azureSpeechRegion || ''}
+                onChange={e => handleFieldChange('azureSpeechRegion', e.target.value)}
+                disabled={!Boolean(formData.liveTranslationEnabled)}
+                placeholder='e.g. eastus'
+              />
+            </Grid>
+            <Grid item size={12}>
+              <TextField
+                fullWidth
+                label='Azure Speech Key'
+                type='password'
+                value={formData.azureSpeechKey || ''}
+                onChange={e => handleFieldChange('azureSpeechKey', e.target.value)}
+                disabled={!Boolean(formData.liveTranslationEnabled)}
+                placeholder='Azure Cognitive Services subscription key'
+              />
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                select
+                label='Default Source Language'
+                value={formData.liveTranslationDefaultSourceLang || 'en'}
+                onChange={e => handleFieldChange('liveTranslationDefaultSourceLang', e.target.value)}
+                disabled={!Boolean(formData.liveTranslationEnabled)}
+              >
+                {['af', 'am', 'ar', 'az', 'be', 'bg', 'bn', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fil', 'fr', 'ga', 'gl', 'gu', 'he', 'hi', 'hr', 'ht', 'hu', 'hy', 'id', 'is', 'it', 'ja', 'jv', 'ka', 'kk', 'km', 'kn', 'ko', 'ku', 'ky', 'lo', 'lt', 'lv', 'mg', 'mk', 'ml', 'mn', 'mr', 'ms', 'mt', 'my', 'nb', 'ne', 'nl', 'no', 'pa', 'pl', 'ps', 'pt', 'ro', 'ru', 'sd', 'si', 'sk', 'sl', 'so', 'sq', 'sr', 'su', 'sv', 'sw', 'ta', 'te', 'th', 'tl', 'tr', 'uk', 'ur', 'uz', 'vi', 'xh', 'yi', 'yo', 'zh', 'zu'].map(lang => (
+                  <MenuItem key={lang} value={lang}>{lang.toUpperCase()}</MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid item size={6}>
+              <TextField
+                fullWidth
+                select
+                label='Default Target Language'
+                value={formData.liveTranslationDefaultTargetLang || 'ar'}
+                onChange={e => handleFieldChange('liveTranslationDefaultTargetLang', e.target.value)}
+                disabled={!Boolean(formData.liveTranslationEnabled)}
+              >
+                {['af', 'am', 'ar', 'az', 'be', 'bg', 'bn', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fil', 'fr', 'ga', 'gl', 'gu', 'he', 'hi', 'hr', 'ht', 'hu', 'hy', 'id', 'is', 'it', 'ja', 'jv', 'ka', 'kk', 'km', 'kn', 'ko', 'ku', 'ky', 'lo', 'lt', 'lv', 'mg', 'mk', 'ml', 'mn', 'mr', 'ms', 'mt', 'my', 'nb', 'ne', 'nl', 'no', 'pa', 'pl', 'ps', 'pt', 'ro', 'ru', 'sd', 'si', 'sk', 'sl', 'so', 'sq', 'sr', 'su', 'sv', 'sw', 'ta', 'te', 'th', 'tl', 'tr', 'uk', 'ur', 'uz', 'vi', 'xh', 'yi', 'yo', 'zh', 'zu'].map(lang => (
+                  <MenuItem key={lang} value={lang}>{lang.toUpperCase()}</MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid item size={4}>
+              <TextField
+                fullWidth
+                type='number'
+                label='Daily Quota (minutes)'
+                value={formData.liveTranslationDailyQuotaMinutes ?? 1000}
+                onChange={e => handleFieldChange('liveTranslationDailyQuotaMinutes', e.target.value)}
+                disabled={!Boolean(formData.liveTranslationEnabled)}
+                inputProps={{ min: 0 }}
+              />
+            </Grid>
+            <Grid item size={4}>
+              <TextField
+                fullWidth
+                type='number'
+                label='Monthly Quota (minutes)'
+                value={formData.liveTranslationMonthlyQuotaMinutes ?? 30000}
+                onChange={e => handleFieldChange('liveTranslationMonthlyQuotaMinutes', e.target.value)}
+                disabled={!Boolean(formData.liveTranslationEnabled)}
+                inputProps={{ min: 0 }}
+              />
+            </Grid>
+            <Grid item size={4}>
+              <TextField
+                fullWidth
+                type='number'
+                label='Max Concurrent Sessions'
+                value={formData.liveTranslationMaxConcurrentSessions ?? 50}
+                onChange={e => handleFieldChange('liveTranslationMaxConcurrentSessions', e.target.value)}
+                disabled={!Boolean(formData.liveTranslationEnabled)}
+                inputProps={{ min: 1, max: 500 }}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+
+      <Card sx={{ mb: 4 }}>
+        <CardContent>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 500, display: 'flex', alignItems: 'center' }}>
+              <i className='tabler-video mr-2' />
+              Anonymous Video Calling & Masks
+            </Typography>
+            <HoverPopover
+              popoverContent={
+                <>
+                  <Box>
+                    <Typography
+                      variant='subtitle1'
+                      sx={{ marginBottom: 1, fontWeight: 500, display: 'flex', alignItems: 'center' }}
+                    >
+                      Anonymous Video Calling
+                    </Typography>
+                    <Divider sx={{ mb: 0 }} />
+                    <p>Enable anonymous mode with AR masks, beauty filters, and background effects for users who want to mask their identity during video calls.</p>
+                  </Box>
+                </>
+              }
+            >
+              <IconButton>
+                <i className='tabler-help-octagon' />
+              </IconButton>
+            </HoverPopover>
+          </Box>
+
+          <Grid container spacing={5}>
+            <Grid item xs={12} md={6}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.anonymousVideoCallingEnabled)}
+                    onChange={() => handleToggle('anonymousVideoCallingEnabled')}
+                  />
+                }
+                label='Enable Anonymous Video Calling'
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.anonymousVideoCallingVideoEnabled)}
+                    onChange={() => handleToggle('anonymousVideoCallingVideoEnabled')}
+                    disabled={!Boolean(formData.anonymousVideoCallingEnabled)}
+                  />
+                }
+                label='Enable Video in Anonymous Mode'
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.anonymousVideoCallingAudioEnabled)}
+                    onChange={() => handleToggle('anonymousVideoCallingAudioEnabled')}
+                    disabled={!Boolean(formData.anonymousVideoCallingEnabled)}
+                  />
+                }
+                label='Enable Audio in Anonymous Mode'
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.anonymousVideoCallingAllowMasks)}
+                    onChange={() => handleToggle('anonymousVideoCallingAllowMasks')}
+                    disabled={!Boolean(formData.anonymousVideoCallingEnabled)}
+                  />
+                }
+                label='Allow AR Masks'
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.anonymousVideoCallingAllowFilters)}
+                    onChange={() => handleToggle('anonymousVideoCallingAllowFilters')}
+                    disabled={!Boolean(formData.anonymousVideoCallingEnabled)}
+                  />
+                }
+                label='Allow Filters'
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.anonymousVideoCallingAllowBeauty)}
+                    onChange={() => handleToggle('anonymousVideoCallingAllowBeauty')}
+                    disabled={!Boolean(formData.anonymousVideoCallingEnabled)}
+                  />
+                }
+                label='Allow Beauty Effects'
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={Boolean(formData.anonymousVideoCallingAllowBackgroundBlur)}
+                    onChange={() => handleToggle('anonymousVideoCallingAllowBackgroundBlur')}
+                    disabled={!Boolean(formData.anonymousVideoCallingEnabled)}
+                  />
+                }
+                label='Allow Background Blur/Mosaic'
+              />
+            </Grid>
+
+          </Grid>
+        </CardContent>
+      </Card>
+
       <Card sx={{ mb: 4 }}>
         <CardContent>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>

@@ -28,13 +28,15 @@ import AdsSettings from './tabs/AdsSettings'
 import ContentModerationSettings from './tabs/ContentModerationSettings'
 import WithdrawalSettings from './tabs/WithdrawalSettings'
 import ProfileManagement from './tabs/ProfileManageMent'
+import TippingSettings from './tabs/TippingSettings'
 
 // Tab labels and values
 const tabs = [
   { label: 'General', value: 'general' },
   { label: 'Payment', value: 'payment' },
   { label: 'Currency', value: 'currency' },
-  { label: 'Withdrawal', value: 'withdrawal' }
+  { label: 'Withdrawal', value: 'withdrawal' },
+  { label: 'Tipping', value: 'tipping' }
 ]
 
 const Settings = () => {
@@ -65,7 +67,8 @@ const Settings = () => {
       activeTab === 'general' ||
       activeTab === 'payment' ||
       activeTab === 'ads' ||
-      activeTab === 'withdrawal'
+      activeTab === 'withdrawal' ||
+      activeTab === 'tipping'
     ) {
       dispatch(fetchSettings())
     }
@@ -83,6 +86,8 @@ const Settings = () => {
         return <CurrencySettings />
       case 'withdrawal':
         return <WithdrawalSettings />
+      case 'tipping':
+        return <TippingSettings />
       default:
         return <Typography>Select a tab</Typography>
     }

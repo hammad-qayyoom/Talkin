@@ -39,11 +39,17 @@
         repositories {
             google()
             mavenCentral()
+            maven { url "https://storage.zego.im/maven" }
             // Fix for plugins still using jcenter
             all { ArtifactRepository repo ->
                 if (repo.url.toString().contains("jcenter.bintray.com")) {
                     remove(repo)
                 }
+            }
+        }
+        configurations.all {
+            resolutionStrategy {
+                force "im.zego:effects-sdk:2.2.1.1573"
             }
         }
     }

@@ -197,4 +197,18 @@ abstract class Api {
   // >>>>> >>>>> Blog & News Api <<<<< <<<<<
   static const getPublicBlogs = "${baseUrl}api/blog/posts?";
   static const getPublicBlogBySlug = "${baseUrl}api/blog/posts/";
+
+  // >>>>> >>>>> Live Translation Api <<<<< <<<<<
+  static const translationConfig = "${baseUrl}api/v2/translation/config";
+  static const anonymousConfig = "${baseUrl}api/v2/translation/anonymous-config";
+  static const translationStart = "${baseUrl}api/v2/translation/start";
+  static const translationStop = "${baseUrl}api/v2/translation/stop";
+  static const translationLog = "${baseUrl}api/v2/translation/log";
+
+  // >>>>> >>>>> Expert Tipping Api <<<<< <<<<<
+  static const tippingConfig = "${baseUrl}api/v2/tipping/config";
+  static const tippingSend = "${baseUrl}api/v2/tipping/send-tip";
+  static const tippingHistory = "${baseUrl}api/v2/tipping/history/";
+  static const tippingExpertHistory = "${baseUrl}api/v2/tipping/expert-history/";
+  static const tippingExpertStats = "${baseUrl}api/v2/tipping/expert-stats/";
 }

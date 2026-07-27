@@ -112,7 +112,7 @@ class FakeOutgoingCallController extends GetxController {
       // android: AndroidSounds.ringtone,
       ios: IosSounds.glass,
       looping: true,
-      volume: 100,
+      volume: 30,
       asAlarm: false,
     );
 

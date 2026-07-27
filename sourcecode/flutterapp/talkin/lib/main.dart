@@ -19,6 +19,8 @@ import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/services/notification_service/notification_services.dart';
+import 'package:notisboard/services/translation/translation_service.dart';
+import 'package:notisboard/services/anonymous_mode/anonymous_mode_service.dart';
 import 'package:notisboard/utils/startup_helper.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'localization/localizations_delegate.dart';
@@ -136,6 +138,9 @@ void main() async {
     timeout: const Duration(seconds: 4),
   );
   await _preloadSplashFonts();
+
+  Get.put(TranslationService(), permanent: true);
+  Get.put(AnonymousModeService(), permanent: true);
 
   runApp(const MyApp());
 

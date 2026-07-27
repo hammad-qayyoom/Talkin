@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/ringtone/ringtone_method.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/services/notification_service/notification_services.dart';
 import 'package:notisboard/socket/socket_emit.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/utils.dart';
@@ -439,6 +440,9 @@ class IncomingCallController extends GetxController
       vibrationTimer?.cancel();
       ringingTimer?.cancel();
 
+      // ✅ Dismiss call notification
+      await NotificationServices.dismissCallNotification();
+
       // ✅ Haptic feedback
       Vibration.vibrate(duration: 50, amplitude: 128);
       await 50.milliseconds.delay();
@@ -484,6 +488,9 @@ class IncomingCallController extends GetxController
       await onPauseAudio();
       vibrationTimer?.cancel();
       ringingTimer?.cancel();
+
+      // ✅ Dismiss call notification
+      await NotificationServices.dismissCallNotification();
 
       // ✅ Haptic feedback
       Vibration.vibrate(duration: 50, amplitude: 128);

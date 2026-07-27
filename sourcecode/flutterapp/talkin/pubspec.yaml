@@ -67,6 +67,7 @@ dependencies:
   vibration: ^3.1.4
   flutter_local_notifications: ^19.5.0
   zego_express_engine: ^3.22.1
+  zego_effects_plugin: ^2.2.6
   overlapped_carousel: ^1.0.2
   country_picker: ^2.0.27
   simple_ripple_animation: ^0.1.0

@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:notisboard/services/anonymous_mode/anonymous_mode_service.dart';
+import 'package:notisboard/services/anonymous_mode/anonymous_mode_widgets.dart';
 import 'package:notisboard/services/permission_handler/permission_handler.dart';
 import 'package:notisboard/socket/socket_emit.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
@@ -479,7 +481,12 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       PermissionHandler.onGetCameraPermission(
         onGranted: () {
           PermissionHandler.onGetMicrophonePermission(
-            onGranted: () {
+            onGranted: () async {
+              // Show pre-call anonymous mode setup dialog
+              if (Get.isRegistered<AnonymousModeService>() &&
+                  Get.find<AnonymousModeService>().isAllowed) {
+                await showPreCallAnonymousSetupDialog(context);
+              }
               emitCall();
             },
           );
@@ -544,6 +551,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
       return;
     }
 
+    final categoryId = (session['categoryId'] ?? '').toString().trim();
+
     final route = callType == 'video'
         ? AppRoutes.videoCallScreen
         : AppRoutes.voiceCallScreen;
@@ -567,6 +576,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
         'sessionId': sessionId,
         if (roomToken.isNotEmpty) 'zegoToken': roomToken,
         if ((bookingId ?? '').trim().isNotEmpty) 'bookingId': bookingId,
+        if (categoryId.isNotEmpty) 'categoryId': categoryId,
       },
     );
   }
@@ -1757,7 +1767,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                             _onStartSessionTap(item, session, expert),
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
-                          backgroundColor: const Color(0xFF1565C0),
+                          backgroundColor: _brandRed,
                           foregroundColor: AppColors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -1939,7 +1949,7 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                               _onStartSessionTap(item, session, expert),
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
-                            backgroundColor: const Color(0xFF1565C0),
+                            backgroundColor: _brandRed,
                             foregroundColor: AppColors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),

@@ -24,6 +24,7 @@ export const MODERATOR_SECTIONS = [
   { key: 'recordingStoragePlans', label: 'Recording Storage Plans', group: 'Subscription', path: '/recording-plans' },
   { key: 'paymentOptions', label: 'Payment Options', group: 'Financial', path: '/payment-options' },
   { key: 'payoutRequests', label: 'Payout Requests', group: 'Financial', path: '/payout-requests' },
+  { key: 'tipAnalytics', label: 'Tip Analytics', group: 'Financial', path: '/tipping/analytics' },
   { key: 'referrals', label: 'Referrals', group: 'Financial', path: '/referrals' },
   { key: 'settings', label: 'Settings', group: 'Settings', path: '/settings' },
   { key: 'profile', label: 'Profile', group: 'Settings', path: '/profile' }
@@ -68,6 +69,7 @@ const ROUTE_PERMISSIONS = [
   { prefix: '/boost-plans', permission: 'experts' },
   { prefix: '/payment-options', permission: 'paymentOptions' },
   { prefix: '/payout-requests', permission: 'payoutRequests' },
+  { prefix: '/tipping/analytics', permission: 'tipAnalytics' },
   { prefix: '/referrals', permission: 'referrals' },
   { prefix: '/settings', permission: 'settings' },
   { prefix: '/profile', permission: 'profile' }

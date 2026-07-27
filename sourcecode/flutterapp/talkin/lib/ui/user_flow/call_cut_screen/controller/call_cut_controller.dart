@@ -22,8 +22,11 @@ class CallCutController extends GetxController {
   String? receiverImage;
   String? receiverId;
   String? callId;
+  String? callType;
   String? callDuration;
   String? date;
+ String? sessionId;
+  String? bookingId;
   String? usedBalance;
   int initialRating = 2; // New rating variable
   TextEditingController reviewCnt = TextEditingController();
@@ -60,11 +63,16 @@ class CallCutController extends GetxController {
       receiverName = data["receiverName"] ?? "";
       receiverImage = data["receiverImage"] ?? "";
       receiverId = data["receiverId"] ?? "";
+      callType = data["callType"] ?? "";
+      sessionId = data["sessionId"] ?? "";
+      bookingId = data["bookingId"] ?? "";
     }
 
     log("receiverName :::::::::$receiverName");
     log("receiverImage ::::::::::$receiverImage");
     log("receiverId :::::::::$receiverId");
+    log("sessionId :::::::::$sessionId");
+    log("bookingId :::::::::$bookingId");
     Future.delayed(Duration(seconds: 1));
     // isProximitySupported = await ProximityScreenLock.isProximityLockSupported();
     if (isProximitySupported == true) {

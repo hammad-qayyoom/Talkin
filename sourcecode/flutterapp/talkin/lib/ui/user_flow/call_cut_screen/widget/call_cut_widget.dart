@@ -4,6 +4,7 @@ import 'package:notisboard/custom/bottom_sheet/share_app_bottom_sheet.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/call_cut_screen/controller/call_cut_controller.dart';
+import 'package:notisboard/ui/user_flow/call_cut_screen/widget/tip_card.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/enums.dart';
@@ -34,6 +35,12 @@ class CallCutView extends StatelessWidget {
             children: [
               _buildHero(receiverName, context),
               _buildSummaryCard(controller, receiverName),
+              TipCard(
+                receiverId: controller.receiverId ?? '',
+                expertName: receiverName,
+                expertImage: controller.receiverImage,
+                callType: controller.callType,
+              ),
               _buildQuestionCard(
                 title: EnumLocale.txtDidYouLikeService.name.tr,
                 selectedValue: controller.listenerService,

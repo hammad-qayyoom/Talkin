@@ -2,6 +2,8 @@ import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/services/anonymous_mode/anonymous_mode_service.dart';
+import 'package:notisboard/services/anonymous_mode/anonymous_mode_widgets.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/database.dart';
@@ -428,6 +430,15 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
       _busySessionId = null;
     });
 
+    // Show pre-call anonymous mode setup dialog for video calls
+    if (callType == 'video' &&
+        Get.isRegistered<AnonymousModeService>() &&
+        Get.find<AnonymousModeService>().isAllowed) {
+      await showPreCallAnonymousSetupDialog(context);
+    }
+
+    final categoryId = (session['categoryId'] ?? '').toString().trim();
+
     await Get.toNamed(
       route,
       arguments: {
@@ -446,6 +457,7 @@ class _HostGroupSessionsScreenState extends State<HostGroupSessionsScreen> {
         'callMode': 'group_session',
         'sessionId': effectiveSessionId,
         if (roomToken.isNotEmpty) 'zegoToken': roomToken,
+        if (categoryId.isNotEmpty) 'categoryId': categoryId,
       },
     );
 

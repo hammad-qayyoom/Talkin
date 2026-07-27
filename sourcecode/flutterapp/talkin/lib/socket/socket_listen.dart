@@ -597,6 +597,10 @@ class SocketListen {
 
     if (Get.currentRoute == AppRoutes.videoCallScreen ||
         Get.currentRoute == AppRoutes.voiceCallScreen) {
+      // Close any open overlays (anonymous mode panel, etc.) before navigating back
+      while (Get.isOverlaysOpen) {
+        Get.back();
+      }
       Get.back();
     }
 

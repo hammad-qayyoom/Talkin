@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
 import 'package:notisboard/custom/notisboard_wordmark.dart';
 import 'package:notisboard/ui/user_flow/voice_call_screen/controller/voice_call_controller.dart';
+import 'package:notisboard/services/translation/translation_service.dart';
+import 'package:notisboard/services/translation/translation_widgets.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/constant.dart';
@@ -272,9 +274,9 @@ class VoiceCallView1 extends StatelessWidget {
               final horizontalPadding = isCompact ? 14.0 : 18.0;
               final cardWidth = constraints.maxWidth > 560 ? 440.0 : 420.0;
               final avatarSize = isCompact ? 92.0 : 104.0;
-              final controlSize = isCompact ? 38.0 : 42.0;
-              final dangerControlSize = isCompact ? 44.0 : 46.0;
-              final controlGap = isCompact ? 8.0 : 10.0;
+              final controlSize = isCompact ? 32.0 : 36.0;
+              final dangerControlSize = isCompact ? 36.0 : 40.0;
+              final controlGap = isCompact ? 6.0 : 8.0;
               final controlTrayMaxWidth = isCompact ? 292.0 : 336.0;
 
               final actionItems = <Widget>[
@@ -322,6 +324,23 @@ class VoiceCallView1 extends StatelessWidget {
                         } else {
                           Utils.showToast(context, "Waiting for other person's consent...");
                         }
+                      },
+                      size: controlSize,
+                    );
+                  },
+                ),
+                GetBuilder<TranslationService>(
+                  id: Constant.idTranslation,
+                  builder: (service) {
+                    return buildControlButton(
+                      iconData: Icons.translate,
+                      isActive: service.isActive,
+                      onTap: () {
+                        if (!service.isEnabled) {
+                          Utils.showToast(context, "Translation is not enabled. Please check settings.");
+                          return;
+                        }
+                        controller.toggleTranslation();
                       },
                       size: controlSize,
                     );
@@ -660,6 +679,7 @@ class VoiceCallView1 extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SubtitleOverlay(),
                 ],
               );
             },

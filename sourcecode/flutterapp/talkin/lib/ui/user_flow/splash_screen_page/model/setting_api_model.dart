@@ -72,6 +72,7 @@ class Data {
   final DateTime? updatedAt;
   final String? zegoAppId;
   final String? zegoAppSignIn;
+  final String? zegoEffectsAppSign;
   final String? aboutUsUrl;
   final String? expertPrivacyPolicyUrl;
   final String? userPrivacyPolicyUrl;
@@ -112,6 +113,30 @@ class Data {
   final int? inPersonExpertAcceptTimeoutMinutes;
   final String? sessionBookingTimezone;
 
+  // Live Translation Settings
+  final bool? liveTranslationEnabled;
+  final bool? liveTranslationAudioEnabled;
+  final bool? liveTranslationVideoEnabled;
+  final String? liveTranslationProvider;
+  final String? azureSpeechKey;
+  final String? azureSpeechRegion;
+  final String? liveTranslationDefaultSourceLang;
+  final String? liveTranslationDefaultTargetLang;
+  final List<String>? liveTranslationSupportedLanguages;
+  final int? liveTranslationDailyQuotaMinutes;
+  final int? liveTranslationMonthlyQuotaMinutes;
+  final int? liveTranslationMaxConcurrentSessions;
+
+  // Anonymous Video Calling Settings
+  final bool? anonymousVideoCallingEnabled;
+  final bool? anonymousVideoCallingVideoEnabled;
+  final bool? anonymousVideoCallingAudioEnabled;
+  final bool? anonymousVideoCallingAllowMasks;
+  final bool? anonymousVideoCallingAllowFilters;
+  final bool? anonymousVideoCallingAllowBeauty;
+  final bool? anonymousVideoCallingAllowBackgroundBlur;
+  final List<String>? anonymousVideoCallingEnabledCategories;
+
   Data({
     this.currency,
     this.id,
@@ -149,6 +174,7 @@ class Data {
     this.updatedAt,
     this.zegoAppId,
     this.zegoAppSignIn,
+    this.zegoEffectsAppSign,
     this.aboutUsUrl,
     this.expertPrivacyPolicyUrl,
     this.userPrivacyPolicyUrl,
@@ -188,6 +214,26 @@ class Data {
     this.inPersonAutoCompleteReleaseExpertPayment,
     this.inPersonExpertAcceptTimeoutMinutes,
     this.sessionBookingTimezone,
+    this.liveTranslationEnabled,
+    this.liveTranslationAudioEnabled,
+    this.liveTranslationVideoEnabled,
+    this.liveTranslationProvider,
+    this.azureSpeechKey,
+    this.azureSpeechRegion,
+    this.liveTranslationDefaultSourceLang,
+    this.liveTranslationDefaultTargetLang,
+    this.liveTranslationSupportedLanguages,
+    this.liveTranslationDailyQuotaMinutes,
+    this.liveTranslationMonthlyQuotaMinutes,
+    this.liveTranslationMaxConcurrentSessions,
+    this.anonymousVideoCallingEnabled,
+    this.anonymousVideoCallingVideoEnabled,
+    this.anonymousVideoCallingAudioEnabled,
+    this.anonymousVideoCallingAllowMasks,
+    this.anonymousVideoCallingAllowFilters,
+    this.anonymousVideoCallingAllowBeauty,
+    this.anonymousVideoCallingAllowBackgroundBlur,
+    this.anonymousVideoCallingEnabledCategories,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -235,6 +281,7 @@ class Data {
             : DateTime.parse(json["updatedAt"]),
         zegoAppId: json["zegoAppId"],
         zegoAppSignIn: json["zegoAppSignIn"],
+        zegoEffectsAppSign: json["zegoEffectsAppSign"],
         aboutUsUrl: json["aboutUsUrl"],
         expertPrivacyPolicyUrl: json["expertPrivacyPolicyUrl"],
         userPrivacyPolicyUrl: json["userPrivacyPolicyUrl"],
@@ -274,6 +321,30 @@ class Data {
         inPersonAutoCompleteReleaseExpertPayment: json["inPersonAutoCompleteReleaseExpertPayment"],
         inPersonExpertAcceptTimeoutMinutes: json["inPersonExpertAcceptTimeoutMinutes"],
         sessionBookingTimezone: json["sessionBookingTimezone"],
+        liveTranslationEnabled: json["liveTranslationEnabled"],
+        liveTranslationAudioEnabled: json["liveTranslationAudioEnabled"],
+        liveTranslationVideoEnabled: json["liveTranslationVideoEnabled"],
+        liveTranslationProvider: json["liveTranslationProvider"],
+        azureSpeechKey: json["azureSpeechKey"],
+        azureSpeechRegion: json["azureSpeechRegion"],
+        liveTranslationDefaultSourceLang: json["liveTranslationDefaultSourceLang"],
+        liveTranslationDefaultTargetLang: json["liveTranslationDefaultTargetLang"],
+        liveTranslationSupportedLanguages: json["liveTranslationSupportedLanguages"] != null
+            ? List<String>.from(json["liveTranslationSupportedLanguages"])
+            : null,
+        liveTranslationDailyQuotaMinutes: json["liveTranslationDailyQuotaMinutes"],
+        liveTranslationMonthlyQuotaMinutes: json["liveTranslationMonthlyQuotaMinutes"],
+        liveTranslationMaxConcurrentSessions: json["liveTranslationMaxConcurrentSessions"],
+        anonymousVideoCallingEnabled: json["anonymousVideoCallingEnabled"],
+        anonymousVideoCallingVideoEnabled: json["anonymousVideoCallingVideoEnabled"],
+        anonymousVideoCallingAudioEnabled: json["anonymousVideoCallingAudioEnabled"],
+        anonymousVideoCallingAllowMasks: json["anonymousVideoCallingAllowMasks"],
+        anonymousVideoCallingAllowFilters: json["anonymousVideoCallingAllowFilters"],
+        anonymousVideoCallingAllowBeauty: json["anonymousVideoCallingAllowBeauty"],
+        anonymousVideoCallingAllowBackgroundBlur: json["anonymousVideoCallingAllowBackgroundBlur"],
+        anonymousVideoCallingEnabledCategories: json["anonymousVideoCallingEnabledCategories"] != null
+            ? List<String>.from(json["anonymousVideoCallingEnabledCategories"])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -313,6 +384,7 @@ class Data {
         "updatedAt": updatedAt?.toIso8601String(),
         "zegoAppId": zegoAppId,
         "zegoAppSignIn": zegoAppSignIn,
+        "zegoEffectsAppSign": zegoEffectsAppSign,
         "aboutUsUrl": aboutUsUrl,
         "expertPrivacyPolicyUrl": expertPrivacyPolicyUrl,
         "userPrivacyPolicyUrl": userPrivacyPolicyUrl,
@@ -352,6 +424,26 @@ class Data {
         "inPersonAutoCompleteReleaseExpertPayment": inPersonAutoCompleteReleaseExpertPayment,
         "inPersonExpertAcceptTimeoutMinutes": inPersonExpertAcceptTimeoutMinutes,
         "sessionBookingTimezone": sessionBookingTimezone,
+        "liveTranslationEnabled": liveTranslationEnabled,
+        "liveTranslationAudioEnabled": liveTranslationAudioEnabled,
+        "liveTranslationVideoEnabled": liveTranslationVideoEnabled,
+        "liveTranslationProvider": liveTranslationProvider,
+        "azureSpeechKey": azureSpeechKey,
+        "azureSpeechRegion": azureSpeechRegion,
+        "liveTranslationDefaultSourceLang": liveTranslationDefaultSourceLang,
+        "liveTranslationDefaultTargetLang": liveTranslationDefaultTargetLang,
+        "liveTranslationSupportedLanguages": liveTranslationSupportedLanguages,
+        "liveTranslationDailyQuotaMinutes": liveTranslationDailyQuotaMinutes,
+        "liveTranslationMonthlyQuotaMinutes": liveTranslationMonthlyQuotaMinutes,
+        "liveTranslationMaxConcurrentSessions": liveTranslationMaxConcurrentSessions,
+        "anonymousVideoCallingEnabled": anonymousVideoCallingEnabled,
+        "anonymousVideoCallingVideoEnabled": anonymousVideoCallingVideoEnabled,
+        "anonymousVideoCallingAudioEnabled": anonymousVideoCallingAudioEnabled,
+        "anonymousVideoCallingAllowMasks": anonymousVideoCallingAllowMasks,
+        "anonymousVideoCallingAllowFilters": anonymousVideoCallingAllowFilters,
+        "anonymousVideoCallingAllowBeauty": anonymousVideoCallingAllowBeauty,
+        "anonymousVideoCallingAllowBackgroundBlur": anonymousVideoCallingAllowBackgroundBlur,
+        "anonymousVideoCallingEnabledCategories": anonymousVideoCallingEnabledCategories,
       };
 }
 

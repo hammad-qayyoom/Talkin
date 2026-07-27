@@ -10,6 +10,8 @@ import 'package:proximity_screen_lock/proximity_screen_lock.dart';
 import 'package:notisboard/custom/dialog/recording_consent_dialog.dart';
 import 'package:notisboard/services/permission_handler/permission_handler.dart';
 import 'package:notisboard/services/recording_upload_queue.dart';
+import 'package:notisboard/services/translation/translation_service.dart';
+import 'package:notisboard/services/anonymous_mode/anonymous_mode_service.dart';
 import 'package:notisboard/socket/socket_emit.dart';
 import 'package:notisboard/ui/common/recording_subscription/api/recording_subscription_api.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/setting_api.dart';
@@ -47,6 +49,9 @@ class VoiceCallController extends GetxController {
   String? callMode;
   String? callerRole;
   String? zegoRoomToken;
+  String? sessionId;
+  String? bookingId;
+  String? categoryId;
 
   Timer? timer;
   DateTime? startTime;
@@ -100,8 +105,18 @@ class VoiceCallController extends GetxController {
     super.onInit();
     Utils.showLog("onInit voice call controller");
 
+    // Refresh translation config on call screen open
+    if (Get.isRegistered<TranslationService>()) {
+      Get.find<TranslationService>().refreshConfig();
+    }
+
     args = Get.arguments as Map<String, dynamic>;
     getDataFromArgs();
+
+    // Fetch anonymous mode config (after parsing args to get categoryId)
+    if (Get.isRegistered<AnonymousModeService>()) {
+      Get.find<AnonymousModeService>().fetchConfig(categoryId: categoryId);
+    }
     
     _checkRecordingEligibility();
 
@@ -195,6 +210,9 @@ class VoiceCallController extends GetxController {
       callMode = Get.arguments["callMode"] ?? "";
       callerRole = Get.arguments["callerRole"] ?? "";
       receiverRole = Get.arguments["receiverRole"] ?? "";
+      sessionId = Get.arguments["sessionId"] ?? "";
+      bookingId = Get.arguments["bookingId"] ?? "";
+      categoryId = Get.arguments["categoryId"] ?? "";
       // isMicMute = Get.arguments["micMute"] ?? "";
       // isSpeakerOn = Get.arguments["speakerOn"] ?? "";
     }
@@ -423,6 +441,14 @@ class VoiceCallController extends GetxController {
           roomUsersById.remove(user.userID);
           streamIdsByUserId.remove(user.userID);
           expertMutedUserIds.remove(user.userID);
+        }
+        // Auto-disconnect when remote user leaves the room (app kill, crash, network drop)
+        final selfId = _resolvedZegoUserId();
+        final hasRemote = roomUsersById.keys.any((id) => id != selfId);
+        if (!hasRemote && !_isGroupSessionCall) {
+          log("Remote user left room — auto disconnecting");
+          endCurrentCall();
+          return;
         }
       }
       update([Constant.idVideoCall]);
@@ -953,12 +979,24 @@ class VoiceCallController extends GetxController {
   }
 
   Future<void> endCurrentCall() async {
+    // Stop translation if active (before group session check)
+    if (Get.isRegistered<TranslationService>()) {
+      final translationService = Get.find<TranslationService>();
+      if (translationService.isActive) {
+        await translationService.stopTranslation();
+      }
+    }
+
+    // Reset anonymous mode
+    if (Get.isRegistered<AnonymousModeService>()) {
+      Get.find<AnonymousModeService>().resetConfig();
+    }
+
     if (_isGroupSessionCall) {
-      if (Get.isOverlaysOpen) {
-        Get.back();
-      } else {
+      while (Get.isOverlaysOpen) {
         Get.back();
       }
+      Get.back();
       return;
     }
 
@@ -977,7 +1015,15 @@ class VoiceCallController extends GetxController {
       receiverRole: receiverRole ?? '',
       receiverImage: receiverImage ?? '',
       receiverName: receiverName ?? '',
+      sessionId: sessionId ?? '',
+      bookingId: bookingId ?? '',
     );
+
+    // Navigate back after emitting — don't wait for server relay
+    while (Get.isOverlaysOpen) {
+      Get.back();
+    }
+    Get.back();
   }
 
   void endCallDueToBackground() {
@@ -1126,6 +1172,18 @@ class VoiceCallController extends GetxController {
         },
         onCancel: () => Get.back(),
       );
+    }
+  }
+
+  void toggleTranslation() {
+    if (!Get.isRegistered<TranslationService>()) return;
+
+    final translationService = Get.find<TranslationService>();
+    if (translationService.isActive) {
+      translationService.stopTranslation();
+    } else {
+      if (callId == null || callId!.isEmpty) return;
+      translationService.startTranslation(callId: callId!);
     }
   }
 

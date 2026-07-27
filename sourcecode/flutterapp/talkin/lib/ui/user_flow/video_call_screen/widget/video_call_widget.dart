@@ -6,6 +6,9 @@ import 'package:notisboard/custom/bottom_sheet/report_block_ui_bottom_sheet.dart
 import 'package:notisboard/custom/bottom_sheet/report_bottom_sheet.dart';
 import 'package:notisboard/custom/dialog/block_dialog.dart';
 import 'package:notisboard/ui/user_flow/video_call_screen/controller/video_call_controller.dart';
+import 'package:notisboard/services/translation/translation_service.dart';
+import 'package:notisboard/services/translation/translation_widgets.dart';
+import 'package:notisboard/services/anonymous_mode/anonymous_mode_widgets.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/constant.dart';
@@ -32,10 +35,10 @@ class VideoCallView1 extends StatelessWidget {
           builder: (logic) {
             final viewport = Size(Get.width, Get.height);
             final isCompactControls = viewport.width < 390;
-            final controlSize = isCompactControls ? 36.0 : 40.0;
-            final dangerControlSize = isCompactControls ? 42.0 : 44.0;
-            final controlBarPadding = isCompactControls ? 5.0 : 6.0;
-            final controlGap = isCompactControls ? 8.0 : 10.0;
+            final controlSize = isCompactControls ? 32.0 : 36.0;
+            final dangerControlSize = isCompactControls ? 36.0 : 40.0;
+            final controlBarPadding = isCompactControls ? 4.0 : 5.0;
+            final controlGap = isCompactControls ? 6.0 : 8.0;
             final controlTrayMaxWidth = isCompactControls ? 328.0 : 368.0;
             logic.prepareSelfPreviewLayout(
               viewport,
@@ -246,6 +249,29 @@ class VideoCallView1 extends StatelessWidget {
                               size: controlSize,
                             ),
                             SizedBox(width: controlGap),
+                            GetBuilder<TranslationService>(
+                              id: Constant.idTranslation,
+                              builder: (service) {
+                                return ControlButton(
+                                  iconData: Icons.translate,
+                                  isActive: service.isActive,
+                                  onTap: () {
+                                    if (!service.isEnabled) {
+                                      Utils.showToast(context, "Translation is not enabled. Please check settings.");
+                                      return;
+                                    }
+                                    logic.toggleTranslation();
+                                  },
+                                  size: controlSize,
+                                );
+                              },
+                            ),
+                            SizedBox(width: controlGap),
+                            AnonymousModeToggle(
+                              onTap: () => showAnonymousModePanel(context),
+                              size: controlSize,
+                            ),
+                            SizedBox(width: controlGap),
                             logic.isGroupSessionCall
                                 ? _buildGroupChatControlButton(
                                     context,
@@ -273,6 +299,7 @@ class VideoCallView1 extends StatelessWidget {
                     ),
                   ),
                 ),
+              const SubtitleOverlay(),
               ],
             );
           },

@@ -48,4 +48,13 @@ class SocketEvents {
   static const reportRecordingComplete = "reportRecordingComplete";
   static const recordingSaved = "recordingSaved";
   static const recordingEligibilityError = "recordingEligibilityError";
+
+  /// Live Translation
+  static const startTranslation = "startTranslation";
+  static const stopTranslation = "stopTranslation";
+  static const translationStarted = "translationStarted";
+  static const translationStopped = "translationStopped";
+  static const subtitleReceived = "subtitleReceived";
+  static const translationParticipantJoined = "translationParticipantJoined";
+  static const translationParticipantLeft = "translationParticipantLeft";
 }

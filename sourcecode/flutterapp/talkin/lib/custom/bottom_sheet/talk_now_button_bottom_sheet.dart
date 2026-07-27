@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/app_button/primary_app_button.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/services/anonymous_mode/anonymous_mode_service.dart';
+import 'package:notisboard/services/anonymous_mode/anonymous_mode_widgets.dart';
 import 'package:notisboard/services/permission_handler/permission_handler.dart';
 import 'package:notisboard/socket/socket_emit.dart';
 import 'package:notisboard/utils/app_asset.dart';
@@ -303,9 +305,14 @@ class TalkNowButtonBottomSheet extends StatelessWidget {
           );
         } else {
           PermissionHandler.onGetCameraPermission(
-            onGranted: () {
+            onGranted: () async {
               PermissionHandler.onGetMicrophonePermission(
                 onGranted: () async {
+                  // Show pre-call anonymous mode setup dialog for video calls
+                  if (Get.isRegistered<AnonymousModeService>() &&
+                      Get.find<AnonymousModeService>().isAllowed) {
+                    await showPreCallAnonymousSetupDialog(Get.context!);
+                  }
                   await SocketEmit.emitCallOutgoingRinging(
                     callerId: callerId,
                     receiverId: receiverId,
