@@ -268,6 +268,11 @@ const VerticalMenu = ({ scrollMenu }) => {
                   Tip Analytics
                 </MenuItem>
               )}
+              {can('settings') && (
+                <MenuItem href='/screen-share/analytics' icon={<i className='tabler-screen-share' />}>
+                  Screen Share Analytics
+                </MenuItem>
+              )}
               {can('referrals') && (
                 <MenuItem href='/referrals' icon={<i className='tabler-gift' />}>
                   Referrals

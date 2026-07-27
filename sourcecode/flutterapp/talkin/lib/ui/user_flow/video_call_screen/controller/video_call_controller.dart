@@ -39,11 +39,14 @@ class VideoParticipantEntry {
 class VideoCallController extends GetxController {
   static const String _hostControlType = 'host_control';
   static const String _groupChatType = 'group_chat';
+  static const String _screenShareType = 'screen_share';
   static const String _actionMuteAudio = 'mute_audio';
   static const String _actionUnmuteAudio = 'unmute_audio';
   static const String _actionMuteVideo = 'mute_video';
   static const String _actionUnmuteVideo = 'unmute_video';
   static const String _actionKickUser = 'kick_user';
+  static const String _actionScreenShareStarted = 'screen_share_started';
+  static const String _actionScreenShareStopped = 'screen_share_stopped';
 
   List<CoinPlan> coinPlan = [];
 
@@ -121,6 +124,15 @@ class VideoCallController extends GetxController {
   DateTime? recordingStartTime;
   AudioRecorder? _audioRecorder;
   String? _recordingFilePath;
+
+  // ─── Screen Sharing State ───
+  bool isScreenSharing = false;
+  bool remoteIsScreenSharing = false;
+  String remoteScreenSharerName = '';
+  DateTime? _screenShareStartTime;
+  int _screenShareDurationSeconds = 0;
+  Timer? _screenShareMaxDurationTimer;
+  ZegoScreenCaptureSource? _desktopScreenCaptureSource;
 
   static const double _selfPreviewMinWidth = 90;
   static const double _selfPreviewMaxWidth = 190;
@@ -573,6 +585,7 @@ class VideoCallController extends GetxController {
     ZegoExpressEngine.onIMRecvCustomCommand = (roomID, fromUser, command) {
       _handleIncomingHostCommand(fromUser, command);
       _handleIncomingGroupChatCommand(fromUser, command);
+      _handleIncomingScreenShareCommand(fromUser, command);
     };
 
     ZegoExpressEngine.onRoomStateUpdate =
@@ -624,6 +637,8 @@ class VideoCallController extends GetxController {
   void stopListenEvent() {
     log("Enter in stop listen event");
     Constant.storage.write("isVideoCall", false);
+
+    _resetScreenState();
 
     ZegoExpressEngine.onRoomUserUpdate = null;
     ZegoExpressEngine.onRoomStreamUpdate = null;
@@ -1443,6 +1458,11 @@ class VideoCallController extends GetxController {
   }
 
   Future<void> endCurrentCall() async {
+    // Stop screen sharing if active
+    if (isScreenSharing) {
+      await _stopScreenShare();
+    }
+
     // Stop translation if active (before group session check)
     if (Get.isRegistered<TranslationService>()) {
       final translationService = Get.find<TranslationService>();
@@ -1481,6 +1501,7 @@ class VideoCallController extends GetxController {
       receiverName: receiverName ?? '',
       sessionId: sessionId ?? '',
       bookingId: bookingId ?? '',
+      screenShareDurationSeconds: _screenShareDurationSeconds > 0 ? _screenShareDurationSeconds : null,
     );
 
     // Navigate back after emitting — don't wait for server relay
@@ -1494,6 +1515,300 @@ class VideoCallController extends GetxController {
     log("endCallDueToBackground");
     endCurrentCall();
     // Get.back(); // or navigate to a call ended screen
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  //  Screen Sharing
+  // ═══════════════════════════════════════════════════════════════
+
+  bool get canScreenShare {
+    final settings = Database.settingApiModel?.data;
+    if (settings == null) return false;
+
+    final screenSharingEnabled = settings.screenSharingEnabled ?? false;
+    if (!screenSharingEnabled) return false;
+
+    final isVideoCall = callType?.toLowerCase() == 'video';
+    final isAudioCall = callType?.toLowerCase() == 'audio';
+
+    if (isAudioCall && !(settings.screenSharingAudioEnabled ?? false)) return false;
+    if (isVideoCall && !(settings.screenSharingVideoEnabled ?? true)) return false;
+
+    final permission = settings.screenSharingPermission ?? 'both';
+    final isExpert = Database.fetchLoginUserProfileModel?.user?.isListener == true;
+
+    if (permission == 'expert_only' && !isExpert) return false;
+    if (permission == 'user_only' && isExpert) return false;
+
+    final categoriesEnabled = settings.screenSharingCategoriesEnabled;
+    if (categoriesEnabled != null && categoriesEnabled is List && categoriesEnabled.isNotEmpty) {
+      if (categoryId != null && !categoriesEnabled.contains(categoryId)) return false;
+    }
+
+    return true;
+  }
+
+  int get screenShareMaxDurationMinutes {
+    return Database.settingApiModel?.data?.screenSharingMaxDurationMinutes ?? 30;
+  }
+
+  int get screenShareDurationAccumulated => _screenShareDurationSeconds;
+
+  Future<void> toggleScreenShare() async {
+    if (isScreenSharing) {
+      await _stopScreenShare();
+    } else {
+      await _startScreenShare();
+    }
+  }
+
+  Future<void> _startScreenShare() async {
+    if (!canScreenShare) {
+      if (Get.context != null) {
+        Utils.showToast(Get.context!, 'Screen sharing is not enabled for your account.');
+      }
+      return;
+    }
+
+    if (remoteIsScreenSharing) {
+      if (Get.context != null) {
+        Utils.showToast(Get.context!, 'The other participant is already sharing their screen.');
+      }
+      return;
+    }
+
+    try {
+      if (!kIsWeb && (Platform.isMacOS || Platform.isWindows)) {
+        // Desktop: use window/screen picker
+        final sources = await ZegoExpressEngine.instance.getScreenCaptureSources(1920, 1080, 64, 64);
+        if (sources.isEmpty) {
+          if (Get.context != null) {
+            Utils.showToast(Get.context!, 'No screens or windows available to share.');
+          }
+          return;
+        }
+
+        final sourceInfo = sources.first;
+        final captureSource = await ZegoExpressEngine.instance.createScreenCaptureSource(
+          sourceId: sourceInfo.sourceID,
+          sourceType: sourceInfo.sourceType,
+        );
+
+        if (captureSource == null) {
+          if (Get.context != null) {
+            Utils.showToast(Get.context!, 'Failed to create screen capture source.');
+          }
+          return;
+        }
+
+        _desktopScreenCaptureSource = captureSource;
+        await captureSource.startCapture();
+        await ZegoExpressEngine.instance.setVideoSource(
+          ZegoVideoSourceType.ScreenCapture,
+          channel: ZegoPublishChannel.Main,
+        );
+      } else {
+        // Mobile (Android/iOS): full screen capture flow
+        // Step 1: Specify video source type
+        await ZegoExpressEngine.instance.setVideoSource(
+          ZegoVideoSourceType.ScreenCapture,
+          channel: ZegoPublishChannel.Main,
+        );
+
+        // Step 2: Specify audio source for system audio capture
+        await ZegoExpressEngine.instance.setAudioSource(
+          ZegoAudioSourceType.ScreenCapture,
+          channel: ZegoPublishChannel.Main,
+        );
+
+        // Step 3: Create screen capture source — triggers MediaProjection permission on Android
+        final captureSource = await ZegoExpressEngine.instance.createScreenCaptureSource();
+
+        if (captureSource == null) {
+          if (Get.context != null) {
+            Utils.showToast(Get.context!, 'Failed to create screen capture source.');
+          }
+          return;
+        }
+
+        _desktopScreenCaptureSource = captureSource;
+
+        // Step 4: Start capture — this shows the Android system consent dialog
+        await captureSource.startCapture(
+          config: ZegoScreenCaptureConfig(true, true),
+        );
+      }
+
+      isScreenSharing = true;
+      _screenShareStartTime = DateTime.now();
+
+      // Start max duration timer
+      final maxMinutes = screenShareMaxDurationMinutes;
+      if (maxMinutes > 0) {
+        _screenShareMaxDurationTimer?.cancel();
+        _screenShareMaxDurationTimer = Timer(
+          Duration(minutes: maxMinutes),
+          () {
+            if (isScreenSharing) {
+              Utils.showToast(
+                Get.context!,
+                'Screen sharing stopped: maximum duration reached ($maxMinutes min).',
+              );
+              _stopScreenShare();
+            }
+          },
+        );
+      }
+
+      // Notify remote participant via custom command
+      await _sendScreenShareCommand(_actionScreenShareStarted);
+
+      update([Constant.idVideoCall, Constant.idScreenShare]);
+
+      if (Get.context != null) {
+        Utils.showToast(Get.context!, 'Screen sharing started.');
+      }
+    } catch (e) {
+      Utils.showLog('Screen share start failed: $e');
+      isScreenSharing = false;
+      if (Get.context != null) {
+        Utils.showToast(Get.context!, 'Failed to start screen sharing: ${e.toString().length > 60 ? e.toString().substring(0, 60) : e.toString()}');
+      }
+    }
+  }
+
+  Future<void> _stopScreenShare() async {
+    try {
+      if (_desktopScreenCaptureSource != null) {
+        await _desktopScreenCaptureSource!.stopCapture();
+        await ZegoExpressEngine.instance.destroyScreenCaptureSource(_desktopScreenCaptureSource!);
+        _desktopScreenCaptureSource = null;
+      }
+
+      await ZegoExpressEngine.instance.setVideoSource(
+        ZegoVideoSourceType.Camera,
+        channel: ZegoPublishChannel.Main,
+      );
+
+      if (_screenShareStartTime != null) {
+        _screenShareDurationSeconds += DateTime.now().difference(_screenShareStartTime!).inSeconds;
+      }
+      _screenShareStartTime = null;
+      _screenShareMaxDurationTimer?.cancel();
+      _screenShareMaxDurationTimer = null;
+
+      isScreenSharing = false;
+
+      // Notify remote participant
+      await _sendScreenShareCommand(_actionScreenShareStopped);
+
+      update([Constant.idVideoCall, Constant.idScreenShare]);
+
+      if (Get.context != null) {
+        Utils.showToast(Get.context!, 'Screen sharing stopped.');
+      }
+    } catch (e) {
+      Utils.showLog('Screen share stop failed: $e');
+    }
+  }
+
+  Future<void> _sendScreenShareCommand(String action) async {
+    final recipients = roomUsersById.values
+        .where((user) => user.userID != _resolvedZegoUserId())
+        .toList(growable: false);
+    if (recipients.isEmpty) return;
+
+    final payload = jsonEncode({
+      'type': _screenShareType,
+      'action': action,
+      'sharerName': _zegoUserName(),
+      'issuedAt': DateTime.now().millisecondsSinceEpoch,
+    });
+
+    try {
+      await ZegoExpressEngine.instance.sendCustomCommand(
+        _resolvedRoomId(),
+        payload,
+        recipients,
+      );
+    } catch (e) {
+      Utils.showLog('Screen share command send failed: $e');
+    }
+  }
+
+  void _handleIncomingScreenShareCommand(ZegoUser fromUser, String command) {
+    Map<String, dynamic> payload;
+    try {
+      final decoded = jsonDecode(command);
+      if (decoded is! Map<String, dynamic>) return;
+      payload = decoded;
+    } catch (_) {
+      return;
+    }
+
+    if ((payload['type'] ?? '').toString() != _screenShareType) return;
+
+    final action = (payload['action'] ?? '').toString().trim();
+    final sharerName = (payload['sharerName'] ?? fromUser.userName).toString().trim();
+
+    switch (action) {
+      case _actionScreenShareStarted:
+        remoteIsScreenSharing = true;
+        remoteScreenSharerName = sharerName.isNotEmpty ? sharerName : 'Participant';
+        
+        final streamId = remoteUserIdsByStream.entries
+            .cast<MapEntry<String, String>?>()
+            .firstWhere((e) => e?.value == fromUser.userID, orElse: () => null)
+            ?.key;
+        if (streamId != null) {
+          final viewId = remoteViewIdsByStream[streamId];
+          if (viewId != null) {
+            ZegoCanvas canvas = ZegoCanvas(viewId, viewMode: ZegoViewMode.AspectFit);
+            ZegoExpressEngine.instance.startPlayingStream(streamId, canvas: canvas);
+          }
+        }
+
+        update([Constant.idVideoCall, Constant.idScreenShare]);
+        if (Get.context != null) {
+          Utils.showToast(
+            Get.context!,
+            '$remoteScreenSharerName started sharing their screen.',
+          );
+        }
+        break;
+      case _actionScreenShareStopped:
+        remoteIsScreenSharing = false;
+        remoteScreenSharerName = '';
+
+        final stoppedStreamId = remoteUserIdsByStream.entries
+            .cast<MapEntry<String, String>?>()
+            .firstWhere((e) => e?.value == fromUser.userID, orElse: () => null)
+            ?.key;
+        if (stoppedStreamId != null) {
+          final viewId = remoteViewIdsByStream[stoppedStreamId];
+          if (viewId != null) {
+            ZegoCanvas canvas = ZegoCanvas(viewId, viewMode: ZegoViewMode.AspectFill);
+            ZegoExpressEngine.instance.startPlayingStream(stoppedStreamId, canvas: canvas);
+          }
+        }
+
+        update([Constant.idVideoCall, Constant.idScreenShare]);
+        if (Get.context != null) {
+          Utils.showToast(Get.context!, 'Screen sharing stopped.');
+        }
+        break;
+    }
+  }
+
+  void _resetScreenState() {
+    isScreenSharing = false;
+    remoteIsScreenSharing = false;
+    remoteScreenSharerName = '';
+    _screenShareStartTime = null;
+    _screenShareDurationSeconds = 0;
+    _screenShareMaxDurationTimer?.cancel();
+    _screenShareMaxDurationTimer = null;
+    _desktopScreenCaptureSource = null;
   }
 
   Future<void> stopRecordingAndUpload() async {

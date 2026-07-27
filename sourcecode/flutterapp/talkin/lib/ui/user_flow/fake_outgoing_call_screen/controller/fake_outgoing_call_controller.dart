@@ -100,7 +100,7 @@ class FakeOutgoingCallController extends GetxController {
   //     fromAsset: AppAsset.retroRing,
   //     ios: IosSounds.glass,
   //     looping: true,
-  //     volume: 100,
+  //     volume: 1.0,
   //     asAlarm: false,
   //   );
   // }
@@ -112,7 +112,7 @@ class FakeOutgoingCallController extends GetxController {
       // android: AndroidSounds.ringtone,
       ios: IosSounds.glass,
       looping: true,
-      volume: 30,
+      volume: 1.0,
       asAlarm: false,
     );
 

@@ -97,6 +97,64 @@ class VideoCallView1 extends StatelessWidget {
                       ),
                     ),
                   ),
+                if (logic.isScreenSharing)
+                  Positioned(
+                    top: logic.isRecordingActive
+                        ? MediaQuery.of(context).padding.top + 34
+                        : 44,
+                    left: 12,
+                    right: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withValues(alpha: 0.9),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.screen_share_rounded, color: Colors.white, size: 14),
+                          const SizedBox(width: 6),
+                          Text(
+                            "You are sharing your screen",
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 11,
+                              fontColor: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                if (logic.remoteIsScreenSharing && !logic.isScreenSharing)
+                  Positioned(
+                    top: logic.isRecordingActive
+                        ? MediaQuery.of(context).padding.top + 34
+                        : 44,
+                    left: 12,
+                    right: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withValues(alpha: 0.9),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.screen_share_rounded, color: Colors.white, size: 14),
+                          const SizedBox(width: 6),
+                          Text(
+                            "${logic.remoteScreenSharerName} is sharing their screen",
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 11,
+                              fontColor: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 Positioned(
                   top: logic.isRecordingActive ? MediaQuery.of(context).padding.top + 34 : 44,
                   left: 12,
@@ -210,6 +268,13 @@ class VideoCallView1 extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Expanded(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                physics: const BouncingScrollPhysics(),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
                             ControlButton(
                               iconData: logic.micMute == true
                                   ? Icons.mic_off_rounded
@@ -233,6 +298,17 @@ class VideoCallView1 extends StatelessWidget {
                               size: controlSize,
                               onTap: logic.onCameraTurn,
                             ),
+                            if (logic.canScreenShare) ...[
+                              SizedBox(width: controlGap),
+                              ControlButton(
+                                iconData: logic.isScreenSharing
+                                    ? Icons.stop_screen_share_rounded
+                                    : Icons.screen_share_rounded,
+                                isActive: logic.isScreenSharing,
+                                size: controlSize,
+                                onTap: logic.toggleScreenShare,
+                              ),
+                            ],
                             SizedBox(width: controlGap),
                             ControlButton(
                               iconData: logic.isRecordingActive ? Icons.stop_circle_outlined : Icons.radio_button_checked,
@@ -286,6 +362,10 @@ class VideoCallView1 extends StatelessWidget {
                                       logic,
                                     ),
                                   ),
+                                  ],
+                                ),
+                              ),
+                            ),
                             SizedBox(width: controlGap),
                             ControlButton(
                               iconData: Icons.call_end_rounded,
@@ -981,7 +1061,7 @@ class VideoCallView1 extends StatelessWidget {
                 ),
           ),
         ),
-        if (logic.remoteVideoOff)
+        if (logic.remoteVideoOff && !logic.remoteIsScreenSharing)
           Container(
             color: AppColors.black.withValues(alpha: 0.55),
             child: Center(
@@ -1070,7 +1150,7 @@ class VideoCallView1 extends StatelessWidget {
                   ),
                 ),
               ),
-              if (logic.isCameraOff)
+              if (logic.isCameraOff && !logic.isScreenSharing)
                 Positioned.fill(
                   child: Container(
                     color: AppColors.black.withValues(alpha: 0.55),

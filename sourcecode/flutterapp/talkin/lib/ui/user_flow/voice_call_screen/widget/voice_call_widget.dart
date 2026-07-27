@@ -346,6 +346,20 @@ class VoiceCallView1 extends StatelessWidget {
                     );
                   },
                 ),
+                GetBuilder<VoiceCallController>(
+                  id: Constant.idVideoCall,
+                  builder: (logic) {
+                    if (!logic.canScreenShare) return const SizedBox.shrink();
+                    return buildControlButton(
+                      iconData: logic.isScreenSharing ? Icons.stop_screen_share : Icons.screen_share,
+                      isActive: logic.isScreenSharing,
+                      onTap: () {
+                        logic.toggleScreenShare();
+                      },
+                      size: controlSize,
+                    );
+                  },
+                ),
                 buildControlButton(
                   iconData: Icons.call_end_rounded,
                   isDanger: true,
@@ -357,19 +371,30 @@ class VoiceCallView1 extends StatelessWidget {
               return Stack(
                 children: [
                   Positioned.fill(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: AppColors.redesignScreenBackground,
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            AppColors.white,
-                            AppColors.redesignScreenBackground,
-                            AppColors.redesignScreenBackground,
-                          ],
-                        ),
-                      ),
+                    child: GetBuilder<VoiceCallController>(
+                      id: Constant.idVideoCall,
+                      builder: (logic) {
+                        if (logic.remoteIsScreenSharing && logic.remoteView != null) {
+                          return Container(
+                            color: Colors.black,
+                            child: logic.remoteView,
+                          );
+                        }
+                        return DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: AppColors.redesignScreenBackground,
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                AppColors.white,
+                                AppColors.redesignScreenBackground,
+                                AppColors.redesignScreenBackground,
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   Positioned(
@@ -469,7 +494,13 @@ class VoiceCallView1 extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: SingleChildScrollView(
+                        child: GetBuilder<VoiceCallController>(
+                          id: Constant.idVideoCall,
+                          builder: (logic) {
+                            if (logic.remoteIsScreenSharing && logic.remoteView != null) {
+                              return const SizedBox.shrink(); // Hide the card during screen share
+                            }
+                            return SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
                           padding: const EdgeInsets.only(bottom: 8),
                           child: Align(
@@ -627,6 +658,8 @@ class VoiceCallView1 extends StatelessWidget {
                               ),
                             ),
                           ),
+                          );
+                          },
                         ),
                       ),
                       Container(
@@ -664,13 +697,22 @@ class VoiceCallView1 extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  for (var i = 0;
-                                      i < actionItems.length;
-                                      i++) ...[
-                                    actionItems[i],
-                                    if (i != actionItems.length - 1)
-                                      SizedBox(width: controlGap),
-                                  ],
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      physics: const BouncingScrollPhysics(),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          for (var i = 0; i < actionItems.length - 1; i++) ...[
+                                            actionItems[i],
+                                            SizedBox(width: controlGap),
+                                          ],
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  actionItems.last,
                                 ],
                               ),
                             ),

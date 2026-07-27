@@ -109,7 +109,7 @@ class OutgoingCallController extends GetxController
       fromAsset: AppAsset.retroRing,
       ios: IosSounds.glass,
       looping: true,
-      volume: 30,
+      volume: 1.0,
       asAlarm: false,
     );
 

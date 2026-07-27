@@ -114,7 +114,7 @@ class _TipSheetState extends State<TipSheet> {
       return;
     }
 
-    final userBalance = int.tryParse(Database.userCoin) ?? 0;
+    final userBalance = (double.tryParse(Database.userCoin) ?? 0.0).toInt();
     if (userBalance < amount) {
       Get.snackbar('Insufficient Coins', 'You need ₹$amount but only have ₹$userBalance coins.',
           backgroundColor: AppColors.redesignBrandRed, colorText: AppColors.white);
@@ -124,9 +124,8 @@ class _TipSheetState extends State<TipSheet> {
     setState(() => _sending = true);
 
     final result = await TipApi.sendTip(
-      expertId: widget.expertId,
+      receiverId: widget.expertId,
       amount: amount,
-      sessionBookingId: widget.sessionBookingId,
       paymentMethod: 'wallet',
     );
 
@@ -167,7 +166,7 @@ class _TipSheetState extends State<TipSheet> {
       return const SizedBox.shrink();
     }
 
-    final userBalance = int.tryParse(Database.userCoin) ?? 0;
+    final userBalance = (double.tryParse(Database.userCoin) ?? 0.0).toInt();
 
     return Container(
       constraints: BoxConstraints(

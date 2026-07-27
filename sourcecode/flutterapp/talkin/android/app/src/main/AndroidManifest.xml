@@ -33,6 +33,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:usesCleartextTraffic="true">
 
+
+
         <!-- Awesome Notification Receiver -->
         <receiver android:name="me.carda.awesome_notifications.notifications.receivers.NotificationActionReceiver"
             android:exported="true">

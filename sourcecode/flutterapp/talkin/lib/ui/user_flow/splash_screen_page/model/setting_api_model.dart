@@ -137,6 +137,14 @@ class Data {
   final bool? anonymousVideoCallingAllowBackgroundBlur;
   final List<String>? anonymousVideoCallingEnabledCategories;
 
+  // Screen Sharing Settings
+  final bool? screenSharingEnabled;
+  final bool? screenSharingVideoEnabled;
+  final bool? screenSharingAudioEnabled;
+  final String? screenSharingPermission;
+  final List<String>? screenSharingCategoriesEnabled;
+  final int? screenSharingMaxDurationMinutes;
+
   Data({
     this.currency,
     this.id,
@@ -234,6 +242,12 @@ class Data {
     this.anonymousVideoCallingAllowBeauty,
     this.anonymousVideoCallingAllowBackgroundBlur,
     this.anonymousVideoCallingEnabledCategories,
+    this.screenSharingEnabled,
+    this.screenSharingVideoEnabled,
+    this.screenSharingAudioEnabled,
+    this.screenSharingPermission,
+    this.screenSharingCategoriesEnabled,
+    this.screenSharingMaxDurationMinutes,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -345,6 +359,14 @@ class Data {
         anonymousVideoCallingEnabledCategories: json["anonymousVideoCallingEnabledCategories"] != null
             ? List<String>.from(json["anonymousVideoCallingEnabledCategories"])
             : null,
+        screenSharingEnabled: json["screenSharingEnabled"],
+        screenSharingVideoEnabled: json["screenSharingVideoEnabled"],
+        screenSharingAudioEnabled: json["screenSharingAudioEnabled"],
+        screenSharingPermission: json["screenSharingPermission"],
+        screenSharingCategoriesEnabled: json["screenSharingCategoriesEnabled"] != null
+            ? List<String>.from(json["screenSharingCategoriesEnabled"])
+            : null,
+        screenSharingMaxDurationMinutes: json["screenSharingMaxDurationMinutes"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -444,6 +466,12 @@ class Data {
         "anonymousVideoCallingAllowBeauty": anonymousVideoCallingAllowBeauty,
         "anonymousVideoCallingAllowBackgroundBlur": anonymousVideoCallingAllowBackgroundBlur,
         "anonymousVideoCallingEnabledCategories": anonymousVideoCallingEnabledCategories,
+        "screenSharingEnabled": screenSharingEnabled,
+        "screenSharingVideoEnabled": screenSharingVideoEnabled,
+        "screenSharingAudioEnabled": screenSharingAudioEnabled,
+        "screenSharingPermission": screenSharingPermission,
+        "screenSharingCategoriesEnabled": screenSharingCategoriesEnabled,
+        "screenSharingMaxDurationMinutes": screenSharingMaxDurationMinutes,
       };
 }
 

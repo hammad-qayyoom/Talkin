@@ -183,6 +183,7 @@ class SocketEmit {
     required String receiverImage,
     String? sessionId,
     String? bookingId,
+    int? screenShareDurationSeconds,
   }) async {
     if (socket != null && socket!.connected) {
       UserCoinModel? userCoinModel;
@@ -201,6 +202,8 @@ class SocketEmit {
           SocketParams.sessionId: sessionId,
         if ((bookingId ?? '').trim().isNotEmpty)
           SocketParams.bookingId: bookingId,
+        if (screenShareDurationSeconds != null && screenShareDurationSeconds > 0)
+          'screenShareDurationSeconds': screenShareDurationSeconds,
       };
       socket!.emit(SocketEvents.callTerminated, data);
       userCoinModel = await UserCoinApi.callApi();

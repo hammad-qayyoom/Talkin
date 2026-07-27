@@ -79,18 +79,18 @@ class _TipCardState extends State<TipCard> {
     }
 
     if (_config != null && amount < _config!.minAmount) {
-      Utils.showToast(context, 'Minimum tip amount is ₹${_config!.minAmount}.');
+      Utils.showToast(context, 'Minimum tip amount is ${_config!.minAmount} coins.');
       return;
     }
 
     if (_config != null && amount > _config!.maxAmount) {
-      Utils.showToast(context, 'Maximum tip amount is ₹${_config!.maxAmount}.');
+      Utils.showToast(context, 'Maximum tip amount is ${_config!.maxAmount} coins.');
       return;
     }
 
     final userBalance = int.tryParse(Database.userCoin) ?? 0;
     if (userBalance < amount) {
-      Utils.showToast(context, 'Insufficient coins. You have ₹$userBalance.');
+      Utils.showToast(context, 'Insufficient coins. You have $userBalance coins.');
       return;
     }
 
@@ -113,7 +113,7 @@ class _TipCardState extends State<TipCard> {
     });
 
     if (result != null && result['status'] == true) {
-      Utils.showToast(context, '₹$amount tip sent to ${widget.expertName}!');
+      Utils.showToast(context, '$amount coins tip sent to ${widget.expertName}!');
       widget.onTipSent?.call(amount);
     } else {
       final msg = result?['message'] ?? 'Failed to send tip.';
@@ -248,10 +248,10 @@ class _TipCardState extends State<TipCard> {
             ),
             child: Row(
               children: [
-                Icon(Icons.account_balance_wallet, size: 16, color: AppColors.redesignCoinText),
+                Icon(Icons.monetization_on, size: 16, color: AppColors.redesignCoinText),
                 const SizedBox(width: 6),
                 Text(
-                  'Balance: ₹$userBalance',
+                  'Balance: $userBalance coins',
                   style: AppFontStyle.fontStyleW600(
                     fontSize: 13,
                     fontColor: _brandDark,
@@ -290,7 +290,7 @@ class _TipCardState extends State<TipCard> {
                     ),
                   ),
                   child: Text(
-                    '₹$amount',
+                    '$amount',
                     style: AppFontStyle.fontStyleW700(
                       fontSize: 14,
                       fontColor: isSelected ? AppColors.white : _brandDark,
@@ -335,9 +335,9 @@ class _TipCardState extends State<TipCard> {
               autofocus: true,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
-                hintText: '₹${_config!.minAmount} - ₹${_config!.maxAmount}',
+                hintText: '${_config!.minAmount} - ${_config!.maxAmount} coins',
                 hintStyle: TextStyle(color: _mutedText, fontSize: 13),
-                prefixText: '₹ ',
+                prefixText: '',
                 prefixStyle: TextStyle(
                   color: _brandDark,
                   fontWeight: FontWeight.w700,
@@ -386,7 +386,7 @@ class _TipCardState extends State<TipCard> {
                         child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                       )
                     : Text(
-                        _effectiveAmount > 0 ? 'Send ₹$_effectiveAmount Tip' : 'Select Amount',
+                        _effectiveAmount > 0 ? 'Send $_effectiveAmount Coins Tip' : 'Select Amount',
                         style: AppFontStyle.fontStyleW700(
                           fontSize: 15,
                           fontColor: _effectiveAmount > 0 ? AppColors.white : _mutedText,

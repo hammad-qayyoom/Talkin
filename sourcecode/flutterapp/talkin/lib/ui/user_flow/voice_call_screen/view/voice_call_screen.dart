@@ -63,12 +63,8 @@ class _VoiceCallScreenState extends State<VoiceCallScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      log("App went to background");
-      // App went to background
-      ///call not cut in background app comment this
-      controller.endCallDueToBackground();
-    }
+    log("🔄 App Lifecycle State: $state");
+    // Voice call should not cut in background, especially if screen sharing
   }
 
   @override

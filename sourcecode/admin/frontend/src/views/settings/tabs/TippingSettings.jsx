@@ -209,7 +209,7 @@ const TippingSettings = () => {
       <Card sx={{ mb: 4 }}>
         <CardContent>
           <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 600, display: 'flex', alignItems: 'center' }}>
-            <i className='tabler-currency-dollar mr-2' />
+            <i className='tabler-coins mr-2' />
             Tip Amount Configuration
           </Typography>
           <Divider sx={{ mb: 3 }} />
@@ -227,7 +227,7 @@ const TippingSettings = () => {
                   inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <Typography variant='caption' color='text.secondary'>₹</Typography>
+                      <Typography variant='caption' color='text.secondary'>coins</Typography>
                     </InputAdornment>
                   )
                 }}
@@ -245,7 +245,7 @@ const TippingSettings = () => {
                   inputProps: { inputMode: 'numeric', pattern: '[0-9]*' },
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <Typography variant='caption' color='text.secondary'>₹</Typography>
+                      <Typography variant='caption' color='text.secondary'>coins</Typography>
                     </InputAdornment>
                   )
                 }}

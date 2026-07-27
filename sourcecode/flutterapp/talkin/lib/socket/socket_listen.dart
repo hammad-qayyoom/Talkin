@@ -546,6 +546,10 @@ class SocketListen {
   /// if Invalid caller, receiver, or call history then listen also in callRejected event
   static void handleCallRejected(dynamic data) {
     Utils.showLog("Socket Listen => callRejected event: $data");
+    NotificationServices.dismissCallNotification();
+    if (Get.currentRoute == AppRoutes.incomingCallScreen) {
+      Get.back();
+    }
   }
 
   static Future<void> handleCallTerminated(dynamic data) async {

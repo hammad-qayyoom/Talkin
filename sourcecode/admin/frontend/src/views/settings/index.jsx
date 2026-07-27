@@ -29,6 +29,7 @@ import ContentModerationSettings from './tabs/ContentModerationSettings'
 import WithdrawalSettings from './tabs/WithdrawalSettings'
 import ProfileManagement from './tabs/ProfileManageMent'
 import TippingSettings from './tabs/TippingSettings'
+import ScreenSharingSettings from './tabs/ScreenSharingSettings'
 
 // Tab labels and values
 const tabs = [
@@ -36,7 +37,8 @@ const tabs = [
   { label: 'Payment', value: 'payment' },
   { label: 'Currency', value: 'currency' },
   { label: 'Withdrawal', value: 'withdrawal' },
-  { label: 'Tipping', value: 'tipping' }
+  { label: 'Tipping', value: 'tipping' },
+  { label: 'Screen Sharing', value: 'screen_sharing' }
 ]
 
 const Settings = () => {
@@ -68,7 +70,8 @@ const Settings = () => {
       activeTab === 'payment' ||
       activeTab === 'ads' ||
       activeTab === 'withdrawal' ||
-      activeTab === 'tipping'
+      activeTab === 'tipping' ||
+      activeTab === 'screen_sharing'
     ) {
       dispatch(fetchSettings())
     }
@@ -88,6 +91,8 @@ const Settings = () => {
         return <WithdrawalSettings />
       case 'tipping':
         return <TippingSettings />
+      case 'screen_sharing':
+        return <ScreenSharingSettings />
       default:
         return <Typography>Select a tab</Typography>
     }

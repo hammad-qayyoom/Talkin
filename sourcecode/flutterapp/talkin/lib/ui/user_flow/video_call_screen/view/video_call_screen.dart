@@ -15,6 +15,7 @@ class VideoCallScreen extends StatefulWidget {
 class _VideoCallScreenState extends State<VideoCallScreen>
     with WidgetsBindingObserver {
   late final VideoCallController controller;
+  bool wasCameraOnBeforeBackground = false;
 
   @override
   void initState() {
@@ -34,10 +35,32 @@ class _VideoCallScreenState extends State<VideoCallScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      log("App went to background");
-      // App went to background
-      controller.endCallDueToBackground();
+    log("🔄 App Lifecycle State: $state");
+
+    switch (state) {
+      case AppLifecycleState.paused:
+        log("📱 App went to BACKGROUND");
+        if (!controller.isScreenSharing) {
+          wasCameraOnBeforeBackground = !controller.isCameraOff;
+          if (!controller.isCameraOff) {
+            controller.onCameraOff();
+            log("📷 Camera turned OFF (background)");
+          }
+        }
+        break;
+
+      case AppLifecycleState.resumed:
+        log("📱 App came to FOREGROUND");
+        if (!controller.isScreenSharing && wasCameraOnBeforeBackground && controller.isCameraOff) {
+          controller.onCameraOff();
+          log("📷 Camera restored to ON (foreground)");
+        }
+        break;
+
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+        break;
     }
   }
 

@@ -27,6 +27,7 @@ class Constant {
   static var idSubtitle = 'idSubtitle';
   static var idAnonymousMode = 'idAnonymousMode';
   static var idAnonymousPanel = 'idAnonymousPanel';
+  static var idScreenShare = 'idScreenShare';
   static var idTabChange = 'idTabChange';
   static var idRating = 'idRating';
   static var idChangeCountry = 'idChangeCountry';
