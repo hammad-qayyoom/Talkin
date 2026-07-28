@@ -82,7 +82,7 @@ class TipApi {
       final uri = Uri.parse(Api.tippingSend);
 
       final body = json.encode({
-        'receiverId': receiverId,
+        'expertId': receiverId,
         'tipAmount': amount,
         'callType': callType ?? 'audio',
         'paymentMethod': paymentMethod,

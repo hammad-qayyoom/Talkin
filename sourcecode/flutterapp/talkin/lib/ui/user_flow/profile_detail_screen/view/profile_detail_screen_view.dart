@@ -102,21 +102,26 @@ class _ProfileDetailContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const TopImageView(),
-        Transform.translate(
-          offset: const Offset(0, -24),
-          child: const Column(
-            children: [
-              UserProfileInfoView(),
-              StatusView(),
-              ReviewShow(),
-            ],
-          ),
-        ),
-      ],
+    return GetBuilder<ProfileDetailScreenController>(
+      id: Constant.listenerProfile,
+      builder: (controller) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const TopImageView(),
+            Transform.translate(
+              offset: const Offset(0, -24),
+              child: Column(
+                children: [
+                  const UserProfileInfoView(),
+                  const StatusView(),
+                  const ReviewShow(),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

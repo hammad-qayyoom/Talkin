@@ -30,6 +30,7 @@ import WithdrawalSettings from './tabs/WithdrawalSettings'
 import ProfileManagement from './tabs/ProfileManageMent'
 import TippingSettings from './tabs/TippingSettings'
 import ScreenSharingSettings from './tabs/ScreenSharingSettings'
+import AiSchedulingSettings from './tabs/AiSchedulingSettings'
 
 // Tab labels and values
 const tabs = [
@@ -38,7 +39,8 @@ const tabs = [
   { label: 'Currency', value: 'currency' },
   { label: 'Withdrawal', value: 'withdrawal' },
   { label: 'Tipping', value: 'tipping' },
-  { label: 'Screen Sharing', value: 'screen_sharing' }
+  { label: 'Screen Sharing', value: 'screen_sharing' },
+  { label: 'AI Scheduling', value: 'ai_scheduling' }
 ]
 
 const Settings = () => {
@@ -71,7 +73,8 @@ const Settings = () => {
       activeTab === 'ads' ||
       activeTab === 'withdrawal' ||
       activeTab === 'tipping' ||
-      activeTab === 'screen_sharing'
+      activeTab === 'screen_sharing' ||
+      activeTab === 'ai_scheduling'
     ) {
       dispatch(fetchSettings())
     }
@@ -93,6 +96,8 @@ const Settings = () => {
         return <TippingSettings />
       case 'screen_sharing':
         return <ScreenSharingSettings />
+      case 'ai_scheduling':
+        return <AiSchedulingSettings />
       default:
         return <Typography>Select a tab</Typography>
     }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
 import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/common/ai_scheduling/ai_scheduling_assistant.dart';
 import 'package:notisboard/ui/user_flow/profile_detail_screen/controller/profile_detail_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/profile_detail_screen/model/listener_profile_response_model.dart';
 import 'package:notisboard/ui/user_flow/profile_detail_screen/model/listener_review_model.dart';
@@ -718,6 +719,17 @@ class UserProfileInfoView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
+              if (statusLabel.toLowerCase() == 'offline' &&
+                  Database.settingApiModel?.data?.aiSmartSchedulingEnabled == true) ...[
+                AiSchedulingAssistant(
+                  listenerId: data.id ?? '',
+                  expertId: data.id ?? '',
+                  expertName: data.name ?? 'Expert',
+                  callType: 'audio',
+                  consultationMode: 'online',
+                ),
+                const SizedBox(height: 12),
+              ],
               if (isWideTablet)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

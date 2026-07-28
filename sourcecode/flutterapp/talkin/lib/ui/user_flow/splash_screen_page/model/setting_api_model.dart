@@ -145,6 +145,9 @@ class Data {
   final List<String>? screenSharingCategoriesEnabled;
   final int? screenSharingMaxDurationMinutes;
 
+  // AI Smart Scheduling Settings
+  final bool? aiSmartSchedulingEnabled;
+
   Data({
     this.currency,
     this.id,
@@ -248,6 +251,7 @@ class Data {
     this.screenSharingPermission,
     this.screenSharingCategoriesEnabled,
     this.screenSharingMaxDurationMinutes,
+    this.aiSmartSchedulingEnabled,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -367,6 +371,7 @@ class Data {
             ? List<String>.from(json["screenSharingCategoriesEnabled"])
             : null,
         screenSharingMaxDurationMinutes: json["screenSharingMaxDurationMinutes"],
+        aiSmartSchedulingEnabled: json["aiSmartSchedulingEnabled"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -472,6 +477,7 @@ class Data {
         "screenSharingPermission": screenSharingPermission,
         "screenSharingCategoriesEnabled": screenSharingCategoriesEnabled,
         "screenSharingMaxDurationMinutes": screenSharingMaxDurationMinutes,
+        "aiSmartSchedulingEnabled": aiSmartSchedulingEnabled,
       };
 }
 

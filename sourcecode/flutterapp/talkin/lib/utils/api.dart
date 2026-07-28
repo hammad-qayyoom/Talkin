@@ -146,6 +146,13 @@ abstract class Api {
   static const sessionAcceptPhysical = "${baseUrl}api/v2/sessions/";
   static const sessionVerifyComplete = "${baseUrl}api/v2/sessions/";
 
+  // >>>>> >>>>> AI Smart Scheduling <<<<< <<<<<
+  static const smartSchedulingSuggest = "${baseUrl}api/v2/smart-scheduling/suggest?";
+  static const smartSchedulingAlternatives = "${baseUrl}api/v2/smart-scheduling/alternatives?";
+  static const smartSchedulingConfirm = "${baseUrl}api/v2/smart-scheduling/confirm";
+  static const smartSchedulingChat = "${baseUrl}api/v2/smart-scheduling/chat";
+  static const smartSchedulingExpertToggle = "${baseUrl}api/v2/smart-scheduling/expert/toggle";
+
   // >>>>> >>>>>  Listener  Api <<<<< <<<<<
 
   static const loginListenerProfile =

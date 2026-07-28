@@ -88,7 +88,7 @@ class _TipCardState extends State<TipCard> {
       return;
     }
 
-    final userBalance = int.tryParse(Database.userCoin) ?? 0;
+    final userBalance = (double.tryParse(Database.userCoin) ?? 0.0).toInt();
     if (userBalance < amount) {
       Utils.showToast(context, 'Insufficient coins. You have $userBalance coins.');
       return;
@@ -188,7 +188,7 @@ class _TipCardState extends State<TipCard> {
   }
 
   Widget _buildTipCard() {
-    final userBalance = int.tryParse(Database.userCoin) ?? 0;
+    final userBalance = (double.tryParse(Database.userCoin) ?? 0.0).toInt();
 
     return Container(
       width: double.infinity,

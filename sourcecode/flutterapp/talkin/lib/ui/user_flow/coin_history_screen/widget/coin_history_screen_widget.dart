@@ -425,11 +425,14 @@ class CoinHistoryScreenTabBarScreen extends StatelessWidget {
   }
 
   bool _isIncome(CoinHistory item) {
+    final type = item.type ?? 0;
+    if (type != 1 && type != 2 && type != 8 && type != 10 && type != 11) {
+      return false;
+    }
     if (item.isIncome != null) {
       return item.isIncome!;
     }
 
-    final type = item.type ?? 0;
     return type == 1 || type == 2 || type == 8 || type == 10;
   }
 

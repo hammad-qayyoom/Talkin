@@ -87,11 +87,7 @@ class CallCutView extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              EnumLocale.txtCompleteTrailCallWithName.name.trParams({
-                'completeTrailCall': EnumLocale.txtCompleteTrailCall.name.tr,
-                'receiverName': receiverName,
-                'completeTrailCall1': EnumLocale.txtCompleteTrailCall1.name.tr,
-              }),
+              '${EnumLocale.txtCompleteTrailCall.name.tr} $receiverName ${EnumLocale.txtCompleteTrailCall1.name.tr}',
               style: AppFontStyle.fontStyleW700(
                 fontSize: 15,
                 fontColor: AppColors.white,
