@@ -218,4 +218,15 @@ abstract class Api {
   static const tippingHistory = "${baseUrl}api/v2/tipping/history/";
   static const tippingExpertHistory = "${baseUrl}api/v2/tipping/expert-history/";
   static const tippingExpertStats = "${baseUrl}api/v2/tipping/expert-stats/";
+
+  // >>>>> >>>>> Calendar Integration Api <<<<< <<<<<
+  static const calendarConnections = "${baseUrl}api/v2/calendar/connections";
+  static const calendarConnectGoogle = "${baseUrl}api/v2/calendar/connect/google";
+  static const calendarConnectGoogleComplete = "${baseUrl}api/v2/calendar/connect/google/complete";
+  static const calendarCallbackGoogle = "${baseUrl}api/v2/calendar/callback/google";
+  static const calendarConnectApple = "${baseUrl}api/v2/calendar/connect/apple";
+  static const calendarDisconnect = "${baseUrl}api/v2/calendar/disconnect/";
+  static const calendarSync = "${baseUrl}api/v2/calendar/sync/";
+  static const calendarEvents = "${baseUrl}api/v2/calendar/events";
+  static const calendarSettings = "${baseUrl}api/v2/calendar/settings/";
 }

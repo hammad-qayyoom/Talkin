@@ -31,6 +31,7 @@ import ProfileManagement from './tabs/ProfileManageMent'
 import TippingSettings from './tabs/TippingSettings'
 import ScreenSharingSettings from './tabs/ScreenSharingSettings'
 import AiSchedulingSettings from './tabs/AiSchedulingSettings'
+import CalendarIntegrationSettings from './tabs/CalendarIntegrationSettings'
 
 // Tab labels and values
 const tabs = [
@@ -40,7 +41,8 @@ const tabs = [
   { label: 'Withdrawal', value: 'withdrawal' },
   { label: 'Tipping', value: 'tipping' },
   { label: 'Screen Sharing', value: 'screen_sharing' },
-  { label: 'AI Scheduling', value: 'ai_scheduling' }
+  { label: 'AI Scheduling', value: 'ai_scheduling' },
+  { label: 'Calendar Integration', value: 'calendar_integration' }
 ]
 
 const Settings = () => {
@@ -74,7 +76,8 @@ const Settings = () => {
       activeTab === 'withdrawal' ||
       activeTab === 'tipping' ||
       activeTab === 'screen_sharing' ||
-      activeTab === 'ai_scheduling'
+      activeTab === 'ai_scheduling' ||
+      activeTab === 'calendar_integration'
     ) {
       dispatch(fetchSettings())
     }
@@ -98,6 +101,8 @@ const Settings = () => {
         return <ScreenSharingSettings />
       case 'ai_scheduling':
         return <AiSchedulingSettings />
+      case 'calendar_integration':
+        return <CalendarIntegrationSettings />
       default:
         return <Typography>Select a tab</Typography>
     }

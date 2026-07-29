@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/common/calendar_integration/calendar_connection_card.dart';
+import 'package:notisboard/ui/common/calendar_integration/google_calendar_connect.dart';
+import 'package:notisboard/ui/common/calendar_integration/apple_calendar_connect.dart';
 import 'package:notisboard/ui/host_flow/host_setting_screen/controller/host_setting_controller.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -205,6 +208,10 @@ class HostSettingView extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 14),
+                  if (Database.settingApiModel?.data?.calendarIntegrationEnabled == true) ...[
+                    _CalendarIntegrationSection(isTablet: isTablet),
+                    const SizedBox(height: 14),
+                  ],
                   _SectionLabel(
                     title: EnumLocale.txtAccount.name.tr,
                     isTablet: isTablet,
@@ -531,6 +538,44 @@ class _SettingsLane extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _CalendarIntegrationSection extends StatefulWidget {
+  final bool isTablet;
+
+  const _CalendarIntegrationSection({required this.isTablet});
+
+  @override
+  State<_CalendarIntegrationSection> createState() => _CalendarIntegrationSectionState();
+}
+
+class _CalendarIntegrationSectionState extends State<_CalendarIntegrationSection> {
+  Key _connectionCardKey = UniqueKey();
+
+  void _refreshConnections() {
+    setState(() {
+      _connectionCardKey = UniqueKey();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SectionLabel(
+          title: 'Calendar Integration',
+          isTablet: widget.isTablet,
+        ),
+        const SizedBox(height: 8),
+        CalendarConnectionCard(key: _connectionCardKey),
+        const SizedBox(height: 8),
+        GoogleCalendarConnect(onConnected: _refreshConnections),
+        const SizedBox(height: 8),
+        AppleCalendarConnect(onConnected: _refreshConnections),
+      ],
     );
   }
 }
