@@ -80,4 +80,6 @@ class AppRoutes {
   static const String hostBoostScreen = '/hostBoostScreen';
   static const String blogNewsListScreen = '/blogNewsListScreen';
   static const String blogNewsDetailScreen = '/blogNewsDetailScreen';
+  static const String expertContentManager = '/expertContentManager';
+  static const String contentLibraryScreen = '/contentLibraryScreen';
 }

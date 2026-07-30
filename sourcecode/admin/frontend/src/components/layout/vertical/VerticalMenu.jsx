@@ -64,7 +64,7 @@ const VerticalMenu = ({ scrollMenu }) => {
   }
 
   const showUserBlock = [can('users'), can('experts'), can('expertRequests'), can('manualVerification'), can('sessions')].some(Boolean)
-  const showContentBlock = [can('faq'), can('categories'), can('identityProofs'), can('growthSpotlight'), can('feedPosts'), can('blog')].some(Boolean)
+  const showContentBlock = [can('faq'), can('categories'), can('identityProofs'), can('growthSpotlight'), can('feedPosts'), can('blog'), can('premiumContent')].some(Boolean)
   const showModerationBlock = [can('reportedFeedPosts'), can('reportedUsers'), can('reportedExperts'), can('reportedChats'), can('reportedSessions')].some(Boolean)
   const showCommunicationBlock = [can('emailMarketing'), can('emailAccounts')].some(Boolean)
   const showSubscriptionBlock = [can('subscriptionPlans'), can('recordingStoragePlans'), can('subscriptionHistory')].some(Boolean)
@@ -173,6 +173,11 @@ const VerticalMenu = ({ scrollMenu }) => {
                   Feed Posts
                 </MenuItem>
               )}
+              {can('premiumContent') && (
+                <MenuItem href='/premium-content' icon={<i className='tabler-file-star' />}>
+                  Premium Content
+                </MenuItem>
+              )}
             </MenuSection>
           )}
 
@@ -234,7 +239,7 @@ const VerticalMenu = ({ scrollMenu }) => {
                 </MenuItem>
               )}
               {can('experts') && (
-                <MenuItem href='/boost-plans' icon={<i className='tabler-lightning' />}>
+                <MenuItem href='/boost-plans' icon={<i className='tabler-rocket' />}>
                   Boost Plans
                 </MenuItem>
               )}

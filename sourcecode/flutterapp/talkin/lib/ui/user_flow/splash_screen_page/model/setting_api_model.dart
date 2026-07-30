@@ -151,6 +151,9 @@ class Data {
   // Calendar Integration Settings
   final bool? calendarIntegrationEnabled;
 
+  // Premium Content Settings
+  final bool? premiumContentEnabled;
+
   Data({
     this.currency,
     this.id,
@@ -256,6 +259,7 @@ class Data {
     this.screenSharingMaxDurationMinutes,
     this.aiSmartSchedulingEnabled,
     this.calendarIntegrationEnabled,
+    this.premiumContentEnabled,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -377,6 +381,7 @@ class Data {
         screenSharingMaxDurationMinutes: json["screenSharingMaxDurationMinutes"],
         aiSmartSchedulingEnabled: json["aiSmartSchedulingEnabled"],
         calendarIntegrationEnabled: json["calendarIntegrationEnabled"],
+        premiumContentEnabled: json["premiumContentEnabled"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -484,6 +489,7 @@ class Data {
         "screenSharingMaxDurationMinutes": screenSharingMaxDurationMinutes,
         "aiSmartSchedulingEnabled": aiSmartSchedulingEnabled,
         "calendarIntegrationEnabled": calendarIntegrationEnabled,
+        "premiumContentEnabled": premiumContentEnabled,
       };
 }
 

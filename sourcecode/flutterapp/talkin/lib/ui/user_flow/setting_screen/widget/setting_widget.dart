@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/common/premium_content/content_library_screen.dart';
 import 'package:notisboard/ui/user_flow/setting_screen/controller/setting_controller.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -204,6 +205,18 @@ class SettingView extends StatelessWidget {
                       Get.toNamed(AppRoutes.referralScreen);
                     },
                   ),
+                  if (Database.settingApiModel?.data?.premiumContentEnabled == true) ...[
+                    const SizedBox(height: 10),
+                    _SettingsLane(
+                      iconAsset: AppAsset.starCoin,
+                      title: 'Content Library',
+                      subtitle: 'View your purchased premium content',
+                      isTablet: isTablet,
+                      onTap: () {
+                        Get.to(() => const ContentLibraryScreen());
+                      },
+                    ),
+                  ],
                   const SizedBox(height: 14),
                   _SectionLabel(
                     title: EnumLocale.txtAccount.name.tr,

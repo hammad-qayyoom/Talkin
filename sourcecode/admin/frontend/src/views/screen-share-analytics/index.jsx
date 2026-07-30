@@ -18,6 +18,7 @@ import Typography from '@mui/material/Typography'
 
 // Config Import
 import { baseURL, secretKey } from '@/config'
+import { getAuthHeaders } from '@/utils/auth-headers'
 
 const formatDuration = (seconds) => {
   if (!seconds || seconds <= 0) return '0s'
@@ -39,12 +40,8 @@ const ScreenShareAnalytics = () => {
     const fetchStats = async () => {
       setLoading(true)
       try {
-        const token = localStorage.getItem('admin_token')
         const response = await axios.get(`${baseURL}/api/v2/screen-share/admin/stats`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            secretKey: secretKey
-          }
+          headers: getAuthHeaders()
         })
         const data = response.data
         if (data.status) {

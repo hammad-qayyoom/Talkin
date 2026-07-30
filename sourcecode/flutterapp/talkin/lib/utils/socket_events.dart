@@ -57,4 +57,14 @@ class SocketEvents {
   static const subtitleReceived = "subtitleReceived";
   static const translationParticipantJoined = "translationParticipantJoined";
   static const translationParticipantLeft = "translationParticipantLeft";
+
+  /// Premium Content / Pay-per-Action
+  static const sendPurchaseRequest = "sendPurchaseRequest";
+  static const purchaseRequestReceived = "purchaseRequestReceived";
+  static const purchaseRequestSent = "purchaseRequestSent";
+  static const acceptPurchaseRequest = "acceptPurchaseRequest";
+  static const declinePurchaseRequest = "declinePurchaseRequest";
+  static const purchaseCompleted = "purchaseCompleted";
+  static const purchaseFailed = "purchaseFailed";
+  static const purchaseDeclined = "purchaseDeclined";
 }

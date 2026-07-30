@@ -6,6 +6,8 @@ import 'package:notisboard/custom/bottom_sheet/report_block_ui_bottom_sheet.dart
 import 'package:notisboard/custom/bottom_sheet/report_bottom_sheet.dart';
 import 'package:notisboard/custom/dialog/block_dialog.dart';
 import 'package:notisboard/ui/user_flow/video_call_screen/controller/video_call_controller.dart';
+import 'package:notisboard/ui/common/premium_content/premium_content_picker.dart';
+import 'package:notisboard/ui/common/premium_content/content_library_screen.dart';
 import 'package:notisboard/services/translation/translation_service.dart';
 import 'package:notisboard/services/translation/translation_widgets.dart';
 import 'package:notisboard/services/anonymous_mode/anonymous_mode_widgets.dart';
@@ -347,6 +349,38 @@ class VideoCallView1 extends StatelessWidget {
                               onTap: () => showAnonymousModePanel(context),
                               size: controlSize,
                             ),
+                            if (Database.isListener && logic.sessionId != null && logic.sessionId!.isNotEmpty) ...[
+                              SizedBox(width: controlGap),
+                              ControlButton(
+                                iconData: Icons.star_rounded,
+                                size: controlSize,
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (_) => PremiumContentPicker(
+                                      sessionId: logic.sessionId!,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                            if (!Database.isListener && logic.sessionId != null && logic.sessionId!.isNotEmpty) ...[
+                              SizedBox(width: controlGap),
+                              ControlButton(
+                                iconData: Icons.library_books_rounded,
+                                size: controlSize,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const ContentLibraryScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                             SizedBox(width: controlGap),
                             logic.isGroupSessionCall
                                 ? _buildGroupChatControlButton(

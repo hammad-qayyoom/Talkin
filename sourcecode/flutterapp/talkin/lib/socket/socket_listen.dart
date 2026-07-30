@@ -16,6 +16,7 @@ import 'package:notisboard/ui/user_flow/home_screen/api/user_coin_api.dart';
 import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/user_coin_model.dart';
 import 'package:notisboard/ui/common/session_booking/session_booking_service.dart';
+import 'package:notisboard/ui/common/premium_content/premium_content_socket_handler.dart';
 import 'package:notisboard/ui/user_flow/personal_chat_screen/controller/personal_chat_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/personal_chat_screen/model/personal_chat_model.dart';
 import 'package:notisboard/ui/user_flow/video_call_screen/controller/video_call_controller.dart';
@@ -132,6 +133,7 @@ class SocketListen {
 
     // Always attach on current connection state.
     _attachCallAndChatListeners();
+    PremiumContentSocketHandler().registerListeners();
 
     // Re-attach on any future reconnect as well.
     if (!_connectHookAttached) {

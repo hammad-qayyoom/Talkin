@@ -117,6 +117,8 @@ dependencies:
   google_sign_in: ^6.2.2
   crypto: ^3.0.6
   flutter_screen_recording: ^2.0.25
+  flutter_pdfview: ^1.4.4
+  open_filex: ^4.7.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

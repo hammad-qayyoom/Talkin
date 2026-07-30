@@ -40,8 +40,12 @@ const getAuthHeaders = () => {
 }
 
 const formatCurrency = value => {
-  if (value == null) return '₹0'
-  return `₹${Number(value).toLocaleString('en-IN')}`
+  const amount = value == null ? '0' : Number(value).toLocaleString('en-IN')
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+      {amount} <img src="/app/assets/assets/icons/star_coin.png" alt="coin" style={{ width: '1em', height: '1em', marginLeft: '4px' }} />
+    </span>
+  )
 }
 
 const formatDate = value => {
@@ -88,6 +92,13 @@ const TipAnalyticsView = () => {
     )
   }
 
+  const currentStats = (() => {
+    if (!stats) return null
+    if (timeframe === 'week') return stats.weekly
+    if (timeframe === 'month') return stats.monthly
+    return stats.allTime
+  })()
+
   return (
     <>
       <Box className='mb-3'>
@@ -121,7 +132,7 @@ const TipAnalyticsView = () => {
             <Grid item xs={12} sm={6} md={3}>
               <Box sx={{ p: 3, border: theme => `1px solid ${theme.palette.divider}`, borderRadius: 2, textAlign: 'center' }}>
                 <Typography variant='h4' color='primary'>
-                  {formatCurrency(stats?.totalTipsAmount || 0)}
+                  {formatCurrency(currentStats?.totalTips || 0)}
                 </Typography>
                 <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
                   Total Tips Sent
@@ -131,7 +142,7 @@ const TipAnalyticsView = () => {
             <Grid item xs={12} sm={6} md={3}>
               <Box sx={{ p: 3, border: theme => `1px solid ${theme.palette.divider}`, borderRadius: 2, textAlign: 'center' }}>
                 <Typography variant='h4' color='success.main'>
-                  {formatCurrency(stats?.totalExpertEarnings || 0)}
+                  {formatCurrency(currentStats?.totalExpertPayout || 0)}
                 </Typography>
                 <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
                   Expert Earnings
@@ -141,7 +152,7 @@ const TipAnalyticsView = () => {
             <Grid item xs={12} sm={6} md={3}>
               <Box sx={{ p: 3, border: theme => `1px solid ${theme.palette.divider}`, borderRadius: 2, textAlign: 'center' }}>
                 <Typography variant='h4' color='warning.main'>
-                  {formatCurrency(stats?.totalPlatformCommission || 0)}
+                  {formatCurrency(currentStats?.totalPlatformFee || 0)}
                 </Typography>
                 <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
                   Platform Commission
@@ -151,7 +162,7 @@ const TipAnalyticsView = () => {
             <Grid item xs={12} sm={6} md={3}>
               <Box sx={{ p: 3, border: theme => `1px solid ${theme.palette.divider}`, borderRadius: 2, textAlign: 'center' }}>
                 <Typography variant='h4'>
-                  {stats?.totalTipCount || 0}
+                  {currentStats?.count || 0}
                 </Typography>
                 <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
                   Total Tips
@@ -194,19 +205,19 @@ const TipAnalyticsView = () => {
                   recentTips.map(tip => (
                     <TableRow key={tip._id}>
                       <TableCell>{formatDate(tip.createdAt)}</TableCell>
-                      <TableCell>{tip.user?.displayName || tip.userId || '-'}</TableCell>
-                      <TableCell>{tip.expert?.displayName || tip.expertId || '-'}</TableCell>
+                      <TableCell>{tip.userId?.fullName || tip.userId?.nickName || '-'}</TableCell>
+                      <TableCell>{tip.expertProfileId?.displayName || '-'}</TableCell>
                       <TableCell>{tip.sessionBookingId || '-'}</TableCell>
                       <TableCell>{formatCurrency(tip.tipAmount)}</TableCell>
-                      <TableCell>{formatCurrency(tip.platformFee)}</TableCell>
-                      <TableCell>{formatCurrency(tip.expertEarning)}</TableCell>
+                      <TableCell>{formatCurrency(tip.platformFeeAmount)}</TableCell>
+                      <TableCell>{formatCurrency(tip.expertPayoutAmount)}</TableCell>
                       <TableCell>
                         <Chip
-                          label={tip.status || 'completed'}
+                          label={tip.tipStatus || 'completed'}
                           color={
-                            tip.status === 'completed'
+                            tip.tipStatus === 'completed'
                               ? 'success'
-                              : tip.status === 'refunded'
+                              : tip.tipStatus === 'refunded'
                                 ? 'warning'
                                 : 'default'
                           }

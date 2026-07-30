@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
 import 'package:notisboard/custom/notisboard_wordmark.dart';
 import 'package:notisboard/ui/user_flow/voice_call_screen/controller/voice_call_controller.dart';
+import 'package:notisboard/ui/common/premium_content/premium_content_picker.dart';
+import 'package:notisboard/ui/common/premium_content/content_library_screen.dart';
 import 'package:notisboard/services/translation/translation_service.dart';
 import 'package:notisboard/services/translation/translation_widgets.dart';
 import 'package:notisboard/utils/app_asset.dart';
@@ -360,6 +362,34 @@ class VoiceCallView1 extends StatelessWidget {
                     );
                   },
                 ),
+                if (Database.isListener && controller.sessionId != null && controller.sessionId!.isNotEmpty)
+                  buildControlButton(
+                    iconData: Icons.star_rounded,
+                    size: controlSize,
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (_) => PremiumContentPicker(
+                          sessionId: controller.sessionId!,
+                        ),
+                      );
+                    },
+                  ),
+                if (!Database.isListener && controller.sessionId != null && controller.sessionId!.isNotEmpty)
+                  buildControlButton(
+                    iconData: Icons.library_books_rounded,
+                    size: controlSize,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ContentLibraryScreen(),
+                        ),
+                      );
+                    },
+                  ),
                 buildControlButton(
                   iconData: Icons.call_end_rounded,
                   isDanger: true,

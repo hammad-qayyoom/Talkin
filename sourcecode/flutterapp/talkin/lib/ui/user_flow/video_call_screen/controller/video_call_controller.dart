@@ -743,6 +743,9 @@ class VideoCallController extends GetxController {
   }
 
   Future<ZegoRoomLogoutResult> logoutRoom() async {
+    if (isScreenSharing) {
+      await _stopScreenShare();
+    }
     await _clearAllRemoteStreams();
     stopPreview();
     stopPublish();
@@ -1523,16 +1526,10 @@ class VideoCallController extends GetxController {
 
   bool get canScreenShare {
     final settings = Database.settingApiModel?.data;
-    if (settings == null) return false;
+    if (settings == null) return true;
 
-    final screenSharingEnabled = settings.screenSharingEnabled ?? false;
+    final screenSharingEnabled = settings.screenSharingEnabled ?? true;
     if (!screenSharingEnabled) return false;
-
-    final isVideoCall = callType?.toLowerCase() == 'video';
-    final isAudioCall = callType?.toLowerCase() == 'audio';
-
-    if (isAudioCall && !(settings.screenSharingAudioEnabled ?? false)) return false;
-    if (isVideoCall && !(settings.screenSharingVideoEnabled ?? true)) return false;
 
     final permission = settings.screenSharingPermission ?? 'both';
     final isExpert = Database.fetchLoginUserProfileModel?.user?.isListener == true;
@@ -1689,6 +1686,9 @@ class VideoCallController extends GetxController {
         ZegoVideoSourceType.Camera,
         channel: ZegoPublishChannel.Main,
       );
+
+      // Restore camera state to user's previous preference
+      await ZegoExpressEngine.instance.enableCamera(!isCameraOff);
 
       if (_screenShareStartTime != null) {
         _screenShareDurationSeconds += DateTime.now().difference(_screenShareStartTime!).inSeconds;

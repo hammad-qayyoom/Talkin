@@ -5,6 +5,7 @@ import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/common/calendar_integration/calendar_connection_card.dart';
 import 'package:notisboard/ui/common/calendar_integration/google_calendar_connect.dart';
 import 'package:notisboard/ui/common/calendar_integration/apple_calendar_connect.dart';
+import 'package:notisboard/ui/common/premium_content/expert_content_manager.dart';
 import 'package:notisboard/ui/host_flow/host_setting_screen/controller/host_setting_controller.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -207,6 +208,18 @@ class HostSettingView extends StatelessWidget {
                       Get.toNamed(AppRoutes.referralScreen);
                     },
                   ),
+                  if (Database.settingApiModel?.data?.premiumContentEnabled == true) ...[
+                    const SizedBox(height: 10),
+                    _SettingsLane(
+                      iconAsset: AppAsset.starCoin,
+                      title: 'Premium Content',
+                      subtitle: 'Upload and manage your premium content',
+                      isTablet: isTablet,
+                      onTap: () {
+                        Get.to(() => const ExpertContentManager());
+                      },
+                    ),
+                  ],
                   const SizedBox(height: 14),
                   if (Database.settingApiModel?.data?.calendarIntegrationEnabled == true) ...[
                     _CalendarIntegrationSection(isTablet: isTablet),

@@ -229,4 +229,16 @@ abstract class Api {
   static const calendarSync = "${baseUrl}api/v2/calendar/sync/";
   static const calendarEvents = "${baseUrl}api/v2/calendar/events";
   static const calendarSettings = "${baseUrl}api/v2/calendar/settings/";
+
+  // >>>>> >>>>> Premium Content / Pay-per-Action Api <<<<< <<<<<
+  static const premiumContentUpload = "${baseUrl}api/v2/premium-content/upload";
+  static const premiumContentList = "${baseUrl}api/v2/premium-content/list";
+  static const premiumContentPurchase = "${baseUrl}api/v2/premium-content/purchase";
+  static const premiumContentPurchasesHistory = "${baseUrl}api/v2/premium-content/purchases/history";
+  static const premiumContentSalesHistory = "${baseUrl}api/v2/premium-content/sales/history";
+  static const premiumContentSalesStats = "${baseUrl}api/v2/premium-content/sales/stats";
+  static const premiumContentExpert = "${baseUrl}api/v2/premium-content/expert/";
+  static const premiumContentDetail = "${baseUrl}api/v2/premium-content/";
+  static const premiumContentDownload = "${baseUrl}api/v2/premium-content/download/";
+  static const premiumContentPreview = "${baseUrl}api/v2/premium-content/preview/";
 }
