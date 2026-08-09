@@ -13,6 +13,13 @@ import FilterAltOffIcon from '@mui/icons-material/FilterAltOff'
 import { Chip, CircularProgress, Fab, Tooltip } from '@mui/material'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogActions from '@mui/material/DialogActions'
+import Alert from '@mui/material/Alert'
+import PersonIcon from '@mui/icons-material/Person'
+import ShieldIcon from '@mui/icons-material/Shield'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 import { styled, useTheme } from '@mui/material/styles'
@@ -228,6 +235,8 @@ const UserListTable = ({ breakpoint = 'lg' }) => {
   const [selectedUser, setSelectedUser] = useState(null)
   const [coinAdjustDialogOpen, setCoinAdjustDialogOpen] = useState(false)
   const [resetKey, setResetKey] = useState(0)
+  const [impersonateConfirmOpen, setImpersonateConfirmOpen] = useState(false)
+  const [impersonateUser, setImpersonateUser] = useState(null)
 
   // Redux state
   const { status, user, pageSize, page, type, initialLoad, total, loading } = useSelector(state => state.userReducer)
@@ -634,7 +643,8 @@ return (
             <Tooltip title="Login As User">
               <IconButton
                 onClick={() => {
-                  window.open(`/simulate?uid=${row.original.uniqueId || row.original._id}&fid=${row.original.firebaseId || row.original._id}`, '_blank')
+                  setImpersonateUser(row.original)
+                  setImpersonateConfirmOpen(true)
                 }}
               >
                 <i className='tabler-external-link text-textSecondary' />
@@ -1121,6 +1131,45 @@ return (
         editData={selectedUser}
         coinAdjustmentMode={true}
       />
+
+      {/* Impersonation Confirmation Dialog */}
+      <Dialog open={impersonateConfirmOpen} onClose={() => setImpersonateConfirmOpen(false)} maxWidth='sm' fullWidth>
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <ShieldIcon color='warning' />
+          <span>Confirm User Impersonation</span>
+        </DialogTitle>
+        <DialogContent>
+          <Alert severity='warning' sx={{ mb: 2 }}>
+            You are about to log in as another user. This action will be logged for audit purposes.
+          </Alert>
+          <Typography variant='body2' sx={{ mb: 1 }}>
+            You are impersonating: <strong>{impersonateUser?.fullName || impersonateUser?.name || 'Unknown User'}</strong>
+          </Typography>
+          <Typography variant='body2' color='text.secondary'>
+            This will open the application as this user in a new tab. You will see their profile, bookings, consultations, subscriptions, wallet, notifications, and all other data.
+          </Typography>
+          <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
+            A floating banner will allow you to exit impersonation and return to the admin panel at any time.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setImpersonateConfirmOpen(false); setImpersonateUser(null) }} color='secondary'>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              setImpersonateConfirmOpen(false)
+              window.open(`/simulate?uid=${impersonateUser?.uniqueId || impersonateUser?._id}&fid=${impersonateUser?.firebaseId || impersonateUser?._id}`, '_blank')
+              setImpersonateUser(null)
+            }}
+            variant='contained'
+            color='primary'
+            startIcon={<PersonIcon />}
+          >
+            Login as User
+          </Button>
+        </DialogActions>
+      </Dialog>
       {/* <UserDetailDialog
         open={isUserDialogOpen}
         onClose={() => {

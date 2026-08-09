@@ -9,6 +9,13 @@ import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
 import Divider from '@mui/material/Divider'
 import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogActions from '@mui/material/DialogActions'
+import Alert from '@mui/material/Alert'
+import PersonIcon from '@mui/icons-material/Person'
+import ShieldIcon from '@mui/icons-material/Shield'
 
 // Component Imports
 import ConfirmationDialog from '@components/dialogs/confirmation-dialog'
@@ -44,12 +51,22 @@ const UserDetails = ({ userDetails }) => {
   })
 
   const [userInfo, setUserInfo] = useState({})
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   useEffect(() => {
     const data = typeof window !== 'undefined' && localStorage.getItem('user')
 
     setUserInfo(JSON.parse(data))
   }, [])
+
+  const handleLoginAsUser = () => {
+    setConfirmOpen(true)
+  }
+
+  const handleConfirm = () => {
+    setConfirmOpen(false)
+    window.open(`/simulate?uid=${userDetails?.uniqueId || userDetails?._id}&fid=${userDetails?.firebaseId || userDetails?._id}`, '_blank')
+  }
 
   // console.log(userInfo)
 
@@ -90,7 +107,7 @@ const UserDetails = ({ userDetails }) => {
             <Button
               variant='contained'
               color='primary'
-              onClick={() => window.open(`/simulate?uid=${userDetails?.uniqueId || userDetails?._id}&fid=${userDetails?.firebaseId || userDetails?._id}`, '_blank')}
+              onClick={handleLoginAsUser}
               startIcon={<i className='tabler-external-link' />}
             >
               Login As User
@@ -212,6 +229,36 @@ const UserDetails = ({ userDetails }) => {
           </div> */}
         </CardContent>
       </Card>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)} maxWidth='sm' fullWidth>
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <ShieldIcon color='warning' />
+          <span>Confirm User Impersonation</span>
+        </DialogTitle>
+        <DialogContent>
+          <Alert severity='warning' sx={{ mb: 2 }}>
+            You are about to log in as another user. This action will be logged for audit purposes.
+          </Alert>
+          <Typography variant='body2' sx={{ mb: 1 }}>
+            You are impersonating: <strong>{userDetails?.name || 'Unknown User'}</strong>
+          </Typography>
+          <Typography variant='body2' color='text.secondary'>
+            This will open the application as this user in a new tab. You will see their profile, bookings, consultations, subscriptions, wallet, notifications, and all other data.
+          </Typography>
+          <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
+            A floating banner will allow you to exit impersonation and return to the admin panel at any time.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmOpen(false)} color='secondary'>
+            Cancel
+          </Button>
+          <Button onClick={handleConfirm} variant='contained' color='primary' startIcon={<PersonIcon />}>
+            Login as User
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }
