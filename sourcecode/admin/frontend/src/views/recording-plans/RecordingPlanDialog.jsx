@@ -14,6 +14,9 @@ import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import CircularProgress from '@mui/material/CircularProgress'
 import MenuItem from '@mui/material/MenuItem'
+import Switch from '@mui/material/Switch'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Divider from '@mui/material/Divider'
 
 import DialogCloseButton from '@components/dialogs/DialogCloseButton'
 
@@ -32,6 +35,16 @@ const RecordingPlanDialog = ({ open, onClose, mode = 'create', plan = null }) =>
     price: '',
     billingCycle: 'monthly',
     storageDays: 30,
+    maxRecordingMinutes: 0,
+    unlimitedStorage: false,
+    retentionDays: 30,
+    unlimitedRetention: false,
+    gracePeriodDays: 14,
+    warningThreshold80: true,
+    warningThreshold90: true,
+    warningThreshold100: true,
+    targetUserType: 'both',
+    planVisibility: 'public',
     appleProductId: '',
     googleProductId: '',
     description: '',
@@ -49,6 +62,16 @@ const RecordingPlanDialog = ({ open, onClose, mode = 'create', plan = null }) =>
         price: plan.price || '',
         billingCycle: plan.billingCycle || 'monthly',
         storageDays: plan.storageDays || 30,
+        maxRecordingMinutes: plan.maxRecordingMinutes || 0,
+        unlimitedStorage: plan.unlimitedStorage || false,
+        retentionDays: plan.retentionDays || 30,
+        unlimitedRetention: plan.unlimitedRetention || false,
+        gracePeriodDays: plan.gracePeriodDays || 14,
+        warningThreshold80: plan.warningThreshold80 !== false,
+        warningThreshold90: plan.warningThreshold90 !== false,
+        warningThreshold100: plan.warningThreshold100 !== false,
+        targetUserType: plan.targetUserType || 'both',
+        planVisibility: plan.planVisibility || 'public',
         appleProductId: plan.appleProductId || '',
         googleProductId: plan.googleProductId || '',
         description: plan.description || '',
@@ -61,6 +84,16 @@ const RecordingPlanDialog = ({ open, onClose, mode = 'create', plan = null }) =>
         price: '',
         billingCycle: 'monthly',
         storageDays: 30,
+        maxRecordingMinutes: 0,
+        unlimitedStorage: false,
+        retentionDays: 30,
+        unlimitedRetention: false,
+        gracePeriodDays: 14,
+        warningThreshold80: true,
+        warningThreshold90: true,
+        warningThreshold100: true,
+        targetUserType: 'both',
+        planVisibility: 'public',
         appleProductId: '',
         googleProductId: '',
         description: '',
@@ -74,7 +107,7 @@ const RecordingPlanDialog = ({ open, onClose, mode = 'create', plan = null }) =>
     setFormData(prev => ({ ...prev, [field]: value }))
     setErrors(prev => {
       const updatedErrors = { ...prev }
-      if ((field === 'price' || field === 'storageDays') && value > 0) {
+      if ((field === 'price' || field === 'storageDays' || field === 'retentionDays') && value > 0) {
         delete updatedErrors[field]
       }
       return updatedErrors
@@ -92,6 +125,9 @@ const RecordingPlanDialog = ({ open, onClose, mode = 'create', plan = null }) =>
     if (!formData.storageDays || formData.storageDays <= 0) {
       newErrors.storageDays = 'Storage days must be a positive number'
     }
+    if (!formData.unlimitedRetention && (!formData.retentionDays || formData.retentionDays <= 0)) {
+      newErrors.retentionDays = 'Retention days must be a positive number when not unlimited'
+    }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -108,6 +144,16 @@ const RecordingPlanDialog = ({ open, onClose, mode = 'create', plan = null }) =>
         if (formData.price !== plan.price) updatedPayload.price = formData.price
         if (formData.billingCycle !== plan.billingCycle) updatedPayload.billingCycle = formData.billingCycle
         if (Number(formData.storageDays) !== plan.storageDays) updatedPayload.storageDays = formData.storageDays
+        if (Number(formData.maxRecordingMinutes) !== (plan.maxRecordingMinutes || 0)) updatedPayload.maxRecordingMinutes = formData.maxRecordingMinutes
+        if (formData.unlimitedStorage !== (plan.unlimitedStorage || false)) updatedPayload.unlimitedStorage = formData.unlimitedStorage
+        if (Number(formData.retentionDays) !== (plan.retentionDays || 30)) updatedPayload.retentionDays = formData.retentionDays
+        if (formData.unlimitedRetention !== (plan.unlimitedRetention || false)) updatedPayload.unlimitedRetention = formData.unlimitedRetention
+        if (Number(formData.gracePeriodDays) !== (plan.gracePeriodDays || 14)) updatedPayload.gracePeriodDays = formData.gracePeriodDays
+        if (formData.warningThreshold80 !== (plan.warningThreshold80 !== false)) updatedPayload.warningThreshold80 = formData.warningThreshold80
+        if (formData.warningThreshold90 !== (plan.warningThreshold90 !== false)) updatedPayload.warningThreshold90 = formData.warningThreshold90
+        if (formData.warningThreshold100 !== (plan.warningThreshold100 !== false)) updatedPayload.warningThreshold100 = formData.warningThreshold100
+        if (formData.targetUserType !== (plan.targetUserType || 'both')) updatedPayload.targetUserType = formData.targetUserType
+        if (formData.planVisibility !== (plan.planVisibility || 'public')) updatedPayload.planVisibility = formData.planVisibility
         if (formData.appleProductId !== plan.appleProductId) updatedPayload.appleProductId = formData.appleProductId
         if (formData.googleProductId !== plan.googleProductId) updatedPayload.googleProductId = formData.googleProductId
         if (formData.description !== (plan.description || '')) updatedPayload.description = formData.description
@@ -137,6 +183,16 @@ const RecordingPlanDialog = ({ open, onClose, mode = 'create', plan = null }) =>
       price: '',
       billingCycle: 'monthly',
       storageDays: 30,
+      maxRecordingMinutes: 0,
+      unlimitedStorage: false,
+      retentionDays: 30,
+      unlimitedRetention: false,
+      gracePeriodDays: 14,
+      warningThreshold80: true,
+      warningThreshold90: true,
+      warningThreshold100: true,
+      targetUserType: 'both',
+      planVisibility: 'public',
       appleProductId: '',
       googleProductId: '',
       description: '',
@@ -159,9 +215,9 @@ const RecordingPlanDialog = ({ open, onClose, mode = 'create', plan = null }) =>
       TransitionComponent={Transition}
       aria-labelledby='recordingplan-dialog-title'
       fullWidth
-      maxWidth='sm'
+      maxWidth='md'
       PaperProps={{
-        sx: { overflow: 'visible', width: '600px', maxWidth: '95vw' }
+        sx: { overflow: 'visible', width: '750px', maxWidth: '95vw' }
       }}
     >
       <DialogTitle id='recordingplan-dialog-title'>
@@ -174,6 +230,10 @@ const RecordingPlanDialog = ({ open, onClose, mode = 'create', plan = null }) =>
       </DialogTitle>
 
       <DialogContent className='flex flex-col gap-4 py-4'>
+        <Typography variant='h6' color='primary'>
+          Basic Information
+        </Typography>
+
         <TextField
           label='Plan Name'
           fullWidth
@@ -209,16 +269,170 @@ const RecordingPlanDialog = ({ open, onClose, mode = 'create', plan = null }) =>
         </TextField>
 
         <TextField
-          label='Storage Days'
+          label='Description'
+          fullWidth
+          multiline
+          rows={2}
+          value={formData.description}
+          onChange={e => handleChange('description', e.target.value)}
+          placeholder='Record and store your consultation sessions securely in the cloud.'
+        />
+
+        <Divider sx={{ my: 2 }} />
+        <Typography variant='h6' color='primary'>
+          Subscription Duration
+        </Typography>
+
+        <TextField
+          label='Storage Days (Subscription Duration)'
           type='number'
           fullWidth
           value={formData.storageDays}
           error={!!errors.storageDays}
-          helperText={errors.storageDays || 'Number of days recording storage is valid'}
+          helperText={errors.storageDays || 'Number of days the subscription is active'}
           onChange={e => handleChange('storageDays', parseInt(e.target.value, 10) || '')}
           placeholder='30'
           inputProps={{ min: 1 }}
         />
+
+        <Divider sx={{ my: 2 }} />
+        <Typography variant='h6' color='primary'>
+          Recording Storage Capacity
+        </Typography>
+
+        <FormControlLabel
+          control={
+            <Switch
+              checked={formData.unlimitedStorage}
+              onChange={e => handleChange('unlimitedStorage', e.target.checked)}
+            />
+          }
+          label='Unlimited Storage'
+        />
+
+        {!formData.unlimitedStorage && (
+          <TextField
+            label='Max Recording Minutes'
+            type='number'
+            fullWidth
+            value={formData.maxRecordingMinutes}
+            helperText='Maximum total recording minutes allowed (0 = unlimited)'
+            onChange={e => handleChange('maxRecordingMinutes', parseInt(e.target.value, 10) || 0)}
+            placeholder='0'
+            inputProps={{ min: 0 }}
+          />
+        )}
+
+        <Divider sx={{ my: 2 }} />
+        <Typography variant='h6' color='primary'>
+          Recording Retention
+        </Typography>
+
+        <FormControlLabel
+          control={
+            <Switch
+              checked={formData.unlimitedRetention}
+              onChange={e => handleChange('unlimitedRetention', e.target.checked)}
+            />
+          }
+          label='Unlimited Retention'
+        />
+
+        {!formData.unlimitedRetention && (
+          <TextField
+            label='Retention Days'
+            type='number'
+            fullWidth
+            value={formData.retentionDays}
+            error={!!errors.retentionDays}
+            helperText={errors.retentionDays || 'Number of days recordings are kept after creation'}
+            onChange={e => handleChange('retentionDays', parseInt(e.target.value, 10) || '')}
+            placeholder='30'
+            inputProps={{ min: 1 }}
+          />
+        )}
+
+        <Divider sx={{ my: 2 }} />
+        <Typography variant='h6' color='primary'>
+          Grace Period & Notifications
+        </Typography>
+
+        <TextField
+          label='Grace Period Days'
+          type='number'
+          fullWidth
+          value={formData.gracePeriodDays}
+          helperText='Days after subscription expires before recordings are locked (0 = no grace period)'
+          onChange={e => handleChange('gracePeriodDays', parseInt(e.target.value, 10) || 0)}
+          placeholder='14'
+          inputProps={{ min: 0 }}
+        />
+
+        <Typography variant='subtitle2' color='text.secondary'>
+          Capacity Warning Thresholds
+        </Typography>
+        <div className='flex gap-4'>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={formData.warningThreshold80}
+                onChange={e => handleChange('warningThreshold80', e.target.checked)}
+              />
+            }
+            label='80% Warning'
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={formData.warningThreshold90}
+                onChange={e => handleChange('warningThreshold90', e.target.checked)}
+              />
+            }
+            label='90% Warning'
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={formData.warningThreshold100}
+                onChange={e => handleChange('warningThreshold100', e.target.checked)}
+              />
+            }
+            label='100% Warning'
+          />
+        </div>
+
+        <Divider sx={{ my: 2 }} />
+        <Typography variant='h6' color='primary'>
+          Targeting & Visibility
+        </Typography>
+
+        <TextField
+          select
+          label='Target User Type'
+          fullWidth
+          value={formData.targetUserType}
+          onChange={e => handleChange('targetUserType', e.target.value)}
+        >
+          <MenuItem value='both'>Both (Users & Listeners)</MenuItem>
+          <MenuItem value='user'>Users Only</MenuItem>
+          <MenuItem value='listener'>Listeners Only</MenuItem>
+        </TextField>
+
+        <TextField
+          select
+          label='Plan Visibility'
+          fullWidth
+          value={formData.planVisibility}
+          onChange={e => handleChange('planVisibility', e.target.value)}
+        >
+          <MenuItem value='public'>Public</MenuItem>
+          <MenuItem value='admin_only'>Admin Only</MenuItem>
+        </TextField>
+
+        <Divider sx={{ my: 2 }} />
+        <Typography variant='h6' color='primary'>
+          Platform Product IDs
+        </Typography>
 
         <TextField
           label='Apple Product ID'
@@ -237,15 +451,31 @@ const RecordingPlanDialog = ({ open, onClose, mode = 'create', plan = null }) =>
           placeholder='recording_storage_monthly'
         />
 
-        <TextField
-          label='Description'
-          fullWidth
-          multiline
-          rows={2}
-          value={formData.description}
-          onChange={e => handleChange('description', e.target.value)}
-          placeholder='Record and store your consultation sessions securely in the cloud.'
-        />
+        <Divider sx={{ my: 2 }} />
+        <Typography variant='h6' color='primary'>
+          Status
+        </Typography>
+
+        <div className='flex gap-4'>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={formData.isPopular}
+                onChange={e => handleChange('isPopular', e.target.checked)}
+              />
+            }
+            label='Popular Plan'
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={formData.isActive}
+                onChange={e => handleChange('isActive', e.target.checked)}
+              />
+            }
+            label='Active'
+          />
+        </div>
       </DialogContent>
 
       <DialogActions>

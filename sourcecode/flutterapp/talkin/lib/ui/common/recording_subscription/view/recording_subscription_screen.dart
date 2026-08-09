@@ -97,11 +97,15 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
     if (mounted) setState(() => isLoading = false);
   }
 
+  /// Loads available payment methods based on platform and settings.
+  /// iOS: ONLY Apple In-App Purchase (App Store) is allowed.
+  /// Android: Google Play and third-party gateways (Stripe, RazorPay, etc.) based on settings.
   void _loadPaymentMethods() {
     paymentMethods.clear();
     selectedPaymentMethod = -1;
     final settings = Database.settingApiModel?.data;
 
+    // iOS: Enforce Apple IAP only — no other payment methods allowed
     if (GetPlatform.isIOS) {
       final isEnabled = settings == null || settings.isAppleInAppPurchaseEnabled != false;
       if (isEnabled) {
@@ -110,9 +114,10 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
         ];
         selectedPaymentMethod = 3;
       }
-      return;
+      return; // Early return ensures no other methods are added on iOS
     }
 
+    // Android: Load all enabled payment methods
     if (settings == null) {
       paymentMethods = [
         PaymentMethodOption(id: 3, title: EnumLocale.txtGooglePlay.name.tr, image: AppAsset.googleIcon, width: 50, height: 26),
@@ -322,6 +327,12 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       return;
     }
     if (isPurchasing) return;
+
+    // iOS enforcement: Only Apple IAP is allowed for recording subscriptions
+    if (GetPlatform.isIOS && selectedPaymentMethod != 3) {
+      Utils.showToast(context, "iOS requires Apple In-App Purchase. Please select App Store.");
+      return;
+    }
 
     setState(() => isPurchasing = true);
 

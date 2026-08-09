@@ -106,16 +106,6 @@ const RecordingPlans = () => {
         header: 'Plan Name',
         cell: ({ getValue }) => <Typography>{getValue() || '-'}</Typography>
       }),
-      columnHelper.accessor(row => row.appleProductId, {
-        id: 'appleProductId',
-        header: 'Apple Product ID',
-        cell: ({ getValue }) => <Typography>{getValue() || '-'}</Typography>
-      }),
-      columnHelper.accessor(row => row.googleProductId, {
-        id: 'googleProductId',
-        header: 'Google Product ID',
-        cell: ({ getValue }) => <Typography>{getValue() || '-'}</Typography>
-      }),
       columnHelper.accessor(row => row.price, {
         id: 'price',
         header: 'Price (USD)',
@@ -128,8 +118,24 @@ const RecordingPlans = () => {
       }),
       columnHelper.accessor(row => row.storageDays, {
         id: 'storageDays',
-        header: 'Storage Days',
+        header: 'Subscription Days',
         cell: ({ getValue }) => <Typography>{getValue() || '-'}</Typography>
+      }),
+      columnHelper.accessor(row => row.maxRecordingMinutes, {
+        id: 'maxRecordingMinutes',
+        header: 'Storage Limit',
+        cell: ({ getValue, row }) => {
+          const unlimited = row.original.unlimitedStorage
+          return <Typography>{unlimited ? 'Unlimited' : getValue() > 0 ? `${getValue()} min` : 'Unlimited'}</Typography>
+        }
+      }),
+      columnHelper.accessor(row => row.retentionDays, {
+        id: 'retentionDays',
+        header: 'Retention',
+        cell: ({ getValue, row }) => {
+          const unlimited = row.original.unlimitedRetention
+          return <Typography>{unlimited ? 'Unlimited' : `${getValue()} days`}</Typography>
+        }
       }),
       columnHelper.accessor(row => row.isPopular, {
         id: 'isPopular',

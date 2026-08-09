@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
 import 'package:notisboard/ui/common/recording_subscription/model/recording_subscription_model.dart';
 import 'package:notisboard/utils/api.dart';
@@ -8,6 +9,12 @@ import 'package:notisboard/utils/firebse_access_token.dart';
 import 'package:notisboard/utils/utils.dart';
 
 class RecordingSubscriptionApi {
+  /// Returns the current platform string for backend enforcement.
+  static String get _platformHeader {
+    if (Platform.isIOS) return "ios";
+    if (Platform.isAndroid) return "android";
+    return Platform.operatingSystem;
+  }
   // 0. Get available Recording Storage Plans
   static Future<List<RecordingStoragePlanModel>?> getPlans() async {
     final token = await FirebaseAccessToken.onGet();
@@ -17,6 +24,7 @@ class RecordingSubscriptionApi {
     final headers = {
       ApiParams.key: Api.secretKey,
       "Content-Type": "application/json",
+      "x-platform": _platformHeader,
       if (token != null) ApiParams.authToken: ApiParams.tokenStartPoint + token,
       ApiParams.authUid: Database.loginUserFirebaseId,
     };
@@ -71,6 +79,7 @@ class RecordingSubscriptionApi {
     final headers = {
       ApiParams.key: Api.secretKey,
       "Content-Type": "application/json",
+      "x-platform": _platformHeader,
       ApiParams.authToken: ApiParams.tokenStartPoint + (token ?? ""),
       ApiParams.authUid: Database.loginUserFirebaseId,
     };
@@ -110,6 +119,7 @@ class RecordingSubscriptionApi {
     final headers = {
       ApiParams.key: Api.secretKey,
       "Content-Type": "application/json",
+      "x-platform": _platformHeader,
       ApiParams.authToken: ApiParams.tokenStartPoint + (token ?? ""),
       ApiParams.authUid: Database.loginUserFirebaseId,
     };
@@ -140,6 +150,7 @@ class RecordingSubscriptionApi {
     final headers = {
       ApiParams.key: Api.secretKey,
       "Content-Type": "application/json",
+      "x-platform": _platformHeader,
       ApiParams.authToken: ApiParams.tokenStartPoint + (token ?? ""),
       ApiParams.authUid: Database.loginUserFirebaseId,
     };
@@ -162,6 +173,7 @@ class RecordingSubscriptionApi {
     final headers = {
       ApiParams.key: Api.secretKey,
       "Content-Type": "application/json",
+      "x-platform": _platformHeader,
       ApiParams.authToken: ApiParams.tokenStartPoint + (token ?? ""),
       ApiParams.authUid: Database.loginUserFirebaseId,
     };
@@ -186,6 +198,7 @@ class RecordingSubscriptionApi {
     final headers = {
       ApiParams.key: Api.secretKey,
       "Content-Type": "application/json",
+      "x-platform": _platformHeader,
       ApiParams.authToken: ApiParams.tokenStartPoint + (token ?? ""),
       ApiParams.authUid: Database.loginUserFirebaseId,
     };
