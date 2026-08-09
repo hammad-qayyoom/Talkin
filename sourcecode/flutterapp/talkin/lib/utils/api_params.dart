@@ -54,4 +54,12 @@ class ApiParams {
   static const callType = "callType";
   static const callMode = "callMode";
   static const userId = "userId";
+  static const userPreferredLanguage = "userPreferredLanguage";
+  static const userAdditionalLanguages = "userAdditionalLanguages";
+  static const consultationLanguage = "consultationLanguage";
+  static const primaryLanguage = "primaryLanguage";
+  static const additionalLanguages = "additionalLanguages";
+  static const proficiency = "proficiency";
+  static const isConsultationLanguage = "isConsultationLanguage";
+  static const consultationMode = "consultationMode";
 }

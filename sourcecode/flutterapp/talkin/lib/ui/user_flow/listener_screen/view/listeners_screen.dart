@@ -12,6 +12,7 @@ import 'package:notisboard/ui/user_flow/listener_screen/widget/listeners_screen_
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
+import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/font_style.dart';
 
 class ListenersScreen extends StatelessWidget {
@@ -333,7 +334,11 @@ class _ExpertCard extends StatelessWidget {
     );
   }
 
-  Widget _buildTag({required String label}) {
+  Widget _buildTag({
+    required String label,
+    IconData? icon,
+    Color? iconColor,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
@@ -341,12 +346,21 @@ class _ExpertCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
         border: Border.all(color: _softBorder),
       ),
-      child: Text(
-        label,
-        style: AppFontStyle.fontStyleW500(
-          fontSize: 10,
-          fontColor: _mutedText,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 11, color: iconColor ?? _mutedText),
+            const SizedBox(width: 3),
+          ],
+          Text(
+            label,
+            style: AppFontStyle.fontStyleW500(
+              fontSize: 10,
+              fontColor: iconColor ?? _mutedText,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -383,6 +397,10 @@ class _ExpertCard extends StatelessWidget {
     final language = (listener.language ?? []).isEmpty
         ? 'Unknown'
         : listener.language!.first;
+    final allLanguages = listener.language ?? [];
+    final userPreferredLanguage = Database.loginUserPreferredLanguage;
+    final isLanguageMatch = userPreferredLanguage.isNotEmpty &&
+        allLanguages.any((l) => l.toLowerCase() == userPreferredLanguage.toLowerCase());
     final rating = listener.rating ?? 0;
     final isVerified = listener.isVerifiedBadge == true;
 
@@ -502,6 +520,12 @@ class _ExpertCard extends StatelessWidget {
                                   _buildTag(
                                     label:
                                         '${rating.toStringAsFixed(1)} rating',
+                                  ),
+                                if (isLanguageMatch)
+                                  _buildTag(
+                                    label: 'Speaks your language',
+                                    icon: Icons.check_circle_outline,
+                                    iconColor: AppColors.redesignStatusSuccess,
                                   ),
                               ],
                             ),

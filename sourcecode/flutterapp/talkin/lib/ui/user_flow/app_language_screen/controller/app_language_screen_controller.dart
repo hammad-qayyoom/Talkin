@@ -52,6 +52,12 @@ class AppLanguageScreenController extends GetxController {
     Database.onSetSelectedLanguageCountryCode(
         languagesChosenValue!.countryCode);
 
+    // Auto-set preferred language if not already set
+    final currentPreferred = Database.loginUserPreferredLanguage;
+    if (currentPreferred.isEmpty) {
+      Database.setUserPreferredLanguage(languagesChosenValue!.languageCode);
+    }
+
     // Update the UI
     Get.updateLocale(Locale(
         languagesChosenValue!.languageCode, languagesChosenValue!.countryCode));

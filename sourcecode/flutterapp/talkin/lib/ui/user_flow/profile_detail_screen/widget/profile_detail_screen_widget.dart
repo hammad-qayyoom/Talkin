@@ -315,7 +315,10 @@ class UserProfileInfoView extends StatelessWidget {
         final intro = (data.selfIntro ?? '').trim();
         final languages = (data.language ?? const <String>[])
             .where((lang) => lang.trim().isNotEmpty)
-            .join(', ');
+            .toList();
+        final userPreferredLanguage = Database.loginUserPreferredLanguage;
+        final isLanguageMatch = userPreferredLanguage.isNotEmpty &&
+            languages.any((l) => l.toLowerCase() == userPreferredLanguage.toLowerCase());
         final rating = (data.rating ?? 0).toDouble();
         final isVerified = data.isVerifiedBadge == true;
 
@@ -360,16 +363,53 @@ class UserProfileInfoView extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: Text(
-                        EnumLocale.txtLanguageWithValue.name.trParams({
-                          'value': languages.isEmpty
-                              ? EnumLocale.txtUnknown.name.tr
-                              : languages,
-                        }),
-                        style: AppFontStyle.fontStyleW600(
-                          fontSize: 14,
-                          fontColor: AppColors.redesignBrandDark,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            EnumLocale.txtLanguageWithValue.name.trParams({
+                              'value': languages.isEmpty
+                                  ? EnumLocale.txtUnknown.name.tr
+                                  : languages.join(', '),
+                            }),
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 14,
+                              fontColor: AppColors.redesignBrandDark,
+                            ),
+                          ),
+                          if (isLanguageMatch) ...[
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.redesignStatusSuccess
+                                    .withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.check_circle_outline,
+                                    size: 12,
+                                    color: AppColors.redesignStatusSuccess,
+                                  ),
+                                  const SizedBox(width: 3),
+                                  Text(
+                                    'Speaks your language',
+                                    style: AppFontStyle.fontStyleW500(
+                                      fontSize: 11,
+                                      fontColor: AppColors.redesignStatusSuccess,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
                   ],

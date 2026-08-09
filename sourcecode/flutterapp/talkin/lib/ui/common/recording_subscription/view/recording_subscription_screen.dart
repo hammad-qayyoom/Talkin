@@ -1,5 +1,12 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:notisboard/custom/progress_indicator/progress_dialog.dart';
+import 'package:notisboard/payment/in_app_purchase/iap_callback.dart';
+import 'package:notisboard/payment/in_app_purchase/in_app_purchase_helper.dart';
 import 'package:notisboard/ui/common/recording_subscription/api/recording_subscription_api.dart';
 import 'package:notisboard/ui/common/recording_subscription/model/recording_subscription_model.dart';
 import 'package:notisboard/utils/app_asset.dart';
@@ -7,8 +14,11 @@ import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/common_payment.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/enums.dart';
+import 'package:notisboard/utils/firebse_access_token.dart';
 import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/guest_browsing_setup.dart';
 import 'package:notisboard/utils/utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PaymentMethodOption {
   final int id;
@@ -33,7 +43,9 @@ class RecordingSubscriptionScreen extends StatefulWidget {
   State<RecordingSubscriptionScreen> createState() => _RecordingSubscriptionScreenState();
 }
 
-class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScreen> {
+class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScreen>
+    with WidgetsBindingObserver
+    implements IAPCallback {
   bool isLoading = true;
   bool isPurchasing = false;
   RecordingSubscriptionModel? subscription;
@@ -45,10 +57,34 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
   int selectedPaymentMethod = -1;
   List<PaymentMethodOption> paymentMethods = [];
 
+  // Apple IAP state
+  Map<String, PurchaseDetails>? _iapPurchases;
+  bool _awaitingApplePurchaseResult = false;
+  Timer? _applePurchaseTimeoutTimer;
+  Timer? _pendingAppleStoreErrorTimer;
+  bool _didReceiveAppleStoreError = false;
+  bool _isRestoringAppleSubscriptions = false;
+  bool _didReceiveRestoredPurchase = false;
+  final Set<String> _activeAppleVerificationKeys = <String>{};
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _fetchData();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _cancelApplePurchaseTimeout();
+    _cancelPendingAppleStoreError();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // No-op for now, could add refresh logic if needed
   }
 
   Future<void> _fetchData() async {
@@ -105,6 +141,145 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
     }
   }
 
+  // ── Apple IAP Helpers ──────────────────────────────────────────────
+
+  String _appleProductKey(RecordingStoragePlanModel? plan) {
+    return (plan?.appleProductId?.trim().isNotEmpty == true)
+        ? plan!.appleProductId!.trim()
+        : '';
+  }
+
+  String _googleProductKey(RecordingStoragePlanModel? plan) {
+    return (plan?.googleProductId?.trim().isNotEmpty == true)
+        ? plan!.googleProductId!.trim()
+        : '';
+  }
+
+  String _productKeyForSelectedPlan() {
+    if (GetPlatform.isIOS) return _appleProductKey(selectedPlan);
+    return _googleProductKey(selectedPlan);
+  }
+
+  bool _isEnabledForPlatform({bool? android, bool? ios, bool? fallback}) {
+    if (GetPlatform.isAndroid) return android ?? fallback ?? false;
+    if (GetPlatform.isIOS) return ios ?? fallback ?? false;
+    return false;
+  }
+
+  void _showBlockingLoader() {
+    if (Get.isDialogOpen != true) {
+      Get.dialog(const LoadingWidget(), barrierDismissible: false);
+    }
+  }
+
+  void _closeBlockingLoader() {
+    if (Get.isDialogOpen == true) {
+      Get.back();
+    }
+  }
+
+  void _cancelApplePurchaseTimeout() {
+    _applePurchaseTimeoutTimer?.cancel();
+    _applePurchaseTimeoutTimer = null;
+  }
+
+  void _cancelPendingAppleStoreError() {
+    _pendingAppleStoreErrorTimer?.cancel();
+    _pendingAppleStoreErrorTimer = null;
+  }
+
+  void _startApplePurchaseWait() {
+    _awaitingApplePurchaseResult = true;
+    setState(() => isPurchasing = true);
+    _cancelApplePurchaseTimeout();
+    _applePurchaseTimeoutTimer = Timer(const Duration(seconds: 75), () {
+      _applePurchaseTimeoutTimer = null;
+      if (!_awaitingApplePurchaseResult) return;
+      _awaitingApplePurchaseResult = false;
+      _closeBlockingLoader();
+      setState(() => isPurchasing = false);
+      Utils.showToast(
+        context,
+        'App Store is taking longer than expected. If Apple charged you, tap Restore.',
+      );
+    });
+  }
+
+  void _finishApplePurchaseWait() {
+    if (!_awaitingApplePurchaseResult && !isPurchasing) return;
+    _awaitingApplePurchaseResult = false;
+    _cancelApplePurchaseTimeout();
+    _closeBlockingLoader();
+    if (mounted) setState(() => isPurchasing = false);
+  }
+
+  bool _isTransientStoreKitError(dynamic error) {
+    final text = error.toString().toLowerCase();
+    return text.contains('storekit_no_response') ||
+        text.contains('storekit_platform_no_response') ||
+        text.contains('failed to get response from platform');
+  }
+
+  String _friendlyIapError(dynamic error) {
+    final raw = error?.toString() ?? '';
+    final lower = raw.toLowerCase();
+    final isRestore = _isRestoringAppleSubscriptions;
+
+    if (lower.contains('purchase canceled') || lower.contains('cancel')) {
+      return 'Purchase canceled';
+    }
+    if (lower.contains('store not available')) {
+      return 'App Store is not available on this device. Please check App Store sign-in and try again.';
+    }
+    if (lower.contains('storekit_no_response') ||
+        lower.contains('storekit_platform_no_response') ||
+        lower.contains('failed to get response from platform')) {
+      return isRestore
+          ? 'Restore could not reach App Store. Please wait a few seconds and try Restore again.'
+          : 'App Store did not return this subscription. Please confirm the Apple Product ID is active in App Store Connect.';
+    }
+    if (lower.contains('no products found') || lower.contains('product not found')) {
+      return 'App Store product is not available yet. Please confirm the Apple Product ID is active in App Store Connect.';
+    }
+    if (lower.trim().isEmpty || lower.contains('null')) {
+      return isRestore ? 'Restore failed. Please try again.' : 'Payment failed. Please try again.';
+    }
+    return isRestore ? 'Restore failed. Please try again.' : 'Payment failed. Please try again.';
+  }
+
+  void _queueAppleStoreErrorToast(dynamic error) {
+    final message = _friendlyIapError(error);
+    _didReceiveAppleStoreError = true;
+    _cancelPendingAppleStoreError();
+    final delay = (_awaitingApplePurchaseResult || _isRestoringAppleSubscriptions)
+        ? const Duration(seconds: 24)
+        : const Duration(seconds: 8);
+    _pendingAppleStoreErrorTimer = Timer(delay, () {
+      _pendingAppleStoreErrorTimer = null;
+      if (_didReceiveRestoredPurchase || _awaitingApplePurchaseResult || _isRestoringAppleSubscriptions) return;
+      if (mounted) Utils.showToast(context, message);
+    });
+  }
+
+  Future<bool> _ensureAppleGuestAccountReady() async {
+    if (!GetPlatform.isIOS) return true;
+    if (!Database.isLogin || Database.loginUserFirebaseId.trim().isEmpty) {
+      final ready = await GuestBrowsingSetup.ensureAuthenticatedGuestSession();
+      if (!ready) return false;
+    }
+    final profileSynced = await GuestBrowsingSetup.refreshCurrentGuestProfile();
+    if (!profileSynced &&
+        (Database.isGuestMode || Database.loginType == 2 || Database.loginUserId.trim().isEmpty)) {
+      await Database.onSetIsLogin(false);
+      await Database.onSetGuestMode(true);
+      final ready = await GuestBrowsingSetup.ensureAuthenticatedGuestSession();
+      if (!ready) return false;
+    }
+    return Database.isLogin &&
+        Database.loginUserFirebaseId.trim().isNotEmpty &&
+        Database.loginUserId.trim().isNotEmpty;
+  }
+
   Future<void> _fetchStatus() async {
     final response = await RecordingSubscriptionApi.getSubscriptionStatus();
     if (response != null && response['status'] == true) {
@@ -146,6 +321,7 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       Utils.showToast(context, "Please select a payment method.");
       return;
     }
+    if (isPurchasing) return;
 
     setState(() => isPurchasing = true);
 
@@ -154,8 +330,14 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       final planId = selectedPlan!.id ?? '';
       final gateway = _gatewayName(selectedPaymentMethod);
 
-      // For In-App Purchase (Apple/Google Play), call API directly with product IDs
-      if (selectedPaymentMethod == 3) {
+      // iOS In-App Purchase — use real App Store flow
+      if (selectedPaymentMethod == 3 && GetPlatform.isIOS) {
+        await _purchaseViaAppleIAP(planId);
+        return;
+      }
+
+      // Android Google Play or third-party gateways — use existing flow
+      if (selectedPaymentMethod == 3 && GetPlatform.isAndroid) {
         final res = await RecordingSubscriptionApi.purchasePlan(
           planId: planId,
           paymentGateway: gateway,
@@ -172,7 +354,7 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
         return;
       }
 
-      // For third-party gateways, process payment first
+      // Third-party gateways
       switch (selectedPaymentMethod) {
         case 0:
           await razorPay(amount: amount, onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
@@ -203,6 +385,68 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
     }
   }
 
+  Future<void> _purchaseViaAppleIAP(String planId) async {
+    final ready = await _ensureAppleGuestAccountReady();
+    if (!ready) {
+      if (mounted) Utils.showToast(context, "Unable to prepare App Store checkout. Please try again.");
+      setState(() => isPurchasing = false);
+      return;
+    }
+
+    final productKey = _appleProductKey(selectedPlan);
+    if (productKey.isEmpty) {
+      if (mounted) Utils.showToast(context, "App Store product is not configured for this plan.");
+      setState(() => isPurchasing = false);
+      return;
+    }
+
+    final helper = InAppPurchaseHelper();
+    helper.init(
+      paymentType: "Recording Storage",
+      userId: Database.loginUserFirebaseId,
+      productKey: [productKey],
+      rupee: (selectedPlan!.price ?? 0).toDouble(),
+      callBack: () {},
+    );
+    helper.setCallback(this);
+    helper.ensurePurchaseListener();
+
+    _showBlockingLoader();
+    try {
+      _didReceiveAppleStoreError = false;
+      _cancelPendingAppleStoreError();
+      final productsReady = await helper.initStoreInfo();
+      if (!productsReady) {
+        _finishApplePurchaseWait();
+        return;
+      }
+      _iapPurchases = helper.getPurchases();
+      final product = helper.getProductDetail(productKey);
+      _closeBlockingLoader();
+
+      if (product != null) {
+        Utils.showLog("Recording IAP product found: ${product.title} - ${product.price}");
+        _startApplePurchaseWait();
+        final started = await helper.buySubscription(product, _iapPurchases ?? {});
+        if (!started) {
+          Utils.showLog("Recording IAP purchase sheet did not start.");
+          _finishApplePurchaseWait();
+        }
+      } else {
+        _finishApplePurchaseWait();
+        if (mounted) {
+          Utils.showToast(context, _friendlyIapError("No products found"));
+          Utils.showLog("Available recording IAP products: ${helper.getAvailableProducts()}");
+        }
+      }
+    } catch (e) {
+      _closeBlockingLoader();
+      Utils.showLog("Recording IAP Failed => $e");
+      _finishApplePurchaseWait();
+      if (mounted) Utils.showToast(context, "Payment failed. Please try again.");
+    }
+  }
+
   Future<void> _onPaymentSuccess(String gateway, String planId) async {
     final res = await RecordingSubscriptionApi.purchasePlan(planId: planId, paymentGateway: gateway);
     if (mounted) {
@@ -213,6 +457,181 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       } else {
         Utils.showToast(context, "Failed to activate subscription after payment.");
       }
+    }
+  }
+
+  // ── IAPCallback implementation ────────────────────────────────────
+
+  @override
+  void onLoaded(bool initialized) {
+    Utils.showLog("Recording IAP Loaded: $initialized");
+  }
+
+  @override
+  void onPending(PurchaseDetails product) {
+    Utils.showLog("Recording IAP Pending: ${product.productID}");
+    if (mounted) Utils.showToast(context, "Payment is pending...");
+  }
+
+  @override
+  void onBillingError(error) {
+    _closeBlockingLoader();
+    Utils.showLog("Recording IAP Billing Error: $error");
+    final errorText = error.toString().toLowerCase();
+
+    if (errorText.contains('cancel')) {
+      _finishApplePurchaseWait();
+      if (mounted) Utils.showToast(context, _friendlyIapError(error));
+      return;
+    }
+
+    if (GetPlatform.isIOS && _awaitingApplePurchaseResult && _isTransientStoreKitError(error)) {
+      _queueAppleStoreErrorToast(error);
+      return;
+    }
+
+    if (!_isTransientStoreKitError(error)) {
+      _finishApplePurchaseWait();
+    }
+    _queueAppleStoreErrorToast(error);
+  }
+
+  @override
+  void onSuccessPurchase(PurchaseDetails product) async {
+    Utils.showLog("Recording IAP Success: ${product.productID}");
+    final purchaseEventKey =
+        '${product.productID}:${product.purchaseID ?? product.transactionDate ?? product.status.name}';
+
+    if (!_activeAppleVerificationKeys.add(purchaseEventKey)) {
+      Utils.showLog("Recording IAP duplicate event ignored: $purchaseEventKey");
+      return;
+    }
+
+    _cancelPendingAppleStoreError();
+    final isRestoreEvent = _isRestoringAppleSubscriptions || product.status == PurchaseStatus.restored;
+    if (isRestoreEvent) {
+      _didReceiveRestoredPurchase = true;
+    }
+
+    try {
+      _showBlockingLoader();
+      final token = (await FirebaseAccessToken.onGet() ?? '').trim();
+      final uid = Database.loginUserFirebaseId.trim().isNotEmpty
+          ? Database.loginUserFirebaseId.trim()
+          : (firebase_auth.FirebaseAuth.instance.currentUser?.uid ?? '').trim();
+
+      if (token.isEmpty || uid.isEmpty) {
+        _closeBlockingLoader();
+        if (mounted) {
+          Utils.showToast(context, "Session expired. Please login again to continue purchase sync.");
+        }
+        return;
+      }
+
+      final receiptData = product.verificationData.serverVerificationData.trim().isNotEmpty
+          ? product.verificationData.serverVerificationData
+          : product.verificationData.localVerificationData;
+
+      final result = await RecordingSubscriptionApi.verifyAppleRecordingSubscription(
+        planId: selectedPlan?.id,
+        productId: product.productID,
+        receiptData: receiptData,
+        transactionId: product.purchaseID ?? '',
+      );
+
+      _closeBlockingLoader();
+
+      if (result != null && result['status'] == true) {
+        if (mounted) {
+          Utils.showToast(
+            context,
+            isRestoreEvent
+                ? "Subscription restored successfully"
+                : result['duplicate'] == true
+                    ? "Subscription already active"
+                    : "Subscription Activated Successfully!",
+          );
+          _fetchData();
+        }
+      } else {
+        if (mounted) {
+          final message = result?['message']?.toString().trim();
+          Utils.showToast(
+            context,
+            (message?.isNotEmpty == true) ? message! : "Failed to activate subscription.",
+          );
+        }
+      }
+    } catch (e) {
+      if (Get.isDialogOpen == true) Get.back();
+      Utils.showLog("Recording IAP verify API failed: $e");
+      if (mounted) Utils.showToast(context, "Payment verification failed. Please try again.");
+    } finally {
+      _activeAppleVerificationKeys.remove(purchaseEventKey);
+      _finishApplePurchaseWait();
+    }
+  }
+
+  // ── Restore & Manage (iOS) ────────────────────────────────────────
+
+  Future<void> _restoreAppleSubscriptions() async {
+    if (!GetPlatform.isIOS) return;
+    if (_isRestoringAppleSubscriptions || isPurchasing) return;
+
+    _isRestoringAppleSubscriptions = true;
+    _didReceiveRestoredPurchase = false;
+    _didReceiveAppleStoreError = false;
+    _cancelPendingAppleStoreError();
+
+    try {
+      final ready = await _ensureAppleGuestAccountReady();
+      if (!ready) {
+        if (mounted) Utils.showToast(context, "Unable to prepare restore. Please try again.");
+        return;
+      }
+
+      final productKeys = plans
+          .map(_appleProductKey)
+          .where((id) => id.trim().isNotEmpty)
+          .toSet()
+          .toList();
+
+      if (productKeys.isEmpty) {
+        if (mounted) Utils.showToast(context, "No App Store product is configured");
+        return;
+      }
+
+      final helper = InAppPurchaseHelper();
+      helper.init(
+        paymentType: "App Store",
+        userId: Database.loginUserFirebaseId,
+        productKey: productKeys,
+        rupee: 0,
+        callBack: () {},
+      );
+      helper.setCallback(this);
+
+      _showBlockingLoader();
+      await helper.restorePurchases(this);
+      _closeBlockingLoader();
+      await 10000.milliseconds.delay();
+      if (!_didReceiveRestoredPurchase && !_didReceiveAppleStoreError) {
+        if (mounted) Utils.showToast(context, "No App Store subscription was found to restore.");
+      }
+    } catch (e) {
+      _closeBlockingLoader();
+      Utils.showLog("Restore Recording Apple Subscription Failed => $e");
+      if (mounted) Utils.showToast(context, "Restore failed. Please try again.");
+    } finally {
+      _isRestoringAppleSubscriptions = false;
+      _closeBlockingLoader();
+    }
+  }
+
+  Future<void> _openAppleManageSubscriptions() async {
+    final uri = Uri.tryParse("https://apps.apple.com/account/subscriptions");
+    if (uri != null && mounted) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
   }
 
@@ -307,33 +726,75 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.redesignSoftBorder),
       ),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: iconColor, size: 28),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.redesignBrandDark),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: iconColor.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: AppFontStyle.fontStyleW500(fontSize: 14, fontColor: AppColors.redesignMutedText),
+                child: Icon(icon, color: iconColor, size: 28),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.redesignBrandDark),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: AppFontStyle.fontStyleW500(fontSize: 14, fontColor: AppColors.redesignMutedText),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          if (GetPlatform.isIOS && hasActivePlan) ...[
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _restoreAppleSubscriptions,
+                    icon: const Icon(Icons.restore_rounded, size: 16),
+                    label: Text(
+                      "Restore",
+                      style: AppFontStyle.fontStyleW600(fontSize: 12, fontColor: AppColors.redesignBrandDark),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: AppColors.redesignSoftBorder),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _openAppleManageSubscriptions,
+                    icon: const Icon(Icons.settings_rounded, size: 16),
+                    label: Text(
+                      "Manage",
+                      style: AppFontStyle.fontStyleW600(fontSize: 12, fontColor: AppColors.redesignBrandDark),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: AppColors.redesignSoftBorder),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                    ),
+                  ),
                 ),
               ],
             ),
-          )
+          ],
         ],
       ),
     );

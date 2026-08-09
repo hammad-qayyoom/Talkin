@@ -405,6 +405,7 @@ class SessionBookingService {
     String? bookingTimezone,
     int? clientTimezoneOffsetMinutes,
     String? consultationMode,
+    String? consultationLanguage,
   }) async {
     try {
       final headers = await _headers();
@@ -431,6 +432,11 @@ class SessionBookingService {
       final normalizedConsultationMode = (consultationMode ?? '').trim();
       if (normalizedConsultationMode.isNotEmpty) {
         body['consultationMode'] = normalizedConsultationMode;
+      }
+
+      final normalizedConsultationLanguage = (consultationLanguage ?? '').trim();
+      if (normalizedConsultationLanguage.isNotEmpty) {
+        body['consultationLanguage'] = normalizedConsultationLanguage;
       }
 
       final response = await http.post(

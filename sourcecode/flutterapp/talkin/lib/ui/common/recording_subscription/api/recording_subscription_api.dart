@@ -96,6 +96,43 @@ class RecordingSubscriptionApi {
     return null;
   }
 
+  // 2b. Verify Apple In-App Purchase for recording subscription
+  static Future<Map<String, dynamic>?> verifyAppleRecordingSubscription({
+    String? planId,
+    required String productId,
+    required String receiptData,
+    required String transactionId,
+  }) async {
+    final token = await FirebaseAccessToken.onGet();
+    Utils.showLog("RecordingSubscriptionApi verifyAppleRecordingSubscription Calling...");
+
+    final uri = Uri.parse(Api.recordingSubscriptionVerifyApple);
+    final headers = {
+      ApiParams.key: Api.secretKey,
+      "Content-Type": "application/json",
+      ApiParams.authToken: ApiParams.tokenStartPoint + (token ?? ""),
+      ApiParams.authUid: Database.loginUserFirebaseId,
+    };
+
+    final body = <String, dynamic>{
+      "productId": productId,
+      "receiptData": receiptData,
+      "transactionId": transactionId,
+    };
+    if (planId != null) body["planId"] = planId;
+
+    try {
+      final response = await http.post(uri, headers: headers, body: jsonEncode(body));
+      if (response.statusCode == 200) {
+        Utils.showLog("RecordingSubscriptionApi verifyAppleRecordingSubscription Response => ${response.body}");
+        return json.decode(response.body);
+      }
+    } catch (error) {
+      Utils.showLog("RecordingSubscriptionApi verifyAppleRecordingSubscription Error => $error");
+    }
+    return null;
+  }
+
   // 3. Get current subscription status
   static Future<Map<String, dynamic>?> getSubscriptionStatus() async {
     final token = await FirebaseAccessToken.onGet();

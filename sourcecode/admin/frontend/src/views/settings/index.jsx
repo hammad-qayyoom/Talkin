@@ -33,6 +33,7 @@ import ScreenSharingSettings from './tabs/ScreenSharingSettings'
 import AiSchedulingSettings from './tabs/AiSchedulingSettings'
 import CalendarIntegrationSettings from './tabs/CalendarIntegrationSettings'
 import PremiumContentSettings from './tabs/PremiumContentSettings'
+import LanguageMatchingSettings from './tabs/LanguageMatchingSettings'
 
 // Tab labels and values
 const tabs = [
@@ -44,7 +45,8 @@ const tabs = [
   { label: 'Screen Sharing', value: 'screen_sharing' },
   { label: 'AI Scheduling', value: 'ai_scheduling' },
   { label: 'Calendar Integration', value: 'calendar_integration' },
-  { label: 'Premium Content', value: 'premium_content' }
+  { label: 'Premium Content', value: 'premium_content' },
+  { label: 'Language Matching', value: 'language_matching' }
 ]
 
 const Settings = () => {
@@ -80,7 +82,8 @@ const Settings = () => {
       activeTab === 'screen_sharing' ||
       activeTab === 'ai_scheduling' ||
       activeTab === 'calendar_integration' ||
-      activeTab === 'premium_content'
+      activeTab === 'premium_content' ||
+      activeTab === 'language_matching'
     ) {
       dispatch(fetchSettings())
     }
@@ -108,6 +111,8 @@ const Settings = () => {
         return <CalendarIntegrationSettings />
       case 'premium_content':
         return <PremiumContentSettings />
+      case 'language_matching':
+        return <LanguageMatchingSettings />
       default:
         return <Typography>Select a tab</Typography>
     }

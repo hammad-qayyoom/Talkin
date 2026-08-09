@@ -293,6 +293,7 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
       bookingTimezone: _bookingTimezone,
       clientTimezoneOffsetMinutes: DateTime.now().timeZoneOffset.inMinutes,
       consultationMode: _consultationMode,
+      consultationLanguage: Database.loginUserPreferredLanguage,
     );
 
     if (!mounted) {
@@ -516,6 +517,24 @@ class _UserBookSessionScreenState extends State<UserBookSessionScreen> {
                     fontSize: 11,
                     fontColor: AppColors.redesignMutedText,
                   ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.language_rounded,
+                      size: 13,
+                      color: AppColors.redesignMutedText,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Consultation language: ${Database.loginUserPreferredLanguage.isNotEmpty ? Database.loginUserPreferredLanguage : 'Not set'}',
+                      style: AppFontStyle.fontStyleW500(
+                        fontSize: 11,
+                        fontColor: AppColors.redesignMutedText,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

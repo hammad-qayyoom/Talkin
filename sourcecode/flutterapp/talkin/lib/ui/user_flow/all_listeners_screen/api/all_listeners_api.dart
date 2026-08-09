@@ -6,6 +6,7 @@ import 'package:notisboard/services/location/user_location_service.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/api_params.dart';
+import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/guest_auth.dart';
 import 'package:notisboard/utils/utils.dart';
 
@@ -113,6 +114,11 @@ class AllListenersApi {
     }
     if (language != null && language.isNotEmpty) {
       queryParameters[ApiParams.language] = language;
+    }
+
+    final userPreferredLanguage = Database.loginUserPreferredLanguage;
+    if (userPreferredLanguage.isNotEmpty) {
+      queryParameters[ApiParams.userPreferredLanguage] = userPreferredLanguage;
     }
 
     log("All Listeners queryParameters ::$queryParameters");

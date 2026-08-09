@@ -122,6 +122,8 @@ abstract class Api {
       "${baseUrl}api/v2/recording-subscription/checkEligibility?";
   static const recordingSubscriptionPurchase =
       "${baseUrl}api/v2/recording-subscription/purchase";
+  static const recordingSubscriptionVerifyApple =
+      "${baseUrl}api/v2/recording-subscription/verifyApplePurchase";
   static const recordingSubscriptionStatus =
       "${baseUrl}api/v2/recording-subscription/status?";
   static const recordingSubscriptionMyRecordings =

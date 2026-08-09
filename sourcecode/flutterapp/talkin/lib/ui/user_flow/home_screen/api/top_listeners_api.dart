@@ -5,6 +5,7 @@ import 'package:notisboard/services/location/user_location_service.dart';
 import 'package:notisboard/ui/user_flow/home_screen/model/top_listeners_model.dart';
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/api_params.dart';
+import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/guest_auth.dart';
 import 'package:notisboard/utils/utils.dart';
 
@@ -17,6 +18,7 @@ class TopListenersApi {
     String? categoryId,
     UserLocationData? userLocation,
     String? consultationMode,
+    String? userPreferredLanguage,
   }) {
     final normalizedSearch = searchString.trim().isEmpty ? "All" : searchString;
 
@@ -33,6 +35,8 @@ class TopListenersApi {
         if (userLocation != null) 'sortOrder': 'asc',
         if (consultationMode != null && consultationMode.isNotEmpty)
           'consultationMode': consultationMode,
+        if (userPreferredLanguage != null && userPreferredLanguage.isNotEmpty)
+          ApiParams.userPreferredLanguage: userPreferredLanguage,
       },
     );
   }
@@ -117,11 +121,13 @@ class TopListenersApi {
     startPagination += 1;
 
     final userLocation = UserLocationService.cachedLocation;
+    final userPreferredLanguage = Database.loginUserPreferredLanguage;
     final discoverUri = _discoverUri(
       searchString: searchString,
       categoryId: categoryId,
       userLocation: userLocation,
       consultationMode: consultationMode,
+      userPreferredLanguage: userPreferredLanguage,
     );
     final topUri = _topListenersUri(
       searchString: searchString, 

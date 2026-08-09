@@ -81,6 +81,12 @@ class Database {
   static String get languageCountryCode =>
       localStorage.read("languageCountryCode") ?? Constant.countryCodeEn;
 
+  static String get loginUserPreferredLanguage =>
+      localStorage.read("userPreferredLanguage") ?? "";
+
+  static Future<void> setUserPreferredLanguage(String language) async =>
+      localStorage.write("userPreferredLanguage", language);
+
   // >>>>> >>>>> Get Login Database <<<<< <<<<<
 
   static String get fcmToken => localStorage.read("fcmToken") ?? "";
