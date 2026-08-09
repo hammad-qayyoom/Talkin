@@ -52,6 +52,8 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>mailto</string>
+		<string>https</string>
+		<string>tel</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Notisboard uses the camera for profile photos, verification uploads, and video calls.</string>
@@ -61,6 +63,12 @@
 	<string>Notisboard records consultation sessions so you can review them later. Your screen and audio will be captured during the recording.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Notisboard lets you choose photos or videos for your profile, chats, feed posts, and verification uploads.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Notisboard needs permission to save images to your photo library.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Notisboard uses your calendar to sync consultation sessions and appointments.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Notisboard uses your location while you use the app to show nearby experts and improve recommendations.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

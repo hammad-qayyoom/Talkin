@@ -77,6 +77,7 @@
 		E66B96938122F101611F1561 /* eyelinerdir_wildcat.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B79CB9CE4423D0808FB19FD /* eyelinerdir_wildcat.bundle */; };
 		E6E4E21E95F908A83C261D9E /* Sunset.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2CA6C92591F9BDE41C85D9D6 /* Sunset.bundle */; };
 		E7FBCF8AE6299795ABD1EB33 /* pendantBaby.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AA109DCF501799F4545DD822 /* pendantBaby.bundle */; };
+		E86113FDA53BB7035A489112 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = EBE259310A8430FEBCA9E253 /* PrivacyInfo.xcprivacy */; };
 		E9FDAC23332B9CDFC64B3CD0 /* coloredcontactsdir_chocolate_brown.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BDE4C1F87CF9A6478B487726 /* coloredcontactsdir_chocolate_brown.bundle */; };
 		EA3346965DC21DD49226CBFF /* pendantGirl.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D15D4A41B573704C8ECE947A /* pendantGirl.bundle */; };
 		ECB2CDC8D9A40C872CADFF97 /* Night.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4840216D80CB7E09E60D7680 /* Night.bundle */; };
@@ -203,6 +204,7 @@
 		E5972CA9F7261CEC83225CC8 /* blusherdir_slightly_drunk.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = blusherdir_slightly_drunk.bundle; sourceTree = "<group>"; };
 		E62636DF1095AEC062C4BD49 /* Film-like.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = "Film-like.bundle"; sourceTree = "<group>"; };
 		E8820944B8716949980D75A5 /* eyelinerdir_scheming.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelinerdir_scheming.bundle; sourceTree = "<group>"; };
+		EBE259310A8430FEBCA9E253 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		EC1526F8A4D3A065407D0E55 /* pendantDeer.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantDeer.bundle; sourceTree = "<group>"; };
 		FF6CE318309E59FE16CDC650 /* makeupdir_milky_eyes.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = makeupdir_milky_eyes.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -255,6 +257,7 @@
 				3FE490C8959FB1FA01E4CAB9 /* SegmentationModel.model */,
 			);
 			name = Models;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		6AD42AF35F47355FE60F93D8 /* eyelinerdir */ = {
@@ -282,6 +285,7 @@
 				D6056FFC4AA39F0F407C4F24 /* blusherdir */,
 			);
 			name = MakeupResources;
+			path = MakeupResources;
 			sourceTree = "<group>";
 		};
 		7197EA6BF9C89C8C7F7AB644 /* Pods */ = {
@@ -350,6 +354,7 @@
 				19993ADF9DCE67438FF1B159 /* Creamy.bundle */,
 			);
 			name = ColorfulStyleResources;
+			path = ColorfulStyleResources;
 			sourceTree = "<group>";
 		};
 		97C146E51CF9000F007C117D = {
@@ -390,6 +395,7 @@
 				349DE5B3E3D1876B88C60FB1 /* Models */,
 				C7CAF9B64A3F1E7DCEFBF588 /* Resources */,
 				9AE5FE002782BFDA8FB0EF50 /* Pendants */,
+				EBE259310A8430FEBCA9E253 /* PrivacyInfo.xcprivacy */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -408,6 +414,7 @@
 				7AC21BA2B55EB5D1913D0DCC /* pendantAnimal.bundle */,
 			);
 			name = Pendants;
+			path = Pendants;
 			sourceTree = "<group>";
 		};
 		B90E47BE2F3DC9E2E7DD9CED /* Frameworks */ = {
@@ -446,6 +453,7 @@
 				F2AAAE24938884BA4F73A528 /* SkinColorResources */,
 			);
 			name = Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		D6056FFC4AA39F0F407C4F24 /* blusherdir */ = {
@@ -524,6 +532,7 @@
 				788CC1808AD4A55F5BA10977 /* [CP] Embed Pods Frameworks */,
 				525852C8A629C8A33ADA850D /* [CP] Copy Pods Resources */,
 				763B3E2805970C061347902E /* Fix App Store Connect SDK Version */,
+				B7FF0C1E4B1C506EAD2B7F91 /* Fix Missing dSYMs */,
 			);
 			buildRules = (
 			);
@@ -668,6 +677,7 @@
 				4F74A99FA528247F19816B46 /* pendantDeer.bundle in Resources */,
 				8C1C33B1BB4F0F1A7F515BD2 /* pendantClown.bundle in Resources */,
 				0F99B6BBA02F3F3F12B0EA79 /* pendantAnimal.bundle in Resources */,
+				E86113FDA53BB7035A489112 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -757,10 +767,11 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/fix_sdk_version.stamp",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "find \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace BuildMachineOSBuild -string \"25F71\" {} \\;\nfind \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace DTXcode -string \"2650\" {} \\;\nfind \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace DTXcodeBuild -string \"17F42\" {} \\;\nfind \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace DTSDKName -string \"iphoneos26.5\" {} \\;\nfind \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace DTSDKBuild -string \"23F73\" {} \\;\nfind \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace DTPlatformBuild -string \"23F73\" {} \\;\nfind \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace DTPlatformVersion -string \"26.5\" {} \\;\n";
+			shellScript = "find \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace BuildMachineOSBuild -string \"25F71\" {} \\;\nfind \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace DTXcode -string \"2650\" {} \\;\nfind \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace DTXcodeBuild -string \"17F42\" {} \\;\nfind \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace DTSDKName -string \"iphoneos26.5\" {} \\;\nfind \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace DTSDKBuild -string \"23F73\" {} \\;\nfind \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace DTPlatformBuild -string \"23F73\" {} \\;\nfind \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" -name \"Info.plist\" -exec plutil -replace DTPlatformVersion -string \"26.5\" {} \\;\ntouch \"${DERIVED_FILE_DIR}/fix_sdk_version.stamp\"\n";
 		};
 		788CC1808AD4A55F5BA10977 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -815,6 +826,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+		};
+		B7FF0C1E4B1C506EAD2B7F91 /* Fix Missing dSYMs */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Fix Missing dSYMs";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Generating missing dSYMs in DWARF_DSYM_FOLDER_PATH...\"\nfind \"$TARGET_BUILD_DIR\" -name '*.framework' -print0 | while IFS= read -r -d '' fm; do\n    name=$(basename \"$fm\" .framework)\n    binary=\"$fm/$name\"\n    if [ -f \"$binary\" ]; then\n        dwarfdump -u \"$binary\" | awk '{print $2}' | while read -r uuid; do\n            dsym_path=\"$DWARF_DSYM_FOLDER_PATH/$name.framework.dSYM\"\n            if [ ! -d \"$dsym_path\" ]; then\n                echo \"Generating dummy dSYM for $name with UUID $uuid at $dsym_path\"\n                mkdir -p \"$dsym_path/Contents/Resources/DWARF\"\n                \n                cat <<EOF > \"$dsym_path/Contents/Info.plist\"\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n    <key>CFBundleDevelopmentRegion</key>\n    <string>English</string>\n    <key>CFBundleIdentifier</key>\n    <string>com.apple.xcode.dsym.$name</string>\n    <key>CFBundleInfoDictionaryVersion</key>\n    <string>6.0</string>\n    <key>CFBundlePackageType</key>\n    <string>dSYM</string>\n    <key>CFBundleSignature</key>\n    <string>????</string>\n    <key>CFBundleShortVersionString</key>\n    <string>1.0</string>\n    <key>CFBundleVersion</key>\n    <string>1</string>\n</dict>\n</plist>\nEOF\n                cp \"$binary\" \"$dsym_path/Contents/Resources/DWARF/$name\"\n                dsymutil \"$binary\" -o \"$dsym_path\" 2>/dev/null || true\n            fi\n        done\n    fi\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -929,6 +958,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = 52;
 				DEVELOPMENT_TEAM = XM44W3KV48;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Notisboard;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
@@ -1122,6 +1152,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = 52;
 				DEVELOPMENT_TEAM = XM44W3KV48;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Notisboard;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
@@ -1149,6 +1180,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = 52;
 				DEVELOPMENT_TEAM = XM44W3KV48;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Notisboard;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";

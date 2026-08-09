@@ -66,7 +66,8 @@ post_install do |installer|
           'PERMISSION_MICROPHONE=1',
           'PERMISSION_PHOTOS=1',
           'PERMISSION_LOCATION_WHENINUSE=1',
-          'PERMISSION_NOTIFICATIONS=1'
+          'PERMISSION_NOTIFICATIONS=1',
+          'PERMISSION_CALENDAR=1'
         ]
         config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = definitions.uniq
       end
