@@ -1630,7 +1630,12 @@ class VideoCallController extends GetxController {
 
         _desktopScreenCaptureSource = captureSource;
 
-        // Step 4: Start capture — this shows the Android system consent dialog
+        // Step 4: Configure for iOS specifically
+        if (!kIsWeb && Platform.isIOS) {
+          await captureSource.setAppGroupID('group.com.notisboard.mobile.screenshare');
+        }
+
+        // Step 5: Start capture — this shows the Android system consent dialog / iOS Broadcast UI
         await captureSource.startCapture(
           config: ZegoScreenCaptureConfig(true, true),
         );

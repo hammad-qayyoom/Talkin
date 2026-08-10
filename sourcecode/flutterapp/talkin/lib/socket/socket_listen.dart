@@ -140,6 +140,7 @@ class SocketListen {
       socket?.on("connect", (_) {
         Utils.showLog("Socket connected, re-registering listeners...");
         _attachCallAndChatListeners();
+        PremiumContentSocketHandler().registerListeners();
       });
       _connectHookAttached = true;
     }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		016DE7A112F7F16A548A23C4 /* lengbai.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 59488F8BA8A0B46DBDE35206 /* lengbai.bundle */; };
+		019F8CA2C5EF4B4D6F358D1B /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF9D4BBBF21516079991C4C /* SampleHandler.swift */; };
 		026567139E3F2B3298EE762D /* coloredcontactsdir_darknight_black.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A5F4914A0ABA2474F52A27DE /* coloredcontactsdir_darknight_black.bundle */; };
 		03078525D5DD8268632539E8 /* Cozily.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9468517F2D1754354671F960 /* Cozily.bundle */; };
 		03DCA71858C029A27D409967 /* Sweet.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 986D98B3CAF49DF53A91263F /* Sweet.bundle */; };
@@ -33,6 +34,7 @@
 		431E53C0D7AA54B59CE98575 /* blusherdir_peach.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 008CB9159E0FCF4DECA1C649 /* blusherdir_peach.bundle */; };
 		438484B37495B5B57A47A98B /* coloredcontactsdir_polar_lights_brown.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 762EBB8AF61A228F4939C042 /* coloredcontactsdir_polar_lights_brown.bundle */; };
 		494C43904E60194066F5E79F /* makeupdir_cutie_and_cool.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B074EDEB046ED55E122EFDE9 /* makeupdir_cutie_and_cool.bundle */; };
+		49AF77E20F656CAFE94CFA66 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B98E74D641ABC73CF86953D5 /* ReplayKit.framework */; };
 		4A2D518AF5A85C9918C8C4E6 /* lipstickdir_rust_red.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D43A2A40BB6EBBAC28AFFB3D /* lipstickdir_rust_red.bundle */; };
 		4A874F3BB8E002B834D459DD /* TeethWhiteningResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 56041B64DFD2D957CE846069 /* TeethWhiteningResources.bundle */; };
 		4BF6E7CA99DB92D7203D56F5 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 674D207EA70F1BF698B7E7C5 /* Pods_Runner.framework */; };
@@ -85,7 +87,10 @@
 		EF01E178BE75171808278640 /* eyelinerdir_temperament.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E1DE2045AD40B0ED0AFA5100 /* eyelinerdir_temperament.bundle */; };
 		F4E5F59C943955EA43042849 /* coloredcontactsdir_starry_blue.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 548727A71AFBA4CA17992193 /* coloredcontactsdir_starry_blue.bundle */; };
 		F729776C2238C839CBE34EEB /* eyelashesdir_tender.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 77F62197C6FDF9AA26C0DC66 /* eyelashesdir_tender.bundle */; };
+		F7EC9048DE9EC8CDF7325E4C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 449808D6CC903E9F03188625 /* Foundation.framework */; };
+		FC8CD2319A44E43D486CFB90 /* ZegoExpressEngine.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D2A4A7366A1F47ABF0EB567 /* ZegoExpressEngine.xcframework */; };
 		FD2B77CFB8C5FEE32B5ADE1E /* CommonResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9B64A114F090412C7A974B24 /* CommonResources.bundle */; };
+		FE68D1CC91EE1FABCBCCF4EE /* ScreenShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CF822B9B9BD0E8C292ABB69C /* ScreenShareExtension.appex */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,9 +101,27 @@
 			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
 			remoteInfo = Runner;
 		};
+		46316949600BA07CBCB84FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 14AB24407D532EDFD54AD011;
+			remoteInfo = ScreenShareExtension;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		133E4F4FA68B1A90B1A3385C /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				FE68D1CC91EE1FABCBCCF4EE /* ScreenShareExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -136,19 +159,23 @@
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		3FE490C8959FB1FA01E4CAB9 /* SegmentationModel.model */ = {isa = PBXFileReference; includeInIndex = 1; path = SegmentationModel.model; sourceTree = "<group>"; };
 		40B831AFBD9C253DDD25049B /* eyeshadowdir_vitality_orange.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyeshadowdir_vitality_orange.bundle; sourceTree = "<group>"; };
+		449808D6CC903E9F03188625 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		4840216D80CB7E09E60D7680 /* Night.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Night.bundle; sourceTree = "<group>"; };
 		524FBF459313D709825F6E1B /* Autumn.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Autumn.bundle; sourceTree = "<group>"; };
+		542D3AD710453D6A8A560365 /* ScreenShareExtension.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = ScreenShareExtension.entitlements; sourceTree = "<group>"; };
 		548727A71AFBA4CA17992193 /* coloredcontactsdir_starry_blue.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = coloredcontactsdir_starry_blue.bundle; sourceTree = "<group>"; };
 		56041B64DFD2D957CE846069 /* TeethWhiteningResources.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = TeethWhiteningResources.bundle; sourceTree = "<group>"; };
 		59488F8BA8A0B46DBDE35206 /* lengbai.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = lengbai.bundle; sourceTree = "<group>"; };
 		5A496978B393B2DA7774A4EB /* blusherdir_apricot_pink.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = blusherdir_apricot_pink.bundle; sourceTree = "<group>"; };
 		5A9C327520A2B5F7A3441003 /* eyeshadowdir_tea_brown.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyeshadowdir_tea_brown.bundle; sourceTree = "<group>"; };
+		5CF9D4BBBF21516079991C4C /* SampleHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
 		63B0582A2E0932D400DEFA83 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		63B0582B2E09333B00DEFA83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		65621F2BA87A0FBD425D921C /* makeupdir_pure_and_sexy.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = makeupdir_pure_and_sexy.bundle; sourceTree = "<group>"; };
 		674D207EA70F1BF698B7E7C5 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A7EA36920F6834A552AAAA8 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		6B6BDDFEB8D923D6F16CBACA /* Brighten.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Brighten.bundle; sourceTree = "<group>"; };
+		6D2A4A7366A1F47ABF0EB567 /* ZegoExpressEngine.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; name = ZegoExpressEngine.xcframework; path = .symlinks/plugins/zego_express_engine/ios/libs/ZegoExpressEngine.xcframework; sourceTree = "<group>"; };
 		714CC41C823C983600B67BF3 /* lipstickdir_velvet_red.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = lipstickdir_velvet_red.bundle; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -187,12 +214,15 @@
 		AA109DCF501799F4545DD822 /* pendantBaby.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantBaby.bundle; sourceTree = "<group>"; };
 		ADD9386C81ADE4F9ED9E171F /* pendantClown.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantClown.bundle; sourceTree = "<group>"; };
 		B074EDEB046ED55E122EFDE9 /* makeupdir_cutie_and_cool.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = makeupdir_cutie_and_cool.bundle; sourceTree = "<group>"; };
+		B0C120A16E1E0C4D08F3AD22 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B1DBFF7DEE61F1C009F5CD40 /* makeupdir_vulnerable_and_innocenteyes.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = makeupdir_vulnerable_and_innocenteyes.bundle; sourceTree = "<group>"; };
 		B20EB4713747B3F1834AEED5 /* pendantCat.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantCat.bundle; sourceTree = "<group>"; };
 		B5093F53CBCAF34EEF2667F0 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B98E74D641ABC73CF86953D5 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		BDE4C1F87CF9A6478B487726 /* coloredcontactsdir_chocolate_brown.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = coloredcontactsdir_chocolate_brown.bundle; sourceTree = "<group>"; };
 		C0AD738A20550993C6DE153C /* eyelashesdir_natural.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelashesdir_natural.bundle; sourceTree = "<group>"; };
 		CD43979C770882B5D744DCEC /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		CF822B9B9BD0E8C292ABB69C /* ScreenShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ScreenShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D15D4A41B573704C8ECE947A /* pendantGirl.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantGirl.bundle; sourceTree = "<group>"; };
 		D1B14CEBD08373656C61F223 /* Cool.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Cool.bundle; sourceTree = "<group>"; };
 		D43A2A40BB6EBBAC28AFFB3D /* lipstickdir_rust_red.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = lipstickdir_rust_red.bundle; sourceTree = "<group>"; };
@@ -210,6 +240,16 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		76CA4C9DA69BA977703BBAF9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7EC9048DE9EC8CDF7325E4C /* Foundation.framework in Frameworks */,
+				FC8CD2319A44E43D486CFB90 /* ZegoExpressEngine.xcframework in Frameworks */,
+				49AF77E20F656CAFE94CFA66 /* ReplayKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8B2DDE81447170276CDE3AFE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -229,6 +269,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B29B77F01FFB351022880E1 /* ScreenShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				B0C120A16E1E0C4D08F3AD22 /* Info.plist */,
+				5CF9D4BBBF21516079991C4C /* SampleHandler.swift */,
+				542D3AD710453D6A8A560365 /* ScreenShareExtension.entitlements */,
+			);
+			name = ScreenShareExtension;
+			path = ScreenShareExtension;
+			sourceTree = "<group>";
+		};
 		23073ACEA5C57F48FC490086 /* eyelashesdir */ = {
 			isa = PBXGroup;
 			children = (
@@ -258,6 +309,14 @@
 			);
 			name = Models;
 			path = Models;
+			sourceTree = "<group>";
+		};
+		65279467004E9D2B6035B9B1 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				449808D6CC903E9F03188625 /* Foundation.framework */,
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 		6AD42AF35F47355FE60F93D8 /* eyelinerdir */ = {
@@ -366,6 +425,7 @@
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				7197EA6BF9C89C8C7F7AB644 /* Pods */,
 				B90E47BE2F3DC9E2E7DD9CED /* Frameworks */,
+				0B29B77F01FFB351022880E1 /* ScreenShareExtension */,
 			);
 			sourceTree = "<group>";
 		};
@@ -374,6 +434,7 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
+				CF822B9B9BD0E8C292ABB69C /* ScreenShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -422,6 +483,9 @@
 			children = (
 				674D207EA70F1BF698B7E7C5 /* Pods_Runner.framework */,
 				842503737F70EF0D43AC8198 /* Pods_RunnerTests.framework */,
+				65279467004E9D2B6035B9B1 /* iOS */,
+				6D2A4A7366A1F47ABF0EB567 /* ZegoExpressEngine.xcframework */,
+				B98E74D641ABC73CF86953D5 /* ReplayKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -498,6 +562,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		14AB24407D532EDFD54AD011 /* ScreenShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A5D1D39166631FA649C090FE /* Build configuration list for PBXNativeTarget "ScreenShareExtension" */;
+			buildPhases = (
+				377836864887EBA256CC090F /* Sources */,
+				76CA4C9DA69BA977703BBAF9 /* Frameworks */,
+				F3E6A03EDE809DF611898645 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ScreenShareExtension;
+			productName = ScreenShareExtension;
+			productReference = CF822B9B9BD0E8C292ABB69C /* ScreenShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		331C8080294A63A400263BE5 /* RunnerTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 331C8087294A63A400263BE5 /* Build configuration list for PBXNativeTarget "RunnerTests" */;
@@ -527,16 +608,18 @@
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
+				133E4F4FA68B1A90B1A3385C /* Embed App Extensions */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				5C3A9B331E0E4BB0A15C2E9D /* Include Vendor dSYMs */,
 				788CC1808AD4A55F5BA10977 /* [CP] Embed Pods Frameworks */,
 				525852C8A629C8A33ADA850D /* [CP] Copy Pods Resources */,
 				763B3E2805970C061347902E /* Fix App Store Connect SDK Version */,
-				B7FF0C1E4B1C506EAD2B7F91 /* Fix Missing dSYMs */,
+				41215012297B5ED1F2485A4B /* Fix Missing dSYMs */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E60A0D8A633962137A3776A4 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
@@ -553,6 +636,9 @@
 				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
+					14AB24407D532EDFD54AD011 = {
+						DevelopmentTeam = XM44W3KV48;
+					};
 					331C8080294A63A400263BE5 = {
 						CreatedOnToolsVersion = 14.0;
 						TestTargetID = 97C146ED1CF9000F007C117D;
@@ -589,6 +675,7 @@
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
+				14AB24407D532EDFD54AD011 /* ScreenShareExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -681,6 +768,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F3E6A03EDE809DF611898645 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -721,6 +815,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
+		};
+		41215012297B5ED1F2485A4B /* Fix Missing dSYMs */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Fix Missing dSYMs";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -z \"$DWARF_DSYM_FOLDER_PATH\" ]; then\n  echo \"DWARF_DSYM_FOLDER_PATH is empty, skipping.\"\n  exit 0\nfi\n\necho \"Generating missing dSYMs in DWARF_DSYM_FOLDER_PATH...\"\nfind \"$TARGET_BUILD_DIR\" -name '*.framework' -print0 | while IFS= read -r -d '' fm; do\n    name=$(basename \"$fm\" .framework)\n    binary=\"$fm/$name\"\n    if [ -f \"$binary\" ]; then\n        dwarfdump -u \"$binary\" | awk '{print $2}' | while read -r uuid; do\n            dsym_path=\"$DWARF_DSYM_FOLDER_PATH/$name.framework.dSYM\"\n            if [ ! -d \"$dsym_path\" ]; then\n                echo \"Generating dummy dSYM for $name with UUID $uuid at $dsym_path\"\n                mkdir -p \"$dsym_path/Contents/Resources/DWARF\"\n                \n                cat <<EOF > \"$dsym_path/Contents/Info.plist\"\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n    <key>CFBundleDevelopmentRegion</key>\n    <string>English</string>\n    <key>CFBundleIdentifier</key>\n    <string>com.apple.xcode.dsym.$name</string>\n    <key>CFBundleInfoDictionaryVersion</key>\n    <string>6.0</string>\n    <key>CFBundlePackageType</key>\n    <string>dSYM</string>\n    <key>CFBundleSignature</key>\n    <string>????</string>\n    <key>CFBundleShortVersionString</key>\n    <string>1.0</string>\n    <key>CFBundleVersion</key>\n    <string>1</string>\n</dict>\n</plist>\nEOF\n                cp \"$binary\" \"$dsym_path/Contents/Resources/DWARF/$name\"\n                dsymutil \"$binary\" -o \"$dsym_path\" 2>/dev/null || true\n            fi\n        done\n    fi\ndone\n";
 		};
 		525852C8A629C8A33ADA850D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -827,24 +940,6 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
 		};
-		B7FF0C1E4B1C506EAD2B7F91 /* Fix Missing dSYMs */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Fix Missing dSYMs";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"Generating missing dSYMs in DWARF_DSYM_FOLDER_PATH...\"\nfind \"$TARGET_BUILD_DIR\" -name '*.framework' -print0 | while IFS= read -r -d '' fm; do\n    name=$(basename \"$fm\" .framework)\n    binary=\"$fm/$name\"\n    if [ -f \"$binary\" ]; then\n        dwarfdump -u \"$binary\" | awk '{print $2}' | while read -r uuid; do\n            dsym_path=\"$DWARF_DSYM_FOLDER_PATH/$name.framework.dSYM\"\n            if [ ! -d \"$dsym_path\" ]; then\n                echo \"Generating dummy dSYM for $name with UUID $uuid at $dsym_path\"\n                mkdir -p \"$dsym_path/Contents/Resources/DWARF\"\n                \n                cat <<EOF > \"$dsym_path/Contents/Info.plist\"\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n    <key>CFBundleDevelopmentRegion</key>\n    <string>English</string>\n    <key>CFBundleIdentifier</key>\n    <string>com.apple.xcode.dsym.$name</string>\n    <key>CFBundleInfoDictionaryVersion</key>\n    <string>6.0</string>\n    <key>CFBundlePackageType</key>\n    <string>dSYM</string>\n    <key>CFBundleSignature</key>\n    <string>????</string>\n    <key>CFBundleShortVersionString</key>\n    <string>1.0</string>\n    <key>CFBundleVersion</key>\n    <string>1</string>\n</dict>\n</plist>\nEOF\n                cp \"$binary\" \"$dsym_path/Contents/Resources/DWARF/$name\"\n                dsymutil \"$binary\" -o \"$dsym_path\" 2>/dev/null || true\n            fi\n        done\n    fi\ndone\n";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -853,6 +948,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		377836864887EBA256CC090F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				019F8CA2C5EF4B4D6F358D1B /* SampleHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -873,6 +976,12 @@
 			isa = PBXTargetDependency;
 			target = 97C146ED1CF9000F007C117D /* Runner */;
 			targetProxy = 331C8085294A63A400263BE5 /* PBXContainerItemProxy */;
+		};
+		E60A0D8A633962137A3776A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ScreenShareExtension;
+			target = 14AB24407D532EDFD54AD011 /* ScreenShareExtension */;
+			targetProxy = 46316949600BA07CBCB84FA0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -896,6 +1005,33 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0834FA605BF802DEF0E1BD82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = ScreenShareExtension/ScreenShareExtension.entitlements;
+				DEVELOPMENT_TEAM = XM44W3KV48;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${SRCROOT}/.symlinks/plugins/zego_express_engine/ios/libs\"",
+				);
+				INFOPLIST_FILE = ScreenShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.notisboard.mobile.ScreenShareExtension;
+				PRODUCT_NAME = ScreenShareExtension;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		249021D3217E4FDB00AE95B9 /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1028,6 +1164,32 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
 			};
 			name = Profile;
+		};
+		5AC0162D3D6B722DBFC1C2E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = ScreenShareExtension/ScreenShareExtension.entitlements;
+				DEVELOPMENT_TEAM = XM44W3KV48;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${SRCROOT}/.symlinks/plugins/zego_express_engine/ios/libs\"",
+				);
+				INFOPLIST_FILE = ScreenShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.notisboard.mobile.ScreenShareExtension;
+				PRODUCT_NAME = ScreenShareExtension;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		97C147031CF9000F007C117D /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1198,6 +1360,33 @@
 			};
 			name = Release;
 		};
+		B02B9B36C5D425CFC6AA0041 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = ScreenShareExtension/ScreenShareExtension.entitlements;
+				DEVELOPMENT_TEAM = XM44W3KV48;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${SRCROOT}/.symlinks/plugins/zego_express_engine/ios/libs\"",
+				);
+				INFOPLIST_FILE = ScreenShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.notisboard.mobile.ScreenShareExtension;
+				PRODUCT_NAME = ScreenShareExtension;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Profile;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1227,6 +1416,16 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A5D1D39166631FA649C090FE /* Build configuration list for PBXNativeTarget "ScreenShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0834FA605BF802DEF0E1BD82 /* Release */,
+				5AC0162D3D6B722DBFC1C2E4 /* Debug */,
+				B02B9B36C5D425CFC6AA0041 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

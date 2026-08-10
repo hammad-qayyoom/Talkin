@@ -25,16 +25,16 @@ class _AppleCalendarConnectState extends State<AppleCalendarConnect> {
     super.dispose();
   }
 
-  Future<void> _connect() async {
+  Future<void> _connect(StateSetter setDialogState) async {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      setState(() => _error = 'Please enter your Apple ID and app-specific password.');
+      setDialogState(() => _error = 'Please enter your Apple ID and app-specific password.');
       return;
     }
 
-    setState(() {
+    setDialogState(() {
       _isLoading = true;
       _error = null;
     });
@@ -52,7 +52,7 @@ class _AppleCalendarConnectState extends State<AppleCalendarConnect> {
         ),
       );
     } else {
-      setState(() {
+      setDialogState(() {
         _isLoading = false;
         _error = (result['message'] ?? 'Failed to connect.').toString();
       });
@@ -119,11 +119,13 @@ class _AppleCalendarConnectState extends State<AppleCalendarConnect> {
         backgroundColor: AppColors.white,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+        child: StatefulBuilder(
+          builder: (context, setDialogState) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
@@ -200,7 +202,7 @@ class _AppleCalendarConnectState extends State<AppleCalendarConnect> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: _isLoading ? null : _connect,
+                      onPressed: _isLoading ? null : () => _connect(setDialogState),
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         backgroundColor: AppColors.redesignBrandDark,
@@ -217,7 +219,9 @@ class _AppleCalendarConnectState extends State<AppleCalendarConnect> {
               ),
             ],
           ),
-        ),
+        );
+      },
+      ),
       ),
     );
   }

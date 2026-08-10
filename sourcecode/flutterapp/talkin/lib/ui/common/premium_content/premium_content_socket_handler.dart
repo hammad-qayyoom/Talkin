@@ -44,14 +44,22 @@ class PremiumContentSocketHandler {
 
   void _handlePurchaseRequestReceived(dynamic data) {
     Utils.showLog("[PremiumContent] Purchase request received: $data");
-    if (data is Map<String, dynamic>) {
-      onPurchaseRequestReceived?.call(data);
+    Map<String, dynamic>? mapData;
+    if (data is Map) {
+      mapData = Map<String, dynamic>.from(data);
+    } else if (data is List && data.isNotEmpty && data.first is Map) {
+      mapData = Map<String, dynamic>.from(data.first);
+    }
+
+    if (mapData != null) {
+      final requestData = mapData;
+      onPurchaseRequestReceived?.call(requestData);
       if (Get.context != null) {
         showModalBottomSheet(
           context: Get.context!,
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
-          builder: (_) => PurchaseRequestSheet(requestData: data),
+          builder: (_) => PurchaseRequestSheet(requestData: requestData),
         );
       }
     }
@@ -59,8 +67,15 @@ class PremiumContentSocketHandler {
 
   void _handlePurchaseRequestSent(dynamic data) {
     Utils.showLog("[PremiumContent] Purchase request sent confirmation: $data");
-    if (data is Map<String, dynamic>) {
-      onPurchaseRequestSent?.call(data);
+    Map<String, dynamic>? mapData;
+    if (data is Map) {
+      mapData = Map<String, dynamic>.from(data);
+    } else if (data is List && data.isNotEmpty && data.first is Map) {
+      mapData = Map<String, dynamic>.from(data.first);
+    }
+
+    if (mapData != null) {
+      onPurchaseRequestSent?.call(mapData);
       if (Get.context != null) {
         Utils.showToast(Get.context!, "Purchase request sent to user.");
       }
@@ -69,8 +84,15 @@ class PremiumContentSocketHandler {
 
   void _handlePurchaseCompleted(dynamic data) {
     Utils.showLog("[PremiumContent] Purchase completed: $data");
-    if (data is Map<String, dynamic>) {
-      onPurchaseCompleted?.call(data);
+    Map<String, dynamic>? mapData;
+    if (data is Map) {
+      mapData = Map<String, dynamic>.from(data);
+    } else if (data is List && data.isNotEmpty && data.first is Map) {
+      mapData = Map<String, dynamic>.from(data.first);
+    }
+
+    if (mapData != null) {
+      onPurchaseCompleted?.call(mapData);
       if (Get.context != null) {
         Utils.showToast(Get.context!, "Payment successful! Content downloaded.");
       }
@@ -79,10 +101,17 @@ class PremiumContentSocketHandler {
 
   void _handlePurchaseFailed(dynamic data) {
     Utils.showLog("[PremiumContent] Purchase failed: $data");
-    if (data is Map<String, dynamic>) {
-      onPurchaseFailed?.call(data);
+    Map<String, dynamic>? mapData;
+    if (data is Map) {
+      mapData = Map<String, dynamic>.from(data);
+    } else if (data is List && data.isNotEmpty && data.first is Map) {
+      mapData = Map<String, dynamic>.from(data.first);
+    }
+
+    if (mapData != null) {
+      onPurchaseFailed?.call(mapData);
       if (Get.context != null) {
-        final message = data['reason']?.toString() ?? data['message']?.toString() ?? "Purchase failed.";
+        final message = mapData['reason']?.toString() ?? mapData['message']?.toString() ?? "Purchase failed.";
         Utils.showToast(Get.context!, message);
       }
     }
@@ -90,8 +119,15 @@ class PremiumContentSocketHandler {
 
   void _handlePurchaseDeclined(dynamic data) {
     Utils.showLog("[PremiumContent] Purchase declined: $data");
-    if (data is Map<String, dynamic>) {
-      onPurchaseDeclined?.call(data);
+    Map<String, dynamic>? mapData;
+    if (data is Map) {
+      mapData = Map<String, dynamic>.from(data);
+    } else if (data is List && data.isNotEmpty && data.first is Map) {
+      mapData = Map<String, dynamic>.from(data.first);
+    }
+
+    if (mapData != null) {
+      onPurchaseDeclined?.call(mapData);
       if (Get.context != null) {
         Utils.showToast(Get.context!, "Purchase declined by user.");
       }
@@ -105,7 +141,7 @@ class PremiumContentSocketHandler {
     required String contentId,
     int? customPrice,
   }) {
-    if (socket != null && socket?.connected == true) {
+    if (socket != null) {
       final data = <String, dynamic>{
         'sessionId': sessionId,
         'contentId': contentId,
@@ -117,7 +153,7 @@ class PremiumContentSocketHandler {
   }
 
   static void acceptPurchaseRequest(String purchaseId) {
-    if (socket != null && socket?.connected == true) {
+    if (socket != null) {
       socket?.emit(SocketEvents.acceptPurchaseRequest, {
         'purchaseId': purchaseId,
       });
@@ -126,7 +162,7 @@ class PremiumContentSocketHandler {
   }
 
   static void declinePurchaseRequest(String purchaseId) {
-    if (socket != null && socket?.connected == true) {
+    if (socket != null) {
       socket?.emit(SocketEvents.declinePurchaseRequest, {
         'purchaseId': purchaseId,
       });

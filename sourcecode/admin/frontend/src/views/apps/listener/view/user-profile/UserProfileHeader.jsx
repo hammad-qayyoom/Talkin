@@ -28,9 +28,9 @@ const UserProfileHeader = ({ data }) => {
 
   const handleConfirm = () => {
     setConfirmOpen(false)
+    const listenerId = userDetails?._id
     const userFirebaseId = userDetails?.userDetails?.firebaseId
-    const userId = userDetails?.userDetails?._id
-    window.open(`/simulate?uid=${userId || userDetails?._id}&fid=${userFirebaseId || userDetails?._id}`, '_blank')
+    window.open(`/simulate?uid=${listenerId}&fid=${userFirebaseId || listenerId}`, '_blank')
   }
 
   return (
