@@ -470,24 +470,7 @@ class SocketListen {
 
       Utils.showLog("vvvvvvvvvvvvvvvvvvvvvvvvvv");
 
-      Get.toNamed(AppRoutes.voiceCallScreen, arguments: {
-        "callerId": data['callerId'],
-        "receiverId": data['receiverId'],
-        "callType": data['callType'],
-        "callerRole": data['callerRole'],
-        "receiverRole": data['receiverRole'],
-        "callId": data['callId'],
-        "receiverName": data['receiverName'],
-        "callerfullName": data['callerfullName'],
-        "callerName": data['callerName'],
-        "receiverImage": data['receiverImage'],
-        "callerImage": data['callerImage'],
-        "isAccept": data['isAccept'],
-        "callMode": data['callMode'],
-        // "micMute": controller.micMute,
-        // "micMute": controller.micMute,
-        // "speakerOn": controller.isSpeakerOn,
-      });
+      Get.toNamed(AppRoutes.voiceCallScreen, arguments: data);
     } else {
       Get.toNamed(AppRoutes.videoCallScreen, arguments: data);
     }

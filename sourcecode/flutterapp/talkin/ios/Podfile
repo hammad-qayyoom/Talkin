@@ -48,6 +48,7 @@ post_install do |installer|
       config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
       config.build_settings['GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS'] = 'NO'
       config.build_settings['SWIFT_SUPPRESS_WARNINGS'] = 'YES'
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
       config.build_settings['OTHER_SWIFT_FLAGS'] = '$(inherited) -suppress-warnings -Xcc -Wno-deprecated-declarations'
       config.build_settings['OTHER_CFLAGS'] = '$(inherited) -Wno-deprecated-declarations'
       config.build_settings['OTHER_LIBTOOLFLAGS'] = '$(inherited) -no_warning_for_no_symbols'

@@ -78,7 +78,7 @@ class HomeScreen extends GetView<HomeScreenController> {
                             id: Constant.idPaginationListener,
                             builder: (controller) {
                               if (controller.isPaginationLoading) {
-                                return const SliverToBoxAdapter(
+                                return SliverToBoxAdapter(
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(vertical: 20.0),
                                     child: Center(
