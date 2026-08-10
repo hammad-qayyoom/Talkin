@@ -4,7 +4,9 @@ import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/font_style.dart';
 
 class CalendarConnectionCard extends StatefulWidget {
-  const CalendarConnectionCard({super.key});
+  final Function(List<dynamic>)? onConnectionsLoaded;
+
+  const CalendarConnectionCard({super.key, this.onConnectionsLoaded});
 
   @override
   State<CalendarConnectionCard> createState() => _CalendarConnectionCardState();
@@ -37,6 +39,7 @@ class _CalendarConnectionCardState extends State<CalendarConnectionCard> {
         _isLoading = false;
         _connections = data['connections'] ?? [];
       });
+      widget.onConnectionsLoaded?.call(_connections);
     } else {
       setState(() {
         _isLoading = false;

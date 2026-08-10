@@ -566,6 +566,7 @@ class _CalendarIntegrationSection extends StatefulWidget {
 
 class _CalendarIntegrationSectionState extends State<_CalendarIntegrationSection> {
   Key _connectionCardKey = UniqueKey();
+  List<dynamic> _connections = [];
 
   void _refreshConnections() {
     setState(() {
@@ -575,6 +576,9 @@ class _CalendarIntegrationSectionState extends State<_CalendarIntegrationSection
 
   @override
   Widget build(BuildContext context) {
+    final hasGoogle = _connections.any((c) => c['provider'] == 'google');
+    final hasApple = _connections.any((c) => c['provider'] == 'apple');
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -583,11 +587,18 @@ class _CalendarIntegrationSectionState extends State<_CalendarIntegrationSection
           isTablet: widget.isTablet,
         ),
         const SizedBox(height: 8),
-        CalendarConnectionCard(key: _connectionCardKey),
-        const SizedBox(height: 8),
-        GoogleCalendarConnect(onConnected: _refreshConnections),
-        const SizedBox(height: 8),
-        AppleCalendarConnect(onConnected: _refreshConnections),
+        CalendarConnectionCard(
+          key: _connectionCardKey,
+          onConnectionsLoaded: (conns) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) setState(() => _connections = conns);
+            });
+          },
+        ),
+        if (!hasGoogle) const SizedBox(height: 8),
+        if (!hasGoogle) GoogleCalendarConnect(onConnected: _refreshConnections),
+        if (!hasApple) const SizedBox(height: 8),
+        if (!hasApple) AppleCalendarConnect(onConnected: _refreshConnections),
       ],
     );
   }
