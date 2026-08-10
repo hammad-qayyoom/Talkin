@@ -203,7 +203,7 @@ class IncomingCallController extends GetxController
     super.onInit();
 
     _isDisposed = false;
-    args = Get.arguments as Map<String, dynamic>;
+    args = Map<String, dynamic>.from(Get.arguments as Map);
     getDataFromArgs();
 
     // ✅ Setup audio player first

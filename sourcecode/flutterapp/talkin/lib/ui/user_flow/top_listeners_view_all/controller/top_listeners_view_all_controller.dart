@@ -73,8 +73,10 @@ class TopListenersViewAllController extends GetxController {
     final uid = Database.loginUserFirebaseId;
     final token = await FirebaseAccessToken.onGet() ?? "";
 
-    if (scrollController.position.pixels ==
-        scrollController.position.maxScrollExtent) {
+    if (isPaginationLoading || isLoading) return;
+
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 200) {
       isPaginationLoading = true;
       update([Constant.idPaginationListener, Constant.idGetListener]);
 

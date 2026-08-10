@@ -58,6 +58,7 @@ class HomeScreen extends GetView<HomeScreenController> {
                       backgroundColor: AppColors.white,
                       onRefresh: () async => controller.onRefresh(),
                       child: CustomScrollView(
+                        controller: controller.scrollController,
                         physics: const AlwaysScrollableScrollPhysics(
                           parent: BouncingScrollPhysics(),
                         ),
@@ -73,8 +74,25 @@ class HomeScreen extends GetView<HomeScreenController> {
                           const SliverToBoxAdapter(
                             child: TopListenerWidget(),
                           ),
-                          const SliverToBoxAdapter(
-                            child: SizedBox(height: 12),
+                          GetBuilder<HomeScreenController>(
+                            id: Constant.idPaginationListener,
+                            builder: (controller) {
+                              if (controller.isPaginationLoading) {
+                                return const SliverToBoxAdapter(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 20.0),
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: AppColors.redesignBrandRed,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                              return const SliverToBoxAdapter(
+                                child: SizedBox(height: 12),
+                              );
+                            },
                           ),
                         ],
                       ),

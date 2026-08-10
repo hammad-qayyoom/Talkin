@@ -124,7 +124,7 @@ class VoiceCallController extends GetxController {
       Get.find<TranslationService>().refreshConfig();
     }
 
-    args = Get.arguments as Map<String, dynamic>;
+    args = Map<String, dynamic>.from(Get.arguments as Map);
     getDataFromArgs();
 
     // Fetch anonymous mode config (after parsing args to get categoryId)
@@ -250,10 +250,7 @@ class VoiceCallController extends GetxController {
   }
 
   bool get isCurrentUserExpert {
-    final role = (callerRole ?? "").trim().toLowerCase();
-    final actualExpertId = (role == "user") ? receiverId : callerId;
-    return Database.loginUserId == actualExpertId ||
-        Database.loginUserFirebaseId == actualExpertId;
+    return Database.isListener;
   }
 
   String _currentZegoUserId() {

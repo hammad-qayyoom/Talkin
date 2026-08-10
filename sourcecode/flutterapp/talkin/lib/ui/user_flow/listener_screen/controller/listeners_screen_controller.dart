@@ -279,8 +279,10 @@ class ListenersScreenController extends GetxController {
   }
 
   Future<void> onTopListenersPagination() async {
-    if (scrollController.position.pixels ==
-        scrollController.position.maxScrollExtent) {
+    if (isPaginationLoading || isLoading) return;
+
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 200) {
       isPaginationLoading = true;
       update([Constant.idPaginationListener]);
 

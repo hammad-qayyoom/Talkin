@@ -50,7 +50,7 @@ class OutgoingCallController extends GetxController
   @override
   void onInit() async {
     Utils.showLog("onInit outgoing call controller");
-    args = Get.arguments as Map<String, dynamic>;
+    args = Map<String, dynamic>.from(Get.arguments as Map);
     FlutterRingtonePlayer().playNotification();
 
     await getDataFromArgs();

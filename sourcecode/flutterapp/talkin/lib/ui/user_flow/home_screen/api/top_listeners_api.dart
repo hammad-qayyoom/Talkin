@@ -11,7 +11,7 @@ import 'package:notisboard/utils/utils.dart';
 
 class TopListenersApi {
   static int startPagination = 0;
-  static int limitPagination = 100;
+  static int limitPagination = 15;
 
   static Uri _discoverUri({
     required String searchString,
