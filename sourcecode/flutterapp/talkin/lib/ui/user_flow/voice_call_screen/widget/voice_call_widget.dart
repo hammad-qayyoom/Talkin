@@ -62,7 +62,8 @@ class VoiceCallView extends StatelessWidget {
                 if (!logic.isRecordingActive) return const SizedBox.shrink();
                 return Center(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.red.withValues(alpha: 0.85),
                       borderRadius: BorderRadius.circular(20),
@@ -316,7 +317,9 @@ class VoiceCallView1 extends StatelessWidget {
                   builder: (logic) {
                     // if (!logic.isRecordingEligible) return const SizedBox.shrink(); // Assuming eligibility is checked and handled
                     return buildControlButton(
-                      iconData: logic.isRecordingActive ? Icons.stop_circle_outlined : Icons.radio_button_checked,
+                      iconData: logic.isRecordingActive
+                          ? Icons.stop_circle_outlined
+                          : Icons.radio_button_checked,
                       isActive: logic.isRecordingActive,
                       onTap: () {
                         if (logic.isRecordingActive) {
@@ -324,7 +327,8 @@ class VoiceCallView1 extends StatelessWidget {
                         } else if (!logic.isRecordingConsentPending) {
                           logic.requestRecording();
                         } else {
-                          Utils.showToast(context, "Waiting for other person's consent...");
+                          Utils.showToast(
+                              context, "Waiting for other person's consent...");
                         }
                       },
                       size: controlSize,
@@ -339,7 +343,8 @@ class VoiceCallView1 extends StatelessWidget {
                       isActive: service.isActive,
                       onTap: () {
                         if (!service.isEnabled) {
-                          Utils.showToast(context, "Translation is not enabled. Please check settings.");
+                          Utils.showToast(context,
+                              "Translation is not enabled. Please check settings.");
                           return;
                         }
                         controller.toggleTranslation();
@@ -353,7 +358,9 @@ class VoiceCallView1 extends StatelessWidget {
                   builder: (logic) {
                     if (!logic.canScreenShare) return const SizedBox.shrink();
                     return buildControlButton(
-                      iconData: logic.isScreenSharing ? Icons.stop_screen_share : Icons.screen_share,
+                      iconData: logic.isScreenSharing
+                          ? Icons.stop_screen_share
+                          : Icons.screen_share,
                       isActive: logic.isScreenSharing,
                       onTap: () {
                         logic.toggleScreenShare();
@@ -362,7 +369,9 @@ class VoiceCallView1 extends StatelessWidget {
                     );
                   },
                 ),
-                if (Database.isListener && controller.sessionId != null && controller.sessionId!.isNotEmpty)
+                if (controller.isCurrentUserExpert &&
+                    controller.sessionId != null &&
+                    controller.sessionId!.isNotEmpty)
                   buildControlButton(
                     iconData: Icons.star_rounded,
                     size: controlSize,
@@ -377,7 +386,9 @@ class VoiceCallView1 extends StatelessWidget {
                       );
                     },
                   ),
-                if (!Database.isListener && controller.sessionId != null && controller.sessionId!.isNotEmpty)
+                if (!controller.isCurrentUserExpert &&
+                    controller.sessionId != null &&
+                    controller.sessionId!.isNotEmpty)
                   buildControlButton(
                     iconData: Icons.library_books_rounded,
                     size: controlSize,
@@ -404,7 +415,8 @@ class VoiceCallView1 extends StatelessWidget {
                     child: GetBuilder<VoiceCallController>(
                       id: Constant.idVideoCall,
                       builder: (logic) {
-                        if (logic.remoteIsScreenSharing && logic.remoteView != null) {
+                        if (logic.remoteIsScreenSharing &&
+                            logic.remoteView != null) {
                           return Container(
                             color: Colors.black,
                             child: logic.remoteView,
@@ -450,7 +462,9 @@ class VoiceCallView1 extends StatelessWidget {
                       GetBuilder<VoiceCallController>(
                         id: Constant.idVideoCall,
                         builder: (logic) {
-                          if (!logic.isRecordingActive) return const SizedBox.shrink();
+                          if (!logic.isRecordingActive) {
+                            return const SizedBox.shrink();
+                          }
                           return Container(
                             width: double.infinity,
                             color: Colors.red.withValues(alpha: 0.9),
@@ -459,7 +473,8 @@ class VoiceCallView1 extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.circle, color: Colors.white, size: 8),
+                                const Icon(Icons.circle,
+                                    color: Colors.white, size: 8),
                                 const SizedBox(width: 6),
                                 Text(
                                   "REC • This call is being recorded",
@@ -527,168 +542,183 @@ class VoiceCallView1 extends StatelessWidget {
                         child: GetBuilder<VoiceCallController>(
                           id: Constant.idVideoCall,
                           builder: (logic) {
-                            if (logic.remoteIsScreenSharing && logic.remoteView != null) {
-                              return const SizedBox.shrink(); // Hide the card during screen share
+                            if (logic.remoteIsScreenSharing &&
+                                logic.remoteView != null) {
+                              return const SizedBox
+                                  .shrink(); // Hide the card during screen share
                             }
                             return SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(maxWidth: cardWidth),
-                              child: Container(
-                                margin: EdgeInsets.fromLTRB(
-                                  horizontalPadding,
-                                  8,
-                                  horizontalPadding,
-                                  10,
-                                ),
-                                padding: EdgeInsets.fromLTRB(
-                                  isCompact ? 14 : 18,
-                                  16,
-                                  isCompact ? 14 : 18,
-                                  18,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColors.white,
-                                  borderRadius: BorderRadius.circular(24),
-                                  border: Border.all(color: _softBorder),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AppColors.black
-                                          .withValues(alpha: 0.07),
-                                      blurRadius: 24,
-                                      offset: const Offset(0, 10),
+                              physics: const BouncingScrollPhysics(),
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: ConstrainedBox(
+                                  constraints:
+                                      BoxConstraints(maxWidth: cardWidth),
+                                  child: Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                      horizontalPadding,
+                                      8,
+                                      horizontalPadding,
+                                      10,
                                     ),
-                                  ],
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      height: 3,
-                                      width: 56,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(999),
-                                        gradient: LinearGradient(
-                                          colors: [_brandRed, _brandRedDark],
+                                    padding: EdgeInsets.fromLTRB(
+                                      isCompact ? 14 : 18,
+                                      16,
+                                      isCompact ? 14 : 18,
+                                      18,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      borderRadius: BorderRadius.circular(24),
+                                      border: Border.all(color: _softBorder),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: AppColors.black
+                                              .withValues(alpha: 0.07),
+                                          blurRadius: 24,
+                                          offset: const Offset(0, 10),
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                    const SizedBox(height: 16),
-                                    Container(
-                                      height: avatarSize,
-                                      width: avatarSize,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        gradient: LinearGradient(
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                          colors: [_brandRed, _brandRedDark],
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(3),
-                                        child: ClipOval(
-                                          child: CustomProfileImage(
-                                            image: displayImage,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 14),
-                                    Text(
-                                      callerName,
-                                      textAlign: TextAlign.center,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: AppFontStyle.fontStyleW700(
-                                        fontSize: isCompact ? 24 : 28,
-                                        fontColor: _brandDark,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 6,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            AppColors.redesignSurfaceNeutralAlt,
-                                        borderRadius:
-                                            BorderRadius.circular(999),
-                                        border: Border.all(color: _softBorder),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.lock_outline_rounded,
-                                            size: 13,
-                                            color: _mutedText,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          Text(
-                                            EnumLocale
-                                                .txtEndToEndEncrypted.name.tr,
-                                            style: AppFontStyle.fontStyleW500(
-                                              fontSize: 11,
-                                              fontColor: _mutedText,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          height: 3,
+                                          width: 56,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(999),
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                _brandRed,
+                                                _brandRedDark
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 14),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 14,
-                                        vertical: 9,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [_brandRed, _brandRedDark],
                                         ),
-                                        borderRadius:
-                                            BorderRadius.circular(999),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: _brandRed.withValues(
-                                                alpha: 0.26),
-                                            blurRadius: 16,
-                                            offset: const Offset(0, 8),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.timer_outlined,
-                                            size: 15,
-                                            color: AppColors.white,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          Text(
-                                            elapsedTime,
-                                            style: AppFontStyle.fontStyleW600(
-                                              fontSize: isCompact ? 18 : 20,
-                                              fontColor: AppColors.white,
+                                        const SizedBox(height: 16),
+                                        Container(
+                                          height: avatarSize,
+                                          width: avatarSize,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            gradient: LinearGradient(
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                              colors: [
+                                                _brandRed,
+                                                _brandRedDark
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(3),
+                                            child: ClipOval(
+                                              child: CustomProfileImage(
+                                                image: displayImage,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 14),
+                                        Text(
+                                          callerName,
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: AppFontStyle.fontStyleW700(
+                                            fontSize: isCompact ? 24 : 28,
+                                            fontColor: _brandDark,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 6,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: AppColors
+                                                .redesignSurfaceNeutralAlt,
+                                            borderRadius:
+                                                BorderRadius.circular(999),
+                                            border:
+                                                Border.all(color: _softBorder),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                Icons.lock_outline_rounded,
+                                                size: 13,
+                                                color: _mutedText,
+                                              ),
+                                              const SizedBox(width: 5),
+                                              Text(
+                                                EnumLocale.txtEndToEndEncrypted
+                                                    .name.tr,
+                                                style:
+                                                    AppFontStyle.fontStyleW500(
+                                                  fontSize: 11,
+                                                  fontColor: _mutedText,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 14),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 14,
+                                            vertical: 9,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                _brandRed,
+                                                _brandRedDark
+                                              ],
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(999),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: _brandRed.withValues(
+                                                    alpha: 0.26),
+                                                blurRadius: 16,
+                                                offset: const Offset(0, 8),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                Icons.timer_outlined,
+                                                size: 15,
+                                                color: AppColors.white,
+                                              ),
+                                              const SizedBox(width: 5),
+                                              Text(
+                                                elapsedTime,
+                                                style:
+                                                    AppFontStyle.fontStyleW600(
+                                                  fontSize: isCompact ? 18 : 20,
+                                                  fontColor: AppColors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          );
+                            );
                           },
                         ),
                       ),
@@ -734,7 +764,9 @@ class VoiceCallView1 extends StatelessWidget {
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          for (var i = 0; i < actionItems.length - 1; i++) ...[
+                                          for (var i = 0;
+                                              i < actionItems.length - 1;
+                                              i++) ...[
                                             actionItems[i],
                                             SizedBox(width: controlGap),
                                           ],

@@ -334,31 +334,20 @@ class MyWalletController extends GetxController
     final gatewayPrefix = hasKnownGateway ? ' on $gateway' : '';
     final expiryText = _activeSubscriptionExpiryText();
 
-    if (!GetPlatform.isIOS) {
-      if (hasCancelledRenewal) {
-        return 'Your active subscription$gatewayPrefix is already cancelled and remains available until $expiryText. After it expires, subscription purchase will be available again.';
-      }
-
-      return 'You already have an active subscription$gatewayPrefix. It expires on $expiryText. After expiry, subscription purchase will be available again.';
-    }
-
-    if (gatewayLower.contains('app store') || platform == 'ios') {
+    if (GetPlatform.isIOS &&
+        (gatewayLower.contains('app store') || platform == 'ios')) {
       if (hasCancelledRenewal) {
         return 'Your App Store subscription is cancelled and remains active until $expiryText.';
       }
 
-      return GetPlatform.isIOS
-          ? 'You already have an active App Store subscription. Use Manage or Restore instead of buying again.'
-          : 'Your active subscription was purchased on App Store. Please manage it from an iPhone or App Store subscriptions.';
+      return 'You already have an active App Store subscription. It expires on $expiryText. Use Manage or Restore instead of buying again.';
     }
 
-    if (gateway.isNotEmpty) {
-      return GetPlatform.isIOS
-          ? 'Your active subscription was purchased on $gateway. Please manage it on that platform.'
-          : 'You already have an active subscription. Please manage it on $gateway.';
+    if (hasCancelledRenewal) {
+      return 'Your active subscription$gatewayPrefix is already cancelled and remains available until $expiryText. After it expires, subscription purchase will be available again.';
     }
 
-    return 'You already have an active subscription.';
+    return 'You already have an active subscription$gatewayPrefix. It expires on $expiryText. After expiry, subscription purchase will be available again.';
   }
 
   bool _isAlreadySubscribedResponse(PurchaseCoinPlan? response) {

@@ -22,7 +22,7 @@ class _ContentLibraryScreenState extends State<ContentLibraryScreen> {
   bool _isLoading = true;
   int _page = 1;
   bool _hasMore = true;
-  Set<String> _downloadingIds = {};
+  final Set<String> _downloadingIds = {};
 
   @override
   void initState() {
@@ -94,6 +94,7 @@ class _ContentLibraryScreenState extends State<ContentLibraryScreen> {
 
         if (mounted) {
           final result = await OpenFilex.open(file.path);
+          if (!mounted) return;
           if (result.type != ResultType.done) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

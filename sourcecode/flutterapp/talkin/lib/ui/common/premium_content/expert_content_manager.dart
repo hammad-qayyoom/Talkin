@@ -173,7 +173,7 @@ class _ExpertContentManagerState extends State<ExpertContentManager> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: AppColors.redesignBrandRed.withOpacity(0.1),
+                  color: AppColors.redesignBrandRed.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(Icons.delete_outline, color: AppColors.redesignBrandRed, size: 26),
@@ -302,7 +302,7 @@ class _ExpertContentManagerState extends State<ExpertContentManager> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
-                  value: selectedCategory,
+                  initialValue: selectedCategory,
                   decoration: InputDecoration(
                     labelText: 'Category',
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -574,7 +574,7 @@ class _ExpertContentManagerState extends State<ExpertContentManager> {
                                             Container(
                                               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                               decoration: BoxDecoration(
-                                                color: statusColor.withOpacity(0.1),
+                                                color: statusColor.withValues(alpha: 0.1),
                                                 borderRadius: BorderRadius.circular(4),
                                               ),
                                               child: Text(
@@ -613,7 +613,7 @@ class _ExpertContentManagerState extends State<ExpertContentManager> {
                                       label: Text('Delete', style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.redesignBrandRed)),
                                       style: OutlinedButton.styleFrom(
                                         foregroundColor: AppColors.redesignBrandRed,
-                                        side: BorderSide(color: AppColors.redesignBrandRed.withOpacity(0.3)),
+                                        side: BorderSide(color: AppColors.redesignBrandRed.withValues(alpha: 0.3)),
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                         padding: const EdgeInsets.symmetric(vertical: 8),
                                       ),

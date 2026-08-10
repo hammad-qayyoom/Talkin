@@ -83,12 +83,15 @@ class VideoCallView1 extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       color: Colors.red.withValues(alpha: 0.9),
-                      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 4, bottom: 4),
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).padding.top + 4,
+                          bottom: 4),
                       alignment: Alignment.center,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.circle, color: Colors.white, size: 8),
+                          const Icon(Icons.circle,
+                              color: Colors.white, size: 8),
                           const SizedBox(width: 6),
                           Text(
                             "REC • This call is being recorded",
@@ -109,7 +112,8 @@ class VideoCallView1 extends StatelessWidget {
                     left: 12,
                     right: 12,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.blue.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(8),
@@ -117,7 +121,8 @@ class VideoCallView1 extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.screen_share_rounded, color: Colors.white, size: 14),
+                          const Icon(Icons.screen_share_rounded,
+                              color: Colors.white, size: 14),
                           const SizedBox(width: 6),
                           Text(
                             "You are sharing your screen",
@@ -138,7 +143,8 @@ class VideoCallView1 extends StatelessWidget {
                     left: 12,
                     right: 12,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.blue.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(8),
@@ -146,7 +152,8 @@ class VideoCallView1 extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.screen_share_rounded, color: Colors.white, size: 14),
+                          const Icon(Icons.screen_share_rounded,
+                              color: Colors.white, size: 14),
                           const SizedBox(width: 6),
                           Text(
                             "${logic.remoteScreenSharerName} is sharing their screen",
@@ -160,7 +167,9 @@ class VideoCallView1 extends StatelessWidget {
                     ),
                   ),
                 Positioned(
-                  top: logic.isRecordingActive ? MediaQuery.of(context).padding.top + 34 : 44,
+                  top: logic.isRecordingActive
+                      ? MediaQuery.of(context).padding.top + 34
+                      : 44,
                   left: 12,
                   right: 12,
                   child: Row(
@@ -279,125 +288,139 @@ class VideoCallView1 extends StatelessWidget {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                            ControlButton(
-                              iconData: logic.micMute == true
-                                  ? Icons.mic_off_rounded
-                                  : Icons.mic_none_rounded,
-                              isActive: logic.micMute,
-                              size: controlSize,
-                              onTap: logic.onMicMute,
-                            ),
-                            SizedBox(width: controlGap),
-                            ControlButton(
-                              iconData: logic.isCameraOff == true
-                                  ? Icons.videocam_off_rounded
-                                  : Icons.videocam_outlined,
-                              isActive: logic.isCameraOff,
-                              size: controlSize,
-                              onTap: logic.onCameraOff,
-                            ),
-                            SizedBox(width: controlGap),
-                            ControlButton(
-                              iconData: Icons.flip_camera_android_rounded,
-                              size: controlSize,
-                              onTap: logic.onCameraTurn,
-                            ),
-                            if (logic.canScreenShare) ...[
-                              SizedBox(width: controlGap),
-                              ControlButton(
-                                iconData: logic.isScreenSharing
-                                    ? Icons.stop_screen_share_rounded
-                                    : Icons.screen_share_rounded,
-                                isActive: logic.isScreenSharing,
-                                size: controlSize,
-                                onTap: logic.toggleScreenShare,
-                              ),
-                            ],
-                            SizedBox(width: controlGap),
-                            ControlButton(
-                              iconData: logic.isRecordingActive ? Icons.stop_circle_outlined : Icons.radio_button_checked,
-                              isActive: logic.isRecordingActive,
-                              onTap: () {
-                                if (logic.isRecordingActive) {
-                                  logic.stopRecording();
-                                } else if (!logic.isRecordingConsentPending) {
-                                  logic.requestRecording();
-                                } else {
-                                  Utils.showToast(context, "Waiting for other person's consent...");
-                                }
-                              },
-                              size: controlSize,
-                            ),
-                            SizedBox(width: controlGap),
-                            GetBuilder<TranslationService>(
-                              id: Constant.idTranslation,
-                              builder: (service) {
-                                return ControlButton(
-                                  iconData: Icons.translate,
-                                  isActive: service.isActive,
-                                  onTap: () {
-                                    if (!service.isEnabled) {
-                                      Utils.showToast(context, "Translation is not enabled. Please check settings.");
-                                      return;
-                                    }
-                                    logic.toggleTranslation();
-                                  },
-                                  size: controlSize,
-                                );
-                              },
-                            ),
-                            SizedBox(width: controlGap),
-                            AnonymousModeToggle(
-                              onTap: () => showAnonymousModePanel(context),
-                              size: controlSize,
-                            ),
-                            if (Database.isListener && logic.sessionId != null && logic.sessionId!.isNotEmpty) ...[
-                              SizedBox(width: controlGap),
-                              ControlButton(
-                                iconData: Icons.star_rounded,
-                                size: controlSize,
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    builder: (_) => PremiumContentPicker(
-                                      sessionId: logic.sessionId!,
+                                    ControlButton(
+                                      iconData: logic.micMute == true
+                                          ? Icons.mic_off_rounded
+                                          : Icons.mic_none_rounded,
+                                      isActive: logic.micMute,
+                                      size: controlSize,
+                                      onTap: logic.onMicMute,
                                     ),
-                                  );
-                                },
-                              ),
-                            ],
-                            if (!Database.isListener && logic.sessionId != null && logic.sessionId!.isNotEmpty) ...[
-                              SizedBox(width: controlGap),
-                              ControlButton(
-                                iconData: Icons.library_books_rounded,
-                                size: controlSize,
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const ContentLibraryScreen(),
+                                    SizedBox(width: controlGap),
+                                    ControlButton(
+                                      iconData: logic.isCameraOff == true
+                                          ? Icons.videocam_off_rounded
+                                          : Icons.videocam_outlined,
+                                      isActive: logic.isCameraOff,
+                                      size: controlSize,
+                                      onTap: logic.onCameraOff,
                                     ),
-                                  );
-                                },
-                              ),
-                            ],
-                            SizedBox(width: controlGap),
-                            logic.isGroupSessionCall
-                                ? _buildGroupChatControlButton(
-                                    context,
-                                    logic,
-                                    size: controlSize,
-                                  )
-                                : ControlButton(
-                                    iconData: Icons.more_horiz_rounded,
-                                    size: controlSize,
-                                    onTap: () => _openMoreOptionsBottomSheet(
-                                      context,
-                                      logic,
+                                    SizedBox(width: controlGap),
+                                    ControlButton(
+                                      iconData:
+                                          Icons.flip_camera_android_rounded,
+                                      size: controlSize,
+                                      onTap: logic.onCameraTurn,
                                     ),
-                                  ),
+                                    if (logic.canScreenShare) ...[
+                                      SizedBox(width: controlGap),
+                                      ControlButton(
+                                        iconData: logic.isScreenSharing
+                                            ? Icons.stop_screen_share_rounded
+                                            : Icons.screen_share_rounded,
+                                        isActive: logic.isScreenSharing,
+                                        size: controlSize,
+                                        onTap: logic.toggleScreenShare,
+                                      ),
+                                    ],
+                                    SizedBox(width: controlGap),
+                                    ControlButton(
+                                      iconData: logic.isRecordingActive
+                                          ? Icons.stop_circle_outlined
+                                          : Icons.radio_button_checked,
+                                      isActive: logic.isRecordingActive,
+                                      onTap: () {
+                                        if (logic.isRecordingActive) {
+                                          logic.stopRecording();
+                                        } else if (!logic
+                                            .isRecordingConsentPending) {
+                                          logic.requestRecording();
+                                        } else {
+                                          Utils.showToast(context,
+                                              "Waiting for other person's consent...");
+                                        }
+                                      },
+                                      size: controlSize,
+                                    ),
+                                    SizedBox(width: controlGap),
+                                    GetBuilder<TranslationService>(
+                                      id: Constant.idTranslation,
+                                      builder: (service) {
+                                        return ControlButton(
+                                          iconData: Icons.translate,
+                                          isActive: service.isActive,
+                                          onTap: () {
+                                            if (!service.isEnabled) {
+                                              Utils.showToast(context,
+                                                  "Translation is not enabled. Please check settings.");
+                                              return;
+                                            }
+                                            logic.toggleTranslation();
+                                          },
+                                          size: controlSize,
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(width: controlGap),
+                                    AnonymousModeToggle(
+                                      onTap: () =>
+                                          showAnonymousModePanel(context),
+                                      size: controlSize,
+                                    ),
+                                    if (logic.isCurrentUserExpert &&
+                                        logic.sessionId != null &&
+                                        logic.sessionId!.isNotEmpty) ...[
+                                      SizedBox(width: controlGap),
+                                      ControlButton(
+                                        iconData: Icons.star_rounded,
+                                        size: controlSize,
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            backgroundColor: Colors.transparent,
+                                            builder: (_) =>
+                                                PremiumContentPicker(
+                                              sessionId: logic.sessionId!,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                    if (!logic.isCurrentUserExpert &&
+                                        logic.sessionId != null &&
+                                        logic.sessionId!.isNotEmpty) ...[
+                                      SizedBox(width: controlGap),
+                                      ControlButton(
+                                        iconData: Icons.library_books_rounded,
+                                        size: controlSize,
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  const ContentLibraryScreen(),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                    SizedBox(width: controlGap),
+                                    logic.isGroupSessionCall
+                                        ? _buildGroupChatControlButton(
+                                            context,
+                                            logic,
+                                            size: controlSize,
+                                          )
+                                        : ControlButton(
+                                            iconData: Icons.more_horiz_rounded,
+                                            size: controlSize,
+                                            onTap: () =>
+                                                _openMoreOptionsBottomSheet(
+                                              context,
+                                              logic,
+                                            ),
+                                          ),
                                   ],
                                 ),
                               ),
@@ -415,7 +438,7 @@ class VideoCallView1 extends StatelessWidget {
                     ),
                   ),
                 ),
-              const SubtitleOverlay(),
+                const SubtitleOverlay(),
               ],
             );
           },
@@ -1157,13 +1180,15 @@ class VideoCallView1 extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: ClipOval(
-                    child: CustomProfileImage(
-                      image: logic.callerId != Database.loginUserId
-                          ? logic.callerImage ?? ''
-                          : logic.receiverImage ?? '',
+                    child: SizedBox(
                       width: 100,
                       height: 100,
-                      fit: BoxFit.cover,
+                      child: CustomProfileImage(
+                        image: logic.callerId != Database.loginUserId
+                            ? logic.callerImage ?? ''
+                            : logic.receiverImage ?? '',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

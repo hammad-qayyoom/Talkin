@@ -587,7 +587,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
   ) async {
     final bookingId = (item['_id'] ?? '').toString();
     if (bookingId.isEmpty) {
-      Utils.showToast(context, 'Unable to verify session. Booking id is missing.');
+      Utils.showToast(
+          context, 'Unable to verify session. Booking id is missing.');
       return;
     }
 
@@ -598,7 +599,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     if (!mounted) return;
 
     if (response['status'] == true) {
-      Utils.showToast(context, 'Session verified and completed. Credits released to expert.');
+      Utils.showToast(context,
+          'Session verified and completed. Credits released to expert.');
       _fetchSessions();
     } else {
       Utils.showToast(
@@ -642,12 +644,14 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     final isInPerson = consultationMode == 'in_person';
 
     if (isInPerson) {
-      final arrivalResponse = await SessionBookingService.requestPhysicalSession(
+      final arrivalResponse =
+          await SessionBookingService.requestPhysicalSession(
         bookingId: bookingId,
       );
       if (!mounted) return;
       if (arrivalResponse['status'] == true) {
-        Utils.showToast(context, 'Physical session request sent. Waiting for expert to accept.');
+        Utils.showToast(context,
+            'Physical session request sent. Waiting for expert to accept.');
         _fetchSessions();
       } else {
         Utils.showToast(
@@ -957,7 +961,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  'Review @expertName'.trParams({'expertName': expertName}),
+                                  'Review @expertName'
+                                      .trParams({'expertName': expertName}),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppFontStyle.fontStyleW700(
@@ -1016,7 +1021,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                             maxLines: 5,
                             textInputAction: TextInputAction.done,
                             decoration: InputDecoration(
-                              hintText: EnumLocale.txtWriteYourReviewHere.name.tr,
+                              hintText:
+                                  EnumLocale.txtWriteYourReviewHere.name.tr,
                               hintStyle: AppFontStyle.fontStyleW500(
                                 fontSize: 12,
                                 fontColor: _mutedText,
@@ -1420,7 +1426,10 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     final expert = _extractExpert(session);
 
     final callTypeRaw = (session['callType'] ?? '').toString().trim();
-    final consultationModeRaw = (item['consultationMode'] ?? session['consultationMode'] ?? '').toString().trim();
+    final consultationModeRaw =
+        (item['consultationMode'] ?? session['consultationMode'] ?? '')
+            .toString()
+            .trim();
     final isInPersonSession = consultationModeRaw == 'in_person';
     final callTypeLabel = isInPersonSession
         ? 'IN-PERSON'
@@ -1457,29 +1466,48 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     final isNarrowActionLayout = cardWidth < 430;
 
     // In-Person consultation fields
-    final consultationMode = (item['consultationMode'] ?? session['consultationMode'] ?? 'online').toString().trim();
+    final consultationMode =
+        (item['consultationMode'] ?? session['consultationMode'] ?? 'online')
+            .toString()
+            .trim();
     final isInPerson = consultationMode == 'in_person';
-    final inPersonDetails = session['inPersonDetails'] is Map<String, dynamic> ? session['inPersonDetails'] as Map<String, dynamic> : <String, dynamic>{};
-    final clinicSnapshot = inPersonDetails['clinicSnapshot'] is Map<String, dynamic> ? inPersonDetails['clinicSnapshot'] as Map<String, dynamic> : <String, dynamic>{};
+    final inPersonDetails = session['inPersonDetails'] is Map<String, dynamic>
+        ? session['inPersonDetails'] as Map<String, dynamic>
+        : <String, dynamic>{};
+    final clinicSnapshot =
+        inPersonDetails['clinicSnapshot'] is Map<String, dynamic>
+            ? inPersonDetails['clinicSnapshot'] as Map<String, dynamic>
+            : <String, dynamic>{};
     final clinicName = (clinicSnapshot['clinicName'] ?? '').toString().trim();
     final clinicAddress = clinicSnapshot['address'];
     final clinicStreet = (clinicAddress?['street'] ?? '').toString().trim();
     final clinicCity = (clinicAddress?['city'] ?? '').toString().trim();
     final clinicState = (clinicAddress?['state'] ?? '').toString().trim();
     final clinicCountry = (clinicAddress?['country'] ?? '').toString().trim();
-    final clinicPostalCode = (clinicAddress?['postalCode'] ?? '').toString().trim();
-    final clinicFullAddress = [clinicStreet, clinicCity, clinicState, clinicCountry]
-        .where((s) => s.trim().isNotEmpty)
-        .join(', ');
-    final clinicFloorSuite = (clinicSnapshot['floorSuite'] ?? '').toString().trim();
+    final clinicPostalCode =
+        (clinicAddress?['postalCode'] ?? '').toString().trim();
+    final clinicFullAddress = [
+      clinicStreet,
+      clinicCity,
+      clinicState,
+      clinicCountry
+    ].where((s) => s.trim().isNotEmpty).join(', ');
+    final clinicFloorSuite =
+        (clinicSnapshot['floorSuite'] ?? '').toString().trim();
     final clinicLandmark = (clinicSnapshot['landmark'] ?? '').toString().trim();
-    final clinicParkingInfo = (clinicSnapshot['parkingInfo'] ?? '').toString().trim();
-    final clinicContactPhone = (clinicSnapshot['contactPhone'] ?? '').toString().trim();
-    final clinicContactEmail = (clinicSnapshot['contactEmail'] ?? '').toString().trim();
-    final clinicInstructions = (clinicSnapshot['consultationInstructions'] ?? '').toString().trim();
-    final arrivalStatus = (item['arrivalStatus'] ?? '').toString().trim().toLowerCase();
+    final clinicParkingInfo =
+        (clinicSnapshot['parkingInfo'] ?? '').toString().trim();
+    final clinicContactPhone =
+        (clinicSnapshot['contactPhone'] ?? '').toString().trim();
+    final clinicContactEmail =
+        (clinicSnapshot['contactEmail'] ?? '').toString().trim();
+    final clinicInstructions =
+        (clinicSnapshot['consultationInstructions'] ?? '').toString().trim();
+    final arrivalStatus =
+        (item['arrivalStatus'] ?? '').toString().trim().toLowerCase();
     final hasCheckedIn = arrivalStatus == 'arrived';
-    final isLive = ['live', 'active', 'ongoing', 'started'].contains(statusLower);
+    final isLive =
+        ['live', 'active', 'ongoing', 'started'].contains(statusLower);
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -1557,7 +1585,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                 text: callTypeLabel,
               ),
               _buildMetaChip(
-                icon: isInPerson ? Icons.location_on_rounded : Icons.videocam_rounded,
+                icon: isInPerson
+                    ? Icons.location_on_rounded
+                    : Icons.videocam_rounded,
                 text: isInPerson ? 'In-Person' : 'Online',
               ),
             ],
@@ -1580,7 +1610,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                       Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF2E7D32).withValues(alpha: 0.12),
+                          color:
+                              const Color(0xFF2E7D32).withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -1620,31 +1651,38 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                   ),
                   if (clinicFullAddress.isNotEmpty) ...[
                     const SizedBox(height: 10),
-                    _buildClinicDetailRow(Icons.place_rounded, clinicFullAddress),
+                    _buildClinicDetailRow(
+                        Icons.place_rounded, clinicFullAddress),
                   ],
                   if (clinicPostalCode.isNotEmpty) ...[
                     const SizedBox(height: 6),
-                    _buildClinicDetailRow(Icons.markunread_mailbox_rounded, 'Postal Code: $clinicPostalCode'),
+                    _buildClinicDetailRow(Icons.markunread_mailbox_rounded,
+                        'Postal Code: $clinicPostalCode'),
                   ],
                   if (clinicFloorSuite.isNotEmpty) ...[
                     const SizedBox(height: 6),
-                    _buildClinicDetailRow(Icons.layers_rounded, 'Floor / Suite: $clinicFloorSuite'),
+                    _buildClinicDetailRow(Icons.layers_rounded,
+                        'Floor / Suite: $clinicFloorSuite'),
                   ],
                   if (clinicLandmark.isNotEmpty) ...[
                     const SizedBox(height: 6),
-                    _buildClinicDetailRow(Icons.signpost_rounded, 'Landmark: $clinicLandmark'),
+                    _buildClinicDetailRow(
+                        Icons.signpost_rounded, 'Landmark: $clinicLandmark'),
                   ],
                   if (clinicParkingInfo.isNotEmpty) ...[
                     const SizedBox(height: 6),
-                    _buildClinicDetailRow(Icons.local_parking_rounded, 'Parking: $clinicParkingInfo'),
+                    _buildClinicDetailRow(Icons.local_parking_rounded,
+                        'Parking: $clinicParkingInfo'),
                   ],
                   if (clinicContactPhone.isNotEmpty) ...[
                     const SizedBox(height: 6),
-                    _buildClinicDetailRow(Icons.phone_rounded, clinicContactPhone),
+                    _buildClinicDetailRow(
+                        Icons.phone_rounded, clinicContactPhone),
                   ],
                   if (clinicContactEmail.isNotEmpty) ...[
                     const SizedBox(height: 6),
-                    _buildClinicDetailRow(Icons.email_rounded, clinicContactEmail),
+                    _buildClinicDetailRow(
+                        Icons.email_rounded, clinicContactEmail),
                   ],
                   if (clinicInstructions.isNotEmpty) ...[
                     const SizedBox(height: 10),
@@ -1658,7 +1696,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.info_outline_rounded, size: 13, color: Color(0xFF558B2F)),
+                          const Icon(Icons.info_outline_rounded,
+                              size: 13, color: Color(0xFF558B2F)),
                           const SizedBox(width: 6),
                           Expanded(
                             child: Text(
@@ -1691,7 +1730,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                       child: OutlinedButton.icon(
                         onPressed: null,
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: const Color(0xFFFFA726).withValues(alpha: 0.5)),
+                          side: BorderSide(
+                              color: const Color(0xFFFFA726)
+                                  .withValues(alpha: 0.5)),
                           foregroundColor: const Color(0xFFE65100),
                           disabledBackgroundColor: const Color(0xFFFFF3E0),
                           disabledForegroundColor: const Color(0xFFE65100),
@@ -1716,7 +1757,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                       child: OutlinedButton.icon(
                         onPressed: null,
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: const Color(0xFF2E7D32).withValues(alpha: 0.5)),
+                          side: BorderSide(
+                              color: const Color(0xFF2E7D32)
+                                  .withValues(alpha: 0.5)),
                           foregroundColor: const Color(0xFF2E7D32),
                           disabledBackgroundColor: const Color(0xFFE8F5E9),
                           disabledForegroundColor: const Color(0xFF2E7D32),
@@ -1724,7 +1767,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        icon: const Icon(Icons.check_circle_outline_rounded, size: 16),
+                        icon: const Icon(Icons.check_circle_outline_rounded,
+                            size: 16),
                         label: Text(
                           isLive ? 'Session In Progress' : 'Checked In',
                           style: AppFontStyle.fontStyleW600(
@@ -1812,7 +1856,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                         ),
                         icon: Icon(
                           canStart
-                              ? (isInPerson ? Icons.location_on_outlined : Icons.play_circle_outline_rounded)
+                              ? (isInPerson
+                                  ? Icons.location_on_outlined
+                                  : Icons.play_circle_outline_rounded)
                               : Icons.schedule_rounded,
                           size: 16,
                         ),
@@ -1870,7 +1916,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                         child: OutlinedButton.icon(
                           onPressed: null,
                           style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: const Color(0xFFFFA726).withValues(alpha: 0.5)),
+                            side: BorderSide(
+                                color: const Color(0xFFFFA726)
+                                    .withValues(alpha: 0.5)),
                             foregroundColor: const Color(0xFFE65100),
                             disabledBackgroundColor: const Color(0xFFFFF3E0),
                             disabledForegroundColor: const Color(0xFFE65100),
@@ -1878,7 +1926,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          icon: const Icon(Icons.hourglass_top_rounded, size: 16),
+                          icon:
+                              const Icon(Icons.hourglass_top_rounded, size: 16),
                           label: Text(
                             'Awaiting Expert',
                             style: AppFontStyle.fontStyleW600(
@@ -1896,7 +1945,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                         child: OutlinedButton.icon(
                           onPressed: null,
                           style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: const Color(0xFF2E7D32).withValues(alpha: 0.5)),
+                            side: BorderSide(
+                                color: const Color(0xFF2E7D32)
+                                    .withValues(alpha: 0.5)),
                             foregroundColor: const Color(0xFF2E7D32),
                             disabledBackgroundColor: const Color(0xFFE8F5E9),
                             disabledForegroundColor: const Color(0xFF2E7D32),
@@ -1904,7 +1955,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          icon: const Icon(Icons.check_circle_outline_rounded, size: 16),
+                          icon: const Icon(Icons.check_circle_outline_rounded,
+                              size: 16),
                           label: Text(
                             isLive ? 'Session In Progress' : 'Checked In',
                             style: AppFontStyle.fontStyleW600(
@@ -1982,7 +2034,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                               _onStartSessionTap(item, session, expert),
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
-                            disabledBackgroundColor: AppColors.redesignSoftBorder,
+                            disabledBackgroundColor:
+                                AppColors.redesignSoftBorder,
                             disabledForegroundColor: _mutedText,
                             backgroundColor: canStart
                                 ? _brandDark
@@ -1995,7 +2048,9 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                           ),
                           icon: Icon(
                             canStart
-                                ? (isInPerson ? Icons.location_on_outlined : Icons.play_circle_outline_rounded)
+                                ? (isInPerson
+                                    ? Icons.location_on_outlined
+                                    : Icons.play_circle_outline_rounded)
                                 : Icons.schedule_rounded,
                             size: 16,
                           ),
@@ -2003,7 +2058,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                             startButtonLabel,
                             style: AppFontStyle.fontStyleW600(
                               fontSize: 13,
-                              fontColor: canStart ? AppColors.white : _mutedText,
+                              fontColor:
+                                  canStart ? AppColors.white : _mutedText,
                             ),
                           ),
                         ),
@@ -2113,7 +2169,11 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
     return _sessions.where((rawItem) {
       if (rawItem is! Map<String, dynamic>) return false;
       final session = _extractSession(rawItem);
-      final consultationMode = (rawItem['consultationMode'] ?? session['consultationMode'] ?? 'online').toString().trim();
+      final consultationMode = (rawItem['consultationMode'] ??
+              session['consultationMode'] ??
+              'online')
+          .toString()
+          .trim();
       if (_modeFilter == 'in_person') return consultationMode == 'in_person';
       if (_modeFilter == 'online') return consultationMode != 'in_person';
       return true;
@@ -2302,7 +2362,6 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                 builder: (context, contentConstraints) {
                   final width = contentConstraints.maxWidth;
                   final isTablet = width >= 760;
-                  final canPop = Navigator.of(context).canPop();
                   final horizontalInset = width >= 1100
                       ? 28.0
                       : isTablet
@@ -2325,30 +2384,6 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                           ),
                           child: Row(
                             children: [
-                              if (canPop)
-                                Material(
-                                  color: AppColors.transparent,
-                                  child: InkWell(
-                                    onTap: () =>
-                                        Navigator.of(context).maybePop(),
-                                    borderRadius: BorderRadius.circular(14),
-                                    child: Container(
-                                      height: isTablet ? 42 : 38,
-                                      width: isTablet ? 42 : 38,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.white,
-                                        borderRadius: BorderRadius.circular(14),
-                                        border: Border.all(color: _softBorder),
-                                      ),
-                                      child: Icon(
-                                        Icons.arrow_back_ios_new_rounded,
-                                        size: isTablet ? 20 : 18,
-                                        color: _brandDark,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              if (canPop) const SizedBox(width: 10),
                               Expanded(
                                 child: Text(
                                   EnumLocale.txtMySessions.name.tr,
@@ -2440,8 +2475,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                         vertical: 7,
                                       ),
                                       decoration: BoxDecoration(
-                                        color:
-                                            AppColors.white.withValues(alpha: 0.2),
+                                        color: AppColors.white
+                                            .withValues(alpha: 0.2),
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(
                                           color: AppColors.white
@@ -2451,8 +2486,10 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                       child: Column(
                                         children: [
                                           Text(
-                                            EnumLocale.txtSessionCount.name.trParams({
-                                              'count': '${_filteredSessions.length}',
+                                            EnumLocale.txtSessionCount.name
+                                                .trParams({
+                                              'count':
+                                                  '${_filteredSessions.length}',
                                             }),
                                             style: AppFontStyle.fontStyleW700(
                                               fontSize: isTablet ? 16 : 14,
@@ -2480,7 +2517,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                   height: isTablet ? 46.0 : 42.0,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      Get.toNamed(AppRoutes.userGroupSessionsScreen);
+                                      Get.toNamed(
+                                          AppRoutes.userGroupSessionsScreen);
                                     },
                                     style: ElevatedButton.styleFrom(
                                       elevation: 0,
@@ -2491,7 +2529,8 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                       ),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Icon(
                                           Icons.groups_rounded,
@@ -2525,19 +2564,23 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (_) => const MyRecordingsScreen(),
+                                          builder: (_) =>
+                                              const MyRecordingsScreen(),
                                         ),
                                       );
                                     },
                                     style: OutlinedButton.styleFrom(
-                                      side: BorderSide(color: AppColors.white.withValues(alpha: 0.5)),
+                                      side: BorderSide(
+                                          color: AppColors.white
+                                              .withValues(alpha: 0.5)),
                                       foregroundColor: AppColors.white,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Icon(
                                           Icons.cloud_rounded,
@@ -2601,9 +2644,12 @@ class _UserMySessionsScreenState extends State<UserMySessionsScreen> {
                             physics: const BouncingScrollPhysics(),
                             child: Row(
                               children: [
-                                _buildModeFilterChip('all', 'All', Icons.filter_list_rounded),
-                                _buildModeFilterChip('online', 'Audio/Video', Icons.headset_rounded),
-                                _buildModeFilterChip('in_person', 'In-Person', Icons.location_on_rounded),
+                                _buildModeFilterChip(
+                                    'all', 'All', Icons.filter_list_rounded),
+                                _buildModeFilterChip('online', 'Audio/Video',
+                                    Icons.headset_rounded),
+                                _buildModeFilterChip('in_person', 'In-Person',
+                                    Icons.location_on_rounded),
                               ],
                             ),
                           ),

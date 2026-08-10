@@ -130,7 +130,7 @@ class _PremiumContentPickerState extends State<PremiumContentPicker> {
                       margin: const EdgeInsets.only(bottom: 8),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: isSelected ? AppColors.redesignBrandRed.withOpacity(0.08) : AppColors.white,
+                        color: isSelected ? AppColors.redesignBrandRed.withValues(alpha: 0.08) : AppColors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: isSelected ? AppColors.redesignBrandRed : AppColors.redesignSoftBorder,

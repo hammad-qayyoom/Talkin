@@ -85,7 +85,7 @@ class _ExpertSmartSchedulingToggleState extends State<ExpertSmartSchedulingToggl
               _isEnabled ? Icons.auto_awesome : Icons.auto_awesome_outlined,
               color: _isEnabled ? Colors.purple : Colors.grey,
             ),
-      activeColor: Colors.purple,
+      activeThumbColor: Colors.purple,
     );
   }
 }

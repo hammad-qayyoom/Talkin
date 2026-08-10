@@ -98,8 +98,8 @@ class VoiceCallController extends GetxController {
   bool isScreenSharing = false;
   bool remoteIsScreenSharing = false;
   String remoteScreenSharerName = '';
-  DateTime? _screenShareStartTime;
-  int _screenShareDurationSeconds = 0;
+
+
   Timer? _screenShareMaxDurationTimer;
   dynamic _desktopScreenCaptureSource;
   final Map<String, int> remoteViewIdsByStream = <String, int>{};
@@ -131,7 +131,7 @@ class VoiceCallController extends GetxController {
     if (Get.isRegistered<AnonymousModeService>()) {
       Get.find<AnonymousModeService>().fetchConfig(categoryId: categoryId);
     }
-    
+
     _checkRecordingEligibility();
 
     final hasMicPermission = await _requestMicrophonePermission();
@@ -247,6 +247,13 @@ class VoiceCallController extends GetxController {
     log("receiverRole ::$receiverRole");
     log("isSpeakerOn ::$isSpeakerOn");
     log("isMicMute ::$isMicMute");
+  }
+
+  bool get isCurrentUserExpert {
+    final role = (callerRole ?? "").trim().toLowerCase();
+    final actualExpertId = (role == "user") ? receiverId : callerId;
+    return Database.loginUserId == actualExpertId ||
+        Database.loginUserFirebaseId == actualExpertId;
   }
 
   String _currentZegoUserId() {
@@ -568,7 +575,10 @@ class VoiceCallController extends GetxController {
 
     await ZegoExpressEngine.instance.createCanvasView((viewID) {
       remoteViewIdsByStream[streamID] = viewID;
-      ZegoCanvas canvas = ZegoCanvas(viewID, viewMode: remoteIsScreenSharing ? ZegoViewMode.AspectFit : ZegoViewMode.AspectFill);
+      ZegoCanvas canvas = ZegoCanvas(viewID,
+          viewMode: remoteIsScreenSharing
+              ? ZegoViewMode.AspectFit
+              : ZegoViewMode.AspectFill);
       ZegoExpressEngine.instance.startPlayingStream(streamID, canvas: canvas);
     }).then((canvasViewWidget) {
       if (canvasViewWidget != null) {
@@ -598,7 +608,7 @@ class VoiceCallController extends GetxController {
   Future<void> stopPlayStream(String streamID) async {
     ZegoExpressEngine.instance.stopPlayingStream(streamID);
     playingStreamIds.remove(streamID);
-    
+
     final viewID = remoteViewIdsByStream.remove(streamID);
     if (viewID != null) {
       await ZegoExpressEngine.instance.destroyCanvasView(viewID);
@@ -1207,7 +1217,8 @@ class VoiceCallController extends GetxController {
       RecordingConsentDialog.show(
         context: Get.context!,
         title: "Start Recording",
-        description: "Do you want to start recording this call? Both participants must consent.",
+        description:
+            "Do you want to start recording this call? Both participants must consent.",
         confirmText: "Yes, Start Recording",
         cancelText: "Cancel",
         icon: Icons.mic_rounded,
@@ -1243,24 +1254,28 @@ class VoiceCallController extends GetxController {
     Utils.showLog("onRequestRecordingConsent called with data: $data");
     final dataCallId = data['callId']?.toString() ?? '';
     final dataRequesterId = data['requesterId']?.toString() ?? '';
-    
+
     // Skip if we are the requester
     if (dataRequesterId == Database.loginUserId) {
       Utils.showLog("Skipping consent popup - we are the requester");
       return;
     }
-    
+
     // Match by callId or by being a participant in this call
-    if (dataCallId.isNotEmpty && callId != null && callId!.isNotEmpty && dataCallId != callId) {
+    if (dataCallId.isNotEmpty &&
+        callId != null &&
+        callId!.isNotEmpty &&
+        dataCallId != callId) {
       Utils.showLog("CallId mismatch: server=$dataCallId local=$callId");
       return;
     }
-    
+
     if (Get.context != null) {
       RecordingConsentDialog.show(
         context: Get.context!,
         title: "Recording Request",
-        description: "The other person wants to record this call. Do you consent?",
+        description:
+            "The other person wants to record this call. Do you consent?",
         confirmText: "Allow",
         cancelText: "Decline",
         icon: Icons.mic_rounded,
@@ -1292,10 +1307,10 @@ class VoiceCallController extends GetxController {
     update([Constant.idVideoCall]);
 
     if (data['isAccepted'] == true) {
-      Utils.showToast(Get.context, "Recording consent accepted. Recording started.");
+      Utils.showToast(
+          Get.context, "Recording consent accepted. Recording started.");
       _beginRecording();
     } else {
-
       Utils.showToast(Get.context, "Recording consent denied.");
     }
   }
@@ -1355,18 +1370,22 @@ class VoiceCallController extends GetxController {
       if (!hasPermission) {
         Utils.showLog("Audio recording permission denied");
         if (Get.context != null) {
-          Utils.showToast(Get.context!, "Microphone permission is required for recording");
+          Utils.showToast(
+              Get.context!, "Microphone permission is required for recording");
         }
         return;
       }
       final dir = await getApplicationDocumentsDirectory();
-      _recordingFilePath = '${dir.path}/call_${DateTime.now().millisecondsSinceEpoch}.m4a';
-      await _audioRecorder!.start(const RecordConfig(), path: _recordingFilePath!);
+      _recordingFilePath =
+          '${dir.path}/call_${DateTime.now().millisecondsSinceEpoch}.m4a';
+      await _audioRecorder!
+          .start(const RecordConfig(), path: _recordingFilePath!);
       Utils.showLog("Local audio recording started successfully");
     } catch (e) {
       Utils.showLog("Error starting recording: $e");
       if (Get.context != null) {
-        Utils.showToast(Get.context!, "Failed to start recording: ${e.toString().length > 80 ? e.toString().substring(0, 80) : e.toString()}");
+        Utils.showToast(Get.context!,
+            "Failed to start recording: ${e.toString().length > 80 ? e.toString().substring(0, 80) : e.toString()}");
       }
     }
   }
@@ -1405,7 +1424,8 @@ class VoiceCallController extends GetxController {
       );
       Utils.showLog("Recording queued for background upload: call $callId");
     } else {
-      Utils.showLog("Recording file not found, skipping queue: $_recordingFilePath");
+      Utils.showLog(
+          "Recording file not found, skipping queue: $_recordingFilePath");
       // Still report with empty URL so server knows
       SocketEmit.emitReportRecordingComplete(
         callId: callId!,
@@ -1424,7 +1444,9 @@ class VoiceCallController extends GetxController {
 
   bool get canScreenShare {
     if (kIsWeb) return false;
-    if (!(Platform.isIOS || Platform.isAndroid || Platform.isMacOS || Platform.isWindows)) return false;
+    if (!(Platform.isIOS || Platform.isAndroid || Platform.isMacOS || Platform.isWindows)) {
+      return false;
+    }
 
     final settings = Database.settingApiModel?.data;
     if (settings == null) return true;
@@ -1433,7 +1455,8 @@ class VoiceCallController extends GetxController {
     if (!screenSharingEnabled) return false;
 
     final permission = settings.screenSharingPermission ?? 'both';
-    final isExpert = Database.fetchLoginUserProfileModel?.user?.isListener == true;
+    final isExpert =
+        Database.fetchLoginUserProfileModel?.user?.isListener == true;
 
     if (permission == 'expert_only' && !isExpert) return false;
     if (permission == 'user_only' && isExpert) return false;
@@ -1458,14 +1481,16 @@ class VoiceCallController extends GetxController {
   Future<void> _startScreenShare() async {
     if (!canScreenShare) {
       if (Get.context != null) {
-        Utils.showToast(Get.context!, 'Screen sharing is not supported on this device.');
+        Utils.showToast(
+            Get.context!, 'Screen sharing is not supported on this device.');
       }
       return;
     }
 
     if (remoteIsScreenSharing) {
       if (Get.context != null) {
-        Utils.showToast(Get.context!, 'The other participant is already sharing their screen.');
+        Utils.showToast(Get.context!,
+            'The other participant is already sharing their screen.');
       }
       return;
     }
@@ -1476,23 +1501,27 @@ class VoiceCallController extends GetxController {
 
       if (!kIsWeb && (Platform.isMacOS || Platform.isWindows)) {
         // Desktop: use window/screen picker
-        final sources = await ZegoExpressEngine.instance.getScreenCaptureSources(1920, 1080, 64, 64);
+        final sources = await ZegoExpressEngine.instance
+            .getScreenCaptureSources(1920, 1080, 64, 64);
         if (sources.isEmpty) {
           if (Get.context != null) {
-            Utils.showToast(Get.context!, 'No screens or windows available to share.');
+            Utils.showToast(
+                Get.context!, 'No screens or windows available to share.');
           }
           return;
         }
 
         final sourceInfo = sources.first;
-        final captureSource = await ZegoExpressEngine.instance.createScreenCaptureSource(
+        final captureSource =
+            await ZegoExpressEngine.instance.createScreenCaptureSource(
           sourceId: sourceInfo.sourceID,
           sourceType: sourceInfo.sourceType,
         );
 
         if (captureSource == null) {
           if (Get.context != null) {
-            Utils.showToast(Get.context!, 'Failed to create screen capture source.');
+            Utils.showToast(
+                Get.context!, 'Failed to create screen capture source.');
           }
           return;
         }
@@ -1522,11 +1551,13 @@ class VoiceCallController extends GetxController {
         );
 
         // Step 3: Create screen capture source — triggers MediaProjection permission on Android
-        final captureSource = await ZegoExpressEngine.instance.createScreenCaptureSource();
+        final captureSource =
+            await ZegoExpressEngine.instance.createScreenCaptureSource();
 
         if (captureSource == null) {
           if (Get.context != null) {
-            Utils.showToast(Get.context!, 'Failed to create screen capture source.');
+            Utils.showToast(
+                Get.context!, 'Failed to create screen capture source.');
           }
           return;
         }
@@ -1535,7 +1566,8 @@ class VoiceCallController extends GetxController {
 
         // Step 4: Configure for iOS specifically
         if (!kIsWeb && Platform.isIOS) {
-          await captureSource.setAppGroupID('group.com.notisboard.mobile.screenshare');
+          await captureSource
+              .setAppGroupID('group.com.notisboard.mobile.screenshare');
         }
 
         // Step 5: Start capture — this shows the Android system consent dialog
@@ -1545,7 +1577,6 @@ class VoiceCallController extends GetxController {
       }
 
       isScreenSharing = true;
-      _screenShareStartTime = DateTime.now();
 
       // Start max duration timer
       final maxMinutes = screenShareMaxDurationMinutes;
@@ -1577,7 +1608,8 @@ class VoiceCallController extends GetxController {
       Utils.showLog('Screen share start failed: $e');
       isScreenSharing = false;
       if (Get.context != null) {
-        Utils.showToast(Get.context!, 'Failed to start screen sharing: ${e.toString().length > 60 ? e.toString().substring(0, 60) : e.toString()}');
+        Utils.showToast(Get.context!,
+            'Failed to start screen sharing: ${e.toString().length > 60 ? e.toString().substring(0, 60) : e.toString()}');
       }
     }
   }
@@ -1586,7 +1618,8 @@ class VoiceCallController extends GetxController {
     try {
       if (_desktopScreenCaptureSource != null) {
         await _desktopScreenCaptureSource!.stopCapture();
-        await ZegoExpressEngine.instance.destroyScreenCaptureSource(_desktopScreenCaptureSource!);
+        await ZegoExpressEngine.instance
+            .destroyScreenCaptureSource(_desktopScreenCaptureSource!);
         _desktopScreenCaptureSource = null;
       }
 
@@ -1603,10 +1636,7 @@ class VoiceCallController extends GetxController {
       // Disable video encoder back to audio-only state
       await ZegoExpressEngine.instance.enableCamera(false);
 
-      if (_screenShareStartTime != null) {
-        _screenShareDurationSeconds += DateTime.now().difference(_screenShareStartTime!).inSeconds;
-      }
-      _screenShareStartTime = null;
+
       _screenShareMaxDurationTimer?.cancel();
       _screenShareMaxDurationTimer = null;
 
@@ -1660,13 +1690,15 @@ class VoiceCallController extends GetxController {
     if ((payload['type'] ?? '').toString() != _screenShareType) return;
 
     final action = (payload['action'] ?? '').toString().trim();
-    final sharerName = (payload['sharerName'] ?? fromUser.userName).toString().trim();
+    final sharerName =
+        (payload['sharerName'] ?? fromUser.userName).toString().trim();
 
     switch (action) {
       case _actionScreenShareStarted:
         remoteIsScreenSharing = true;
-        remoteScreenSharerName = sharerName.isNotEmpty ? sharerName : 'Participant';
-        
+        remoteScreenSharerName =
+            sharerName.isNotEmpty ? sharerName : 'Participant';
+
         final streamId = streamIdsByUserId[fromUser.userID];
         if (streamId != null) {
           if (!playingStreamIds.contains(streamId)) {
@@ -1674,15 +1706,18 @@ class VoiceCallController extends GetxController {
           } else {
             final viewId = remoteViewIdsByStream[streamId];
             if (viewId != null) {
-              ZegoCanvas canvas = ZegoCanvas(viewId, viewMode: ZegoViewMode.AspectFit);
-              ZegoExpressEngine.instance.startPlayingStream(streamId, canvas: canvas);
+              ZegoCanvas canvas =
+                  ZegoCanvas(viewId, viewMode: ZegoViewMode.AspectFit);
+              ZegoExpressEngine.instance
+                  .startPlayingStream(streamId, canvas: canvas);
             }
           }
         }
 
         update([Constant.idVideoCall]);
         if (Get.context != null) {
-          Utils.showToast(Get.context!, '$remoteScreenSharerName started sharing their screen.');
+          Utils.showToast(Get.context!,
+              '$remoteScreenSharerName started sharing their screen.');
         }
         break;
       case _actionScreenShareStopped:
@@ -1690,11 +1725,14 @@ class VoiceCallController extends GetxController {
         remoteScreenSharerName = '';
 
         final stoppedStreamId = streamIdsByUserId[fromUser.userID];
-        if (stoppedStreamId != null && playingStreamIds.contains(stoppedStreamId)) {
+        if (stoppedStreamId != null &&
+            playingStreamIds.contains(stoppedStreamId)) {
           final viewId = remoteViewIdsByStream[stoppedStreamId];
           if (viewId != null) {
-            ZegoCanvas canvas = ZegoCanvas(viewId, viewMode: ZegoViewMode.AspectFill);
-            ZegoExpressEngine.instance.startPlayingStream(stoppedStreamId, canvas: canvas);
+            ZegoCanvas canvas =
+                ZegoCanvas(viewId, viewMode: ZegoViewMode.AspectFill);
+            ZegoExpressEngine.instance
+                .startPlayingStream(stoppedStreamId, canvas: canvas);
           }
         }
 
@@ -1705,9 +1743,7 @@ class VoiceCallController extends GetxController {
         break;
     }
   }
-
 }
-
 
 class GroupLiveChatMessage {
   final String messageId;

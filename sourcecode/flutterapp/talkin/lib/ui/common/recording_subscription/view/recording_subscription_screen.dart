@@ -12,6 +12,7 @@ import 'package:notisboard/ui/common/recording_subscription/model/recording_subs
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/common_payment.dart';
+
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/firebse_access_token.dart';
@@ -40,10 +41,12 @@ class RecordingSubscriptionScreen extends StatefulWidget {
   const RecordingSubscriptionScreen({super.key});
 
   @override
-  State<RecordingSubscriptionScreen> createState() => _RecordingSubscriptionScreenState();
+  State<RecordingSubscriptionScreen> createState() =>
+      _RecordingSubscriptionScreenState();
 }
 
-class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScreen>
+class _RecordingSubscriptionScreenState
+    extends State<RecordingSubscriptionScreen>
     with WidgetsBindingObserver
     implements IAPCallback {
   bool isLoading = true;
@@ -107,10 +110,16 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
 
     // iOS: Enforce Apple IAP only — no other payment methods allowed
     if (GetPlatform.isIOS) {
-      final isEnabled = settings == null || settings.isAppleInAppPurchaseEnabled != false;
+      final isEnabled =
+          settings == null || settings.isAppleInAppPurchaseEnabled != false;
       if (isEnabled) {
         paymentMethods = [
-          PaymentMethodOption(id: 3, title: EnumLocale.txtAppStore.name.tr, image: AppAsset.appStoreImage, width: 50, height: 26),
+          PaymentMethodOption(
+              id: 3,
+              title: EnumLocale.txtAppStore.name.tr,
+              image: AppAsset.appStoreImage,
+              width: 50,
+              height: 26),
         ];
         selectedPaymentMethod = 3;
       }
@@ -120,29 +129,47 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
     // Android: Load all enabled payment methods
     if (settings == null) {
       paymentMethods = [
-        PaymentMethodOption(id: 3, title: EnumLocale.txtGooglePlay.name.tr, image: AppAsset.googleIcon, width: 50, height: 26),
+        PaymentMethodOption(
+            id: 3,
+            title: EnumLocale.txtGooglePlay.name.tr,
+            image: AppAsset.googleIcon,
+            width: 50,
+            height: 26),
       ];
       selectedPaymentMethod = 3;
       return;
     }
 
-    _addIfEnabled(1, EnumLocale.txtStripe.name.tr, AppAsset.stripe, 52, 26, android: settings.isStripeEnabled);
-    _addIfEnabled(0, EnumLocale.txtRazorpay.name.tr, AppAsset.razorpay, 54, 28, android: settings.isRazorpayEnabled);
-    _addIfEnabled(2, EnumLocale.txtFlutterwave.name.tr, AppAsset.flutterWave, 54, 28, android: settings.isFlutterwaveEnabled);
-    _addIfEnabled(5, EnumLocale.txtPaystack.name.tr, AppAsset.payStackImage, 52, 28, android: settings.isPaystackAndroidEnabled);
-    _addIfEnabled(4, EnumLocale.txtCashfree.name.tr, AppAsset.cashFreeImage, 54, 28, android: settings.isCashfreeAndroidEnabled);
-    _addIfEnabled(6, EnumLocale.txtPaypal.name.tr, AppAsset.payPalImage, 52, 28, android: settings.isPaypalAndroidEnabled);
-    _addIfEnabled(3, EnumLocale.txtGooglePlay.name.tr, AppAsset.googleIcon, 50, 26, android: settings.isGooglePlayEnabled);
+    _addIfEnabled(1, EnumLocale.txtStripe.name.tr, AppAsset.stripe, 52, 26,
+        android: settings.isStripeEnabled);
+    _addIfEnabled(0, EnumLocale.txtRazorpay.name.tr, AppAsset.razorpay, 54, 28,
+        android: settings.isRazorpayEnabled);
+    _addIfEnabled(
+        2, EnumLocale.txtFlutterwave.name.tr, AppAsset.flutterWave, 54, 28,
+        android: settings.isFlutterwaveEnabled);
+    _addIfEnabled(
+        5, EnumLocale.txtPaystack.name.tr, AppAsset.payStackImage, 52, 28,
+        android: settings.isPaystackAndroidEnabled);
+    _addIfEnabled(
+        4, EnumLocale.txtCashfree.name.tr, AppAsset.cashFreeImage, 54, 28,
+        android: settings.isCashfreeAndroidEnabled);
+    _addIfEnabled(6, EnumLocale.txtPaypal.name.tr, AppAsset.payPalImage, 52, 28,
+        android: settings.isPaypalAndroidEnabled);
+    _addIfEnabled(
+        3, EnumLocale.txtGooglePlay.name.tr, AppAsset.googleIcon, 50, 26,
+        android: settings.isGooglePlayEnabled);
 
     if (paymentMethods.isNotEmpty && selectedPaymentMethod == -1) {
       selectedPaymentMethod = paymentMethods.first.id;
     }
   }
 
-  void _addIfEnabled(int id, String title, String image, double? w, double? h, {bool? android, bool? ios}) {
+  void _addIfEnabled(int id, String title, String image, double? w, double? h,
+      {bool? android, bool? ios}) {
     final enabled = GetPlatform.isAndroid ? (android ?? false) : (ios ?? false);
     if (enabled) {
-      paymentMethods.add(PaymentMethodOption(id: id, title: title, image: image, width: w, height: h));
+      paymentMethods.add(PaymentMethodOption(
+          id: id, title: title, image: image, width: w, height: h));
     }
   }
 
@@ -154,22 +181,6 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
         : '';
   }
 
-  String _googleProductKey(RecordingStoragePlanModel? plan) {
-    return (plan?.googleProductId?.trim().isNotEmpty == true)
-        ? plan!.googleProductId!.trim()
-        : '';
-  }
-
-  String _productKeyForSelectedPlan() {
-    if (GetPlatform.isIOS) return _appleProductKey(selectedPlan);
-    return _googleProductKey(selectedPlan);
-  }
-
-  bool _isEnabledForPlatform({bool? android, bool? ios, bool? fallback}) {
-    if (GetPlatform.isAndroid) return android ?? fallback ?? false;
-    if (GetPlatform.isIOS) return ios ?? fallback ?? false;
-    return false;
-  }
 
   void _showBlockingLoader() {
     if (Get.isDialogOpen != true) {
@@ -243,25 +254,35 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
           ? 'Restore could not reach App Store. Please wait a few seconds and try Restore again.'
           : 'App Store did not return this subscription. Please confirm the Apple Product ID is active in App Store Connect.';
     }
-    if (lower.contains('no products found') || lower.contains('product not found')) {
+    if (lower.contains('no products found') ||
+        lower.contains('product not found')) {
       return 'App Store product is not available yet. Please confirm the Apple Product ID is active in App Store Connect.';
     }
     if (lower.trim().isEmpty || lower.contains('null')) {
-      return isRestore ? 'Restore failed. Please try again.' : 'Payment failed. Please try again.';
+      return isRestore
+          ? 'Restore failed. Please try again.'
+          : 'Payment failed. Please try again.';
     }
-    return isRestore ? 'Restore failed. Please try again.' : 'Payment failed. Please try again.';
+    return isRestore
+        ? 'Restore failed. Please try again.'
+        : 'Payment failed. Please try again.';
   }
 
   void _queueAppleStoreErrorToast(dynamic error) {
     final message = _friendlyIapError(error);
     _didReceiveAppleStoreError = true;
     _cancelPendingAppleStoreError();
-    final delay = (_awaitingApplePurchaseResult || _isRestoringAppleSubscriptions)
-        ? const Duration(seconds: 24)
-        : const Duration(seconds: 8);
+    final delay =
+        (_awaitingApplePurchaseResult || _isRestoringAppleSubscriptions)
+            ? const Duration(seconds: 24)
+            : const Duration(seconds: 8);
     _pendingAppleStoreErrorTimer = Timer(delay, () {
       _pendingAppleStoreErrorTimer = null;
-      if (_didReceiveRestoredPurchase || _awaitingApplePurchaseResult || _isRestoringAppleSubscriptions) return;
+      if (_didReceiveRestoredPurchase ||
+          _awaitingApplePurchaseResult ||
+          _isRestoringAppleSubscriptions) {
+        return;
+      }
       if (mounted) Utils.showToast(context, message);
     });
   }
@@ -274,7 +295,9 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
     }
     final profileSynced = await GuestBrowsingSetup.refreshCurrentGuestProfile();
     if (!profileSynced &&
-        (Database.isGuestMode || Database.loginType == 2 || Database.loginUserId.trim().isEmpty)) {
+        (Database.isGuestMode ||
+            Database.loginType == 2 ||
+            Database.loginUserId.trim().isEmpty)) {
       await Database.onSetIsLogin(false);
       await Database.onSetGuestMode(true);
       final ready = await GuestBrowsingSetup.ensureAuthenticatedGuestSession();
@@ -289,7 +312,8 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
     final response = await RecordingSubscriptionApi.getSubscriptionStatus();
     if (response != null && response['status'] == true) {
       if (response['subscription'] != null) {
-        subscription = RecordingSubscriptionModel.fromJson(response['subscription']);
+        subscription =
+            RecordingSubscriptionModel.fromJson(response['subscription']);
       }
       status = response['subscriptionStatus'] ?? "none";
       hasActivePlan = response['hasSubscription'] ?? false;
@@ -300,20 +324,29 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
     final result = await RecordingSubscriptionApi.getPlans();
     if (result != null && result.isNotEmpty) {
       plans = result;
-      selectedPlan = result.firstWhere((p) => p.isPopular, orElse: () => result.first);
+      selectedPlan =
+          result.firstWhere((p) => p.isPopular, orElse: () => result.first);
     }
   }
 
   String _gatewayName(int methodId) {
     switch (methodId) {
-      case 0: return "RazorPay";
-      case 1: return "Stripe";
-      case 2: return "Flutter Wave";
-      case 3: return GetPlatform.isIOS ? "Apple" : "Google Play";
-      case 4: return "cash free";
-      case 5: return "pay stack";
-      case 6: return "pay pal";
-      default: return "system";
+      case 0:
+        return "RazorPay";
+      case 1:
+        return "Stripe";
+      case 2:
+        return "Flutter Wave";
+      case 3:
+        return GetPlatform.isIOS ? "Apple" : "Google Play";
+      case 4:
+        return "cash free";
+      case 5:
+        return "pay stack";
+      case 6:
+        return "pay pal";
+      default:
+        return "system";
     }
   }
 
@@ -330,7 +363,8 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
 
     // iOS enforcement: Only Apple IAP is allowed for recording subscriptions
     if (GetPlatform.isIOS && selectedPaymentMethod != 3) {
-      Utils.showToast(context, "iOS requires Apple In-App Purchase. Please select App Store.");
+      Utils.showToast(context,
+          "iOS requires Apple In-App Purchase. Please select App Store.");
       return;
     }
 
@@ -368,22 +402,34 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       // Third-party gateways
       switch (selectedPaymentMethod) {
         case 0:
-          await razorPay(amount: amount, onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
+          await razorPay(
+              amount: amount,
+              onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
           break;
         case 1:
-          await stripe(amount: amount, onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
+          await stripe(
+              amount: amount,
+              onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
           break;
         case 2:
-          await flutterWave(amount: amount, onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
+          await flutterWave(
+              amount: amount,
+              onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
           break;
         case 4:
-          await cashFree(amount: amount, onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
+          await cashFree(
+              amount: amount,
+              onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
           break;
         case 5:
-          await payStack(amount: amount, onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
+          await payStack(
+              amount: amount,
+              onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
           break;
         case 6:
-          await payPal(amount: amount, onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
+          await payPal(
+              amount: amount,
+              onPaymentSuccess: () => _onPaymentSuccess(gateway, planId));
           break;
         default:
           Utils.showToast(context, "Invalid payment method.");
@@ -391,7 +437,9 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       }
     } catch (e) {
       Utils.showLog("Recording subscription payment error: $e");
-      if (mounted) Utils.showToast(context, "Payment failed. Please try again.");
+      if (mounted) {
+        Utils.showToast(context, "Payment failed. Please try again.");
+      }
       if (mounted) setState(() => isPurchasing = false);
     }
   }
@@ -399,14 +447,20 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
   Future<void> _purchaseViaAppleIAP(String planId) async {
     final ready = await _ensureAppleGuestAccountReady();
     if (!ready) {
-      if (mounted) Utils.showToast(context, "Unable to prepare App Store checkout. Please try again.");
+      if (mounted) {
+        Utils.showToast(
+            context, "Unable to prepare App Store checkout. Please try again.");
+      }
       setState(() => isPurchasing = false);
       return;
     }
 
     final productKey = _appleProductKey(selectedPlan);
     if (productKey.isEmpty) {
-      if (mounted) Utils.showToast(context, "App Store product is not configured for this plan.");
+      if (mounted) {
+        Utils.showToast(
+            context, "App Store product is not configured for this plan.");
+      }
       setState(() => isPurchasing = false);
       return;
     }
@@ -436,9 +490,11 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       _closeBlockingLoader();
 
       if (product != null) {
-        Utils.showLog("Recording IAP product found: ${product.title} - ${product.price}");
+        Utils.showLog(
+            "Recording IAP product found: ${product.title} - ${product.price}");
         _startApplePurchaseWait();
-        final started = await helper.buySubscription(product, _iapPurchases ?? {});
+        final started =
+            await helper.buySubscription(product, _iapPurchases ?? {});
         if (!started) {
           Utils.showLog("Recording IAP purchase sheet did not start.");
           _finishApplePurchaseWait();
@@ -447,26 +503,31 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
         _finishApplePurchaseWait();
         if (mounted) {
           Utils.showToast(context, _friendlyIapError("No products found"));
-          Utils.showLog("Available recording IAP products: ${helper.getAvailableProducts()}");
+          Utils.showLog(
+              "Available recording IAP products: ${helper.getAvailableProducts()}");
         }
       }
     } catch (e) {
       _closeBlockingLoader();
       Utils.showLog("Recording IAP Failed => $e");
       _finishApplePurchaseWait();
-      if (mounted) Utils.showToast(context, "Payment failed. Please try again.");
+      if (mounted) {
+        Utils.showToast(context, "Payment failed. Please try again.");
+      }
     }
   }
 
   Future<void> _onPaymentSuccess(String gateway, String planId) async {
-    final res = await RecordingSubscriptionApi.purchasePlan(planId: planId, paymentGateway: gateway);
+    final res = await RecordingSubscriptionApi.purchasePlan(
+        planId: planId, paymentGateway: gateway);
     if (mounted) {
       setState(() => isPurchasing = false);
       if (res != null) {
         Utils.showToast(context, "Subscription Activated Successfully!");
         _fetchData();
       } else {
-        Utils.showToast(context, "Failed to activate subscription after payment.");
+        Utils.showToast(
+            context, "Failed to activate subscription after payment.");
       }
     }
   }
@@ -496,7 +557,9 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       return;
     }
 
-    if (GetPlatform.isIOS && _awaitingApplePurchaseResult && _isTransientStoreKitError(error)) {
+    if (GetPlatform.isIOS &&
+        _awaitingApplePurchaseResult &&
+        _isTransientStoreKitError(error)) {
       _queueAppleStoreErrorToast(error);
       return;
     }
@@ -519,7 +582,8 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
     }
 
     _cancelPendingAppleStoreError();
-    final isRestoreEvent = _isRestoringAppleSubscriptions || product.status == PurchaseStatus.restored;
+    final isRestoreEvent = _isRestoringAppleSubscriptions ||
+        product.status == PurchaseStatus.restored;
     if (isRestoreEvent) {
       _didReceiveRestoredPurchase = true;
     }
@@ -534,16 +598,19 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       if (token.isEmpty || uid.isEmpty) {
         _closeBlockingLoader();
         if (mounted) {
-          Utils.showToast(context, "Session expired. Please login again to continue purchase sync.");
+          Utils.showToast(context,
+              "Session expired. Please login again to continue purchase sync.");
         }
         return;
       }
 
-      final receiptData = product.verificationData.serverVerificationData.trim().isNotEmpty
-          ? product.verificationData.serverVerificationData
-          : product.verificationData.localVerificationData;
+      final receiptData =
+          product.verificationData.serverVerificationData.trim().isNotEmpty
+              ? product.verificationData.serverVerificationData
+              : product.verificationData.localVerificationData;
 
-      final result = await RecordingSubscriptionApi.verifyAppleRecordingSubscription(
+      final result =
+          await RecordingSubscriptionApi.verifyAppleRecordingSubscription(
         planId: selectedPlan?.id,
         productId: product.productID,
         receiptData: receiptData,
@@ -569,14 +636,19 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
           final message = result?['message']?.toString().trim();
           Utils.showToast(
             context,
-            (message?.isNotEmpty == true) ? message! : "Failed to activate subscription.",
+            (message?.isNotEmpty == true)
+                ? message!
+                : "Failed to activate subscription.",
           );
         }
       }
     } catch (e) {
       if (Get.isDialogOpen == true) Get.back();
       Utils.showLog("Recording IAP verify API failed: $e");
-      if (mounted) Utils.showToast(context, "Payment verification failed. Please try again.");
+      if (mounted) {
+        Utils.showToast(
+            context, "Payment verification failed. Please try again.");
+      }
     } finally {
       _activeAppleVerificationKeys.remove(purchaseEventKey);
       _finishApplePurchaseWait();
@@ -597,7 +669,10 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
     try {
       final ready = await _ensureAppleGuestAccountReady();
       if (!ready) {
-        if (mounted) Utils.showToast(context, "Unable to prepare restore. Please try again.");
+        if (mounted) {
+          Utils.showToast(
+              context, "Unable to prepare restore. Please try again.");
+        }
         return;
       }
 
@@ -608,7 +683,9 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
           .toList();
 
       if (productKeys.isEmpty) {
-        if (mounted) Utils.showToast(context, "No App Store product is configured");
+        if (mounted) {
+          Utils.showToast(context, "No App Store product is configured");
+        }
         return;
       }
 
@@ -627,12 +704,17 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       _closeBlockingLoader();
       await 10000.milliseconds.delay();
       if (!_didReceiveRestoredPurchase && !_didReceiveAppleStoreError) {
-        if (mounted) Utils.showToast(context, "No App Store subscription was found to restore.");
+        if (mounted) {
+          Utils.showToast(
+              context, "No App Store subscription was found to restore.");
+        }
       }
     } catch (e) {
       _closeBlockingLoader();
       Utils.showLog("Restore Recording Apple Subscription Failed => $e");
-      if (mounted) Utils.showToast(context, "Restore failed. Please try again.");
+      if (mounted) {
+        Utils.showToast(context, "Restore failed. Please try again.");
+      }
     } finally {
       _isRestoringAppleSubscriptions = false;
       _closeBlockingLoader();
@@ -659,11 +741,14 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
         ),
         title: Text(
           "Recording Storage",
-          style: AppFontStyle.fontStyleW700(fontSize: 18, fontColor: AppColors.redesignBrandDark),
+          style: AppFontStyle.fontStyleW700(
+              fontSize: 18, fontColor: AppColors.redesignBrandDark),
         ),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColors.redesignBrandRed))
+          ? Center(
+              child:
+                  CircularProgressIndicator(color: AppColors.redesignBrandRed))
           : _buildBody(),
     );
   }
@@ -683,7 +768,8 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
             const SizedBox(height: 24),
             Text(
               "Payment Method",
-              style: AppFontStyle.fontStyleW700(fontSize: 18, fontColor: AppColors.redesignBrandDark),
+              style: AppFontStyle.fontStyleW700(
+                  fontSize: 18, fontColor: AppColors.redesignBrandDark),
             ),
             const SizedBox(height: 12),
             _buildPaymentMethodSelector(),
@@ -691,13 +777,20 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
           const SizedBox(height: 24),
           Text(
             "Plan Benefits",
-            style: AppFontStyle.fontStyleW700(fontSize: 18, fontColor: AppColors.redesignBrandDark),
+            style: AppFontStyle.fontStyleW700(
+                fontSize: 18, fontColor: AppColors.redesignBrandDark),
           ),
           const SizedBox(height: 16),
-          _buildBenefitItem(Icons.cloud_done_rounded, "Secure Cloud Storage for all recordings"),
-          _buildBenefitItem(Icons.history_rounded, "${selectedPlan?.storageDays ?? 30}-day access to replay consultation sessions"),
-          _buildBenefitItem(Icons.privacy_tip_rounded, "Mutual consent enforced for privacy"),
+          _buildBenefitItem(Icons.cloud_done_rounded,
+              "Secure Cloud Storage for all recordings"),
+          _buildBenefitItem(Icons.history_rounded,
+              "${selectedPlan?.storageDays ?? 30}-day access to replay consultation sessions"),
+          _buildBenefitItem(
+              Icons.privacy_tip_rounded, "Mutual consent enforced for privacy"),
           const SizedBox(height: 40),
+          if (GetPlatform.isIOS) ...[
+            _buildAppleActionButtons(),
+          ],
           _buildPurchaseAction(),
         ],
       ),
@@ -725,8 +818,11 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       icon = Icons.lock_clock_rounded;
       title = "Grace Period Active";
 
-      final days = subscription?.gracePeriodEndsAt?.difference(DateTime.now()).inDays ?? 0;
-      subtitle = "Your recordings are locked. Renew within $days days to prevent deletion.";
+      final days =
+          subscription?.gracePeriodEndsAt?.difference(DateTime.now()).inDays ??
+              0;
+      subtitle =
+          "Your recordings are locked. Renew within $days days to prevent deletion.";
     }
 
     return Container(
@@ -756,56 +852,21 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
                   children: [
                     Text(
                       title,
-                      style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.redesignBrandDark),
+                      style: AppFontStyle.fontStyleW700(
+                          fontSize: 16, fontColor: AppColors.redesignBrandDark),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: AppFontStyle.fontStyleW500(fontSize: 14, fontColor: AppColors.redesignMutedText),
+                      style: AppFontStyle.fontStyleW500(
+                          fontSize: 14, fontColor: AppColors.redesignMutedText),
                     ),
                   ],
                 ),
               )
             ],
           ),
-          if (GetPlatform.isIOS && hasActivePlan) ...[
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: _restoreAppleSubscriptions,
-                    icon: const Icon(Icons.restore_rounded, size: 16),
-                    label: Text(
-                      "Restore",
-                      style: AppFontStyle.fontStyleW600(fontSize: 12, fontColor: AppColors.redesignBrandDark),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: AppColors.redesignSoftBorder),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: _openAppleManageSubscriptions,
-                    icon: const Icon(Icons.settings_rounded, size: 16),
-                    label: Text(
-                      "Manage",
-                      style: AppFontStyle.fontStyleW600(fontSize: 12, fontColor: AppColors.redesignBrandDark),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: AppColors.redesignSoftBorder),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
+          // Apple manage buttons moved to bottom
         ],
       ),
     );
@@ -817,7 +878,8 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       children: [
         Text(
           "Select Plan",
-          style: AppFontStyle.fontStyleW700(fontSize: 18, fontColor: AppColors.redesignBrandDark),
+          style: AppFontStyle.fontStyleW700(
+              fontSize: 18, fontColor: AppColors.redesignBrandDark),
         ),
         const SizedBox(height: 12),
         ...plans.map((plan) {
@@ -829,10 +891,14 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.redesignBrandRed.withValues(alpha: 0.08) : AppColors.white,
+                color: isSelected
+                    ? AppColors.redesignBrandRed.withValues(alpha: 0.08)
+                    : AppColors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: isSelected ? AppColors.redesignBrandRed : AppColors.redesignSoftBorder,
+                  color: isSelected
+                      ? AppColors.redesignBrandRed
+                      : AppColors.redesignSoftBorder,
                   width: isSelected ? 2 : 1,
                 ),
               ),
@@ -844,19 +910,26 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
                       children: [
                         Text(
                           plan.name ?? "Recording Storage",
-                          style: AppFontStyle.fontStyleW700(fontSize: 16, fontColor: AppColors.redesignBrandDark),
+                          style: AppFontStyle.fontStyleW700(
+                              fontSize: 16,
+                              fontColor: AppColors.redesignBrandDark),
                         ),
-                        if (plan.description != null && plan.description!.isNotEmpty) ...[
+                        if (plan.description != null &&
+                            plan.description!.isNotEmpty) ...[
                           const SizedBox(height: 4),
                           Text(
                             plan.description!,
-                            style: AppFontStyle.fontStyleW500(fontSize: 13, fontColor: AppColors.redesignMutedText),
+                            style: AppFontStyle.fontStyleW500(
+                                fontSize: 13,
+                                fontColor: AppColors.redesignMutedText),
                           ),
                         ],
                         const SizedBox(height: 4),
                         Text(
                           "${plan.storageDays ?? 30} days storage",
-                          style: AppFontStyle.fontStyleW500(fontSize: 13, fontColor: AppColors.redesignMutedText),
+                          style: AppFontStyle.fontStyleW500(
+                              fontSize: 13,
+                              fontColor: AppColors.redesignMutedText),
                         ),
                       ],
                     ),
@@ -866,11 +939,15 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
                     children: [
                       Text(
                         "\$${(plan.price ?? 0).toStringAsFixed(2)}",
-                        style: AppFontStyle.fontStyleW700(fontSize: 20, fontColor: AppColors.redesignBrandRed),
+                        style: AppFontStyle.fontStyleW700(
+                            fontSize: 20,
+                            fontColor: AppColors.redesignBrandRed),
                       ),
                       Text(
                         "/${plan.billingCycle ?? "month"}",
-                        style: AppFontStyle.fontStyleW500(fontSize: 12, fontColor: AppColors.redesignMutedText),
+                        style: AppFontStyle.fontStyleW500(
+                            fontSize: 12,
+                            fontColor: AppColors.redesignMutedText),
                       ),
                     ],
                   ),
@@ -925,12 +1002,17 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
                   Expanded(
                     child: Text(
                       method.title,
-                      style: AppFontStyle.fontStyleW600(fontSize: 14, fontColor: AppColors.redesignBrandDark),
+                      style: AppFontStyle.fontStyleW600(
+                          fontSize: 14, fontColor: AppColors.redesignBrandDark),
                     ),
                   ),
                   Icon(
-                    isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
-                    color: isSelected ? AppColors.redesignBrandRed : AppColors.redesignMutedText,
+                    isSelected
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_off,
+                    color: isSelected
+                        ? AppColors.redesignBrandRed
+                        : AppColors.redesignMutedText,
                     size: 22,
                   ),
                 ],
@@ -952,7 +1034,8 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
           Expanded(
             child: Text(
               text,
-              style: AppFontStyle.fontStyleW500(fontSize: 15, fontColor: AppColors.redesignBrandDark),
+              style: AppFontStyle.fontStyleW500(
+                  fontSize: 15, fontColor: AppColors.redesignBrandDark),
             ),
           )
         ],
@@ -977,7 +1060,8 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.redesignBrandRed,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           elevation: 0,
         ),
         onPressed: isPurchasing ? null : _purchasePlan,
@@ -985,12 +1069,159 @@ class _RecordingSubscriptionScreenState extends State<RecordingSubscriptionScree
             ? const SizedBox(
                 width: 24,
                 height: 24,
-                child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                child: CircularProgressIndicator(
+                    color: Colors.white, strokeWidth: 2),
               )
             : Text(
                 btnText,
-                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
               ),
+      ),
+    );
+  }
+
+  Widget _buildAppleActionButtons() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: _AppleCheckoutActionButton(
+                icon: Icons.restore_rounded,
+                label: _isRestoringAppleSubscriptions ? 'Restoring' : 'Restore',
+                showTrailingIcon: false,
+                onTap: isPurchasing || _isRestoringAppleSubscriptions
+                    ? null
+                    : _restoreAppleSubscriptions,
+                leading: _isRestoringAppleSubscriptions
+                    ? SizedBox(
+                        height: 14,
+                        width: 14,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.redesignBrandRed,
+                        ),
+                      )
+                    : null,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _AppleCheckoutActionButton(
+                icon: Icons.tune_rounded,
+                label: 'Manage',
+                onTap: isPurchasing || _isRestoringAppleSubscriptions
+                    ? null
+                    : _openAppleManageSubscriptions,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _AppleCheckoutActionButton(
+          icon: Icons.description_outlined,
+          label: 'Terms of Use (EULA)',
+          onTap: isPurchasing || _isRestoringAppleSubscriptions
+              ? null
+              : () => launchUrl(
+                  Uri.parse(
+                      'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/'),
+                  mode: LaunchMode.externalApplication),
+        ),
+        const SizedBox(height: 8),
+        _AppleCheckoutActionButton(
+          icon: Icons.privacy_tip_outlined,
+          label: 'Privacy Policy',
+          onTap: isPurchasing || _isRestoringAppleSubscriptions
+              ? null
+              : () => launchUrl(
+                  Uri.parse('https://notisboard.com/privacy-policy'),
+                  mode: LaunchMode.externalApplication),
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+}
+
+class _AppleCheckoutActionButton extends StatelessWidget {
+  const _AppleCheckoutActionButton({
+    required this.icon,
+    required this.label,
+    this.onTap,
+    this.leading,
+    this.showTrailingIcon = true,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback? onTap;
+  final Widget? leading;
+  final bool showTrailingIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDisabled = onTap == null;
+
+    return Material(
+      color: isDisabled
+          ? AppColors.redesignSurfaceNeutralAlt.withValues(alpha: 0.62)
+          : AppColors.redesignSurfaceNeutralAlt,
+      borderRadius: BorderRadius.circular(13),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(13),
+        child: Container(
+          width: double.infinity,
+          constraints: const BoxConstraints(minHeight: 42),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: isDisabled
+                  ? AppColors.redesignSoftBorder.withValues(alpha: 0.65)
+                  : AppColors.redesignSoftBorder,
+            ),
+            borderRadius: BorderRadius.circular(13),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              leading ??
+                  Icon(
+                    icon,
+                    size: 17,
+                    color: isDisabled
+                        ? AppColors.redesignMutedText.withValues(alpha: 0.52)
+                        : AppColors.redesignBrandRed,
+                  ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW600(
+                    fontSize: 12,
+                    fontColor: isDisabled
+                        ? AppColors.redesignMutedText.withValues(alpha: 0.7)
+                        : AppColors.redesignBrandDark,
+                  ),
+                ),
+              ),
+              if (!isDisabled && showTrailingIcon) ...[
+                const SizedBox(width: 6),
+                Icon(
+                  Icons.open_in_new_rounded,
+                  size: 14,
+                  color: AppColors.redesignMutedText,
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }

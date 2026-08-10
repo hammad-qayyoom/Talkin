@@ -6,7 +6,7 @@ import 'package:notisboard/ui/user_flow/setting_screen/api/verify_delete_otp_api
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/utils.dart';
-import 'package:notisboard/routes/app_routes.dart';
+
 
 class DeleteAccountOtpController extends GetxController {
   final formKey = GlobalKey<FormState>();

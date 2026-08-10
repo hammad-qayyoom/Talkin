@@ -14,7 +14,7 @@ import 'package:zego_express_engine/zego_express_engine.dart';
 /// Service to manage Anonymous Mode (AR masks, filters, beauty, background effects)
 /// using ZEGO Effects SDK integrated with the existing ZEGO Express Engine.
 class AnonymousModeService extends GetxController {
-  bool _initialized = false;
+  final bool _initialized = false;
   @override
   bool get initialized => _initialized;
 

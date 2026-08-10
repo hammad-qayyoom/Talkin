@@ -64,7 +64,7 @@ class _BlogNewsDetailScreenState extends State<BlogNewsDetailScreen> {
     if (item == null) return;
     final slug = item.slug ?? item.id ?? '';
     final shareUrl = '${Api.baseUrl}blog/$slug';
-    Share.share(shareUrl);
+    SharePlus.instance.share(ShareParams(uri: Uri.parse(shareUrl)));
   }
 
   @override

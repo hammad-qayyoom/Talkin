@@ -347,6 +347,7 @@ class _ExpertAvailabilityScreenState extends State<ExpertAvailabilityScreen> {
     }
 
     if (payloadSlots.isEmpty && _slots.isNotEmpty) {
+      if (!mounted) return;
       Utils.showToast(context, 'No valid service type enabled for the selected mode.');
       return;
     }

@@ -142,9 +142,9 @@ class _PurchaseRequestSheetState extends State<PurchaseRequestSheet> {
             width: double.infinity,
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: AppColors.redesignBrandRed.withOpacity(0.06),
+              color: AppColors.redesignBrandRed.withValues(alpha: 0.06),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.redesignBrandRed.withOpacity(0.15)),
+              border: Border.all(color: AppColors.redesignBrandRed.withValues(alpha: 0.15)),
             ),
             child: Row(
               children: [
