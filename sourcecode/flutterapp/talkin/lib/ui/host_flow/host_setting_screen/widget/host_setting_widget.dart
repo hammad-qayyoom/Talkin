@@ -245,7 +245,6 @@ class HostSettingView extends StatelessWidget {
                         icon: Icons.logout_rounded,
                         onConfirm: () {
                           Database.onLogOut();
-                          Get.offAllNamed(AppRoutes.main);
                         },
                       );
                     },

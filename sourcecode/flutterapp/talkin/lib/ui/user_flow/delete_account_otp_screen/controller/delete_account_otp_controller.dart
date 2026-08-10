@@ -53,8 +53,6 @@ class DeleteAccountOtpController extends GetxController {
         Utils.showToast(Get.context!, response.message ?? "Account deleted successfully.");
         // Clear login session and go to splash or login
         Database.onLogOut();
-
-        Get.offAllNamed(AppRoutes.splashScreenPage);
       } else {
         Utils.showToast(Get.context!, response?.message ?? "Invalid OTP or Something went wrong.");
       }

@@ -461,7 +461,7 @@ class TopListenerWidget extends StatelessWidget {
                       : LayoutBuilder(
                           builder: (context, constraints) {
                             final visibleListeners =
-                                controller.topListeners.take(4).toList();
+                                controller.topListeners.toList();
 
                             Widget buildListenerItem(
                               TopListeners listener, {

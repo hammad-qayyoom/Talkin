@@ -11,7 +11,7 @@ import 'package:notisboard/utils/utils.dart';
 
 class TopListenersApi {
   static int startPagination = 0;
-  static int limitPagination = 20;
+  static int limitPagination = 100;
 
   static Uri _discoverUri({
     required String searchString,
@@ -67,19 +67,10 @@ class TopListenersApi {
     return (model?.data ?? []).isNotEmpty;
   }
 
-  static bool _hasLocationSortSignal(TopListenersModel model) {
-    return (model.data ?? []).any(
-      (expert) =>
-          expert.distanceKm != null ||
-          (expert.latitude != null && expert.longitude != null),
-    );
-  }
-
   static Future<TopListenersModel?> _fetchListeners({
     required Uri uri,
     required Map<String, String> headers,
     required String logLabel,
-    bool requireLocationSortSignal = false,
   }) async {
     final response = await http.get(uri, headers: headers);
 
@@ -97,12 +88,6 @@ class TopListenersApi {
         (expert) =>
             !expert.hasLegacyListener || (expert.id ?? '').trim().isEmpty,
       );
-      if (requireLocationSortSignal && !_hasLocationSortSignal(model)) {
-        Utils.showLog(
-          "$logLabel skipped: no distance or coordinates in response.",
-        );
-        return null;
-      }
       return model;
     }
 
@@ -149,7 +134,6 @@ class TopListenersApi {
         headers: headers,
         logLabel:
             hasLocation ? "Top Listeners Discover Api" : "Top Listeners Api",
-        requireLocationSortSignal: hasLocation,
       );
       if (_hasExperts(primaryModel)) return primaryModel;
 
@@ -158,8 +142,8 @@ class TopListenersApi {
         uri: fallbackUri,
         headers: headers,
         logLabel: hasLocation
-            ? "Top Listeners Legacy Fallback"
-            : "Top Listeners Discover Fallback",
+            ? "Top Listeners Fallback Api"
+            : "Top Listeners Discover Fallback Api",
       );
       if (_hasExperts(fallbackModel)) return fallbackModel;
 

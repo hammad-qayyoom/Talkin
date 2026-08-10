@@ -190,6 +190,9 @@ class VideoCallController extends GetxController {
 
     startListenEvent();
 
+    // Allow UI to render before heavy SDK initialization blocks the thread
+    await Future.delayed(const Duration(milliseconds: 300));
+
     // Initialize Effects BEFORE loginRoom (which calls startPreview + startPublish)
     // The custom video process handler must be set before publishing starts
     if (Get.isRegistered<AnonymousModeService>()) {

@@ -18,10 +18,20 @@ class PremiumContentSocketHandler {
   Function(Map<String, dynamic>)? onPurchaseDeclined;
 
   bool _listenersRegistered = false;
+  int? _socketIdentity;
 
   void registerListeners() {
-    if (_listenersRegistered) return;
+    final currentIdentity = socket.hashCode;
+    if (_listenersRegistered && _socketIdentity == currentIdentity) return;
+    
     _listenersRegistered = true;
+    _socketIdentity = currentIdentity;
+
+    socket?.off(SocketEvents.purchaseRequestReceived, _handlePurchaseRequestReceived);
+    socket?.off(SocketEvents.purchaseRequestSent, _handlePurchaseRequestSent);
+    socket?.off(SocketEvents.purchaseCompleted, _handlePurchaseCompleted);
+    socket?.off(SocketEvents.purchaseFailed, _handlePurchaseFailed);
+    socket?.off(SocketEvents.purchaseDeclined, _handlePurchaseDeclined);
 
     socket?.on(SocketEvents.purchaseRequestReceived, _handlePurchaseRequestReceived);
     socket?.on(SocketEvents.purchaseRequestSent, _handlePurchaseRequestSent);

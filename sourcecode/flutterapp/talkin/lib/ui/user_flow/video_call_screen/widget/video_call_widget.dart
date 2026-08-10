@@ -2,6 +2,8 @@ import 'package:notisboard/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:blurrycontainer/blurrycontainer.dart';
+import 'package:notisboard/custom/custom_profile/custom_profile_image.dart';
 import 'package:notisboard/custom/bottom_sheet/report_block_ui_bottom_sheet.dart';
 import 'package:notisboard/custom/bottom_sheet/report_bottom_sheet.dart';
 import 'package:notisboard/custom/dialog/block_dialog.dart';
@@ -1038,12 +1040,7 @@ class VideoCallView1 extends StatelessWidget {
               color: AppColors.black,
               width: Get.width,
               height: Get.height,
-              child: Center(
-                child: LoadingAnimationWidget.threeArchedCircle(
-                  color: AppColors.white,
-                  size: 50,
-                ),
-              ),
+              child: _buildLoadingView(logic),
             ),
             _buildMinimizedStrip(logic),
           ],
@@ -1087,13 +1084,9 @@ class VideoCallView1 extends StatelessWidget {
           color: AppColors.black,
           width: Get.width,
           height: Get.height,
-          child: Center(
-            child: logic.remoteView ??
-                LoadingAnimationWidget.threeArchedCircle(
-                  color: AppColors.white,
-                  size: 50,
-                ),
-          ),
+          child: logic.remoteView != null
+              ? Center(child: logic.remoteView)
+              : _buildLoadingView(logic),
         ),
         if (logic.remoteVideoOff && !logic.remoteIsScreenSharing)
           Container(
@@ -1126,6 +1119,71 @@ class VideoCallView1 extends StatelessWidget {
               height: 30,
             ),
           ),
+      ],
+    );
+  }
+
+  Widget _buildLoadingView(VideoCallController logic) {
+    return Stack(
+      children: [
+        SizedBox(
+          height: Get.height,
+          width: Get.width,
+          child: CustomProfileImage(
+            image: logic.callerId != Database.loginUserId
+                ? logic.callerImage ?? ''
+                : logic.receiverImage ?? '',
+            fit: BoxFit.cover,
+          ),
+        ),
+        BlurryContainer(
+          blur: 15,
+          elevation: 0,
+          color: AppColors.black.withValues(alpha: 0.65),
+          height: Get.height,
+          width: Get.width,
+          child: const SizedBox(),
+        ),
+        Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                      color: AppColors.white.withValues(alpha: 0.5), width: 2),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ClipOval(
+                    child: CustomProfileImage(
+                      image: logic.callerId != Database.loginUserId
+                          ? logic.callerImage ?? ''
+                          : logic.receiverImage ?? '',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                "Connecting...",
+                style: AppFontStyle.fontStyleW600(
+                  fontSize: 18,
+                  fontColor: AppColors.white,
+                ),
+              ),
+              const SizedBox(height: 16),
+              LoadingAnimationWidget.threeArchedCircle(
+                color: AppColors.white,
+                size: 30,
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

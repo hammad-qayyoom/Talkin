@@ -60,7 +60,6 @@ class _LogoutDialogState extends State<LogoutDialog> {
                   onTap: () {
                     Database.onLogOut();
                     // controller.signOut();
-                    Get.offAllNamed(AppRoutes.main);
                     // exit(0);
                   },
                   height: 47,

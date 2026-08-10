@@ -141,6 +141,9 @@ class VoiceCallController extends GetxController {
       return;
     }
 
+    // Allow UI to render before heavy SDK initialization blocks the thread
+    await Future.delayed(const Duration(milliseconds: 300));
+
     final engineReady = await createEngine();
     if (!engineReady) {
       if (Get.context != null) {
