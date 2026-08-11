@@ -1630,11 +1630,14 @@ class VideoCallController extends GetxController {
           channel: ZegoPublishChannel.Main,
         );
 
-        // Step 2: Specify audio source for system audio capture
-        await ZegoExpressEngine.instance.setAudioSource(
-          ZegoAudioSourceType.ScreenCapture,
-          channel: ZegoPublishChannel.Main,
-        );
+        // For iOS, we need to set the audio source to ScreenCapture because the ReplayKit extension
+        // handles the microphone. For Android, we keep the main app's microphone active to prevent freezing.
+        if (Platform.isIOS) {
+          await ZegoExpressEngine.instance.setAudioSource(
+            ZegoAudioSourceType.ScreenCapture,
+            channel: ZegoPublishChannel.Main,
+          );
+        }
 
         // Step 3: Create screen capture source — triggers MediaProjection permission on Android
         final captureSource =
@@ -1657,8 +1660,9 @@ class VideoCallController extends GetxController {
         }
 
         // Step 5: Start capture — this shows the Android system consent dialog / iOS Broadcast UI
+        // captureVideo: true, captureAudio: true for iOS (ReplayKit mic), false for Android
         await captureSource.startCapture(
-          config: ZegoScreenCaptureConfig(true, true),
+          config: ZegoScreenCaptureConfig(true, Platform.isIOS),
         );
       }
 

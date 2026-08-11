@@ -1541,11 +1541,14 @@ class VoiceCallController extends GetxController {
         // Step 1.5: Enable camera (which controls video track publishing in Zego)
         await ZegoExpressEngine.instance.enableCamera(true);
 
-        // Step 2: Specify audio source for system audio capture
-        await ZegoExpressEngine.instance.setAudioSource(
-          ZegoAudioSourceType.ScreenCapture,
-          channel: ZegoPublishChannel.Main,
-        );
+        // For iOS, we need to set the audio source to ScreenCapture because the ReplayKit extension
+        // handles the microphone. For Android, we keep the main app's microphone active to prevent freezing.
+        if (Platform.isIOS) {
+          await ZegoExpressEngine.instance.setAudioSource(
+            ZegoAudioSourceType.ScreenCapture,
+            channel: ZegoPublishChannel.Main,
+          );
+        }
 
         // Step 3: Create screen capture source — triggers MediaProjection permission on Android
         final captureSource =
@@ -1567,9 +1570,10 @@ class VoiceCallController extends GetxController {
               .setAppGroupID('group.com.notisboard.mobile.screenshare');
         }
 
-        // Step 5: Start capture — this shows the Android system consent dialog
+        // Step 5: Start capture — this shows the Android system consent dialog / iOS Broadcast UI
+        // captureVideo: true, captureAudio: true for iOS (ReplayKit mic), false for Android
         await captureSource.startCapture(
-          config: ZegoScreenCaptureConfig(true, true),
+          config: ZegoScreenCaptureConfig(true, Platform.isIOS),
         );
       }
 
@@ -1626,7 +1630,7 @@ class VoiceCallController extends GetxController {
       );
 
       await ZegoExpressEngine.instance.setAudioSource(
-        ZegoAudioSourceType.None,
+        ZegoAudioSourceType.Microphone,
         channel: ZegoPublishChannel.Main,
       );
 
