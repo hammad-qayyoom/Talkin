@@ -28,7 +28,8 @@ export const MODERATOR_SECTIONS = [
   { key: 'tipAnalytics', label: 'Tip Analytics', group: 'Financial', path: '/tipping/analytics' },
   { key: 'referrals', label: 'Referrals', group: 'Financial', path: '/referrals' },
   { key: 'settings', label: 'Settings', group: 'Settings', path: '/settings' },
-  { key: 'profile', label: 'Profile', group: 'Settings', path: '/profile' }
+  { key: 'profile', label: 'Profile', group: 'Settings', path: '/profile' },
+  { key: 'serverManagement', label: 'Server Management', group: 'Server Management', path: '/server-management' }
 ]
 
 export const DEFAULT_MODERATOR_PERMISSIONS = MODERATOR_SECTIONS.reduce((permissions, section) => {
@@ -74,7 +75,8 @@ const ROUTE_PERMISSIONS = [
   { prefix: '/tipping/analytics', permission: 'tipAnalytics' },
   { prefix: '/referrals', permission: 'referrals' },
   { prefix: '/settings', permission: 'settings' },
-  { prefix: '/profile', permission: 'profile' }
+  { prefix: '/profile', permission: 'profile' },
+  { prefix: '/server-management', permission: 'serverManagement' }
 ].sort((a, b) => b.prefix.length - a.prefix.length)
 
 export const normalizeModeratorPermissions = permissions => {

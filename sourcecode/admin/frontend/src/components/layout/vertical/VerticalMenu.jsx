@@ -69,6 +69,7 @@ const VerticalMenu = ({ scrollMenu }) => {
   const showCommunicationBlock = [can('emailMarketing'), can('emailAccounts')].some(Boolean)
   const showSubscriptionBlock = [can('subscriptionPlans'), can('recordingStoragePlans'), can('subscriptionHistory')].some(Boolean)
   const showFinancialBlock = [can('paymentOptions'), can('payoutRequests'), can('referrals')].some(Boolean)
+  const showServerBlock = [can('serverManagement')].some(Boolean)
 
   return (
     <>
@@ -306,6 +307,41 @@ const VerticalMenu = ({ scrollMenu }) => {
               Logout
             </MenuItem>
           </MenuSection>
+
+          {showServerBlock && (
+            <MenuSection label='SERVER MANAGEMENT'>
+              {can('serverManagement') && (
+                <MenuItem href='/server-management' icon={<i className='tabler-server' />}>
+                  Overview
+                </MenuItem>
+              )}
+              {can('serverManagement') && (
+                <MenuItem href='/server-management/file-manager' icon={<i className='tabler-folder' />}>
+                  File Manager
+                </MenuItem>
+              )}
+              {can('serverManagement') && (
+                <MenuItem href='/server-management/processes' icon={<i className='tabler-cpu' />}>
+                  Processes & Services
+                </MenuItem>
+              )}
+              {can('serverManagement') && (
+                <MenuItem href='/server-management/logs' icon={<i className='tabler-file-text' />}>
+                  Logs
+                </MenuItem>
+              )}
+              {can('serverManagement') && (
+                <MenuItem href='/server-management/backups' icon={<i className='tabler-database' />}>
+                  Backups
+                </MenuItem>
+              )}
+              {can('serverManagement') && (
+                <MenuItem href='/server-management/alerts' icon={<i className='tabler-bell' />}>
+                  Alerts & Audit
+                </MenuItem>
+              )}
+            </MenuSection>
+          )}
         </Menu>
       </ScrollWrapper>
 
