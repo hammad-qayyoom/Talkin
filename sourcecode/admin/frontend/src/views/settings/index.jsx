@@ -22,6 +22,7 @@ import { fetchSettings } from '@/redux-store/slices/settings'
 // Tab Components
 import ReportReasonSettings from './tabs/ReportReasonSettings'
 import GeneralSettings from './tabs/GeneralSettings'
+import AppUpdateSettings from './tabs/AppUpdateSettings'
 import CurrencySettings from './tabs/CurrencySettings'
 import PaymentSettings from './tabs/PaymentSettings'
 import AdsSettings from './tabs/AdsSettings'
@@ -38,6 +39,7 @@ import LanguageMatchingSettings from './tabs/LanguageMatchingSettings'
 // Tab labels and values
 const tabs = [
   { label: 'General', value: 'general' },
+  { label: 'App Update', value: 'app_update' },
   { label: 'Payment', value: 'payment' },
   { label: 'Currency', value: 'currency' },
   { label: 'Withdrawal', value: 'withdrawal' },
@@ -75,6 +77,7 @@ const Settings = () => {
   useEffect(() => {
     if (
       activeTab === 'general' ||
+      activeTab === 'app_update' ||
       activeTab === 'payment' ||
       activeTab === 'ads' ||
       activeTab === 'withdrawal' ||
@@ -95,6 +98,8 @@ const Settings = () => {
     switch (activeTab) {
       case 'general':
         return <GeneralSettings />
+      case 'app_update':
+        return <AppUpdateSettings />
       case 'payment':
         return <PaymentSettings />
       case 'currency':

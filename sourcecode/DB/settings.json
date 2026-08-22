@@ -74,6 +74,16 @@
   "paystackSecretKey": "sk_test_82ab2cf5ee273c492e97ffbc9230d32f697d8877",
   "androidAppLink": "https://andriodapplink.com",
   "androidAppVersion": "1.0.0",
+  "androidLatestVersion": "1.0.0",
+  "androidMinVersion": "1.0.0",
   "iosAppLink": "https://iosapplink.com",
-  "iosAppVersion": "1.0.0"
+  "iosAppVersion": "1.0.0",
+  "iosLatestVersion": "1.0.0",
+  "iosMinVersion": "1.0.0",
+  "isForceUpdateEnabled": false,
+  "isFlexibleUpdateEnabled": false,
+  "updateDialogTitle": "Update Available",
+  "updateDialogMessage": "A new version of the app is available with new features and improvements. Please update to enjoy the best experience.",
+  "updateDialogButtonText": "Update Now",
+  "updateDialogSkipText": "Maybe Later"
 }]

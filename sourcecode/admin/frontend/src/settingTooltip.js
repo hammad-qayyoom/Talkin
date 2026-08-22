@@ -109,6 +109,46 @@ export const toolTipData = {
     title: 'IOS App Link',
     tooltip: 'Direct URL to download the iOS app from the App Store.'
   },
+  isForceUpdateEnabled: {
+    title: 'Force Update',
+    tooltip: 'When enabled, users with versions below minimum supported version cannot use the app without updating.'
+  },
+  isFlexibleUpdateEnabled: {
+    title: 'Flexible Update',
+    tooltip: 'When enabled, users with outdated versions receive a dismissible update suggestion with a skip option.'
+  },
+  androidLatestVersion: {
+    title: 'Android Latest Version',
+    tooltip: 'The most recent version of the Android app published on Google Play Store.'
+  },
+  androidMinVersion: {
+    title: 'Android Minimum Supported Version',
+    tooltip: 'The lowest Android app version allowed to run. Versions below this will be forced to update.'
+  },
+  iosLatestVersion: {
+    title: 'iOS Latest Version',
+    tooltip: 'The most recent version of the iOS app published on Apple App Store.'
+  },
+  iosMinVersion: {
+    title: 'iOS Minimum Supported Version',
+    tooltip: 'The lowest iOS app version allowed to run. Versions below this will be forced to update.'
+  },
+  updateDialogTitle: {
+    title: 'Update Dialog Title',
+    tooltip: 'The header title displayed in the mobile app update dialog.'
+  },
+  updateDialogMessage: {
+    title: 'Update Dialog Message',
+    tooltip: 'The description message explaining the update to mobile users.'
+  },
+  updateDialogButtonText: {
+    title: 'Update Button Text',
+    tooltip: 'The text for the primary button that redirects the user to the store.'
+  },
+  updateDialogSkipText: {
+    title: 'Skip Button Text',
+    tooltip: 'The text for the skip / dismiss button in flexible update dialogs.'
+  },
   allowBecomeHostOption: {
     title: 'Allow Become Host',
     tooltip: 'Allow users to apply or become a host.'

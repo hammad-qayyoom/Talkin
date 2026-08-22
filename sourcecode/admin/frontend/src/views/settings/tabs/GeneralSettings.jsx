@@ -717,6 +717,12 @@ const GeneralSettings = () => {
                 onChange={e => handleFieldChange('iosAppLink', e.target.value)}
               />
             </Grid>
+
+            <Grid item size={12}>
+              <Alert severity='info' icon={<i className='tabler-sparkles' />}>
+                Looking for advanced update controls? Check the dedicated <strong>App Update</strong> tab for Force Update & Flexible Update toggles, minimum supported versions, custom dialog messages, and live preview!
+              </Alert>
+            </Grid>
           </Grid>
         </CardContent>
       </Card>

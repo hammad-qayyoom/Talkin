@@ -4,9 +4,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:notisboard/custom/dialog/app_update_dialog.dart';
 import 'package:notisboard/custom/dialog/exit_app_dialog.dart';
-import 'package:notisboard/custom/dialog/force_update_dialog.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/utils/version_helper.dart';
 import 'package:notisboard/services/biometric/biometric_auth_service.dart';
 import 'package:notisboard/services/recording_upload_queue.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/api/host_coin_api.dart';
@@ -219,7 +220,7 @@ class SplashScreenController extends GetxController {
     unawaited(splashScreen());
   }
 
-  Future<bool> checkForceUpdate() async {
+  Future<bool> checkAppUpdate() async {
     final packageInfo = await _guardedSplashTask<PackageInfo>(
       "Package info",
       () => PackageInfo.fromPlatform(),
@@ -230,57 +231,87 @@ class SplashScreenController extends GetxController {
       return false;
     }
     final currentVersion = packageInfo.version;
-    Utils.showLog("Current version ==> ${packageInfo.version}");
-    // 🔴 Replace this with API response
+    Utils.showLog("Installed app version ==> $currentVersion");
 
-    final latestVersion = GetPlatform.isIOS
-        ? Database.settingApiModel?.data?.iosAppVersion ?? ""
-        : Database.settingApiModel?.data?.androidAppVersion ?? "";
-    // final latestVersion = GetPlatform.isIOS ? "0.1.1" ?? "" : "0.1.1" ?? "";
-    Utils.showLog("Latest  version ==> $latestVersion");
-    if (latestVersion.isEmpty) {
-      Utils.showLog("⚠️ Latest version missing from API");
+    final settingData = Database.settingApiModel?.data;
+    if (settingData == null) {
+      Utils.showLog("⚠️ App settings missing, skipping update check");
       _scheduleSplashNavigation();
       return false;
     }
-    if (isUpdateRequired(currentVersion, latestVersion)) {
+
+    final isIos = GetPlatform.isIOS;
+    final latestVersion = (isIos
+            ? (settingData.iosLatestVersion ?? settingData.iosAppVersion)
+            : (settingData.androidLatestVersion ??
+                settingData.androidAppVersion)) ??
+        "";
+    final minVersion = (isIos
+            ? settingData.iosMinVersion
+            : settingData.androidMinVersion) ??
+        "";
+
+    final isForceUpdateEnabled = settingData.isForceUpdateEnabled ?? false;
+    final isFlexibleUpdateEnabled =
+        settingData.isFlexibleUpdateEnabled ?? false;
+
+    Utils.showLog(
+        "Update check (Installed: $currentVersion) -> Latest: $latestVersion, Min: $minVersion, ForceToggle: $isForceUpdateEnabled, FlexibleToggle: $isFlexibleUpdateEnabled");
+
+    // 1. Check if Force Update is triggered
+    // Triggered when installed version is strictly below minimum supported version,
+    // OR when Force Update toggle is ON and installed version is below latest version.
+    bool requiresForceUpdate = false;
+    if (minVersion.trim().isNotEmpty &&
+        VersionHelper.isVersionBelow(currentVersion, minVersion)) {
+      requiresForceUpdate = true;
+    } else if (isForceUpdateEnabled &&
+        latestVersion.trim().isNotEmpty &&
+        VersionHelper.isVersionBelow(currentVersion, latestVersion)) {
+      requiresForceUpdate = true;
+    }
+
+    if (requiresForceUpdate) {
+      Utils.showLog("🚨 Force update required. Presenting blocking update dialog.");
       Get.dialog(
-        const ForceUpdateDialog(),
-        barrierDismissible: false, // ❌ outside tap disabled
+        AppUpdateDialog(
+          isForceUpdate: true,
+          targetVersion: latestVersion.isNotEmpty ? latestVersion : minVersion,
+        ),
+        barrierDismissible: false,
       );
-      return true;
-    } else {
-      _scheduleSplashNavigation();
-      return false;
+      return true; // Block splash navigation
     }
-  }
 
-  bool isUpdateRequired(String current, String latest) {
-    final currentParts = _parseVersionParts(current);
-    final latestParts = _parseVersionParts(latest);
-
-    for (int i = 0; i < latestParts.length; i++) {
-      if (currentParts[i] < latestParts[i]) return true;
-      if (currentParts[i] > latestParts[i]) return false;
+    // 2. Check if Flexible Update is triggered
+    // Triggered when Flexible Update toggle is ON and installed version is below latest version.
+    if (isFlexibleUpdateEnabled &&
+        latestVersion.trim().isNotEmpty &&
+        VersionHelper.isVersionBelow(currentVersion, latestVersion)) {
+      Utils.showLog("✨ Flexible update available. Presenting skippable dialog.");
+      Get.dialog(
+        AppUpdateDialog(
+          isForceUpdate: false,
+          targetVersion: latestVersion,
+          onSkip: () {
+            _scheduleSplashNavigation();
+          },
+        ),
+        barrierDismissible: true,
+      );
+      return true; // Wait for user to tap Update or Skip
     }
+
+    // 3. App is up to date or no update rules matched
+    _scheduleSplashNavigation();
     return false;
   }
 
-  List<int> _parseVersionParts(String version) {
-    final parts = version
-        .split('+')
-        .first
-        .split('-')
-        .first
-        .split('.')
-        .map((part) => int.tryParse(part.replaceAll(RegExp(r'[^0-9]'), '')))
-        .map((part) => part ?? 0)
-        .toList();
+  /// Backward-compatible wrapper
+  Future<bool> checkForceUpdate() => checkAppUpdate();
 
-    while (parts.length < 3) {
-      parts.add(0);
-    }
-    return parts.take(3).toList();
+  bool isUpdateRequired(String current, String latest) {
+    return VersionHelper.isVersionBelow(current, latest);
   }
 }
 

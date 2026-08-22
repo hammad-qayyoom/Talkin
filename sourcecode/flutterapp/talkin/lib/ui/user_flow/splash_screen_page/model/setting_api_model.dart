@@ -95,8 +95,18 @@ class Data {
   final String? paystackSecretKey;
   final String? androidAppLink;
   final String? androidAppVersion;
+  final String? androidLatestVersion;
+  final String? androidMinVersion;
   final String? iosAppLink;
   final String? iosAppVersion;
+  final String? iosLatestVersion;
+  final String? iosMinVersion;
+  final bool? isForceUpdateEnabled;
+  final bool? isFlexibleUpdateEnabled;
+  final String? updateDialogTitle;
+  final String? updateDialogMessage;
+  final String? updateDialogButtonText;
+  final String? updateDialogSkipText;
   final int? sessionSlotDurationMinutes;
   final int? inPersonSessionSlotDurationMinutes;
   final bool? inPersonConsultationEnabled;
@@ -214,8 +224,18 @@ class Data {
     this.paystackSecretKey,
     this.androidAppLink,
     this.androidAppVersion,
+    this.androidLatestVersion,
+    this.androidMinVersion,
     this.iosAppLink,
     this.iosAppVersion,
+    this.iosLatestVersion,
+    this.iosMinVersion,
+    this.isForceUpdateEnabled,
+    this.isFlexibleUpdateEnabled,
+    this.updateDialogTitle,
+    this.updateDialogMessage,
+    this.updateDialogButtonText,
+    this.updateDialogSkipText,
     this.sessionSlotDurationMinutes,
     this.inPersonSessionSlotDurationMinutes,
     this.inPersonConsultationEnabled,
@@ -330,8 +350,18 @@ class Data {
         paystackSecretKey: json["paystackSecretKey"],
         androidAppLink: json["androidAppLink"],
         androidAppVersion: json["androidAppVersion"],
+        androidLatestVersion: json["androidLatestVersion"] ?? json["androidAppVersion"],
+        androidMinVersion: json["androidMinVersion"],
         iosAppLink: json["iosAppLink"],
         iosAppVersion: json["iosAppVersion"],
+        iosLatestVersion: json["iosLatestVersion"] ?? json["iosAppVersion"],
+        iosMinVersion: json["iosMinVersion"],
+        isForceUpdateEnabled: json["isForceUpdateEnabled"] == true || json["isForceUpdateEnabled"] == 1,
+        isFlexibleUpdateEnabled: json["isFlexibleUpdateEnabled"] == true || json["isFlexibleUpdateEnabled"] == 1,
+        updateDialogTitle: json["updateDialogTitle"],
+        updateDialogMessage: json["updateDialogMessage"],
+        updateDialogButtonText: json["updateDialogButtonText"],
+        updateDialogSkipText: json["updateDialogSkipText"],
         sessionSlotDurationMinutes: json["sessionSlotDurationMinutes"],
         inPersonSessionSlotDurationMinutes: json["inPersonSessionSlotDurationMinutes"],
         inPersonConsultationEnabled: json["inPersonConsultationEnabled"],
@@ -444,8 +474,18 @@ class Data {
         "paystackSecretKey": paystackSecretKey,
         "androidAppLink": androidAppLink,
         "androidAppVersion": androidAppVersion,
+        "androidLatestVersion": androidLatestVersion,
+        "androidMinVersion": androidMinVersion,
         "iosAppLink": iosAppLink,
         "iosAppVersion": iosAppVersion,
+        "iosLatestVersion": iosLatestVersion,
+        "iosMinVersion": iosMinVersion,
+        "isForceUpdateEnabled": isForceUpdateEnabled,
+        "isFlexibleUpdateEnabled": isFlexibleUpdateEnabled,
+        "updateDialogTitle": updateDialogTitle,
+        "updateDialogMessage": updateDialogMessage,
+        "updateDialogButtonText": updateDialogButtonText,
+        "updateDialogSkipText": updateDialogSkipText,
         "sessionSlotDurationMinutes": sessionSlotDurationMinutes,
         "inPersonSessionSlotDurationMinutes": inPersonSessionSlotDurationMinutes,
         "inPersonConsultationEnabled": inPersonConsultationEnabled,
