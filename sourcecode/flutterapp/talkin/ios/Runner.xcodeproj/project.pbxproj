@@ -138,7 +138,7 @@
 		008CB9159E0FCF4DECA1C649 /* blusherdir_peach.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = blusherdir_peach.bundle; sourceTree = "<group>"; };
 		018659B753CEBC91D485CF93 /* coloredcontactsdir_mystery_brown_green.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = coloredcontactsdir_mystery_brown_green.bundle; sourceTree = "<group>"; };
 		042012D2EDA44FEE38FF0AB6 /* RosyResources.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = RosyResources.bundle; sourceTree = "<group>"; };
-		04A4B6B0BE4D12ACE3861C0F /* FaceDetectionModel.model */ = {isa = PBXFileReference; includeInIndex = 1; path = FaceDetectionModel.model; sourceTree = "<group>"; };
+		04A4B6B0BE4D12ACE3861C0F /* FaceDetectionModel.model */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; path = FaceDetectionModel.model; sourceTree = "<group>"; };
 		0631AEB26CB8F351853418EB /* pendantDive.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantDive.bundle; sourceTree = "<group>"; };
 		0D59FCB17F36388621E8F213 /* eyelinerdir_pretty.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyelinerdir_pretty.bundle; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
@@ -157,7 +157,7 @@
 		3823E5A946CFE5B700C9022E /* pendantWatermelon.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = pendantWatermelon.bundle; sourceTree = "<group>"; };
 		3ACB721C471A896180134D79 /* makeupdir_flawless.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = makeupdir_flawless.bundle; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
-		3FE490C8959FB1FA01E4CAB9 /* SegmentationModel.model */ = {isa = PBXFileReference; includeInIndex = 1; path = SegmentationModel.model; sourceTree = "<group>"; };
+		3FE490C8959FB1FA01E4CAB9 /* SegmentationModel.model */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; path = SegmentationModel.model; sourceTree = "<group>"; };
 		40B831AFBD9C253DDD25049B /* eyeshadowdir_vitality_orange.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = eyeshadowdir_vitality_orange.bundle; sourceTree = "<group>"; };
 		449808D6CC903E9F03188625 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		4840216D80CB7E09E60D7680 /* Night.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Night.bundle; sourceTree = "<group>"; };
@@ -175,7 +175,7 @@
 		674D207EA70F1BF698B7E7C5 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A7EA36920F6834A552AAAA8 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		6B6BDDFEB8D923D6F16CBACA /* Brighten.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Brighten.bundle; sourceTree = "<group>"; };
-		6D2A4A7366A1F47ABF0EB567 /* ZegoExpressEngine.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; name = ZegoExpressEngine.xcframework; path = .symlinks/plugins/zego_express_engine/ios/libs/ZegoExpressEngine.xcframework; sourceTree = "<group>"; };
+		6D2A4A7366A1F47ABF0EB567 /* ZegoExpressEngine.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcframework; name = ZegoExpressEngine.xcframework; path = .symlinks/plugins/zego_express_engine/ios/libs/ZegoExpressEngine.xcframework; sourceTree = "<group>"; };
 		714CC41C823C983600B67BF3 /* lipstickdir_velvet_red.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = lipstickdir_velvet_red.bundle; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -276,7 +276,6 @@
 				5CF9D4BBBF21516079991C4C /* SampleHandler.swift */,
 				542D3AD710453D6A8A560365 /* ScreenShareExtension.entitlements */,
 			);
-			name = ScreenShareExtension;
 			path = ScreenShareExtension;
 			sourceTree = "<group>";
 		};
@@ -289,7 +288,6 @@
 				1FD072765ACC1735E7F5AAC2 /* eyelashesdir_bushy.bundle */,
 				77F62197C6FDF9AA26C0DC66 /* eyelashesdir_tender.bundle */,
 			);
-			name = eyelashesdir;
 			path = eyelashesdir;
 			sourceTree = "<group>";
 		};
@@ -307,7 +305,6 @@
 				04A4B6B0BE4D12ACE3861C0F /* FaceDetectionModel.model */,
 				3FE490C8959FB1FA01E4CAB9 /* SegmentationModel.model */,
 			);
-			name = Models;
 			path = Models;
 			sourceTree = "<group>";
 		};
@@ -328,7 +325,6 @@
 				E8820944B8716949980D75A5 /* eyelinerdir_scheming.bundle */,
 				0D59FCB17F36388621E8F213 /* eyelinerdir_pretty.bundle */,
 			);
-			name = eyelinerdir;
 			path = eyelinerdir;
 			sourceTree = "<group>";
 		};
@@ -343,7 +339,6 @@
 				6AD42AF35F47355FE60F93D8 /* eyelinerdir */,
 				D6056FFC4AA39F0F407C4F24 /* blusherdir */,
 			);
-			name = MakeupResources;
 			path = MakeupResources;
 			sourceTree = "<group>";
 		};
@@ -369,7 +364,6 @@
 				548727A71AFBA4CA17992193 /* coloredcontactsdir_starry_blue.bundle */,
 				A5F4914A0ABA2474F52A27DE /* coloredcontactsdir_darknight_black.bundle */,
 			);
-			name = coloredcontactsdir;
 			path = coloredcontactsdir;
 			sourceTree = "<group>";
 		};
@@ -382,7 +376,6 @@
 				FF6CE318309E59FE16CDC650 /* makeupdir_milky_eyes.bundle */,
 				B1DBFF7DEE61F1C009F5CD40 /* makeupdir_vulnerable_and_innocenteyes.bundle */,
 			);
-			name = makeupdir;
 			path = makeupdir;
 			sourceTree = "<group>";
 		};
@@ -412,7 +405,6 @@
 				9468517F2D1754354671F960 /* Cozily.bundle */,
 				19993ADF9DCE67438FF1B159 /* Creamy.bundle */,
 			);
-			name = ColorfulStyleResources;
 			path = ColorfulStyleResources;
 			sourceTree = "<group>";
 		};
@@ -474,7 +466,6 @@
 				ADD9386C81ADE4F9ED9E171F /* pendantClown.bundle */,
 				7AC21BA2B55EB5D1913D0DCC /* pendantAnimal.bundle */,
 			);
-			name = Pendants;
 			path = Pendants;
 			sourceTree = "<group>";
 		};
@@ -499,7 +490,6 @@
 				8C10174098B115274C1723F8 /* lipstickdir_sweet_orange.bundle */,
 				714CC41C823C983600B67BF3 /* lipstickdir_velvet_red.bundle */,
 			);
-			name = lipstickdir;
 			path = lipstickdir;
 			sourceTree = "<group>";
 		};
@@ -516,7 +506,6 @@
 				70AEF4F67CF4A63BEB41C449 /* MakeupResources */,
 				F2AAAE24938884BA4F73A528 /* SkinColorResources */,
 			);
-			name = Resources;
 			path = Resources;
 			sourceTree = "<group>";
 		};
@@ -529,7 +518,6 @@
 				DDBBF996B6B04D77CB8C6DA4 /* blusherdir_milk_orange.bundle */,
 				008CB9159E0FCF4DECA1C649 /* blusherdir_peach.bundle */,
 			);
-			name = blusherdir;
 			path = blusherdir;
 			sourceTree = "<group>";
 		};
@@ -542,7 +530,6 @@
 				84381C0505181EEB41EBAE21 /* eyeshadowdir_mocha_brown.bundle */,
 				5A9C327520A2B5F7A3441003 /* eyeshadowdir_tea_brown.bundle */,
 			);
-			name = eyeshadowdir;
 			path = eyeshadowdir;
 			sourceTree = "<group>";
 		};
@@ -555,7 +542,6 @@
 				59488F8BA8A0B46DBDE35206 /* lengbai.bundle */,
 				95E1B45AB17BDC8CED11054F /* nuanbai.bundle */,
 			);
-			name = SkinColorResources;
 			path = SkinColorResources;
 			sourceTree = "<group>";
 		};
@@ -633,7 +619,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 1600;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					14AB24407D532EDFD54AD011 = {
@@ -843,9 +829,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -894,9 +884,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1010,11 +1004,13 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ScreenShareExtension/ScreenShareExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = XM44W3KV48;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${SRCROOT}/.symlinks/plugins/zego_express_engine/ios/libs\"",
 				);
+				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ScreenShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1022,6 +1018,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.notisboard.mobile.ScreenShareExtension;
 				PRODUCT_NAME = ScreenShareExtension;
 				SDKROOT = iphoneos;
@@ -1092,7 +1089,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 52;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = XM44W3KV48;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -1103,7 +1100,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.notisboard.mobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -1170,11 +1167,13 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ScreenShareExtension/ScreenShareExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = XM44W3KV48;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${SRCROOT}/.symlinks/plugins/zego_express_engine/ios/libs\"",
 				);
+				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ScreenShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1182,6 +1181,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.notisboard.mobile.ScreenShareExtension;
 				PRODUCT_NAME = ScreenShareExtension;
 				SDKROOT = iphoneos;
@@ -1312,7 +1312,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 52;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = XM44W3KV48;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -1323,7 +1323,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.notisboard.mobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -1340,7 +1340,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 52;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = XM44W3KV48;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -1351,7 +1351,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.notisboard.mobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -1365,11 +1365,13 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ScreenShareExtension/ScreenShareExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = XM44W3KV48;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${SRCROOT}/.symlinks/plugins/zego_express_engine/ios/libs\"",
 				);
+				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ScreenShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1377,6 +1379,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.notisboard.mobile.ScreenShareExtension;
 				PRODUCT_NAME = ScreenShareExtension;
 				SDKROOT = iphoneos;

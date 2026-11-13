@@ -104,12 +104,33 @@ post_install do |installer|
     File.write(xcconfig_path, contents)
   end
 
-  # --- FIX FOR ITMS-90111 UNSUPPORTED SDK & BETA MACOS ---
+  # --- SYNC FLUTTER VERSION & FIX EXTENSION VERSION MISMATCH ---
   runner_project_path = File.join(File.dirname(__FILE__), 'Runner.xcodeproj')
   begin
     require 'xcodeproj'
     runner_project = Xcodeproj::Project.open(runner_project_path)
+
+    flutter_build_number = '1'
+    flutter_build_name = '1.0.0'
+    generated_xcconfig_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
+    if File.exist?(generated_xcconfig_path)
+      File.foreach(generated_xcconfig_path) do |line|
+        if line.start_with?('FLUTTER_BUILD_NUMBER=')
+          flutter_build_number = line.split('=', 2).last.strip
+        elsif line.start_with?('FLUTTER_BUILD_NAME=')
+          flutter_build_name = line.split('=', 2).last.strip
+        end
+      end
+    end
+
     runner_project.targets.each do |target|
+      if target.name == 'Runner' || target.name == 'ScreenShareExtension'
+        target.build_configurations.each do |config|
+          config.build_settings['CURRENT_PROJECT_VERSION'] = flutter_build_number
+          config.build_settings['MARKETING_VERSION'] = flutter_build_name
+        end
+      end
+
       if target.name == 'Runner'
         phase_name = 'Fix App Store Connect SDK Version'
         phase_exists = target.shell_script_build_phases.any? { |p| p.name == phase_name }
@@ -127,8 +148,12 @@ SCRIPT
         end
       end
     end
+
+    runner_project.root_object.attributes['LastUpgradeCheck'] = '1600'
+    installer.pods_project.root_object.attributes['LastUpgradeCheck'] = '1600'
+
     runner_project.save
   rescue LoadError
-    puts "xcodeproj gem not found, skipping ITMS-90111 fix"
+    puts "xcodeproj gem not found, skipping sync"
   end
 end

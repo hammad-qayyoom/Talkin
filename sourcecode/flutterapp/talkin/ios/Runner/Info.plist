@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -17,13 +19,52 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.787587737004-81ectfs5u3utr84gq6fqveme9m0c3nnh</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>mailto</string>
+		<string>https</string>
+		<string>tel</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Notisboard uses your calendar to sync consultation sessions and appointments.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Notisboard uses the camera for profile photos, verification uploads, and video calls.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use Face ID to securely unlock your Notisboard account.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Notisboard uses your location to show nearby experts and improve recommendations when you use the app.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Notisboard uses your location while you use the app to show nearby experts and improve recommendations.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Notisboard uses the microphone for voice messages and audio or video calls.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Notisboard may use device motion to keep camera previews and video calls oriented correctly.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Notisboard needs permission to save images to your photo library.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Notisboard lets you choose photos or videos for your profile, chats, feed posts, and verification uploads.</string>
+	<key>NSScreenCaptureUsageDescription</key>
+	<string>Notisboard records consultation sessions so you can review them later. Your screen and audio will be captured during the recording.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -45,38 +86,18 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+		<string>audio</string>
+		<string>voip</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>mailto</string>
-		<string>https</string>
-		<string>tel</string>
-	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>Notisboard uses the camera for profile photos, verification uploads, and video calls.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Notisboard uses the microphone for voice messages and audio or video calls.</string>
-	<key>NSScreenCaptureUsageDescription</key>
-	<string>Notisboard records consultation sessions so you can review them later. Your screen and audio will be captured during the recording.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Notisboard lets you choose photos or videos for your profile, chats, feed posts, and verification uploads.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Notisboard needs permission to save images to your photo library.</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Notisboard uses your calendar to sync consultation sessions and appointments.</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Notisboard uses your location while you use the app to show nearby experts and improve recommendations.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Notisboard uses your location to show nearby experts and improve recommendations when you use the app.</string>
-	<key>NSMotionUsageDescription</key>
-	<string>Notisboard may use device motion to keep camera previews and video calls oriented correctly.</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Use Face ID to securely unlock your Notisboard account.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -89,27 +110,6 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-		<string>audio</string>
-		<string>voip</string>
-	</array>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.googleusercontent.apps.787587737004-81ectfs5u3utr84gq6fqveme9m0c3nnh</string>
-			</array>
-		</dict>
 	</array>
 </dict>
 </plist>

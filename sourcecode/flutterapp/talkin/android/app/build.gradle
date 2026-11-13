@@ -15,8 +15,8 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.notisboard.mobile"
     compileSdk = 36
-    buildToolsVersion = "35.0.0"
-    ndkVersion = flutter.ndkVersion
+    buildToolsVersion = "36.0.0"
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -70,7 +70,7 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.release
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -81,6 +81,7 @@ flutter {
     source = "../.."
 }
 dependencies {
+    implementation 'androidx.activity:activity-ktx:1.9.3'
     implementation 'com.google.android.material:material:1.10.0' // or later version
     implementation 'androidx.lifecycle:lifecycle-process:2.6.2' // or later version
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
@@ -129,6 +130,15 @@ dependencies {
         implementation('androidx.compose.material:material-ripple-android:1.7.0')
     }
 
+}
+
+configurations.all {
+    resolutionStrategy {
+        force "com.stripe:paymentsheet:20.48.0"
+        force "com.stripe:stripe-android:20.48.0"
+        force "com.stripe:financial-connections:20.48.0"
+        force "com.stripe:payments-core:20.48.0"
+    }
 }
 
 

@@ -39,6 +39,7 @@
         repositories {
             google()
             mavenCentral()
+            maven { url "https://maven.zego.im" }
             maven { url "https://storage.zego.im/maven" }
             // Fix for plugins still using jcenter
             all { ArtifactRepository repo ->
@@ -49,7 +50,11 @@
         }
         configurations.all {
             resolutionStrategy {
-                force "im.zego:effects-sdk:2.2.1.1573"
+                force "im.zego:effects-sdk:2.2.6.1631"
+                force "com.stripe:paymentsheet:20.48.0"
+                force "com.stripe:stripe-android:20.48.0"
+                force "com.stripe:financial-connections:20.48.0"
+                force "com.stripe:payments-core:20.48.0"
             }
         }
     }
