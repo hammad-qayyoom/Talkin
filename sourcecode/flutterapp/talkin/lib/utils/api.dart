@@ -139,6 +139,42 @@ abstract class Api {
   static const expertVerificationStatus =
       "${baseUrl}api/v2/experts/verification/status";
 
+  // >>>>> >>>>> Foundation Ecosystem Integration <<<<< <<<<<
+  static const expertEcosystemApplyVendor =
+      "${baseUrl}api/v2/ecosystem/apply-vendor";
+  static const expertEcosystemApplyOrganizer =
+      "${baseUrl}api/v2/ecosystem/apply-organizer";
+  static const expertEcosystemStatus =
+      "${baseUrl}api/v2/ecosystem/status";
+  static const expertEcosystemCurrency =
+      "${baseUrl}api/v2/ecosystem/currency";
+  static const expertEcosystemProducts =
+      "${baseUrl}api/v2/ecosystem/products";
+  static const expertEcosystemEvents =
+      "${baseUrl}api/v2/ecosystem/events";
+  static const expertEcosystemCampaigns =
+      "${baseUrl}api/v2/ecosystem/campaigns";
+  static const expertEcosystemVendorPortalData =
+      "${baseUrl}api/v2/ecosystem/vendor/portal-data";
+  static const expertEcosystemVendorProfile =
+      "${baseUrl}api/v2/ecosystem/vendor/profile";
+  static const expertEcosystemVendorSettings =
+      "${baseUrl}api/v2/ecosystem/vendor/settings";
+  static const expertEcosystemVendorOrderStatus =
+      "${baseUrl}api/v2/ecosystem/vendor/orders/";
+  static const expertEcosystemVendorPayouts =
+      "${baseUrl}api/v2/ecosystem/vendor/payouts";
+  static const expertEcosystemOrganizerPortalData =
+      "${baseUrl}api/v2/ecosystem/organizer/portal-data";
+  static const expertEcosystemOrganizerProfile =
+      "${baseUrl}api/v2/ecosystem/organizer/profile";
+  static const expertEcosystemOrganizerSettings =
+      "${baseUrl}api/v2/ecosystem/organizer/settings";
+  static const expertEcosystemOrganizerCheckIn =
+      "${baseUrl}api/v2/ecosystem/organizer/attendees/";
+  static const expertEcosystemOrganizerPayouts =
+      "${baseUrl}api/v2/ecosystem/organizer/payouts";
+
   // >>>>> >>>>> In-Person Consultation <<<<< <<<<<
   static const expertClinic = "${baseUrl}api/v2/experts/clinic/";
   static const sessionNavigation = "${baseUrl}api/v2/sessions/navigation/";

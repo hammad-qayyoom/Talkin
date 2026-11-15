@@ -6,6 +6,7 @@ import 'package:notisboard/ui/common/calendar_integration/calendar_connection_ca
 import 'package:notisboard/ui/common/calendar_integration/google_calendar_connect.dart';
 import 'package:notisboard/ui/common/calendar_integration/apple_calendar_connect.dart';
 import 'package:notisboard/ui/common/premium_content/expert_content_manager.dart';
+import 'package:notisboard/ui/host_flow/ecosystem/views/ecosystem_hub_view.dart';
 import 'package:notisboard/ui/host_flow/host_setting_screen/controller/host_setting_controller.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -225,6 +226,21 @@ class HostSettingView extends StatelessWidget {
                     _CalendarIntegrationSection(isTablet: isTablet),
                     const SizedBox(height: 14),
                   ],
+                  _SectionLabel(
+                    title: 'Foundation Ecosystem',
+                    isTablet: isTablet,
+                  ),
+                  const SizedBox(height: 8),
+                  _SettingsLane(
+                    iconAsset: AppAsset.starCoin,
+                    title: 'Vendor & Organizer Hub',
+                    subtitle: 'Apply as Vendor/Organizer & sync with Foundation',
+                    isTablet: isTablet,
+                    onTap: () {
+                      Get.to(() => const EcosystemHubView());
+                    },
+                  ),
+                  const SizedBox(height: 14),
                   _SectionLabel(
                     title: EnumLocale.txtAccount.name.tr,
                     isTablet: isTablet,
