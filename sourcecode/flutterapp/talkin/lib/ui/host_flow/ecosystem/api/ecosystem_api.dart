@@ -252,20 +252,7 @@ class EcosystemApi {
           "trackingCarrier": trackingCarrier,
         }),
       );
-      if (response.statusCode == 200) {
-        final jsonResult = jsonDecode(response.body);
-        return jsonResult["status"] == true || jsonResult["success"] == true;
-      } else {
-        try {
-          final jsonResult = jsonDecode(response.body);
-          final msg = jsonResult["message"] ?? jsonResult["error"];
-          if (msg != null && msg.toString().isNotEmpty) {
-            Utils.showToast(Get.context!, msg.toString());
-            return false;
-          }
-        } catch (_) {}
-        return false;
-      }
+      return response.statusCode == 200;
     } catch (e) {
       Utils.showLog("EcosystemApi.updateVendorOrderStatus Error: $e");
       return false;
@@ -291,20 +278,7 @@ class EcosystemApi {
           if (notes != null) "notes": notes,
         }),
       );
-      if (response.statusCode == 200) {
-        final jsonResult = jsonDecode(response.body);
-        return jsonResult["status"] == true || jsonResult["success"] == true;
-      } else {
-        try {
-          final jsonResult = jsonDecode(response.body);
-          final msg = jsonResult["message"] ?? jsonResult["error"];
-          if (msg != null && msg.toString().isNotEmpty) {
-            Utils.showToast(Get.context!, msg.toString());
-            return false;
-          }
-        } catch (_) {}
-        return false;
-      }
+      return response.statusCode == 200;
     } catch (e) {
       Utils.showLog("EcosystemApi.requestVendorPayout Error: $e");
       return false;
@@ -361,7 +335,7 @@ class EcosystemApi {
       );
       if (response.statusCode == 200) {
         final jsonResult = jsonDecode(response.body);
-        return jsonResult["status"] == true || jsonResult["success"] == true;
+        return jsonResult["status"] == true;
       } else {
         try {
           final jsonResult = jsonDecode(response.body);

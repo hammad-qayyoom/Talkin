@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:notisboard/custom/image/professional_cached_image.dart';
 import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:notisboard/ui/user_flow/host_verification_screen/model/talk_topic_model.dart';
-import 'package:notisboard/ui/user_flow/home_screen/widget/user_growth_spotlight_widget.dart';
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/constant.dart';
@@ -431,10 +430,6 @@ class FindMoreWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.fromLTRB(horizontalInset, 10, horizontalInset, 14),
-          child: const UserGrowthSpotlightWidget(),
-        ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: horizontalInset),
           child: Row(

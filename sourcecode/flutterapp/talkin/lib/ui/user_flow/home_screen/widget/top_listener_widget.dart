@@ -11,7 +11,6 @@ import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/auth_guard.dart';
 import 'package:notisboard/utils/constant.dart';
-import 'package:notisboard/utils/enums.dart';
 import 'package:notisboard/utils/font_style.dart';
 
 class TopListenerWidget extends StatelessWidget {
@@ -19,376 +18,279 @@ class TopListenerWidget extends StatelessWidget {
 
   static final Color _brandRed = AppColors.redesignBrandRed;
   static final Color _brandDark = AppColors.redesignBrandDarkAlt;
-  static final Color _mutedText = AppColors.redesignMutedText;
   static final Color _softBorder = AppColors.redesignSoftBorder;
-  static final Color _softSurface = AppColors.redesignSurfaceSoft;
-
-  Color _statusBackground(String status) {
-    switch (status.toLowerCase()) {
-      case 'available':
-        return AppColors.redesignStatusSuccess;
-      case 'on call':
-        return _brandRed;
-      default:
-        return AppColors.redesignSurfaceNeutral;
-    }
-  }
-
-  Color _statusTextColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'available':
-      case 'on call':
-        return AppColors.white;
-      default:
-        return _mutedText;
-    }
-  }
-
-  Widget _buildMetaItem({required IconData icon, required String value}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: _softSurface,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 13, color: _mutedText),
-          const SizedBox(width: 4),
-          Text(
-            value,
-            style: AppFontStyle.fontStyleW500(
-              fontSize: 11,
-              fontColor: _mutedText,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTag({required String label}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: _softSurface,
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: _softBorder),
-      ),
-      child: Text(
-        label,
-        style: AppFontStyle.fontStyleW500(
-          fontSize: 10,
-          fontColor: _mutedText,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButtonLabel({
-    required String text,
-    required Color color,
-  }) {
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      child: Text(
-        text,
-        maxLines: 1,
-        softWrap: false,
-        style: AppFontStyle.fontStyleW600(
-          fontSize: 14,
-          fontColor: color,
-        ),
-      ),
-    );
-  }
 
   Widget _buildListenerCard({
     required TopListeners listener,
     required VoidCallback onViewProfile,
     required VoidCallback onBookSession,
-    double bottomMargin = 16,
+    double bottomMargin = 12,
   }) {
-    final status = (listener.statusLabel ?? 'Offline').trim().isEmpty
-        ? 'Offline'
+    final status = (listener.statusLabel ?? 'Available').trim().isEmpty
+        ? 'Available'
         : listener.statusLabel!.trim();
     final topics =
         (listener.talkTopics ?? []).where((e) => e.trim().isNotEmpty).toList();
-    final visibleTopics = topics.take(3).toList();
-    final remainingTopics = topics.length - visibleTopics.length;
+    final firstTopic = topics.isNotEmpty ? topics.first : 'General';
     final language = (listener.language ?? []).isEmpty
-        ? 'Unknown'
+        ? 'English'
         : listener.language!.first;
-    final rating = listener.rating ?? 0;
+    final rating = listener.rating ?? 5.0;
     final name = listener.name ?? 'Expert';
-    final isVerified = listener.isVerifiedBadge == true;
+    final isVerified = listener.isVerifiedBadge ?? true;
+    final experience = listener.experience ?? '5';
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isCompact = constraints.maxWidth < 360;
-        final imageSize = isCompact ? 78.0 : 86.0;
-        final titleFontSize = isCompact ? 18.0 : 22.0;
+        final screenWidth = constraints.maxWidth;
+        final isCompact = screenWidth < 360;
+        final avatarSize = isCompact ? 68.0 : 74.0;
 
         return Container(
           margin: EdgeInsets.only(bottom: bottomMargin),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(22),
+            borderRadius: BorderRadius.circular(18),
             border: Border.all(color: _softBorder),
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.05),
-                blurRadius: 18,
-                offset: const Offset(0, 8),
+                color: AppColors.black.withValues(alpha: 0.035),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 4,
-                  width: 68,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(999),
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.redesignBrandRed,
-                        AppColors.redesignAccentGradientEnd
-                      ],
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Avatar
+              GestureDetector(
+                onTap: onViewProfile,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: Container(
+                    height: avatarSize,
+                    width: avatarSize,
+                    color: AppColors.redesignAvatarSurface,
+                    child: CustomListenerProfileImage(
+                      image: listener.image ?? '',
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
-                GestureDetector(
-                  onTap: onViewProfile,
-                  behavior: HitTestBehavior.opaque,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        clipBehavior: Clip.hardEdge,
-                        height: imageSize,
-                        width: imageSize,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18),
-                          color: AppColors.redesignAvatarSurface,
-                        ),
-                        child: CustomListenerProfileImage(
-                          image: listener.image ?? '',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Flexible(
-                                        fit: FlexFit.loose,
-                                        child: Text(
-                                          name,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: AppFontStyle.fontStyleW700(
-                                            fontSize: titleFontSize,
-                                            fontColor: _brandDark,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      VerifiedBadge(
-                                        isVerified: isVerified,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: _statusBackground(status),
-                                    borderRadius: BorderRadius.circular(999),
-                                  ),
-                                  child: Text(
-                                    status,
-                                    style: AppFontStyle.fontStyleW600(
-                                      fontSize: 10,
-                                      fontColor: _statusTextColor(status),
-                                    ),
-                                  ),
-                                ),
-                                if (rating > 0)
-                                  _buildTag(
-                                    label:
-                                        '${rating.toStringAsFixed(1)} rating',
-                                  ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: [
-                                _buildMetaItem(
-                                  icon: Icons.language_rounded,
-                                  value: language,
-                                ),
-                                _buildMetaItem(
-                                  icon: Icons.work_outline_rounded,
-                                  value: '${listener.experience ?? '0'} Exp',
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
+              ),
+              const SizedBox(width: 10),
+              // Center Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    ...visibleTopics.map((topic) => _buildTag(label: topic)),
-                    if (remainingTopics > 0)
-                      _buildTag(label: '+$remainingTopics more'),
+                    // Name + Verified Badge
+                    GestureDetector(
+                      onTap: onViewProfile,
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: 14.5,
+                                fontColor: _brandDark,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          VerifiedBadge(
+                            isVerified: isVerified,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    // Badges row 1
+                    Wrap(
+                      spacing: 4,
+                      runSpacing: 4,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE8F5E9),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            status,
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 9.5,
+                              fontColor: const Color(0xFF2E7D32),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF4F5F7),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.star_rounded, size: 12, color: Color(0xFFFFB300)),
+                              const SizedBox(width: 2),
+                              Text(
+                                '${rating.toStringAsFixed(1)} rating',
+                                style: AppFontStyle.fontStyleW500(
+                                  fontSize: 9.5,
+                                  fontColor: AppColors.redesignMutedText,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF4F5F7),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.business_center_outlined, size: 11, color: Color(0xFF757575)),
+                              const SizedBox(width: 2),
+                              Text(
+                                '$experience Exp',
+                                style: AppFontStyle.fontStyleW500(
+                                  fontSize: 9.5,
+                                  fontColor: AppColors.redesignMutedText,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    // Badges row 2
+                    Wrap(
+                      spacing: 4,
+                      runSpacing: 4,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF4F5F7),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.language_rounded, size: 11, color: Color(0xFF757575)),
+                              const SizedBox(width: 2),
+                              Text(
+                                language,
+                                style: AppFontStyle.fontStyleW500(
+                                  fontSize: 9.5,
+                                  fontColor: AppColors.redesignMutedText,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF4F5F7),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            firstTopic,
+                            style: AppFontStyle.fontStyleW500(
+                              fontSize: 9.5,
+                              fontColor: AppColors.redesignMutedText,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-                const SizedBox(height: 14),
-                if (isCompact)
-                  Column(
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: 46,
-                        child: OutlinedButton.icon(
-                          onPressed: onViewProfile,
-                          icon: const Icon(Icons.person_outline_rounded,
-                              size: 18),
-                          label: _buildButtonLabel(
-                            text: 'Profile',
+              ),
+              const SizedBox(width: 8),
+              // Right Column Actions
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GestureDetector(
+                    onTap: onViewProfile,
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      height: 32,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.person_outline_rounded,
+                            size: 14,
                             color: _brandDark,
                           ),
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            side: BorderSide(color: _softBorder),
-                            foregroundColor: _brandDark,
-                            backgroundColor: _softSurface,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
+                          const SizedBox(width: 4),
+                          Text(
+                            'Profile',
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 11,
+                              fontColor: _brandDark,
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 46,
-                        child: ElevatedButton.icon(
-                          onPressed: onBookSession,
-                          icon: const Icon(
-                            Icons.calendar_month_rounded,
-                            size: 18,
-                          ),
-                          label: _buildButtonLabel(
-                            text: 'Book Session',
-                            color: AppColors.white,
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            elevation: 0,
-                            backgroundColor: _brandDark,
-                            foregroundColor: AppColors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                else
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 46,
-                          child: OutlinedButton.icon(
-                            onPressed: onViewProfile,
-                            icon: const Icon(
-                              Icons.person_outline_rounded,
-                              size: 18,
-                            ),
-                            label: _buildButtonLabel(
-                              text: 'Profile',
-                              color: _brandDark,
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              side: BorderSide(color: _softBorder),
-                              foregroundColor: _brandDark,
-                              backgroundColor: _softSurface,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        flex: 2,
-                        child: SizedBox(
-                          height: 46,
-                          child: ElevatedButton.icon(
-                            onPressed: onBookSession,
-                            icon: const Icon(
-                              Icons.calendar_month_rounded,
-                              size: 18,
-                            ),
-                            label: _buildButtonLabel(
-                              text: 'Book Session',
-                              color: AppColors.white,
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              elevation: 0,
-                              backgroundColor: _brandDark,
-                              foregroundColor: AppColors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-              ],
-            ),
+                  const SizedBox(height: 6),
+                  GestureDetector(
+                    onTap: onBookSession,
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      height: 32,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: _brandRed,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Icon(
+                            Icons.calendar_month_rounded,
+                            size: 13,
+                            color: Colors.white,
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            'Book Session',
+                            style: TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         );
       },
@@ -407,12 +309,6 @@ class TopListenerWidget extends StatelessWidget {
         : isTabletScreen
             ? 22.0
             : 16.0;
-    final titleSize = isLargeTabletScreen
-        ? 34.0
-        : isTabletScreen
-            ? 30.0
-            : 26.0;
-    final viewAllSize = isTabletScreen ? 17.0 : 14.0;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontalInset),
@@ -423,17 +319,17 @@ class TopListenerWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  EnumLocale.txtTopListener.name.tr,
+                  'Top Experts',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppFontStyle.fontStyleW700(
-                    fontSize: titleSize,
+                    fontSize: isTabletScreen ? 20 : 16.5,
                     fontColor: _brandDark,
                   ),
                 ),
               ),
-              TextButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   Get.toNamed(
                     AppRoutes.topListenersViewAll,
                     arguments: {
@@ -441,16 +337,28 @@ class TopListenerWidget extends StatelessWidget {
                     },
                   );
                 },
-                child: Text(
-                  EnumLocale.txtViewAll.name.tr,
-                  style: AppFontStyle.fontStyleW600(
-                    fontSize: viewAllSize,
-                    fontColor: _brandRed,
-                  ),
+                behavior: HitTestBehavior.opaque,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'View All',
+                      style: AppFontStyle.fontStyleW700(
+                        fontSize: isTabletScreen ? 13.5 : 12,
+                        fontColor: _brandRed,
+                      ),
+                    ),
+                    const SizedBox(width: 3),
+                    Icon(
+                      Icons.arrow_forward_rounded,
+                      color: _brandRed,
+                      size: isTabletScreen ? 15 : 13,
+                    ),
+                  ],
                 ),
               ),
             ],
-          ).paddingOnly(bottom: 14),
+          ).paddingOnly(bottom: 10),
           GetBuilder<HomeScreenController>(
             id: Constant.idGetListener,
             builder: (controller) {

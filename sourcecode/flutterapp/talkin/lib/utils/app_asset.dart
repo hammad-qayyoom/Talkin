@@ -140,6 +140,8 @@ class AppAsset {
   static const underMaintenanceImage =
       "${getImagesPath}under_maintenance_image.png";
   static const demoListener = "${getImagesPath}demo_listener.png";
+  static const foodBankBox = "${getImagesPath}food_bank_box.jpg";
+  static const eventSummit = "${getImagesPath}event_summit.jpg";
 
   static const listeners = "${getImagesPath}listeners.png";
   static const withdrawBg = "${getImagesPath}withdraw_bg.png";

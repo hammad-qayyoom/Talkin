@@ -2,19 +2,16 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/custom/image/professional_cached_image.dart';
-import 'package:notisboard/ui/host_flow/host_home_screen/model/growth_spotlight_model.dart';
+import 'package:notisboard/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
 import 'package:notisboard/ui/user_flow/home_screen/controller/home_screen_controller.dart';
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/app_color.dart';
-import 'package:notisboard/utils/enums.dart';
-import 'package:notisboard/utils/font_style.dart';
+import 'package:notisboard/utils/constant.dart';
 
 class UserGrowthSpotlightWidget extends StatelessWidget {
   const UserGrowthSpotlightWidget({super.key});
 
   static final Color _brandRed = AppColors.redesignBrandRed;
-  static final Color _brandDark = AppColors.redesignBrandDark;
-  static final Color _softBorder = AppColors.redesignSoftBorder;
 
   String _resolveSpotlightImageUrl(String rawImage) {
     final trimmed = rawImage.trim();
@@ -28,180 +25,184 @@ class UserGrowthSpotlightWidget extends StatelessWidget {
     return "${Api.baseUrl}$trimmed";
   }
 
-  String _resolveSpotlightTitle(GrowthSpotlightData item) {
-    final text = (item.title ?? "").trim();
-    if (text.isNotEmpty) {
-      return text;
+  void _onBannerTap() {
+    if (Get.isRegistered<BottomBarController>()) {
+      final bottomBar = Get.find<BottomBarController>();
+      bottomBar.selectIndex = 2; // Listeners / Experts
+      bottomBar.update([Constant.idBottomBar]);
     }
-    return "Spotlight Highlight";
-  }
-
-  String _resolveSpotlightDescription(GrowthSpotlightData item) {
-    final text = (item.description ?? "").trim();
-    if (text.isNotEmpty) {
-      return text;
-    }
-    return "Check out latest updates and premium features.";
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final isTablet = screenWidth >= 760;
+    final isLargeTablet = screenWidth >= 1100;
+    final horizontalInset = isLargeTablet
+        ? 28.0
+        : isTablet
+            ? 22.0
+            : 16.0;
+
+    final bannerHeight = isTablet ? 175.0 : 142.0;
 
     return GetBuilder<HomeScreenController>(
       id: 'userSpotlight',
       builder: (controller) {
-        if (!controller.isSpotlightLoading && controller.userSpotlightItems.isEmpty) {
-          return const SizedBox.shrink();
-        }
+        final items = controller.userSpotlightItems;
 
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: _softBorder),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.05),
-                blurRadius: 18,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  EnumLocale.txtGrowthSpotlight.name.tr,
-                  style: AppFontStyle.fontStyleW700(
-                    fontSize: isTablet ? 18 : 16,
-                    fontColor: _brandDark,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                if (controller.isSpotlightLoading)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: AppImageShimmer(
-                      height: isTablet ? 170 : 138,
-                      width: double.infinity,
-                    ),
-                  )
-                else
-                  Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: CarouselSlider(
-                          options: CarouselOptions(
-                            height: isTablet ? 170 : 138,
-                            autoPlay: controller.userSpotlightItems.length > 1,
-                            viewportFraction: 1,
-                            enlargeCenterPage: false,
-                            onPageChanged: controller.onSpotlightPageChanged,
-                          ),
-                          items: controller.userSpotlightItems.map((item) {
-                            final imageUrl = _resolveSpotlightImageUrl(item.image ?? "");
-                            final title = _resolveSpotlightTitle(item);
-                            final description = _resolveSpotlightDescription(item);
-
-                            return Builder(
-                              builder: (BuildContext context) {
-                                return Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    imageUrl.isEmpty
-                                        ? Container(
-                                            color: AppColors.redesignSurfaceNeutralAlt,
-                                          )
-                                        : ProfessionalCachedImage(
-                                            imageUrl: imageUrl,
-                                            fit: BoxFit.cover,
-                                            placeholder: const AppImageShimmer(),
-                                            errorWidget: Container(
-                                              color: AppColors.redesignSurfaceNeutralAlt,
-                                            ),
-                                          ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                          colors: [
-                                            AppColors.black.withValues(alpha: 0.08),
-                                            AppColors.black.withValues(alpha: 0.48),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      left: 12,
-                                      right: 12,
-                                      bottom: 10,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            title,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: AppFontStyle.fontStyleW700(
-                                              fontSize: isTablet ? 14 : 12,
-                                              fontColor: AppColors.white,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 2),
-                                          Text(
-                                            description,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: AppFontStyle.fontStyleW500(
-                                              fontSize: isTablet ? 12 : 11,
-                                              fontColor: AppColors.white.withValues(alpha: 0.94),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+        return Padding(
+          padding: EdgeInsets.fromLTRB(horizontalInset, 4, horizontalInset, 12),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: controller.isSpotlightLoading
+                    ? AppImageShimmer(
+                        height: bannerHeight,
+                        width: double.infinity,
+                      )
+                    : items.isEmpty
+                        ? GestureDetector(
+                            onTap: _onBannerTap,
+                            child: Container(
+                              height: bannerHeight,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                gradient: const LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Color(0xFF0F1E36),
+                                    Color(0xFF1E3A6C),
                                   ],
-                                );
-                              },
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      if (controller.userSpotlightItems.length > 1) ...[
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                            controller.userSpotlightItems.length,
-                            (index) {
-                              final isSelected = controller.currentSpotlightIndex == index;
+                                ),
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'CONNECT WITH TOP EXPERTS',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: isTablet ? 18 : 14.5,
+                                            letterSpacing: 0.2,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          'Get Trusted Advice in Health, Education, Business and More',
+                                          style: TextStyle(
+                                            color: Colors.white.withValues(alpha: 0.85),
+                                            fontSize: isTablet ? 13 : 11,
+                                            height: 1.25,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 6,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: _brandRed,
+                                            borderRadius: BorderRadius.circular(999),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: const [
+                                              Text(
+                                                'Find Your Expert',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 11,
+                                                ),
+                                              ),
+                                              SizedBox(width: 4),
+                                              Icon(
+                                                Icons.arrow_forward_rounded,
+                                                color: Colors.white,
+                                                size: 13,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : CarouselSlider(
+                            options: CarouselOptions(
+                              height: bannerHeight,
+                              autoPlay: items.length > 1,
+                              viewportFraction: 1.0,
+                              enlargeCenterPage: false,
+                              onPageChanged: controller.onSpotlightPageChanged,
+                            ),
+                            items: items.map((item) {
+                              final imageUrl = _resolveSpotlightImageUrl(item.image ?? '');
 
-                              return AnimatedContainer(
-                                duration: const Duration(milliseconds: 260),
-                                margin: const EdgeInsets.symmetric(horizontal: 3),
-                                width: isSelected ? 18 : 6,
-                                height: 6,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(999),
-                                  color: isSelected ? _brandRed : AppColors.redesignSoftBorder,
+                              return GestureDetector(
+                                onTap: _onBannerTap,
+                                behavior: HitTestBehavior.opaque,
+                                child: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: const Color(0xFF0F1E36),
+                                  ),
+                                  child: imageUrl.isEmpty
+                                      ? Container(color: const Color(0xFF0F1E36))
+                                      : ProfessionalCachedImage(
+                                          imageUrl: imageUrl,
+                                          fit: BoxFit.cover,
+                                          placeholder: const AppImageShimmer(),
+                                          errorWidget: Container(
+                                            color: const Color(0xFF0F1E36),
+                                          ),
+                                        ),
                                 ),
                               );
-                            },
+                            }).toList(),
                           ),
-                        ),
-                      ],
-                    ],
-                  ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 8),
+              // Carousel Indicator Dots
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  items.length > 1 ? items.length : 3,
+                  (index) {
+                    final isSelected = controller.currentSpotlightIndex == index;
+
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                      width: isSelected ? 16 : 6,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(999),
+                        color: isSelected
+                            ? _brandRed
+                            : AppColors.redesignSoftBorder,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         );
       },

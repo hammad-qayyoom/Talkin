@@ -430,36 +430,94 @@ class HomeAppBarWidget extends StatelessWidget {
       );
     }
 
+    Widget searchBar() {
+      return GestureDetector(
+        onTap: () {
+          Get.toNamed(AppRoutes.searchScreen);
+        },
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          height: isTablet ? 52 : 46,
+          margin: const EdgeInsets.only(top: 14),
+          padding: EdgeInsets.symmetric(horizontal: isCompact ? 12 : 14),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: _borderColor),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.035),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.search_rounded,
+                color: AppColors.redesignMutedText,
+                size: isTablet ? 24 : 20,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Search experts, events, products and more',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW500(
+                    fontSize: isTablet ? 14 : 12.5,
+                    fontColor: AppColors.redesignMutedText,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.tune_rounded,
+                color: _brandDark,
+                size: isTablet ? 22 : 18,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Padding(
-      padding: EdgeInsets.only(top: topInset + 8, bottom: 12),
-      child: isVeryCompact
-          ? Column(
-              children: [
-                Row(
+      padding: EdgeInsets.only(top: topInset + 8, bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          isVeryCompact
+              ? Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(child: profileSection()),
+                        const SizedBox(width: 8),
+                        notificationButton(),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: coinCard(),
+                    ),
+                  ],
+                )
+              : Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(child: profileSection()),
+                    SizedBox(width: isCompact ? 8 : 10),
+                    coinCard(),
                     const SizedBox(width: 8),
                     notificationButton(),
                   ],
                 ),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: coinCard(),
-                ),
-              ],
-            )
-          : Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(child: profileSection()),
-                SizedBox(width: isCompact ? 8 : 10),
-                coinCard(),
-                const SizedBox(width: 8),
-                notificationButton(),
-              ],
-            ),
+          searchBar(),
+        ],
+      ),
     );
   }
 }
