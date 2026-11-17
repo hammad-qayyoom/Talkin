@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:country_code_picker/country_code_picker.dart';
@@ -9,6 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/services/biometric/biometric_auth_service.dart';
 import 'package:notisboard/socket/socket_service.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_login_user_profile_api.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/model/aap_configuration_model.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/model/fetch_listener_profile_model.dart';
@@ -61,16 +63,126 @@ class Database {
 
     Utils.showLog("Is New User => $isNewUser");
 
-    if (isNewUser == false) {
-      final token = await FirebaseAccessToken.onGet();
+    // Immediately restore cached profiles from local storage to prevent blank states
+    loadCachedProfiles();
 
-      fetchLoginUserProfileModel = await FetchLoginUserProfileApi.callApi(
-          loginUserId: loginUserFirebaseId, token: token ?? '');
+    if (isNewUser == false && isLogin) {
+      final token = await FirebaseAccessToken.onGet();
+      if ((token ?? '').isNotEmpty) {
+        final profile = await FetchLoginUserProfileApi.callApi(
+            loginUserId: loginUserFirebaseId, token: token ?? '');
+        if (profile != null && profile.status == true) {
+          setLoginUserProfile(profile);
+        }
+      }
     }
 
     if (isListener) {
-      // fetchSellerDetailsModel = await FetchSellerDetailsApi.callApi(sellerId: sellerId, userId: loginUserId);
-      // Database.onSetSellerPayoutAmount(fetchSellerDetailsModel?.data?.payoutAmount ?? 0);
+      final listenerId = (fetchLoginUserProfileModel?.user?.listenerId ??
+              loginListenerId)
+          .toString()
+          .trim();
+      if (listenerId.isNotEmpty) {
+        final listenerModel =
+            await FetchListenerProfileAPi.callApi(loginListenerId: listenerId);
+        if (listenerModel != null && listenerModel.status == true) {
+          setListenerProfile(listenerModel);
+        }
+      }
+    }
+  }
+
+  static void loadCachedProfiles() {
+    try {
+      final cachedLoginProfile =
+          localStorage.read("cachedLoginUserProfileJson");
+      if (cachedLoginProfile != null &&
+          cachedLoginProfile is String &&
+          cachedLoginProfile.isNotEmpty) {
+        final decoded = jsonDecode(cachedLoginProfile);
+        if (decoded is Map<String, dynamic>) {
+          fetchLoginUserProfileModel =
+              FetchLoginUserProfileModel.fromJson(decoded);
+          Utils.showLog("Restored login user profile from local cache.");
+        }
+      }
+
+      final cachedListenerProfile =
+          localStorage.read("cachedListenerProfileJson");
+      if (cachedListenerProfile != null &&
+          cachedListenerProfile is String &&
+          cachedListenerProfile.isNotEmpty) {
+        final decoded = jsonDecode(cachedListenerProfile);
+        if (decoded is Map<String, dynamic>) {
+          fetchListenerProfileModel =
+              FetchListenerProfileModel.fromJson(decoded);
+          Utils.showLog("Restored listener profile from local cache.");
+        }
+      }
+    } catch (e) {
+      Utils.showLog("Failed to restore cached profiles => $e");
+    }
+  }
+
+  static void setLoginUserProfile(FetchLoginUserProfileModel model) {
+    fetchLoginUserProfileModel = model;
+    if (model.user != null) {
+      final user = model.user!;
+      if ((user.id ?? '').isNotEmpty) onSetLoginUserId(user.id!);
+      if ((user.firebaseId ?? '').isNotEmpty) {
+        onSetLoginUserFirebaseId(user.firebaseId!);
+      }
+      if ((user.fullName ?? '').isNotEmpty) onSetLoginUserName(user.fullName!);
+      if (user.nickName != null) onSetLoginUserNickName(user.nickName!);
+      if ((user.email ?? '').isNotEmpty) onSetLoginUserEmail(user.email!);
+      if (user.profilePic != null) {
+        onSetLoginUserProfilePic(user.profilePic!);
+      }
+      if (user.country != null) onSetLoginUserCountry(user.country!);
+      if (user.countryFlag != null) {
+        onSetLoginUserCountryFlag(user.countryFlag!);
+      }
+      if (user.birthDate != null) onSetLoginUserBirthDate(user.birthDate!);
+      if (user.gender != null) onSetLoginUserGender(user.gender!);
+      if (user.phoneNumber != null) {
+        onSetLoginUserPhoneNumber(user.phoneNumber!);
+      }
+      if (user.isListener == true) onSetIsListener(true);
+      if (user.listenerId != null) {
+        final lid = user.listenerId.toString().trim();
+        if (lid.isNotEmpty) onSetLoginListenerId(lid);
+      }
+    }
+    try {
+      localStorage.write(
+          "cachedLoginUserProfileJson", jsonEncode(model.toJson()));
+    } catch (e) {
+      Utils.showLog("Error caching login user profile => $e");
+    }
+  }
+
+  static void setListenerProfile(FetchListenerProfileModel model) {
+    fetchListenerProfileModel = model;
+    if (model.data != null) {
+      final data = model.data!;
+      if ((data.id ?? '').isNotEmpty) onSetLoginListenerId(data.id!);
+      if ((data.name ?? '').isNotEmpty) onSetLoginListenerName(data.name!);
+      if ((data.image ?? '').isNotEmpty) onSetLoginListenerImage(data.image!);
+      if ((data.uniqueId ?? '').isNotEmpty) {
+        onSetLoginListenerUniqueId(data.uniqueId!);
+      }
+      if (data.isVerifiedBadge != null) {
+        onSetLoginListenerIsVerifiedBadge(data.isVerifiedBadge!);
+      }
+      if (data.currentCoinBalance != null) {
+        onSetListenerCoin(data.currentCoinBalance!.toString());
+      }
+    }
+    try {
+      localStorage.write(
+          "cachedListenerProfileJson", jsonEncode(model.toJson()));
+    } catch (e) {
+      Utils.showLog("Error caching listener profile => $e");
     }
   }
 
@@ -147,6 +259,14 @@ class Database {
 
   static String get loginListenerId =>
       localStorage.read("loginListenerId") ?? "";
+  static String get loginListenerName =>
+      localStorage.read("loginListenerName") ?? "";
+  static String get loginListenerImage =>
+      localStorage.read("loginListenerImage") ?? "";
+  static String get loginListenerUniqueId =>
+      localStorage.read("loginListenerUniqueId") ?? "";
+  static bool get loginListenerIsVerifiedBadge =>
+      localStorage.read("loginListenerIsVerifiedBadge") ?? false;
   static String get userCoin => _formatCoinValue(localStorage.read("userCoin"));
   static String get listenerCoin =>
       _formatCoinValue(localStorage.read("listenerCoin"));
@@ -249,6 +369,14 @@ class Database {
       await localStorage.write("userLongitude", longitude);
   static onSetLoginListenerId(String loginListenerId) async =>
       localStorage.write("loginListenerId", loginListenerId);
+  static onSetLoginListenerName(String loginListenerName) async =>
+      localStorage.write("loginListenerName", loginListenerName);
+  static onSetLoginListenerImage(String loginListenerImage) async =>
+      localStorage.write("loginListenerImage", loginListenerImage);
+  static onSetLoginListenerUniqueId(String loginListenerUniqueId) async =>
+      localStorage.write("loginListenerUniqueId", loginListenerUniqueId);
+  static onSetLoginListenerIsVerifiedBadge(bool isVerified) async =>
+      localStorage.write("loginListenerIsVerifiedBadge", isVerified);
   static onSetUserCoin(String userCoin) async =>
       localStorage.write("userCoin", userCoin);
   static onSetListenerCoin(String listenerCoin) async =>
@@ -290,6 +418,8 @@ class Database {
 
     await FirebaseAuth.instance.signOut();
     await BiometricAuthService.clearAll();
+    fetchLoginUserProfileModel = null;
+    fetchListenerProfileModel = null;
     await localStorage.erase();
 
     log("logout app language $selectedLanguage");

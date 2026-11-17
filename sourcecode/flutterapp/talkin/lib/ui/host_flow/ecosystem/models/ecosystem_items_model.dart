@@ -63,6 +63,8 @@ class EcosystemProduct {
   List<Map<String, dynamic>> variants;
   List<String> images;
   bool isActive;
+  String? rejectionReason;
+  String? createdAt;
 
   EcosystemProduct({
     required this.id,
@@ -93,6 +95,8 @@ class EcosystemProduct {
     this.variants = const [],
     this.images = const [],
     this.isActive = true,
+    this.rejectionReason,
+    this.createdAt,
   });
 
   factory EcosystemProduct.fromJson(Map<String, dynamic> json) {
@@ -147,6 +151,8 @@ class EcosystemProduct {
       variants: parseVariantList(json['variants']),
       images: (json['images'] is List) ? (json['images'] as List).map((i) => (i is Map ? i['url']?.toString() ?? '' : i.toString())).where((s) => s.isNotEmpty).toList() : [],
       isActive: (json['isActive'] == true || json['is_active'] == true) && (json['status'] == 'ACTIVE' || json['status'] == 'APPROVED'),
+      rejectionReason: json['rejectionReason']?.toString(),
+      createdAt: json['createdAt']?.toString(),
     );
   }
 }
@@ -650,7 +656,9 @@ class VendorPortalData {
 
     final avail = (rawMetrics['availableBalance'] != null)
         ? double.tryParse(rawMetrics['availableBalance'].toString()) ?? 0.0
-        : (json['balance'] != null ? double.tryParse(json['balance'].toString()) ?? 0.0 : 0.0);
+        : (json['availableBalance'] != null
+            ? double.tryParse(json['availableBalance'].toString()) ?? 0.0
+            : (json['balance'] != null ? double.tryParse(json['balance'].toString()) ?? 0.0 : 0.0));
 
     final escrow = (rawMetrics['escrowHolding'] != null)
         ? double.tryParse(rawMetrics['escrowHolding'].toString()) ?? 0.0

@@ -63,7 +63,7 @@ class HostHomeScreen extends GetView<HostHomeScreenController> {
                               padding: EdgeInsets.symmetric(
                                 horizontal: horizontalPadding,
                               ),
-                              child: const HostTopHomeView(),
+                              child: HostTopHomeView(),
                             ),
                           ),
                           SliverToBoxAdapter(

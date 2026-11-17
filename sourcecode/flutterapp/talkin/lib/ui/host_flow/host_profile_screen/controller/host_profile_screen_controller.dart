@@ -2,11 +2,35 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:notisboard/custom/custom_web_view/web_view_screen.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HostProfileScreenController extends GetxController {
+  @override
+  void onInit() {
+    super.onInit();
+    refreshProfile();
+  }
+
+  Future<void> refreshProfile() async {
+    final listenerId = (Database.fetchListenerProfileModel?.data?.id ??
+            Database.fetchLoginUserProfileModel?.user?.listenerId ??
+            Database.loginListenerId)
+        .toString()
+        .trim();
+
+    if (listenerId.isNotEmpty) {
+      final model =
+          await FetchListenerProfileAPi.callApi(loginListenerId: listenerId);
+      if (model != null && model.status == true) {
+        Database.setListenerProfile(model);
+        update();
+      }
+    }
+  }
+
   Future<void> onClickPrivacyPolicy() async {
     final String privacyPolicyUrl =
         Database.settingApiModel?.data?.expertPrivacyPolicyUrl.toString() ?? "";

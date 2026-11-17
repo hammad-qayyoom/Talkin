@@ -44,11 +44,21 @@ class HostProfileTopView extends StatelessWidget {
     final isTablet = width >= 760;
     final maxContentWidth = width >= 1100 ? 980.0 : width;
 
-    final listenerName =
-        (Database.fetchListenerProfileModel?.data?.name ?? '').trim();
+    final listenerName = (Database.fetchListenerProfileModel?.data?.name ??
+            Database.loginListenerName)
+        .trim();
     final displayName = listenerName.isEmpty ? 'Expert' : listenerName;
-    final uniqueId =
-        (Database.fetchLoginUserProfileModel?.user?.uniqueId ?? '').toString();
+    final profileImage = (Database.fetchListenerProfileModel?.data?.image ??
+            Database.loginListenerImage)
+        .trim();
+    final uniqueId = (Database.fetchListenerProfileModel?.data?.uniqueId ??
+            (Database.loginListenerUniqueId.isNotEmpty
+                ? Database.loginListenerUniqueId
+                : Database.fetchLoginUserProfileModel?.user?.uniqueId ?? ''))
+        .toString();
+    final isVerified = (Database.fetchListenerProfileModel?.data?.isVerifiedBadge ??
+            Database.loginListenerIsVerifiedBadge) ==
+        true;
 
     return Container(
       color: AppColors.redesignScreenBackground,
@@ -132,9 +142,7 @@ class HostProfileTopView extends StatelessWidget {
                             ),
                             child: ClipOval(
                               child: CustomProfileImage(
-                                image: Database.fetchListenerProfileModel?.data
-                                        ?.image ??
-                                    '',
+                                image: profileImage,
                               ),
                             ),
                           ),
@@ -162,7 +170,7 @@ class HostProfileTopView extends StatelessWidget {
                                           ),
                                           const SizedBox(width: 4),
                                           VerifiedBadge(
-                                            isVerified: Database.fetchListenerProfileModel?.data?.isVerifiedBadge == true,
+                                            isVerified: isVerified,
                                             size: 20,
                                           ),
                                         ],
@@ -279,15 +287,30 @@ class HostProfileTopView extends StatelessWidget {
                               onTap: () {
                                 Get.toNamed(AppRoutes.hostListenersDetailScreen)
                                     ?.then((value) async {
-                                  final latest =
-                                      await FetchListenerProfileAPi.callApi(
-                                    loginListenerId: Database
-                                        .fetchLoginUserProfileModel
-                                        ?.user
-                                        ?.listenerId,
-                                  );
-                                  if (latest != null) {
-                                    Database.fetchListenerProfileModel = latest;
+                                  final listenerId = (Database
+                                              .fetchListenerProfileModel
+                                              ?.data
+                                              ?.id ??
+                                          Database.fetchLoginUserProfileModel
+                                              ?.user
+                                              ?.listenerId ??
+                                          Database.loginListenerId)
+                                      .toString()
+                                      .trim();
+                                  if (listenerId.isNotEmpty) {
+                                    final latest =
+                                        await FetchListenerProfileAPi.callApi(
+                                      loginListenerId: listenerId,
+                                    );
+                                    if (latest != null &&
+                                        latest.status == true) {
+                                      Database.setListenerProfile(latest);
+                                      if (Get.isRegistered<
+                                          HostProfileScreenController>()) {
+                                        Get.find<HostProfileScreenController>()
+                                            .update();
+                                      }
+                                    }
                                   }
                                 });
                               },

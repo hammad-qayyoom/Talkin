@@ -13,7 +13,9 @@ import 'package:notisboard/ui/host_flow/host_home_screen/model/growth_spotlight_
 import 'package:notisboard/ui/host_flow/host_home_screen/model/listener_coin_model.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/model/update_expert_call_status_model.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_listener_profile_api.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/fetch_login_user_profile_api.dart';
 import 'package:notisboard/ui/user_flow/splash_screen_page/model/fetch_listener_profile_model.dart';
+import 'package:notisboard/utils/firebse_access_token.dart';
 import 'package:notisboard/utils/constant.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/enums.dart' show EnumLocale;
@@ -82,6 +84,26 @@ class HostHomeScreenController extends GetxController {
     isCoinLoading = true;
     update([Constant.idCoinUpdate]);
 
+    // Ensure user profile is recovered if missing from transient startup failure
+    if (Database.isLogin &&
+        Database.fetchLoginUserProfileModel == null &&
+        Database.loginUserFirebaseId.isNotEmpty) {
+      try {
+        final token = await FirebaseAccessToken.onGet();
+        if ((token ?? '').isNotEmpty) {
+          final profile = await FetchLoginUserProfileApi.callApi(
+            loginUserId: Database.loginUserFirebaseId,
+            token: token ?? '',
+          );
+          if (profile != null && profile.status == true) {
+            Database.setLoginUserProfile(profile);
+          }
+        }
+      } catch (e) {
+        log("Home init login profile recovery error: $e");
+      }
+    }
+
     await fetchRealStats();
     await hostCoin();
     await fetchGrowthSpotlights();
@@ -94,8 +116,9 @@ class HostHomeScreenController extends GetxController {
       if (listenerId.isNotEmpty) {
         fetchListenerProfileModel =
             await FetchListenerProfileAPi.callApi(loginListenerId: listenerId);
-        if (fetchListenerProfileModel != null) {
-          Database.fetchListenerProfileModel = fetchListenerProfileModel;
+        if (fetchListenerProfileModel != null &&
+            fetchListenerProfileModel?.status == true) {
+          Database.setListenerProfile(fetchListenerProfileModel!);
           isAvailableForPrivateAudioCall =
               fetchListenerProfileModel?.data?.isAvailableForPrivateAudioCall ??
                   isAvailableForPrivateAudioCall;

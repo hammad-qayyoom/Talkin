@@ -73,86 +73,96 @@ class HostTopHomeView extends StatelessWidget {
     final idFontSize = isTablet ? 11.0 : 10.0;
 
     Widget profileSection() {
-      final listenerProfile = Database.fetchListenerProfileModel?.data;
-      final fallbackName =
-          (Database.fetchLoginUserProfileModel?.user?.fullName ??
-                  Database.loginUserName)
+      return GetBuilder<HostHomeScreenController>(
+        builder: (controller) {
+          final listenerProfile = Database.fetchListenerProfileModel?.data;
+          final fallbackName = (Database.loginListenerName.isNotEmpty
+                  ? Database.loginListenerName
+                  : (Database.fetchLoginUserProfileModel?.user?.fullName ??
+                      Database.loginUserName))
               .toString()
               .trim();
-      final listenerName =
-          (listenerProfile?.name ?? fallbackName).toString().trim();
-      final displayName = listenerName.isEmpty ? 'Expert' : listenerName;
-      final profileImage = (listenerProfile?.image ??
-              Database.fetchLoginUserProfileModel?.user?.profilePic ??
-              Database.loginUserProfilePic)
-          .toString()
-          .trim();
-      final uniqueId = (listenerProfile?.uniqueId ??
-              Database.fetchLoginUserProfileModel?.user?.uniqueId ??
-              '')
-          .toString()
-          .trim();
+          final listenerName =
+              (listenerProfile?.name ?? fallbackName).toString().trim();
+          final displayName = listenerName.isEmpty ? 'Expert' : listenerName;
+          final profileImage = (listenerProfile?.image ??
+                  (Database.loginListenerImage.isNotEmpty
+                      ? Database.loginListenerImage
+                      : (Database.fetchLoginUserProfileModel?.user?.profilePic ??
+                          Database.loginUserProfilePic)))
+              .toString()
+              .trim();
+          final uniqueId = (listenerProfile?.uniqueId ??
+                  (Database.loginListenerUniqueId.isNotEmpty
+                      ? Database.loginListenerUniqueId
+                      : (Database.fetchLoginUserProfileModel?.user?.uniqueId ??
+                          '')))
+              .toString()
+              .trim();
+          final isVerified = (listenerProfile?.isVerifiedBadge ??
+                  Database.loginListenerIsVerifiedBadge) ==
+              true;
 
-      return GestureDetector(
-        onTap: () {
-          Get.toNamed(AppRoutes.hostProfileScreen);
-        },
-        child: Row(
-          children: [
-            Container(
-              clipBehavior: Clip.hardEdge,
-              height: profileImageSize,
-              width: profileImageSize,
-              decoration: BoxDecoration(
-                color: AppColors.lightGrey,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: _brandRed.withValues(alpha: 0.28),
-                  width: 2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.black.withValues(alpha: 0.08),
-                    blurRadius: 14,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
-              ),
-              child: CustomProfileImage(
-                image: profileImage,
-              ),
-            ),
-            SizedBox(width: isCompact ? 8 : 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          displayName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppFontStyle.fontStyleW700(
-                            fontSize: nameFontSize,
-                            fontColor: _brandDark,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      VerifiedBadge(
-                        isVerified: Database.fetchListenerProfileModel?.data?.isVerifiedBadge == true,
-                        size: nameFontSize * 0.9,
+          return GestureDetector(
+            onTap: () {
+              Get.toNamed(AppRoutes.hostProfileScreen)?.then((_) {
+                controller.update();
+              });
+            },
+            child: Row(
+              children: [
+                Container(
+                  clipBehavior: Clip.hardEdge,
+                  height: profileImageSize,
+                  width: profileImageSize,
+                  decoration: BoxDecoration(
+                    color: AppColors.lightGrey,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: _brandRed.withValues(alpha: 0.28),
+                      width: 2,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.black.withValues(alpha: 0.08),
+                        blurRadius: 14,
+                        offset: const Offset(0, 6),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
-                  GetBuilder<HostHomeScreenController>(
-                    builder: (controller) {
-                      return GestureDetector(
+                  child: CustomProfileImage(
+                    image: profileImage,
+                  ),
+                ),
+                SizedBox(width: isCompact ? 8 : 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              displayName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: nameFontSize,
+                                fontColor: _brandDark,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          VerifiedBadge(
+                            isVerified: isVerified,
+                            size: nameFontSize * 0.9,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      GestureDetector(
                         onTap: () {
                           if (uniqueId.isEmpty) return;
                           if (!controller.isToastVisible) {
@@ -188,7 +198,8 @@ class HostTopHomeView extends StatelessWidget {
                             children: [
                               Flexible(
                                 child: Text(
-                                  'ID @uniqueId'.trParams({'uniqueId': uniqueId}),
+                                  'ID @uniqueId'
+                                      .trParams({'uniqueId': uniqueId}),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppFontStyle.fontStyleW600(
@@ -206,14 +217,14 @@ class HostTopHomeView extends StatelessWidget {
                             ],
                           ),
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       );
     }
 

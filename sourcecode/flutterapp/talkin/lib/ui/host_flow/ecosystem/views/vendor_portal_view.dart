@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:notisboard/ui/host_flow/ecosystem/controllers/ecosystem_controller.dart';
 import 'package:notisboard/ui/host_flow/ecosystem/models/ecosystem_items_model.dart';
+import 'package:notisboard/ui/host_flow/ecosystem/views/organizer_portal_view.dart';
 import 'package:notisboard/utils/font_style.dart';
 
 class VendorPortalView extends StatefulWidget {
@@ -114,8 +115,14 @@ class _VendorPortalViewState extends State<VendorPortalView> {
   bool _notifyStock = true;
   bool _settingsInitialized = false;
 
-  // Filters & Search
+  // Store profile image paths (local picker)
+  String? _storeLogoPath;
+  String? _storeBannerPath;
+  final ImagePicker _picker = ImagePicker();
+
+  // Filters, Search & Sorting
   String _productFilter = "ALL";
+  String _productSortBy = "NEWEST";
   String _orderStatusFilter = "ALL";
   String _orderSearchQuery = "";
   String _productSearchQuery = "";
@@ -681,49 +688,145 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                     icon: Icons.settings_outlined,
                     title: "Settings",
                   ),
+
+                  const SizedBox(height: 12),
+                  const Divider(color: Color(0xFF1E293B)),
+
+                  // MY PORTALS SECTION (Parity with Web Vendor Layout)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "MY PORTALS",
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.8,
+                            color: Color(0xFF64748B),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1E293B),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Text(
+                            "2",
+                            style: TextStyle(
+                              color: Color(0xFF94A3B8),
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ListTile(
+                    dense: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    leading: const Icon(Icons.person_pin_outlined, color: Color(0xFF94A3B8), size: 18),
+                    title: const Text("User Portal", style: TextStyle(color: Color(0xFFCBD5E1), fontSize: 12)),
+                    trailing: const Icon(Icons.chevron_right, size: 16, color: Color(0xFF64748B)),
+                    onTap: () {
+                      Get.back();
+                      Get.back(); // Switch back to host/user view
+                    },
+                  ),
+                  ListTile(
+                    dense: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    leading: const Icon(Icons.confirmation_number_outlined, color: Color(0xFF94A3B8), size: 18),
+                    title: const Text("Organizer Portal", style: TextStyle(color: Color(0xFFCBD5E1), fontSize: 12)),
+                    trailing: const Icon(Icons.chevron_right, size: 16, color: Color(0xFF64748B)),
+                    onTap: () {
+                      Get.back();
+                      Get.to(() => const OrganizerPortalView());
+                    },
+                  ),
+                  ListTile(
+                    dense: true,
+                    selected: true,
+                    selectedTileColor: const Color(0xFF1E293B),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    leading: const Icon(Icons.storefront_outlined, color: Color(0xFF38BDF8), size: 18),
+                    title: const Text("Vendor Portal", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+                    trailing: Container(
+                      width: 7,
+                      height: 7,
+                      decoration: const BoxDecoration(color: Color(0xFF38BDF8), shape: BoxShape.circle),
+                    ),
+                  ),
                 ],
               ),
             ),
+
+            // SIDEBAR BOTTOM: Vendor Profile, Visit Store & Exit
             Container(
-              padding: const EdgeInsets.all(14),
-              margin: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: const Color(0xFF1E293B),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: const Color(0xFF334155)),
               ),
-              child: Row(
+              child: Column(
                 children: [
-                  CircleAvatar(
-                    radius: 18,
-                    backgroundColor: const Color(0xFF2563EB),
-                    child: Text(
-                      (data?.storeName.isNotEmpty ?? false) ? data!.storeName[0].toUpperCase() : "V",
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data?.storeName ?? "Official Merchant",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppFontStyle.fontStyleW600(fontSize: 12, fontColor: Colors.white),
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 17,
+                        backgroundColor: const Color(0xFF2563EB),
+                        child: Text(
+                          (data?.storeName.isNotEmpty ?? false) ? data!.storeName[0].toUpperCase() : "V",
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          "Foundation Vendor",
-                          style: AppFontStyle.fontStyleW400(fontSize: 10, fontColor: const Color(0xFF94A3B8)),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              data?.storeName ?? "Official Merchant",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW600(fontSize: 12, fontColor: Colors.white),
+                            ),
+                            Text(
+                              "Verified Vendor",
+                              style: AppFontStyle.fontStyleW400(fontSize: 10, fontColor: const Color(0xFF10B981)),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.logout_rounded, color: Color(0xFFEF4444), size: 18),
+                        onPressed: () => Get.back(),
+                        tooltip: "Exit Portal",
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFF94A3B8), size: 16),
-                    onPressed: () => Get.back(),
-                    tooltip: "Exit Portal",
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF94A3B8),
+                        side: const BorderSide(color: Color(0xFF334155)),
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
+                      icon: const Icon(Icons.store_mall_directory_outlined, size: 14),
+                      label: const Text("Visit Public Store", style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
+                      onPressed: () {
+                        Get.back();
+                        _navigateToPage(6); // Open Store Profile / Storefront
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -1486,12 +1589,15 @@ class _VendorPortalViewState extends State<VendorPortalView> {
     final totalCount = prods.length;
     final activeCount = prods.where((p) => (p.status == "ACTIVE" || p.status == "APPROVED") && p.isActive).length;
     final underReviewCount = prods.where((p) => p.status == "PENDING_REVIEW" || p.status == "UNDER_REVIEW" || p.status == "PENDING").length;
+    final changesReqCount = prods.where((p) => p.status == "CHANGES_REQUESTED" || p.status == "REJECTED").length;
     final draftCount = prods.where((p) => p.status == "DRAFT").length;
 
     if (_productFilter == "ACTIVE") {
       prods = prods.where((p) => (p.status == "ACTIVE" || p.status == "APPROVED") && p.isActive).toList();
     } else if (_productFilter == "UNDER_REVIEW") {
       prods = prods.where((p) => p.status == "PENDING_REVIEW" || p.status == "UNDER_REVIEW" || p.status == "PENDING").toList();
+    } else if (_productFilter == "CHANGES_REQUESTED") {
+      prods = prods.where((p) => p.status == "CHANGES_REQUESTED" || p.status == "REJECTED").toList();
     } else if (_productFilter == "DRAFT") {
       prods = prods.where((p) => p.status == "DRAFT").toList();
     } else if (_productFilter == "OUT_OF_STOCK") {
@@ -1505,6 +1611,19 @@ class _VendorPortalViewState extends State<VendorPortalView> {
               (p.sku != null && p.sku!.toLowerCase().contains(_productSearchQuery.toLowerCase())) ||
               (p.categoryName != null && p.categoryName!.toLowerCase().contains(_productSearchQuery.toLowerCase())))
           .toList();
+    }
+
+    prods = List.from(prods);
+    if (_productSortBy == "NEWEST") {
+      prods.sort((a, b) => (b.createdAt ?? "").compareTo(a.createdAt ?? ""));
+    } else if (_productSortBy == "OLDEST") {
+      prods.sort((a, b) => (a.createdAt ?? "").compareTo(b.createdAt ?? ""));
+    } else if (_productSortBy == "PRICE_LOW") {
+      prods.sort((a, b) => a.price.compareTo(b.price));
+    } else if (_productSortBy == "PRICE_HIGH") {
+      prods.sort((a, b) => b.price.compareTo(a.price));
+    } else if (_productSortBy == "STOCK_HIGH") {
+      prods.sort((a, b) => b.inventory.compareTo(a.inventory));
     }
 
     return Column(
@@ -1526,7 +1645,7 @@ class _VendorPortalViewState extends State<VendorPortalView> {
           ),
         ),
 
-        // Search & Filter Bar
+        // Search, Sort & Filter Bar
         Container(
           color: Colors.white,
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
@@ -1570,7 +1689,40 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Sort Order", style: AppFontStyle.fontStyleW600(fontSize: 11, fontColor: const Color(0xFF64748B))),
+                  Container(
+                    height: 32,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF8FAFC),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: _productSortBy,
+                        icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 16, color: Color(0xFF64748B)),
+                        style: const TextStyle(fontSize: 11, color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
+                        items: const [
+                          DropdownMenuItem(value: "NEWEST", child: Text("Newest First")),
+                          DropdownMenuItem(value: "OLDEST", child: Text("Oldest First")),
+                          DropdownMenuItem(value: "PRICE_LOW", child: Text("Price: Low to High")),
+                          DropdownMenuItem(value: "PRICE_HIGH", child: Text("Price: High to Low")),
+                          DropdownMenuItem(value: "STOCK_HIGH", child: Text("Inventory: High to Low")),
+                        ],
+                        onChanged: (val) {
+                          if (val != null) setState(() => _productSortBy = val);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -1578,6 +1730,8 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                     _buildFilterChip("ALL", "All ($totalCount)"),
                     _buildFilterChip("ACTIVE", "Active ($activeCount)"),
                     _buildFilterChip("UNDER_REVIEW", "Under Review ($underReviewCount)"),
+                    if (changesReqCount > 0)
+                      _buildFilterChip("CHANGES_REQUESTED", "Needs Attention ($changesReqCount)"),
                     _buildFilterChip("DRAFT", "Drafts ($draftCount)"),
                     _buildFilterChip("OUT_OF_STOCK", "Out of Stock"),
                   ],
@@ -1793,11 +1947,32 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Text(
-                        product.sku != null && product.sku!.isNotEmpty ? "SKU: ${product.sku}" : (product.categoryName ?? "Marketplace"),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppFontStyle.fontStyleW400(fontSize: 10, fontColor: const Color(0xFF94A3B8)),
+                      child: Row(
+                        children: [
+                          if (product.badge != null && product.badge!.isNotEmpty) ...[
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFEFF6FF),
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(color: const Color(0xFFBFDBFE)),
+                              ),
+                              child: Text(
+                                product.badge!,
+                                style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Color(0xFF1D4ED8)),
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                          ],
+                          Expanded(
+                            child: Text(
+                              product.sku != null && product.sku!.isNotEmpty ? "SKU: ${product.sku}" : (product.categoryName ?? "Marketplace"),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppFontStyle.fontStyleW400(fontSize: 10, fontColor: const Color(0xFF94A3B8)),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Row(
@@ -1824,6 +1999,31 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                     ),
                   ],
                 ),
+                if ((isRejected || isChangesRequested) && (product.rejectionReason != null && product.rejectionReason!.isNotEmpty)) ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFEF2F2),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xFFFECACA)),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.error_outline_rounded, size: 14, color: Color(0xFFDC2626)),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            "Admin Feedback: ${product.rejectionReason}",
+                            style: const TextStyle(fontSize: 10, color: Color(0xFF991B1B), fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -3095,6 +3295,7 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                     _buildOrderFilterChip("PROCESSING", "Processing"),
                     _buildOrderFilterChip("SHIPPED", "Shipped"),
                     _buildOrderFilterChip("DELIVERED", "Delivered"),
+                    _buildOrderFilterChip("CANCELLED", "Cancelled"),
                   ],
                 ),
               ),
@@ -3149,6 +3350,7 @@ class _VendorPortalViewState extends State<VendorPortalView> {
     Color badgeColor = const Color(0xFFF59E0B);
     if (order.status.toUpperCase() == "DELIVERED") badgeColor = const Color(0xFF10B981);
     if (order.status.toUpperCase() == "SHIPPED") badgeColor = const Color(0xFF2563EB);
+    if (order.status.toUpperCase() == "CANCELLED") badgeColor = const Color(0xFFEF4444);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -3221,6 +3423,35 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                   label: const Text("Delivered", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
                   onPressed: () => _showFulfillmentModal(context, controller, order),
                 )
+              else if (order.status.toUpperCase() == "CANCELLED")
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFEF2F2),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFFFECACA)),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.cancel_outlined, size: 14, color: Color(0xFFDC2626)),
+                      SizedBox(width: 4),
+                      Text("Cancelled", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFFDC2626))),
+                    ],
+                  ),
+                )
+              else if (order.status.toUpperCase() == "SHIPPED")
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF16A34A),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  icon: const Icon(Icons.check_circle_outline_rounded, size: 14),
+                  label: const Text("Mark Delivered", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                  onPressed: () => _showFulfillmentModal(context, controller, order),
+                )
               else
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
@@ -3290,7 +3521,10 @@ class _VendorPortalViewState extends State<VendorPortalView> {
   }
 
   void _showFulfillmentModal(BuildContext context, EcosystemController controller, EcosystemVendorOrder order) {
-    String selectedStatus = "SHIPPED";
+    final currentStatus = order.status.toUpperCase();
+    String selectedStatus = currentStatus == "SHIPPED"
+        ? "DELIVERED"
+        : (currentStatus == "PENDING" ? "PROCESSING" : (currentStatus == "DELIVERED" ? "DELIVERED" : "SHIPPED"));
     final trackingCtrl = TextEditingController(text: order.trackingNumber ?? "");
     String selectedCarrier = order.trackingCarrier ?? "Canada Post";
 
@@ -3324,6 +3558,7 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                   DropdownMenuItem(value: "PROCESSING", child: Text("Processing")),
                   DropdownMenuItem(value: "SHIPPED", child: Text("Shipped")),
                   DropdownMenuItem(value: "DELIVERED", child: Text("Delivered")),
+                  DropdownMenuItem(value: "CANCELLED", child: Text("Cancelled / Refunded")),
                 ],
                 onChanged: (v) {
                   if (v != null) setModalState(() => selectedStatus = v);
@@ -3495,6 +3730,126 @@ class _VendorPortalViewState extends State<VendorPortalView> {
               ),
             ],
           ),
+          const SizedBox(height: 20),
+
+          // Order Clearance & Escrow Ledger (Parity with Web Earnings Table)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Order Clearance & Escrow Ledger",
+                style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: const Color(0xFF0F172A)),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF1F5F9),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  "${(data?.orders ?? []).where((o) => o.status.toUpperCase() == 'DELIVERED').length} Delivered",
+                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF475569)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            holdDays == 0
+                ? "Instant release policy active: all delivered sales are unlocked immediately."
+                : "Timeline for delivered orders releasing to Available Settlement Balance after $holdDays days.",
+            style: const TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+          ),
+          const SizedBox(height: 10),
+
+          if ((data?.orders ?? []).where((o) => o.status.toUpperCase() == 'DELIVERED').isEmpty)
+            Container(
+              padding: const EdgeInsets.all(16),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: const Color(0xFFE2E8F0)),
+              ),
+              child: const Text(
+                "No delivered orders pending escrow clearance.",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Color(0xFF64748B), fontSize: 12),
+              ),
+            )
+          else
+            ...(data?.orders ?? [])
+                .where((o) => o.status.toUpperCase() == 'DELIVERED')
+                .map((o) => Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                o.orderNumber.isNotEmpty ? o.orderNumber : "Order #${o.id.substring(0, 8)}",
+                                style: AppFontStyle.fontStyleW700(fontSize: 13, fontColor: const Color(0xFF0F172A)),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: o.isCleared ? const Color(0xFFECFDF5) : const Color(0xFFFFFBEB),
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: o.isCleared ? const Color(0xFFA7F3D0) : const Color(0xFFFDE68A),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      o.isCleared ? Icons.check_circle_rounded : Icons.hourglass_top_rounded,
+                                      size: 12,
+                                      color: o.isCleared ? const Color(0xFF059669) : const Color(0xFFD97706),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      o.isCleared
+                                          ? "Cleared & Available"
+                                          : (o.clearanceStatus.isNotEmpty
+                                              ? o.clearanceStatus
+                                              : "${o.daysRemaining}d remaining"),
+                                      style: TextStyle(
+                                        color: o.isCleared ? const Color(0xFF059669) : const Color(0xFFD97706),
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Customer: ${o.customerName}",
+                                style: const TextStyle(fontSize: 11, color: Color(0xFF475569)),
+                              ),
+                              Text(
+                                "Net: ${controller.formatCurrency(o.vendorEarnings)}",
+                                style: AppFontStyle.fontStyleW700(fontSize: 12, fontColor: const Color(0xFF10B981)),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )),
           const SizedBox(height: 20),
 
           Text("Settlement & Payout History", style: AppFontStyle.fontStyleW700(fontSize: 15, fontColor: const Color(0xFF0F172A))),
@@ -3704,6 +4059,122 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                   ],
                 ),
                 const SizedBox(height: 14),
+
+                // STOREFRONT COVER & LOGO CARD (Parity with Web Vendor Profile)
+                Container(
+                  height: 140,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0F172A),
+                    borderRadius: BorderRadius.circular(12),
+                    image: _storeBannerPath != null
+                        ? DecorationImage(
+                            image: FileImage(File(_storeBannerPath!)),
+                            fit: BoxFit.cover,
+                          )
+                        : (data?.profile?.banner != null && data!.profile!.banner!.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(data.profile!.banner!),
+                                fit: BoxFit.cover,
+                              )
+                            : null),
+                  ),
+                  child: Stack(
+                    children: [
+                      if (_storeBannerPath == null && (data?.profile?.banner == null || data!.profile!.banner!.isEmpty))
+                        Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.panorama_outlined, color: Colors.white54, size: 28),
+                              const SizedBox(height: 4),
+                              Text("Store Cover Banner (1200 x 400)", style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 11)),
+                            ],
+                          ),
+                        ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: InkWell(
+                          onTap: () async {
+                            final x = await _picker.pickImage(source: ImageSource.gallery);
+                            if (x != null) setState(() => _storeBannerPath = x.path);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.65),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.camera_alt_outlined, color: Colors.white, size: 14),
+                                SizedBox(width: 4),
+                                Text("Change Banner", style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        left: 14,
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: 64,
+                              height: 64,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: const Color(0xFF2563EB),
+                                border: Border.all(color: Colors.white, width: 2.5),
+                                image: _storeLogoPath != null
+                                    ? DecorationImage(
+                                        image: FileImage(File(_storeLogoPath!)),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : (data?.profile?.logo != null && data!.profile!.logo!.isNotEmpty
+                                        ? DecorationImage(
+                                            image: NetworkImage(data.profile!.logo!),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : null),
+                              ),
+                              child: (_storeLogoPath == null && (data?.profile?.logo == null || data!.profile!.logo!.isEmpty))
+                                  ? Center(
+                                      child: Text(
+                                        _storeNameCtrl.text.isNotEmpty ? _storeNameCtrl.text[0].toUpperCase() : "V",
+                                        style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  : null,
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: InkWell(
+                                onTap: () async {
+                                  final x = await _picker.pickImage(source: ImageSource.gallery);
+                                  if (x != null) setState(() => _storeLogoPath = x.path);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFF2563EB),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(Icons.camera_alt, color: Colors.white, size: 12),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 14),
                 _buildFormLabel("Store Display Name *"),
                 TextField(controller: _storeNameCtrl, decoration: _buildInputDec("Store Name")),
                 const SizedBox(height: 12),
@@ -3771,6 +4242,8 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                       await controller.saveVendorProfile(
                         storeName: _storeNameCtrl.text.trim(),
                         description: _storeBioCtrl.text.trim(),
+                        logoPath: _storeLogoPath,
+                        bannerPath: _storeBannerPath,
                         website: _storeWebsiteCtrl.text.trim(),
                         storeEmail: _storeEmailCtrl.text.trim(),
                         storePhone: _storePhoneCtrl.text.trim(),

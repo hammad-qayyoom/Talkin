@@ -47,6 +47,17 @@ class FirebaseAccessToken {
     final targetFirebaseUid = Database.loginUserFirebaseId.trim();
 
     if (Database.isLogin && targetFirebaseUid.isNotEmpty) {
+      if (user == null) {
+        try {
+          user = await FirebaseAuth.instance
+              .authStateChanges()
+              .firstWhere((u) => u != null)
+              .timeout(const Duration(seconds: 2));
+        } catch (_) {
+          user = FirebaseAuth.instance.currentUser;
+        }
+      }
+
       if (user == null || user.uid != targetFirebaseUid) {
         await _repairFirebaseSession(targetFirebaseUid: targetFirebaseUid);
         user = FirebaseAuth.instance.currentUser;
@@ -77,17 +88,22 @@ class FirebaseAccessToken {
         return null;
       }
 
-      bool? isExpired = await user?.getIdTokenResult().then((tokenResult) {
-        DateTime expiryTime = tokenResult.expirationTime!;
-
-        Utils.showLog("Firebase Token Expire Time => $expiryTime");
-
-        return expiryTime.isBefore(DateTime.now());
-      });
+      bool isExpired = false;
+      try {
+        final tokenResult = await user?.getIdTokenResult();
+        if (tokenResult?.expirationTime != null) {
+          isExpired = tokenResult!.expirationTime!.isBefore(
+            DateTime.now().add(const Duration(minutes: 2)),
+          );
+        }
+      } catch (e) {
+        Utils.showLog("Firebase check token expiration error => $e");
+        isExpired = true;
+      }
 
       Utils.showLog("Firebase Token Is Expire => $isExpired");
 
-      final token = isExpired == true
+      final token = isExpired
           ? await user?.getIdToken(true)
           : await user?.getIdToken();
 

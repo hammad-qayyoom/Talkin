@@ -473,26 +473,7 @@ class MainScreenController extends GetxController {
       Database.onSetIsNewUser(false);
       log("fetchLoginUserProfileModel?.user?.Email${fetchLoginUserProfileModel?.user?.email}");
 
-      Database.onSetLoginUserId(fetchLoginUserProfileModel!.user!.id!);
-      Database.onSetLoginUserFirebaseId(
-          fetchLoginUserProfileModel!.user!.firebaseId!);
-      Database.onSetLoginUserProfilePic(
-          fetchLoginUserProfileModel?.user?.profilePic ?? "");
-      Database.onSetLoginUserName(fetchLoginUserProfileModel!.user!.fullName!);
-      Database.onSetLoginUserNickName(
-          fetchLoginUserProfileModel?.user?.nickName ?? "");
-      Database.onSetLoginUserEmail(fetchLoginUserProfileModel!.user!.email!);
-      Database.onSetLoginUserCountry(
-          fetchLoginUserProfileModel!.user!.country!);
-      Database.onSetLoginUserCountryFlag(
-          fetchLoginUserProfileModel!.user!.countryFlag!);
-      Database.onSetLoginUserBirthDate(
-          fetchLoginUserProfileModel?.user?.birthDate ?? "");
-      Database.onSetLoginUserGender(
-          fetchLoginUserProfileModel?.user?.gender ?? "Male");
-      Database.onSetLoginUserPhoneNumber(
-          fetchLoginUserProfileModel?.user?.phoneNumber ?? "");
-      Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
+      Database.setLoginUserProfile(fetchLoginUserProfileModel!);
       log("Database.loginUserId  ${Database.loginUserId}");
       log("Database.loginUserEmail  ${Database.loginUserEmail}");
       log("Database.loginUserFirebaseId  ${Database.loginUserFirebaseId}");
@@ -503,12 +484,14 @@ class MainScreenController extends GetxController {
           loginListenerId:
               Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
         );
-        Database.onSetLoginUserId(fetchListenerProfileModel!.data!.id!);
-        Database.onSetLoginListenerId(fetchListenerProfileModel!.data!.id!);
+        if (fetchListenerProfileModel != null &&
+            fetchListenerProfileModel?.data != null) {
+          Database.setListenerProfile(fetchListenerProfileModel!);
+          Database.onSetIsListener(true);
+        }
         if (fetchListenerProfileModel?.status == false) {
           Utils.showLog(fetchListenerProfileModel?.message ?? "");
         }
-        Database.fetchListenerProfileModel = fetchListenerProfileModel;
       }
 
       if (Database.isLogin) {

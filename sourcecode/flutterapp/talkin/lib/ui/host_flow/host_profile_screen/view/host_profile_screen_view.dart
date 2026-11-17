@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:notisboard/ui/host_flow/host_profile_screen/controller/host_profile_screen_controller.dart';
 import 'package:notisboard/ui/host_flow/host_profile_screen/widget/host_profile_screen_widget.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/utils.dart';
@@ -23,11 +25,15 @@ class HostProfileScreen extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: maxContentWidth),
-                child: const Column(
-                  children: [
-                    HostProfileTopView(),
-                    HostProfileOptionsView(),
-                  ],
+                child: GetBuilder<HostProfileScreenController>(
+                  builder: (_) {
+                    return const Column(
+                      children: [
+                        HostProfileTopView(),
+                        HostProfileOptionsView(),
+                      ],
+                    );
+                  },
                 ),
               ),
             );

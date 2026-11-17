@@ -117,13 +117,19 @@ class SplashScreenController extends GetxController {
             token: token ?? '',
           ),
         );
+        if (fetchLoginUserProfileModel != null &&
+            fetchLoginUserProfileModel?.status == true) {
+          Database.setLoginUserProfile(fetchLoginUserProfileModel!);
+        }
       }
-      Database.fetchLoginUserProfileModel = fetchLoginUserProfileModel;
+      Database.fetchLoginUserProfileModel =
+          fetchLoginUserProfileModel ?? Database.fetchLoginUserProfileModel;
 
       if (Database.loginUserFirebaseId.isEmpty &&
-          (fetchLoginUserProfileModel?.user?.firebaseId ?? '').isNotEmpty) {
+          (Database.fetchLoginUserProfileModel?.user?.firebaseId ?? '')
+              .isNotEmpty) {
         Database.onSetLoginUserFirebaseId(
-            fetchLoginUserProfileModel?.user?.firebaseId ?? '');
+            Database.fetchLoginUserProfileModel?.user?.firebaseId ?? '');
       }
 
       await _guardedSplashTask<UserLocationData>(
@@ -154,30 +160,28 @@ class SplashScreenController extends GetxController {
         return;
       }
 
-      // if (fetchLoginUserProfileModel?.status == false || fetchLoginUserProfileModel?.message == "User not found in the database." || token == null) {
-      //   log("Login user not found, redirecting to main screen...");
-      //   Get.offAllNamed(AppRoutes.main);
-      //   return;
-      // }
-
-      if (fetchLoginUserProfileModel?.user?.isListener == true) {
-        fetchListenerProfileModel =
-            await _guardedSplashTask<FetchListenerProfileModel>(
-          "Listener profile fetch",
-          () => FetchListenerProfileAPi.callApi(
-            loginListenerId:
-                Database.fetchLoginUserProfileModel?.user?.listenerId ?? '',
-          ),
-        );
-        final listenerUserId = fetchListenerProfileModel?.data?.id ?? '';
-        if (listenerUserId.isNotEmpty) {
-          Database.onSetLoginUserId(listenerUserId);
-          Database.onSetLoginListenerId(listenerUserId);
+      if (Database.fetchLoginUserProfileModel?.user?.isListener == true ||
+          Database.isListener == true) {
+        final listenerId =
+            (Database.fetchLoginUserProfileModel?.user?.listenerId ??
+                    Database.loginListenerId)
+                .toString()
+                .trim();
+        if (listenerId.isNotEmpty) {
+          fetchListenerProfileModel =
+              await _guardedSplashTask<FetchListenerProfileModel>(
+            "Listener profile fetch",
+            () => FetchListenerProfileAPi.callApi(
+              loginListenerId: listenerId,
+            ),
+          );
+          if (fetchListenerProfileModel != null &&
+              fetchListenerProfileModel?.status == true) {
+            Database.setListenerProfile(fetchListenerProfileModel!);
+          }
         }
-        if (fetchListenerProfileModel?.status == false) {
-          Utils.showLog(fetchListenerProfileModel?.message ?? "");
-        }
-        Database.fetchListenerProfileModel = fetchListenerProfileModel;
+        Database.fetchListenerProfileModel =
+            fetchListenerProfileModel ?? Database.fetchListenerProfileModel;
       }
 
       await syncInitialBalances();
@@ -227,7 +231,6 @@ class SplashScreenController extends GetxController {
       timeout: const Duration(seconds: 3),
     );
     if (packageInfo == null) {
-      _scheduleSplashNavigation();
       return false;
     }
     final currentVersion = packageInfo.version;
@@ -236,7 +239,6 @@ class SplashScreenController extends GetxController {
     final settingData = Database.settingApiModel?.data;
     if (settingData == null) {
       Utils.showLog("⚠️ App settings missing, skipping update check");
-      _scheduleSplashNavigation();
       return false;
     }
 
@@ -303,7 +305,6 @@ class SplashScreenController extends GetxController {
     }
 
     // 3. App is up to date or no update rules matched
-    _scheduleSplashNavigation();
     return false;
   }
 
@@ -379,8 +380,11 @@ Future<void> splashScreen() async {
         }
 
         final hasValidProfile =
-            Database.fetchLoginUserProfileModel?.status == true &&
-                Database.fetchLoginUserProfileModel?.user != null;
+            (Database.fetchLoginUserProfileModel?.status == true &&
+                Database.fetchLoginUserProfileModel?.user != null) ||
+            (Database.isLogin &&
+                (Database.loginUserName.isNotEmpty ||
+                    Database.loginListenerName.isNotEmpty));
 
         final userNotFoundInBackend =
             Database.fetchLoginUserProfileModel?.message ==
@@ -396,7 +400,9 @@ Future<void> splashScreen() async {
 
             if (Database.isFillProfile == true) {
               final isHostMode = Database.isListener;
-              final isVerifiedExpert = Database.fetchLoginUserProfileModel?.user?.isListener == true;
+              final isVerifiedExpert =
+                  Database.fetchLoginUserProfileModel?.user?.isListener == true ||
+                      Database.loginListenerId.isNotEmpty;
               
               if (isHostMode || isVerifiedExpert) {
                 navigateFromSplash(AppRoutes.hostBottomBar);
@@ -421,7 +427,9 @@ Future<void> splashScreen() async {
               final shouldBiometricUnlock =
                   await BiometricAuthService.shouldRequireUnlockOnStartup();
               final isHostMode = Database.isListener;
-              final isVerifiedExpert = Database.fetchLoginUserProfileModel?.user?.isListener == true;
+              final isVerifiedExpert =
+                  Database.fetchLoginUserProfileModel?.user?.isListener == true ||
+                      Database.loginListenerId.isNotEmpty;
               final nextRoute = (isHostMode || isVerifiedExpert)
                   ? AppRoutes.hostBottomBar
                   : AppRoutes.bottomBar;

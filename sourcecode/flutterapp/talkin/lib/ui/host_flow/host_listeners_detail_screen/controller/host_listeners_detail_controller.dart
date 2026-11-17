@@ -352,17 +352,25 @@ class HostListenersDetailController extends GetxController {
     );
 
     if (hostListenerProfileUpdateModel?.status == true) {
+      final listenerId = (Database.fetchListenerProfileModel?.data?.id ??
+              Database.loginListenerId)
+          .toString()
+          .trim();
       fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(
-        loginListenerId: Database.fetchListenerProfileModel?.data?.id ?? '',
+        loginListenerId: listenerId,
       );
-      Database.fetchListenerProfileModel = fetchListenerProfileModel;
+      if (fetchListenerProfileModel != null) {
+        Database.setListenerProfile(fetchListenerProfileModel!);
+      }
       update();
 
       Get.close(2);
       fetchListenerProfileModel = await FetchListenerProfileAPi.callApi(
-        loginListenerId: Database.fetchListenerProfileModel?.data?.id ?? '',
+        loginListenerId: listenerId,
       );
-      Database.fetchListenerProfileModel = fetchListenerProfileModel;
+      if (fetchListenerProfileModel != null) {
+        Database.setListenerProfile(fetchListenerProfileModel!);
+      }
       update();
     } else {
       Utils.showToast(Get.context!, EnumLocale.txtSomeThingWentWrong.name.tr);
