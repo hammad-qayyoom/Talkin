@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:notisboard/ui/host_flow/ecosystem/models/ecosystem_items_model.dart';
 import 'package:notisboard/ui/host_flow/ecosystem/models/ecosystem_status_model.dart';
@@ -310,6 +311,8 @@ class EcosystemApi {
     String method = "Direct Bank Transfer",
     required Map<String, dynamic> bankDetails,
     String? notes,
+    String source = "EVENTS",
+    String? campaignId,
   }) async {
     try {
       final headers = await _getHeaders();
@@ -320,13 +323,34 @@ class EcosystemApi {
         body: jsonEncode({
           "amount": amount,
           "method": method,
-          "bankDetails": bankDetails,
+          "bankDetails": {
+            ...bankDetails,
+            "source": source,
+            if (campaignId != null) "campaignId": campaignId,
+          },
+          "source": source,
+          if (campaignId != null) "campaignId": campaignId,
           "notes": notes ?? "Organizer settlement request from Mobile App",
         }),
       );
-      return response.statusCode == 200;
+      if (response.statusCode == 200) {
+        final jsonResult = jsonDecode(response.body);
+        return jsonResult["status"] == true;
+      } else {
+        try {
+          final jsonResult = jsonDecode(response.body);
+          final msg = jsonResult["message"] ?? jsonResult["error"];
+          if (msg != null && msg.toString().isNotEmpty) {
+            Utils.showToast(Get.context!, msg.toString());
+            return false;
+          }
+        } catch (_) {}
+        Utils.showToast(Get.context!, "Failed to submit payout request");
+        return false;
+      }
     } catch (e) {
       Utils.showLog("EcosystemApi.requestOrganizerPayout Error: $e");
+      Utils.showToast(Get.context!, "Network error submitting payout request");
       return false;
     }
   }
@@ -618,6 +642,7 @@ class EcosystemApi {
     required double goalAmount,
     DateTime? startDate,
     DateTime? endDate,
+    String? status,
     String? imagePath,
   }) async {
     try {
@@ -632,6 +657,7 @@ class EcosystemApi {
       request.fields['description'] = description;
       request.fields['beneficiary'] = beneficiary;
       request.fields['goalAmount'] = goalAmount.toString();
+      request.fields['status'] = status ?? "PENDING_REVIEW";
       if (startDate != null) request.fields['startDate'] = startDate.toIso8601String();
       if (endDate != null) request.fields['endDate'] = endDate.toIso8601String();
 
@@ -843,9 +869,10 @@ class EcosystemApi {
     }
   }
 
-  static Future<bool> checkInOrganizerAttendee({
+  static Future<Map<String, dynamic>> checkInOrganizerAttendee({
     required String registrationId,
     bool checkedIn = true,
+    bool forceOverride = false,
   }) async {
     try {
       final headers = await _getHeaders();
@@ -853,12 +880,64 @@ class EcosystemApi {
       final res = await http.patch(
         Uri.parse("${Api.expertEcosystemOrganizerCheckIn}$registrationId/checkin"),
         headers: headers,
-        body: jsonEncode({"checkedIn": checkedIn}),
+        body: jsonEncode({
+          "checkedIn": checkedIn,
+          "forceOverride": forceOverride,
+        }),
       );
-      return res.statusCode == 200;
+      final json = jsonDecode(res.body);
+      return {
+        "success": res.statusCode == 200 && json["status"] != false,
+        "message": json["message"] ?? json["error"] ?? (res.statusCode == 200 ? "Updated" : "Check-in failed"),
+        "windowNotOpen": json["windowNotOpen"] == true,
+        "data": json["data"],
+      };
     } catch (e) {
       Utils.showLog("EcosystemApi.checkInOrganizerAttendee Error: $e");
-      return false;
+      return {"success": false, "message": "$e"};
+    }
+  }
+
+  static Future<Map<String, dynamic>> lookupOrganizerTicket({
+    required String eventId,
+    required String code,
+    bool autoCheckIn = false,
+    bool forceOverride = false,
+  }) async {
+    try {
+      final headers = await _getHeaders();
+      headers["Content-Type"] = "application/json";
+      final res = await http.post(
+        Uri.parse("${Api.expertEcosystemEvents}/$eventId/qr-lookup"),
+        headers: headers,
+        body: jsonEncode({
+          "code": code,
+          "autoCheckIn": autoCheckIn,
+          "forceOverride": forceOverride,
+        }),
+      );
+      final json = jsonDecode(res.body);
+      final dataMap = (json is Map && json["data"] is Map<String, dynamic>)
+          ? json["data"] as Map<String, dynamic>
+          : <String, dynamic>{};
+      final bool isSuccess = res.statusCode == 200 &&
+          json["status"] != false &&
+          json["success"] != false &&
+          dataMap["success"] != false;
+      return {
+        ...dataMap,
+        if (json is Map<String, dynamic>) ...json,
+        "success": isSuccess,
+        "message": dataMap["message"] ??
+            json["message"] ??
+            dataMap["error"] ??
+            json["error"] ??
+            (isSuccess ? "Ticket verified" : "Verification failed"),
+        "data": dataMap.isNotEmpty ? dataMap : json,
+      };
+    } catch (e) {
+      Utils.showLog("EcosystemApi.lookupOrganizerTicket Error: $e");
+      return {"success": false, "message": "$e"};
     }
   }
 

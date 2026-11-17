@@ -185,10 +185,18 @@ class EcosystemVendorOrder {
   String? shippingAddress;
   double total;
   double vendorEarnings;
+  double commissionAmount;
+  double commissionRate;
   String status;
   String? trackingNumber;
   String? trackingCarrier;
   String? createdAt;
+  String? shippedAt;
+  String? deliveredAt;
+  bool isCleared;
+  String? clearsAt;
+  int daysRemaining;
+  String clearanceStatus;
   List<EcosystemVendorOrderItem> items;
 
   EcosystemVendorOrder({
@@ -199,10 +207,18 @@ class EcosystemVendorOrder {
     this.shippingAddress,
     required this.total,
     this.vendorEarnings = 0.0,
+    this.commissionAmount = 0.0,
+    this.commissionRate = 10.0,
     required this.status,
     this.trackingNumber,
     this.trackingCarrier,
     this.createdAt,
+    this.shippedAt,
+    this.deliveredAt,
+    this.isCleared = false,
+    this.clearsAt,
+    this.daysRemaining = 0,
+    this.clearanceStatus = '',
     this.items = const [],
   });
 
@@ -212,18 +228,62 @@ class EcosystemVendorOrder {
     if (rawItems is List) {
       parsedItems = rawItems.map((i) => EcosystemVendorOrderItem.fromJson(i)).toList();
     }
+
+    final rawOrder = (json['order'] is Map<String, dynamic>)
+        ? json['order'] as Map<String, dynamic>
+        : <String, dynamic>{};
+
+    String custName = json['customerName']?.toString() ?? '';
+    if (custName.isEmpty || custName == 'Customer') {
+      custName = rawOrder['customerName']?.toString() ?? '';
+    }
+    if (custName.isEmpty || custName == 'Customer') {
+      final fName = rawOrder['firstName']?.toString() ?? '';
+      final lName = rawOrder['lastName']?.toString() ?? '';
+      final combined = '$fName $lName'.trim();
+      if (combined.isNotEmpty) custName = combined;
+    }
+    if (custName.isEmpty) custName = 'Customer';
+
+    String? shipAddr = json['shippingAddress']?.toString();
+    if (shipAddr == null || shipAddr.isEmpty) {
+      final rawShip = rawOrder['shippingAddress'];
+      if (rawShip is Map) {
+        shipAddr = [
+          rawShip['address']?.toString(),
+          rawShip['city']?.toString(),
+          rawShip['state']?.toString(),
+          rawShip['country']?.toString(),
+        ].where((s) => s != null && s.isNotEmpty).join(', ');
+      } else if (rawShip != null) {
+        shipAddr = rawShip.toString();
+      }
+    }
+
     return EcosystemVendorOrder(
       id: json['id']?.toString() ?? '',
-      orderNumber: json['orderNumber']?.toString() ?? json['subOrderNumber']?.toString() ?? '',
-      customerName: json['customerName']?.toString() ?? 'Customer',
-      customerEmail: json['customerEmail']?.toString() ?? '',
-      shippingAddress: json['shippingAddress']?.toString(),
-      total: (json['total'] != null) ? double.tryParse(json['total'].toString()) ?? 0.0 : ((json['totalAmount'] != null) ? double.tryParse(json['totalAmount'].toString()) ?? 0.0 : 0.0),
+      orderNumber: json['orderNumber']?.toString() ?? json['subOrderNumber']?.toString() ?? rawOrder['orderNumber']?.toString() ?? '',
+      customerName: custName,
+      customerEmail: json['customerEmail']?.toString() ?? rawOrder['email']?.toString() ?? '',
+      shippingAddress: shipAddr,
+      total: (json['total'] != null)
+          ? double.tryParse(json['total'].toString()) ?? 0.0
+          : ((json['totalAmount'] != null)
+              ? double.tryParse(json['totalAmount'].toString()) ?? 0.0
+              : ((json['subtotal'] != null) ? double.tryParse(json['subtotal'].toString()) ?? 0.0 : 0.0)),
       vendorEarnings: (json['vendorEarnings'] != null) ? double.tryParse(json['vendorEarnings'].toString()) ?? 0.0 : 0.0,
+      commissionAmount: (json['commissionAmount'] != null) ? double.tryParse(json['commissionAmount'].toString()) ?? 0.0 : 0.0,
+      commissionRate: (json['commissionRate'] != null) ? double.tryParse(json['commissionRate'].toString()) ?? 10.0 : 10.0,
       status: json['status']?.toString() ?? 'PENDING',
       trackingNumber: json['trackingNumber']?.toString(),
       trackingCarrier: json['trackingCarrier']?.toString() ?? json['shippingCarrier']?.toString(),
-      createdAt: json['createdAt']?.toString(),
+      createdAt: json['createdAt']?.toString() ?? rawOrder['createdAt']?.toString(),
+      shippedAt: json['shippedAt']?.toString(),
+      deliveredAt: json['deliveredAt']?.toString(),
+      isCleared: json['isCleared'] == true,
+      clearsAt: json['clearsAt']?.toString(),
+      daysRemaining: (json['daysRemaining'] != null) ? int.tryParse(json['daysRemaining'].toString()) ?? 0 : 0,
+      clearanceStatus: json['clearanceStatus']?.toString() ?? '',
       items: parsedItems,
     );
   }
@@ -236,6 +296,10 @@ class EcosystemWithdrawal {
   String? method;
   String status;
   String? createdAt;
+  String? reference;
+  String? source;
+  String? campaignId;
+  String? campaignTitle;
 
   EcosystemWithdrawal({
     required this.id,
@@ -244,16 +308,24 @@ class EcosystemWithdrawal {
     this.method,
     required this.status,
     this.createdAt,
+    this.reference,
+    this.source,
+    this.campaignId,
+    this.campaignTitle,
   });
 
   factory EcosystemWithdrawal.fromJson(Map<String, dynamic> json) {
     return EcosystemWithdrawal(
       id: json['id']?.toString() ?? '',
       amount: (json['amount'] != null) ? double.tryParse(json['amount'].toString()) ?? 0.0 : 0.0,
-      currency: json['currency']?.toString() ?? 'USD',
+      currency: json['currency']?.toString() ?? 'CAD',
       method: json['method']?.toString(),
       status: json['status']?.toString() ?? 'PENDING',
       createdAt: json['createdAt']?.toString(),
+      reference: json['reference']?.toString(),
+      source: json['source']?.toString(),
+      campaignId: json['campaignId']?.toString(),
+      campaignTitle: json['campaignTitle']?.toString(),
     );
   }
 }
@@ -465,9 +537,16 @@ class VendorPortalData {
   double totalRevenue;
   double grossSales;
   double netEarnings;
+  double platformCommission;
+  double clearedEarnings;
+  double pendingEscrowEarnings;
   double escrowPending;
   double pendingPayout;
   double commissionRate;
+  int payoutHoldDays;
+  double minWithdrawalAmount;
+  double totalWithdrawn;
+  double pendingWithdrawals;
   int activeProducts;
   int draftProducts;
   int underReviewProducts;
@@ -501,9 +580,16 @@ class VendorPortalData {
     required this.totalRevenue,
     this.grossSales = 0.0,
     this.netEarnings = 0.0,
+    this.platformCommission = 0.0,
+    this.clearedEarnings = 0.0,
+    this.pendingEscrowEarnings = 0.0,
     this.escrowPending = 0.0,
     required this.pendingPayout,
     this.commissionRate = 10.0,
+    this.payoutHoldDays = 7,
+    this.minWithdrawalAmount = 20.0,
+    this.totalWithdrawn = 0.0,
+    this.pendingWithdrawals = 0.0,
     required this.activeProducts,
     this.draftProducts = 0,
     this.underReviewProducts = 0,
@@ -558,6 +644,10 @@ class VendorPortalData {
         ? double.tryParse(rawMetrics['netEarnings'].toString()) ?? 0.0
         : gross;
 
+    final comm = (rawMetrics['platformCommission'] != null)
+        ? double.tryParse(rawMetrics['platformCommission'].toString()) ?? 0.0
+        : 0.0;
+
     final avail = (rawMetrics['availableBalance'] != null)
         ? double.tryParse(rawMetrics['availableBalance'].toString()) ?? 0.0
         : (json['balance'] != null ? double.tryParse(json['balance'].toString()) ?? 0.0 : 0.0);
@@ -565,6 +655,30 @@ class VendorPortalData {
     final escrow = (rawMetrics['escrowHolding'] != null)
         ? double.tryParse(rawMetrics['escrowHolding'].toString()) ?? 0.0
         : ((rawFinancials['escrowPending'] != null) ? double.tryParse(rawFinancials['escrowPending'].toString()) ?? 0.0 : 0.0);
+
+    final cleared = (rawMetrics['clearedEarnings'] != null)
+        ? double.tryParse(rawMetrics['clearedEarnings'].toString()) ?? 0.0
+        : (json['clearedEarnings'] != null ? double.tryParse(json['clearedEarnings'].toString()) ?? 0.0 : 0.0);
+
+    final pendingEscrow = (rawMetrics['pendingEscrowEarnings'] != null)
+        ? double.tryParse(rawMetrics['pendingEscrowEarnings'].toString()) ?? escrow
+        : escrow;
+
+    final holdDays = (rawMetrics['payoutHoldDays'] != null)
+        ? int.tryParse(rawMetrics['payoutHoldDays'].toString()) ?? 7
+        : (json['payoutHoldDays'] != null ? int.tryParse(json['payoutHoldDays'].toString()) ?? 7 : 7);
+
+    final minWithdrawal = (rawMetrics['minWithdrawalAmount'] != null)
+        ? double.tryParse(rawMetrics['minWithdrawalAmount'].toString()) ?? 20.0
+        : (json['minWithdrawalAmount'] != null ? double.tryParse(json['minWithdrawalAmount'].toString()) ?? 20.0 : 20.0);
+
+    final withdrawn = (rawMetrics['totalWithdrawn'] != null)
+        ? double.tryParse(rawMetrics['totalWithdrawn'].toString()) ?? 0.0
+        : 0.0;
+
+    final pendingWith = (rawMetrics['pendingWithdrawals'] != null)
+        ? double.tryParse(rawMetrics['pendingWithdrawals'].toString()) ?? 0.0
+        : 0.0;
 
     final customers = (rawMetrics['totalCustomers'] != null)
         ? int.tryParse(rawMetrics['totalCustomers'].toString()) ?? 0
@@ -588,8 +702,15 @@ class VendorPortalData {
       totalRevenue: gross,
       grossSales: gross,
       netEarnings: net,
+      platformCommission: comm,
+      clearedEarnings: cleared,
+      pendingEscrowEarnings: pendingEscrow,
       escrowPending: escrow,
       escrowHolding: escrow,
+      payoutHoldDays: holdDays,
+      minWithdrawalAmount: minWithdrawal,
+      totalWithdrawn: withdrawn,
+      pendingWithdrawals: pendingWith,
       pendingPayout: (json['pendingPayout'] != null) ? double.tryParse(json['pendingPayout'].toString()) ?? 0.0 : 0.0,
       commissionRate: (rawMetrics['commissionRate'] != null) ? double.tryParse(rawMetrics['commissionRate'].toString()) ?? 10.0 : 10.0,
       activeProducts: (rawMetrics['activeProducts'] != null)
@@ -666,6 +787,34 @@ class EventTicketTier {
       };
 }
 
+class EventSettlementPolicy {
+  final int payoutHoldDays;
+  final String payoutTrigger;
+  final bool isEscrowProtectionActive;
+  final String policyLabel;
+  final double minWithdrawalAmount;
+
+  EventSettlementPolicy({
+    this.payoutHoldDays = 7,
+    this.payoutTrigger = "EVENT_COMPLETION",
+    this.isEscrowProtectionActive = true,
+    this.policyLabel = "Event Completion Based",
+    this.minWithdrawalAmount = 20.0,
+  });
+
+  bool get isImmediateBooking => payoutTrigger == "IMMEDIATE_BOOKING";
+
+  factory EventSettlementPolicy.fromJson(Map<String, dynamic> json) {
+    return EventSettlementPolicy(
+      payoutHoldDays: int.tryParse(json['payoutHoldDays']?.toString() ?? '7') ?? 7,
+      payoutTrigger: json['payoutTrigger']?.toString() ?? 'EVENT_COMPLETION',
+      isEscrowProtectionActive: json['isEscrowProtectionActive'] == true,
+      policyLabel: json['policyLabel']?.toString() ?? 'Event Completion Based',
+      minWithdrawalAmount: double.tryParse(json['minWithdrawalAmount']?.toString() ?? '20.0') ?? 20.0,
+    );
+  }
+}
+
 class EcosystemEvent {
   String id;
   String title;
@@ -696,6 +845,9 @@ class EcosystemEvent {
   double escrowAmount;
   String clearanceStatus;
   String fundsReleaseDate;
+  bool isCleared;
+  String payoutStatus;
+  int daysUntilClearance;
   List<EventTicketTier> tickets;
 
   EcosystemEvent({
@@ -728,8 +880,25 @@ class EcosystemEvent {
     this.escrowAmount = 0.0,
     this.clearanceStatus = "CLEARED & AVAILABLE",
     this.fundsReleaseDate = "",
+    this.isCleared = true,
+    this.payoutStatus = "AVAILABLE",
+    this.daysUntilClearance = 0,
     this.tickets = const [],
   });
+
+  DateTime get startDate => DateTime.tryParse(startDateTime) ?? DateTime.now();
+  DateTime get endDate => DateTime.tryParse(endDateTime) ?? DateTime.now();
+
+  bool get isCheckInOpen {
+    if (checkInWindowMinutes <= 0) return true;
+    final openTime = startDate.millisecondsSinceEpoch - (checkInWindowMinutes * 60 * 1000);
+    return DateTime.now().millisecondsSinceEpoch >= openTime;
+  }
+
+  DateTime get checkInOpensAt {
+    final openTime = startDate.millisecondsSinceEpoch - (checkInWindowMinutes * 60 * 1000);
+    return DateTime.fromMillisecondsSinceEpoch(openTime);
+  }
 
   factory EcosystemEvent.fromJson(Map<String, dynamic> json) {
     var rawTickets = json['tickets'];
@@ -775,6 +944,9 @@ class EcosystemEvent {
       escrowAmount: (json['escrowAmount'] != null) ? double.tryParse(json['escrowAmount'].toString()) ?? 0.0 : 0.0,
       clearanceStatus: json['clearanceStatus']?.toString() ?? 'CLEARED & AVAILABLE',
       fundsReleaseDate: json['fundsReleaseDate']?.toString() ?? '',
+      isCleared: json['isCleared'] == true || json['payoutStatus'] == 'AVAILABLE' || json['clearanceStatus'] == 'CLEARED & AVAILABLE',
+      payoutStatus: json['payoutStatus']?.toString() ?? 'AVAILABLE',
+      daysUntilClearance: int.tryParse(json['daysUntilClearance']?.toString() ?? '0') ?? 0,
       tickets: parsedTickets,
     );
   }
@@ -836,6 +1008,9 @@ class EcosystemAttendee {
   String email;
   String phone;
   String status;
+  String ticketName;
+  double ticketPrice;
+  int quantity;
   String ticketNumber;
   double totalAmount;
   bool checkedIn;
@@ -851,6 +1026,9 @@ class EcosystemAttendee {
     required this.email,
     required this.phone,
     required this.status,
+    this.ticketName = "General Admission",
+    this.ticketPrice = 0.0,
+    this.quantity = 1,
     required this.ticketNumber,
     required this.totalAmount,
     this.checkedIn = false,
@@ -868,7 +1046,10 @@ class EcosystemAttendee {
       email: json['email']?.toString() ?? '',
       phone: json['phone']?.toString() ?? '',
       status: json['status']?.toString() ?? 'CONFIRMED',
-      ticketNumber: json['ticketNumber']?.toString() ?? json['id']?.toString() ?? '',
+      ticketName: json['ticketName']?.toString() ?? json['ticket']?['name']?.toString() ?? 'General Admission',
+      ticketPrice: double.tryParse(json['ticketPrice']?.toString() ?? '') ?? (double.tryParse(json['ticket']?['price']?.toString() ?? '') ?? 0.0),
+      quantity: int.tryParse(json['quantity']?.toString() ?? '') ?? 1,
+      ticketNumber: json['ticketNumber']?.toString() ?? json['paymentId']?.toString() ?? json['id']?.toString() ?? '',
       totalAmount: (json['totalAmount'] != null) ? double.tryParse(json['totalAmount'].toString()) ?? 0.0 : 0.0,
       checkedIn: json['checkedIn'] == true,
       checkedInAt: json['checkedInAt']?.toString(),
@@ -920,6 +1101,15 @@ class OrganizerKycDossier {
   String website;
   String city;
   String country;
+  String streetAddress;
+  String idDocumentType;
+  String idFrontUrl;
+  String idBackUrl;
+  String bankName;
+  String accountHolder;
+  String accountNumber;
+  String routingNumber;
+  String verificationStatus;
   bool isApproved;
 
   OrganizerKycDossier({
@@ -933,6 +1123,15 @@ class OrganizerKycDossier {
     this.website = '',
     this.city = '',
     this.country = '',
+    this.streetAddress = '',
+    this.idDocumentType = 'International Passport',
+    this.idFrontUrl = '',
+    this.idBackUrl = '',
+    this.bankName = '',
+    this.accountHolder = '',
+    this.accountNumber = '',
+    this.routingNumber = '',
+    this.verificationStatus = 'VERIFIED & APPROVED',
     this.isApproved = false,
   });
 
@@ -948,6 +1147,15 @@ class OrganizerKycDossier {
       website: json['website']?.toString() ?? '',
       city: json['city']?.toString() ?? '',
       country: json['country']?.toString() ?? '',
+      streetAddress: json['streetAddress']?.toString() ?? '',
+      idDocumentType: json['idDocumentType']?.toString() ?? 'International Passport',
+      idFrontUrl: json['idFrontUrl']?.toString() ?? '',
+      idBackUrl: json['idBackUrl']?.toString() ?? '',
+      bankName: json['bankName']?.toString() ?? json['bankDetails']?['bankName']?.toString() ?? '',
+      accountHolder: json['accountHolder']?.toString() ?? json['bankDetails']?['accountHolder']?.toString() ?? '',
+      accountNumber: json['accountNumber']?.toString() ?? json['bankDetails']?['accountNumber']?.toString() ?? '',
+      routingNumber: json['routingNumber']?.toString() ?? json['bankDetails']?['routingNumber']?.toString() ?? '',
+      verificationStatus: json['verificationStatus']?.toString() ?? (json['isApproved'] == true ? 'VERIFIED & APPROVED' : 'ACTION REQUIRED'),
       isApproved: json['isApproved'] == true,
     );
   }
@@ -955,20 +1163,26 @@ class OrganizerKycDossier {
 
 class OrganizerSettings {
   String payoutMethod;
+  String settlementSchedule;
   String bankName;
   String accountHolder;
   String accountNumber;
   String routingNumber;
+  int defaultCheckInWindow;
+  String defaultRefundPolicy;
   bool notifyRegistrationAlert;
   bool notifyDonationAlert;
   bool notifyEventReminder;
 
   OrganizerSettings({
-    this.payoutMethod = 'Bank Transfer',
+    this.payoutMethod = 'Direct Bank Wire / Local Transfer',
+    this.settlementSchedule = 'Weekly Auto-Settlement (Recommended)',
     this.bankName = '',
     this.accountHolder = '',
     this.accountNumber = '',
     this.routingNumber = '',
+    this.defaultCheckInWindow = 30,
+    this.defaultRefundPolicy = '30-Day Policy',
     this.notifyRegistrationAlert = true,
     this.notifyDonationAlert = true,
     this.notifyEventReminder = true,
@@ -976,11 +1190,14 @@ class OrganizerSettings {
 
   factory OrganizerSettings.fromJson(Map<String, dynamic> json) {
     return OrganizerSettings(
-      payoutMethod: json['payoutMethod']?.toString() ?? 'Bank Transfer',
+      payoutMethod: json['payoutMethod']?.toString() ?? 'Direct Bank Wire / Local Transfer',
+      settlementSchedule: json['settlementSchedule']?.toString() ?? 'Weekly Auto-Settlement (Recommended)',
       bankName: json['bankName']?.toString() ?? '',
       accountHolder: json['accountHolder']?.toString() ?? '',
       accountNumber: json['accountNumber']?.toString() ?? '',
       routingNumber: json['routingNumber']?.toString() ?? '',
+      defaultCheckInWindow: int.tryParse(json['defaultCheckInWindow']?.toString() ?? '30') ?? 30,
+      defaultRefundPolicy: json['defaultRefundPolicy']?.toString() ?? '30-Day Policy',
       notifyRegistrationAlert: json['notifyRegistrationAlert'] != false,
       notifyDonationAlert: json['notifyDonationAlert'] != false,
       notifyEventReminder: json['notifyEventReminder'] != false,
@@ -988,7 +1205,134 @@ class OrganizerSettings {
   }
 }
 
+class FundraisingCampaignFinancialItem {
+  final String campaignId;
+  final String title;
+  final String slug;
+  final String status;
+  final String currency;
+  final double goalAmount;
+  final double raisedAmount;
+  final double grossCollected;
+  final double commissionDeducted;
+  final double gatewayFees;
+  final double netEarnings;
+  final double pendingSettlement;
+  final double clearedEntitlement;
+  final double reservedWithdrawals;
+  final double totalWithdrawn;
+  final double availableBalance;
+  final String? nextClearingDate;
+  final int donationsCount;
+  final int payoutHoldDays;
+
+  FundraisingCampaignFinancialItem({
+    required this.campaignId,
+    required this.title,
+    required this.slug,
+    required this.status,
+    required this.currency,
+    required this.goalAmount,
+    required this.raisedAmount,
+    required this.grossCollected,
+    required this.commissionDeducted,
+    required this.gatewayFees,
+    required this.netEarnings,
+    required this.pendingSettlement,
+    required this.clearedEntitlement,
+    required this.reservedWithdrawals,
+    required this.totalWithdrawn,
+    required this.availableBalance,
+    this.nextClearingDate,
+    required this.donationsCount,
+    required this.payoutHoldDays,
+  });
+
+  factory FundraisingCampaignFinancialItem.fromJson(Map<String, dynamic> json) {
+    return FundraisingCampaignFinancialItem(
+      campaignId: json['campaignId']?.toString() ?? '',
+      title: json['title']?.toString() ?? '',
+      slug: json['slug']?.toString() ?? '',
+      status: json['status']?.toString() ?? 'ACTIVE',
+      currency: json['currency']?.toString() ?? 'CAD',
+      goalAmount: double.tryParse(json['goalAmount']?.toString() ?? '') ?? 0.0,
+      raisedAmount: double.tryParse(json['raisedAmount']?.toString() ?? '') ?? 0.0,
+      grossCollected: double.tryParse(json['grossCollected']?.toString() ?? '') ?? 0.0,
+      commissionDeducted: double.tryParse(json['commissionDeducted']?.toString() ?? '') ?? 0.0,
+      gatewayFees: double.tryParse(json['gatewayFees']?.toString() ?? '') ?? 0.0,
+      netEarnings: double.tryParse(json['netEarnings']?.toString() ?? '') ?? 0.0,
+      pendingSettlement: double.tryParse(json['pendingSettlement']?.toString() ?? '') ?? 0.0,
+      clearedEntitlement: double.tryParse(json['clearedEntitlement']?.toString() ?? '') ?? 0.0,
+      reservedWithdrawals: double.tryParse(json['reservedWithdrawals']?.toString() ?? '') ?? 0.0,
+      totalWithdrawn: double.tryParse(json['totalWithdrawn']?.toString() ?? '') ?? 0.0,
+      availableBalance: double.tryParse(json['availableBalance']?.toString() ?? '') ?? 0.0,
+      nextClearingDate: json['nextClearingDate']?.toString(),
+      donationsCount: int.tryParse(json['donationsCount']?.toString() ?? '') ?? 0,
+      payoutHoldDays: int.tryParse(json['payoutHoldDays']?.toString() ?? '') ?? 0,
+    );
+  }
+}
+
+class FundraisingFinancials {
+  final double totalGrossCollected;
+  final double totalCommissionDeducted;
+  final double totalGatewayFees;
+  final double totalNetEarnings;
+  final double pendingSettlement;
+  final double availableForWithdrawal;
+  final double reservedWithdrawals;
+  final double totalWithdrawn;
+  final int campaignCount;
+  final int payoutHoldDays;
+  final String feeResponsibility;
+  final bool kycApproved;
+  final double minWithdrawalAmount;
+  final double commissionRate;
+  final List<FundraisingCampaignFinancialItem> campaigns;
+
+  FundraisingFinancials({
+    required this.totalGrossCollected,
+    required this.totalCommissionDeducted,
+    required this.totalGatewayFees,
+    required this.totalNetEarnings,
+    required this.pendingSettlement,
+    required this.availableForWithdrawal,
+    required this.reservedWithdrawals,
+    required this.totalWithdrawn,
+    required this.campaignCount,
+    required this.payoutHoldDays,
+    required this.feeResponsibility,
+    required this.kycApproved,
+    required this.minWithdrawalAmount,
+    required this.commissionRate,
+    required this.campaigns,
+  });
+
+  factory FundraisingFinancials.fromJson(Map<String, dynamic> json) {
+    final rawCamps = json['campaigns'] as List? ?? [];
+    return FundraisingFinancials(
+      totalGrossCollected: double.tryParse(json['totalGrossCollected']?.toString() ?? '') ?? 0.0,
+      totalCommissionDeducted: double.tryParse(json['totalCommissionDeducted']?.toString() ?? '') ?? 0.0,
+      totalGatewayFees: double.tryParse(json['totalGatewayFees']?.toString() ?? '') ?? 0.0,
+      totalNetEarnings: double.tryParse(json['totalNetEarnings']?.toString() ?? '') ?? 0.0,
+      pendingSettlement: double.tryParse(json['pendingSettlement']?.toString() ?? '') ?? 0.0,
+      availableForWithdrawal: double.tryParse(json['availableForWithdrawal']?.toString() ?? '') ?? 0.0,
+      reservedWithdrawals: double.tryParse(json['reservedWithdrawals']?.toString() ?? '') ?? 0.0,
+      totalWithdrawn: double.tryParse(json['totalWithdrawn']?.toString() ?? '') ?? 0.0,
+      campaignCount: int.tryParse(json['campaignCount']?.toString() ?? '') ?? rawCamps.length,
+      payoutHoldDays: int.tryParse(json['payoutHoldDays']?.toString() ?? '') ?? 0,
+      feeResponsibility: json['feeResponsibility']?.toString() ?? 'FOUNDATION_ABSORBS',
+      kycApproved: json['kycApproved'] == true,
+      minWithdrawalAmount: double.tryParse(json['minWithdrawalAmount']?.toString() ?? '') ?? 20.0,
+      commissionRate: double.tryParse(json['commissionRate']?.toString() ?? '') ?? 2.0,
+      campaigns: rawCamps.map((c) => FundraisingCampaignFinancialItem.fromJson(c)).toList(),
+    );
+  }
+}
+
 class OrganizerPortalData {
+  String referenceId;
+  String fundraiserReferenceId;
   String organizationName;
   String organizationType;
   bool isApproved;
@@ -1016,6 +1360,8 @@ class OrganizerPortalData {
   OrganizerProfile? profileData;
   OrganizerKycDossier? dossier;
   OrganizerSettings? settings;
+  FundraisingFinancials? fundraising;
+  EventSettlementPolicy? settlementPolicy;
   List<EcosystemEvent> events;
   List<EcosystemCampaign> campaigns;
   List<EcosystemAttendee> attendees;
@@ -1023,6 +1369,8 @@ class OrganizerPortalData {
   List<EcosystemNotificationItem> notifications;
 
   OrganizerPortalData({
+    this.referenceId = 'ORG-FOUNDATION-9281',
+    this.fundraiserReferenceId = 'FR-ORG-7781',
     required this.organizationName,
     required this.organizationType,
     required this.isApproved,
@@ -1050,6 +1398,8 @@ class OrganizerPortalData {
     this.profileData,
     this.dossier,
     this.settings,
+    this.fundraising,
+    this.settlementPolicy,
     this.events = const [],
     this.campaigns = const [],
     this.attendees = const [],
@@ -1067,6 +1417,7 @@ class OrganizerPortalData {
     final stats = json['stats'] as Map<String, dynamic>? ?? {};
     final dossierJson = json['dossier'] as Map<String, dynamic>? ?? {};
     final settingsJson = json['settings'] as Map<String, dynamic>? ?? {};
+    final fundJson = json['fundraising'] as Map<String, dynamic>?;
 
     final rawEvents = json['events'] as List? ?? [];
     final rawCampaigns = json['campaigns'] as List? ?? [];
@@ -1081,6 +1432,8 @@ class OrganizerPortalData {
     }).where((s) => s.isNotEmpty).toList();
 
     return OrganizerPortalData(
+      referenceId: json['referenceId']?.toString() ?? profile['id']?.toString() ?? 'ORG-FOUNDATION-9281',
+      fundraiserReferenceId: json['fundraiserReferenceId']?.toString() ?? 'FR-ORG-7781',
       organizationName: profile['organizationName']?.toString() ?? json['organizationName']?.toString() ?? 'My Organization',
       organizationType: profile['organizationType']?.toString() ?? json['organizationType']?.toString() ?? 'Organizer',
       isApproved: profile['isApproved'] == true || json['isApproved'] == true,
@@ -1112,6 +1465,8 @@ class OrganizerPortalData {
       profileData: profile.isNotEmpty ? OrganizerProfile.fromJson(profile) : null,
       dossier: dossierJson.isNotEmpty ? OrganizerKycDossier.fromJson(dossierJson) : null,
       settings: settingsJson.isNotEmpty ? OrganizerSettings.fromJson(settingsJson) : OrganizerSettings(),
+      fundraising: fundJson != null ? FundraisingFinancials.fromJson(fundJson) : null,
+      settlementPolicy: json['settlementPolicy'] != null ? EventSettlementPolicy.fromJson(json['settlementPolicy']) : EventSettlementPolicy(),
       events: rawEvents.map((e) => EcosystemEvent.fromJson(e)).toList(),
       campaigns: rawCampaigns.map((c) => EcosystemCampaign.fromJson(c)).toList(),
       attendees: rawAttendees.map((a) => EcosystemAttendee.fromJson(a)).toList(),

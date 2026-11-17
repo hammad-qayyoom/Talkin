@@ -10,6 +10,7 @@ import 'package:notisboard/custom/switch/switch.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/custom/verified_badge/verified_badge.dart';
 import 'package:notisboard/ui/host_flow/host_home_screen/controller/host_home_screen_controller.dart';
+import 'package:notisboard/ui/host_flow/ecosystem/views/ecosystem_hub_view.dart';
 import 'package:notisboard/utils/api.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -1405,6 +1406,103 @@ class HostBoostCtaCard extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class HostEcosystemCtaCard extends StatelessWidget {
+  const HostEcosystemCtaCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Get.to(() => const EcosystemHubView()),
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(top: 14),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFF0F172A),
+              Color(0xFF1E293B),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF0F172A).withValues(alpha: 0.25),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: const Color(0xFF2563EB).withValues(alpha: 0.25),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFF3B82F6).withValues(alpha: 0.4)),
+              ),
+              child: const Icon(
+                Icons.hub_rounded,
+                color: Color(0xFF60A5FA),
+                size: 22,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Vendor & Organizer Portals',
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2563EB),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Text(
+                          'GLOBAL',
+                          style: TextStyle(color: Colors.white, fontSize: 8.5, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'Foundation Marketplace & Global Events',
+                    style: TextStyle(
+                      color: AppColors.white.withValues(alpha: 0.8),
+                      fontSize: 11.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: AppColors.white.withValues(alpha: 0.8),
+              size: 15,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

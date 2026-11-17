@@ -808,20 +808,34 @@ class _VendorPortalViewState extends State<VendorPortalView> {
   }
 
   Widget _buildBottomQuickBar() {
+    int currentNavIndex = 0;
+    if (_selectedPageIndex == 1) {
+      currentNavIndex = 0;
+    } else if (_selectedPageIndex == 2 || _selectedPageIndex == 3) {
+      currentNavIndex = 1;
+    } else if (_selectedPageIndex == 4) {
+      currentNavIndex = 2;
+    } else if (_selectedPageIndex == 5) {
+      currentNavIndex = 3;
+    } else if (_selectedPageIndex == 6) {
+      currentNavIndex = 4;
+    } else {
+      currentNavIndex = 0;
+    }
+
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
         border: Border(top: BorderSide(color: Color(0xFFE2E8F0))),
       ),
       child: BottomNavigationBar(
-        currentIndex: _selectedPageIndex == 1
-            ? 0
-            : (_selectedPageIndex == 2 ? 1 : (_selectedPageIndex == 4 ? 2 : 3)),
+        currentIndex: currentNavIndex,
         onTap: (tabIdx) {
           if (tabIdx == 0) _navigateToPage(1); // Dashboard
           if (tabIdx == 1) _navigateToPage(2); // Products
           if (tabIdx == 2) _navigateToPage(4); // Orders
-          if (tabIdx == 3) _navigateToPage(6); // Store Profile
+          if (tabIdx == 3) _navigateToPage(5); // Earnings
+          if (tabIdx == 4) _navigateToPage(6); // Store Profile
         },
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
@@ -833,6 +847,7 @@ class _VendorPortalViewState extends State<VendorPortalView> {
           BottomNavigationBarItem(icon: Icon(Icons.dashboard_outlined), activeIcon: Icon(Icons.dashboard_rounded), label: "Dashboard"),
           BottomNavigationBarItem(icon: Icon(Icons.inventory_2_outlined), activeIcon: Icon(Icons.inventory_2_rounded), label: "Products"),
           BottomNavigationBarItem(icon: Icon(Icons.receipt_long_outlined), activeIcon: Icon(Icons.receipt_long_rounded), label: "Orders"),
+          BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet_outlined), activeIcon: Icon(Icons.account_balance_wallet_rounded), label: "Earnings"),
           BottomNavigationBarItem(icon: Icon(Icons.storefront_outlined), activeIcon: Icon(Icons.storefront_rounded), label: "Profile"),
         ],
       ),
@@ -1179,7 +1194,7 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                   ),
                   icon: const Icon(Icons.account_balance_wallet_outlined, size: 16),
                   label: const Text("Request Payout", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-                  onPressed: () => _showPayoutRequestDialog(context, controller, balance),
+                  onPressed: () => _showPayoutRequestDialog(context, controller, balance, data?.minWithdrawalAmount ?? 20.0),
                 ),
               ],
             ),
@@ -1301,7 +1316,7 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                   icon: Icons.account_balance_wallet_outlined,
                   label: "Request Payout",
                   color: const Color(0xFFF59E0B),
-                  onTap: () => _showPayoutRequestDialog(context, controller, balance),
+                  onTap: () => _showPayoutRequestDialog(context, controller, balance, data?.minWithdrawalAmount ?? 20.0),
                 ),
               ),
             ],
@@ -3194,19 +3209,67 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                   Text("Net Earnings: ${controller.formatCurrency(order.vendorEarnings)}", style: AppFontStyle.fontStyleW500(fontSize: 11, fontColor: const Color(0xFF10B981))),
                 ],
               ),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2563EB),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              if (order.status.toUpperCase() == "DELIVERED")
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF059669),
+                    side: const BorderSide(color: Color(0xFF10B981)),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  icon: const Icon(Icons.check_circle_rounded, size: 14, color: Color(0xFF059669)),
+                  label: const Text("Delivered", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                  onPressed: () => _showFulfillmentModal(context, controller, order),
+                )
+              else
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2563EB),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  icon: const Icon(Icons.local_shipping_outlined, size: 14),
+                  label: const Text("Fulfill", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                  onPressed: () => _showFulfillmentModal(context, controller, order),
                 ),
-                icon: const Icon(Icons.local_shipping_outlined, size: 14),
-                label: const Text("Fulfill", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
-                onPressed: () => _showFulfillmentModal(context, controller, order),
-              ),
             ],
           ),
+          if (order.status.toUpperCase() == "DELIVERED") ...[
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: order.isCleared ? const Color(0xFFF0FDF4) : const Color(0xFFFFFBEB),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: order.isCleared ? const Color(0xFFBBF7D0) : const Color(0xFFFDE68A)),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    order.isCleared ? Icons.verified_rounded : Icons.hourglass_top_rounded,
+                    size: 14,
+                    color: order.isCleared ? const Color(0xFF16A34A) : const Color(0xFFD97706),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      order.isCleared
+                          ? "Funds Cleared & Available for Payout"
+                          : (order.clearanceStatus.isNotEmpty
+                              ? order.clearanceStatus
+                              : "${order.daysRemaining} days remaining in clearance"),
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: order.isCleared ? const Color(0xFF16A34A) : const Color(0xFFD97706),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
           if (order.trackingNumber != null && order.trackingNumber!.isNotEmpty) ...[
             const SizedBox(height: 8),
             Container(
@@ -3319,7 +3382,10 @@ class _VendorPortalViewState extends State<VendorPortalView> {
     final gross = data?.grossSales ?? 0.0;
     final net = data?.netEarnings ?? 0.0;
     final commissionRate = data?.commissionRate ?? 10.0;
+    final commissionAmt = data?.platformCommission ?? 0.0;
     final escrow = data?.escrowHolding ?? (data?.escrowPending ?? 0.0);
+    final holdDays = data?.payoutHoldDays ?? 7;
+    final minPayout = data?.minWithdrawalAmount ?? 20.0;
     final withdrawals = data?.withdrawals ?? [];
 
     return SingleChildScrollView(
@@ -3354,7 +3420,42 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                     ),
                     icon: const Icon(Icons.account_balance_wallet_outlined, size: 18),
                     label: const Text("Withdraw Available Funds", style: TextStyle(fontWeight: FontWeight.bold)),
-                    onPressed: () => _showPayoutRequestDialog(context, controller, balance),
+                    onPressed: () => _showPayoutRequestDialog(context, controller, balance, minPayout),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Dynamic Escrow Clearance Policy Banner
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: holdDays == 0 ? const Color(0xFFF0FDF4) : const Color(0xFFFFFBEB),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: holdDays == 0 ? const Color(0xFFBBF7D0) : const Color(0xFFFDE68A),
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  holdDays == 0 ? Icons.bolt_rounded : Icons.shield_outlined,
+                  size: 18,
+                  color: holdDays == 0 ? const Color(0xFF16A34A) : const Color(0xFFD97706),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    holdDays == 0
+                        ? "Instant Clearance Active (0 Days Hold): Earnings clear immediately upon order delivery."
+                        : "Escrow Protection Policy: Delivered order earnings are held for $holdDays days before releasing to Available Settlement Balance.",
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: holdDays == 0 ? const Color(0xFF16A34A) : const Color(0xFF92400E),
+                    ),
                   ),
                 ),
               ],
@@ -3373,9 +3474,25 @@ class _VendorPortalViewState extends State<VendorPortalView> {
           const SizedBox(height: 12),
           Row(
             children: [
-              Expanded(child: _buildMetricTile("Platform Commission", "${commissionRate.toStringAsFixed(0)}%", Icons.pie_chart_outline_rounded, const Color(0xFFF59E0B))),
+              Expanded(
+                child: _buildMetricTile(
+                  "Platform Commission",
+                  commissionAmt > 0
+                      ? "${commissionRate.toStringAsFixed(0)}% (-${controller.formatCurrency(commissionAmt)})"
+                      : "${commissionRate.toStringAsFixed(0)}%",
+                  Icons.pie_chart_outline_rounded,
+                  const Color(0xFFF59E0B),
+                ),
+              ),
               const SizedBox(width: 12),
-              Expanded(child: _buildMetricTile("Escrow Holding (7-Day)", controller.formatCurrency(escrow), Icons.lock_clock_outlined, const Color(0xFF8B5CF6))),
+              Expanded(
+                child: _buildMetricTile(
+                  holdDays == 0 ? "Escrow Holding (Instant)" : "Escrow Holding ($holdDays-Day)",
+                  controller.formatCurrency(escrow),
+                  Icons.lock_clock_outlined,
+                  const Color(0xFF8B5CF6),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -3436,8 +3553,8 @@ class _VendorPortalViewState extends State<VendorPortalView> {
     );
   }
 
-  void _showPayoutRequestDialog(BuildContext context, EcosystemController controller, double availableBalance) {
-    final amountCtrl = TextEditingController(text: availableBalance > 0 ? availableBalance.toStringAsFixed(2) : "");
+  void _showPayoutRequestDialog(BuildContext context, EcosystemController controller, double availableBalance, [double minPayout = 20.0]) {
+    final amountCtrl = TextEditingController(text: availableBalance >= minPayout ? availableBalance.toStringAsFixed(2) : "");
     final bankCtrl = TextEditingController(text: _bankNameCtrl.text);
     final accountCtrl = TextEditingController(text: _accountNumberCtrl.text);
     final holderCtrl = TextEditingController(text: _accountHolderCtrl.text);
@@ -3464,13 +3581,16 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                     IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(ctx)),
                   ],
                 ),
-                Text("Available for payout: ${controller.formatCurrency(availableBalance)} (Min. ${controller.currencySymbol}50.00)", style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                Text(
+                  "Available for payout: ${controller.formatCurrency(availableBalance)} (Min. ${controller.currencySymbol}${minPayout.toStringAsFixed(2)})",
+                  style: const TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                ),
                 const SizedBox(height: 14),
                 _buildFormLabel("Withdrawal Amount (${controller.currencySymbol}) *"),
                 TextField(
                   controller: amountCtrl,
                   keyboardType: TextInputType.number,
-                  decoration: _buildInputDec("50.00"),
+                  decoration: _buildInputDec(minPayout.toStringAsFixed(2)),
                 ),
                 const SizedBox(height: 12),
                 _buildFormLabel("Settlement Method"),
@@ -3510,12 +3630,22 @@ class _VendorPortalViewState extends State<VendorPortalView> {
                     ),
                     onPressed: () async {
                       final reqAmt = double.tryParse(amountCtrl.text.trim()) ?? 0.0;
-                      if (reqAmt < 50.0) {
-                        Get.snackbar("Minimum Threshold", "Minimum payout request amount is ${controller.currencySymbol}50.00.", backgroundColor: Colors.redAccent, colorText: Colors.white);
+                      if (reqAmt < minPayout) {
+                        Get.snackbar(
+                          "Minimum Threshold",
+                          "Minimum payout request amount is ${controller.currencySymbol}${minPayout.toStringAsFixed(2)}.",
+                          backgroundColor: Colors.redAccent,
+                          colorText: Colors.white,
+                        );
                         return;
                       }
                       if (reqAmt > availableBalance) {
-                        Get.snackbar("Insufficient Funds", "Amount exceeds available balance.", backgroundColor: Colors.redAccent, colorText: Colors.white);
+                        Get.snackbar(
+                          "Insufficient Funds",
+                          "Amount exceeds available balance.",
+                          backgroundColor: Colors.redAccent,
+                          colorText: Colors.white,
+                        );
                         return;
                       }
 

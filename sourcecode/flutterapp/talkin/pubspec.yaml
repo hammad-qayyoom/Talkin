@@ -119,6 +119,7 @@ dependencies:
   flutter_screen_recording: ^2.0.25
   flutter_pdfview: ^1.4.4
   open_filex: ^4.7.0
+  mobile_scanner: ^7.5.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

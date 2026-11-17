@@ -102,6 +102,14 @@ class HostHomeScreen extends GetView<HostHomeScreenController> {
                           ),
                           SliverToBoxAdapter(
                             child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: horizontalPadding,
+                              ),
+                              child: const HostEcosystemCtaCard(),
+                            ),
+                          ),
+                          SliverToBoxAdapter(
+                            child: Padding(
                               padding: EdgeInsets.fromLTRB(
                                 horizontalPadding,
                                 0,

@@ -567,7 +567,7 @@ class EcosystemController extends GetxController {
 
     isActionLoading = false;
     if (success) {
-      Utils.showToast(Get.context!, eventId != null ? "Event updated successfully!" : "Event published to Foundation Events page!");
+      Utils.showToast(Get.context!, eventId != null ? "Event updated successfully!" : "Event submitted for Foundation admin review!");
       await loadOrganizerPortal();
       return true;
     } else {
@@ -584,6 +584,7 @@ class EcosystemController extends GetxController {
     required double goalAmount,
     DateTime? startDate,
     DateTime? endDate,
+    String? status,
     String? imagePath,
   }) async {
     isActionLoading = true;
@@ -596,12 +597,13 @@ class EcosystemController extends GetxController {
       goalAmount: goalAmount,
       startDate: startDate,
       endDate: endDate,
+      status: status ?? "PENDING_REVIEW",
       imagePath: imagePath,
     );
 
     isActionLoading = false;
     if (success) {
-      Utils.showToast(Get.context!, "Campaign published to Foundation Fundraising page!");
+      Utils.showToast(Get.context!, "Campaign submitted for Foundation review!");
       await loadOrganizerPortal();
       return true;
     } else {
@@ -739,19 +741,51 @@ class EcosystemController extends GetxController {
     return ok;
   }
 
-  Future<bool> checkInAttendee(String attendeeId, bool checkedIn) async {
+  Future<Map<String, dynamic>> checkInAttendee(
+    String attendeeId,
+    bool checkedIn, {
+    bool forceOverride = false,
+  }) async {
     isActionLoading = true;
     update();
-    final ok = await EcosystemApi.checkInOrganizerAttendee(registrationId: attendeeId, checkedIn: checkedIn);
+    final res = await EcosystemApi.checkInOrganizerAttendee(
+      registrationId: attendeeId,
+      checkedIn: checkedIn,
+      forceOverride: forceOverride,
+    );
     isActionLoading = false;
+    final bool ok = res["success"] == true;
+    final String msg = res["message"]?.toString() ??
+        (ok ? (checkedIn ? "Attendee checked in!" : "Check-in undone") : "Failed to update attendee check-in");
+    Utils.showToast(Get.context!, msg);
     if (ok) {
-      Utils.showToast(Get.context!, checkedIn ? "Attendee checked in!" : "Check-in undone");
       await loadOrganizerPortal();
     } else {
-      Utils.showToast(Get.context!, "Failed to update attendee check-in");
       update();
     }
-    return ok;
+    return res;
+  }
+
+  Future<Map<String, dynamic>> verifyTicketQr({
+    required String eventId,
+    required String code,
+    bool autoCheckIn = false,
+    bool forceOverride = false,
+  }) async {
+    isActionLoading = true;
+    update();
+    final res = await EcosystemApi.lookupOrganizerTicket(
+      eventId: eventId,
+      code: code,
+      autoCheckIn: autoCheckIn,
+      forceOverride: forceOverride,
+    );
+    isActionLoading = false;
+    update();
+    if (res["success"] == true && autoCheckIn) {
+      await loadOrganizerPortal();
+    }
+    return res;
   }
 
   Future<bool> removeEvent(String eventId) async {
@@ -774,6 +808,8 @@ class EcosystemController extends GetxController {
     String method = "Direct Bank Transfer",
     required Map<String, dynamic> bankDetails,
     String? notes,
+    String source = "EVENTS",
+    String? campaignId,
   }) async {
     isActionLoading = true;
     update();
@@ -782,13 +818,14 @@ class EcosystemController extends GetxController {
       method: method,
       bankDetails: bankDetails,
       notes: notes,
+      source: source,
+      campaignId: campaignId,
     );
     isActionLoading = false;
     if (ok) {
-      Utils.showToast(Get.context!, "Payout request submitted!");
+      Utils.showToast(Get.context!, "Payout request submitted successfully!");
       await loadOrganizerPortal();
     } else {
-      Utils.showToast(Get.context!, "Failed to submit payout request");
       update();
     }
     return ok;
