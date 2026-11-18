@@ -2,6 +2,13 @@ import 'package:notisboard/ui/user_flow/delete_account_otp_screen/view/delete_ac
 import 'package:notisboard/ui/user_flow/delete_account_otp_screen/binding/delete_account_otp_binding.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
+import 'package:notisboard/ui/user_flow/marketplace/binding/marketplace_binding.dart';
+import 'package:notisboard/ui/user_flow/marketplace/view/cart_screen.dart';
+import 'package:notisboard/ui/user_flow/marketplace/view/checkout_screen.dart';
+import 'package:notisboard/ui/user_flow/marketplace/view/marketplace_home_screen.dart';
+import 'package:notisboard/ui/user_flow/marketplace/view/my_orders_screen.dart';
+import 'package:notisboard/ui/user_flow/marketplace/view/order_success_screen.dart';
+import 'package:notisboard/ui/user_flow/marketplace/view/product_detail_screen.dart';
 import 'package:notisboard/ui/common/blog_news/binding/blog_news_binding.dart';
 import 'package:notisboard/ui/common/blog_news/view/blog_news_detail_screen.dart';
 import 'package:notisboard/ui/common/blog_news/view/blog_news_list_screen.dart';
@@ -492,6 +499,32 @@ class AppPages {
       name: AppRoutes.blogNewsDetailScreen,
       page: () => const BlogNewsDetailScreen(),
       binding: BlogNewsBinding(),
+    ),
+    // Marketplace & Foundation Shop Routes
+    GetPage(
+      name: AppRoutes.marketplaceHomeScreen,
+      page: () => const MarketplaceHomeScreen(),
+      binding: MarketplaceBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.marketplaceProductDetailScreen,
+      page: () => const ProductDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.marketplaceCartScreen,
+      page: () => const CartScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.marketplaceCheckoutScreen,
+      page: () => const CheckoutScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.marketplaceOrderSuccessScreen,
+      page: () => const OrderSuccessScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.marketplaceMyOrdersScreen,
+      page: () => const MyOrdersScreen(),
     ),
   ];
 }

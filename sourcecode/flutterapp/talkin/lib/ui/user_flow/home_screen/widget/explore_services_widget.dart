@@ -1,3 +1,4 @@
+import 'package:notisboard/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notisboard/ui/user_flow/bottom_bar/controller/bottom_bar_controller.dart';
@@ -177,7 +178,7 @@ class ExploreServicesWidget extends StatelessWidget {
                 icon: Icons.shopping_bag_outlined,
                 label: 'Shop',
                 isTablet: isTablet,
-                onTap: () => _onServiceTap(context, 'Shop', null),
+                onTap: () => Get.toNamed(AppRoutes.marketplaceHomeScreen),
               ),
               _buildServiceCard(
                 context: context,

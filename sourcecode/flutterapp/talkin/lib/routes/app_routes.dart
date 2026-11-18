@@ -82,4 +82,12 @@ class AppRoutes {
   static const String blogNewsDetailScreen = '/blogNewsDetailScreen';
   static const String expertContentManager = '/expertContentManager';
   static const String contentLibraryScreen = '/contentLibraryScreen';
+
+  // Marketplace & Foundation Shop Routes
+  static const String marketplaceHomeScreen = '/marketplaceHomeScreen';
+  static const String marketplaceProductDetailScreen = '/marketplaceProductDetailScreen';
+  static const String marketplaceCartScreen = '/marketplaceCartScreen';
+  static const String marketplaceCheckoutScreen = '/marketplaceCheckoutScreen';
+  static const String marketplaceOrderSuccessScreen = '/marketplaceOrderSuccessScreen';
+  static const String marketplaceMyOrdersScreen = '/marketplaceMyOrdersScreen';
 }

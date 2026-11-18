@@ -81,11 +81,13 @@ class AppColors {
   static Color redesignBrandDark = const Color(0xFF171A22);
   static Color redesignBrandDarkAlt = const Color(0xFF1C1F26);
   static Color redesignMutedText = const Color(0xFF6B7280);
+  static Color redesignSlateGrey = const Color(0xFF6B7280);
   static Color redesignSoftBorder = const Color(0xFFE5E7EB);
   static Color redesignSurfaceSoft = const Color(0xFFF8FAFC);
   static Color redesignChatSurface = const Color(0xFFF7F8FA);
   static Color redesignSurfaceInput = const Color(0xFFF3F4F7);
   static Color redesignSurfaceNeutral = const Color(0xFFF3F4F6);
+  static Color redesignNeutralGrey = const Color(0xFFF3F4F6);
   static Color redesignSurfaceNeutralAlt = const Color(0xFFF9FAFB);
   static Color redesignSurfaceCardAlt = const Color(0xFFF4F6FB);
   static Color redesignSurfaceChipAlt = const Color(0xFFEEF2FB);
