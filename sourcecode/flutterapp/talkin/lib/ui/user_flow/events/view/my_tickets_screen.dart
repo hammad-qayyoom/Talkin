@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/events/controller/my_tickets_controller.dart';
 import 'package:notisboard/ui/user_flow/events/model/event_model.dart';
+import 'package:notisboard/ui/user_flow/events/shimmer/events_shimmer.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/font_style.dart';
 
@@ -103,8 +104,9 @@ class MyTicketsScreen extends GetView<MyTicketsController> {
               color: _brandRed,
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return Center(
-                    child: CircularProgressIndicator(color: _brandRed),
+                  return const SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: TicketsHistoryShimmer(),
                   );
                 }
 

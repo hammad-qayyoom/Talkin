@@ -6,6 +6,7 @@ import 'package:notisboard/custom/image/professional_cached_image.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/marketplace/api/marketplace_api.dart';
 import 'package:notisboard/ui/user_flow/marketplace/model/marketplace_model.dart';
+import 'package:notisboard/ui/user_flow/marketplace/shimmer/marketplace_shimmer.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -198,7 +199,10 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
               onRefresh: _fetchOrders,
               color: _brandRed,
               child: _isLoading
-                  ? Center(child: CircularProgressIndicator(color: _brandRed))
+                  ? SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: OrdersHistoryShimmer(horizontalPadding: horizontalPadding),
+                    )
                   : _allOrders.isEmpty
                       ? Center(
                           child: Padding(

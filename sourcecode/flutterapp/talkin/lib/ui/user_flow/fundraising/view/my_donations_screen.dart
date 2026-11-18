@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/fundraising/controller/my_donations_controller.dart';
+import 'package:notisboard/ui/user_flow/fundraising/shimmer/fundraising_shimmer.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/font_style.dart';
 
@@ -101,8 +102,9 @@ class MyDonationsScreen extends GetView<MyDonationsController> {
               color: _brandRed,
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return Center(
-                    child: CircularProgressIndicator(color: _brandRed),
+                  return const SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: DonationsHistoryShimmer(),
                   );
                 }
 
