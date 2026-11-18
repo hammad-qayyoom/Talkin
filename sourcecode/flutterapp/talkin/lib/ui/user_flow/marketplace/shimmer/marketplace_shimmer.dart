@@ -25,7 +25,7 @@ class MarketplaceGridShimmer extends StatelessWidget {
           itemCount: isTablet ? 6 : 4,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: isTablet ? 3 : 2,
-            childAspectRatio: 0.64,
+            childAspectRatio: isTablet ? 0.65 : 0.58,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
           ),
@@ -43,7 +43,7 @@ class MarketplaceGridShimmer extends StatelessWidget {
                   ClipRRect(
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                     child: AspectRatio(
-                      aspectRatio: 1.05,
+                      aspectRatio: 1.15,
                       child: Container(color: Colors.white),
                     ),
                   ),

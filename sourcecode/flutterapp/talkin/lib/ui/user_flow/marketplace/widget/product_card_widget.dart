@@ -30,6 +30,7 @@ class ProductCardWidget extends StatelessWidget {
       },
       behavior: HitTestBehavior.opaque,
       child: Container(
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
@@ -51,7 +52,7 @@ class ProductCardWidget extends StatelessWidget {
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                   child: AspectRatio(
-                    aspectRatio: 1.05,
+                    aspectRatio: 1.15,
                     child: product.featuredImage.isNotEmpty
                         ? CachedNetworkImage(
                             imageUrl: product.featuredImage,
@@ -152,36 +153,40 @@ class ProductCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Vendor Name
-                  if (product.sellerName != null && product.sellerName!.isNotEmpty)
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            product.sellerName!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppFontStyle.fontStyleW500(
-                              fontSize: 11,
-                              fontColor: AppColors.redesignSlateGrey,
-                            ),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          (product.sellerName != null && product.sellerName!.isNotEmpty)
+                              ? product.sellerName!
+                              : 'Artisan Store',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppFontStyle.fontStyleW500(
+                            fontSize: 11,
+                            fontColor: AppColors.redesignSlateGrey,
                           ),
                         ),
-                        if (product.vendor?.isVerified == true) ...[
-                          const SizedBox(width: 3),
-                          Icon(Icons.verified, size: 12, color: AppColors.blue),
-                        ],
+                      ),
+                      if (product.vendor?.isVerified == true) ...[
+                        const SizedBox(width: 3),
+                        Icon(Icons.verified, size: 12, color: AppColors.blue),
                       ],
-                    ),
+                    ],
+                  ),
                   const SizedBox(height: 3),
 
-                  // Title
-                  Text(
-                    product.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppFontStyle.fontStyleW600(
-                      fontSize: 13,
-                      fontColor: _brandDark,
+                  // Title - Fixed height so both 1-line and 2-line titles align perfectly
+                  SizedBox(
+                    height: 36,
+                    child: Text(
+                      product.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppFontStyle.fontStyleW600(
+                        fontSize: 12.5,
+                        fontColor: _brandDark,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -195,19 +200,24 @@ class ProductCardWidget extends StatelessWidget {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
                               'CA\$${product.price.toStringAsFixed(2)}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: AppFontStyle.fontStyleW700(
-                                fontSize: 14.5,
+                                fontSize: 14,
                                 fontColor: _brandRed,
                               ),
                             ),
                             if (product.isOnSale && product.compareAtPrice != null)
                               Text(
                                 'CA\$${product.compareAtPrice!.toStringAsFixed(2)}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  fontSize: 11,
+                                  fontSize: 10.5,
                                   color: AppColors.redesignSlateGrey,
                                   decoration: TextDecoration.lineThrough,
                                 ),
@@ -215,41 +225,93 @@ class ProductCardWidget extends StatelessWidget {
                           ],
                         ),
                       ),
+                      const SizedBox(width: 4),
 
-                      // Quick Add to Cart button
+                      // Quick Add to Cart button / Stepper
                       Obx(() {
                         final inCart = cart.isInCart(product.id);
                         final qty = cart.getQuantity(product.id);
 
-                        return GestureDetector(
-                          onTap: product.isInStock
-                              ? () => cart.addToCart(product)
-                              : null,
-                          child: Container(
-                            height: 34,
-                            width: 34,
-                            decoration: BoxDecoration(
-                              color: inCart ? _brandRed : AppColors.redesignAccentSoftBg,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: inCart ? _brandRed : _brandRed.withValues(alpha: 0.2),
+                        if (!product.isInStock) {
+                          return const SizedBox.shrink();
+                        }
+
+                        if (!inCart) {
+                          return GestureDetector(
+                            onTap: () => cart.addToCart(product, showToast: false),
+                            child: Container(
+                              height: 32,
+                              width: 32,
+                              decoration: BoxDecoration(
+                                color: AppColors.redesignAccentSoftBg,
+                                borderRadius: BorderRadius.circular(9),
+                                border: Border.all(
+                                  color: _brandRed.withValues(alpha: 0.25),
+                                ),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.add_shopping_cart_rounded,
+                                  size: 16,
+                                  color: _brandRed,
+                                ),
                               ),
                             ),
-                            child: Center(
-                              child: inCart
-                                  ? Text(
-                                      '$qty',
-                                      style: AppFontStyle.fontStyleW700(
-                                        fontSize: 13,
-                                        fontColor: AppColors.white,
-                                      ),
-                                    )
-                                  : Icon(
-                                      Icons.add_shopping_cart_rounded,
-                                      size: 17,
-                                      color: _brandRed,
-                                    ),
-                            ),
+                          );
+                        }
+
+                        // Sleek quantity stepper pill when item is in cart
+                        return Container(
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: _brandRed,
+                            borderRadius: BorderRadius.circular(9),
+                            boxShadow: [
+                              BoxShadow(
+                                color: _brandRed.withValues(alpha: 0.25),
+                                blurRadius: 4,
+                                offset: const Offset(0, 1.5),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              GestureDetector(
+                                onTap: () => cart.updateQuantity(product.id, qty - 1),
+                                behavior: HitTestBehavior.opaque,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                                  child: Icon(
+                                    qty <= 1 ? Icons.delete_outline_rounded : Icons.remove_rounded,
+                                    size: 14,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 2),
+                                child: Text(
+                                  '$qty',
+                                  style: AppFontStyle.fontStyleW700(
+                                    fontSize: 12,
+                                    fontColor: AppColors.white,
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () => cart.addToCart(product, showToast: false),
+                                behavior: HitTestBehavior.opaque,
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                                  child: Icon(
+                                    Icons.add_rounded,
+                                    size: 14,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       }),

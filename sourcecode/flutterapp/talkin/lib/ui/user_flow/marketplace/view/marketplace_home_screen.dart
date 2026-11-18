@@ -445,7 +445,7 @@ class MarketplaceHomeScreen extends StatelessWidget {
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: isTablet ? 3 : 2,
-                    childAspectRatio: 0.64,
+                    childAspectRatio: isTablet ? 0.65 : 0.58,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                   ),
