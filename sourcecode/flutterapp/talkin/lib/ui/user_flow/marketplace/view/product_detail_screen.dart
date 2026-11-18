@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notisboard/custom/image/professional_cached_image.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/marketplace/controller/marketplace_cart_controller.dart';
 import 'package:notisboard/ui/user_flow/marketplace/controller/product_detail_controller.dart';
@@ -47,20 +48,29 @@ class ProductDetailScreen extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 IconButton(
-                  icon: Icon(Icons.shopping_bag_outlined, color: _brandDark, size: 24),
+                  tooltip: 'Shopping Cart',
+                  icon: Container(
+                    padding: const EdgeInsets.all(7),
+                    decoration: BoxDecoration(
+                      color: AppColors.redesignAccentSoftBg,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(Icons.shopping_bag_outlined, color: _brandRed, size: 18),
+                  ),
                   onPressed: () => Get.toNamed(AppRoutes.marketplaceCartScreen),
                 ),
                 if (count > 0)
                   Positioned(
-                    top: 8,
-                    right: 8,
+                    top: 6,
+                    right: 6,
                     child: Container(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(3.5),
                       decoration: BoxDecoration(
                         color: _brandRed,
                         shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.white, width: 1.5),
                       ),
-                      constraints: const BoxConstraints(minWidth: 17, minHeight: 17),
+                      constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
                       child: Center(
                         child: Text(
                           '$count',
@@ -80,7 +90,13 @@ class ProductDetailScreen extends StatelessWidget {
       ),
       body: Obx(() {
         if (controller.isLoading.value && controller.product.value == null) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: AppImageShimmer(
+              width: double.infinity,
+              height: 280,
+              borderRadius: BorderRadius.zero,
+            ),
+          );
         }
 
         final product = controller.product.value;
@@ -124,19 +140,12 @@ class ProductDetailScreen extends StatelessWidget {
                             imageUrl: url,
                             fit: BoxFit.contain,
                             width: double.infinity,
-                            placeholder: (_, __) => Container(
-                              color: AppColors.redesignNeutralGrey,
-                              child: const Center(
-                                child: SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
-                                ),
-                              ),
+                            placeholder: (_, __) => const AppImageShimmer(
+                              borderRadius: BorderRadius.zero,
                             ),
                             errorWidget: (_, __, ___) => Container(
                               color: AppColors.redesignNeutralGrey,
-                              child: const Icon(Icons.shopping_bag_outlined, size: 48, color: Colors.grey),
+                              child: Icon(Icons.shopping_bag_outlined, size: 48, color: AppColors.redesignSlateGrey),
                             ),
                           );
                         }).toList(),
@@ -167,9 +176,7 @@ class ProductDetailScreen extends StatelessWidget {
                 Container(
                   height: 200,
                   color: AppColors.redesignNeutralGrey,
-                  child: const Center(
-                    child: Icon(Icons.shopping_bag_outlined, size: 48, color: Colors.grey),
-                  ),
+                  child: Icon(Icons.shopping_bag_outlined, size: 48, color: AppColors.redesignSlateGrey),
                 ),
 
               // Title, Pricing & Badges Card
@@ -187,8 +194,9 @@ class ProductDetailScreen extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: _brandRed.withValues(alpha: 0.1),
+                              color: AppColors.redesignAccentSoftBg,
                               borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: _brandRed.withValues(alpha: 0.2)),
                             ),
                             child: Text(
                               product.category!.name.toUpperCase(),
@@ -291,6 +299,13 @@ class ProductDetailScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: _brandRed,
                               borderRadius: BorderRadius.circular(4),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: _brandRed.withValues(alpha: 0.25),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 1),
+                                ),
+                              ],
                             ),
                             child: Text(
                               'Save ${product.discountPercent}%',
@@ -321,10 +336,10 @@ class ProductDetailScreen extends StatelessWidget {
                         height: 40,
                         width: 40,
                         decoration: BoxDecoration(
-                          color: _brandRed.withValues(alpha: 0.1),
+                          color: AppColors.redesignAccentSoftBg,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Icon(Icons.store_rounded, color: Colors.blueGrey, size: 22),
+                        child: Icon(Icons.store_rounded, color: _brandRed, size: 22),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -452,7 +467,7 @@ class ProductDetailScreen extends StatelessWidget {
                           : 'Handcrafted with fair-trade certified materials by independent community artisans.',
                       style: AppFontStyle.fontStyleW400(
                         fontSize: 13,
-                        fontColor: const Color(0xFF334155),
+                        fontColor: AppColors.redesignSlateGrey,
                       ),
                     ),
                     if (product.features.isNotEmpty) ...[
@@ -478,7 +493,7 @@ class ProductDetailScreen extends StatelessWidget {
                                   f,
                                   style: AppFontStyle.fontStyleW400(
                                     fontSize: 12.5,
-                                    fontColor: const Color(0xFF475569),
+                                    fontColor: _brandDark,
                                   ),
                                 ),
                               ),
@@ -518,7 +533,7 @@ class ProductDetailScreen extends StatelessWidget {
                             'Free standard shipping on all orders over CA\$100.00.',
                             style: AppFontStyle.fontStyleW500(
                               fontSize: 12.5,
-                              fontColor: const Color(0xFF334155),
+                              fontColor: _brandDark,
                             ),
                           ),
                         ),

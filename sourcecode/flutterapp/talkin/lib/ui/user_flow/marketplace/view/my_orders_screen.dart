@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:notisboard/custom/image/professional_cached_image.dart';
 import 'package:notisboard/ui/user_flow/marketplace/api/marketplace_api.dart';
 import 'package:notisboard/ui/user_flow/marketplace/model/marketplace_model.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -55,7 +56,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
         return Colors.blue;
       case 'CANCELLED':
       case 'REFUNDED':
-        return AppColors.red;
+        return _brandRed;
       case 'PENDING':
       default:
         return Colors.orange;
@@ -89,7 +90,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
         onRefresh: _fetchOrders,
         color: _brandRed,
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator(color: _brandRed))
             : _orders.isEmpty
                 ? Center(
                     child: Padding(
@@ -97,12 +98,24 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.inventory_2_outlined, size: 56, color: AppColors.redesignSlateGrey),
-                          const SizedBox(height: 16),
+                          Container(
+                            height: 90,
+                            width: 90,
+                            decoration: BoxDecoration(
+                              color: AppColors.redesignAccentSoftBg,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.inventory_2_outlined,
+                              size: 44,
+                              color: _brandRed,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
                           Text(
                             'No Orders Yet',
                             style: AppFontStyle.fontStyleW700(
-                              fontSize: 17,
+                              fontSize: 18,
                               fontColor: _brandDark,
                             ),
                           ),
@@ -113,6 +126,26 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                             style: AppFontStyle.fontStyleW400(
                               fontSize: 13,
                               fontColor: AppColors.redesignSlateGrey,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          ElevatedButton(
+                            onPressed: () => Get.back(),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: _brandRed,
+                              foregroundColor: AppColors.white,
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 13),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Text(
+                              'Explore Marketplace',
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: 14,
+                                fontColor: AppColors.white,
+                              ),
                             ),
                           ),
                         ],
@@ -205,7 +238,10 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                           height: 38,
                                           width: 38,
                                           fit: BoxFit.cover,
-                                          errorWidget: (_, __, ___) => const Icon(Icons.shopping_bag_outlined, size: 20),
+                                          placeholder: (context, url) => const AppImageShimmer(
+                                            borderRadius: BorderRadius.all(Radius.circular(6)),
+                                          ),
+                                          errorWidget: (_, __, ___) => Icon(Icons.shopping_bag_outlined, size: 20, color: AppColors.redesignSlateGrey),
                                         ),
                                       )
                                     else
@@ -216,7 +252,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                           color: AppColors.redesignNeutralGrey,
                                           borderRadius: BorderRadius.circular(6),
                                         ),
-                                        child: const Icon(Icons.shopping_bag_outlined, size: 20),
+                                        child: Icon(Icons.shopping_bag_outlined, size: 20, color: AppColors.redesignSlateGrey),
                                       ),
                                     const SizedBox(width: 10),
                                     Expanded(
@@ -262,8 +298,9 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                   margin: const EdgeInsets.only(top: 4),
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFF1F5F9),
+                                    color: const Color(0xFFF8F9FA),
                                     borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: _softBorder),
                                   ),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -272,7 +309,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                         '${vo.subOrderNumber} (${vo.storeName ?? "Vendor"})',
                                         style: AppFontStyle.fontStyleW500(
                                           fontSize: 11,
-                                          fontColor: const Color(0xFF475569),
+                                          fontColor: _brandDark,
                                         ),
                                       ),
                                       Text(
@@ -333,4 +370,3 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
     );
   }
 }
-

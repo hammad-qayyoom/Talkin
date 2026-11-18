@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/marketplace/controller/marketplace_cart_controller.dart';
 import 'package:notisboard/ui/user_flow/marketplace/controller/marketplace_controller.dart';
+import 'package:notisboard/ui/user_flow/marketplace/shimmer/marketplace_shimmer.dart';
 import 'package:notisboard/ui/user_flow/marketplace/widget/product_card_widget.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -53,10 +54,20 @@ class MarketplaceHomeScreen extends StatelessWidget {
         ),
         actions: [
           // Order History Icon
-          IconButton(
-            icon: Icon(Icons.receipt_long_rounded, color: _brandDark, size: 22),
-            tooltip: 'My Orders',
-            onPressed: () => Get.toNamed(AppRoutes.marketplaceMyOrdersScreen),
+          Padding(
+            padding: const EdgeInsets.only(right: 2),
+            child: IconButton(
+              tooltip: 'My Orders',
+              icon: Container(
+                padding: const EdgeInsets.all(7),
+                decoration: BoxDecoration(
+                  color: AppColors.redesignAccentSoftBg,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.receipt_long_rounded, color: _brandRed, size: 18),
+              ),
+              onPressed: () => Get.toNamed(AppRoutes.marketplaceMyOrdersScreen),
+            ),
           ),
           // Cart Icon with Badge
           Obx(() {
@@ -65,20 +76,29 @@ class MarketplaceHomeScreen extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 IconButton(
-                  icon: Icon(Icons.shopping_bag_outlined, color: _brandDark, size: 24),
+                  tooltip: 'Shopping Cart',
+                  icon: Container(
+                    padding: const EdgeInsets.all(7),
+                    decoration: BoxDecoration(
+                      color: AppColors.redesignAccentSoftBg,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(Icons.shopping_bag_outlined, color: _brandRed, size: 18),
+                  ),
                   onPressed: () => Get.toNamed(AppRoutes.marketplaceCartScreen),
                 ),
                 if (count > 0)
                   Positioned(
-                    top: 8,
-                    right: 8,
+                    top: 6,
+                    right: 6,
                     child: Container(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(3.5),
                       decoration: BoxDecoration(
                         color: _brandRed,
                         shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.white, width: 1.5),
                       ),
-                      constraints: const BoxConstraints(minWidth: 17, minHeight: 17),
+                      constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
                       child: Center(
                         child: Text(
                           '$count',
@@ -97,7 +117,7 @@ class MarketplaceHomeScreen extends StatelessWidget {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => controller.loadInitialData(),
+        onRefresh: () => controller.loadInitialData(isBackgroundSync: false),
         color: _brandRed,
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -148,24 +168,27 @@ class MarketplaceHomeScreen extends StatelessWidget {
               ),
             ),
 
-            // Hero Showcase Banner
+            // Hero Showcase Banner in Brand Red Gradient
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(horizontalPadding, 6, horizontalPadding, 12),
                 child: Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.redesignBrandRed,
+                        AppColors.redesignBrandRedDeep,
+                      ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.black.withValues(alpha: 0.12),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
+                        color: AppColors.redesignBrandRed.withValues(alpha: 0.25),
+                        blurRadius: 16,
+                        offset: const Offset(0, 6),
                       ),
                     ],
                   ),
@@ -176,24 +199,32 @@ class MarketplaceHomeScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
-                                color: _brandRed.withValues(alpha: 0.25),
-                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.white.withValues(alpha: 0.18),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: Colors.white.withValues(alpha: 0.28)),
                               ),
-                              child: Text(
-                                '🌍 100% ETHICAL & FAIR-TRADE',
-                                style: AppFontStyle.fontStyleW700(
-                                  fontSize: 10,
-                                  fontColor: const Color(0xFFFF8A80),
-                                ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text('🌍', style: TextStyle(fontSize: 11)),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '100% ETHICAL & FAIR-TRADE',
+                                    style: AppFontStyle.fontStyleW700(
+                                      fontSize: 10,
+                                      fontColor: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 10),
                             Text(
                               'Support Global Artisans',
                               style: AppFontStyle.fontStyleW700(
-                                fontSize: 16,
+                                fontSize: 18,
                                 fontColor: AppColors.white,
                               ),
                             ),
@@ -201,8 +232,8 @@ class MarketplaceHomeScreen extends StatelessWidget {
                             Text(
                               'Every single purchase directly empowers independent creators worldwide.',
                               style: AppFontStyle.fontStyleW400(
-                                fontSize: 11.5,
-                                fontColor: const Color(0xFF94A3B8),
+                                fontSize: 12,
+                                fontColor: Colors.white.withValues(alpha: 0.92),
                               ),
                             ),
                           ],
@@ -210,11 +241,12 @@ class MarketplaceHomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       Container(
-                        height: 52,
-                        width: 52,
+                        height: 54,
+                        width: 54,
                         decoration: BoxDecoration(
-                          color: AppColors.white.withValues(alpha: 0.1),
+                          color: Colors.white.withValues(alpha: 0.18),
                           shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.28)),
                         ),
                         child: const Icon(
                           Icons.storefront_rounded,
@@ -290,15 +322,30 @@ class MarketplaceHomeScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Obx(() => Text(
-                          controller.isLoading.value
-                              ? 'Loading products...'
-                              : '${controller.productList.length} products available',
-                          style: AppFontStyle.fontStyleW600(
-                            fontSize: 13,
-                            fontColor: _brandDark,
+                    Obx(() {
+                      final isInitialLoading = controller.isLoading.value && controller.productList.isEmpty;
+                      return Row(
+                        children: [
+                          Text(
+                            isInitialLoading
+                                ? 'Loading products...'
+                                : '${controller.productList.length} products available',
+                            style: AppFontStyle.fontStyleW600(
+                              fontSize: 13,
+                              fontColor: _brandDark,
+                            ),
                           ),
-                        )),
+                          if (controller.isLoading.value && controller.productList.isNotEmpty) ...[
+                            const SizedBox(width: 8),
+                            SizedBox(
+                              width: 12,
+                              height: 12,
+                              child: CircularProgressIndicator(strokeWidth: 1.5, color: _brandRed),
+                            ),
+                          ],
+                        ],
+                      );
+                    }),
                     // Sort dropdown
                     PopupMenuButton<String>(
                       onSelected: controller.changeSort,
@@ -340,13 +387,13 @@ class MarketplaceHomeScreen extends StatelessWidget {
               ),
             ),
 
-            // Products Grid
+            // Products Grid: Shimmer when initial loading or real products
             Obx(() {
-              if (controller.isLoading.value) {
-                return const SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(
-                    child: CircularProgressIndicator(),
+              if (controller.isLoading.value && controller.productList.isEmpty) {
+                return SliverToBoxAdapter(
+                  child: MarketplaceGridShimmer(
+                    horizontalPadding: horizontalPadding,
+                    isTablet: isTablet,
                   ),
                 );
               }
@@ -360,8 +407,16 @@ class MarketplaceHomeScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.search_off_rounded, size: 56, color: AppColors.redesignSlateGrey),
-                          const SizedBox(height: 12),
+                          Container(
+                            height: 72,
+                            width: 72,
+                            decoration: BoxDecoration(
+                              color: AppColors.redesignAccentSoftBg,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(Icons.search_off_rounded, size: 36, color: _brandRed),
+                          ),
+                          const SizedBox(height: 14),
                           Text(
                             'No Products Found',
                             style: AppFontStyle.fontStyleW700(
@@ -410,4 +465,3 @@ class MarketplaceHomeScreen extends StatelessWidget {
     );
   }
 }
-

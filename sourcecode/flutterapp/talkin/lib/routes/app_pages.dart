@@ -9,6 +9,19 @@ import 'package:notisboard/ui/user_flow/marketplace/view/marketplace_home_screen
 import 'package:notisboard/ui/user_flow/marketplace/view/my_orders_screen.dart';
 import 'package:notisboard/ui/user_flow/marketplace/view/order_success_screen.dart';
 import 'package:notisboard/ui/user_flow/marketplace/view/product_detail_screen.dart';
+import 'package:notisboard/ui/user_flow/fundraising/binding/fundraising_binding.dart';
+import 'package:notisboard/ui/user_flow/fundraising/view/fundraising_home_screen.dart';
+import 'package:notisboard/ui/user_flow/fundraising/view/campaign_detail_screen.dart';
+import 'package:notisboard/ui/user_flow/fundraising/view/program_detail_screen.dart';
+import 'package:notisboard/ui/user_flow/fundraising/view/donate_screen.dart';
+import 'package:notisboard/ui/user_flow/fundraising/view/donation_success_screen.dart';
+import 'package:notisboard/ui/user_flow/fundraising/view/my_donations_screen.dart';
+import 'package:notisboard/ui/user_flow/events/binding/events_binding.dart';
+import 'package:notisboard/ui/user_flow/events/view/events_home_screen.dart';
+import 'package:notisboard/ui/user_flow/events/view/event_detail_screen.dart';
+import 'package:notisboard/ui/user_flow/events/view/event_booking_screen.dart';
+import 'package:notisboard/ui/user_flow/events/view/ticket_pass_screen.dart';
+import 'package:notisboard/ui/user_flow/events/view/my_tickets_screen.dart';
 import 'package:notisboard/ui/common/blog_news/binding/blog_news_binding.dart';
 import 'package:notisboard/ui/common/blog_news/view/blog_news_detail_screen.dart';
 import 'package:notisboard/ui/common/blog_news/view/blog_news_list_screen.dart';
@@ -525,6 +538,61 @@ class AppPages {
     GetPage(
       name: AppRoutes.marketplaceMyOrdersScreen,
       page: () => const MyOrdersScreen(),
+    ),
+    // Fundraising & Foundation Giving Routes
+    GetPage(
+      name: AppRoutes.fundraisingHomeScreen,
+      page: () => const FundraisingHomeScreen(),
+      binding: FundraisingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.campaignDetailScreen,
+      page: () => const CampaignDetailScreen(),
+      binding: FundraisingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.programDetailScreen,
+      page: () => const ProgramDetailScreen(),
+      binding: FundraisingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.donationScreen,
+      page: () => const DonateScreen(),
+      binding: FundraisingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.donationSuccessScreen,
+      page: () => const DonationSuccessScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.myDonationsScreen,
+      page: () => const MyDonationsScreen(),
+      binding: FundraisingBinding(),
+    ),
+    // Events & Ticketing Routes
+    GetPage(
+      name: AppRoutes.eventsHomeScreen,
+      page: () => const EventsHomeScreen(),
+      binding: EventsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.eventDetailScreen,
+      page: () => const EventDetailScreen(),
+      binding: EventsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.eventBookingScreen,
+      page: () => const EventBookingScreen(),
+      binding: EventsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.ticketPassScreen,
+      page: () => const TicketPassScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.myTicketsScreen,
+      page: () => const MyTicketsScreen(),
+      binding: EventsBinding(),
     ),
   ];
 }

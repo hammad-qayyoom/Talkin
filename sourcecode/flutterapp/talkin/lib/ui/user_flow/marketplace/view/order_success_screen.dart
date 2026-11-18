@@ -105,14 +105,14 @@ class OrderSuccessScreen extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Icon(Icons.mark_email_read_outlined, size: 16, color: AppColors.blue),
+                          Icon(Icons.mark_email_read_outlined, size: 16, color: _brandRed),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               'Confirmation sent to $email',
                               style: AppFontStyle.fontStyleW500(
                                 fontSize: 11.5,
-                                fontColor: const Color(0xFF334155),
+                                fontColor: _brandDark,
                               ),
                             ),
                           ),
@@ -157,8 +157,9 @@ class OrderSuccessScreen extends StatelessWidget {
                     Get.offNamed(AppRoutes.marketplaceMyOrdersScreen);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _brandDark,
+                    backgroundColor: _brandRed,
                     foregroundColor: AppColors.white,
+                    elevation: 0,
                     minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),

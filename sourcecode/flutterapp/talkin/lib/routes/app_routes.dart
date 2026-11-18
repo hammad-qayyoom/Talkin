@@ -90,4 +90,19 @@ class AppRoutes {
   static const String marketplaceCheckoutScreen = '/marketplaceCheckoutScreen';
   static const String marketplaceOrderSuccessScreen = '/marketplaceOrderSuccessScreen';
   static const String marketplaceMyOrdersScreen = '/marketplaceMyOrdersScreen';
+
+  // Fundraising & Foundation Giving Routes
+  static const String fundraisingHomeScreen = '/fundraisingHomeScreen';
+  static const String campaignDetailScreen = '/campaignDetailScreen';
+  static const String programDetailScreen = '/programDetailScreen';
+  static const String donationScreen = '/donationScreen';
+  static const String donationSuccessScreen = '/donationSuccessScreen';
+  static const String myDonationsScreen = '/myDonationsScreen';
+
+  // Events & Ticketing Routes
+  static const String eventsHomeScreen = '/eventsHomeScreen';
+  static const String eventDetailScreen = '/eventDetailScreen';
+  static const String eventBookingScreen = '/eventBookingScreen';
+  static const String ticketPassScreen = '/ticketPassScreen';
+  static const String myTicketsScreen = '/myTicketsScreen';
 }

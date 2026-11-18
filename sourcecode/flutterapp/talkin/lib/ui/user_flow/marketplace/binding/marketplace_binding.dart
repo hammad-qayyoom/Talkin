@@ -8,7 +8,6 @@ class MarketplaceBinding extends Bindings {
     if (!Get.isRegistered<MarketplaceCartController>()) {
       Get.put(MarketplaceCartController(), permanent: true);
     }
-    Get.lazyPut<MarketplaceController>(() => MarketplaceController());
+    Get.lazyPut<MarketplaceController>(() => MarketplaceController(), fenix: true);
   }
 }
-

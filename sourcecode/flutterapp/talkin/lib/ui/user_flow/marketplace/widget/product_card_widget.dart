@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notisboard/custom/image/professional_cached_image.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/marketplace/controller/marketplace_cart_controller.dart';
 import 'package:notisboard/ui/user_flow/marketplace/model/marketplace_model.dart';
@@ -55,24 +56,17 @@ class ProductCardWidget extends StatelessWidget {
                         ? CachedNetworkImage(
                             imageUrl: product.featuredImage,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(
-                              color: AppColors.redesignNeutralGrey,
-                              child: const Center(
-                                child: SizedBox(
-                                  width: 22,
-                                  height: 22,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
-                                ),
-                              ),
+                            placeholder: (context, url) => const AppImageShimmer(
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                             ),
                             errorWidget: (context, url, error) => Container(
                               color: AppColors.redesignNeutralGrey,
-                              child: const Icon(Icons.shopping_bag_outlined, color: Colors.grey),
+                              child: Icon(Icons.shopping_bag_outlined, color: AppColors.redesignSlateGrey),
                             ),
                           )
                         : Container(
                             color: AppColors.redesignNeutralGrey,
-                            child: const Icon(Icons.shopping_bag_outlined, color: Colors.grey),
+                            child: Icon(Icons.shopping_bag_outlined, color: AppColors.redesignSlateGrey),
                           ),
                   ),
                 ),
@@ -86,6 +80,13 @@ class ProductCardWidget extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: _brandRed,
                         borderRadius: BorderRadius.circular(6),
+                        boxShadow: [
+                          BoxShadow(
+                            color: _brandRed.withValues(alpha: 0.3),
+                            blurRadius: 4,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
                       ),
                       child: Text(
                         '${product.discountPercent}% OFF',
@@ -228,8 +229,11 @@ class ProductCardWidget extends StatelessWidget {
                             height: 34,
                             width: 34,
                             decoration: BoxDecoration(
-                              color: inCart ? _brandRed : _brandRed.withValues(alpha: 0.1),
+                              color: inCart ? _brandRed : AppColors.redesignAccentSoftBg,
                               borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: inCart ? _brandRed : _brandRed.withValues(alpha: 0.2),
+                              ),
                             ),
                             child: Center(
                               child: inCart
@@ -242,7 +246,7 @@ class ProductCardWidget extends StatelessWidget {
                                     )
                                   : Icon(
                                       Icons.add_shopping_cart_rounded,
-                                      size: 18,
+                                      size: 17,
                                       color: _brandRed,
                                     ),
                             ),

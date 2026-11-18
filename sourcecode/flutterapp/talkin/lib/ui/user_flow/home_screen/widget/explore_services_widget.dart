@@ -164,14 +164,14 @@ class ExploreServicesWidget extends StatelessWidget {
                 icon: Icons.calendar_today_outlined,
                 label: 'Events',
                 isTablet: isTablet,
-                onTap: () => _onServiceTap(context, 'Events', null),
+                onTap: () => Get.toNamed(AppRoutes.eventsHomeScreen),
               ),
               _buildServiceCard(
                 context: context,
                 icon: Icons.volunteer_activism_outlined,
                 label: 'Fundraising',
                 isTablet: isTablet,
-                onTap: () => _onServiceTap(context, 'Fundraising', null),
+                onTap: () => Get.toNamed(AppRoutes.fundraisingHomeScreen),
               ),
               _buildServiceCard(
                 context: context,

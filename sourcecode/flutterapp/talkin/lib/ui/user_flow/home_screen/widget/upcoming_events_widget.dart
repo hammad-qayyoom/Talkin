@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/font_style.dart';
-import 'package:notisboard/utils/utils.dart';
 
 class UpcomingEventsWidget extends StatelessWidget {
   const UpcomingEventsWidget({super.key});
@@ -39,9 +40,7 @@ class UpcomingEventsWidget extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  Utils.showToast(context, 'Events module is coming soon!');
-                },
+                onTap: () => Get.toNamed(AppRoutes.eventsHomeScreen),
                 behavior: HitTestBehavior.opaque,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -66,9 +65,7 @@ class UpcomingEventsWidget extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           GestureDetector(
-            onTap: () {
-              Utils.showToast(context, 'Event registrations opening soon!');
-            },
+            onTap: () => Get.toNamed(AppRoutes.eventsHomeScreen),
             behavior: HitTestBehavior.opaque,
             child: Container(
               padding: const EdgeInsets.all(10),

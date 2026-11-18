@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notisboard/custom/image/professional_cached_image.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/marketplace/controller/marketplace_cart_controller.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -64,15 +65,15 @@ class CartScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    height: 100,
-                    width: 100,
+                    height: 90,
+                    width: 90,
                     decoration: BoxDecoration(
-                      color: _brandRed.withValues(alpha: 0.08),
+                      color: AppColors.redesignAccentSoftBg,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.shopping_bag_outlined,
-                      size: 48,
+                      size: 46,
                       color: _brandRed,
                     ),
                   ),
@@ -99,7 +100,8 @@ class CartScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _brandRed,
                       foregroundColor: AppColors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 13),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -200,7 +202,7 @@ class CartScreen extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Thumbnail
+                        // Thumbnail with Shimmer placeholder
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Container(
@@ -211,9 +213,14 @@ class CartScreen extends StatelessWidget {
                                 ? CachedNetworkImage(
                                     imageUrl: product.featuredImage,
                                     fit: BoxFit.cover,
-                                    errorWidget: (_, __, ___) => const Icon(Icons.shopping_bag_outlined),
+                                    placeholder: (_, __) => const AppImageShimmer(
+                                      height: 72,
+                                      width: 72,
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    errorWidget: (_, __, ___) => Icon(Icons.shopping_bag_outlined, color: AppColors.redesignSlateGrey),
                                   )
-                                : const Icon(Icons.shopping_bag_outlined),
+                                : Icon(Icons.shopping_bag_outlined, color: AppColors.redesignSlateGrey),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -258,7 +265,7 @@ class CartScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.delete_outline_rounded, size: 20, color: AppColors.red),
+                              icon: Icon(Icons.delete_outline_rounded, size: 20, color: _brandRed),
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
                               onPressed: () => cart.removeFromCart(product.id),
@@ -437,4 +444,3 @@ class CartScreen extends StatelessWidget {
     );
   }
 }
-

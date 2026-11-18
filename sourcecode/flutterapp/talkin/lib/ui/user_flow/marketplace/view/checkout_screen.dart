@@ -154,7 +154,7 @@ class CheckoutScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // 3. Select Payment Gateway (Configured by App Admin Panel)
+            // 3. Select Payment Gateway
             _buildSectionCard(
               title: 'Payment Gateway',
               icon: Icons.payment_rounded,
@@ -220,7 +220,7 @@ class CheckoutScreen extends StatelessWidget {
                                 height: 36,
                                 width: 36,
                                 decoration: BoxDecoration(
-                                  color: _brandRed.withValues(alpha: 0.08),
+                                  color: AppColors.redesignAccentSoftBg,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Icon(m.icon, color: _brandRed, size: 20),
@@ -278,7 +278,7 @@ class CheckoutScreen extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: AppFontStyle.fontStyleW500(
                               fontSize: 12.5,
-                              fontColor: const Color(0xFF334155),
+                              fontColor: _brandDark,
                             ),
                           ),
                         ),
@@ -409,8 +409,15 @@ class CheckoutScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, size: 20, color: _brandRed),
-              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: AppColors.redesignAccentSoftBg,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(icon, size: 18, color: _brandRed),
+              ),
+              const SizedBox(width: 10),
               Text(
                 title,
                 style: AppFontStyle.fontStyleW700(
