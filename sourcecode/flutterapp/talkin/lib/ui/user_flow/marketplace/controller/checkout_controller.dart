@@ -399,6 +399,10 @@ class CheckoutController extends GetxController {
     final result = await MarketplaceApi.createOrder(payload);
 
     if (result['success'] == true) {
+      final emailStr = emailController.text.trim();
+      if (emailStr.isNotEmpty) {
+        Database.localStorage.write('last_order_email', emailStr);
+      }
       final MarketplaceOrder? placedOrder = result['order'] is MarketplaceOrder
           ? result['order'] as MarketplaceOrder
           : null;

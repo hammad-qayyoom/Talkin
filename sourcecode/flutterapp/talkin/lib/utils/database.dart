@@ -236,6 +236,31 @@ class Database {
   static String get loginUserProfilePic =>
       localStorage.read("loginUserProfilePic") ?? "";
   static String get loginUserEmail => localStorage.read("loginUserEmail") ?? "";
+
+  static String get resolvedUserEmail {
+    final profileEmail = (fetchLoginUserProfileModel?.user?.email ?? '').trim();
+    if (profileEmail.isNotEmpty) return profileEmail;
+
+    final storedEmail = (localStorage.read("loginUserEmail") ?? '').toString().trim();
+    if (storedEmail.isNotEmpty) return storedEmail;
+
+    final fbEmail = (FirebaseAuth.instance.currentUser?.email ?? '').trim();
+    if (fbEmail.isNotEmpty) return fbEmail;
+
+    final cachedDonor = (localStorage.read("last_donor_email") ?? '').toString().trim();
+    if (cachedDonor.isNotEmpty) return cachedDonor;
+
+    final cachedTicket = (localStorage.read("last_ticket_email") ?? '').toString().trim();
+    if (cachedTicket.isNotEmpty) return cachedTicket;
+
+    final cachedOrder = (localStorage.read("last_order_email") ?? '').toString().trim();
+    if (cachedOrder.isNotEmpty) return cachedOrder;
+
+    final cachedAccount = (localStorage.read("last_account_email") ?? '').toString().trim();
+    if (cachedAccount.isNotEmpty) return cachedAccount;
+
+    return '';
+  }
   static String get country => localStorage.read("country") ?? "";
   static String get countryFlag => localStorage.read("countryFlag") ?? "";
   static String get loginUserName => localStorage.read("loginUserName") ?? "";

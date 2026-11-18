@@ -43,77 +43,73 @@ class MyTicketsScreen extends GetView<MyTicketsController> {
       ),
       body: Column(
         children: [
-          // Email Lookup Header
+          // Event / Pass Search Header
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             color: AppColors.white,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF8F9FA),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: _softBorder),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.email_outlined, size: 18, color: _slateGrey),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: TextField(
-                            controller: controller.emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            onSubmitted: (val) => controller.loadTickets(val),
-                            style: AppFontStyle.fontStyleW500(
-                              fontSize: 13,
-                              fontColor: _brandDark,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: 'Enter attendee email to find passes',
-                              hintStyle: AppFontStyle.fontStyleW400(
-                                fontSize: 12.5,
-                                fontColor: _slateGrey,
-                              ),
-                              border: InputBorder.none,
-                              isDense: true,
-                              contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                            ),
-                          ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8F9FA),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: _softBorder),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.search_rounded, size: 20, color: _slateGrey),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: controller.searchController,
+                      onChanged: controller.onSearchChanged,
+                      style: AppFontStyle.fontStyleW500(
+                        fontSize: 13.5,
+                        fontColor: _brandDark,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Search passes by booking ID, event name...',
+                        hintStyle: AppFontStyle.fontStyleW400(
+                          fontSize: 13,
+                          fontColor: _slateGrey,
                         ),
-                      ],
+                        border: InputBorder.none,
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 11),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: () => controller.loadTickets(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _brandRed,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  ),
-                  child: const Text('Search'),
-                ),
-              ],
+                  Obx(() {
+                    if (controller.searchQuery.value.trim().isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+                    return GestureDetector(
+                      onTap: controller.clearSearch,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 6),
+                        child: Icon(Icons.cancel_rounded, size: 18, color: _slateGrey),
+                      ),
+                    );
+                  }),
+                ],
+              ),
             ),
           ),
           Divider(height: 1, color: _softBorder),
 
-          // Body
+          // Main Body
           Expanded(
             child: RefreshIndicator(
               onRefresh: controller.loadTickets,
               color: _brandRed,
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return Center(child: CircularProgressIndicator(color: _brandRed));
+                  return Center(
+                    child: CircularProgressIndicator(color: _brandRed),
+                  );
                 }
 
-                if (controller.tickets.isEmpty) {
+                // Empty state when user has no tickets at all
+                if (controller.allTickets.isEmpty) {
                   return ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
                     children: [
@@ -121,12 +117,20 @@ class MyTicketsScreen extends GetView<MyTicketsController> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.confirmation_number_outlined,
-                              size: 64,
-                              color: _brandRed.withValues(alpha: 0.35),
+                            Container(
+                              height: 90,
+                              width: 90,
+                              decoration: BoxDecoration(
+                                color: _accentSoftBg,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.confirmation_number_outlined,
+                                size: 44,
+                                color: _brandRed,
+                              ),
                             ),
-                            const SizedBox(height: 14),
+                            const SizedBox(height: 18),
                             Text(
                               'No Tickets Found',
                               style: AppFontStyle.fontStyleW700(
@@ -136,22 +140,24 @@ class MyTicketsScreen extends GetView<MyTicketsController> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              'No event registrations found for ${controller.emailController.text.trim().isNotEmpty ? controller.emailController.text.trim() : "this account"}. Search by the booking email or register for upcoming events.',
+                              'You haven\'t registered for any events yet. Check out upcoming events and community gatherings.',
                               textAlign: TextAlign.center,
                               style: AppFontStyle.fontStyleW400(
                                 fontSize: 13,
                                 fontColor: _slateGrey,
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 22),
                             ElevatedButton(
                               onPressed: () => Get.toNamed(AppRoutes.eventsHomeScreen),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: _brandRed,
                                 foregroundColor: Colors.white,
                                 elevation: 0,
-                                padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
                               child: const Text('Browse Events'),
                             ),
@@ -162,11 +168,70 @@ class MyTicketsScreen extends GetView<MyTicketsController> {
                   );
                 }
 
+                // Filter returned 0 results
+                if (controller.filteredTickets.isEmpty) {
+                  return ListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+                    children: [
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF1F5F9),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.search_off_rounded,
+                                size: 40,
+                                color: _slateGrey,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'No Matching Passes',
+                              style: AppFontStyle.fontStyleW700(
+                                fontSize: 16,
+                                fontColor: _brandDark,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'No event passes matched "${controller.searchQuery.value}".',
+                              textAlign: TextAlign.center,
+                              style: AppFontStyle.fontStyleW400(
+                                fontSize: 13,
+                                fontColor: _slateGrey,
+                              ),
+                            ),
+                            const SizedBox(height: 18),
+                            OutlinedButton(
+                              onPressed: controller.clearSearch,
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: _brandRed,
+                                side: BorderSide(color: _brandRed),
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Text('Clear Search'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }
+
                 return ListView.builder(
                   padding: const EdgeInsets.all(16),
-                  itemCount: controller.tickets.length,
+                  itemCount: controller.filteredTickets.length,
                   itemBuilder: (context, index) {
-                    final t = controller.tickets[index];
+                    final t = controller.filteredTickets[index];
                     return _buildTicketCard(context, t);
                   },
                 );

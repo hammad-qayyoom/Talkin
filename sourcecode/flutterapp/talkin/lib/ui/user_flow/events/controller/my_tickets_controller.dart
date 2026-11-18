@@ -6,42 +6,81 @@ import 'package:notisboard/utils/database.dart';
 
 class MyTicketsController extends GetxController {
   final isLoading = true.obs;
-  final tickets = <EventRegistrationRecord>[].obs;
-  final emailController = TextEditingController();
+  final allTickets = <EventRegistrationRecord>[].obs;
+  final filteredTickets = <EventRegistrationRecord>[].obs;
+  final searchController = TextEditingController();
+  final searchQuery = ''.obs;
+
+  // Resolved user email from logged in profile / session
+  String get userEmail => Database.resolvedUserEmail;
+
+  // Backwards compatibility alias for any existing bindings
+  RxList<EventRegistrationRecord> get tickets => filteredTickets;
 
   @override
   void onInit() {
     super.onInit();
-    final savedEmail = _resolveEmail();
-    emailController.text = savedEmail;
     loadTickets();
   }
 
   @override
   void onClose() {
-    emailController.dispose();
+    searchController.dispose();
     super.onClose();
   }
 
-  String _resolveEmail() {
-    final userEmail = Database.fetchLoginUserProfileModel?.user?.email?.trim() ?? '';
-    if (userEmail.isNotEmpty) return userEmail;
-    final cached = Database.localStorage.read('last_ticket_email') ?? Database.localStorage.read('last_donor_email');
-    if (cached is String && cached.trim().isNotEmpty) return cached.trim();
-    return '';
-  }
-
-  Future<void> loadTickets([String? overrideEmail]) async {
+  Future<void> loadTickets() async {
     isLoading.value = true;
-    final email = (overrideEmail ?? emailController.text).trim();
+    final email = userEmail;
     if (email.isNotEmpty) {
-      Database.localStorage.write('last_ticket_email', email);
       final list = await EventApi.fetchUserTickets(email);
-      tickets.assignAll(list);
+      allTickets.assignAll(list);
+      _applySearchFilter();
     } else {
-      tickets.clear();
+      allTickets.clear();
+      filteredTickets.clear();
     }
     isLoading.value = false;
   }
-}
 
+  void onSearchChanged(String query) {
+    searchQuery.value = query;
+    _applySearchFilter();
+  }
+
+  void clearSearch() {
+    searchController.clear();
+    searchQuery.value = '';
+    _applySearchFilter();
+  }
+
+  void _applySearchFilter() {
+    final query = searchQuery.value.trim().toLowerCase();
+    if (query.isEmpty) {
+      filteredTickets.assignAll(allTickets);
+      return;
+    }
+
+    final filtered = allTickets.where((t) {
+      final ref = t.bookingReference.toLowerCase();
+      final title = t.eventTitle.toLowerCase();
+      final attendee = t.attendeeName.toLowerCase();
+      final status = t.status.toLowerCase();
+      final venue = (t.venue ?? '').toLowerCase();
+      final ticketType = (t.ticketName ?? '').toLowerCase();
+      final amount = t.totalAmount.toString();
+      final amountFormatted = t.totalAmount.toStringAsFixed(2);
+
+      return ref.contains(query) ||
+          title.contains(query) ||
+          attendee.contains(query) ||
+          status.contains(query) ||
+          venue.contains(query) ||
+          ticketType.contains(query) ||
+          amount.contains(query) ||
+          amountFormatted.contains(query);
+    }).toList();
+
+    filteredTickets.assignAll(filtered);
+  }
+}

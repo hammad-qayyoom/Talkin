@@ -6,41 +6,77 @@ import 'package:notisboard/utils/database.dart';
 
 class MyDonationsController extends GetxController {
   final isLoading = true.obs;
-  final donations = <DonationRecord>[].obs;
-  final emailController = TextEditingController();
+  final allDonations = <DonationRecord>[].obs;
+  final filteredDonations = <DonationRecord>[].obs;
+  final searchController = TextEditingController();
+  final searchQuery = ''.obs;
+
+  // Resolved user email from logged in profile / session
+  String get userEmail => Database.resolvedUserEmail;
+
+  // Backwards compatibility alias for any existing bindings
+  RxList<DonationRecord> get donations => filteredDonations;
 
   @override
   void onInit() {
     super.onInit();
-    final savedEmail = _resolveDonorEmail();
-    emailController.text = savedEmail;
     loadDonations();
   }
 
   @override
   void onClose() {
-    emailController.dispose();
+    searchController.dispose();
     super.onClose();
   }
 
-  String _resolveDonorEmail() {
-    final userEmail = Database.fetchLoginUserProfileModel?.user?.email?.trim() ?? '';
-    if (userEmail.isNotEmpty) return userEmail;
-    final cached = Database.localStorage.read('last_donor_email');
-    if (cached is String && cached.trim().isNotEmpty) return cached.trim();
-    return '';
-  }
-
-  Future<void> loadDonations([String? overrideEmail]) async {
+  Future<void> loadDonations() async {
     isLoading.value = true;
-    final email = (overrideEmail ?? emailController.text).trim();
+    final email = userEmail;
     if (email.isNotEmpty) {
-      Database.localStorage.write('last_donor_email', email);
       final list = await FundraisingApi.fetchUserDonations(email);
-      donations.assignAll(list);
+      allDonations.assignAll(list);
+      _applySearchFilter();
     } else {
-      donations.clear();
+      allDonations.clear();
+      filteredDonations.clear();
     }
     isLoading.value = false;
+  }
+
+  void onSearchChanged(String query) {
+    searchQuery.value = query;
+    _applySearchFilter();
+  }
+
+  void clearSearch() {
+    searchController.clear();
+    searchQuery.value = '';
+    _applySearchFilter();
+  }
+
+  void _applySearchFilter() {
+    final query = searchQuery.value.trim().toLowerCase();
+    if (query.isEmpty) {
+      filteredDonations.assignAll(allDonations);
+      return;
+    }
+
+    final filtered = allDonations.where((d) {
+      final receipt = d.receiptNumber.toLowerCase();
+      final cause = (d.causeTitle ?? '').toLowerCase();
+      final status = d.status.toLowerCase();
+      final method = d.paymentMethod.toLowerCase();
+      final amount = d.amount.toString();
+      final amountFormatted = d.amount.toStringAsFixed(2);
+
+      return receipt.contains(query) ||
+          cause.contains(query) ||
+          status.contains(query) ||
+          method.contains(query) ||
+          amount.contains(query) ||
+          amountFormatted.contains(query);
+    }).toList();
+
+    filteredDonations.assignAll(filtered);
   }
 }
