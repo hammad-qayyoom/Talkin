@@ -50,7 +50,7 @@ class MyFoodRequestsScreen extends GetView<FoodAssistanceController> {
         final isLoading = controller.isLoadingRequests.value;
 
         return RefreshIndicator(
-          color: const Color(0xFFE11D48),
+          color: const Color(0xFF2563EB),
           onRefresh: () async {
             if (searchEmailController.text.trim().isNotEmpty) {
               await controller.loadMyRequests(searchEmailController.text.trim());
@@ -88,7 +88,7 @@ class MyFoodRequestsScreen extends GetView<FoodAssistanceController> {
                       ElevatedButton(
                         onPressed: () => controller.loadMyRequests(searchEmailController.text.trim()),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE11D48),
+                          backgroundColor: const Color(0xFF2563EB),
                           elevation: 0,
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -104,7 +104,7 @@ class MyFoodRequestsScreen extends GetView<FoodAssistanceController> {
                 if (isLoading) ...[
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 40),
-                    child: Center(child: CircularProgressIndicator(color: Color(0xFFE11D48))),
+                    child: Center(child: CircularProgressIndicator(color: Color(0xFF2563EB))),
                   ),
                 ] else ...[
                   // Beneficiary Profile Card
@@ -125,7 +125,7 @@ class MyFoodRequestsScreen extends GetView<FoodAssistanceController> {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.info_outline_rounded, color: Color(0xFFE11D48), size: 20),
+                              const Icon(Icons.info_outline_rounded, color: Color(0xFF2563EB), size: 20),
                               const SizedBox(width: 8),
                               Text(
                                 'No Beneficiary Profile Registered',
@@ -142,7 +142,7 @@ class MyFoodRequestsScreen extends GetView<FoodAssistanceController> {
                           ElevatedButton(
                             onPressed: () => Get.toNamed(AppRoutes.foodAssistanceApplyScreen),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFE11D48),
+                              backgroundColor: const Color(0xFF2563EB),
                               elevation: 0,
                               minimumSize: const Size(double.infinity, 36),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -321,7 +321,7 @@ class MyFoodRequestsScreen extends GetView<FoodAssistanceController> {
             children: [
               Text(
                 ord.orderNumber,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFFE11D48)),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF2563EB)),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),

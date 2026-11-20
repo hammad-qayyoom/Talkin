@@ -50,7 +50,7 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
                 ElevatedButton(
                   onPressed: () => Get.back(),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFE11D48),
+                    backgroundColor: const Color(0xFF2563EB),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                   child: const Text('Return to Food Catalogue', style: TextStyle(color: Colors.white)),
@@ -142,7 +142,7 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
                             ),
                             Text(
                               '${entry.value}x',
-                              style: AppFontStyle.fontStyleW700(fontSize: 13, fontColor: const Color(0xFFE11D48)),
+                              style: AppFontStyle.fontStyleW700(fontSize: 13, fontColor: const Color(0xFF2563EB)),
                             ),
                           ],
                         ),
@@ -235,16 +235,16 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
                               return Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: isSelected ? const Color(0xFFFFF1F2) : const Color(0xFFF8FAFC),
+                                  color: isSelected ? const Color(0xFFEFF6FF) : const Color(0xFFF8FAFC),
                                   borderRadius: BorderRadius.circular(14),
                                   border: Border.all(
-                                    color: isSelected ? const Color(0xFFE11D48) : const Color(0xFFE2E8F0),
+                                    color: isSelected ? const Color(0xFF2563EB) : const Color(0xFFE2E8F0),
                                     width: isSelected ? 1.5 : 1,
                                   ),
                                 ),
                                 child: Column(
                                   children: [
-                                    Icon(Icons.local_shipping_rounded, color: isSelected ? const Color(0xFFE11D48) : const Color(0xFF64748B)),
+                                    Icon(Icons.local_shipping_rounded, color: isSelected ? const Color(0xFF2563EB) : const Color(0xFF64748B)),
                                     const SizedBox(height: 4),
                                     Text('Home Delivery', style: AppFontStyle.fontStyleW700(fontSize: 12, fontColor: const Color(0xFF0F172A))),
                                   ],
@@ -262,16 +262,16 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
                               return Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: isSelected ? const Color(0xFFFFF1F2) : const Color(0xFFF8FAFC),
+                                  color: isSelected ? const Color(0xFFEFF6FF) : const Color(0xFFF8FAFC),
                                   borderRadius: BorderRadius.circular(14),
                                   border: Border.all(
-                                    color: isSelected ? const Color(0xFFE11D48) : const Color(0xFFE2E8F0),
+                                    color: isSelected ? const Color(0xFF2563EB) : const Color(0xFFE2E8F0),
                                     width: isSelected ? 1.5 : 1,
                                   ),
                                 ),
                                 child: Column(
                                   children: [
-                                    Icon(Icons.store_mall_directory_rounded, color: isSelected ? const Color(0xFFE11D48) : const Color(0xFF64748B)),
+                                    Icon(Icons.store_mall_directory_rounded, color: isSelected ? const Color(0xFF2563EB) : const Color(0xFF64748B)),
                                     const SizedBox(height: 4),
                                     Text('Depot Pickup', style: AppFontStyle.fontStyleW700(fontSize: 12, fontColor: const Color(0xFF0F172A))),
                                   ],
@@ -523,7 +523,7 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
                 ),
                 child: Text(
                   'Order #${orderData?['orderNumber'] ?? 'FBO-CONFIRMED'}',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFFE11D48)),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF2563EB)),
                 ),
               ),
               const SizedBox(height: 20),

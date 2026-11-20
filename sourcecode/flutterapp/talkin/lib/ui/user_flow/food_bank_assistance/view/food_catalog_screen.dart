@@ -49,7 +49,7 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
       ),
       body: Obx(() {
         if (controller.isLoadingProducts.value) {
-          return const Center(child: CircularProgressIndicator(color: Color(0xFFE11D48)));
+          return const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB)));
         }
 
         final filtered = controller.filteredProducts;
@@ -130,7 +130,7 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
                             margin: const EdgeInsets.only(right: 6),
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFFE11D48) : const Color(0xFFF1F5F9),
+                              color: isSelected ? const Color(0xFF2563EB) : const Color(0xFFF1F5F9),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -264,12 +264,12 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
                     return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFFF1F2),
+                        color: const Color(0xFFEFF6FF),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         tag,
-                        style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Color(0xFFE11D48)),
+                        style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Color(0xFF2563EB)),
                       ),
                     );
                   }).toList(),
@@ -301,7 +301,7 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
                     ),
                     Text(
                       '$qty',
-                      style: AppFontStyle.fontStyleW800(fontSize: 12, fontColor: const Color(0xFFE11D48)),
+                      style: AppFontStyle.fontStyleW800(fontSize: 12, fontColor: const Color(0xFF2563EB)),
                     ),
                     IconButton(
                       icon: const Icon(Icons.remove, size: 16),
@@ -319,7 +319,7 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
               child: ElevatedButton(
                 onPressed: p.isAvailable ? () => controller.addToParcel(p, context) : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFE11D48),
+                  backgroundColor: const Color(0xFF2563EB),
                   disabledBackgroundColor: const Color(0xFFE2E8F0),
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                   minimumSize: const Size(60, 32),

@@ -34,20 +34,20 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
         actions: [
           IconButton(
             tooltip: 'My Requests',
-            icon: const Icon(Icons.receipt_long_rounded, color: Color(0xFFE11D48)),
+            icon: const Icon(Icons.receipt_long_rounded, color: Color(0xFF2563EB)),
             onPressed: () => Get.toNamed(AppRoutes.foodAssistanceRequestsScreen),
           ),
         ],
       ),
       body: Obx(() {
         if (controller.isLoadingLocations.value) {
-          return const Center(child: CircularProgressIndicator(color: Color(0xFFE11D48)));
+          return const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB)));
         }
 
         final city = controller.selectedCity.value;
 
         return RefreshIndicator(
-          color: const Color(0xFFE11D48),
+          color: const Color(0xFF2563EB),
           onRefresh: () async {
             await controller.fetchLocationsAndProducts();
           },
@@ -63,14 +63,14 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [Color(0xFF991B1B), Color(0xFFE11D48), Color(0xFFBE123C)],
+                      colors: [Color(0xFF0F172A), Color(0xFF1E40AF), Color(0xFF2563EB)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFE11D48).withValues(alpha:0.3),
+                        color: const Color(0xFF2563EB).withValues(alpha: 0.25),
                         blurRadius: 18,
                         offset: const Offset(0, 8),
                       ),
@@ -85,15 +85,15 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha:0.2),
+                              color: Colors.white.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.white.withValues(alpha:0.3)),
+                              border: Border.all(color: Colors.white.withValues(alpha: 0.25)),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Text('🛡️', style: TextStyle(fontSize: 12)),
-                                const SizedBox(width: 4),
+                                const Icon(Icons.verified_user_rounded, color: Colors.white, size: 14),
+                                const SizedBox(width: 5),
                                 Text(
                                   'Global Food Relief Hub',
                                   style: AppFontStyle.fontStyleW700(
@@ -133,7 +133,7 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                         'Providing nutritious, dignified food packages & doorstep delivery to eligible families and community members.',
                         style: AppFontStyle.fontStyleW400(
                           fontSize: 12.5,
-                          fontColor: Colors.white.withValues(alpha:0.9),
+                          fontColor: Colors.white.withValues(alpha: 0.9),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -141,7 +141,7 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha:0.18),
+                          color: Colors.black.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Row(
@@ -175,13 +175,15 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                 ),
                 const SizedBox(height: 12),
 
-                GridView.count(
+                GridView(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 1.15,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    mainAxisExtent: 154,
+                  ),
                   children: [
                     _buildServiceCard(
                       icon: Icons.shopping_basket_rounded,
@@ -194,8 +196,8 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                     ),
                     _buildServiceCard(
                       icon: Icons.assignment_ind_rounded,
-                      iconBg: const Color(0xFFFFF1F2),
-                      iconColor: const Color(0xFFE11D48),
+                      iconBg: const Color(0xFFEFF6FF),
+                      iconColor: const Color(0xFF2563EB),
                       title: 'Apply for Assistance',
                       subtitle: 'Household verification & KYC',
                       badge: 'Verification',
@@ -237,14 +239,14 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      _buildCategoryChip('🍎', 'Fresh Fruits'),
-                      _buildCategoryChip('🥦', 'Organic Veggies'),
-                      _buildCategoryChip('🌾', 'Grains & Rice'),
-                      _buildCategoryChip('🥛', 'Dairy & Milk'),
-                      _buildCategoryChip('🥩', 'Halal Meat'),
-                      _buildCategoryChip('🥫', 'Pantry Cans'),
-                      _buildCategoryChip('🧼', 'Hygiene Kits'),
-                      _buildCategoryChip('🧃', 'Juices & Tea'),
+                      _buildCategoryChip(Icons.eco_rounded, 'Fresh Fruits', const Color(0xFF16A34A)),
+                      _buildCategoryChip(Icons.spa_rounded, 'Organic Veggies', const Color(0xFF059669)),
+                      _buildCategoryChip(Icons.grain_rounded, 'Grains & Rice', const Color(0xFFD97706)),
+                      _buildCategoryChip(Icons.local_drink_rounded, 'Dairy & Milk', const Color(0xFF2563EB)),
+                      _buildCategoryChip(Icons.restaurant_rounded, 'Halal Meat', const Color(0xFF0284C7)),
+                      _buildCategoryChip(Icons.inventory_2_rounded, 'Pantry Cans', const Color(0xFFD97706)),
+                      _buildCategoryChip(Icons.sanitizer_rounded, 'Hygiene Kits', const Color(0xFF0284C7)),
+                      _buildCategoryChip(Icons.emoji_food_beverage_rounded, 'Juices & Tea', const Color(0xFFEAB308)),
                     ],
                   ),
                 ),
@@ -272,10 +274,10 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFFF1F2),
+                          color: const Color(0xFFEFF6FF),
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: const Icon(Icons.volunteer_activism_rounded, color: Color(0xFFE11D48), size: 28),
+                        child: const Icon(Icons.volunteer_activism_rounded, color: Color(0xFF2563EB), size: 28),
                       ),
                       const SizedBox(width: 14),
                       Expanded(
@@ -303,7 +305,7 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                       TextButton(
                         onPressed: () => Get.toNamed(AppRoutes.foodBankDonateScreen),
                         style: TextButton.styleFrom(
-                          foregroundColor: const Color(0xFFE11D48),
+                          foregroundColor: const Color(0xFF2563EB),
                           textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                         ),
                         child: const Text('Donate →'),
@@ -480,7 +482,7 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -504,13 +506,13 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: iconBg,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(icon, color: iconColor, size: 22),
+                  child: Icon(icon, color: iconColor, size: 20),
                 ),
                 if (badge != null)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                     decoration: BoxDecoration(
                       color: const Color(0xFFF1F5F9),
                       borderRadius: BorderRadius.circular(8),
@@ -522,21 +524,21 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                   ),
               ],
             ),
+            const SizedBox(height: 6),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   title,
-                  style: AppFontStyle.fontStyleW700(fontSize: 13, fontColor: const Color(0xFF0F172A)),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  style: AppFontStyle.fontStyleW700(fontSize: 12.5, fontColor: const Color(0xFF0F172A)),
+                  maxLines: 2,
                 ),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
                   style: AppFontStyle.fontStyleW400(fontSize: 10.5, fontColor: const Color(0xFF64748B)),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                 ),
               ],
             ),
@@ -546,7 +548,7 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
     );
   }
 
-  Widget _buildCategoryChip(String emoji, String title) {
+  Widget _buildCategoryChip(IconData icon, String title, Color iconColor) {
     return Container(
       margin: const EdgeInsets.only(right: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -558,7 +560,7 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 14)),
+          Icon(icon, size: 16, color: iconColor),
           const SizedBox(width: 6),
           Text(
             title,
@@ -609,7 +611,13 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
               Expanded(
                 child: ListView(
                   children: [
-                    Text('🚚 Delivery Zones', style: AppFontStyle.fontStyleW700(fontSize: 14, fontColor: const Color(0xFF0F172A))),
+                    Row(
+                      children: [
+                        const Icon(Icons.local_shipping_outlined, color: Color(0xFF2563EB), size: 18),
+                        const SizedBox(width: 6),
+                        Text('Delivery Zones', style: AppFontStyle.fontStyleW700(fontSize: 14, fontColor: const Color(0xFF0F172A))),
+                      ],
+                    ),
                     const SizedBox(height: 8),
                     ...city.zones.map((zone) {
                       return Container(
@@ -637,13 +645,13 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                                 return Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: const Color(0xFFEFF6FF),
                                     borderRadius: BorderRadius.circular(6),
-                                    border: Border.all(color: const Color(0xFFCBD5E1)),
+                                    border: Border.all(color: const Color(0xFFBFDBFE)),
                                   ),
                                   child: Text(
                                     pfx,
-                                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFFE11D48)),
+                                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF2563EB)),
                                   ),
                                 );
                               }).toList(),
@@ -654,7 +662,13 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                     }),
 
                     const SizedBox(height: 16),
-                    Text('🏢 Walk-In Community Depots', style: AppFontStyle.fontStyleW700(fontSize: 14, fontColor: const Color(0xFF0F172A))),
+                    Row(
+                      children: [
+                        const Icon(Icons.storefront_outlined, color: Color(0xFF2563EB), size: 18),
+                        const SizedBox(width: 6),
+                        Text('Walk-In Community Depots', style: AppFontStyle.fontStyleW700(fontSize: 14, fontColor: const Color(0xFF0F172A))),
+                      ],
+                    ),
                     const SizedBox(height: 8),
                     ...city.pickupLocations.map((loc) {
                       return Container(
@@ -669,10 +683,31 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(loc.name, style: AppFontStyle.fontStyleW700(fontSize: 13, fontColor: const Color(0xFF0F172A))),
-                            const SizedBox(height: 3),
-                            Text('📍 ${loc.address}', style: AppFontStyle.fontStyleW400(fontSize: 11, fontColor: const Color(0xFF475569))),
-                            Text('🕒 ${loc.operatingHours}', style: AppFontStyle.fontStyleW400(fontSize: 11, fontColor: const Color(0xFF64748B))),
-                            Text('📞 ${loc.contactPhone}', style: AppFontStyle.fontStyleW600(fontSize: 11, fontColor: const Color(0xFF059669))),
+                            const SizedBox(height: 4),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Icon(Icons.location_on_outlined, size: 14, color: Color(0xFF64748B)),
+                                const SizedBox(width: 4),
+                                Expanded(child: Text(loc.address, style: AppFontStyle.fontStyleW400(fontSize: 11, fontColor: const Color(0xFF475569)))),
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                            Row(
+                              children: [
+                                const Icon(Icons.access_time_rounded, size: 14, color: Color(0xFF64748B)),
+                                const SizedBox(width: 4),
+                                Expanded(child: Text(loc.operatingHours, style: AppFontStyle.fontStyleW400(fontSize: 11, fontColor: const Color(0xFF64748B)))),
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                            Row(
+                              children: [
+                                const Icon(Icons.phone_outlined, size: 14, color: Color(0xFF059669)),
+                                const SizedBox(width: 4),
+                                Expanded(child: Text(loc.contactPhone, style: AppFontStyle.fontStyleW600(fontSize: 11, fontColor: const Color(0xFF059669)))),
+                              ],
+                            ),
                           ],
                         ),
                       );
