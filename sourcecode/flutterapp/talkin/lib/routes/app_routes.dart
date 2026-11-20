@@ -105,4 +105,16 @@ class AppRoutes {
   static const String eventBookingScreen = '/eventBookingScreen';
   static const String ticketPassScreen = '/ticketPassScreen';
   static const String myTicketsScreen = '/myTicketsScreen';
+
+  // Food Bank Donation Routes (Phase 4)
+  static const String foodBankDonateScreen = '/foodBankDonateScreen';
+  static const String foodBankSuccessScreen = '/foodBankSuccessScreen';
+  static const String foodBankHistoryScreen = '/foodBankHistoryScreen';
+
+  // Food Bank Operations & Assistance Routes (Phase 5)
+  static const String foodAssistanceHomeScreen = '/foodAssistanceHomeScreen';
+  static const String foodAssistanceApplyScreen = '/foodAssistanceApplyScreen';
+  static const String foodAssistanceCatalogScreen = '/foodAssistanceCatalogScreen';
+  static const String foodAssistanceCheckoutScreen = '/foodAssistanceCheckoutScreen';
+  static const String foodAssistanceRequestsScreen = '/foodAssistanceRequestsScreen';
 }

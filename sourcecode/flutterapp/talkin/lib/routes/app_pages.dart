@@ -22,6 +22,16 @@ import 'package:notisboard/ui/user_flow/events/view/event_detail_screen.dart';
 import 'package:notisboard/ui/user_flow/events/view/event_booking_screen.dart';
 import 'package:notisboard/ui/user_flow/events/view/ticket_pass_screen.dart';
 import 'package:notisboard/ui/user_flow/events/view/my_tickets_screen.dart';
+import 'package:notisboard/ui/user_flow/food_bank/binding/food_bank_binding.dart';
+import 'package:notisboard/ui/user_flow/food_bank/view/food_bank_donate_screen.dart';
+import 'package:notisboard/ui/user_flow/food_bank/view/food_bank_success_screen.dart';
+import 'package:notisboard/ui/user_flow/food_bank/view/food_bank_history_screen.dart';
+import 'package:notisboard/ui/user_flow/food_bank_assistance/binding/food_assistance_binding.dart';
+import 'package:notisboard/ui/user_flow/food_bank_assistance/view/food_assistance_home_screen.dart';
+import 'package:notisboard/ui/user_flow/food_bank_assistance/view/beneficiary_apply_screen.dart';
+import 'package:notisboard/ui/user_flow/food_bank_assistance/view/food_catalog_screen.dart';
+import 'package:notisboard/ui/user_flow/food_bank_assistance/view/food_checkout_screen.dart';
+import 'package:notisboard/ui/user_flow/food_bank_assistance/view/my_food_requests_screen.dart';
 import 'package:notisboard/ui/common/blog_news/binding/blog_news_binding.dart';
 import 'package:notisboard/ui/common/blog_news/view/blog_news_detail_screen.dart';
 import 'package:notisboard/ui/common/blog_news/view/blog_news_list_screen.dart';
@@ -593,6 +603,47 @@ class AppPages {
       name: AppRoutes.myTicketsScreen,
       page: () => const MyTicketsScreen(),
       binding: EventsBinding(),
+    ),
+    // Food Bank Donation Routes (Phase 4)
+    GetPage(
+      name: AppRoutes.foodBankDonateScreen,
+      page: () => const FoodBankDonateScreen(),
+      binding: FoodBankBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.foodBankSuccessScreen,
+      page: () => const FoodBankSuccessScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.foodBankHistoryScreen,
+      page: () => const FoodBankHistoryScreen(),
+      binding: FoodBankBinding(),
+    ),
+    // Food Bank Operations & Assistance Routes (Phase 5)
+    GetPage(
+      name: AppRoutes.foodAssistanceHomeScreen,
+      page: () => const FoodAssistanceHomeScreen(),
+      binding: FoodAssistanceBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.foodAssistanceApplyScreen,
+      page: () => const BeneficiaryApplyScreen(),
+      binding: FoodAssistanceBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.foodAssistanceCatalogScreen,
+      page: () => const FoodCatalogScreen(),
+      binding: FoodAssistanceBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.foodAssistanceCheckoutScreen,
+      page: () => const FoodCheckoutScreen(),
+      binding: FoodAssistanceBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.foodAssistanceRequestsScreen,
+      page: () => const MyFoodRequestsScreen(),
+      binding: FoodAssistanceBinding(),
     ),
   ];
 }

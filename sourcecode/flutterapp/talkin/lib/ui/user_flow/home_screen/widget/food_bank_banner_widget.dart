@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/utils/app_asset.dart';
 import 'package:notisboard/utils/app_color.dart';
 import 'package:notisboard/utils/font_style.dart';
@@ -100,7 +102,7 @@ class FoodBankBannerWidget extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Utils.showToast(context, 'Food Bank assistance program is coming soon!');
+                          Get.toNamed(AppRoutes.foodAssistanceHomeScreen);
                         },
                         behavior: HitTestBehavior.opaque,
                         child: Container(
@@ -134,7 +136,7 @@ class FoodBankBannerWidget extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Utils.showToast(context, 'Food Bank donation portal is coming soon!');
+                          Get.toNamed(AppRoutes.foodBankDonateScreen);
                         },
                         behavior: HitTestBehavior.opaque,
                         child: Container(

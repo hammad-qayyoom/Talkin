@@ -185,7 +185,7 @@ class ExploreServicesWidget extends StatelessWidget {
                 icon: Icons.all_inbox_rounded,
                 label: 'Food Bank',
                 isTablet: isTablet,
-                onTap: () => _onServiceTap(context, 'Food Bank', null),
+                onTap: () => Get.toNamed(AppRoutes.foodAssistanceHomeScreen),
               ),
             ],
           ),
