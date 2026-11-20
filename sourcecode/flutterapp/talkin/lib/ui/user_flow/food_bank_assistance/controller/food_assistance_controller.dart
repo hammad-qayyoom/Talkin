@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:notisboard/ui/user_flow/food_bank_assistance/api/food_assistance_api.dart';
 import 'package:notisboard/ui/user_flow/food_bank_assistance/model/food_assistance_model.dart';
 import 'package:notisboard/utils/database.dart';
@@ -63,6 +64,46 @@ class FoodAssistanceController extends GetxController {
   var applySeniors = 0.obs;
   var applyDietaryTags = <String>[].obs;
   var applyIdType = 'GOVERNMENT_PHOTO_ID'.obs;
+  var applyIdDocumentPath = ''.obs;
+  var applyIdDocumentUrl = ''.obs;
+  var isUploadingDocument = false.obs;
+
+  Future<void> pickIdDocument() async {
+    try {
+      final picker = ImagePicker();
+      final picked = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+      );
+      if (picked != null) {
+        applyIdDocumentPath.value = picked.path;
+        isUploadingDocument.value = true;
+        final url = await FoodAssistanceApi.uploadDocument(picked.path);
+        isUploadingDocument.value = false;
+        if (url != null) {
+          applyIdDocumentUrl.value = url;
+          if (Get.context != null) {
+            Utils.showToast(Get.context!, 'Document uploaded successfully!');
+          }
+        } else {
+          if (Get.context != null) {
+            Utils.showToast(Get.context!, 'Document selected (will upload on submit)');
+          }
+        }
+      }
+    } catch (e) {
+      isUploadingDocument.value = false;
+      Utils.showLog('pickIdDocument error: $e');
+      if (Get.context != null) {
+        Utils.showToast(Get.context!, 'Image picker error: $e');
+      }
+    }
+  }
+
+  void removeIdDocument() {
+    applyIdDocumentPath.value = '';
+    applyIdDocumentUrl.value = '';
+  }
 
   // Free Checkout Form Controllers
   final checkoutNameController = TextEditingController();
@@ -250,6 +291,13 @@ class FoodAssistanceController extends GetxController {
       return false;
     }
 
+    if (applyIdDocumentPath.value.isEmpty && applyIdDocumentUrl.value.isEmpty) {
+      if (Get.context != null) {
+        Utils.showToast(Get.context!, 'Please upload a photo of your identity document (KYC).');
+      }
+      return false;
+    }
+
     if (selectedCity.value == null) {
       if (Get.context != null) {
         Utils.showToast(Get.context!, 'Active city hub is not selected');
@@ -259,6 +307,14 @@ class FoodAssistanceController extends GetxController {
 
     isSubmittingApply.value = true;
     try {
+      // If document file was picked but url not ready, upload now
+      if (applyIdDocumentUrl.value.isEmpty && applyIdDocumentPath.value.isNotEmpty) {
+        final uploaded = await FoodAssistanceApi.uploadDocument(applyIdDocumentPath.value);
+        if (uploaded != null) {
+          applyIdDocumentUrl.value = uploaded;
+        }
+      }
+
       final city = selectedCity.value!;
       // Dynamically resolve parent province and country from selected city
       FoodBankProvince? matchedProvince;
@@ -292,6 +348,7 @@ class FoodAssistanceController extends GetxController {
         householdSeniors: applySeniors.value,
         dietaryRestrictions: applyDietaryTags.toList(),
         idDocumentType: applyIdType.value,
+        idDocumentUrl: applyIdDocumentUrl.value.isNotEmpty ? applyIdDocumentUrl.value : null,
         specialNotes: applyNotesController.text.trim().isNotEmpty ? applyNotesController.text.trim() : null,
       );
 

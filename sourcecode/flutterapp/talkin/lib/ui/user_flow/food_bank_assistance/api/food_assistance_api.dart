@@ -61,6 +61,27 @@ class FoodAssistanceApi {
     return [];
   }
 
+  /// Upload identity KYC document to media storage
+  static Future<String?> uploadDocument(String filePath) async {
+    try {
+      final uri = Uri.parse('$baseUrl/media/upload/public');
+      final request = http.MultipartRequest('POST', uri);
+      request.files.add(await http.MultipartFile.fromPath('file', filePath));
+      final streamed = await request.send().timeout(const Duration(seconds: 30));
+      final res = await http.Response.fromStream(streamed);
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        final json = jsonDecode(res.body);
+        if (json['success'] == true && json['data'] != null) {
+          final data = json['data'] as Map<String, dynamic>;
+          return data['url']?.toString();
+        }
+      }
+    } catch (e) {
+      Utils.showLog('FoodAssistanceApi.uploadDocument error: $e');
+    }
+    return null;
+  }
+
   /// Submit a Beneficiary Application (Relief KYC)
   static Future<Map<String, dynamic>> applyBeneficiary({
     required String fullName,
