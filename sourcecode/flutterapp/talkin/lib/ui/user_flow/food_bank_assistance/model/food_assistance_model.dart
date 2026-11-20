@@ -198,6 +198,10 @@ class FoodBankOperationSettings {
   final int defaultCooldownDays;
   final int maxProductTypesPerOrder;
   final bool emergencyOverride;
+  final String? helplineTitle;
+  final String? helplinePhone;
+  final String? helplineEmail;
+  final String? helplineHours;
 
   FoodBankOperationSettings({
     required this.id,
@@ -206,6 +210,10 @@ class FoodBankOperationSettings {
     this.defaultCooldownDays = 14,
     this.maxProductTypesPerOrder = 4,
     this.emergencyOverride = false,
+    this.helplineTitle,
+    this.helplinePhone,
+    this.helplineEmail,
+    this.helplineHours,
   });
 
   factory FoodBankOperationSettings.fromJson(Map<String, dynamic> json) {
@@ -216,6 +224,10 @@ class FoodBankOperationSettings {
       defaultCooldownDays: _toInt(json['defaultCooldownDays'], 14),
       maxProductTypesPerOrder: _toInt(json['maxProductTypesPerOrder'], 4),
       emergencyOverride: json['emergencyOverride'] == true,
+      helplineTitle: json['helplineTitle']?.toString(),
+      helplinePhone: json['helplinePhone']?.toString(),
+      helplineEmail: json['helplineEmail']?.toString(),
+      helplineHours: json['helplineHours']?.toString(),
     );
   }
 }

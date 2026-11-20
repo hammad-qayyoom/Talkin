@@ -332,7 +332,9 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                           const Icon(Icons.headset_mic_rounded, color: Colors.white, size: 20),
                           const SizedBox(width: 8),
                           Text(
-                            '${city?.name ?? "Operations"} Relief Helpline',
+                            controller.settings.value?.helplineTitle?.isNotEmpty == true
+                                ? controller.settings.value!.helplineTitle!
+                                : (city?.name.isNotEmpty == true ? '${city!.name} Relief Helpline' : 'Food Bank Helpline'),
                             style: AppFontStyle.fontStyleW700(
                               fontSize: 14,
                               fontColor: Colors.white,
@@ -342,7 +344,7 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Dispatch & Support: ${city?.contactPhone.isNotEmpty == true ? city!.contactPhone : "Notisboard Global Support"}',
+                        'Dispatch & Support: ${controller.settings.value?.helplinePhone?.isNotEmpty == true ? controller.settings.value!.helplinePhone! : (city?.contactPhone.isNotEmpty == true ? city!.contactPhone : "Contact Support")}',
                         style: AppFontStyle.fontStyleW500(
                           fontSize: 12,
                           fontColor: Colors.white.withValues(alpha:0.8),
@@ -350,12 +352,22 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Email: ${city?.contactEmail.isNotEmpty == true ? city!.contactEmail : "support@notisboardglobalfoundation.org"}',
+                        'Email: ${controller.settings.value?.helplineEmail?.isNotEmpty == true ? controller.settings.value!.helplineEmail! : (city?.contactEmail.isNotEmpty == true ? city!.contactEmail : "support@notisboardglobalfoundation.org")}',
                         style: AppFontStyle.fontStyleW400(
                           fontSize: 11.5,
                           fontColor: Colors.white.withValues(alpha:0.6),
                         ),
                       ),
+                      if (controller.settings.value?.helplineHours?.isNotEmpty == true) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          'Hours: ${controller.settings.value!.helplineHours!}',
+                          style: AppFontStyle.fontStyleW400(
+                            fontSize: 11,
+                            fontColor: Colors.white.withValues(alpha:0.6),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
