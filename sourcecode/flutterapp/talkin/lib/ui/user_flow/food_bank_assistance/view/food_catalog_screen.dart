@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/food_bank_assistance/controller/food_assistance_controller.dart';
 import 'package:notisboard/ui/user_flow/food_bank_assistance/model/food_assistance_model.dart';
 import 'package:notisboard/utils/app_color.dart';
@@ -17,14 +16,14 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
 
     final categories = [
       {'key': 'ALL', 'label': 'All Items'},
-      {'key': 'FRUITS', 'label': '🍎 Fruits'},
-      {'key': 'VEGETABLES', 'label': '🥦 Veggies'},
-      {'key': 'GRAINS', 'label': '🌾 Grains & Rice'},
-      {'key': 'DAIRY', 'label': '🥛 Dairy & Cheese'},
-      {'key': 'MEAT', 'label': '🥩 Halal Meat'},
-      {'key': 'CANNED_FOOD', 'label': '🥫 Canned Goods'},
-      {'key': 'HOUSEHOLD_ESSENTIALS', 'label': '🧼 Hygiene'},
-      {'key': 'BEVERAGES', 'label': '🧃 Juices & Tea'},
+      {'key': 'FRUITS', 'label': 'Fruits'},
+      {'key': 'VEGETABLES', 'label': 'Veggies'},
+      {'key': 'GRAINS', 'label': 'Grains & Rice'},
+      {'key': 'DAIRY', 'label': 'Dairy & Cheese'},
+      {'key': 'MEAT', 'label': 'Halal Meat'},
+      {'key': 'CANNED_FOOD', 'label': 'Canned Goods'},
+      {'key': 'HOUSEHOLD_ESSENTIALS', 'label': 'Hygiene'},
+      {'key': 'BEVERAGES', 'label': 'Juices & Tea'},
     ];
 
     final dietaryTags = ['ALL', 'Halal', 'Vegetarian', 'Vegan', 'Gluten-Free', 'Kosher'];
@@ -49,7 +48,7 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
       ),
       body: Obx(() {
         if (controller.isLoadingProducts.value) {
-          return const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB)));
+          return const Center(child: CircularProgressIndicator(color: Color(0xFFE11D48)));
         }
 
         final filtered = controller.filteredProducts;
@@ -130,7 +129,7 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
                             margin: const EdgeInsets.only(right: 6),
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFF2563EB) : const Color(0xFFF1F5F9),
+                              color: isSelected ? const Color(0xFFE11D48) : const Color(0xFFF1F5F9),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -223,20 +222,25 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF1F5F9),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        p.packageSize,
-                        style: AppFontStyle.fontStyleW600(fontSize: 9.5, fontColor: const Color(0xFF64748B)),
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF1F5F9),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          p.packageSize,
+                          style: AppFontStyle.fontStyleW600(fontSize: 9.5, fontColor: const Color(0xFF64748B)),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
+                    const SizedBox(width: 6),
                     Text(
                       'FREE \$0.00',
-                      style: AppFontStyle.fontStyleW800(fontSize: 11, fontColor: const Color(0xFF10B981)),
+                      style: AppFontStyle.fontStyleW800(fontSize: 11, fontColor: const Color(0xFFE11D48)),
                     ),
                   ],
                 ),
@@ -244,8 +248,8 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
                 Text(
                   p.name,
                   style: AppFontStyle.fontStyleW700(fontSize: 13, fontColor: const Color(0xFF0F172A)),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  softWrap: true,
                 ),
                 if (p.description != null && p.description!.isNotEmpty) ...[
                   const SizedBox(height: 2),
@@ -253,23 +257,24 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
                     p.description!,
                     style: AppFontStyle.fontStyleW400(fontSize: 10.5, fontColor: const Color(0xFF64748B)),
                     maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
                   ),
                 ],
                 const SizedBox(height: 6),
                 // Dietary Tags
                 Wrap(
                   spacing: 4,
+                  runSpacing: 4,
                   children: p.dietaryTags.map((tag) {
                     return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEFF6FF),
+                        color: const Color(0xFFFFF1F2),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         tag,
-                        style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Color(0xFF2563EB)),
+                        style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Color(0xFFE11D48)),
                       ),
                     );
                   }).toList(),
@@ -287,24 +292,24 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
             if (qty > 0) {
               return Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF8FAFC),
+                  color: const Color(0xFFFFF1F2),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                  border: Border.all(color: const Color(0xFFFECDD3)),
                 ),
                 child: Column(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.add, size: 16),
+                      icon: const Icon(Icons.add, size: 16, color: Color(0xFFE11D48)),
                       onPressed: () => controller.addToParcel(p, context),
                       padding: const EdgeInsets.all(4),
                       constraints: const BoxConstraints(),
                     ),
                     Text(
                       '$qty',
-                      style: AppFontStyle.fontStyleW800(fontSize: 12, fontColor: const Color(0xFF2563EB)),
+                      style: AppFontStyle.fontStyleW800(fontSize: 12, fontColor: const Color(0xFFE11D48)),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.remove, size: 16),
+                      icon: const Icon(Icons.remove, size: 16, color: Color(0xFFE11D48)),
                       onPressed: () => controller.removeFromParcel(p.id),
                       padding: const EdgeInsets.all(4),
                       constraints: const BoxConstraints(),
@@ -319,7 +324,7 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
               child: ElevatedButton(
                 onPressed: p.isAvailable ? () => controller.addToParcel(p, context) : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2563EB),
+                  backgroundColor: const Color(0xFFE11D48),
                   disabledBackgroundColor: const Color(0xFFE2E8F0),
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                   minimumSize: const Size(60, 32),
@@ -388,15 +393,15 @@ class FoodCatalogScreen extends GetView<FoodAssistanceController> {
                     const SizedBox(height: 2),
                     Text(
                       'Total: \$0.00 FREE',
-                      style: AppFontStyle.fontStyleW800(fontSize: 15, fontColor: const Color(0xFF10B981)),
+                      style: AppFontStyle.fontStyleW800(fontSize: 15, fontColor: const Color(0xFFE11D48)),
                     ),
                   ],
                 ),
               ),
               ElevatedButton(
-                onPressed: () => Get.toNamed(AppRoutes.foodAssistanceCheckoutScreen),
+                onPressed: () => controller.handleProceedToCheckout(),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF10B981),
+                  backgroundColor: const Color(0xFFE11D48),
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),

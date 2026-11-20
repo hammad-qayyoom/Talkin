@@ -107,7 +107,7 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF10B981),
+                              color: const Color(0xFFE11D48),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -205,8 +205,8 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                     ),
                     _buildServiceCard(
                       icon: Icons.track_changes_rounded,
-                      iconBg: const Color(0xFFF0FDF4),
-                      iconColor: const Color(0xFF16A34A),
+                      iconBg: const Color(0xFFFFF1F2),
+                      iconColor: const Color(0xFFE11D48),
                       title: 'Track My Parcels',
                       subtitle: 'Real-time delivery progress',
                       badge: '${controller.myRequests.length}',
@@ -239,8 +239,8 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      _buildCategoryChip(Icons.eco_rounded, 'Fresh Fruits', const Color(0xFF16A34A)),
-                      _buildCategoryChip(Icons.spa_rounded, 'Organic Veggies', const Color(0xFF059669)),
+                      _buildCategoryChip(Icons.eco_rounded, 'Fresh Fruits', const Color(0xFFE11D48)),
+                      _buildCategoryChip(Icons.spa_rounded, 'Organic Veggies', const Color(0xFFBE123C)),
                       _buildCategoryChip(Icons.grain_rounded, 'Grains & Rice', const Color(0xFFD97706)),
                       _buildCategoryChip(Icons.local_drink_rounded, 'Dairy & Milk', const Color(0xFF2563EB)),
                       _buildCategoryChip(Icons.restaurant_rounded, 'Halal Meat', const Color(0xFF0284C7)),
@@ -401,7 +401,7 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isApproved ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
+          color: isApproved ? const Color(0xFFE11D48) : const Color(0xFFF59E0B),
           width: 1.5,
         ),
         boxShadow: [
@@ -429,15 +429,15 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                 decoration: BoxDecoration(
                   color: isApproved
-                      ? const Color(0xFF10B981).withValues(alpha:0.12)
-                      : const Color(0xFFF59E0B).withValues(alpha:0.12),
+                      ? const Color(0xFFFFF1F2)
+                      : const Color(0xFFFFFBEB),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   profile.status,
                   style: AppFontStyle.fontStyleW800(
                     fontSize: 10,
-                    fontColor: isApproved ? const Color(0xFF059669) : const Color(0xFFD97706),
+                    fontColor: isApproved ? const Color(0xFFE11D48) : const Color(0xFFD97706),
                   ),
                 ),
               ),
@@ -457,7 +457,7 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
             ElevatedButton(
               onPressed: () => Get.toNamed(AppRoutes.foodAssistanceCatalogScreen),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF10B981),
+                backgroundColor: const Color(0xFFE11D48),
                 elevation: 0,
                 minimumSize: const Size(double.infinity, 36),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -703,9 +703,9 @@ class FoodAssistanceHomeScreen extends GetView<FoodAssistanceController> {
                             const SizedBox(height: 2),
                             Row(
                               children: [
-                                const Icon(Icons.phone_outlined, size: 14, color: Color(0xFF059669)),
+                                const Icon(Icons.phone_outlined, size: 14, color: Color(0xFFE11D48)),
                                 const SizedBox(width: 4),
-                                Expanded(child: Text(loc.contactPhone, style: AppFontStyle.fontStyleW600(fontSize: 11, fontColor: const Color(0xFF059669)))),
+                                Expanded(child: Text(loc.contactPhone, style: AppFontStyle.fontStyleW600(fontSize: 11, fontColor: const Color(0xFFE11D48)))),
                               ],
                             ),
                           ],

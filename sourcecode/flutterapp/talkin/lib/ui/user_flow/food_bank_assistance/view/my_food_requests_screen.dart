@@ -198,7 +198,7 @@ class MyFoodRequestsScreen extends GetView<FoodAssistanceController> {
                           ElevatedButton(
                             onPressed: () => Get.toNamed(AppRoutes.foodAssistanceCatalogScreen),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF10B981),
+                              backgroundColor: const Color(0xFFE11D48),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
                             child: const Text('Browse Food Catalogue →', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
@@ -229,7 +229,7 @@ class MyFoodRequestsScreen extends GetView<FoodAssistanceController> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isApproved ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
+          color: isApproved ? const Color(0xFFE11D48) : const Color(0xFFF59E0B),
           width: 1.5,
         ),
       ),
@@ -246,14 +246,14 @@ class MyFoodRequestsScreen extends GetView<FoodAssistanceController> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                 decoration: BoxDecoration(
-                  color: isApproved ? const Color(0xFFECFDF5) : const Color(0xFFFFFBEB),
+                  color: isApproved ? const Color(0xFFFFF1F2) : const Color(0xFFFFFBEB),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   profile.status,
                   style: AppFontStyle.fontStyleW800(
                     fontSize: 10.5,
-                    fontColor: isApproved ? const Color(0xFF059669) : const Color(0xFFD97706),
+                    fontColor: isApproved ? const Color(0xFFE11D48) : const Color(0xFFD97706),
                   ),
                 ),
               ),
@@ -270,7 +270,7 @@ class MyFoodRequestsScreen extends GetView<FoodAssistanceController> {
             ElevatedButton(
               onPressed: () => Get.toNamed(AppRoutes.foodAssistanceCatalogScreen),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF10B981),
+                backgroundColor: const Color(0xFFE11D48),
                 elevation: 0,
                 minimumSize: const Size(double.infinity, 38),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -288,8 +288,8 @@ class MyFoodRequestsScreen extends GetView<FoodAssistanceController> {
     Color statusColor = const Color(0xFFD97706);
 
     if (ord.status == 'DELIVERED') {
-      statusBg = const Color(0xFFECFDF5);
-      statusColor = const Color(0xFF059669);
+      statusBg = const Color(0xFFF1F5F9);
+      statusColor = const Color(0xFF334155);
     } else if (ord.status == 'OUT_FOR_DELIVERY') {
       statusBg = const Color(0xFFEFF6FF);
       statusColor = const Color(0xFF2563EB);
@@ -385,7 +385,7 @@ class MyFoodRequestsScreen extends GetView<FoodAssistanceController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Cost: \$0.00 FREE', style: AppFontStyle.fontStyleW800(fontSize: 12, fontColor: const Color(0xFF10B981))),
+              Text('Cost: \$0.00 FREE', style: AppFontStyle.fontStyleW800(fontSize: 12, fontColor: const Color(0xFFE11D48))),
 
               if (ord.status == 'SUBMITTED' || ord.status == 'APPROVED')
                 TextButton(

@@ -319,11 +319,11 @@ class BeneficiaryApplyScreen extends GetView<FoodAssistanceController> {
                                 children: [
                                   Row(
                                     children: [
-                                      const Icon(Icons.check_circle_rounded, color: Color(0xFF16A34A), size: 16),
+                                      const Icon(Icons.check_circle_rounded, color: Color(0xFFE11D48), size: 16),
                                       const SizedBox(width: 5),
                                       Text(
                                         'Document Attached',
-                                        style: AppFontStyle.fontStyleW700(fontSize: 12.5, fontColor: const Color(0xFF15803D)),
+                                        style: AppFontStyle.fontStyleW700(fontSize: 12.5, fontColor: const Color(0xFF9F1239)),
                                       ),
                                     ],
                                   ),
@@ -459,7 +459,7 @@ class BeneficiaryApplyScreen extends GetView<FoodAssistanceController> {
                                 }
                               },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2563EB),
+                          backgroundColor: const Color(0xFFE11D48),
                           elevation: 0,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                         ),
@@ -557,7 +557,7 @@ class BeneficiaryApplyScreen extends GetView<FoodAssistanceController> {
                   onPressed: value.value > min ? () => value.value-- : null,
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(minWidth: 26, minHeight: 26),
-                  color: const Color(0xFF2563EB),
+                  color: const Color(0xFFE11D48),
                 ),
                 Text(
                   '${value.value}',
@@ -568,7 +568,7 @@ class BeneficiaryApplyScreen extends GetView<FoodAssistanceController> {
                   onPressed: value.value < 15 ? () => value.value++ : null,
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(minWidth: 26, minHeight: 26),
-                  color: const Color(0xFF2563EB),
+                  color: const Color(0xFFE11D48),
                 ),
               ],
             ),

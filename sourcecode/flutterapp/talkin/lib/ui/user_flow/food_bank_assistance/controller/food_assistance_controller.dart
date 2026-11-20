@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/food_bank_assistance/api/food_assistance_api.dart';
 import 'package:notisboard/ui/user_flow/food_bank_assistance/model/food_assistance_model.dart';
 import 'package:notisboard/utils/database.dart';
@@ -274,6 +275,162 @@ class FoodAssistanceController extends GetxController {
   void clearParcel() {
     parcel.clear();
     parcel.refresh();
+  }
+
+  // Guard for Free Checkout: Only approved beneficiaries can proceed
+  Future<void> handleProceedToCheckout() async {
+    final user = Database.fetchLoginUserProfileModel?.user;
+    final userEmail = user?.email ?? '';
+
+    if (userEmail.isEmpty) {
+      _showKycDialog(
+        title: 'Sign In Required',
+        message: 'Please sign in to your Notisboard account to request a food parcel.',
+        buttonText: 'Sign In →',
+        onConfirm: () => Get.toNamed(AppRoutes.mobileLogIn),
+      );
+      return;
+    }
+
+    // If beneficiaryProfile is not loaded yet, fetch status from API
+    if (beneficiaryProfile.value == null) {
+      Get.dialog(
+        const Center(child: CircularProgressIndicator(color: Color(0xFFE11D48))),
+        barrierDismissible: false,
+      );
+      try {
+        final profile = await FoodAssistanceApi.checkBeneficiaryStatus(userEmail);
+        if (Get.isDialogOpen == true) Get.back();
+        if (profile != null) {
+          beneficiaryProfile.value = profile;
+        }
+      } catch (_) {
+        if (Get.isDialogOpen == true) Get.back();
+      }
+    }
+
+    final profile = beneficiaryProfile.value;
+
+    // 1. Not registered at all
+    if (profile == null) {
+      _showKycDialog(
+        title: 'KYC Verification Required',
+        message: 'You have not registered as an authorized beneficiary yet. Please complete a quick household KYC application to unlock free grocery parcel orders.',
+        buttonText: 'Complete KYC Application →',
+        onConfirm: () => Get.toNamed(AppRoutes.foodAssistanceApplyScreen),
+      );
+      return;
+    }
+
+    // 2. Pending admin review
+    if (profile.status == 'PENDING') {
+      _showKycDialog(
+        title: 'Verification In Review',
+        message: 'Your household registration is currently pending review by food bank administrators. Free food parcel checkout will unlock as soon as your account is approved.',
+        buttonText: 'Check Application Status →',
+        onConfirm: () => Get.toNamed(AppRoutes.foodAssistanceRequestsScreen),
+      );
+      return;
+    }
+
+    // 3. Rejected
+    if (profile.status == 'REJECTED') {
+      _showKycDialog(
+        title: 'Application Not Approved',
+        message: 'Your household KYC verification was not approved. Please review and update your registration details.',
+        buttonText: 'Update KYC Application →',
+        onConfirm: () => Get.toNamed(AppRoutes.foodAssistanceApplyScreen),
+      );
+      return;
+    }
+
+    // 4. Approved -> proceed to checkout!
+    if (profile.status == 'APPROVED') {
+      Get.toNamed(AppRoutes.foodAssistanceCheckoutScreen);
+    } else {
+      _showKycDialog(
+        title: 'Account Status: ${profile.status}',
+        message: 'Your beneficiary account status is ${profile.status}. Please contact relief support.',
+        buttonText: 'View Status',
+        onConfirm: () => Get.toNamed(AppRoutes.foodAssistanceRequestsScreen),
+      );
+    }
+  }
+
+  void _showKycDialog({
+    required String title,
+    required String message,
+    required String buttonText,
+    required VoidCallback onConfirm,
+  }) {
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.all(22),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFFF1F2),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.shield_outlined, color: Color(0xFFE11D48), size: 32),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF0F172A),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 12.5,
+                  height: 1.4,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF64748B),
+                ),
+              ),
+              const SizedBox(height: 22),
+              ElevatedButton(
+                onPressed: () {
+                  Get.back();
+                  onConfirm();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFE11D48),
+                  minimumSize: const Size(double.infinity, 44),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: Text(
+                  buttonText,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () => Get.back(),
+                style: TextButton.styleFrom(
+                  foregroundColor: const Color(0xFF64748B),
+                ),
+                child: const Text('Back to Catalogue', style: TextStyle(fontSize: 12.5)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   // Submit Beneficiary KYC Application

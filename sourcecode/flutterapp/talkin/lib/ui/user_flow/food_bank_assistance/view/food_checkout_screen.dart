@@ -69,13 +69,13 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFECFDF5),
+                  color: const Color(0xFFFFF1F2),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFA7F3D0)),
+                  border: Border.all(color: const Color(0xFFFECDD3)),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.verified_rounded, color: Color(0xFF059669), size: 24),
+                    const Icon(Icons.verified_rounded, color: Color(0xFFE11D48), size: 24),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Column(
@@ -83,12 +83,12 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
                         children: [
                           Text(
                             '100% Free Food Assistance (\$0.00)',
-                            style: AppFontStyle.fontStyleW700(fontSize: 13, fontColor: const Color(0xFF065F46)),
+                            style: AppFontStyle.fontStyleW700(fontSize: 13, fontColor: const Color(0xFF9F1239)),
                           ),
                           const SizedBox(height: 2),
                           Text(
                             'Subsidized through Notisboard Global Foundation relief allocations. Zero payment required.',
-                            style: AppFontStyle.fontStyleW400(fontSize: 11, fontColor: const Color(0xFF047857)),
+                            style: AppFontStyle.fontStyleW400(fontSize: 11, fontColor: const Color(0xFFBE123C)),
                           ),
                         ],
                       ),
@@ -155,7 +155,7 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Total Payable', style: AppFontStyle.fontStyleW700(fontSize: 14, fontColor: const Color(0xFF0F172A))),
-                        Text('FREE \$0.00', style: AppFontStyle.fontStyleW800(fontSize: 16, fontColor: const Color(0xFF10B981))),
+                        Text('FREE \$0.00', style: AppFontStyle.fontStyleW800(fontSize: 16, fontColor: const Color(0xFFE11D48))),
                       ],
                     ),
                   ],
@@ -429,7 +429,7 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
                             }
                           },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF10B981),
+                      backgroundColor: const Color(0xFFE11D48),
                       elevation: 0,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     ),
@@ -478,7 +478,7 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFCBD5E1))),
             enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
-            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFF10B981), width: 1.5)),
+            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFE11D48), width: 1.5)),
           ),
         ),
       ],
@@ -498,10 +498,10 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: const BoxDecoration(
-                  color: Color(0xFFECFDF5),
+                  color: Color(0xFFFFF1F2),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 48),
+                child: const Icon(Icons.check_circle_rounded, color: Color(0xFFE11D48), size: 48),
               ),
               const SizedBox(height: 16),
               Text(
@@ -523,7 +523,7 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
                 ),
                 child: Text(
                   'Order #${orderData?['orderNumber'] ?? 'FBO-CONFIRMED'}',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF2563EB)),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFFE11D48)),
                 ),
               ),
               const SizedBox(height: 20),
@@ -533,7 +533,7 @@ class FoodCheckoutScreen extends GetView<FoodAssistanceController> {
                   Get.offNamed(AppRoutes.foodAssistanceRequestsScreen);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF10B981),
+                  backgroundColor: const Color(0xFFE11D48),
                   minimumSize: const Size(double.infinity, 44),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
