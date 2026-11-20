@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:notisboard/routes/app_routes.dart';
 import 'package:notisboard/ui/user_flow/food_bank/api/food_bank_api.dart';
 import 'package:notisboard/ui/user_flow/food_bank/model/food_bank_model.dart';
+import 'package:notisboard/ui/user_flow/splash_screen_page/api/setting_api.dart';
+import 'package:notisboard/utils/common_payment.dart';
 import 'package:notisboard/utils/database.dart';
 import 'package:notisboard/utils/utils.dart';
 
@@ -44,7 +46,7 @@ class FoodBankController extends GetxController {
   void onInit() {
     super.onInit();
     _prefillDonorInfo();
-    _loadAvailableGateways();
+    _refreshSettingsAndGateways();
     loadConfig();
   }
 
@@ -72,6 +74,18 @@ class FoodBankController extends GetxController {
         emailController.text = cachedEmail;
       }
     }
+  }
+
+  Future<void> _refreshSettingsAndGateways() async {
+    try {
+      final fresh = await SettingApi.callApi();
+      if (fresh?.data != null) {
+        Database.settingApiModel = fresh;
+      }
+    } catch (e) {
+      Utils.showLog('FoodBankController: refresh settings failed: $e');
+    }
+    _loadAvailableGateways();
   }
 
   bool _isGatewayEnabled({bool? android, bool? ios, bool? fallback}) {
@@ -165,7 +179,7 @@ class FoodBankController extends GetxController {
       ));
     }
 
-    // Star Coin Wallet
+    // Star Coin Wallet (Always available as extra internal option)
     final coins = Database.fetchLoginUserProfileModel?.user?.coins ?? 0;
     list.add(PaymentMethodOption(
       id: 'wallet',
@@ -176,7 +190,9 @@ class FoodBankController extends GetxController {
 
     availableGateways.assignAll(list);
     if (list.isNotEmpty) {
-      selectedGatewayId.value = list.first.id;
+      if (!list.any((g) => g.id == selectedGatewayId.value)) {
+        selectedGatewayId.value = list.first.id;
+      }
     }
   }
 
@@ -263,38 +279,126 @@ class FoodBankController extends GetxController {
       return;
     }
 
-    // Check Star Coin Wallet balance if paying with wallet
-    if (selectedGatewayId.value == 'wallet') {
-      final userCoins = Database.fetchLoginUserProfileModel?.user?.coins ?? 0;
-      if (userCoins < amt) {
-        Utils.showToast(
-          Get.context!,
-          'Insufficient Star Coins ($userCoins available, ${amt.toStringAsFixed(0)} required). Please top-up or select another payment gateway.',
+    final gateway = selectedGatewayId.value;
+
+    try {
+      if (gateway == 'paypal') {
+        isSubmitting.value = true;
+        await payPal(
+          amount: amt,
+          onPaymentSuccess: () async {
+            await _recordCompletedDonation(
+              paymentMethod: 'PayPal Checkout',
+              paymentId: 'paypal_${DateTime.now().millisecondsSinceEpoch}',
+            );
+          },
         );
-        return;
+        isSubmitting.value = false;
+      } else if (gateway == 'stripe') {
+        isSubmitting.value = true;
+        await stripe(
+          amount: amt,
+          onPaymentSuccess: () async {
+            await _recordCompletedDonation(
+              paymentMethod: 'Credit / Debit Card (Stripe)',
+              paymentId: 'stripe_${DateTime.now().millisecondsSinceEpoch}',
+            );
+          },
+        );
+        isSubmitting.value = false;
+      } else if (gateway == 'razorpay') {
+        isSubmitting.value = true;
+        await razorPay(
+          amount: amt,
+          onPaymentSuccess: () async {
+            await _recordCompletedDonation(
+              paymentMethod: 'Razorpay',
+              paymentId: 'rzp_${DateTime.now().millisecondsSinceEpoch}',
+            );
+          },
+        );
+        isSubmitting.value = false;
+      } else if (gateway == 'flutterwave') {
+        isSubmitting.value = true;
+        await flutterWave(
+          amount: amt,
+          onPaymentSuccess: () async {
+            await _recordCompletedDonation(
+              paymentMethod: 'Flutterwave',
+              paymentId: 'flw_${DateTime.now().millisecondsSinceEpoch}',
+            );
+          },
+        );
+        isSubmitting.value = false;
+      } else if (gateway == 'paystack') {
+        isSubmitting.value = true;
+        await payStack(
+          amount: amt,
+          onPaymentSuccess: () async {
+            await _recordCompletedDonation(
+              paymentMethod: 'Paystack',
+              paymentId: 'pstk_${DateTime.now().millisecondsSinceEpoch}',
+            );
+          },
+        );
+        isSubmitting.value = false;
+      } else if (gateway == 'cashfree') {
+        isSubmitting.value = true;
+        await cashFree(
+          amount: amt,
+          onPaymentSuccess: () async {
+            await _recordCompletedDonation(
+              paymentMethod: 'Cashfree',
+              paymentId: 'cf_${DateTime.now().millisecondsSinceEpoch}',
+            );
+          },
+        );
+        isSubmitting.value = false;
+      } else if (gateway == 'wallet') {
+        final userCoins = Database.fetchLoginUserProfileModel?.user?.coins ?? 0;
+        if (userCoins < amt) {
+          Utils.showToast(
+            Get.context!,
+            'Insufficient Star Coins ($userCoins available, ${amt.toStringAsFixed(0)} required). Please top-up or select another payment gateway.',
+          );
+          return;
+        }
+
+        isSubmitting.value = true;
+        await _recordCompletedDonation(
+          paymentMethod: 'Star Coin Wallet',
+          paymentId: 'wallet_${DateTime.now().millisecondsSinceEpoch}',
+        );
+        isSubmitting.value = false;
+      } else {
+        Utils.showToast(Get.context!, 'Unsupported payment method selected');
       }
+    } catch (e) {
+      isSubmitting.value = false;
+      Utils.showLog('processDonation error: $e');
+      Utils.showToast(Get.context!, 'Payment processing failed. Please try again.');
     }
+  }
 
-    isSubmitting.value = true;
-
-    final txId = 'FBD-TX-${DateTime.now().millisecondsSinceEpoch}';
-    final gatewayName = availableGateways.firstWhere(
-      (g) => g.id == selectedGatewayId.value,
-      orElse: () => PaymentMethodOption(id: 'online', title: 'Online Payment', subtitle: '', icon: Icons.payment),
-    ).title;
+  Future<void> _recordCompletedDonation({
+    required String paymentMethod,
+    required String paymentId,
+  }) async {
+    final cfg = config.value;
+    final donorName = nameController.text.trim();
+    final donorEmail = emailController.text.trim();
+    final amt = selectedAmount.value;
 
     final result = await FoodBankApi.submitDonation(
       donorName: donorName,
       donorEmail: donorEmail,
       donorPhone: phoneController.text.trim(),
       amount: amt,
-      currency: cfg.currency,
-      paymentGateway: gatewayName,
-      paymentTransactionId: txId,
+      currency: cfg?.currency ?? 'CAD',
+      paymentGateway: paymentMethod,
+      paymentTransactionId: paymentId,
       message: messageController.text.trim(),
     );
-
-    isSubmitting.value = false;
 
     if (result != null) {
       Database.localStorage.write('last_food_bank_donor_email', donorEmail);
@@ -310,7 +414,7 @@ class FoodBankController extends GetxController {
 
       Get.offNamed(AppRoutes.foodBankSuccessScreen, arguments: result);
     } else {
-      Utils.showToast(Get.context!, 'Payment submission failed. Please try again.');
+      Utils.showToast(Get.context!, 'Donation confirmation failed. Please contact support.');
     }
   }
 }

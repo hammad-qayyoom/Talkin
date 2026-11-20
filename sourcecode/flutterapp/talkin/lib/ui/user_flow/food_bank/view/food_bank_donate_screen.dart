@@ -356,14 +356,14 @@ class FoodBankDonateScreen extends GetView<FoodBankController> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF059669).withValues(alpha: 0.1),
+                          color: const Color(0xFFE11D48).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
                           'ADMIN VERIFIED',
                           style: AppFontStyle.fontStyleW700(
                             fontSize: 9.5,
-                            fontColor: const Color(0xFF059669),
+                            fontColor: const Color(0xFFE11D48),
                           ),
                         ),
                       ),

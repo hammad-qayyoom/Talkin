@@ -36,13 +36,13 @@ class FoodBankSuccessScreen extends StatelessWidget {
                   width: 86,
                   height: 86,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF059669).withValues(alpha: 0.12),
+                    color: const Color(0xFFE11D48).withValues(alpha: 0.12),
                     shape: BoxShape.circle,
                   ),
                   child: const Center(
                     child: Icon(
                       Icons.check_circle_rounded,
-                      color: Color(0xFF059669),
+                      color: Color(0xFFE11D48),
                       size: 58,
                     ),
                   ),
@@ -98,7 +98,7 @@ class FoodBankSuccessScreen extends StatelessWidget {
                       _buildReceiptRow('Payment Gateway', record?.paymentGateway ?? 'Online Payment'),
                       const Divider(height: 20, color: Color(0xFFF1F5F9)),
                       _buildReceiptRow('Status', record?.status.toUpperCase() ?? 'COMPLETED',
-                          valueColor: const Color(0xFF059669), isBold: true),
+                          valueColor: const Color(0xFFE11D48), isBold: true),
                       const Divider(height: 20, color: Color(0xFFF1F5F9)),
                       _buildReceiptRow(
                         'Total Amount',
